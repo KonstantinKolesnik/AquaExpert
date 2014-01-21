@@ -58,12 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Gadgeteer" />
-    <Reference Include="Gadgeteer.WebClient, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Gadgeteer.WebServer, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="GHI.Premium.Hardware, Version=4.2.11.1, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GHI.Premium.Net, Version=4.2.11.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,6 +98,7 @@
     <Reference Include="Microsoft.SPOT.TinyCore" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
+    <Reference Include="System.Http" />
     <Reference Include="System.IO" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -122,6 +117,7 @@
     <None Include="Program.gadgeteer.diagram">
       <DependentUpon>Program.gadgeteer</DependentUpon>
     </None>
+    <Content Include="Resources\index.html" />
     <None Include="Resources\NinaB.tinyfnt" />
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
@@ -134,6 +130,10 @@
       <Project>{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}</Project>
       <Name>MFE.Net.Managers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj">
+      <Project>{632B23F9-A020-4C66-93A3-DE9AF4529CB9}</Project>
+      <Name>MFE.Net.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MFE\MFE.Net\MFE.Net.csproj">
       <Project>{D87CB0D5-ED06-4E01-AA00-FFCDD0A3D708}</Project>
       <Name>MFE.Net</Name>
@@ -142,5 +142,13 @@
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MFE\MFE.USB\MFE.USB.csproj">
+      <Project>{F0DA6247-97C4-43DC-99B6-A763AF5225C2}</Project>
+      <Name>MFE.USB</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Script\Main.js" />
   </ItemGroup>
 </Project>

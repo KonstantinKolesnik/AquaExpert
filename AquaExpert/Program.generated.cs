@@ -24,10 +24,10 @@ namespace AquaExpert {
         /// <summary>The Relay module using socket 18 of the mainboard.</summary>
         private Gadgeteer.Modules.LoveElectronics.Relay relays;
         
-        /// <summary>The Ethernet_ENC28  (Premium) module using socket 3 of the mainboard.</summary>
+        /// <summary>The Ethernet_ENC28  (Premium) module (not connected).</summary>
         private Gadgeteer.Modules.GHIElectronics.Ethernet_ENC28 ethernet_ENC28;
         
-        /// <summary>The MoistureSensor module using socket 2 of the mainboard.</summary>
+        /// <summary>The MoistureSensor module (not connected).</summary>
         private Gadgeteer.Modules.Seeed.MoistureSensor moistureSensorLower;
         
         /// <summary>The WiFi_RS21 (Premium) module using socket 1 of the mainboard.</summary>
@@ -64,8 +64,9 @@ namespace AquaExpert {
             this.usbClientDP = new GTM.GHIElectronics.UsbClientDP(8);
             this.moistureSensorUpper = new GTM.Seeed.MoistureSensor(13);
             this.relays = new GTM.LoveElectronics.Relay(18);
-            this.ethernet_ENC28 = new GTM.GHIElectronics.Ethernet_ENC28(3);
-            this.moistureSensorLower = new GTM.Seeed.MoistureSensor(2);
+            Microsoft.SPOT.Debug.Print("The module \'ethernet_ENC28\' was not connected in the designer and will be null.");
+            Microsoft.SPOT.Debug.Print("The module \'moistureSensorLower\' was not connected in the designer and will be nu" +
+                    "ll.");
             this.wifi_RS21 = new GTM.GHIElectronics.WiFi_RS21(1);
             Microsoft.SPOT.Debug.Print("The module \'pHTemp\' was not connected in the designer and will be null.");
             this.indicators = new GTM.GHIElectronics.LED_Strip(9);
