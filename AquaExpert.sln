@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Core", "..\MFE\MFE.Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Managers", "..\MFE\MFE.Net.Managers\MFE.Net.Managers.csproj", "{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Storage", "..\MFE\MFE.Storage\MFE.Storage.csproj", "{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

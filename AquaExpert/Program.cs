@@ -1,45 +1,60 @@
-﻿using MFE.Net.Managers;
+﻿using AquaExpert.Sensors;
+using GHI.Premium.Hardware;
+using MFE.Net.Managers;
 using MFE.Net.Udp;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Time;
+using System;
 using System.Net;
 using System.Threading;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.Seeed;
+using Gadgeteer.Modules.LoveElectronics;
+using MFE.Net.Http;
+using MFE.Net.WebSocket;
 
 namespace AquaExpert
 {
     public partial class Program
     {
+        #region fields
         private INetworkManager networkManager;
-        private WaterLevelSensor wlsMax;
-        private WaterLevelSensor wlsMin;
+        private Gadgeteer.Timer timerNetworkConnect;
+        
+        private HttpServer httpServer;
+        private WSServer wsServer;
 
-        private int relayWaterIn = 0;
-        private int relayWaterOut = 1;
+        private WaterLevelSensor sensorWaterMax;
+        private WaterLevelSensor sensorWaterMin;
+        private PHSensor sensorPH;
 
+        private State State = new State();
+        private Settings Settings = null;
+
+        private int relayWaterIn = 0, ledWaterIn = 0;
+        private int relayWaterOut = 1, ledWaterOut = 1;
+        private int relayLight = 2, ledLight = 2;
+        private int relayFeed = 3, ledFeed = 3;
+        private int ledNetwork = 4;
+
+        private Gadgeteer.Timer timerWorkflow;
+        #endregion
 
         private void ProgramStarted()
         {
-            wlsMax = new WaterLevelSensor(wetnessSensorUpper);
-            wlsMax.WetnessChanged += wlSensorUpper_WetnessChanged;
+            indicators.TurnAllLedsOff();
 
-            
+            timerNetworkConnect = new Gadgeteer.Timer(500);
+            timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
 
-            //GT.Timer timer = new GT.Timer(1000);
-            //timer.Tick += delegate(GT.Timer t)
-            //{
-            //    relays[0] = !relays[0];
-            //    relays[1] = !relays[1];
-            //    relays[2] = !relays[2];
-            //    relays[3] = !relays[3];
-            //};
-            //timer.Start();
+            timerWorkflow = new Gadgeteer.Timer(500);
+            timerWorkflow.Tick += timerWorkflow_Tick;
 
-            //DateTime dt = RealTimeClock.GetTime();
-            //Debug.Print(dt.ToString());
+            sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
+
+            Settings = Settings.LoadFromFlash(0);
 
             InitNetwork();
-
-
 
             Mainboard.SetDebugLED(true);
         }
@@ -53,19 +68,19 @@ namespace AquaExpert
             //tcpServer.SessionDataReceived += Session_DataReceived;
             //tcpServer.SessionDisconnected += Session_Disconnected;
 
-            //wsServer = new WSServer(Options.WSPort);
+            wsServer = new WSServer(Settings.WSPort);
             //wsServer.SessionConnected += Session_Connected;
             //wsServer.SessionDataReceived += Session_DataReceived;
             //wsServer.SessionDisconnected += Session_Disconnected;
 
-            //httpServer = new HttpServer();
+            httpServer = new HttpServer();
             //httpServer.OnGetRequest += httpServer_OnGetRequest;
             //httpServer.OnResponse += httpServer_OnResponse;
 
             //if (options.UseWiFi)
-            //networkManager = new GadgeteerWiFiManager(HWConfig.WiFi, options.WiFiSSID, options.WiFiPassword);//, GT.Socket.GetSocket(18, true, null, null).PWM9);
+            networkManager = new GadgeteerWiFiManager(wifi_RS21, Settings.WiFiSSID, Settings.WiFiPassword);
             //else
-            networkManager = new GadgeteerEthernetManager(ethernet_ENC28);
+            //networkManager = new GadgeteerEthernetManager(ethernet_ENC28);
 
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
@@ -74,7 +89,7 @@ namespace AquaExpert
         }
         private void StartNetwork()
         {
-            //timerNetworkConnect.Start();
+            timerNetworkConnect.Start();
             new Thread(delegate
             {
                 networkManager.Start();
@@ -82,25 +97,6 @@ namespace AquaExpert
         }
         private void InitTimeService()
         {
-            // setup callbacks
-            FixedTimeService.SystemTimeChanged += new SystemTimeChangedEventHandler(TimeService_SystemTimeChanged);
-            FixedTimeService.TimeSyncFailed += new TimeSyncFailedEventHandler(TimeService_TimeSyncFailed);
-            // New event: called when after we check the time (even if we don't end up changing the time)
-            FixedTimeService.SystemTimeChecked += new SystemTimeChangedEventHandler(TimeService_SystemTimeChecked);
-
-            // start thread to init TimeService
-            Thread initTimeserviceThread = new Thread(() => InitTimeservice2());
-            initTimeserviceThread.Start();
-        }
-        void InitTimeservice2()
-        {
-            Thread.Sleep(1);  // let ProgramStarted finish before doing this
-
-            // wait for internet connection
-            while (IPAddress.GetDefaultLocalAddress() == IPAddress.Any)
-                Thread.Sleep(500);
-
-            // configure & start FixedTimeService
             FixedTimeService.Settings = new TimeServiceSettings()
             {
                 AutoDayLightSavings = true,
@@ -110,9 +106,63 @@ namespace AquaExpert
                 AlternateServer = Dns.GetHostEntry("pool.ntp.org").AddressList[0].GetAddressBytes(),
                 RefreshTime = 24 * 60 * 60 // once a day
             };
-            FixedTimeService.SetTimeZoneOffset(-8 * 60); /// PST
+            FixedTimeService.SetTimeZoneOffset(+2 * 60); /// PST
             FixedTimeService.SetDst("Mar Sun>=8 @2", "Nov Sun>=1 @2", 60); // US DST
-            FixedTimeService.Start();
+
+            FixedTimeService.SystemTimeChanged += new SystemTimeChangedEventHandler(TimeService_SystemTimeChanged);
+            FixedTimeService.TimeSyncFailed += new TimeSyncFailedEventHandler(TimeService_TimeSyncFailed);
+            // New event: called when after we check the time (even if we don't end up changing the time)
+            FixedTimeService.SystemTimeChecked += new SystemTimeChangedEventHandler(TimeService_SystemTimeChecked);
+        }
+        private void SyncTime()
+        {
+            new Thread(() =>
+            {
+                // wait for internet connection
+                while (IPAddress.GetDefaultLocalAddress() == IPAddress.Any)
+                    Thread.Sleep(500);
+
+                FixedTimeService.Start();
+            }).Start();
+        }
+
+        private void PopulateState()
+        {
+            DateTime dt = RealTimeClock.GetTime();
+            //Debug.Print(dt.ToString());
+
+            State.IsLightOn = dt.Hour >= Settings.LightOnHour && dt.Hour < Settings.LightOffHour;
+
+            //relays[relayWaterIn] = !relays[relayWaterIn];
+
+        }
+        private void DoWork()
+        {
+            if (!State.IsWaterOutMode)
+            {
+                relays[relayWaterIn] = !sensorWaterMax.IsWet;
+                relays[relayWaterOut] = false;
+            }
+            else
+            {
+                relays[relayWaterIn] = false;
+                relays[relayWaterOut] = sensorWaterMin.IsWet;
+                if (!sensorWaterMin.IsWet)
+                    State.IsWaterOutMode = false;
+            }
+
+            relays[relayLight] = State.IsLightOn;
+            relays[relayFeed] = State.IsFeedMode;
+
+            indicators[ledWaterIn] = relays[relayWaterIn];
+            indicators[ledWaterOut] = relays[relayWaterOut];
+            indicators[ledLight] = relays[relayLight];
+            indicators[ledFeed] = relays[relayFeed];
+        }
+
+        private void ReplaceWater()
+        {
+            State.IsWaterOutMode = true;
         }
 
         #region Event handlers
@@ -121,11 +171,11 @@ namespace AquaExpert
             //HWConfig.WiFi.NetworkSettings.IPAddress
             //HWConfig.Ethernet.Interface.NetworkInterface.IPAddress
 
-            //timerNetworkConnect.Stop();
-            //HWConfig.Indicators[HWConfig.LEDNetwork] = true;
+            timerNetworkConnect.Stop();
+            indicators[ledNetwork] = true;
 
-            //httpServer.Start("http", 80);
-            //wsServer.Start();
+            httpServer.Start("http", 80);
+            wsServer.Start();
             //tcpServer.Start();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
@@ -134,9 +184,12 @@ namespace AquaExpert
             //ns.AddName("TYPHOON", NameService.NameType.Unique, NameService.MsSuffix.Default);
 
             InitTimeService();
+            SyncTime();
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
+            indicators[ledNetwork] = false;
+
             //httpServer.Stop();
             //wsServer.Stop();
             //tcpServer.Stop();
@@ -148,20 +201,22 @@ namespace AquaExpert
 
         private void TimeService_SystemTimeChanged(object sender, SystemTimeChangedEventArgs e)
         {
-
+            RealTimeClock.SetTime(e.EventTime);
+            timerWorkflow.Start();
         }
         private void TimeService_TimeSyncFailed(object sender, TimeSyncFailedEventArgs e)
         {
-
         }
         private void TimeService_SystemTimeChecked(object sender, SystemTimeChangedEventArgs e)
         {
-
+            RealTimeClock.SetTime(e.EventTime);
+            //timerClock.Start();
         }
 
-        private void wlSensorUpper_WetnessChanged(object sender, EventArgs e)
+        private void timerWorkflow_Tick(Gadgeteer.Timer timer)
         {
-            relays[relayWaterIn] = !wlsMax.IsWet;
+            PopulateState();
+            DoWork();
         }
         #endregion
     }
