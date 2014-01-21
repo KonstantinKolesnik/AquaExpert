@@ -1,11 +1,9 @@
-using System;
-using Microsoft.SPOT;
-using MFE.Storage;
 using MFE.Core;
-using System.Text;
-using System.IO;
-using System.Xml;
+using MFE.Storage;
 using System.Ext.Xml;
+using System.IO;
+using System.Text;
+using System.Xml;
 
 namespace AquaExpert
 {
@@ -116,7 +114,7 @@ namespace AquaExpert
         public static Settings LoadFromFlash(uint id)
         {
             Settings res = new Settings();
-            object data = FlashManager.RestoreFromFlash(typeof(string), 0);
+            object data = FlashManager.LoadFromFlash(typeof(string), 0);
             if (data != null)
                 res = Settings.FromXml((string)data);
 

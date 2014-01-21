@@ -59,6 +59,7 @@ namespace AquaExpert
             Mainboard.SetDebugLED(true);
         }
 
+        #region Private methods
         private void InitNetwork()
         {
             //discoveryListener = new DiscoveryListener();
@@ -164,6 +165,7 @@ namespace AquaExpert
         {
             State.IsWaterOutMode = true;
         }
+        #endregion
 
         #region Event handlers
         private void Network_Started(object sender, EventArgs e)
