@@ -264,8 +264,11 @@ namespace AquaExpert
                     //ResourceUtility.GetObject(Resources.ResourceManager, Resources.BinaryResources.index);
 
                     //byte[] data = Resources.GetBytes(Resources.BinaryResources.index_html);
-                    byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
-                    //httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
+                    //byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
+                    byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
+                    
+                    
+                    httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
                 }
 
                 BlinkLED(ledNetwork);
