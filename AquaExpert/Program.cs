@@ -28,7 +28,7 @@ namespace AquaExpert
         private Gadgeteer.Timer timerNetworkConnect;
         private HttpServer httpServer;
         private WSServer wsServer;
-        private TcpServer tcpServer;
+        //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
 
         //private USBCDCDevice cdcDevice;
@@ -38,14 +38,16 @@ namespace AquaExpert
         private WaterLevelSensor sensorWaterMin;
         private PHSensor sensorPH;
 
-        private State State = new State();
-        private Settings Settings = null;
+        private State state = new State();
+        private Settings settings = null;
 
         private int relayWaterIn = 0, ledWaterIn = 0;
         private int relayWaterOut = 1, ledWaterOut = 1;
         private int relayLight = 2, ledLight = 2;
         private int relayHeater = 3, ledHeater = 3;
-        private int ledNetwork = 4;
+        private int relayCO2 = 4, ledCO2 = 4;
+
+        private int ledNetwork = 5;
 
         private Gadgeteer.Timer timerWorkflow;
         #endregion
@@ -54,6 +56,14 @@ namespace AquaExpert
         public static string Version
         {
             get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+        }
+        public State State
+        {
+            get { return state; }
+        }
+        public Settings Settings
+        {
+            get { return settings; }
         }
         #endregion
 
@@ -74,7 +84,7 @@ namespace AquaExpert
 
             sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
 
-            Settings = Settings.LoadFromFlash(0);
+            settings = Settings.LoadFromFlash(0);
 
             //cdcDevice = new USBCDCDevice();
             //hidDevice = new USBHIDDevice();
@@ -90,10 +100,10 @@ namespace AquaExpert
         {
             //discoveryListener = new DiscoveryListener();
 
-            tcpServer = new TcpServer(Settings.IPPort);
-            tcpServer.SessionConnected += Session_Connected;
-            tcpServer.SessionDataReceived += Session_DataReceived;
-            tcpServer.SessionDisconnected += Session_Disconnected;
+            //tcpServer = new TcpServer(Settings.IPPort);
+            //tcpServer.SessionConnected += Session_Connected;
+            //tcpServer.SessionDataReceived += Session_DataReceived;
+            //tcpServer.SessionDisconnected += Session_Disconnected;
 
             wsServer = new WSServer(Settings.WSPort);
             wsServer.SessionConnected += Session_Connected;
@@ -105,7 +115,7 @@ namespace AquaExpert
             httpServer.OnGetRequest += httpServer_OnGetRequest;
             httpServer.OnResponse += httpServer_OnResponse;
 
-            networkManager = new GadgeteerWiFiManager(wifi_RS21, Settings.WiFiSSID, Settings.WiFiPassword);
+            networkManager = new GadgeteerWiFiManager(wifi_RS21, settings.WiFiSSID, settings.WiFiPassword);
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
 
@@ -151,38 +161,52 @@ namespace AquaExpert
             }).Start();
         }
 
-        private void PopulateState()
+        private void SetState()
         {
-            DateTime dt = RealTimeClock.GetTime();
-            //Debug.Print(dt.ToString());
+            //state.Temperature = ;
+            //state.PH = ;
 
-            State.IsLightOn = dt.Hour >= Settings.LightOnHour && dt.Hour < Settings.LightOffHour;
+            if (!state.IsManualMode)
+            {
+                DateTime dt = RealTimeClock.GetTime();
+                //Debug.Print(dt.ToString());
 
-            //relays[relayWaterIn] = !relays[relayWaterIn];
+                state.IsLightOn = dt.Hour >= settings.LightOnHour && dt.Hour < settings.LightOffHour;
+                state.IsCO2On = dt.Hour >= settings.CO2OnHour && dt.Hour < settings.CO2OffHour;
 
+                if (!sensorWaterMin.IsWet) // если мин. уровень достигнут, то останавливаем слив
+                    state.IsWaterOutMode = false;
+
+                state.IsWaterInMode = !state.IsWaterOutMode; // если нет слива в данный момент, то набираем
+            }
+
+            // ПО-ЛЮБОМУ!!! если макс. уровень достигнут, то останавливаем набор
+            if (sensorWaterMax.IsWet)
+                state.IsWaterInMode = false;
         }
         private void DoWork()
         {
-            if (!State.IsWaterOutMode)
-            {
-                relays[relayWaterIn] = !sensorWaterMax.IsWet;
-                relays[relayWaterOut] = false;
-            }
-            else
-            {
-                relays[relayWaterIn] = false;
-                relays[relayWaterOut] = sensorWaterMin.IsWet;
-                if (!sensorWaterMin.IsWet)
-                    State.IsWaterOutMode = false;
-            }
+            relays[relayWaterIn] = state.IsWaterInMode;
+            relays[relayWaterOut] = state.IsWaterOutMode;
+            relays[relayLight] = state.IsLightOn;
+            relays[relayHeater] = state.IsHeaterOn;
+            relays[relayCO2] = state.IsCO2On;
 
-            relays[relayLight] = State.IsLightOn;
-            relays[relayHeater] = State.IsHeatOn;
-
+            // double with indicators:
             indicators[ledWaterIn] = relays[relayWaterIn];
             indicators[ledWaterOut] = relays[relayWaterOut];
             indicators[ledLight] = relays[relayLight];
             indicators[ledHeater] = relays[relayHeater];
+            indicators[ledCO2] = relays[relayCO2];
+        }
+        private void SendStateToClients()
+        {
+            NetworkMessage msg = new NetworkMessage("State");
+            msg["Version"] = Version;
+            byte[] data = msg.Pack(msgFormat);
+
+            wsServer.SendToAll(data, 0, data.Length);
+            //tcpServer.SendToAll(data);
         }
 
         private void BlinkLED(int led)
@@ -198,10 +222,20 @@ namespace AquaExpert
                 indicators[led] = true;
             }).Start();
         }
+        #endregion
 
-        private void ReplaceWater()
+        #region Public methods
+        public void WaterIn(bool on) // набор воды
         {
-            State.IsWaterOutMode = true;
+            // в автоматическом режиме не влияет на поведение
+            // в ручном режиме идет набор до достижения макс. уровня, независимо от режима слива
+            state.IsWaterInMode = on;
+        }
+        public void WaterOut(bool on) // слив воды
+        {
+            // в ручном режиме спустит всю воду
+            // в автоматическом режиме сделает замену воды
+            state.IsWaterOutMode = on;
         }
         #endregion
 
@@ -216,7 +250,7 @@ namespace AquaExpert
 
             httpServer.Start("http", 80);
             wsServer.Start();
-            tcpServer.Start();
+            //tcpServer.Start();
             SyncTime();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
@@ -231,7 +265,7 @@ namespace AquaExpert
 
             httpServer.Stop();
             wsServer.Stop();
-            tcpServer.Stop();
+            //tcpServer.Stop();
 
             Thread.Sleep(1000);
 
@@ -311,8 +345,9 @@ namespace AquaExpert
 
         private void timerWorkflow_Tick(Gadgeteer.Timer timer)
         {
-            PopulateState();
+            SetState();
             DoWork();
+            SendStateToClients();
         }
         #endregion
 

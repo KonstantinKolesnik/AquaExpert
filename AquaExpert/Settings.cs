@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace AquaExpert
 {
-    class Settings
+    public class Settings
     {
         #region Constants
         public const int IPPort = 7777;
@@ -16,14 +16,17 @@ namespace AquaExpert
         #endregion
 
         #region Settings
-        public string WiFiSSID = "GothicMaestro";
-        public string WiFiPassword = "kotyara75";
-        //public string WiFiSSID = "TW";
-        //public string WiFiPassword = "techwiregreyc";
+        //public string WiFiSSID = "GothicMaestro";
+        //public string WiFiPassword = "kotyara75";
+        public string WiFiSSID = "TW";
+        public string WiFiPassword = "techwiregreyc";
 
         public int LightOnHour = 10;
         public int LightOffHour = 20;
-
+        public int CO2OnHour = 9;
+        public int CO2OffHour = 19;
+        public int WaterOutDay = 6;
+        public int WaterOutHour = 12;
         #endregion
 
         #region Serialization / deserialization
