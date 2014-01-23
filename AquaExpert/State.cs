@@ -6,7 +6,7 @@ namespace AquaExpert
     class State
     {
         public bool IsLightOn = false;
-        public bool IsFeedMode = false;
+        public bool IsHeatOn = false;
         public bool IsWaterOutMode = false;
 
 

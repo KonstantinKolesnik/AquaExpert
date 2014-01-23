@@ -15,6 +15,9 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.Seeed;
+using Gadgeteer.Modules.LoveElectronics;
 
 namespace AquaExpert
 {
@@ -41,7 +44,7 @@ namespace AquaExpert
         private int relayWaterIn = 0, ledWaterIn = 0;
         private int relayWaterOut = 1, ledWaterOut = 1;
         private int relayLight = 2, ledLight = 2;
-        private int relayFeed = 3, ledFeed = 3;
+        private int relayHeater = 3, ledHeater = 3;
         private int ledNetwork = 4;
 
         private Gadgeteer.Timer timerWorkflow;
@@ -56,6 +59,11 @@ namespace AquaExpert
 
         private void ProgramStarted()
         {
+            relays[relayWaterIn] = false;
+            relays[relayWaterOut] = false;
+            relays[relayLight] = false;
+            relays[relayHeater] = false;
+
             indicators.TurnAllLedsOff();
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
@@ -71,6 +79,7 @@ namespace AquaExpert
             //cdcDevice = new USBCDCDevice();
             //hidDevice = new USBHIDDevice();
 
+            InitTimeService();
             InitNetwork();
 
             Mainboard.SetDebugLED(true);
@@ -92,14 +101,11 @@ namespace AquaExpert
             wsServer.SessionDisconnected += Session_Disconnected;
 
             httpServer = new HttpServer();
+            httpServer.OnRequest += httpServer_OnRequest;
             httpServer.OnGetRequest += httpServer_OnGetRequest;
             httpServer.OnResponse += httpServer_OnResponse;
 
-            //if (options.UseWiFi)
             networkManager = new GadgeteerWiFiManager(wifi_RS21, Settings.WiFiSSID, Settings.WiFiPassword);
-            //else
-            //networkManager = new GadgeteerEthernetManager(ethernet_ENC28);
-
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
 
@@ -119,10 +125,7 @@ namespace AquaExpert
             {
                 AutoDayLightSavings = true,
                 ForceSyncAtWakeUp = true,
-                // "nist1-sj.ustiming.org,us.pool.ntp.org,clock.tricity.wsu.edu,clock-1.cs.cmu.edu,time-a.nist.gov"
-                PrimaryServer = Dns.GetHostEntry("nist1-sj.ustiming.org").AddressList[0].GetAddressBytes(),
-                AlternateServer = Dns.GetHostEntry("pool.ntp.org").AddressList[0].GetAddressBytes(),
-                RefreshTime = 24 * 60 * 60 // once a day
+                RefreshTime = 24 * 60 * 60, // once a day
             };
             FixedTimeService.SetTimeZoneOffset(+2 * 60); /// PST
             FixedTimeService.SetDst("Mar Sun>=8 @2", "Nov Sun>=1 @2", 60); // US DST
@@ -136,6 +139,10 @@ namespace AquaExpert
         {
             new Thread(() =>
             {
+                // "nist1-sj.ustiming.org,us.pool.ntp.org,clock.tricity.wsu.edu,clock-1.cs.cmu.edu,time-a.nist.gov"
+                FixedTimeService.Settings.PrimaryServer = Dns.GetHostEntry("nist1-sj.ustiming.org").AddressList[0].GetAddressBytes();
+                FixedTimeService.Settings.AlternateServer = Dns.GetHostEntry("pool.ntp.org").AddressList[0].GetAddressBytes();
+
                 // wait for internet connection
                 while (IPAddress.GetDefaultLocalAddress() == IPAddress.Any)
                     Thread.Sleep(500);
@@ -170,12 +177,12 @@ namespace AquaExpert
             }
 
             relays[relayLight] = State.IsLightOn;
-            relays[relayFeed] = State.IsFeedMode;
+            relays[relayHeater] = State.IsHeatOn;
 
             indicators[ledWaterIn] = relays[relayWaterIn];
             indicators[ledWaterOut] = relays[relayWaterOut];
             indicators[ledLight] = relays[relayLight];
-            indicators[ledFeed] = relays[relayFeed];
+            indicators[ledHeater] = relays[relayHeater];
         }
 
         private void BlinkLED(int led)
@@ -209,23 +216,22 @@ namespace AquaExpert
 
             httpServer.Start("http", 80);
             wsServer.Start();
-            //tcpServer.Start();
+            tcpServer.Start();
+            SyncTime();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
 
             //NameService ns = new NameService();
             //ns.AddName("TYPHOON", NameService.NameType.Unique, NameService.MsSuffix.Default);
 
-            InitTimeService();
-            SyncTime();
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
             indicators[ledNetwork] = false;
 
-            //httpServer.Stop();
-            //wsServer.Stop();
-            //tcpServer.Stop();
+            httpServer.Stop();
+            wsServer.Stop();
+            tcpServer.Stop();
 
             Thread.Sleep(1000);
 
@@ -242,14 +248,17 @@ namespace AquaExpert
         }
         private void TimeService_SystemTimeChecked(object sender, SystemTimeChangedEventArgs e)
         {
-            RealTimeClock.SetTime(e.EventTime);
-            //timerClock.Start();
+            //RealTimeClock.SetTime(e.EventTime);
+            //timerWorkflow.Start();
         }
 
-        private void httpServer_OnGetRequest(string path, Hashtable parameters, HttpListenerResponse response)
+        private void httpServer_OnRequest(HttpListenerRequest request)
         {
             BlinkLED(ledNetwork);
-
+            //indicators[6] = true;
+        }
+        private void httpServer_OnGetRequest(string path, Hashtable parameters, HttpListenerResponse response)
+        {
             //if (HWConfig.SDCard.IsCardMounted)
             {
                 if (path.ToLower() == "\\admin") // There is one particular URL that we process differently
@@ -261,17 +270,10 @@ namespace AquaExpert
                     //httpServer.SendFile(HWConfig.SDCard.GetStorageDevice().RootDirectory + "\\DTC" + path, response);
 
 
-                    //ResourceUtility.GetObject(Resources.ResourceManager, Resources.BinaryResources.index);
-
-                    //byte[] data = Resources.GetBytes(Resources.BinaryResources.index_html);
-                    //byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
-                    byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
-                    
-                    
+                    byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
+                    //byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
                     httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
                 }
-
-                BlinkLED(ledNetwork);
             }
         }
         private void httpServer_OnResponse(HttpListenerResponse response)

@@ -12,11 +12,10 @@ namespace AquaExpert
         #region Constants
         public const int IPPort = 7777;
         public const int WSPort = 12000;
-        private const string fileName = @"\AquaExpert\options.xml";
+        private const string fileName = @"\AquaExpert\settings.xml";
         #endregion
 
         #region Settings
-        public bool UseWiFi = true;
         public string WiFiSSID = "GothicMaestro";
         public string WiFiPassword = "kotyara75";
         //public string WiFiSSID = "TW";
@@ -48,12 +47,12 @@ namespace AquaExpert
                         while (!reader.EOF)
                         {
                             reader.Read();
-                            if (reader.NodeType == XmlNodeType.Element && reader.Name == "Options")
+                            if (reader.NodeType == XmlNodeType.Element && reader.Name == "Settings")
                             {
                                 res = new Settings();
 
-                                if (!Utils.StringIsNullOrEmpty(reader.GetAttribute("UseWiFi")))
-                                    res.UseWiFi = reader.GetAttribute("UseWiFi") == bool.TrueString;
+                                //if (!Utils.StringIsNullOrEmpty(reader.GetAttribute("UseWiFi")))
+                                //    res.UseWiFi = reader.GetAttribute("UseWiFi") == bool.TrueString;
                                 if (!Utils.StringIsNullOrEmpty(reader.GetAttribute("WiFiSSID")))
                                     res.WiFiSSID = reader.GetAttribute("WiFiSSID");
                                 if (!Utils.StringIsNullOrEmpty(reader.GetAttribute("WiFiPassword")))
@@ -89,9 +88,9 @@ namespace AquaExpert
                     //<?xml version="1.0" encoding="utf-8" ?>
                     //writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
 
-                    writer.WriteStartElement("Options");
+                    writer.WriteStartElement("Settings");
 
-                    writer.WriteAttributeString("UseWiFi", UseWiFi ? bool.TrueString : bool.FalseString);
+                    //writer.WriteAttributeString("UseWiFi", UseWiFi ? bool.TrueString : bool.FalseString);
                     writer.WriteAttributeString("WiFiSSID", WiFiSSID);
                     writer.WriteAttributeString("WiFiPassword", WiFiPassword);
 
