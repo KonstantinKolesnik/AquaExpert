@@ -11,8 +11,8 @@ namespace AquaExpert
         public bool IsWaterOutMode = false;
         public bool IsWaterInMode = false;
 
-        public int Temperature;
-        public int PH;
+        public double Temperature = 0;
+        public double PH = 0;
 
         public bool IsManualMode = false;
     }

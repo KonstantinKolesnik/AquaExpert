@@ -36,7 +36,7 @@ namespace AquaExpert
 
         private WaterLevelSensor sensorWaterMax;
         private WaterLevelSensor sensorWaterMin;
-        private PHSensor sensorPH;
+        private PHTempSensor sensorPHTemp;
 
         private State state = new State();
         private Settings settings = null;
@@ -53,6 +53,10 @@ namespace AquaExpert
         #endregion
 
         #region Properties
+        public static string Name
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Name; }
+        }
         public static string Version
         {
             get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
@@ -69,6 +73,25 @@ namespace AquaExpert
 
         private void ProgramStarted()
         {
+            //if (sdCard.IsCardInserted)
+            //{
+            //    sdCard.MountSDCard();
+            //    Thread.Sleep(500);
+            //    settings = Settings.LoadFromSD(sdCard.GetStorageDevice().RootDirectory);
+            //}
+            //settings = Settings.LoadFromFlash(0);
+            settings = new Settings();
+
+            InitHardware();
+            //InitTimeService();
+            //InitNetwork();
+
+            Mainboard.SetDebugLED(true);
+        }
+
+        #region Private methods
+        private void InitHardware()
+        {
             relays[relayWaterIn] = false;
             relays[relayWaterOut] = false;
             relays[relayLight] = false;
@@ -83,19 +106,11 @@ namespace AquaExpert
             timerWorkflow.Tick += timerWorkflow_Tick;
 
             sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
-
-            settings = Settings.LoadFromFlash(0);
+            sensorPHTemp = new PHTempSensor(pHTempSensor);
 
             //cdcDevice = new USBCDCDevice();
             //hidDevice = new USBHIDDevice();
-
-            InitTimeService();
-            InitNetwork();
-
-            Mainboard.SetDebugLED(true);
         }
-
-        #region Private methods
         private void InitNetwork()
         {
             //discoveryListener = new DiscoveryListener();
@@ -163,8 +178,8 @@ namespace AquaExpert
 
         private void SetState()
         {
-            //state.Temperature = ;
-            //state.PH = ;
+            //state.Temperature = sensorPHTemp.Temperature;
+            //state.PH = sensorPHTemp.PH;
 
             if (!state.IsManualMode)
             {
@@ -193,15 +208,16 @@ namespace AquaExpert
             relays[relayCO2] = state.IsCO2On;
 
             // double with indicators:
-            indicators[ledWaterIn] = relays[relayWaterIn];
-            indicators[ledWaterOut] = relays[relayWaterOut];
-            indicators[ledLight] = relays[relayLight];
-            indicators[ledHeater] = relays[relayHeater];
-            indicators[ledCO2] = relays[relayCO2];
+            indicators[ledWaterIn] = state.IsWaterInMode;
+            indicators[ledWaterOut] = state.IsWaterOutMode;
+            indicators[ledLight] = state.IsLightOn;
+            indicators[ledHeater] = state.IsHeaterOn;
+            indicators[ledCO2] = state.IsCO2On;
         }
         private void SendStateToClients()
         {
             NetworkMessage msg = new NetworkMessage("State");
+            msg["TimeStamp"] = DateTime.Now.ToString();
             msg["Version"] = Version;
             byte[] data = msg.Pack(msgFormat);
 
@@ -293,7 +309,7 @@ namespace AquaExpert
         }
         private void httpServer_OnGetRequest(string path, Hashtable parameters, HttpListenerResponse response)
         {
-            //if (HWConfig.SDCard.IsCardMounted)
+            if (sdCard.IsCardMounted)
             {
                 if (path.ToLower() == "\\admin") // There is one particular URL that we process differently
                 {
@@ -301,12 +317,11 @@ namespace AquaExpert
                 }
                 else
                 {
-                    //httpServer.SendFile(HWConfig.SDCard.GetStorageDevice().RootDirectory + "\\DTC" + path, response);
+                    httpServer.SendFile(sdCard.GetStorageDevice().RootDirectory + "\\" + Name + path, response);
 
-
-                    byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
-                    //byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
-                    httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
+                    //byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
+                    ////byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
+                    //httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
                 }
             }
         }

@@ -39,7 +39,7 @@
   <!-- Everything below here is custom to .NET MF / Gadgeteer template-->
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Sensors\PHSensor.cs" />
+    <Compile Include="Sensors\PHTempSensor.cs" />
     <Compile Include="Program.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,13 +74,13 @@
     <Reference Include="GTM.GHIElectronics.LED_Strip, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="GTM.GHIElectronics.SDCard, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="GTM.GHIElectronics.UsbClientDP, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GTM.GHIElectronics.WiFi_RS21, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="GTM.LoveElectronics.PHTemp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GTM.LoveElectronics.Relay, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -120,11 +120,14 @@
     <None Include="Program.gadgeteer.diagram">
       <DependentUpon>Program.gadgeteer</DependentUpon>
     </None>
-    <Content Include="Resources\index.html" />
     <None Include="Resources\NinaB.tinyfnt" />
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MFE\GTM.LoveElectronics.PHTemp\GTM.LoveElectronics.PHTemp.csproj">
+      <Project>{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}</Project>
+      <Name>GTM.LoveElectronics.PHTemp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MFE\MFE.Core\MFE.Core.csproj">
       <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
       <Name>MFE.Core</Name>
@@ -151,7 +154,4 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="Resources\Script\Main.js" />
-  </ItemGroup>
 </Project>

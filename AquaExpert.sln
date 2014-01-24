@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.USB", "..\MFE\MFE.USB\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Messaging", "..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj", "{632B23F9-A020-4C66-93A3-DE9AF4529CB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTM.LoveElectronics.PHTemp", "..\MFE\GTM.LoveElectronics.PHTemp\GTM.LoveElectronics.PHTemp.csproj", "{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{632B23F9-A020-4C66-93A3-DE9AF4529CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{632B23F9-A020-4C66-93A3-DE9AF4529CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{632B23F9-A020-4C66-93A3-DE9AF4529CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F26F4FA-F8E2-4E8B-8A38-5095A1B8912F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

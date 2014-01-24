@@ -29,15 +29,6 @@ namespace AquaExpert
         {
             return ((Microsoft.SPOT.Font)(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
         }
-        internal static string GetString(Resources.StringResources id)
-        {
-            return ((string)(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
-        }
-        [System.SerializableAttribute()]
-        internal enum StringResources : short
-        {
-            index = -2501,
-        }
         [System.SerializableAttribute()]
         internal enum FontResources : short
         {

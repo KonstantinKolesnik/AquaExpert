@@ -30,11 +30,14 @@ namespace AquaExpert {
         /// <summary>The WiFi_RS21 (Premium) module using socket 3 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.WiFi_RS21 wifi_RS21;
         
-        /// <summary>The PHTemp module (not connected).</summary>
-        private Gadgeteer.Modules.LoveElectronics.PHTemp pHTemp;
+        /// <summary>The PHTemp module using socket 12 of the mainboard.</summary>
+        private Gadgeteer.Modules.LoveElectronics.PHTemp pHTempSensor;
         
-        /// <summary>The LED Strip module using socket 9 of the mainboard.</summary>
+        /// <summary>The LED Strip module using socket 18 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.LED_Strip indicators;
+        
+        /// <summary>The SDCard module using socket 9 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.SDCard sdCard;
         
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZRaptor Mainboard {
@@ -64,8 +67,9 @@ namespace AquaExpert {
             Microsoft.SPOT.Debug.Print("The module \'moistureSensorLower\' was not connected in the designer and will be nu" +
                     "ll.");
             this.wifi_RS21 = new GTM.GHIElectronics.WiFi_RS21(3);
-            Microsoft.SPOT.Debug.Print("The module \'pHTemp\' was not connected in the designer and will be null.");
-            this.indicators = new GTM.GHIElectronics.LED_Strip(9);
+            this.pHTempSensor = new GTM.LoveElectronics.PHTemp(12);
+            this.indicators = new GTM.GHIElectronics.LED_Strip(18);
+            this.sdCard = new GTM.GHIElectronics.SDCard(9);
         }
     }
 }

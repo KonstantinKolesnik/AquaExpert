@@ -16,10 +16,10 @@ namespace AquaExpert
         #endregion
 
         #region Settings
-        //public string WiFiSSID = "GothicMaestro";
-        //public string WiFiPassword = "kotyara75";
-        public string WiFiSSID = "TW";
-        public string WiFiPassword = "techwiregreyc";
+        public string WiFiSSID = "GothicMaestro";
+        public string WiFiPassword = "kotyara75";
+        //public string WiFiSSID = "TW";
+        //public string WiFiPassword = "techwiregreyc";
 
         public int LightOnHour = 10;
         public int LightOffHour = 20;
