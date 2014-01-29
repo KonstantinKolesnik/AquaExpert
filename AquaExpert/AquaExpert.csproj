@@ -148,10 +148,6 @@
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.USB\MFE.USB.csproj">
-      <Project>{F0DA6247-97C4-43DC-99B6-A763AF5225C2}</Project>
-      <Name>MFE.USB</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
 </Project>

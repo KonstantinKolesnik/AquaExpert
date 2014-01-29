@@ -6,18 +6,13 @@ using MFE.Net.Messaging;
 using MFE.Net.Tcp;
 using MFE.Net.Udp;
 using MFE.Net.WebSocket;
-using MFE.USB.Client;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Time;
 using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using Gadgeteer.Modules.GHIElectronics;
-using Gadgeteer.Modules.Seeed;
-using Gadgeteer.Modules.LoveElectronics;
 
 namespace AquaExpert
 {
@@ -30,9 +25,6 @@ namespace AquaExpert
         private WSServer wsServer;
         //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
-
-        //private USBCDCDevice cdcDevice;
-        //private USBHIDDevice hidDevice;
 
         private WaterLevelSensor sensorWaterMax;
         private WaterLevelSensor sensorWaterMin;
@@ -107,9 +99,6 @@ namespace AquaExpert
 
             sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
             sensorPHTemp = new PHTempSensor(pHTempSensor);
-
-            //cdcDevice = new USBCDCDevice();
-            //hidDevice = new USBHIDDevice();
         }
         private void InitNetwork()
         {
@@ -139,10 +128,7 @@ namespace AquaExpert
         private void StartNetwork()
         {
             timerNetworkConnect.Start();
-            new Thread(delegate
-            {
-                networkManager.Start();
-            }).Start();
+            new Thread(() => { networkManager.Start(); }).Start();
         }
         private void InitTimeService()
         {
@@ -227,11 +213,7 @@ namespace AquaExpert
 
         private void BlinkLED(int led)
         {
-            //indicators[led] = false;
-            //Thread.Sleep(20);
-            //indicators[led] = true;
-
-            new Thread(delegate
+            new Thread(() =>
             {
                 indicators[led] = false;
                 Thread.Sleep(20);
@@ -270,10 +252,6 @@ namespace AquaExpert
             SyncTime();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
-
-            //NameService ns = new NameService();
-            //ns.AddName("TYPHOON", NameService.NameType.Unique, NameService.MsSuffix.Default);
-
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
@@ -305,7 +283,6 @@ namespace AquaExpert
         private void httpServer_OnRequest(HttpListenerRequest request)
         {
             BlinkLED(ledNetwork);
-            //indicators[6] = true;
         }
         private void httpServer_OnGetRequest(string path, Hashtable parameters, HttpListenerResponse response)
         {
@@ -316,13 +293,7 @@ namespace AquaExpert
                     //httpServer.ProcessPasswordProtectedArea(request, response);
                 }
                 else
-                {
                     httpServer.SendFile(sdCard.GetStorageDevice().RootDirectory + "\\" + Name + path, response);
-
-                    //byte[] data = Encoding.UTF8.GetBytes(Resources.GetString(Resources.StringResources.index));
-                    ////byte[] data = Encoding.UTF8.GetBytes(RealTimeClock.GetTime().ToString());
-                    //httpServer.SendStream(data, HttpServer.DefineContentType(path), response);
-                }
             }
         }
         private void httpServer_OnResponse(HttpListenerResponse response)
@@ -355,7 +326,7 @@ namespace AquaExpert
         }
         private void Session_Disconnected(TcpSession session)
         {
-            // TODO: release locos and accessories
+            
         }
 
         private void timerWorkflow_Tick(Gadgeteer.Timer timer)
