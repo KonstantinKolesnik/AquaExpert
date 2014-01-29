@@ -1,0 +1,1 @@
+Tiny48/88 (28 pin DIP) as well as Tiny261/461/861 (20 pin DIP) and Tiny43U are the only Tiny's with true TWI.

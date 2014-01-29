@@ -13,6 +13,9 @@ using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.Seeed;
+using Gadgeteer.Modules.LoveElectronics;
 
 namespace AquaExpert
 {
