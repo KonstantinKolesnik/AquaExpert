@@ -1,15 +1,15 @@
-From: =?windows-1251?B?0e718ODt5e3uIFdpbmRvd3MgSW50ZXJuZXQgRXhwbG9yZXIgMTA=?=
+From: =?windows-1251?B?0e718ODt5e3uIEludGVybmV0IEV4cGxvcmVyIDEx?=
 Subject: ATmega8 and TWI (I2C) sensors
-Date: Wed, 29 Jan 2014 16:40:17 +0200
+Date: Sat, 1 Feb 2014 16:55:40 +0200
 MIME-Version: 1.0
 Content-Type: multipart/related;
 	type="text/html";
-	boundary="----=_NextPart_000_0000_01CF1D10.CB0CA700"
-X-MimeOLE: Produced By Microsoft MimeOLE V6.2.9200.16384
+	boundary="----=_NextPart_000_0000_01CF1F6E.6FEA8DA0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.3.9600.16384
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: text/html;
 	charset="windows-1253"
 Content-Transfer-Encoding: quoted-printable
@@ -39,7 +39,7 @@ s.parentNode.insertBefore(ga, s);=0A=
 =0A=
 </SCRIPT>
 =20
-<META name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16750"></HEAD>
+<META name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.16476"></HEAD>
 <BODY bgcolor=3D"#b0c0d0"><!---pb_body--->=20
 <TABLE width=3D"1089" height=3D"4122" align=3D"center" =
 bgcolor=3D"#ffffff" border=3D"0"=20
@@ -275,14 +275,13 @@ method=3D"post">
 0px; margin-bottom: 0px;"><FONT=20
             face=3D"Book Antiqua"><INPUT name=3D"cmd" type=3D"hidden" =
 value=3D"_donations">=20
-            <INPUT name=3D"business" type=3D"hidden" =
-value=3D"WTFWNCYTJG37G"> <INPUT=20
-            name=3D"lc" type=3D"hidden" value=3D"GR"> <INPUT =
-name=3D"item_name" type=3D"hidden"=20
-            value=3D"http://www.serasidis.gr (web site support)"> <INPUT =
-name=3D"currency_code"=20
-            type=3D"hidden" value=3D"EUR"> <INPUT name=3D"bn" =
-type=3D"hidden" value=3D"PP-DonationsBF:btn_donateCC_LG.gif:NonHosted">=20
+<INPUT name=3D"business" type=3D"hidden" value=3D"WTFWNCYTJG37G">=20
+<INPUT name=3D"lc" type=3D"hidden" value=3D"GR">=20
+<INPUT name=3D"item_name" type=3D"hidden" =
+value=3D"http://www.serasidis.gr (web site support)">=20
+<INPUT name=3D"currency_code" type=3D"hidden" value=3D"EUR"> <INPUT =
+name=3D"bn" type=3D"hidden" =
+value=3D"PP-DonationsBF:btn_donateCC_LG.gif:NonHosted">=20
             <INPUT name=3D"submit" type=3D"image" alt=3D"PayPal - The =
 safer, easier way to pay online!"=20
             src=3D"" border=3D"0"> <IMG width=3D"1" height=3D"1" =
@@ -1063,16 +1062,15 @@ method=3D"post">
 margin-bottom: 0px;"><FONT=20
       face=3D"Book Antiqua"><INPUT name=3D"cmd" type=3D"hidden" =
 value=3D"_donations">=20
-      <INPUT name=3D"business" type=3D"hidden" value=3D"WTFWNCYTJG37G"> =
-<INPUT name=3D"lc"=20
-      type=3D"hidden" value=3D"GR"> <INPUT name=3D"item_name" =
-type=3D"hidden" value=3D"http://www.serasidis.gr (web site support)">=20
-      <INPUT name=3D"currency_code" type=3D"hidden" value=3D"EUR"> =
-<INPUT name=3D"bn"=20
-      type=3D"hidden" =
-value=3D"PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"> <INPUT=20
-      name=3D"submit" type=3D"image" alt=3D"PayPal - The safer, easier =
-way to pay online!"=20
+<INPUT name=3D"business" type=3D"hidden" value=3D"WTFWNCYTJG37G"> <INPUT =
+name=3D"lc" type=3D"hidden" value=3D"GR">=20
+<INPUT name=3D"item_name" type=3D"hidden" =
+value=3D"http://www.serasidis.gr (web site support)">=20
+<INPUT name=3D"currency_code" type=3D"hidden" value=3D"EUR">=20
+<INPUT name=3D"bn" type=3D"hidden" =
+value=3D"PP-DonationsBF:btn_donateCC_LG.gif:NonHosted">=20
+      <INPUT name=3D"submit" type=3D"image" alt=3D"PayPal - The safer, =
+easier way to pay online!"=20
       src=3D"" border=3D"0"> <IMG width=3D"1" height=3D"1" alt=3D"" =
 src=3D"" border=3D"0">=20
       </FONT></P></FORM>
@@ -1171,7 +1169,7 @@ background=3D"http://www.serasidis.gr/circuits/i2c_sensors/images/lr.gif"=
       <P align=3D"justify" style=3D"line-height: 100%; margin-top: 0px; =
 margin-bottom: 0px;">&nbsp;</P></TD></TR></TBODY></TABLE></BODY></HTML>
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/jpeg
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/i2c_bus.JPG
@@ -1699,7 +1697,7 @@ AooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAC
 iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKK
 KKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//2Q==
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/jpeg
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/images/home2.jpg
@@ -1751,7 +1749,7 @@ to65akmNy7s05HhZBSweDj3r/up+Jot6W2Lrt7qXU2SQHh/XPoK1j38B7KKul9CCIUrkM4P4hTqk
 tTIdXalIbhxKXgsphj4nf5dyhdm+kEsIaWtlKEIACUhOAB4AeFFuIyllpKEjAArCHEajNhDacAV0
 im6lCc7r/9k=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/jpeg
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/i2c_byte_write.JPG
@@ -1942,7 +1940,7 @@ AKACgAoAKACgAoAKACgAoAKACgDP1nSLHXLA2er2sdzaGSOQxSDKlkdXQ/UMqkfSgChd+F9HuNfs
 9dubCKXWLdRDFdN95QBIB+Qkkx/vmmBBdeDPD95a67a3ek20sGsSCXUEK8XTBVALfgij8KQHRpxn
 2OKAH0AFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFAH//Z
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/jpeg
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/i2c_byte_read.JPG
@@ -2246,7 +2244,7 @@ qWleJrKK6n1CePdPZXkcSq0MzDH7or9zP3SGXuKAPdlGFGTnHegB1ABQAUAFABQAUAFABQAUAFAB
 QAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFA
 BQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAf/Z
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/jpeg
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/right_arrow.jpg
@@ -2262,7 +2260,7 @@ cuWt20umKbKHGzIOEuKPalPu7s4x4IzpiKrVJKdlqhJszkm+2/LPJC23W1epKwdwYRgnAil3sy6m
 cQ7y9sOEqU1MgkPHy0OoPlWgP9hER6ChCEAiEuCyX7xvOWfrhQq3aagKlpJK88y8e5Tg2SNABvrs
 TlCAuW20ttpQhIShIASlIwABsBCEID//2Q==
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/png
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/images/Download-icon.png
@@ -2432,7 +2430,7 @@ BDi2gGo41s+1HKjtQB0H6lZBvf8AVZ9x1lfbUdZ2tF+zyp7feY6++ztMtZK4hg0butq0aaO5cO4D
 3KFDB3l1q1+gOUX1b9+JVI0uzjdTokb7jZW8F/5/FZLbCWkiHDl2/pOH//it3O+p8Y++L/2/CX9l
 rOf+K+O/iP8D6Sw6ob17ECkAAAAASUVORK5CYII=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/ul.gif
@@ -2464,7 +2462,7 @@ AnQ1hg9/toomeR0YpVgAEdiK3xYhAVHUqSDB4KuhRYQ0HQ4h9XbsUQC4ANIFRpEA0gRcPAttBiCx
 UJQWD4CUgrZHdRGSEPCFRAS5RQHgREg8MhvAAGY+C4AQIRE1hnUBYMBuuzKAJIFRGoC0wr9jAFAC
 SB4UJQYDIOWAMAAbgHTCtyEZMXEFILVQlBQhQTExBCDJUGlIVUycAEg3FIVESFkgHBAAOw==
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/hu.gif
@@ -2487,7 +2485,7 @@ AAh+AAcIHEiwoMGDCBMSBMCwocOHECNKnEixosWLGDNqrBigo8ePIEOKHEnyo8KTKFOqXMnyoICX
 MGPKnEmzps2YG3Pq3Mmzp8+ILYMKHUq0qNGjSJMqXcq0qdOnUKNKnUq1qtWrWLNq3cq1q9evYMOK
 HUu2rNmzaNOqXcu2LdeAADs=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/ur.gif
@@ -2519,7 +2517,7 @@ qCJ1aEY+6HQFb1/GqhV4HOzUgZNr6ooUDK7qBIRGrwEgLFJKaISDTlhoFASsy45xQEYd7ASeC9Qu
 e0JGBWCoQkYZdCssERrtKERGBFBULXmVBfDsGFFo5ISy7+qEQUZbjgGGRkLgm++4AViw0wIZxSDw
 uz0GYACkGf2Yr05GaLTWGN8GsMHC1VqhkRU6tZBRBBwv63FGSug0Q0YOlCysFholoVOTCAAQEAA7
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/vl.gif
@@ -2543,7 +2541,7 @@ LGMKRDkSpsyVLlXeNJmT5M6SPW3+/Bh0KFCaL42GRKpT6cWiTjFCjXoSAMWkVKtebZq1JVOfXb1a
 TQk27MKpZs9+FZp25tiabSWujav2LVa6aNvmTbvXbN+wf7sGzjqYauGoh50mVrrYaOOhj39G3jn5
 ZmWZl2NmZrkZ51y6breW5fsZb+m4nXmeThsQADs=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/vr.gif
@@ -2567,7 +2565,7 @@ Jl2ehKlR5kyGH2vaDEmT5c6OOEvq/EmxJ1GgAC6uPLrRKNOJTp9WDLpU6tSkOX1aNRh1a0qqMb0S
 7CpWINmyZ8Wm9bp2a1urb6XGfTqXad2jd4nm/bl3Z1+bf2UGdjm4ZWGUh29iFaq17EuwQx0nFjmZ
 J+TGaC87Hqt5s9nOnisjVRpWMujNPQMCADs=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/ll.gif
@@ -2600,7 +2598,7 @@ IC1B1HJ3RJg4DRGRFkzgYIIGDAQaLndh1DCfQhTgEJpEYmghRRNIvAsfFryyKkAHQHQJkr/waTGD
 cqxewIIQUTwFFML8bbEDbd8GIIEHJ7Qgww0Ux3iFDXNmHPKUWxThglvfnmxoF04IIUMJG1QAQQIu
 IxwQADs=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/hd.gif
@@ -2623,7 +2621,7 @@ AAh9AAcIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuX
 MGPKnEmzps2bOHPq3MmzJ0UAQIMKHUq0qNGjSJMqXcq0qdOkAqJKnUq1qtWrWKf6JBmgq9evYMOK
 HUv269OzaNOqXcu2aEAAOw==
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
 Content-Type: image/gif
 Content-Transfer-Encoding: base64
 Content-Location: http://www.serasidis.gr/circuits/i2c_sensors/images/lr.gif
@@ -2656,24 +2654,24 @@ iCO1dlFpgAUm4MDElbdJGkAEIYL7WxJKWBEXQlfgwBuVBdiAobvLUYQFEB2M+pqw/ApYEBhRCKFC
 pxkZMMO3Bf9GwwwtnMDBAtb25kN1EdeXMZUW2HBFx0VaS0AGLgShJslPIuBABBuMEIMQTtTK8s04
 ixgQADs=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700
-Content-Type: application/javascript
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0
+Content-Type: application/octet-stream
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://pagead2.googlesyndication.com/pagead/show_ads.js
 
-(function(){var n=3Dthis,aa=3Dfunction(a,b,c){return =
+(function(){var m=3Dthis,aa=3Dfunction(a,b,c){return =
 a.call.apply(a.bind,arguments)},ba=3Dfunction(a,b,c){if(!a)throw =
 Error();if(2<arguments.length){var =
 f=3DArray.prototype.slice.call(arguments,2);return function(){var =
 c=3DArray.prototype.slice.call(arguments);Array.prototype.unshift.apply(c=
 ,f);return a.apply(b,c)}}return function(){return =
-a.apply(b,arguments)}},p=3Dfunction(a,b,c){p=3DFunction.prototype.bind&&-=
+a.apply(b,arguments)}},n=3Dfunction(a,b,c){n=3DFunction.prototype.bind&&-=
 1!=3DFunction.prototype.bind.toString().indexOf("native =
-code")?aa:ba;return p.apply(null,arguments)},ca=3Dfunction(a,=0A=
+code")?aa:ba;return n.apply(null,arguments)},ca=3Dfunction(a,=0A=
 b){var c=3DArray.prototype.slice.call(arguments,1);return function(){var =
 b=3Dc.slice();b.push.apply(b,arguments);return =
 a.apply(this,b)}},da=3DDate.now||function(){return+new Date};var =
-t=3D(new Date).getTime();var w=3Dfunction(a){a=3DparseFloat(a);return =
+u=3D(new Date).getTime();var w=3Dfunction(a){a=3DparseFloat(a);return =
 isNaN(a)||1<a||0>a?0:a},ea=3D/^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/,fa=3Df=
 unction(a,b){if(!a)return b;var c=3Da.match(ea);return c?c[0]:b};var =
 ga=3Dw("0.15"),ha=3Dw("0.001"),ia=3Dw("1.0"),ja=3Dw("0.0"),ka=3Dw("0.001"=
@@ -2683,8 +2681,8 @@ ra=3Dfunction(){return fa("","pagead2.googlesyndication.com")};var =
 sa=3D/&/g,ta=3D/</g,ua=3D/>/g,va=3D/"/g,wa=3D/'/g,x=3D{"\x00":"\\0","\b":=
 "\\b","\f":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\x0B":"\\x0B",'"':'\\"=
 ',"\\":"\\\\"},y=3D{"'":"\\'"};var =
-B=3Ddocument,C=3Dwindow,D,xa=3Dnull,E=3DB.getElementsByTagName("script");=
-E&&E.length&&(xa=3DE[E.length-1]);D=3Dxa;var G=3Dfunction(a,b){for(var c =
+C=3Ddocument,D=3Dwindow,E,xa=3Dnull,F=3DC.getElementsByTagName("script");=
+F&&F.length&&(xa=3DF[F.length-1]);E=3Dxa;var G=3Dfunction(a,b){for(var c =
 in =
 a)Object.prototype.hasOwnProperty.call(a,c)&&b.call(null,a[c],c,a)},H=3Df=
 unction(a){return!!a&&"function"=3D=3Dtypeof =
@@ -2693,7 +2691,7 @@ c=3D1,f=3Darguments.length;c<f;++c)a.push(arguments[c])};function =
 za(a,b){I(a,"load",b)}=0A=
 var I=3Dfunction(a,b,c,f){return =
 a.addEventListener?(a.addEventListener(b,c,f||!1),!0):a.attachEvent?(a.at=
-tachEvent("on"+b,c),!0):!1},J=3Dfunction(a,b,c,f){c=3Dp(f,c);return =
+tachEvent("on"+b,c),!0):!1},J=3Dfunction(a,b,c,f){c=3Dn(f,c);return =
 I(a,b,c,void =
 0)?c:null},K=3Dfunction(a,b,c){a.removeEventListener?a.removeEventListene=
 r(b,c,!1):a.detachEvent&&a.detachEvent("on"+b,c)},Aa=3Dfunction(a){"googl=
@@ -2711,12 +2709,12 @@ b=3D[],c=3D0;a&&25>c;++c){var =
 f=3D9!=3Da.nodeType&&a.id,f=3Df?"/"+f:"",d;o:{var =
 e=3Da.parentElement;d=3Da.nodeName.toLowerCase();if(e)for(var =
 e=3De.childNodes,h=3D=0A=
-0,m=3D0;m<e.length;++m){var =
-g=3De[m];if(g.nodeName&&g.nodeName.toLowerCase()=3D=3Dd){if(a=3D=3Dg){d=3D=
+0,p=3D0;p<e.length;++p){var =
+g=3De[p];if(g.nodeName&&g.nodeName.toLowerCase()=3D=3Dd){if(a=3D=3Dg){d=3D=
 "."+h;break =
 o}++h}}d=3D""}b.push((a.nodeName&&a.nodeName.toLowerCase())+f+d);a=3Da.pa=
 rentElement}return b.join()},Da=3Dfunction(){var =
-a=3DC,b=3D[];if(a)try{for(var =
+a=3DD,b=3D[];if(a)try{for(var =
 c=3Da.parent,f=3D0;c&&c!=3Da&&25>f;++f){for(var =
 d=3Dc.frames,e=3D0;e<d.length;++e)if(a=3D=3Dd[e]){b.push(e);break}a=3Dc;c=
 =3Da.parent}}catch(h){}return =
@@ -2792,7 +2790,7 @@ ry{var =
 b=3DQa.test(a.location.host);return!(!a.postMessage||!a.localStorage||!a.=
 JSON||b)}catch(c){return!1}};var =
 R=3Dfunction(a){this.b=3Da;a.google_iframe_oncopy||(a.google_iframe_oncop=
-y=3D{handlers:{},upd:p(this.n,this)});this.l=3Da.google_iframe_oncopy},Sa=
+y=3D{handlers:{},upd:n(this.n,this)});this.l=3Da.google_iframe_oncopy},Sa=
 ;var S=3D"var =
 i=3Dthis.id,s=3Dwindow.google_iframe_oncopy,H=3Ds&&s.handlers,h=3DH&&H[i]=
 ,w=3Dthis.contentWindow,d;try{d=3Dw.document}catch(e){}if(h&&d&&(!d.body|=
@@ -2803,49 +2801,50 @@ if(h.match){try{h=3Ds.upd(h,i)}catch(e){}w.location.replace(h)}}";=0A=
 S.replace(ua,"&gt;")),-1!=3DS.indexOf('"')&&(S=3DS.replace(va,"&quot;")),=
 -1!=3DS.indexOf("'")&&(S=3DS.replace(wa,"&#39;")));Sa=3DS;R.prototype.set=
 =3Dfunction(a,b){this.l.handlers[a]=3Db;this.b.addEventListener&&this.b.a=
-ddEventListener("load",p(this.m,this,a),!1)};=0A=
-R.prototype.m=3Dfunction(a){a=3Dthis.b.document.getElementById(a);var =
+ddEventListener("load",n(this.m,this,a),!1)};=0A=
+R.prototype.m=3Dfunction(a){a=3Dthis.b.document.getElementById(a);try{var=
+ =
 b=3Da.contentWindow.document;if(a.onload&&b&&(!b.body||!b.body.firstChild=
-))a.onload()};R.prototype.n=3Dfunction(a,b){var =
+))a.onload()}catch(c){}};R.prototype.n=3Dfunction(a,b){var =
 c=3DTa("rx",a),f;o:{if(a&&(f=3Da.match("dt=3D([^&]+)"))&&2=3D=3Df.length)=
 {f=3Df[1];break o}f=3D""}f=3D(new =
 Date).getTime()-f;c=3Dc.replace(/&dtd=3D(\d+|M)/,"&dtd=3D"+(1E4>f?f+"":"M=
 "));this.set(b,c);return c};var Ta=3Dfunction(a,b){var =
 c=3DRegExp("\\b"+a+"=3D(\\d+)"),f=3Dc.exec(b);f&&(b=3Db.replace(c,a+"=3D"=
 +(+f[1]+1||1)));return b};var T,U,V,Ua,Va=3Dfunction(){return =
-n.navigator?n.navigator.userAgent:null};Ua=3DV=3DU=3DT=3D!1;var =
+m.navigator?m.navigator.userAgent:null};Ua=3DV=3DU=3DT=3D!1;var =
 W;if(W=3DVa()){var =
-Wa=3Dn.navigator;T=3D0=3D=3DW.lastIndexOf("Opera",0);U=3D!T&&(-1!=3DW.ind=
+Wa=3Dm.navigator;T=3D0=3D=3DW.lastIndexOf("Opera",0);U=3D!T&&(-1!=3DW.ind=
 exOf("MSIE")||-1!=3DW.indexOf("Trident"));V=3D!T&&-1!=3DW.indexOf("WebKit=
 ");Ua=3D!T&&!V&&!U&&"Gecko"=3D=3DWa.product}var =
-Xa=3DU,Ya=3DUa,Za=3DV;var X;if(T&&n.opera){var =
-$a=3Dn.opera.version;"function"=3D=3Dtypeof $a&&$a()}else =
+Xa=3DU,Ya=3DUa,Za=3DV;var X;if(T&&m.opera){var =
+$a=3Dm.opera.version;"function"=3D=3Dtypeof $a&&$a()}else =
 Ya?X=3D/rv\:([^\);]+)(\)|;)/:Xa?X=3D/\b(?:MSIE|rv)[: =
 ]([^\);]+)(\)|;)/:Za&&(X=3D/WebKit\/(\S+)/),X&&X.exec(Va());var =
 ab=3D!0,bb=3D{},db=3Dfunction(a,b,c,f){var =
 d,e=3Dab;try{d=3Dc()}catch(h){try{var =
-m=3Dh.toString();h.name&&-1=3D=3Dm.indexOf(h.name)&&(m+=3D": =
-"+h.name);h.message&&-1=3D=3Dm.indexOf(h.message)&&(m+=3D": =
+p,g=3Dh.toString();h.name&&-1=3D=3Dg.indexOf(h.name)&&(g+=3D": =
+"+h.name);h.message&&-1=3D=3Dg.indexOf(h.message)&&(g+=3D": =
 "+h.message);if(h.stack){var =
-g=3Dh.stack;c=3Dm;try{-1=3D=3Dg.indexOf(c)&&(g=3Dc+"\n"+g);for(var =
-k;g!=3Dk;)k=3Dg,g=3Dg.replace(/((https?:\/..*\/)[^\/:]*:\d+(?:.|\n)*)\2/,=
-"$1");m=3Dg.replace(/\n =
-*/g,"\n")}catch(l){m=3Dc}}g=3D"";h.fileName&&(g=3Dh.fileName);k=3D-1;h.li=
-neNumber&&(k=3Dh.lineNumber);var q;o:{try{q=3Df?f():"";break =
-o}catch(F){}q=3D""}e=3Db(a,=0A=
-m,g,k,q)}catch(u){cb({context:"protectAndRun",msg:u.toString()+"\n"+(u.st=
-ack||"")})}if(!e)throw h;}return =
+k=3Dh.stack;c=3Dg;try{-1=3D=3Dk.indexOf(c)&&(k=3Dc+"\n"+k);for(var =
+l;k!=3Dl;)l=3Dk,k=3Dk.replace(/((https?:\/..*\/)[^\/:]*:\d+(?:.|\n)*)\2/,=
+"$1");g=3Dk.replace(/\n =
+*/g,"\n")}catch(q){g=3Dc}}p=3Dg;g=3D"";h.fileName&&(g=3Dh.fileName);k=3D-=
+1;h.lineNumber&&(k=3Dh.lineNumber);var z;o:{try{z=3Df?f():"";break =
+o}catch(A){}z=3D""}e=3D=0A=
+b(a,p,g,k,z)}catch(r){cb({context:"protectAndRun",msg:r.toString()+"\n"+(=
+r.stack||"")})}if(!e)throw h;}return =
 d},fb=3Dfunction(a,b,c,f,d){a=3D{context:a,msg:b.substring(0,512),eid:d&&=
-d.substring(0,40),file:c,line:f.toString(),url:B.URL.substring(0,512),ref=
-:B.referrer.substring(0,512)};eb(a);cb(a);return =
+d.substring(0,40),file:c,line:f.toString(),url:C.URL.substring(0,512),ref=
+:C.referrer.substring(0,512)};eb(a);cb(a);return =
 ab},cb=3Dfunction(a){if(0.01>Math.random()){a=3D"/pagead/gen_204?id=3Djse=
-rror"+gb(a);a=3D"http"+("https:"=3D=3DC.location.protocol?"s":"")+"://pag=
-ead2.googlesyndication.com"+a;a=3Da.substring(0,2E3);C.google_image_reque=
+rror"+gb(a);a=3D"http"+("https:"=3D=3DD.location.protocol?"s":"")+"://pag=
+ead2.googlesyndication.com"+a;a=3Da.substring(0,2E3);D.google_image_reque=
 sts||=0A=
-(C.google_image_requests=3D[]);var =
-b=3DC.document.createElement("img");b.src=3Da;C.google_image_requests.pus=
+(D.google_image_requests=3D[]);var =
+b=3DD.document.createElement("img");b.src=3Da;D.google_image_requests.pus=
 h(b)}},eb=3Dfunction(a){var =
-b=3Da||{};G(bb,function(a,f){b[f]=3DC[a]})},hb=3Dfunction(a,b){return =
+b=3Da||{};G(bb,function(a,f){b[f]=3DD[a]})},hb=3Dfunction(a,b){return =
 ca(db,a,fb,b,void 0)},gb=3Dfunction(a){var =
 b=3D"";G(a,function(a,f){if(0=3D=3D=3Da||a)b+=3D"&"+f+"=3D"+("function"=3D=
 =3Dtypeof encodeURIComponent?encodeURIComponent(a):escape(a))});return =
@@ -2857,16 +2856,16 @@ b){0!=3Dthis.a||0!=3Dthis.c.length||b&&b!=3Dwindow?this.g(a,b):(this.a=3D=
 ib(a,window)))};Z.prototype.g=3Dfunction(a,b){this.c.push(new =
 ib(a,b||this.b));jb(this)};Z.prototype.q=3Dfunction(a){this.a=3D1;if(a){v=
 ar =
-b=3Dhb("sjr::timeout",p(this.e,this));this.d=3Dthis.b.setTimeout(b,a)}};=0A=
+b=3Dhb("sjr::timeout",n(this.e,this));this.d=3Dthis.b.setTimeout(b,a)}};=0A=
 Z.prototype.e=3Dfunction(){1=3D=3Dthis.a&&(null!=3Dthis.d&&(this.b.clearT=
 imeout(this.d),this.d=3Dnull),this.a=3D0);jb(this)};Z.prototype.r=3Dfunct=
 ion(){return!(!window||!Array)};Z.prototype.nq=3DZ.prototype.p;Z.prototyp=
 e.nqa=3DZ.prototype.g;Z.prototype.al=3DZ.prototype.q;Z.prototype.rl=3DZ.p=
 rototype.e;Z.prototype.sz=3DZ.prototype.r;var jb=3Dfunction(a){var =
-b=3Dhb("sjr::tryrun",p(a.o,a));a.b.setTimeout(b,0)};=0A=
+b=3Dhb("sjr::tryrun",n(a.o,a));a.b.setTimeout(b,0)};=0A=
 Z.prototype.o=3Dfunction(){if(0=3D=3Dthis.a&&this.c.length){var =
 a=3Dthis.c.shift();this.a=3D2;var =
-b=3Dhb("sjr::run",p(this.f,this,a));a.win.setTimeout(b,0);jb(this)}};Z.pr=
+b=3Dhb("sjr::run",n(this.f,this,a));a.win.setTimeout(b,0);jb(this)}};Z.pr=
 ototype.f=3Dfunction(a){this.a=3D0;a.k()};=0A=
 var kb=3Dfunction(a){try{return =
 a.sz()}catch(b){return!1}},lb=3Dfunction(a){return!!a&&("object"=3D=3Dtyp=
@@ -2878,22 +2877,22 @@ Z(a)},nb=3Dfunction(a,b){mb().nq(a,b)},ob=3Dfunction(a,b){mb().nqa(a,b)};=
 var =
 pb=3D{"120x90":!0,"160x90":!0,"180x90":!0,"200x90":!0,"468x15":!0,"728x15=
 ":!0},qb=3Dfunction(){var a=3D"script";return["<",a,' =
-src=3D"',P(ra(),"/pagead/js/r20140121/r20140107/show_ads_impl.js",""),'">=
+src=3D"',P(ra(),"/pagead/js/r20140123/r20140107/show_ads_impl.js",""),'">=
 </',a,">"].join("")},rb=3Dfunction(a,b,c,f){return function(){var =
 d=3D!1;f&&mb().al(3E4);try{if(N(a.document.getElementById(b).contentWindo=
 w)){var e=3Da.document.getElementById(b).contentWindow,=0A=
 h=3De.document;h.body&&h.body.firstChild||(h.open(),e.google_async_iframe=
 _close=3D!0,h.write(c))}else{var =
-m=3Da.document.getElementById(b).contentWindow,g;e=3Dc;e=3DString(e);if(e=
+p=3Da.document.getElementById(b).contentWindow,g;e=3Dc;e=3DString(e);if(e=
 .quote)g=3De.quote();else{for(var h=3D['"'],k=3D0;k<e.length;k++){var =
-l=3De.charAt(k),q=3Dl.charCodeAt(0),F=3Dh,u=3Dk+1,z;if(!(z=3Dx[l])){var =
-r;if(31<q&&127>q)r=3Dl;else{var v=3Dl;if(v in y)r=3Dy[v];else if(v in =
-x)r=3Dy[v]=3Dx[v];else{var =
-s=3Dv,A=3Dv.charCodeAt(0);if(31<A&&127>A)s=3Dv;else{if(256>A){if(s=3D"\\x=
-",16>A||256<A)s+=3D"0"}else s=3D"\\u",4096>A&&(s+=3D"0");s+=3D=0A=
-A.toString(16).toUpperCase()}r=3Dy[v]=3Ds}}z=3Dr}F[u]=3Dz}h.push('"');g=3D=
-h.join("")}m.location.replace("javascript:"+g)}d=3D!0}catch(Bb){m=3DIa().=
-google_jobrunner,lb(m)&&m.rl()}d&&(d=3DTa("google_async_rrc",c),(new =
+l=3De.charAt(k),q=3Dl.charCodeAt(0),z=3Dh,A=3Dk+1,r;if(!(r=3Dx[l])){var =
+s;if(31<q&&127>q)s=3Dl;else{var v=3Dl;if(v in y)s=3Dy[v];else if(v in =
+x)s=3Dy[v]=3Dx[v];else{var =
+t=3Dv,B=3Dv.charCodeAt(0);if(31<B&&127>B)t=3Dv;else{if(256>B){if(t=3D"\\x=
+",16>B||256<B)t+=3D"0"}else t=3D"\\u",4096>B&&(t+=3D"0");t+=3D=0A=
+B.toString(16).toUpperCase()}s=3Dy[v]=3Dt}}r=3Ds}z[A]=3Dr}h.push('"');g=3D=
+h.join("")}p.location.replace("javascript:"+g)}d=3D!0}catch(Bb){p=3DIa().=
+google_jobrunner,lb(p)&&p.rl()}d&&(d=3DTa("google_async_rrc",c),(new =
 R(a)).set(b,rb(a,b,d,!1)))}},sb=3Dfunction(a){var =
 b=3D["<iframe"];G(a,function(a,f){null!=3Da&&b.push(" =
 "+f+'=3D"'+a+'"')});b.push("></iframe>");return =
@@ -2906,10 +2905,10 @@ f=3Db.google_ad_output,d=3Db.google_ad_format;d||"html"!=3Df&&null!=3Df||=
 (d=3Db.google_ad_width+"x"+b.google_ad_height,c&&(d+=3D"_as"));c=3D!b.goo=
 gle_ad_slot||b.google_override_format||!pb[b.google_ad_width+"x"+b.google=
 _ad_height]&&"aa"=3D=3Db.google_loader_used;d=3Dd&&c?d.toLowerCase():"";b=
-.google_ad_format=3Dd;b.google_ad_unit_key=3DEa(D.parentElement,b,!0);a=3D=
+.google_ad_format=3Dd;b.google_ad_unit_key=3DEa(E.parentElement,b,!0);a=3D=
 a.google_adk2_experiment=3Da.google_adk2_experiment||L(["C","E"],ma)||"N"=
 ;"E"=3D=3Da?b.google_ad_unit_key_2=3D=0A=
-Ea(D,b):"C"=3D=3Da&&(b.google_ad_unit_key_2=3D"ctrl")},vb=3DMath.floor(1E=
+Ea(E,b):"C"=3D=3Da&&(b.google_ad_unit_key_2=3D"ctrl")},vb=3DMath.floor(1E=
 6*Math.random()),wb=3Dfunction(a){for(var =
 b=3Da.data.split("\n"),c=3D{},f=3D0;f<b.length;f++){var =
 d=3Db[f].indexOf("=3D");-1!=3Dd&&(c[b[f].substr(0,d)]=3Db[f].substr(d+1))=
@@ -2962,7 +2961,7 @@ a=3Dwindow;Aa(a);if(!window.google_top_experiment&&!window.google_top_js_=
 status){var =
 b=3Dwindow;if(2!=3D=3D(b.top=3D=3Db?0:N(b.top)?1:2))window.google_top_js_=
 status=3D0;else if(top.postMessage){var =
-c;try{c=3DC.top.frames.google_top_static_frame?!0:!1}catch(f){c=3D!1}if(c=
+c;try{c=3DD.top.frames.google_top_static_frame?!0:!1}catch(f){c=3D!1}if(c=
 ){if(window.google_top_experiment=3DL(["jp_c","jp_zl","jp_wfpmr"],ga),"jp=
 _c"!=3D=3Dwindow.google_top_experiment){I(window,"message",wb);window.goo=
 gle_top_js_status=3D3;b=3D{0:"google_loc_request",1:vb};c=3D[];for(var d =
@@ -2994,24 +2993,24 @@ nt)||Ga.test(navigator.userAgent)||(window.google_async_for_oa_experiment=
 =3DL(["E","C"],ja)),e=3DHa.test(e)?"E"=3D=3D=3Dwindow.google_async_for_oa=
 _experiment:!0),e=3D!e||window.google_container_id||window.google_ad_outp=
 ut&&"html"!=3Dwindow.google_ad_output);=0A=
-if(e)a.google_loader_used=3D"sb",a.google_start_time=3Dt,ub(a,a),document=
+if(e)a.google_loader_used=3D"sb",a.google_start_time=3Du,ub(a,a),document=
 .write(qb());else{a.google_unique_id?++a.google_unique_id:a.google_unique=
 _id=3D1;e=3D{};d=3D0;for(b=3DQ.length;d<b;d++)c=3DQ[d],null!=3Da[c]&&(e[c=
 ]=3Da[c]);e.google_loader_used=3D"sa";d=3D0;for(b=3DQ.length;d<b;d++)c=3D=
 Q[d],Oa[c]||(a[c]=3Dnull);d=3De.google_ad_width;b=3De.google_ad_height;c=3D=
 {};tb(c,d,b,!0);c.onload=3D'"'+Sa+'"';for(var =
-h,m=3Da.document,g=3Dc.id,k=3D0;!g||m.getElementById(g);)g=3D"aswift_"+k+=
+h,p=3Da.document,g=3Dc.id,k=3D0;!g||p.getElementById(g);)g=3D"aswift_"+k+=
 +;c.id=3Dg;c.name=3Dg;var k=3De.google_ad_width,l=3De.google_ad_height,=0A=
 g=3D["<iframe"];for(h in =
 c)c.hasOwnProperty(h)&&ya(g,h+"=3D"+c[h]);g.push('style=3D"left:0;positio=
 n:absolute;top:0;"');g.push("></iframe>");h=3D"border:none;height:"+l+"px=
 ;margin:0;padding:0;position:relative;visibility:visible;width:"+k+"px;ba=
-ckground-color:transparent";m.write(['<ins =
+ckground-color:transparent";p.write(['<ins =
 style=3D"display:inline-table;',h,'"><ins id=3D"',c.id+"_anchor",'" =
 style=3D"display:block;',h,'">',g.join(" =
 "),"</ins></ins>"].join(""));h=3Dc.id;c=3De.google_override_format||!pb[e=
 .google_ad_width+"x"+e.google_ad_height]&&"aa"=3D=3De.google_loader_used?=0A=
-L(["c","e"],na):null;ub(a,e,"e"=3D=3Dc);m=3DPa(e);g=3DRa(a);k=3Da.documen=
+L(["c","e"],na):null;ub(a,e,"e"=3D=3Dc);p=3DPa(e);g=3DRa(a);k=3Da.documen=
 t;k=3D3=3D=3D({visible:1,hidden:2,prerender:3,preview:4}[k.webkitVisibili=
 tyState||k.mozVisibilityState||k.visibilityState||""]||0);!g||k||void =
 0!=3D=3Da.google_ad_handling_mode||a.google_async_for_oa_experiment||(a.g=
@@ -3020,30 +3019,30 @@ e_ad_handling_mode?String(a.google_ad_handling_mode):null;if(Ra(a)&&1=3D=3D=
 a.google_unique_id&&"XN"!=3Dg&&"S"!=3Dg){k=3D"zrt_ads_frame"+a.google_uni=
 que_id;l=3De.google_page_url;=0A=
 if(!l){e:{var =
-l=3Da.document,q=3Dd||a.google_ad_width,F=3Db||a.google_ad_height;if(a.to=
-p=3D=3Da)l=3D!1;else{var u=3Dl.documentElement;if(q&&F){var =
-z=3D1,r=3D1;a.innerHeight?(z=3Da.innerWidth,r=3Da.innerHeight):u&&u.clien=
-tHeight?(z=3Du.clientWidth,r=3Du.clientHeight):l.body&&(z=3Dl.body.client=
-Width,r=3Dl.body.clientHeight);if(r>2*F||z>2*q){l=3D!1;break =
+l=3Da.document,q=3Dd||a.google_ad_width,z=3Db||a.google_ad_height;if(a.to=
+p=3D=3Da)l=3D!1;else{var A=3Dl.documentElement;if(q&&z){var =
+r=3D1,s=3D1;a.innerHeight?(r=3Da.innerWidth,s=3Da.innerHeight):A&&A.clien=
+tHeight?(r=3DA.clientWidth,s=3DA.clientHeight):l.body&&(r=3Dl.body.client=
+Width,s=3Dl.body.clientHeight);if(s>2*z||r>2*q){l=3D!1;break =
 e}}l=3D!0}}l=3Dl?a.document.referrer:a.document.URL}l=3DencodeURIComponen=
 t(l);q=3Dnull;if("PC"=3D=3Dg||"EI"=3D=3Dg||"AZ"=3D=3Dg){switch(g){case =
 "EI":q=3D"I";break;case "AZ":q=3D"Z";break;default:q=3D"K"}q=3D=0A=
 q+"-"+(l+"/"+e.google_ad_unit_key+"/"+a.google_unique_id)}e=3D{};tb(e,d,b=
 ,!1);e.style=3D"display:none";d=3Dq;e.id=3Dk;e.name=3Dk;d=3DP(fa("","goog=
-leads.g.doubleclick.net"),["/pagead/html/r20140121/r20140107/zrt_lookup.h=
+leads.g.doubleclick.net"),["/pagead/html/r20140123/r20140107/zrt_lookup.h=
 tml",d?"#"+encodeURIComponent(d):""].join(""));e.src=3Dd;e=3Dsb(e)}else =
 e=3Dnull;d=3D(new =
 Date).getTime();b=3Da.google_top_experiment;k=3Da.google_async_for_oa_exp=
 eriment;l=3Da.google_always_use_delayed_impressions_experiment;=0A=
 e=3D["<!doctype =
-html><html><body>",e,"<script>",m,"google_show_ads_impl=3Dtrue;google_uni=
+html><html><body>",e,"<script>",p,"google_show_ads_impl=3Dtrue;google_uni=
 que_id=3D",a.google_unique_id,';google_async_iframe_id=3D"',h,'";google_s=
-tart_time=3D',t,";",b?'google_top_experiment=3D"'+b+'";':"",g?'google_ad_=
+tart_time=3D',u,";",b?'google_top_experiment=3D"'+b+'";':"",g?'google_ad_=
 handling_mode=3D"'+g+'";':"",k?'google_async_for_oa_experiment=3D"'+k+'";=
 ':"",l?'google_always_use_delayed_impressions_experiment=3D"'+l+'";':"",c=
-?'google_append_as_for_format_override=3D"'+c+'";':"","google_bpp=3D",d>t=
-?d-t:1,";google_async_rrc=3D0;\x3c/script>",qb(),"</body></html>"].join("=
+?'google_append_as_for_format_override=3D"'+c+'";':"","google_bpp=3D",d>u=
+?d-u:1,";google_async_rrc=3D0;\x3c/script>",qb(),"</body></html>"].join("=
 ");=0A=
 (a.document.getElementById(h)?nb:ob)(rb(a,h,e,!0))}});})();=0A=
 
-------=_NextPart_000_0000_01CF1D10.CB0CA700--
+------=_NextPart_000_0000_01CF1F6E.6FEA8DA0--

@@ -16,6 +16,9 @@ using System.Threading;
 using Gadgeteer.Modules.GHIElectronics;
 using Gadgeteer.Modules.Seeed;
 using Gadgeteer.Modules.LoveElectronics;
+using MFE.Hardware;
+using Gadgeteer;
+using Gadgeteer.Interfaces;
 
 namespace AquaExpert
 {
@@ -29,9 +32,9 @@ namespace AquaExpert
         //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
 
-        private WaterLevelSensor sensorWaterMax;
-        private WaterLevelSensor sensorWaterMin;
-        private PHTempSensor sensorPHTemp;
+        //private WaterLevelSensor sensorWaterMax;
+        //private WaterLevelSensor sensorWaterMin;
+        //private PHTempSensor sensorPHTemp;
 
         private State state = new State();
         private Settings settings = null;
@@ -68,15 +71,7 @@ namespace AquaExpert
 
         private void ProgramStarted()
         {
-            //if (sdCard.IsCardInserted)
-            //{
-            //    sdCard.MountSDCard();
-            //    Thread.Sleep(500);
-            //    settings = Settings.LoadFromSD(sdCard.GetStorageDevice().RootDirectory);
-            //}
-            //settings = Settings.LoadFromFlash(0);
-            settings = new Settings();
-
+            InitSettings();
             InitHardware();
             //InitTimeService();
             //InitNetwork();
@@ -85,14 +80,30 @@ namespace AquaExpert
         }
 
         #region Private methods
+        private void InitSettings()
+        {
+            //if (sdCard.IsCardInserted)
+            //{
+            //    sdCard.MountSDCard();
+            //    Thread.Sleep(500);
+            //    settings = Settings.LoadFromSD(sdCard.GetStorageDevice().RootDirectory);
+            //}
+            //settings = Settings.LoadFromFlash(0);
+            settings = new Settings();
+        }
         private void InitHardware()
         {
-            relays[relayWaterIn] = false;
-            relays[relayWaterOut] = false;
-            relays[relayLight] = false;
-            relays[relayHeater] = false;
-
             indicators.TurnAllLedsOff();
+
+
+            //Watchdog
+
+            //ArrayList res = I2CExtension.Scan(0, 127, 400);
+
+            //relays[relayWaterIn] = false;
+            //relays[relayWaterOut] = false;
+            //relays[relayLight] = false;
+            //relays[relayHeater] = false;
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
@@ -100,8 +111,8 @@ namespace AquaExpert
             timerWorkflow = new Gadgeteer.Timer(500);
             timerWorkflow.Tick += timerWorkflow_Tick;
 
-            sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
-            sensorPHTemp = new PHTempSensor(pHTempSensor);
+            //sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
+            //sensorPHTemp = new PHTempSensor(pHTempSensor);
         }
         private void InitNetwork()
         {
@@ -170,38 +181,38 @@ namespace AquaExpert
             //state.Temperature = sensorPHTemp.Temperature;
             //state.PH = sensorPHTemp.PH;
 
-            if (!state.IsManualMode)
-            {
-                DateTime dt = RealTimeClock.GetTime();
-                //Debug.Print(dt.ToString());
+            //if (!state.IsManualMode)
+            //{
+            //    DateTime dt = RealTimeClock.GetTime();
+            //    //Debug.Print(dt.ToString());
 
-                state.IsLightOn = dt.Hour >= settings.LightOnHour && dt.Hour < settings.LightOffHour;
-                state.IsCO2On = dt.Hour >= settings.CO2OnHour && dt.Hour < settings.CO2OffHour;
+            //    state.IsLightOn = dt.Hour >= settings.LightOnHour && dt.Hour < settings.LightOffHour;
+            //    state.IsCO2On = dt.Hour >= settings.CO2OnHour && dt.Hour < settings.CO2OffHour;
 
-                if (!sensorWaterMin.IsWet) // если мин. уровень достигнут, то останавливаем слив
-                    state.IsWaterOutMode = false;
+            //    if (!sensorWaterMin.IsWet) // если мин. уровень достигнут, то останавливаем слив
+            //        state.IsWaterOutMode = false;
 
-                state.IsWaterInMode = !state.IsWaterOutMode; // если нет слива в данный момент, то набираем
-            }
+            //    state.IsWaterInMode = !state.IsWaterOutMode; // если нет слива в данный момент, то набираем
+            //}
 
-            // ПО-ЛЮБОМУ!!! если макс. уровень достигнут, то останавливаем набор
-            if (sensorWaterMax.IsWet)
-                state.IsWaterInMode = false;
+            //// ПО-ЛЮБОМУ!!! если макс. уровень достигнут, то останавливаем набор
+            //if (sensorWaterMax.IsWet)
+            //    state.IsWaterInMode = false;
         }
         private void DoWork()
         {
-            relays[relayWaterIn] = state.IsWaterInMode;
-            relays[relayWaterOut] = state.IsWaterOutMode;
-            relays[relayLight] = state.IsLightOn;
-            relays[relayHeater] = state.IsHeaterOn;
-            relays[relayCO2] = state.IsCO2On;
+            //relays[relayWaterIn] = state.IsWaterInMode;
+            //relays[relayWaterOut] = state.IsWaterOutMode;
+            //relays[relayLight] = state.IsLightOn;
+            //relays[relayHeater] = state.IsHeaterOn;
+            //relays[relayCO2] = state.IsCO2On;
 
-            // double with indicators:
-            indicators[ledWaterIn] = state.IsWaterInMode;
-            indicators[ledWaterOut] = state.IsWaterOutMode;
-            indicators[ledLight] = state.IsLightOn;
-            indicators[ledHeater] = state.IsHeaterOn;
-            indicators[ledCO2] = state.IsCO2On;
+            //// double with indicators:
+            //indicators[ledWaterIn] = state.IsWaterInMode;
+            //indicators[ledWaterOut] = state.IsWaterOutMode;
+            //indicators[ledLight] = state.IsLightOn;
+            //indicators[ledHeater] = state.IsHeaterOn;
+            //indicators[ledCO2] = state.IsCO2On;
         }
         private void SendStateToClients()
         {
@@ -334,9 +345,9 @@ namespace AquaExpert
 
         private void timerWorkflow_Tick(Gadgeteer.Timer timer)
         {
-            SetState();
-            DoWork();
-            SendStateToClients();
+            //SetState();
+            //DoWork();
+            //SendStateToClients();
         }
         #endregion
 
