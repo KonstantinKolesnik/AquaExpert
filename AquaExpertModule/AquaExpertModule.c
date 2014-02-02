@@ -2,6 +2,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
+#include "IIC_ultimate.h"
 //#include "ShortCircuitDetector.h"
 //#include "DCCOut.h"
 //#include "AckDetector.h"
@@ -14,10 +16,8 @@ uint8_t GetSwitch(uint8_t idx);
 void InitHardware()
 {
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
-	//ACSR = 0b10000000;				// ACD bit = On: Analog comparator disabled
-	ACSR |= (1 << ADC);				// ACD bit = On: Analog comparator disabled
-	ADCSRA = 0b00000000;			// ADEN bit (#7) = Off: AD converter disabled
-	//ADCSRA |= (0 << ADEN);			// ADEN bit (#7) = Off: AD convertor disabled
+	ACSR |= (1 << ACD);				// ACD bit = On: Analog comparator disabled
+	ADCSRA |= (1 << ADEN);			// ADEN bit (#7) = On: AD converter enabled
 	
 	// Port A
 	//PORTA |= (1<<ACK_DETECT);			// pull up
@@ -32,14 +32,18 @@ void InitHardware()
 			|  (SWITCH_DEFAULT_STATE<<SW_5)
 			|  (SWITCH_DEFAULT_STATE<<SW_6)
 			|  (SWITCH_DEFAULT_STATE<<SW_7);
-	DDRB	|= (1<<SW_0)				// out
-			|  (1<<SW_1)				// out
-			|  (1<<SW_2)				// out
-			|  (1<<SW_3)				// out
-			|  (1<<SW_4)				// out
-			|  (1<<SW_5)				// out
-			|  (1<<SW_6)				// out
-			|  (1<<SW_7);				// out
+	//DDRB	|= (1<<SW_0)				// out
+			//|  (1<<SW_1)				// out
+			//|  (1<<SW_2)				// out
+			//|  (1<<SW_3)				// out
+			//|  (1<<SW_4)				// out
+			//|  (1<<SW_5)				// out
+			//|  (1<<SW_6)				// out
+			//|  (1<<SW_7);				// out
+	DDRB = 0xFF;
+			
+			
+			
 		  
 	//// Port C
 	//PORTC	|= (1<<SHORT_MAIN)			// pull up
@@ -84,10 +88,12 @@ int main()
 	//InitDCCOut();
 	InitInterrupt();
 	
-	//MAIN_TRACK_OFF;
-	//PROG_TRACK_OFF;
-	
 	SetSwitches(SWITCH_DEFAULT_STATE);
+	
+	Init_i2c();               		// Запускаем и конфигурируем i2c
+	Init_Slave_i2c(SlaveOutFunc);   // Настраиваем событие выхода при сработке как Slave
+	
+
 	
     while (1)
     {
@@ -96,7 +102,7 @@ int main()
 		//SetSwitch(0, GetSwitch(0) == 1 ? 0 : 1);
 
 
-		//wdt_reset();
+		wdt_reset();
 		_delay_ms(200);
     }
 }
@@ -110,7 +116,10 @@ void SetSwitch(uint8_t idx, uint8_t state)
 }
 void SetSwitches(uint8_t state)
 {
-	PORTB = state;
+	if (state == 1)
+		PORTB = 0xFF;
+	else
+		PORTB = 0;
 }
 uint8_t GetSwitch(uint8_t idx)
 {

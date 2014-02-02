@@ -11,15 +11,15 @@
 //SPIEN = [X]
 //CKOPT = [ ]
 //EESAVE = [ ]
-//BOOTSZ = 512W_3E00
-//BOOTRST = [ ]
+//BOOTSZ = 256W_3F00
+//BOOTRST = [X]
 //BODLEVEL = 2V7
 //BODEN = [ ]
-//SUT_CKSEL = INTRCOSC_8MHZ_6CK_0MS
+//SUT_CKSEL = INTRCOSC_8MHZ_6CK_64MS
 //
-//HIGH = 0x9D (valid)
-//LOW = 0xC4 (valid)
-//
+//HIGH = 0x9E (valid)
+//LOW = 0xE4 (valid)
+
 //****************************************************************************************
 // 2. Ports Definition
 //****************************************************************************************
