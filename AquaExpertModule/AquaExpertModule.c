@@ -1,47 +1,21 @@
 #include "Hardware.h"
-#include <avr/io.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
+#include "ADC.h"
+#include "Relays.h"
 #include "IIC_ultimate.h"
-//#include "ShortCircuitDetector.h"
-//#include "DCCOut.h"
-//#include "AckDetector.h"
 
-void SetSwitch(uint8_t idx, uint8_t state);
-void SetSwitches(uint8_t state);
-uint8_t GetSwitch(uint8_t idx);
+uint16_t vvv = 0;
 
 //****************************************************************************************
 void InitHardware()
 {
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
 	ACSR |= (1 << ACD);				// ACD bit = On: Analog comparator disabled
-	ADCSRA |= (1 << ADEN);			// ADEN bit (#7) = On: AD converter enabled
 	
 	// Port A
 	//PORTA |= (1<<ACK_DETECT);			// pull up
 	//DDRA  |= (0<<ACK_DETECT);    		// in
 
-	// Port B (switches)
-	PORTB	|= (SWITCH_DEFAULT_STATE<<SW_0)
-			|  (SWITCH_DEFAULT_STATE<<SW_1)
-			|  (SWITCH_DEFAULT_STATE<<SW_2)
-			|  (SWITCH_DEFAULT_STATE<<SW_3)
-			|  (SWITCH_DEFAULT_STATE<<SW_4)
-			|  (SWITCH_DEFAULT_STATE<<SW_5)
-			|  (SWITCH_DEFAULT_STATE<<SW_6)
-			|  (SWITCH_DEFAULT_STATE<<SW_7);
-	//DDRB	|= (1<<SW_0)				// out
-			//|  (1<<SW_1)				// out
-			//|  (1<<SW_2)				// out
-			//|  (1<<SW_3)				// out
-			//|  (1<<SW_4)				// out
-			//|  (1<<SW_5)				// out
-			//|  (1<<SW_6)				// out
-			//|  (1<<SW_7);				// out
-	DDRB = 0xFF;
-			
+	
 			
 			
 		  
@@ -87,8 +61,10 @@ int main()
 	//InitShortCircuitDetector();
 	//InitDCCOut();
 	InitInterrupt();
+	InitRelays();
+	InitADC(false); // use internal 2.56V reference
 	
-	SetSwitches(SWITCH_DEFAULT_STATE);
+	SetRelays(RELAY_DEFAULT_STATE);
 	
 	Init_i2c();               		// Запускаем и конфигурируем i2c
 	Init_Slave_i2c(SlaveOutFunc);   // Настраиваем событие выхода при сработке как Slave
@@ -99,29 +75,11 @@ int main()
     {
 		//CheckAcknowledgement();
 		
-		//SetSwitch(0, GetSwitch(0) == 1 ? 0 : 1);
-
+		//SetRelay(0, GetRelay(0) ? false : true);
+		vvv = ReadADC(0);
 
 		wdt_reset();
 		_delay_ms(200);
     }
 }
 //****************************************************************************************
-void SetSwitch(uint8_t idx, uint8_t state)
-{
-	if (state == 1)
-		PORTB |= (1<<idx);
-	else
-		PORTB &= ~(1<<idx);
-}
-void SetSwitches(uint8_t state)
-{
-	if (state == 1)
-		PORTB = 0xFF;
-	else
-		PORTB = 0;
-}
-uint8_t GetSwitch(uint8_t idx)
-{
-	return (PINB & (1<<idx));
-}
