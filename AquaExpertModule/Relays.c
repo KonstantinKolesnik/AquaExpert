@@ -4,7 +4,7 @@ void InitRelays()
 {
 	// Port B
 	PORTB = 0xFF;	// all "1" as 8-relay module active value is "0"
-	DDRB = 0xFF;	// all outs
+	DDRB = 0xFF;	// all outputs
 }
 
 void SetRelay(uint8_t idx, bool state)

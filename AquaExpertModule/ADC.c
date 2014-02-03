@@ -14,7 +14,7 @@ void InitADC(bool useVccRef)
 	ADCSRA |= (1<<ADSC);                //Do an initial conversion because this one is the slowest and to ensure that everything is up and running
 }
 
-uint16_t ReadADC(uint8_t channel)
+uint16_t ReadADC(char channel)
 {
 	channel &= 0b00000111;
 	ADMUX |= channel;

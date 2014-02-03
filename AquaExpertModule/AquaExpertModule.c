@@ -2,9 +2,14 @@
 #include "ADC.h"
 #include "Relays.h"
 #include "IIC_ultimate.h"
-
-uint16_t vvv = 0;
-
+//****************************************************************************************
+typedef struct
+{
+	uint16_t V[8];
+	bool Relay[8];
+} State;
+//****************************************************************************************
+static volatile State moduleState;
 //****************************************************************************************
 void InitHardware()
 {
@@ -66,20 +71,26 @@ int main()
 	
 	SetRelays(RELAY_DEFAULT_STATE);
 	
-	Init_i2c();               		// Запускаем и конфигурируем i2c
+	Init_i2c();
 	Init_Slave_i2c(SlaveOutFunc);   // Настраиваем событие выхода при сработке как Slave
 	
 
-	
     while (1)
     {
-		//CheckAcknowledgement();
-		
-		//SetRelay(0, GetRelay(0) ? false : true);
-		vvv = ReadADC(0);
-
 		wdt_reset();
-		_delay_ms(200);
+		
+		// for test:
+		//SetRelay(0, GetRelay(0) ? false : true);
+		//_delay_ms(200);
+		
+		
+		
+		// populate the module state:
+		for (uint8_t i = 0; i < 8; i++)
+		{
+			moduleState.V[i] = ReadADC(i); // read 8 channels of ADC
+			moduleState.Relay[i] = GetRelay(i);
+		}
     }
 }
 //****************************************************************************************
