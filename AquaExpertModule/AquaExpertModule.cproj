@@ -163,22 +163,19 @@
     <Compile Include="OWI\common_files\OWIDeviceSpecific.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="OWI\main.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="OWI\OWI.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="OWI\OWI.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\polled\main.c">
+    <Compile Include="OWI\OWIBitFunctions.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\polled\OWIBitFunctions.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OWI\polled\OWISWBitFunctions.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OWI\polled\OWIUARTBitFunctions.c">
+    <Compile Include="OWI\OWIBitFunctions.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Relays.c">
@@ -205,7 +202,6 @@
     <Folder Include="IIC" />
     <Folder Include="OWI\" />
     <Folder Include="OWI\common_files\" />
-    <Folder Include="OWI\polled\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\AvrGCC.targets" />
 </Project>

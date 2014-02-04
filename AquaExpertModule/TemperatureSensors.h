@@ -1,7 +1,8 @@
 #ifndef TEMPERATURESENSORS_H_
 #define TEMPERATURESENSORS_H_
 
-#include "OWI/OWI.h"
+#include "OWI\OWI.h"
+#include "OWI\OWIBitFunctions.h"
 
 #define DS1820_FAMILY_ID                0x10
 #define DS1820_START_CONVERSION         0x44

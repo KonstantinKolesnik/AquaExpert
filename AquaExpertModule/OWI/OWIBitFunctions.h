@@ -21,8 +21,8 @@
 #ifndef _OWI_BIT_FUNCTIONS_H_
 #define _OWI_BIT_FUNCTIONS_H_
 
-#include "..\common_files\OWIdefs.h"
-#include "..\OWI.h"
+#include "common_files\OWIdefs.h"
+#include "OWI.h"
 
 #ifdef OWI_SOFTWARE_DRIVER
 void OWI_Init(unsigned char pins);
