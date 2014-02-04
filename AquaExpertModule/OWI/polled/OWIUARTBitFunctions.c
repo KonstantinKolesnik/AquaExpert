@@ -19,7 +19,7 @@
 *                         $Date: Thursday, August 19, 2004 14:27:18 UTC $
 ****************************************************************************/
 
-#include "OWIPolled.h"
+#include "..\OWI.h"
 
 #ifdef OWI_UART_DRIVER
 

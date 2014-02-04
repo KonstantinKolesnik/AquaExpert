@@ -108,7 +108,7 @@ OWI_device* FindFamily(unsigned char familyID, OWI_device* devices, unsigned cha
 void InitOWI()
 {
 	//OWI_Init(BUSES);
-//
+
 	//// Do the bus search until all ids are read without CRC error.
 	//while (!SearchBuses(devices, MAX_DEVICES, BUSES));
 

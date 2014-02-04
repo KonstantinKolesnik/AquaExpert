@@ -175,9 +175,6 @@
     <Compile Include="OWI\polled\OWIBitFunctions.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\polled\OWIPolled.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="OWI\polled\OWISWBitFunctions.c">
       <SubType>compile</SubType>
     </Compile>

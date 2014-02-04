@@ -1,7 +1,7 @@
 #include "ADC.h"
-
+//****************************************************************************************
 float Vref = 5.00;
-
+//****************************************************************************************
 void InitADC(bool useVccRef)
 {
 	// ADC clock must be in range of 50KHz to 200KHz
@@ -21,7 +21,6 @@ void InitADC(bool useVccRef)
 	ADCSRA |= (1<<ADEN);							// Turn on ADC
 	ADCSRA |= (1<<ADSC);							// Do an initial conversion because this one is the slowest and to ensure that everything is up and running
 }
-
 uint16_t ReadADC(char channel)
 {
 	channel &= 0b00000111;
@@ -34,7 +33,6 @@ uint16_t ReadADC(char channel)
 
 	return ADC;
 }
-
 float GetADCVref()
 {
 	return Vref;

@@ -1,35 +1,8 @@
-// This file has been prepared for Doxygen automatic documentation generation.
-/*! \file ********************************************************************
-*
-* Atmel Corporation
-*
-* \li File:               main.c
-* \li Compiler:           IAR EWAAVR 3.20a
-* \li Support mail:       avr@atmel.com
-*
-* \li Supported devices:  All AVRs.
-*
-* \li Application Note:   AVR318 - Dallas 1-Wire(R) master.
-*                         
-*
-* \li Description:        Example on how to use the 1-Wire(R) interface
-*                         master.
-*
-*                         $Revision: 1.7 $
-*                         $Date: Thursday, August 19, 2004 14:27:18 UTC $
-****************************************************************************/
-
 //#include "OWIPolled.h"
 //#include "OWIHighLevelFunctions.h"
 //#include "OWIBitFunctions.h"
 //#include "..\common_files\OWIcrc.h"
 //#include "..\..\Hardware.h"
-
-
-
-
-
-
 
 /*! \brief  Example application for the polled drivers.
  *
@@ -39,8 +12,8 @@
  *  device on a bus, and communicate with them to read temperature (DS1820) or set wiper position (DS2890).
  *  This example is not written in a very optimal way. It is merely intended to show how the polled 1-Wire(R) driver can be used.
  */
-void ___main(void)
-{
+//void ___main(void)
+//{
     //static OWI_device devices[MAX_DEVICES];
     //OWI_device* ds1820;
     //OWI_device* ds2890;
@@ -75,6 +48,6 @@ void ___main(void)
         //// Discard lsb of temperature and output to PORTB.
         //PORTB = ~(temperature >> 1);
     //}
-}
+//}
 
 
