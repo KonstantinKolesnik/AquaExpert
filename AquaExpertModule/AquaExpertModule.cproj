@@ -133,10 +133,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ADC.c">
+    <Compile Include="ADC\ADC.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ADC.h">
+    <Compile Include="ADC\ADC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="AquaExpertModule.c">
@@ -145,10 +145,43 @@
     <Compile Include="Hardware.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IIC_ultimate.c">
+    <Compile Include="IIC\IIC_ultimate.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IIC_ultimate.h">
+    <Compile Include="IIC\IIC_ultimate.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\common_files\OWIcrc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\common_files\OWIcrc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\common_files\OWIdefs.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\common_files\OWIDeviceSpecific.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\OWI.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\OWI.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\polled\main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\polled\OWIBitFunctions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\polled\OWIPolled.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\polled\OWISWBitFunctions.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OWI\polled\OWIUARTBitFunctions.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Relays.c">
@@ -157,6 +190,25 @@
     <Compile Include="Relays.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="TemperatureSensors.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TemperatureSensors.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WaterSensors.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WaterSensors.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ADC" />
+    <Folder Include="IIC" />
+    <Folder Include="OWI\" />
+    <Folder Include="OWI\common_files\" />
+    <Folder Include="OWI\polled\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\AvrGCC.targets" />
 </Project>
