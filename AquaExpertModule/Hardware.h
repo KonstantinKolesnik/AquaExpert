@@ -3,7 +3,7 @@
 //****************************************************************************************
 // 1. Processor Definitions
 //****************************************************************************************
-// ATMega32: 32KBytes FLASH, 2048Byte SRAM, 1024Byte EEPROM
+// ATMega32A: 32KBytes FLASH, 2048Byte SRAM, 1024Byte EEPROM
 
 #define F_CPU 8000000UL // 8MHz
 
@@ -27,6 +27,30 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
+#include <string.h> // used for memcpy.
+
+// module types:
+#define MODULE_TYPE 1 // 
+//#define MODULE_TYPE 2 //
+//#define MODULE_TYPE 3 //
+//#define MODULE_TYPE 4 //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //****************************************************************************************
 // 2. Ports Definition
@@ -73,10 +97,6 @@
 //****************************************************************************************
 // 3. LED-Control and IO-Macros
 //****************************************************************************************
-
-
-
-
 //#define MAIN_TRACK_ON    		PORTB |= (1<<EN_MAIN)
 //#define MAIN_TRACK_OFF   		PORTB &= ~(1<<EN_MAIN)
 //#define MAIN_IS_ON 				(PINB & (1<<EN_MAIN))

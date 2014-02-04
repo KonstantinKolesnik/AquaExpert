@@ -1,15 +1,36 @@
 #include "Hardware.h"
-#include "ADC.h"
+#include "ADC/ADC.h"
+#include "OWI/OWI.h"
+#include "IIC/IIC_ultimate.h"
+
 #include "Relays.h"
-#include "IIC_ultimate.h"
+#include "WaterSensors.h"
+#include "TemperatureSensors.h"
 
-uint16_t vvv = 0;
 
+//****************************************************************************************
+typedef struct
+{
+	bool WaterSensors[3];
+	uint8_t PhSensors[2];
+	uint8_t OrpSensors[2];
+	bool Relays[8];
+} State;
+//****************************************************************************************
+static volatile State moduleState;
 //****************************************************************************************
 void InitHardware()
 {
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
 	ACSR |= (1 << ACD);				// ACD bit = On: Analog comparator disabled
+	
+	InitADC(false); // use internal 2.56V reference
+	
+	InitOWI();
+	
+	Init_i2c();
+	Init_Slave_i2c(SlaveOutFunc);   // Настраиваем событие выхода при сработке как Slave
+	
 	
 	// Port A
 	//PORTA |= (1<<ACK_DETECT);			// pull up
@@ -38,9 +59,8 @@ void InitHardware()
 			//|  (0<<USB_DMINUS)     		// in
 			//|  (1<<DCC)       			// out
 			//|  (1<<NDCC);     			// out
-}
-void InitInterrupt()
-{
+			
+			
     //TIMSK = (1<<OCIE1A)     // Timer1/Counter1 Compare A Interrupt; reassigned in InitDCCOut
           //| (0<<OCIE1B)     // Timer1/Counter1 Compare B Interrupt
           //| (0<<TOIE1)      // Timer1/Counter1 Overflow Interrupt
@@ -58,28 +78,32 @@ void InitInterrupt()
 int main()
 {
 	InitHardware();
-	//InitShortCircuitDetector();
-	//InitDCCOut();
-	InitInterrupt();
-	InitRelays();
-	InitADC(false); // use internal 2.56V reference
 	
+	InitRelays();
 	SetRelays(RELAY_DEFAULT_STATE);
 	
-	Init_i2c();               		// Запускаем и конфигурируем i2c
-	Init_Slave_i2c(SlaveOutFunc);   // Настраиваем событие выхода при сработке как Slave
 	
 
-	
-    while (1)
+    while (true)
     {
-		//CheckAcknowledgement();
-		
-		//SetRelay(0, GetRelay(0) ? false : true);
-		vvv = ReadADC(0);
-
 		wdt_reset();
-		_delay_ms(200);
+		
+		// for test:
+		//SetRelay(0, GetRelay(0) ? false : true);
+		//_delay_ms(200);
+		
+		
+		// populate the module state:
+		
+		for (uint8_t i = 0; i < 3; i++)
+			moduleState.WaterSensors[i] = IsWaterSensorWet(i);
+		
+		for (uint8_t i = 0; i < 8; i++)
+			moduleState.Relays[i] = GetRelay(i);
+			
+			
+			
+			
     }
 }
 //****************************************************************************************
