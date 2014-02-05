@@ -7,40 +7,50 @@
 
 #define F_CPU 8000000UL // 8MHz
 
-//OCDEN = [ ]
-//JTAGEN = [X]
-//SPIEN = [X]
-//CKOPT = [ ]
-//EESAVE = [ ]
-//BOOTSZ = 2048W_3800
-//BOOTRST = [ ]
-//BODLEVEL = 2V7
-//BODEN = [ ]
-//SUT_CKSEL = INTRCOSC_8MHZ_6CK_64MS
-//
-//HIGH = 0x99 (valid)
-//LOW = 0xE4 (valid)
+// Fuses:
+/*
+OCDEN = [ ]
+JTAGEN = [X]
+SPIEN = [X]
+CKOPT = [ ]
+EESAVE = [ ]
+BOOTSZ = 2048W_3800
+BOOTRST = [ ]
+BODLEVEL = 2V7
+BODEN = [ ]
+SUT_CKSEL = INTRCOSC_8MHZ_6CK_64MS
 
+HIGH = 0x99 (valid)
+LOW = 0xE4 (valid)
+*/
 //****************************************************************************************
 #include <stdbool.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
-#include <string.h> // used for memcpy.
 
 // module types:
-#define MODULE_TYPE 1 // 
-//#define MODULE_TYPE 2 //
-//#define MODULE_TYPE 3 //
-//#define MODULE_TYPE 4 //
+#define MODULE_TYPE_0 // test module; full imitation
+//#define MODULE_TYPE_1 // 
+//#define MODULE_TYPE_2 //
+//#define MODULE_TYPE_3 //
+//#define MODULE_TYPE_4 //
 
 
 
+#ifdef MODULE_TYPE_0
+
+#define RELAY_COUNT				8
+#define WATER_SENSOR_COUNT		3
+#define PH_SENSOR_COUNT			2
+#define ORP_SENSOR_COUNT		2
+#define TEMP_SENSOR_COUNT		1//3
+
+#elif MODULE_TYPE_1
 
 
-
-
+#endif
 
 
 

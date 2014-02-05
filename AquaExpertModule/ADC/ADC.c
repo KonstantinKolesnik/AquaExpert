@@ -21,17 +21,19 @@ void InitADC(bool useVccRef)
 	ADCSRA |= (1<<ADEN);							// Turn on ADC
 	ADCSRA |= (1<<ADSC);							// Do an initial conversion because this one is the slowest and to ensure that everything is up and running
 }
-uint16_t ReadADC(char channel)
+uint16_t ReadADC(uint8_t channel)
 {
 	channel &= 0b00000111;
-	ADMUX |= channel;
+	ADMUX = (ADMUX & 0xF8) | channel;	// clears the bottom 3 bits before ORing
 
-	ADCSRA |= (1<<ADSC);                //Starts a new conversion
-	while (ADCSRA & (1<<ADIF));         //Wait until the conversion is done
+	ADCSRA |= (1<<ADSC);                // starts a new conversion
 	
-	ADCSRA |= (1<<ADIF);				//Clear ADIF by writing one to it
+	//while (ADCSRA & (1<<ADIF));         // wait until the conversion is done
+	while (ADCSRA & (1<<ADSC));
+	
+	//ADCSRA |= (1<<ADIF);				// clear ADIF by writing one to it
 
-	return ADC;
+	return (ADC);
 }
 float GetADCVref()
 {

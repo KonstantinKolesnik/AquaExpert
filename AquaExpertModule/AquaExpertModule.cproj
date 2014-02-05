@@ -44,7 +44,7 @@
       <ToolOptions>
         <InterfaceName>JTAG</InterfaceName>
         <InterfaceProperties>
-          <JtagDbgClock>1000000</JtagDbgClock>
+          <JtagDbgClock>200000</JtagDbgClock>
           <JtagProgClock>1000000</JtagProgClock>
           <IspClock>150000</IspClock>
           <JtagInChain>false</JtagInChain>
@@ -69,7 +69,7 @@
     <UncachedRange />
     <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
-    <eraseonlaunchrule>2</eraseonlaunchrule>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data>
         <options />
@@ -121,7 +121,7 @@
         <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
         <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
         <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+        <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
         <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
         <avrgcc.linker.libraries.Libraries>
           <ListValues>
@@ -151,31 +151,22 @@
     <Compile Include="IIC\IIC_ultimate.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\common_files\OWIcrc.c">
+    <Compile Include="OW\delay.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\common_files\OWIcrc.h">
+    <Compile Include="OW\delay.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\common_files\OWIdefs.h">
+    <Compile Include="OW\ds18x20.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\common_files\OWIDeviceSpecific.h">
+    <Compile Include="OW\ds18x20.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\main.c">
+    <Compile Include="OW\onewire.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="OWI\OWI.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OWI\OWI.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OWI\OWIBitFunctions.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OWI\OWIBitFunctions.h">
+    <Compile Include="OW\onewire.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Relays.c">
@@ -200,8 +191,7 @@
   <ItemGroup>
     <Folder Include="ADC" />
     <Folder Include="IIC" />
-    <Folder Include="OWI\" />
-    <Folder Include="OWI\common_files\" />
+    <Folder Include="OW" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\AvrGCC.targets" />
 </Project>

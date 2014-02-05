@@ -1,20 +1,18 @@
 #include "Hardware.h"
-#include "ADC/ADC.h"
-#include "OWI/OWI.h"
-#include "IIC/IIC_ultimate.h"
-
+#include "ADC\ADC.h"
+#include "OW\onewire.h"
+#include "IIC\IIC_ultimate.h"
 #include "Relays.h"
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
-
-
 //****************************************************************************************
 typedef struct
 {
-	bool WaterSensors[3];
-	uint8_t PhSensors[2];
-	uint8_t OrpSensors[2];
-	bool Relays[8];
+	bool Relays[RELAY_COUNT];
+	bool WaterSensors[WATER_SENSOR_COUNT];
+	uint8_t PhSensors[PH_SENSOR_COUNT];
+	uint8_t OrpSensors[ORP_SENSOR_COUNT];
+	float TempSensors[TEMP_SENSOR_COUNT];
 } State;
 //****************************************************************************************
 static volatile State moduleState;
@@ -24,10 +22,8 @@ void InitHardware()
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
 	ACSR |= (1 << ACD);				// ACD bit = On: Analog comparator disabled
 	
-	InitADC(false); // use internal 2.56V reference
-	
-	InitOWI();
-	
+	InitADC(true); // use internal 2.56V reference
+	InitOW();
 	Init_i2c();
 	Init_Slave_i2c(SlaveOutFunc);   // Ќастраиваем событие выхода при сработке как Slave
 	
@@ -36,10 +32,6 @@ void InitHardware()
 	//PORTA |= (1<<ACK_DETECT);			// pull up
 	//DDRA  |= (0<<ACK_DETECT);    		// in
 
-	
-			
-			
-		  
 	//// Port C
 	//PORTC	|= (1<<SHORT_MAIN)			// pull up
 			//|  (1<<SHORT_PROG);			// pull up
@@ -82,8 +74,6 @@ int main()
 	InitRelays();
 	SetRelays(RELAY_DEFAULT_STATE);
 	
-	
-
     while (true)
     {
 		wdt_reset();
@@ -94,16 +84,15 @@ int main()
 		
 		
 		// populate the module state:
-		
-		for (uint8_t i = 0; i < 3; i++)
+		for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
 			moduleState.WaterSensors[i] = IsWaterSensorWet(i);
 		
-		for (uint8_t i = 0; i < 8; i++)
+		for (uint8_t i = 0; i < RELAY_COUNT; i++)
 			moduleState.Relays[i] = GetRelay(i);
 			
-			
-			
-			
+		for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
+			moduleState.TempSensors[i] = ReadTemperature(i);
+	
     }
 }
 //****************************************************************************************
