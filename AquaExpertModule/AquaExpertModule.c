@@ -72,7 +72,7 @@ int main()
 	InitHardware();
 	
 	InitRelays();
-	SetRelays(RELAY_DEFAULT_STATE);
+	//SetRelays(RELAY_DEFAULT_STATE);
 	
     while (true)
     {

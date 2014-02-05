@@ -3,24 +3,25 @@
 void InitRelays()
 {
 	// Port B
-	PORTB = 0xFF;	// all "1" as 8-relay module active value is "0"
 	DDRB = 0xFF;	// all outputs
+	
+	bool active = RELAY_ACTIVE_LEVEL ? RELAY_DEFAULT_STATE : !RELAY_DEFAULT_STATE;
+	PORTB = active ? 0xFF : 0x00;	
 }
-void SetRelay(uint8_t idx, bool state)
+void SetRelay(uint8_t idx, bool active)
 {
-	// we use inverted state!
-	if (!state)
+	active = RELAY_ACTIVE_LEVEL ? active : !active;
+	if (!active)
 		PORTB |= (1<<idx);
 	else
 		PORTB &= ~(1<<idx);
 }
-void SetRelays(bool state)
+void SetRelays(bool active)
 {
-	// we use inverted state!
-	PORTB = !state ? 0xFF : 0x00;
+	active = RELAY_ACTIVE_LEVEL ? active : !active;
+	PORTB = active ? 0xFF : 0x00;
 }
 bool GetRelay(uint8_t idx)
 {
-	// we use inverted state!
-	return !(PINB & (1<<idx));
+	return RELAY_ACTIVE_LEVEL ? (PINB & (1<<idx)) : !(PINB & (1<<idx));
 }
