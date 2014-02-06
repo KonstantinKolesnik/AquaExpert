@@ -31,8 +31,8 @@ LOW = 0xE4 (valid)
 #include <util/delay.h>
 
 // module types:
-#define MODULE_TYPE_0		0 // test module; full imitation
-//#define MODULE_TYPE_1		1 // 
+#define MODULE_TYPE_0 // test module; full imitation
+//#define MODULE_TYPE_1 // 
 //#define MODULE_TYPE_2 //
 //#define MODULE_TYPE_3 //
 //#define MODULE_TYPE_4 //
