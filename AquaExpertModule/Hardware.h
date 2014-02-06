@@ -31,8 +31,8 @@ LOW = 0xE4 (valid)
 #include <util/delay.h>
 
 // module types:
-#define MODULE_TYPE_0 // test module; full imitation
-//#define MODULE_TYPE_1 // 
+#define MODULE_TYPE_0		0 // test module; full imitation
+//#define MODULE_TYPE_1		1 // 
 //#define MODULE_TYPE_2 //
 //#define MODULE_TYPE_3 //
 //#define MODULE_TYPE_4 //
@@ -83,7 +83,7 @@ LOW = 0xE4 (valid)
 //#define NDCC					4	//PD4 (OC1B) 		pin 18
 //#define DCC						5	//PD5 (OC1A) 		pin 19
 //								6	//PD6 (ICP) 		pin 20
-//								7	//PD7 (OC2) 		pin 21
+#define LED_MSG					7	//PD7 (OC2) 		pin 21
 //****************************************************************************************
 // Port A
 //								0	//PA0 (ADC0)		pin 40
@@ -120,10 +120,10 @@ LOW = 0xE4 (valid)
 //#define PROG_SHORT_BLOCKED		(PINB & (1<<LED_SHORT_PROG))
 //
 //#define ACK_DETECTED	  		(!(PINA & (1<<ACK_DETECT)))
-//
-//#define LED_MSG_ON	     		PORTB |= (1<<LED_MSG)
-//#define LED_MSG_OFF	    		PORTB &= ~(1<<LED_MSG)
-//
+
+#define LED_MSG_ON	     		PORTD |= (1<<LED_MSG)
+#define LED_MSG_OFF	    		PORTD &= ~(1<<LED_MSG)
+
 //#define LED_SHORT_MAIN_ON     	PORTB |= (1<<LED_SHORT_MAIN)
 //#define LED_SHORT_MAIN_OFF    	PORTB &= ~(1<<LED_SHORT_MAIN)
 //

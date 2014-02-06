@@ -19,6 +19,7 @@ using Gadgeteer.Modules.LoveElectronics;
 using MFE.Hardware;
 using Gadgeteer;
 using Gadgeteer.Interfaces;
+using Microsoft.SPOT.Hardware;
 
 namespace AquaExpert
 {
@@ -32,6 +33,10 @@ namespace AquaExpert
         //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
 
+        private I2CDevice bus = new I2CDevice(null);
+        private int busClockRate = 400; // 400 kHz
+
+        private ArrayList modules = new ArrayList();
         //private WaterLevelSensor sensorWaterMax;
         //private WaterLevelSensor sensorWaterMin;
         //private PHTempSensor sensorPHTemp;
@@ -73,6 +78,7 @@ namespace AquaExpert
         {
             InitSettings();
             InitHardware();
+            //InitModules();
             //InitTimeService();
             //InitNetwork();
 
@@ -95,10 +101,7 @@ namespace AquaExpert
         {
             indicators.TurnAllLedsOff();
 
-
             //Watchdog
-
-            //ArrayList res = I2CExtension.Scan(0, 127, 400);
 
             //relays[relayWaterIn] = false;
             //relays[relayWaterOut] = false;
@@ -110,9 +113,42 @@ namespace AquaExpert
 
             timerWorkflow = new Gadgeteer.Timer(500);
             timerWorkflow.Tick += timerWorkflow_Tick;
+            timerWorkflow.Start();
 
             //sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
             //sensorPHTemp = new PHTempSensor(pHTempSensor);
+        }
+        private void InitModules()
+        {
+            modules.Clear();
+
+            ArrayList res = bus.Scan(0, 127, busClockRate);
+            foreach (int address in res)
+            {
+                Module module = new Module(address);
+                //byte r;
+                //if (bus.TryGetRegister(new I2CDevice.Configuration((ushort)address, busClockRate), 1000, 8, out r))
+                //{
+                //    byte bbb = r;
+                //}
+                
+                
+                modules.Add(module);
+            }
+
+
+            //var socket = Socket.GetSocket(12, true, null, null);
+            //var i2c = new I2CBus(socket, 1, busClockRate, null);
+
+            //byte[] b = new byte[5];
+            //int i = i2c.Read(b, 1000);
+            //Debug.Print(b[0].ToString() + i);
+
+            //byte[] b = new byte[1];
+            //int i = i2c.WriteRead(new byte[] {0x00}, b, 1000);
+            //Debug.Print(b[0].ToString() + i);
+            //- See more at: https://www.ghielectronics.com/community/forum/topic?id=13503&page=2#msg137894
+
         }
         private void InitNetwork()
         {
@@ -283,7 +319,6 @@ namespace AquaExpert
         private void TimeService_SystemTimeChanged(object sender, SystemTimeChangedEventArgs e)
         {
             RealTimeClock.SetTime(e.EventTime);
-            timerWorkflow.Start();
         }
         private void TimeService_TimeSyncFailed(object sender, TimeSyncFailedEventArgs e)
         {
@@ -291,7 +326,6 @@ namespace AquaExpert
         private void TimeService_SystemTimeChecked(object sender, SystemTimeChangedEventArgs e)
         {
             //RealTimeClock.SetTime(e.EventTime);
-            //timerWorkflow.Start();
         }
 
         private void httpServer_OnRequest(HttpListenerRequest request)
@@ -345,9 +379,16 @@ namespace AquaExpert
 
         private void timerWorkflow_Tick(Gadgeteer.Timer timer)
         {
+            timerWorkflow.Stop();
+
+            InitModules();
+
             //SetState();
             //DoWork();
             //SendStateToClients();
+
+
+            timerWorkflow.Start();
         }
         #endregion
 

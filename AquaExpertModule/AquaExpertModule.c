@@ -22,11 +22,13 @@ void InitHardware()
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
 	ACSR |= (1 << ACD);				// ACD bit = On: Analog comparator disabled
 	
+	DDRD |=  (1<<LED_MSG);
+	LED_MSG_OFF;
+	
 	InitADC(true); // use internal Vcc reference
 	InitOW();
 	Init_i2c();
 	Init_Slave_i2c(SlaveOutFunc);   // Ќастраиваем событие выхода при сработке как Slave
-	
 	
     //TIMSK = (1<<OCIE1A)     // Timer1/Counter1 Compare A Interrupt; reassigned in InitDCCOut
           //| (0<<OCIE1B)     // Timer1/Counter1 Compare B Interrupt

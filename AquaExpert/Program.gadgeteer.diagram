@@ -164,12 +164,5 @@
         <socketShapeMoniker Id="97a3ec03-5854-4359-9d39-d248e40981bf" />
       </nodes>
     </socketConnector>
-    <socketConnector Id="677b644c-1ccf-42e4-9f44-87efe201f5be" edgePoints="[(12.0364173215043 : 8.145); (11.625 : 8.145); (11.625 : 6.865); (6.445 : 6.865); (6.445 : 6.45358267849573)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <socketUseReferencesSocketMoniker Id="537adc35-2b2b-4b42-a701-9c25cb497dbc" />
-      <nodes>
-        <socketUseShapeMoniker Id="18dbd2a9-47b3-4832-95e7-7f4097a553b4" />
-        <socketShapeMoniker Id="dd096b86-d25d-4ed7-a11f-d22d55fc58fa" />
-      </nodes>
-    </socketConnector>
   </nestedChildShapes>
 </gadgeteerDSLDiagram>
