@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="ModulesManager.cs" />
     <Compile Include="Sensors\PHTempSensor.cs" />
     <Compile Include="Program.generated.cs">
       <AutoGen>True</AutoGen>
