@@ -40,8 +40,9 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="Controller.cs" />
-    <Compile Include="Module.cs" />
-    <Compile Include="ModulesManager.cs" />
+    <Compile Include="Managers\Module.cs" />
+    <Compile Include="Managers\ModulesManager.cs" />
+    <Compile Include="Managers\TimeManager.cs" />
     <Compile Include="Sensors\PHTempSensor.cs" />
     <Compile Include="Program.generated.cs">
       <AutoGen>True</AutoGen>

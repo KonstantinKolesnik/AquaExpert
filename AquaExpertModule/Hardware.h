@@ -31,7 +31,7 @@ LOW = 0xE4 (valid)
 #include <util/delay.h>
 
 // module types:
-#define MODULE_TYPE_0 // test module; full imitation
+#define MODULE_TYPE_0 // test module; all features
 //#define MODULE_TYPE_1 // 
 //#define MODULE_TYPE_2 //
 //#define MODULE_TYPE_3 //
@@ -51,16 +51,6 @@ LOW = 0xE4 (valid)
 
 
 #endif
-
-
-
-
-
-
-
-
-
-
 
 //****************************************************************************************
 // 2. Ports Definition

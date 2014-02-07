@@ -1,25 +1,15 @@
-﻿using AquaExpert.Sensors;
-using GHI.Premium.Hardware;
+﻿using AquaExpert.Managers;
+using Gadgeteer;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
 using MFE.Net.Tcp;
-using MFE.Net.Udp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
-using Microsoft.SPOT.Time;
-using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using Gadgeteer.Modules.GHIElectronics;
-using Gadgeteer.Modules.Seeed;
-using Gadgeteer.Modules.LoveElectronics;
-using MFE.Hardware;
-using Gadgeteer;
-using Gadgeteer.Interfaces;
-using Microsoft.SPOT.Hardware;
 
 namespace AquaExpert
 {
@@ -40,13 +30,7 @@ namespace AquaExpert
         private State state = new State();
         private Settings settings = null;
 
-        private int relayWaterIn = 0, ledWaterIn = 0;
-        private int relayWaterOut = 1, ledWaterOut = 1;
-        private int relayLight = 2, ledLight = 2;
-        private int relayHeater = 3, ledHeater = 3;
-        private int relayCO2 = 4, ledCO2 = 4;
-
-        private int ledNetwork = 5;
+        private int ledNetwork = 0;
 
         private Gadgeteer.Timer timerWorkflow;
         #endregion
@@ -74,8 +58,9 @@ namespace AquaExpert
         {
             InitSettings();
             InitHardware();
-            //InitTimeService();
-            //InitNetwork();
+
+            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+            //    InitNetwork();
 
             Mainboard.SetDebugLED(true);
         }
@@ -96,22 +81,14 @@ namespace AquaExpert
         {
             indicators.TurnAllLedsOff();
 
-            //Watchdog
-
-            //relays[relayWaterIn] = false;
-            //relays[relayWaterOut] = false;
-            //relays[relayLight] = false;
-            //relays[relayHeater] = false;
+            //Watchdog!!!
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
 
-            timerWorkflow = new Gadgeteer.Timer(500);
+            timerWorkflow = new Gadgeteer.Timer(1000);
             timerWorkflow.Tick += timerWorkflow_Tick;
             timerWorkflow.Start();
-
-            //sensorWaterMax = new WaterLevelSensor(moistureSensorUpper);
-            //sensorPHTemp = new PHTempSensor(pHTempSensor);
         }
         private void InitNetwork()
         {
@@ -142,37 +119,6 @@ namespace AquaExpert
         {
             timerNetworkConnect.Start();
             new Thread(() => { networkManager.Start(); }).Start();
-        }
-        private void InitTimeService()
-        {
-            FixedTimeService.Settings = new TimeServiceSettings()
-            {
-                AutoDayLightSavings = true,
-                ForceSyncAtWakeUp = true,
-                RefreshTime = 24 * 60 * 60, // once a day
-            };
-            FixedTimeService.SetTimeZoneOffset(+2 * 60); /// PST
-            FixedTimeService.SetDst("Mar Sun>=8 @2", "Nov Sun>=1 @2", 60); // US DST
-
-            FixedTimeService.SystemTimeChanged += new SystemTimeChangedEventHandler(TimeService_SystemTimeChanged);
-            FixedTimeService.TimeSyncFailed += new TimeSyncFailedEventHandler(TimeService_TimeSyncFailed);
-            // New event: called when after we check the time (even if we don't end up changing the time)
-            FixedTimeService.SystemTimeChecked += new SystemTimeChangedEventHandler(TimeService_SystemTimeChecked);
-        }
-        private void SyncTime()
-        {
-            new Thread(() =>
-            {
-                // "nist1-sj.ustiming.org,us.pool.ntp.org,clock.tricity.wsu.edu,clock-1.cs.cmu.edu,time-a.nist.gov"
-                FixedTimeService.Settings.PrimaryServer = Dns.GetHostEntry("nist1-sj.ustiming.org").AddressList[0].GetAddressBytes();
-                FixedTimeService.Settings.AlternateServer = Dns.GetHostEntry("pool.ntp.org").AddressList[0].GetAddressBytes();
-
-                // wait for internet connection
-                while (IPAddress.GetDefaultLocalAddress() == IPAddress.Any)
-                    Thread.Sleep(500);
-
-                FixedTimeService.Start();
-            }).Start();
         }
 
         private void SetState()
@@ -215,13 +161,13 @@ namespace AquaExpert
         }
         private void SendStateToClients()
         {
-            NetworkMessage msg = new NetworkMessage("State");
-            msg["TimeStamp"] = DateTime.Now.ToString();
-            msg["Version"] = Version;
-            byte[] data = msg.Pack(msgFormat);
+            //NetworkMessage msg = new NetworkMessage("State");
+            //msg["TimeStamp"] = DateTime.Now.ToString();
+            //msg["Version"] = Version;
+            //byte[] data = msg.Pack(msgFormat);
 
-            wsServer.SendToAll(data, 0, data.Length);
-            //tcpServer.SendToAll(data);
+            //wsServer.SendToAll(data, 0, data.Length);
+            ////tcpServer.SendToAll(data);
         }
 
         private void BlinkLED(int led)
@@ -262,7 +208,7 @@ namespace AquaExpert
             httpServer.Start("http", 80);
             wsServer.Start();
             //tcpServer.Start();
-            SyncTime();
+            TimeManager.Start();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
         }
@@ -273,22 +219,11 @@ namespace AquaExpert
             httpServer.Stop();
             wsServer.Stop();
             //tcpServer.Stop();
+            TimeManager.Stop();
 
             Thread.Sleep(1000);
 
             StartNetwork();
-        }
-
-        private void TimeService_SystemTimeChanged(object sender, SystemTimeChangedEventArgs e)
-        {
-            RealTimeClock.SetTime(e.EventTime);
-        }
-        private void TimeService_TimeSyncFailed(object sender, TimeSyncFailedEventArgs e)
-        {
-        }
-        private void TimeService_SystemTimeChecked(object sender, SystemTimeChangedEventArgs e)
-        {
-            //RealTimeClock.SetTime(e.EventTime);
         }
 
         private void httpServer_OnRequest(HttpListenerRequest request)
@@ -344,6 +279,8 @@ namespace AquaExpert
         {
             timerWorkflow.Stop();
 
+            //DateTime dt = TimeManager.CurrentTime;
+
             ModulesManager.Scan();
 
             //SetState();
@@ -351,11 +288,11 @@ namespace AquaExpert
             //SendStateToClients();
 
 
-            timerWorkflow.Start();
+            //timerWorkflow.Start();
         }
         #endregion
 
-        #region Network message processing
+        #region Clients messages processing
         private NetworkMessage ProcessNetworkMessage(NetworkMessage msg)
         {
             NetworkMessage response = null;

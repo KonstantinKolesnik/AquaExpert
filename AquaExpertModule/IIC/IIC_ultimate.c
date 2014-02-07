@@ -3,7 +3,7 @@
 void DoNothing(void);
 
 uint8_t i2c_Do;									// Переменная состояния передатчика IIC
-uint8_t i2c_InBuff[i2c_MasterBytesRX];			// Буфер прием при работе как Slave
+uint8_t i2c_InBuff[i2c_MasterBytesRX];			// Буфер приема при работе как Slave
 uint8_t i2c_OutBuff[i2c_MasterBytesTX];			// Буфер передачи при работе как Slave
 uint8_t i2c_SlaveIndex;							// Индекс буфера Slave
 
@@ -64,19 +64,19 @@ ISR(TWI_vect)	// Прерывание TWI
 			MACRO_i2c_WhatDo_ErrorOut
 			break;
 
-		case 0x08:	// Старт был, а затем мы:
-			if ((i2c_Do & i2c_type_msk)== i2c_sarp)			// В зависимости от режима
+		case 0x08:	// Start sent
+			if ((i2c_Do & i2c_type_msk) == i2c_sarp)		// В зависимости от режима
 				i2c_SlaveAddress |= 0x01;					// Шлем Addr+R
 			else											// Или
 				i2c_SlaveAddress &= 0xFE;					// Шлем Addr+W
 			
-			TWDR = i2c_SlaveAddress;				// Адрес слейва
+			TWDR = i2c_SlaveAddress;						// Адрес слейва
 			TWCR = 	0<<TWSTA|
 					0<<TWSTO|
 					1<<TWINT|
 					i2c_i_am_slave<<TWEA|
 					1<<TWEN|
-					1<<TWIE;  								// Go!
+					1<<TWIE;
 			break;
 
 		case 0x10:	// Повторный старт был, а затем мы
@@ -95,32 +95,25 @@ ISR(TWI_vect)	// Прерывание TWI
 					1<<TWIE;  	// Go!
 			break;
 
-		case 0x18:	// Был послан SLA+W получили ACK, а затем:
+		case 0x18:	// Был послан SLA+W, получили ACK
 			if ((i2c_Do & i2c_type_msk) == i2c_sawp)		// В зависимости от режима
 			{
 				TWDR = i2c_Buffer[i2c_index];				// Шлем байт данных
 				i2c_index++;							// Увеличиваем указатель буфера
-
-				TWCR = 	0<<TWSTA|
-						0<<TWSTO|
-						1<<TWINT|
-						i2c_i_am_slave<<TWEA|
-						1<<TWEN|
-						1<<TWIE;  // Go!
 			}
 
 			if ((i2c_Do & i2c_type_msk) == i2c_sawsarp)
 			{
 				TWDR = i2c_PageAddress[i2c_PageAddrIndex];	// Или шлем адрес странцы (по сути тоже байт данных)
 				i2c_PageAddrIndex++;						// Увеличиваем указатель буфера страницы
-
-				TWCR = 	0<<TWSTA|
-						0<<TWSTO|
-						1<<TWINT|
-						i2c_i_am_slave<<TWEA|
-						1<<TWEN|
-						1<<TWIE;	// Go!
 			}
+			
+			TWCR = 	0<<TWSTA|
+					0<<TWSTO|
+					1<<TWINT|
+					i2c_i_am_slave<<TWEA|
+					1<<TWEN|
+					1<<TWIE;	// Go!
 			
 			break;
 
@@ -138,7 +131,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			break;
 			
 		case 0x28: 	// Байт данных послали, получили ACK! (если sawp - это был байт данных. если sawsarp - байт адреса страницы)
-		{	// А дальше:
+		{
 			if ((i2c_Do & i2c_type_msk) == i2c_sawp)		// В зависимости от режима
 			{
 				if (i2c_index == i2c_ByteCount)				// Если был байт данных последний
@@ -384,7 +377,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			i2c_PageAddrIndex = 0;
 			// Break нет! Идем дальше
 			
-		case 0xA8:	// Либо просто словили свой адрес на чтение
+		case 0xA8:	// RCV SLA+R, ACK sent
 			i2c_SlaveIndex = 0;							// Индексы слейвовых массивов на 0
 			TWDR = i2c_OutBuff[i2c_SlaveIndex];			// Что ж, отдадим байт из тех, что есть.
 			
@@ -457,17 +450,15 @@ ISR(TWI_vect)	// Прерывание TWI
 	LED_MSG_OFF;
 }
 
-void DoNothing(void)						// Функция пустышка, затыкать несуществующие ссылки
-{
-}
-
 void Init_i2c(void)							// Настройка режима мастера
 {
-	i2c_PORT |=	 1<<i2c_SCL
-				|1<<i2c_SDA;			// Включим подтяжку на ноги, вдруг юзер на резисторы пожмотился
-	i2c_DDR &=~(1<<i2c_SCL|1<<i2c_SDA);
+	// pins pull up:
+	i2c_PORT |=	(1<<i2c_SCL) |
+				(1<<i2c_SDA);
+				
+	i2c_DDR &= ~(1<<i2c_SCL | 1<<i2c_SDA);
 
-	// Настроим битрейт for 8MHz:
+	// Bit rate (for 8MHz):
 	TWBR = 0x02;
 	TWSR = 0x00;							// prescaler = 1; 400kHz
 	//TWSR = 0x01;							// prescaler = 4; 100kHz
@@ -479,11 +470,16 @@ void Init_Slave_i2c(IIC_F Addr)				// Настройка режима слейва (если нужно)
 	TWAR = addr;							// Внесем в регистр свой адрес, на который будем отзываться
 												
 	SlaveOutFunc = Addr;					// Присвоим указателю выхода по слейву функцию выхода
-
-	TWCR = 	0<<TWSTA|
-			0<<TWSTO|
-			0<<TWINT|
-			1<<TWEA|
-			1<<TWEN|						// Включаем агрегат и начинаем слушать шину.
-			1<<TWIE;
+	
+	// Включаем агрегат и начинаем слушать шину.
+	TWCR =	(0<<TWSTA) |	// TWI START Condition Bit
+			(0<<TWSTO) |	// TWI STOP Condition Bit
+			(0<<TWINT) |	// TWI Interrupt Flag
+			(1<<TWEA)  |	// TWI Enable Acknowledge Bit
+			(1<<TWEN)  |	// TWI Enable Bit
+			(1<<TWIE);		// TWI Interrupt Enable
+}
+void DoNothing(void)
+{
+	// Функция пустышка, затыкать несуществующие ссылки
 }
