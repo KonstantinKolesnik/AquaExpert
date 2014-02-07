@@ -288,7 +288,7 @@ namespace AquaExpert
             //SendStateToClients();
 
 
-            //timerWorkflow.Start();
+            timerWorkflow.Start();
         }
         #endregion
 

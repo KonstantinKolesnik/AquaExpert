@@ -10,6 +10,7 @@ namespace AquaExpert.Managers
         private const int busClockRate = 400; // 400 kHz
         private const int timeout = 1000; // 1 sec
         private static Hashtable modules = new Hashtable();
+        private static byte[] response = new byte[10];
 
         public static void Scan()
         {
@@ -40,18 +41,15 @@ namespace AquaExpert.Managers
 
         private static void GetModuleProperties(Module module)
         {
-            //I2CDevice.Configuration config = new I2CDevice.Configuration(module.Address, busClockRate);
-            //byte register = 8;
-            //byte value;
-            
-            //if (bus.TryGetRegister(config, timeout, register, out value))
-            //{
-            //    byte bbb = value;
-
-
-
-
-            //}
+            I2CDevice.Configuration config = new I2CDevice.Configuration(module.Address, busClockRate);
+            if (bus.TryGetRegisters(config, timeout, Module.CMD_GET_PROPERTIES, response))
+            {
+                module.RelayCount = response[0];
+                module.WaterSensorCount = response[1];
+                module.PhSensorCount = response[2];
+                module.OrpSensorCount = response[3];
+                module.TemperatureSensorCount = response[4];
+            }
         }
     }
 }

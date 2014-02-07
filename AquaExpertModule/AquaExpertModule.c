@@ -6,10 +6,13 @@
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
 //****************************************************************************************
-// Sample TWI transmission commands (from Master)
-#define TWI_CMD_MASTER_WRITE 0x10
-#define TWI_CMD_MASTER_READ  0x20
+// commands (from Master)
+#define TWI_CMD_GET_PROPERTIES			0x00
 
+
+
+
+//****************************************************************************************
 typedef struct
 {
 	bool Relays[RELAY_COUNT];
@@ -49,8 +52,7 @@ void InitHardware()
 		  //| (1<<OCIE0)      // Timer0/Counter0 Compare Interrupt
 		  //| (0<<TOIE0);     // Timer0/Counter0 Overflow Interrupt
 	
-	Init_i2c();
-	Init_i2c_Slave();//SlaveOutFunc);   // Ќастраиваем событие выхода при сработке как Slave
+	InitI2C();
 	TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 
 	sei();
@@ -83,40 +85,45 @@ uint8_t OnFailureInLastTransmission(uint8_t TWIerrorMsg)
 }
 void ProcessMasterMessages()
 {
-	// Check if the TWI Transceiver has completed an operation.
-	if (!TWI_TransceiverBusy())
+	if (!TWI_TransceiverBusy()) // Check if the TWI Transceiver has completed an operation
 	{
-		// Check if the last operation was successful
-		if (TWI_statusReg.lastTransOK)
+		if (TWI_statusReg.lastTransOK) // Check if the last operation was successful
 		{
-			// Check if the last operation was a reception
-			if (TWI_statusReg.RxDataInBuf)
+			if (TWI_statusReg.RxDataInBuf) // Check if the last operation was a reception
 			{
-				TWI_GetDataFromTransceiver(messageBuf, 2);
+				LED_MSG_ON;
+				_delay_ms(5);
+				LED_MSG_OFF;
+				
+				TWI_GetDataFromTransceiver(messageBuf, TWI_BUFFER_SIZE);
 					
-				// Check if the last operation was a reception as General Call
-				if (TWI_statusReg.genAddressCall)
+				if (TWI_statusReg.genAddressCall) // last operation was a reception as General Call
 				{
 					// Put data received out to PORTB as an example.
 					//PORTB = messageBuf[0];
 				}
-				else // Ends up here if the last operation was a reception as Slave Address Match
+				else // last operation was a reception as Slave Address Match
 				{
-					// Example of how to interpret a command and respond.
-						
-					if (messageBuf[0] == TWI_CMD_MASTER_WRITE) // TWI_CMD_MASTER_WRITE stores the data to PORTB
+					switch (messageBuf[0]) // command type
 					{
-						//PORTB = messageBuf[1];
+						case TWI_CMD_GET_PROPERTIES:
+							messageBuf[0] = RELAY_COUNT;
+							messageBuf[1] = WATER_SENSOR_COUNT;
+							messageBuf[2] = PH_SENSOR_COUNT;
+							messageBuf[3] = ORP_SENSOR_COUNT;
+							messageBuf[4] = TEMP_SENSOR_COUNT;
+							TWI_StartTransceiverWithData(messageBuf, 5);
+							break;
+						//case TWI_CMD_MASTER_WRITE:
+							////PORTB = messageBuf[1];
+							//break;
+						//
+						default:
+							break;	
 					}
-					if (messageBuf[0] == TWI_CMD_MASTER_READ) // TWI_CMD_MASTER_READ prepares the data from PINB in the transceiver buffer for the TWI master to fetch.
-					{
-						//messageBuf[0] = PINB;
-						//TWI_StartTransceiverWithData(messageBuf, 1);
-					}
-					// other commands ..........
 				}
 			}
-			else // Ends up here if the last operation was a transmission
+			else // last operation was a transmission
 			{
 				//__no_operation(); // Put own code here.
 			}
@@ -129,7 +136,7 @@ void ProcessMasterMessages()
 			OnFailureInLastTransmission(TWI_GetStateInfo());
 	}
 }
-//****************************************************************************************
+
 int main()
 {
 	InitHardware();
@@ -141,4 +148,3 @@ int main()
 		ProcessMasterMessages();
     }
 }
-//****************************************************************************************
