@@ -157,7 +157,5 @@
       <Name>MFE.Storage</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
