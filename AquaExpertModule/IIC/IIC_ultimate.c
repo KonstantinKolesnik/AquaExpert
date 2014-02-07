@@ -26,45 +26,135 @@ IIC_F ErrorOutFunc 	= &DoNothing;			//  в результате ошибки в режиме Master
 uint8_t 	WorkLog[100];						// Лог пишем сюда
 uint8_t		WorkIndex = 0;						// Индекс лога
 
-ISR(TWI_vect)	// Прерывание TWI
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// This is true when the TWI is in the middle of a transfer
+// and set to false when all bytes have been transmitted/received
+// Also used to determine how deep we can sleep.
+static unsigned char TWI_busy = 0;
+union TWI_statusReg_t TWI_statusReg = {0};           // TWI_statusReg is defined in TWI_Slave.h
+static unsigned char TWI_buf[TWI_BUFFER_SIZE];     // Transceiver buffer. Set the size in the header file
+static uint8_t TWI_msgSize  = 0;             // Number of bytes to be transmitted.
+static unsigned char TWI_state    = TWI_NO_STATE;  // State byte. Default set to TWI_NO_STATE.
+
+ISR(TWI_vect)	// TWI interrupt
 {
 	LED_MSG_ON;
 	_delay_ms(5);
 	
-	/*
-	PORTB ^= 0x01;	// Дрыгаем ногой порта, для синхронизации логического анализатора и отметок вызова TWI
-	// Отладочный кусок. Вывод лога работы конечного автомата в буфер памяти, а потом. По окончании работы через UART на волю
-
-	if (WorkIndex <99)				// Если лог не переполнен
-	{
-		if (TWSR)				// Статус нулевой?
-		{
-			WorkLog[WorkIndex]= TWSR;	// Пишем статус в лог
-			WorkIndex++;
-		}
-		else
-		{
-			WorkLog[WorkIndex]= 0xFF;	// Если статус нулевой то вписываем FF
-			WorkIndex++;
-		}
-	}
-	*/
+	static uint8_t TWI_bufPtr;
 
 	switch(TWSR & 0xF8)	// Отсекаем биты прескалера
 	{
-		case 0x00:	// Bus Fail
+		//case TWI_STX_ADR_ACK:            // Own SLA+R has been received; ACK has been returned
+		////    case TWI_STX_ADR_ACK_M_ARB_LOST: // Arbitration lost in SLA+R/W as Master; own SLA+R has been received; ACK has been returned
+		//TWI_bufPtr   = 0;                                 // Set buffer pointer to first data location
+		//case TWI_STX_DATA_ACK:           // Data byte in TWDR has been transmitted; ACK has been received
+		//TWDR = TWI_buf[TWI_bufPtr++];
+		//TWCR = (1<<TWEN)|                                 // TWI Interface enabled
+		//(1<<TWIE)|(1<<TWINT)|                      // Enable TWI Interupt and clear the flag to send byte
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           //
+		//(0<<TWWC);                                 //
+		//TWI_busy = 1;
+		//break;
+		//case TWI_STX_DATA_NACK:          // Data byte in TWDR has been transmitted; NACK has been received.
+		//// I.e. this could be the end of the transmission.
+		//if (TWI_bufPtr == TWI_msgSize) // Have we transceived all expected data?
+		//{
+			//TWI_statusReg.lastTransOK = TRUE;               // Set status bits to completed successfully.
+		//}
+		//else                          // Master has sent a NACK before all data where sent.
+		//{
+			//TWI_state = TWSR;                               // Store TWI State as errormessage.
+		//}
+    //
+		//TWCR = (1<<TWEN)|                                 // Enable TWI-interface and release TWI pins
+		//(1<<TWIE)|(1<<TWINT)|                      // Keep interrupt enabled and clear the flag
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // Answer on next address match
+		//(0<<TWWC);                                 //
+    //
+		//TWI_busy = 0;   // Transmit is finished, we are not busy anymore
+		//break;
+		//case TWI_SRX_GEN_ACK:            // General call address has been received; ACK has been returned
+		////    case TWI_SRX_GEN_ACK_M_ARB_LOST: // Arbitration lost in SLA+R/W as Master; General call address has been received; ACK has been returned
+		//TWI_statusReg.genAddressCall = TRUE;
+		//case TWI_SRX_ADR_ACK:            // Own SLA+W has been received ACK has been returned
+		////    case TWI_SRX_ADR_ACK_M_ARB_LOST: // Arbitration lost in SLA+R/W as Master; own SLA+W has been received; ACK has been returned
+		//// Dont need to clear TWI_S_statusRegister.generalAddressCall due to that it is the default state.
+		//TWI_statusReg.RxDataInBuf = TRUE;
+		//TWI_bufPtr   = 0;                                 // Set buffer pointer to first data location
+    //
+		//// Reset the TWI Interupt to wait for a new event.
+		//TWCR = (1<<TWEN)|                                 // TWI Interface enabled
+		//(1<<TWIE)|(1<<TWINT)|                      // Enable TWI Interupt and clear the flag to send byte
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // Expect ACK on this transmission
+		//(0<<TWWC);
+		//TWI_busy = 1;
+    //
+		//break;
+		//case TWI_SRX_ADR_DATA_ACK:       // Previously addressed with own SLA+W; data has been received; ACK has been returned
+		//case TWI_SRX_GEN_DATA_ACK:       // Previously addressed with general call; data has been received; ACK has been returned
+		//TWI_buf[TWI_bufPtr++]     = TWDR;
+		//TWI_statusReg.lastTransOK = TRUE;                 // Set flag transmission successfull.
+		//// Reset the TWI Interupt to wait for a new event.
+		//TWCR = (1<<TWEN)|                                 // TWI Interface enabled
+		//(1<<TWIE)|(1<<TWINT)|                      // Enable TWI Interupt and clear the flag to send byte
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // Send ACK after next reception
+		//(0<<TWWC);                                 //
+		//TWI_busy = 1;
+		//break;
+		//case TWI_SRX_STOP_RESTART:       // A STOP condition or repeated START condition has been received while still addressed as Slave
+		//// Enter not addressed mode and listen to address match
+		//TWCR = (1<<TWEN)|                                 // Enable TWI-interface and release TWI pins
+		//(1<<TWIE)|(1<<TWINT)|                      // Enable interrupt and clear the flag
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // Wait for new address match
+		//(0<<TWWC);                                 //
+    //
+		//TWI_busy = 0;  // We are waiting for a new address match, so we are not busy
+    //
+		//break;
+		//case TWI_SRX_ADR_DATA_NACK:      // Previously addressed with own SLA+W; data has been received; NOT ACK has been returned
+		//case TWI_SRX_GEN_DATA_NACK:      // Previously addressed with general call; data has been received; NOT ACK has been returned
+		//case TWI_STX_DATA_ACK_LAST_BYTE: // Last data byte in TWDR has been transmitted (TWEA = “0”); ACK has been received
+		////    case TWI_NO_STATE              // No relevant state information available; TWINT = “0”
+		//case TWI_BUS_ERROR:         // Bus error due to an illegal START or STOP condition
+		//TWI_state = TWSR;                 //Store TWI State as errormessage, operation also clears noErrors bit
+		//TWCR =   (1<<TWSTO)|(1<<TWINT);   //Recover from TWI_BUS_ERROR, this will release the SDA and SCL pins thus enabling other devices to use the bus
+		//break;
+		//default:
+		//TWI_state = TWSR;                                 // Store TWI State as errormessage, operation also clears the Success bit.
+		//TWCR = (1<<TWEN)|                                 // Enable TWI-interface and release TWI pins
+		//(1<<TWIE)|(1<<TWINT)|                      // Keep interrupt enabled and clear the flag
+		//(1<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // Acknowledge on any new requests.
+		//(0<<TWWC);                                 //
+    //
+		//TWI_busy = 0; // Unknown status, so we wait for a new address match that might be something we can handle
+		//
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		case TWI_BUS_ERROR:	// Bus Fail
 			i2c_Do |= i2c_ERR_BF;
 			TWCR = 	0<<TWSTA|
 					1<<TWSTO|
 					1<<TWINT|
 					i2c_i_am_slave<<TWEA|
 					1<<TWEN|
-					1<<TWIE;  	// Go!
+					1<<TWIE;
 			
 			MACRO_i2c_WhatDo_ErrorOut
 			break;
 
-		case 0x08:	// Start sent
+		case TWI_START:	// Start sent
 			if ((i2c_Do & i2c_type_msk) == i2c_sarp)		// В зависимости от режима
 				i2c_SlaveAddress |= 0x01;					// Шлем Addr+R
 			else											// Или
@@ -79,7 +169,7 @@ ISR(TWI_vect)	// Прерывание TWI
 					1<<TWIE;
 			break;
 
-		case 0x10:	// Повторный старт был, а затем мы
+		case TWI_REP_START:	// Повторный старт был
 			if ((i2c_Do & i2c_type_msk) == i2c_sawsarp)		// В зависимости от режима
 				i2c_SlaveAddress |= 0x01;					// Шлем Addr+R
 			else
@@ -95,7 +185,7 @@ ISR(TWI_vect)	// Прерывание TWI
 					1<<TWIE;  	// Go!
 			break;
 
-		case 0x18:	// Был послан SLA+W, получили ACK
+		case TWI_MTX_ADR_ACK:	// Был послан SLA+W, получили ACK
 			if ((i2c_Do & i2c_type_msk) == i2c_sawp)		// В зависимости от режима
 			{
 				TWDR = i2c_Buffer[i2c_index];				// Шлем байт данных
@@ -116,8 +206,7 @@ ISR(TWI_vect)	// Прерывание TWI
 					1<<TWIE;	// Go!
 			
 			break;
-
-		case 0x20:	// Был послан SLA+W получили NACK - слейв либо занят, либо его нет дома.
+		case TWI_MTX_ADR_NACK:	// Был послан SLA+W получили NACK - слейв либо занят, либо его нет
 			i2c_Do |= i2c_ERR_NA;	// Код ошибки
 
 			TWCR = 	0<<TWSTA|
@@ -130,8 +219,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			MACRO_i2c_WhatDo_ErrorOut 	// Обрабатываем событие ошибки;
 			break;
 			
-		case 0x28: 	// Байт данных послали, получили ACK! (если sawp - это был байт данных. если sawsarp - байт адреса страницы)
-		{
+		case TWI_MTX_DATA_ACK: 	// Байт данных послали, получили ACK! (если sawp - это был байт данных, если sawsarp - байт адреса страницы)
 			if ((i2c_Do & i2c_type_msk) == i2c_sawp)		// В зависимости от режима
 			{
 				if (i2c_index == i2c_ByteCount)				// Если был байт данных последний
@@ -181,10 +269,9 @@ ISR(TWI_vect)	// Прерывание TWI
 							1<<TWIE;						// Go!
 				}
 			}
-		}
-		break;
-		
-		case 0x30:	//Байт ушел, но получили NACK, причин две. 1я передача оборвана слейвом и так надо. 2я слейв сглючил.
+			
+			break;
+		case TWI_MTX_DATA_NACK:	//Байт ушел, но получили NACK; причин две: 1я - передача оборвана слейвом и так надо, 2я - слейв сглючил.
 			i2c_Do |= i2c_ERR_NK;						// Запишем статус ошибки. Хотя это не факт, что ошибка.
 			
 			TWCR = 	0<<TWSTA|
@@ -197,7 +284,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			MACRO_i2c_WhatDo_MasterOut					// Отрабатываем событие выхода
 			break;
 		
-		case 0x38:	//  Коллизия на шине. Нашелся кто то поглавней
+		case TWI_ARB_LOST:	// Коллизия на шине. Нашелся кто-то поглавней
 			i2c_Do |= i2c_ERR_LP;						// Ставим ошибку потери приоритета
 			
 			// Настраиваем индексы заново.
@@ -212,7 +299,7 @@ ISR(TWI_vect)	// Прерывание TWI
 					1<<TWIE;							// Как только шина будет свободна
 			break;										// попробуем передать снова.
 		
-		case 0x40: // Послали SLA+R получили АСК. А теперь будем получать байты
+		case TWI_MRX_ADR_ACK: // Послали SLA+R, получили АСК; теперь будем получать байты
 			if (i2c_index + 1 == i2c_ByteCount)			// Если буфер кончится на этом байте, то
 				TWCR = 	0<<TWSTA|
 						0<<TWSTO|
@@ -229,8 +316,7 @@ ISR(TWI_vect)	// Прерывание TWI
 						1<<TWIE;						// Или просто примем байт и скажем потом ACK
 			
 			break;
-		
-		case 0x48: // Послали SLA+R, но получили NACK. Видать slave занят или его нет дома.
+		case TWI_MRX_ADR_NACK: // Послали SLA+R, но получили NACK. Видать, slave занят или его нет.
 			i2c_Do |= i2c_ERR_NA; // Код ошибки No Answer
 			
 			TWCR = 	0<<TWSTA|
@@ -243,7 +329,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			MACRO_i2c_WhatDo_ErrorOut					// Отрабатываем выходную ситуацию ошибки
 			break;
 		
-		case 0x50: // Приняли байт.
+		case TWI_MRX_DATA_ACK: // Приняли байт.
 			i2c_Buffer[i2c_index] = TWDR;				// Забрали его из буфера
 			i2c_index++;
 			
@@ -265,8 +351,7 @@ ISR(TWI_vect)	// Прерывание TWI
 						1<<TWIE;						// Если нет, то затребываем следующий байт, а в ответ скажем АСК
 			
 			break;
-		
-		case 0x58:	// Вот мы взяли последний байт, сказали NACK слейв обиделся и отпал.
+		case TWI_MRX_DATA_NACK:	// Вот мы взяли последний байт, сказали NACK слейв обиделся и отпал.
 			i2c_Buffer[i2c_index] = TWDR;				// Взяли байт в буфер
 			
 			TWCR = 	0<<TWSTA|
@@ -369,7 +454,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			
 			break;
 		
-		case 0xB0:  // Поймали свой адрес на чтение во время передачи Мастером
+		case TWI_STX_ADR_ACK_M_ARB_LOST:  // Поймали свой адрес на чтение во время передачи Мастером
 			i2c_Do |= i2c_ERR_LP | i2c_Interrupted;		// Ну чо, коды ошибки и флаг прерваной передачи.
 			
 			// Восстанавливаем индексы
@@ -377,7 +462,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			i2c_PageAddrIndex = 0;
 			// Break нет! Идем дальше
 			
-		case 0xA8:	// RCV SLA+R, ACK sent
+		case TWI_STX_ADR_ACK:	// RCV SLA+R, ACK sent
 			i2c_SlaveIndex = 0;							// Индексы слейвовых массивов на 0
 			TWDR = i2c_OutBuff[i2c_SlaveIndex];			// Что ж, отдадим байт из тех, что есть.
 			
@@ -398,7 +483,7 @@ ISR(TWI_vect)	// Прерывание TWI
 			
 			break;
 		
-		case 0xB8: // Послали байт, получили ACK
+		case TWI_STX_DATA_ACK: // Послали байт, получили ACK
 			i2c_SlaveIndex++;								// Значит продолжаем дискотеку. Берем следующий байт
 			TWDR = i2c_OutBuff[i2c_SlaveIndex];				// Даем его мастеру
 			
@@ -419,8 +504,8 @@ ISR(TWI_vect)	// Прерывание TWI
 			
 			break;
 
-		case 0xC0: // Мы выслали последний байт, больше у нас нет, получили NACK
-		case 0xC8: // или ACK. В данном случае нам пох. Т.к. больше байтов у нас нет.
+		case TWI_STX_DATA_NACK: // Мы выслали последний байт, больше у нас нет, получили NACK
+		case TWI_STX_DATA_ACK_LAST_BYTE: // или ACK. В данном случае нам пох. Т.к. больше байтов у нас нет.
 			if (i2c_Do & i2c_Interrupted)		// Если там была прерваная передача мастера
 			{									// То мы ему ее вернем
 				i2c_Do &= i2c_NoInterrupted;	// Снимем флаг прерваности
@@ -445,6 +530,7 @@ ISR(TWI_vect)	// Прерывание TWI
 		
 		default:
 			break;
+		*/
 	}
 	
 	LED_MSG_OFF;
@@ -463,22 +549,122 @@ void Init_i2c(void)							// Настройка режима мастера
 	TWSR = 0x00;							// prescaler = 1; 400kHz
 	//TWSR = 0x01;							// prescaler = 4; 100kHz
 }
-void Init_Slave_i2c(IIC_F Addr)				// Настройка режима слейва (если нужно)
+void Init_i2c_Slave(IIC_F Addr)				// Настройка режима слейва (если нужно)
 {
-	uint8_t addr = (i2c_MasterAddress << 1);
-	addr |= 1<<0;							// 1 в нулевом бите означает, что мы отзываемся на широковещательные пакеты
-	TWAR = addr;							// Внесем в регистр свой адрес, на который будем отзываться
+	TWAR = (i2c_MasterAddress << 1) | (ACCEPT_BROADCAST << 0);
 												
-	SlaveOutFunc = Addr;					// Присвоим указателю выхода по слейву функцию выхода
+	SlaveOutFunc = Addr;	// Присвоим указателю выхода по слейву функцию выхода
 	
-	// Включаем агрегат и начинаем слушать шину.
-	TWCR =	(0<<TWSTA) |	// TWI START Condition Bit
-			(0<<TWSTO) |	// TWI STOP Condition Bit
-			(0<<TWINT) |	// TWI Interrupt Flag
-			(1<<TWEA)  |	// TWI Enable Acknowledge Bit
-			(1<<TWEN)  |	// TWI Enable Bit
-			(1<<TWIE);		// TWI Interrupt Enable
+	//TWCR =	(0<<TWSTA) |	// TWI START Condition Bit
+			//(0<<TWSTO) |	// TWI STOP Condition Bit
+			//(0<<TWINT) |	// TWI Interrupt Flag
+			//(1<<TWEA)  |	// TWI Enable Acknowledge Bit; 0
+			//(1<<TWEN)  |	// TWI Enable Bit
+			//(1<<TWIE)  |	// TWI Interrupt Enable; 0
+			//(0<<TWWC);
+
+  TWCR =	(1<<TWEN) |								// Enable TWI-interface and release TWI pins.
+			(0<<TWIE) | (0<<TWINT) |				// Disable TWI Interrupt.
+			(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) |	// Do not ACK on any requests, yet.
+			(0<<TWWC);
+			
+	TWI_busy = 0;
 }
+
+/****************************************************************************
+Call this function to test if the TWI_ISR is busy transmitting.
+****************************************************************************/
+unsigned char TWI_TransceiverBusy()
+{
+	return TWI_busy;
+}
+
+/****************************************************************************
+Call this function to fetch the state information of the previous operation. The function will hold execution (loop)
+until the TWI_ISR has completed with the previous operation. If there was an error, then the function
+will return the TWI State code.
+****************************************************************************/
+unsigned char TWI_GetStateInfo()
+{
+	while (TWI_TransceiverBusy());			// Wait until TWI has completed the transmission.
+	return (TWI_state);						// Return error state.
+}
+
+/****************************************************************************
+Call this function to start the Transceiver without specifying new transmission data. Useful for restarting
+a transmission, or just starting the transceiver for reception. The driver will reuse the data previously put
+in the transceiver buffers. The function will hold execution (loop) until the TWI_ISR has completed with the
+previous operation, then initialize the next operation and return.
+****************************************************************************/
+void TWI_StartTransceiver()
+{
+	while (TWI_TransceiverBusy());             // Wait until TWI is ready for next transmission.
+	
+	TWI_statusReg.all = 0;
+	TWI_state = TWI_NO_STATE ;
+	
+	TWCR =	(1<<TWEN) |								// TWI Interface enabled.
+			(1<<TWIE) | (1<<TWINT) |				// Enable TWI Interupt and clear the flag.
+			(1<<TWEA) | (0<<TWSTA) | (0<<TWSTO) |	// Prepare to ACK next time the Slave is addressed.
+			(0<<TWWC);
+			
+	TWI_busy = 0;
+}
+
+/****************************************************************************
+Call this function to send a prepared message, or start the Transceiver for reception. Include
+a pointer to the data to be sent if a SLA+W is received. The data will be copied to the TWI buffer.
+Also include how many bytes that should be sent. Note that unlike the similar Master function, the
+Address byte is not included in the message buffers.
+The function will hold execution (loop) until the TWI_ISR has completed with the previous operation,
+then initialize the next operation and return.
+****************************************************************************/
+void TWI_StartTransceiverWithData(unsigned char *msg, uint8_t msgSize)
+{
+	uint8_t temp;
+
+	while (TWI_TransceiverBusy());             // Wait until TWI is ready for next transmission.
+
+	TWI_msgSize = msgSize;                        // Number of data to transmit.
+	for (temp = 0; temp < msgSize; temp++)      // Copy data that may be transmitted if the TWI Master requests data.
+		TWI_buf[temp] = msg[temp];
+	
+	TWI_statusReg.all = 0;
+	TWI_state         = TWI_NO_STATE ;
+	
+	TWCR =	(1<<TWEN) |                             // TWI Interface enabled.
+			(1<<TWIE) | (1<<TWINT) |                  // Enable TWI Interupt and clear the flag.
+			(1<<TWEA) | (0<<TWSTA) | (0<<TWSTO) |       // Prepare to ACK next time the Slave is addressed.
+			(0<<TWWC);
+			
+	TWI_busy = 1;
+}
+
+/****************************************************************************
+Call this function to read out the received data from the TWI transceiver buffer. I.e. first call
+TWI_Start_Transceiver to get the TWI Transceiver to fetch data. Then Run this function to collect the
+data when they have arrived. Include a pointer to where to place the data and the number of bytes
+to fetch in the function call. The function will hold execution (loop) until the TWI_ISR has completed
+with the previous operation, before reading out the data and returning.
+If there was an error in the previous transmission the function will return the TWI State code.
+****************************************************************************/
+bool TWI_GetDataFromTransceiver(unsigned char *msg, uint8_t msgSize)
+{
+	uint8_t i;
+
+	while (TWI_TransceiverBusy());             // Wait until TWI is ready for next transmission.
+
+	if (TWI_statusReg.lastTransOK)               // Last transmission completed successfully.
+	{
+		for (i = 0; i < msgSize; i++)                 // Copy data from Transceiver buffer.
+			msg[i] = TWI_buf[i];
+		
+		TWI_statusReg.RxDataInBuf = false;          // Slave Receive data has been read from buffer.
+	}
+	
+	return (TWI_statusReg.lastTransOK);
+}
+
 void DoNothing(void)
 {
 	// Функция пустышка, затыкать несуществующие ссылки
