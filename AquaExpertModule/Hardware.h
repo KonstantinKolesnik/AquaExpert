@@ -32,7 +32,7 @@ LOW = 0xE4 (valid)
 
 // module types:
 #define MODULE_TYPE_0 // test module; all features
-//#define MODULE_TYPE_1 // 
+//#define MODULE_TYPE_1 // AE-R8
 //#define MODULE_TYPE_2 //
 //#define MODULE_TYPE_3 //
 //#define MODULE_TYPE_4 //
@@ -49,6 +49,11 @@ LOW = 0xE4 (valid)
 
 #elif MODULE_TYPE_1
 
+#define RELAY_COUNT				8
+#define WATER_SENSOR_COUNT		0
+#define PH_SENSOR_COUNT			0
+#define ORP_SENSOR_COUNT		0
+#define TEMP_SENSOR_COUNT		0
 
 #endif
 

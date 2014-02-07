@@ -36,12 +36,8 @@ void InitHardware()
 	InitADC(true); // use internal Vcc reference
 	
 	InitOW();
-	
-	Init_i2c();
-	Init_i2c_Slave(SlaveOutFunc);   // Ќастраиваем событие выхода при сработке как Slave
-	TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 
-	
+	//InitPWM();
     //TIMSK = (1<<OCIE1A)     // Timer1/Counter1 Compare A Interrupt; reassigned in InitDCCOut
           //| (0<<OCIE1B)     // Timer1/Counter1 Compare B Interrupt
           //| (0<<TOIE1)      // Timer1/Counter1 Overflow Interrupt
@@ -52,11 +48,19 @@ void InitHardware()
 		  //
 		  //| (1<<OCIE0)      // Timer0/Counter0 Compare Interrupt
 		  //| (0<<TOIE0);     // Timer0/Counter0 Overflow Interrupt
+	
+	Init_i2c();
+	Init_i2c_Slave();//SlaveOutFunc);   // Ќастраиваем событие выхода при сработке как Slave
+	TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 
 	sei();
 }
 void PopulateModuleState()
 {
+	// for test:
+	//SetRelay(0, GetRelay(0) ? false : true);
+	//_delay_ms(200);
+	
 	for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
 		moduleState.WaterSensors[i] = IsWaterSensorWet(i);
 		
@@ -133,11 +137,6 @@ int main()
     while (true)
     {
 		wdt_reset();
-		
-		// for test:
-		//SetRelay(0, GetRelay(0) ? false : true);
-		//_delay_ms(200);
-		
 		PopulateModuleState();
 		ProcessMasterMessages();
     }
