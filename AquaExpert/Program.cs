@@ -1,5 +1,6 @@
 ﻿using AquaExpert.Managers;
 using Gadgeteer;
+using GTM.MFE.Displays;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
@@ -10,6 +11,7 @@ using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using Gadgeteer.Modules.GHIElectronics;
 
 namespace AquaExpert
 {
@@ -22,6 +24,8 @@ namespace AquaExpert
         private WSServer wsServer;
         //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
+
+        private Display display;
 
         //private WaterLevelSensor sensorWaterMax;
         //private WaterLevelSensor sensorWaterMin;
@@ -58,6 +62,7 @@ namespace AquaExpert
         {
             InitSettings();
             InitHardware();
+            InitDisplay();
 
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
             //    InitNetwork();
@@ -89,6 +94,13 @@ namespace AquaExpert
             timerWorkflow = new Gadgeteer.Timer(1000);
             timerWorkflow.Tick += timerWorkflow_Tick;
             timerWorkflow.Start();
+        }
+        private void InitDisplay()
+        {
+            display = new Display(ModelType.TFT01_22SP, 11);
+
+
+
         }
         private void InitNetwork()
         {

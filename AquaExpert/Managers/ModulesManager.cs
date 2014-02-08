@@ -10,7 +10,9 @@ namespace AquaExpert.Managers
         private const int busClockRate = 400; // 400 kHz
         private const int timeout = 1000; // 1 sec
         private static Hashtable modules = new Hashtable();
-        private static byte[] response = new byte[10];
+        //private static byte[] response = new byte[5];
+
+        static bool on = false;
 
         public static void Scan()
         {
@@ -35,12 +37,18 @@ namespace AquaExpert.Managers
                 else
                     module = (Module)modules[address];
 
-                GetModuleProperties(module);
+                //GetModuleProperties(module);
+
+                //SetModuleRelay(module, 0, on);
+                //on = !on;
+
+                //GetModuleRelay(module, 0);
             }
         }
 
         private static void GetModuleProperties(Module module)
         {
+            byte[] response = new byte[5];
             I2CDevice.Configuration config = new I2CDevice.Configuration(module.Address, busClockRate);
             if (bus.TryGetRegisters(config, timeout, Module.CMD_GET_PROPERTIES, response))
             {
@@ -49,6 +57,21 @@ namespace AquaExpert.Managers
                 module.PhSensorCount = response[2];
                 module.OrpSensorCount = response[3];
                 module.TemperatureSensorCount = response[4];
+            }
+        }
+
+        private static void GetModuleRelay(Module module, int idx)
+        {
+            //I2CDevice.Configuration config = new I2CDevice.Configuration(module.Address, busClockRate);
+            //if (bus.TrySetRegister(config, timeout, Module.CMD_SET_RELAY_STATE, new byte[] { 0, (byte)(on ? 1 : 0) }))
+            //{
+            //}
+        }
+        private static void SetModuleRelay(Module module, int idx, bool on)
+        {
+            I2CDevice.Configuration config = new I2CDevice.Configuration(module.Address, busClockRate);
+            if (bus.TrySetRegister(config, timeout, Module.CMD_SET_RELAY_STATE, new byte[] { 0, (byte)(on ? 1 : 0) }))
+            {
             }
         }
     }

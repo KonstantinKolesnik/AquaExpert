@@ -39,7 +39,7 @@ LOW = 0xE4 (valid)
 
 
 
-#ifdef MODULE_TYPE_0
+//#ifdef MODULE_TYPE_0
 
 #define RELAY_COUNT				8
 #define WATER_SENSOR_COUNT		3
@@ -47,15 +47,15 @@ LOW = 0xE4 (valid)
 #define ORP_SENSOR_COUNT		2
 #define TEMP_SENSOR_COUNT		1//3
 
-#elif MODULE_TYPE_1
-
-#define RELAY_COUNT				8
-#define WATER_SENSOR_COUNT		0
-#define PH_SENSOR_COUNT			0
-#define ORP_SENSOR_COUNT		0
-#define TEMP_SENSOR_COUNT		0
-
-#endif
+//#elif MODULE_TYPE_1
+//
+//#define RELAY_COUNT				8
+//#define WATER_SENSOR_COUNT		0
+//#define PH_SENSOR_COUNT			0
+//#define ORP_SENSOR_COUNT		0
+//#define TEMP_SENSOR_COUNT		0
+//
+//#endif
 
 //****************************************************************************************
 // 2. Ports Definition

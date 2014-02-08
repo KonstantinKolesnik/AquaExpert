@@ -11,13 +11,17 @@ static uint8_t TWI_state = TWI_NO_STATE;	// State byte. Default set to TWI_NO_ST
 //****************************************************************************************
 ISR(TWI_vect)	// TWI interrupt
 {
+		LED_MSG_ON;
+		_delay_ms(5);
+		LED_MSG_OFF;
+
 	static uint8_t TWI_bufPtr;
 
 	switch (TWSR & 0xF8)	// Отсекаем биты прескалера
 	{
 		case TWI_STX_ADR_ACK:            // Own SLA+R has been received; ACK has been returned
 		//case TWI_STX_ADR_ACK_M_ARB_LOST: // Arbitration lost in SLA+R/W as Master; own SLA+R has been received; ACK has been returned
-			TWI_bufPtr   = 0;                                 // Set buffer pointer to first data location
+			TWI_bufPtr = 0;                                 // Set buffer pointer to first data location
 		case TWI_STX_DATA_ACK:           // Data byte in TWDR has been transmitted; ACK has been received
 			TWDR = TWI_buf[TWI_bufPtr++];
 			TWCR =	(1<<TWEN)|                                 // TWI Interface enabled
@@ -49,7 +53,7 @@ ISR(TWI_vect)	// TWI interrupt
 		//case TWI_SRX_ADR_ACK_M_ARB_LOST: // Arbitration lost in SLA+R/W as Master; own SLA+W has been received; ACK has been returned
 			// Don't need to clear TWI_S_statusRegister.generalAddressCall due to that it is the default state.
 			TWI_statusReg.RxDataInBuf = true;
-			TWI_bufPtr   = 0;                                 // Set buffer pointer to first data location
+			TWI_bufPtr = 0;                                 // Set buffer pointer to first data location
     
 			// Reset the TWI Interrupt to wait for a new event.
 			TWCR =	(1<<TWEN)|                                 // TWI Interface enabled

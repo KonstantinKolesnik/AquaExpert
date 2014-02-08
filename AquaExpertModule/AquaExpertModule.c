@@ -7,8 +7,9 @@
 #include "TemperatureSensors.h"
 //****************************************************************************************
 // commands (from Master)
-#define TWI_CMD_GET_PROPERTIES			0x00
-
+#define TWI_CMD_GET_PROPERTIES			0
+#define TWI_CMD_GET_RELAY_STATE			1
+#define TWI_CMD_SET_RELAY_STATE			2
 
 
 
@@ -23,8 +24,14 @@ typedef struct
 } State_t;
 //****************************************************************************************
 static volatile State_t moduleState;
-uint8_t messageBuf[TWI_BUFFER_SIZE];
+static uint8_t msg[TWI_BUFFER_SIZE];
 //****************************************************************************************
+void BlinkMsgLed()
+{
+	LED_MSG_ON;
+	_delay_ms(5);
+	LED_MSG_OFF;
+}
 void InitHardware()
 {
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
@@ -34,7 +41,6 @@ void InitHardware()
 	LED_MSG_OFF;
 	
 	InitRelays();
-	//SetRelays(RELAY_DEFAULT_STATE);
 	
 	InitADC(true); // use internal Vcc reference
 	
@@ -56,21 +62,22 @@ void InitHardware()
 	TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 
 	sei();
+	//SetRelay(0, true);
 }
 void PopulateModuleState()
 {
 	// for test:
-	//SetRelay(0, GetRelay(0) ? false : true);
+	//SetRelay(1, !GetRelay(1));
 	//_delay_ms(200);
 	
-	for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
-		moduleState.WaterSensors[i] = IsWaterSensorWet(i);
+	//for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
+		//moduleState.WaterSensors[i] = IsWaterSensorWet(i);
 		
-	for (uint8_t i = 0; i < RELAY_COUNT; i++)
-		moduleState.Relays[i] = GetRelay(i);
-		
-	for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
-		moduleState.TempSensors[i] = ReadTemperature(i);
+	//for (uint8_t i = 0; i < RELAY_COUNT; i++)
+		//moduleState.Relays[i] = GetRelay(i);
+		//
+	//for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
+		//moduleState.TempSensors[i] = ReadTemperature(i);
 }
 uint8_t OnFailureInLastTransmission(uint8_t TWIerrorMsg)
 {
@@ -91,11 +98,9 @@ void ProcessMasterMessages()
 		{
 			if (TWI_statusReg.RxDataInBuf) // Check if the last operation was a reception
 			{
-				LED_MSG_ON;
-				_delay_ms(5);
-				LED_MSG_OFF;
+				//BlinkMsgLed();
 				
-				TWI_GetDataFromTransceiver(messageBuf, TWI_BUFFER_SIZE);
+				TWI_GetDataFromTransceiver(msg, 1);//TWI_BUFFER_SIZE);
 					
 				if (TWI_statusReg.genAddressCall) // last operation was a reception as General Call
 				{
@@ -104,23 +109,28 @@ void ProcessMasterMessages()
 				}
 				else // last operation was a reception as Slave Address Match
 				{
-					switch (messageBuf[0]) // command type
+					switch (msg[0]) // command type
 					{
 						case TWI_CMD_GET_PROPERTIES:
-							messageBuf[0] = RELAY_COUNT;
-							messageBuf[1] = WATER_SENSOR_COUNT;
-							messageBuf[2] = PH_SENSOR_COUNT;
-							messageBuf[3] = ORP_SENSOR_COUNT;
-							messageBuf[4] = TEMP_SENSOR_COUNT;
-							TWI_StartTransceiverWithData(messageBuf, 5);
+							msg[0] = RELAY_COUNT;
+							msg[1] = WATER_SENSOR_COUNT;
+							msg[2] = PH_SENSOR_COUNT;
+							msg[3] = ORP_SENSOR_COUNT;
+							msg[4] = TEMP_SENSOR_COUNT;
+							TWI_StartTransceiverWithData(msg, 5);
 							break;
-						//case TWI_CMD_MASTER_WRITE:
-							////PORTB = messageBuf[1];
-							//break;
-						//
+						case TWI_CMD_GET_RELAY_STATE:
+							msg[0] = moduleState.Relays[msg[1]];
+							TWI_StartTransceiverWithData(msg, 1);
+							break;
+						case TWI_CMD_SET_RELAY_STATE:
+							SetRelay(msg[1], msg[2]);
+							break;
 						default:
 							break;	
 					}
+					
+					//BlinkMsgLed();
 				}
 			}
 			else // last operation was a transmission

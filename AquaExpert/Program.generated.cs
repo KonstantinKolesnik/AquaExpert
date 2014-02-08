@@ -18,20 +18,8 @@ namespace AquaExpert {
         /// <summary>The UsbClientDP module using socket 8 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.UsbClientDP usbClientDP;
         
-        /// <summary>The MoistureSensor module (not connected).</summary>
-        private Gadgeteer.Modules.Seeed.MoistureSensor moistureSensorUpper;
-        
-        /// <summary>The Relay module (not connected).</summary>
-        private Gadgeteer.Modules.LoveElectronics.Relay relays;
-        
-        /// <summary>The MoistureSensor module (not connected).</summary>
-        private Gadgeteer.Modules.Seeed.MoistureSensor moistureSensorLower;
-        
         /// <summary>The WiFi_RS21 (Premium) module using socket 3 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.WiFi_RS21 wifi_RS21;
-        
-        /// <summary>The PHTemp module (not connected).</summary>
-        private Gadgeteer.Modules.LoveElectronics.PHTemp pHTempSensor;
         
         /// <summary>The LED Strip module using socket 18 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.LED_Strip indicators;
@@ -62,13 +50,7 @@ namespace AquaExpert {
         
         private void InitializeModules() {
             this.usbClientDP = new GTM.GHIElectronics.UsbClientDP(8);
-            Microsoft.SPOT.Debug.Print("The module \'moistureSensorUpper\' was not connected in the designer and will be nu" +
-                    "ll.");
-            Microsoft.SPOT.Debug.Print("The module \'relays\' was not connected in the designer and will be null.");
-            Microsoft.SPOT.Debug.Print("The module \'moistureSensorLower\' was not connected in the designer and will be nu" +
-                    "ll.");
             this.wifi_RS21 = new GTM.GHIElectronics.WiFi_RS21(3);
-            Microsoft.SPOT.Debug.Print("The module \'pHTempSensor\' was not connected in the designer and will be null.");
             this.indicators = new GTM.GHIElectronics.LED_Strip(18);
             this.sdCard = new GTM.GHIElectronics.SDCard(9);
         }

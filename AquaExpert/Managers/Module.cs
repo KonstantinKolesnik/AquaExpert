@@ -5,8 +5,8 @@ namespace AquaExpert.Managers
     {
         #region Commands
         public const int CMD_GET_PROPERTIES = 0;
-
-
+        public const int CMD_GET_RELAY_STATE = 1;
+        public const int CMD_SET_RELAY_STATE = 2;
 
         #endregion
 
@@ -57,5 +57,10 @@ namespace AquaExpert.Managers
             this.address = address;
         }
         #endregion
+
+        //public bool GetRelayState(int idx)
+        //{
+
+        //}
     }
 }

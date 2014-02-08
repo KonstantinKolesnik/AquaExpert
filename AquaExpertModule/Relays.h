@@ -3,7 +3,7 @@
 //****************************************************************************************
 #include "Hardware.h"
 //****************************************************************************************
-#define RELAY_ACTIVE_LEVEL		false // 8-relay module active level is "0"
+#define RELAY_ACTIVE_LEVEL		0 // 8-relay module active level is "0"
 #define RELAY_DEFAULT_STATE		false // off
 //****************************************************************************************
 void InitRelays();
