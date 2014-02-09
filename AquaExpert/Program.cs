@@ -1,5 +1,4 @@
 ﻿using AquaExpert.Managers;
-using Gadgeteer;
 using GTM.MFE.Displays;
 using MFE.Net.Http;
 using MFE.Net.Managers;
@@ -7,12 +6,12 @@ using MFE.Net.Messaging;
 using MFE.Net.Tcp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
+using Microsoft.SPOT.Hardware;
 using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using Gadgeteer.Modules.GHIElectronics;
-using System;
+using GT = Gadgeteer;
 
 namespace AquaExpert
 {
@@ -20,27 +19,32 @@ namespace AquaExpert
     {
         #region fields
         private INetworkManager networkManager;
-        private Gadgeteer.Timer timerNetworkConnect;
+        private GT.Timer timerNetworkConnect;
         private HttpServer httpServer;
         private WSServer wsServer;
         //private TcpServer tcpServer;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
-
-        private Display display;
-
-        //private WaterLevelSensor sensorWaterMax;
-        //private WaterLevelSensor sensorWaterMin;
-        //private PHTempSensor sensorPHTemp;
 
         private State state = new State();
         private Settings settings = null;
 
         private int ledNetwork = 0;
 
-        private Gadgeteer.Timer timerWorkflow;
+        private ModulesManager modulesManager = new ModulesManager();
+        //private GT.Timer timerWorkflow;
+
+        private Display display;
+
+        private static I2CDevice bus = new I2CDevice(null);
+        public const int BusClockRate = 400; // 400 kHz
+        public const int BusTimeout = 1000; // 1 sec
         #endregion
 
         #region Properties
+        public static I2CDevice Bus
+        {
+            get { return bus; }
+        }
         public static string Name
         {
             get { return Assembly.GetExecutingAssembly().GetName().Name; }
@@ -49,13 +53,13 @@ namespace AquaExpert
         {
             get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
         }
-        public State State
-        {
-            get { return state; }
-        }
         public Settings Settings
         {
             get { return settings; }
+        }
+        public State State
+        {
+            get { return state; }
         }
         #endregion
 
@@ -64,7 +68,6 @@ namespace AquaExpert
             InitSettings();
             InitHardware();
             InitDisplay();
-
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
             //    InitNetwork();
 
@@ -87,14 +90,15 @@ namespace AquaExpert
         {
             indicators.TurnAllLedsOff();
 
+            modulesManager.CollectionChanged += modulesManager_CollectionChanged;
             //Watchdog!!!
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
 
-            timerWorkflow = new Gadgeteer.Timer(1000);
-            timerWorkflow.Tick += timerWorkflow_Tick;
-            timerWorkflow.Start();
+            //timerWorkflow = new Gadgeteer.Timer(1000);
+            //timerWorkflow.Tick += timerWorkflow_Tick;
+            //timerWorkflow.Start();
         }
         private void InitDisplay()
         {
@@ -104,31 +108,27 @@ namespace AquaExpert
             Bitmap picture = new Bitmap(Resources.GetBytes(Resources.BinaryResources.test_24b), Bitmap.BitmapImageType.Bmp);
             //display.Draw(picture);
 
-            //display.SimpleGraphics.BackgroundColor = Gadgeteer.Color.Green;
-            //display.SimpleGraphics.DisplayText("Hello World!", Resources.GetFont(Resources.FontResources.NinaB), Gadgeteer.Color.Red, 5, 5);
-            //display.SimpleGraphics.DisplayText("Kotyara!", Resources.GetFont(Resources.FontResources.small), Gadgeteer.Color.Red, 5, 25);
-            //Thread.Sleep(2000);
-            //display.SimpleGraphics.Clear();
-            //display.SimpleGraphics.DisplayEllipse(Gadgeteer.Color.Blue, 60, 120, 30, 20);
-            //Thread.Sleep(2000);
             //display.SimpleGraphics.DisplayImage(picture, 0, 0);
+            ////display.SimpleGraphics.BackgroundColor = GT.Color.Green;
+            //display.SimpleGraphics.DisplayText("Igor, mi bogati!", Resources.GetFont(Resources.FontResources.NinaB), GT.Color.Red, 5, 5);
+            //display.SimpleGraphics.DisplayText("Pivo v studiyu!", Resources.GetFont(Resources.FontResources.small), GT.Color.Red, 5, 25);
+            ////Thread.Sleep(2000);
+            ////display.SimpleGraphics.Clear();
+            //display.SimpleGraphics.DisplayEllipse(GT.Color.Blue, 120, 160, 30, 20);
+            //Thread.Sleep(2000);
 
-            //loop(display);
-
-
-
-
+            //DisplayDemo(display);
         }
-        //void loop(Display display)
-        //{
-        //    Gadgeteer.Modules.Module.DisplayModule.SimpleGraphicsInterface graphics = display.SimpleGraphics;
-        //  int buf[318];
-        //  int x, x2;
-        //  int y, y2;
-        //  int r;
+        void DisplayDemo(Display display)
+        {
+            GT.Modules.Module.DisplayModule.SimpleGraphicsInterface graphics = display.SimpleGraphics;
+            //int buf[318];
+            //int x, x2;
+            //int y, y2;
+            //int r;
 
-        //// Clear the screen and draw the frame
-        //  graphics.Clear();
+            // Clear the screen and draw the frame
+            graphics.Clear();
 
         //  graphics.setColor(255, 0, 0);
         //  graphics.fillRect(0, 0, 319, 13);
@@ -146,7 +146,7 @@ namespace AquaExpert
 
         //// Draw crosshairs
         //  graphics.setColor(0, 0, 255);
-        //  graphics.setBackColor(0, 0, 0);
+            graphics.BackgroundColor = GT.Color.Black;
         //  graphics.drawLine(159, 15, 159, 224);
         //  graphics.drawLine(1, 119, 318, 119);
         //  for (int i=9; i<310; i+=10)
@@ -176,7 +176,7 @@ namespace AquaExpert
         //    graphics.drawPixel(i,119+(tan(((i*1.13)*3.14)/180)));
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
 
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -206,7 +206,7 @@ namespace AquaExpert
         //    buf[x-1]=y;
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -235,7 +235,7 @@ namespace AquaExpert
         //    graphics.fillRect(70+(i*20), 30+(i*20), 130+(i*20), 90+(i*20));
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -263,8 +263,8 @@ namespace AquaExpert
         //    }
         //    graphics.fillRoundRect(190-(i*20), 30+(i*20), 250-(i*20), 90+(i*20));
         //  }
-  
-        //  delay(2000);
+
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -292,8 +292,8 @@ namespace AquaExpert
         //    }
         //    graphics.fillCircle(100+(i*20),60+(i*20), 30);
         //  }
-  
-        //  delay(2000);
+
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -319,8 +319,8 @@ namespace AquaExpert
         //  {
         //    graphics.drawLine(318, i, 330-(i*1.44), 224);
         //  }
-  
-        //  delay(2000);
+
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -335,7 +335,7 @@ namespace AquaExpert
         //    graphics.drawCircle(x, y, r);
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -351,7 +351,7 @@ namespace AquaExpert
         //    graphics.drawRect(x, y, x2, y2);
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -367,7 +367,7 @@ namespace AquaExpert
         //    graphics.drawRoundRect(x, y, x2, y2);
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -382,7 +382,7 @@ namespace AquaExpert
         //    graphics.drawLine(x, y, x2, y2);
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
   
         //  graphics.setColor(0,0,0);
         //  graphics.fillRect(1,15,318,224);
@@ -393,7 +393,7 @@ namespace AquaExpert
         //    graphics.drawPixel(2+random(316), 16+random(209));
         //  }
 
-        //  delay(2000);
+            Thread.Sleep(2000);
 
         //  graphics.fillScr(0, 0, 255);
         //  graphics.setColor(255, 0, 0);
@@ -409,9 +409,9 @@ namespace AquaExpert
         //  graphics.setBackColor(0, 0, 255);
         //  graphics.print("Runtime: (msecs)", CENTER, 210);
         //  graphics.printNumI(millis(), CENTER, 225);
-  
-        //  delay (10000);
-        //}
+
+            Thread.Sleep(10000);
+        }
 
         private void InitNetwork()
         {
@@ -598,20 +598,48 @@ namespace AquaExpert
             
         }
 
-        private void timerWorkflow_Tick(Gadgeteer.Timer timer)
+        //private void timerWorkflow_Tick(Gadgeteer.Timer timer)
+        //{
+        //    timerWorkflow.Stop();
+
+        //    //DateTime dt = TimeManager.CurrentTime;
+
+        //    modulesManager.Scan();
+
+        //    //SetState();
+        //    //DoWork();
+        //    //SendStateToClients();
+
+
+        //    timerWorkflow.Start();
+        //}
+        private void modulesManager_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
-            timerWorkflow.Stop();
+            uint x = 10;
+            uint indent = 10;
+            uint y = 10;
+            uint lineHight = 15;
+            Font fontTitle = Resources.GetFont(Resources.FontResources.NinaB);
+            Font font = Resources.GetFont(Resources.FontResources.small);
+            GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
 
-            //DateTime dt = TimeManager.CurrentTime;
+            display.SimpleGraphics.Clear();
+            display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
 
-            ModulesManager.Scan();
+            foreach (ushort address in modulesManager.Modules.Keys)
+            {
+                Module module = (Module)modulesManager.Modules[address];
 
-            //SetState();
-            //DoWork();
-            //SendStateToClients();
+                display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.Name, fontTitle, color, x, y); y += lineHight;
 
+                display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("PH sensors: " + module.PhSensorCount, font, color, x + indent, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("ORP sensors: " + module.OrpSensorCount, font, color, x + indent, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("Temperature sensors: " + module.TemperatureSensorCount, font, color, x + indent, y); y += lineHight;
 
-            timerWorkflow.Start();
+                display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
+            }
         }
         #endregion
 

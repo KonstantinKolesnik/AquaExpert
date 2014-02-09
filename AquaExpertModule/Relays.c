@@ -4,24 +4,28 @@ void InitRelays()
 {
 	// Port B
 	DDRB = 0xFF;	// all outputs
-	
-	bool active = RELAY_ACTIVE_LEVEL ? RELAY_DEFAULT_STATE : !RELAY_DEFAULT_STATE;
-	PORTB = active ? 0xFF : 0x00;	
+	SetRelays(RELAY_DEFAULT_STATE);
 }
 void SetRelay(uint8_t idx, bool active)
 {
-	active = RELAY_ACTIVE_LEVEL ? active : !active;
-	if (!active)
+	bool output = RELAY_ACTIVE_LEVEL ? active : !active;
+	if (output)
 		PORTB |= (1<<idx);
 	else
 		PORTB &= ~(1<<idx);
 }
 void SetRelays(bool active)
 {
-	active = RELAY_ACTIVE_LEVEL ? active : !active;
-	PORTB = active ? 0xFF : 0x00;
+	bool output = RELAY_ACTIVE_LEVEL ? active : !active;
+	PORTB = output ? 0xFF : 0x00;
 }
 bool GetRelay(uint8_t idx)
 {
-	return RELAY_ACTIVE_LEVEL ? (PINB & (1<<idx)) : !(PINB & (1<<idx));
+	bool output = (PINB & (1<<idx));
+	return RELAY_ACTIVE_LEVEL ? output : !output;
+}
+uint8_t GetRelays()
+{
+	uint8_t output = (PORTB);
+	return RELAY_ACTIVE_LEVEL ? output : ~output;
 }

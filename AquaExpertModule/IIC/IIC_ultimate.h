@@ -13,7 +13,7 @@
 #define TWI_SlaveAddress 			5	 // јдрес на который будем отзыватьс€, 1...127
 
 #define TWI_ACCEPT_BROADCAST		1	 // Accept broadcast messages
-#define TWI_BUFFER_SIZE				6	 // Reserves memory for the drivers transceiver buffer. Set this to the largest message size that will be sent including address byte.
+#define TWI_BUFFER_SIZE				10	 // Reserves memory for the drivers transceiver buffer. Set this to the largest message size that will be sent including address byte.
 
 // TWI Miscellaneous status codes
 #define TWI_NO_STATE               0xF8  // No relevant state information available; TWINT = У0Ф
@@ -56,21 +56,21 @@
 //****************************************************************************************
 union TWI_statusReg_t                       // Status byte holding flags.
 {
-	unsigned char all;
+	uint8_t all;
 	struct
 	{
-		unsigned char lastTransOK:1;
-		unsigned char RxDataInBuf:1;
-		unsigned char genAddressCall:1;		// TRUE = General call, FALSE = TWI Address;
+		bool lastTransOK:1;
+		bool RxDataInBuf:1;
+		bool genAddressCall:1;		// TRUE = General call, FALSE = TWI Address;
 		unsigned char unusedBits:5;
 	};
 };
 
 extern union TWI_statusReg_t TWI_statusReg;
 
-extern void InitI2C();
-unsigned char TWI_TransceiverBusy();
-unsigned char TWI_GetStateInfo();
+void InitI2C();
+bool TWI_TransceiverBusy();
+uint8_t TWI_GetStateInfo();
 void TWI_StartTransceiver();
 void TWI_StartTransceiverWithData(unsigned char *msg, uint8_t msgSize);
 bool TWI_GetDataFromTransceiver(unsigned char *msg, uint8_t msgSize);

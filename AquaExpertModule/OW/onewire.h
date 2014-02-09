@@ -54,12 +54,12 @@
 // rom-code size including CRC
 #define OW_ROMCODE_SIZE	8
 //****************************************************************************************
-unsigned char OW_Reset(void);
+unsigned char OW_Reset();
 void OW_WriteBit(unsigned char bit);
-unsigned char OW_ReadBit(void);
+unsigned char OW_ReadBit();
 
 #ifndef UART_AS_OneWire
-	unsigned char OW_ReadByte(void);
+	unsigned char OW_ReadByte();
 	void OW_WriteByte(unsigned char byte);
 #else
 	unsigned char OW_WriteByte(unsigned char byte);

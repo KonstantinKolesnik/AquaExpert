@@ -99,7 +99,8 @@ void OW_WriteBit(unsigned char bit)
 	OW_Set(1);
 	_delay_us(1);
 	//If we want to write 1, release the line (if not will keep low)
-	if(bit) OW_Set(0); 
+	if (bit)
+		OW_Set(0); 
 	//Wait for 60uS and release the line
 	_delay_us(60);
 	OW_Set(0);

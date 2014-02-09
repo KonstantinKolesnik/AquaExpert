@@ -7,7 +7,7 @@
 #include "TemperatureSensors.h"
 //****************************************************************************************
 // commands (from Master)
-#define TWI_CMD_GET_PROPERTIES			0
+#define TWI_CMD_GET_SUMMARY				0
 #define TWI_CMD_GET_RELAY_STATE			1
 #define TWI_CMD_SET_RELAY_STATE			2
 
@@ -19,17 +19,19 @@ typedef struct
 	bool Relays[RELAY_COUNT];
 	bool WaterSensors[WATER_SENSOR_COUNT];
 	uint8_t PhSensors[PH_SENSOR_COUNT];
-	uint8_t OrpSensors[ORP_SENSOR_COUNT];
-	float TempSensors[TEMP_SENSOR_COUNT];
+	uint16_t OrpSensors[ORP_SENSOR_COUNT];
+	float TemperatureSensors[TEMP_SENSOR_COUNT];
 } State_t;
 //****************************************************************************************
 static volatile State_t moduleState;
 static uint8_t msg[TWI_BUFFER_SIZE];
+
+void ProcessMasterMessages();
 //****************************************************************************************
 void BlinkMsgLed()
 {
 	LED_MSG_ON;
-	_delay_ms(5);
+	_delay_ms(10);
 	LED_MSG_OFF;
 }
 void InitHardware()
@@ -62,24 +64,23 @@ void InitHardware()
 	TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 
 	sei();
-	//SetRelay(0, true);
 }
 void PopulateModuleState()
 {
-	// for test:
-	//SetRelay(1, !GetRelay(1));
-	//_delay_ms(200);
-	
-	//for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
-		//moduleState.WaterSensors[i] = IsWaterSensorWet(i);
+	for (uint8_t i = 0; i < RELAY_COUNT; i++)
+		moduleState.Relays[i] = GetRelay(i);
 		
-	//for (uint8_t i = 0; i < RELAY_COUNT; i++)
-		//moduleState.Relays[i] = GetRelay(i);
-		//
-	//for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
-		//moduleState.TempSensors[i] = ReadTemperature(i);
+	for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
+		moduleState.WaterSensors[i] = IsWaterSensorWet(i);
+		
+	for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
+		moduleState.TemperatureSensors[i] = ReadTemperature(i);
+		
+		
+		
+		
 }
-uint8_t OnFailureInLastTransmission(uint8_t TWIerrorMsg)
+uint8_t OnLastTransmissionError(uint8_t TWIerrorMsg)
 {
 	// A failure has occurred, use TWIerrorMsg to determine the nature of the failure and take appropriate actions.
 	// See header file for a list of possible failures messages.
@@ -98,26 +99,24 @@ void ProcessMasterMessages()
 		{
 			if (TWI_statusReg.RxDataInBuf) // Check if the last operation was a reception
 			{
-				//BlinkMsgLed();
-				
-				TWI_GetDataFromTransceiver(msg, 1);//TWI_BUFFER_SIZE);
+				TWI_GetDataFromTransceiver(msg, TWI_BUFFER_SIZE);
 					
 				if (TWI_statusReg.genAddressCall) // last operation was a reception as General Call
 				{
-					// Put data received out to PORTB as an example.
-					//PORTB = messageBuf[0];
+					//uint8_t cmd = msg[0];
 				}
 				else // last operation was a reception as Slave Address Match
 				{
 					switch (msg[0]) // command type
 					{
-						case TWI_CMD_GET_PROPERTIES:
-							msg[0] = RELAY_COUNT;
-							msg[1] = WATER_SENSOR_COUNT;
-							msg[2] = PH_SENSOR_COUNT;
-							msg[3] = ORP_SENSOR_COUNT;
-							msg[4] = TEMP_SENSOR_COUNT;
-							TWI_StartTransceiverWithData(msg, 5);
+						case TWI_CMD_GET_SUMMARY:
+							msg[0] = MODULE_TYPE;
+							msg[1] = RELAY_COUNT;
+							msg[2] = WATER_SENSOR_COUNT;
+							msg[3] = PH_SENSOR_COUNT;
+							msg[4] = ORP_SENSOR_COUNT;
+							msg[5] = TEMP_SENSOR_COUNT;
+							TWI_StartTransceiverWithData(msg, 6);
 							break;
 						case TWI_CMD_GET_RELAY_STATE:
 							msg[0] = moduleState.Relays[msg[1]];
@@ -129,13 +128,11 @@ void ProcessMasterMessages()
 						default:
 							break;	
 					}
-					
-					//BlinkMsgLed();
 				}
+				BlinkMsgLed();
 			}
 			else // last operation was a transmission
 			{
-				//__no_operation(); // Put own code here.
 			}
 				
 			// Check if the TWI Transceiver has already been started. If not then restart it to prepare it for new receptions.
@@ -143,7 +140,7 @@ void ProcessMasterMessages()
 				TWI_StartTransceiver();
 		}
 		else // Ends up here if the last operation completed unsuccessfully
-			OnFailureInLastTransmission(TWI_GetStateInfo());
+			OnLastTransmissionError(TWI_GetStateInfo());
 	}
 }
 
@@ -155,6 +152,5 @@ int main()
     {
 		wdt_reset();
 		PopulateModuleState();
-		ProcessMasterMessages();
     }
 }

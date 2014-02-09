@@ -31,31 +31,27 @@ LOW = 0xE4 (valid)
 #include <util/delay.h>
 
 // module types:
-#define MODULE_TYPE_0 // test module; all features
-//#define MODULE_TYPE_1 // AE-R8
-//#define MODULE_TYPE_2 //
-//#define MODULE_TYPE_3 //
-//#define MODULE_TYPE_4 //
+#define MODULE_TYPE				0 // test
+//#define MODULE_TYPE					1 // AE-R8
 
+#if (MODULE_TYPE == 0)
+	#define RELAY_COUNT				8
+	#define WATER_SENSOR_COUNT		3
+	#define PH_SENSOR_COUNT			2
+	#define ORP_SENSOR_COUNT		2
+	#define TEMP_SENSOR_COUNT		1//3
+#elif (MODULE_TYPE == 1)
+	#define RELAY_COUNT				8
+	#define WATER_SENSOR_COUNT		0
+	#define PH_SENSOR_COUNT			0
+	#define ORP_SENSOR_COUNT		0
+	#define TEMP_SENSOR_COUNT		0
+	
+	
+	
+	
+#endif
 
-
-//#ifdef MODULE_TYPE_0
-
-#define RELAY_COUNT				8
-#define WATER_SENSOR_COUNT		3
-#define PH_SENSOR_COUNT			2
-#define ORP_SENSOR_COUNT		2
-#define TEMP_SENSOR_COUNT		1//3
-
-//#elif MODULE_TYPE_1
-//
-//#define RELAY_COUNT				8
-//#define WATER_SENSOR_COUNT		0
-//#define PH_SENSOR_COUNT			0
-//#define ORP_SENSOR_COUNT		0
-//#define TEMP_SENSOR_COUNT		0
-//
-//#endif
 
 //****************************************************************************************
 // 2. Ports Definition
@@ -118,11 +114,5 @@ LOW = 0xE4 (valid)
 
 #define LED_MSG_ON	     		PORTD |= (1<<LED_MSG)
 #define LED_MSG_OFF	    		PORTD &= ~(1<<LED_MSG)
-
-//#define LED_SHORT_MAIN_ON     	PORTB |= (1<<LED_SHORT_MAIN)
-//#define LED_SHORT_MAIN_OFF    	PORTB &= ~(1<<LED_SHORT_MAIN)
-//
-//#define LED_SHORT_PROG_ON     	PORTB |= (1<<LED_SHORT_PROG)
-//#define LED_SHORT_PROG_OFF    	PORTB &= ~(1<<LED_SHORT_PROG)
 //****************************************************************************************
 #endif /* HARDWARE_H_ */

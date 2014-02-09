@@ -7,14 +7,13 @@
 
 #ifndef F_CPU
 	#warning F_CPU not defined
-#elif (F_CPU<2020000)
+#elif (F_CPU < 2020000)
 	#define T_PRESCALER 8
-#elif (F_CPU<16200000)
+#elif (F_CPU < 16200000)
 	#define T_PRESCALER 64
 #else 
 	#define T_PRESCALER 256
 #endif
-
 
 #define TIKS_1MS (F_CPU/T_PRESCALER/1000)
 
@@ -33,9 +32,11 @@ void timerDelayInit(void)
 
 void timerDelayMs(unsigned long int ms)
 {
-	while(ms--){
+	while(ms--)
+	{
 		TCNT0 = 0;
-		while(TCNT0 < TIKS_1MS) {
+		while(TCNT0 < TIKS_1MS)
+		{
 			#ifdef RUN_TASKS 
 				RunTasks();
 			#endif
