@@ -1,5 +1,6 @@
 ﻿using AquaExpert.Managers;
-using GTM.MFE.Displays;
+using Gadgeteer.Modules.KKSolutions;
+using GHI.Premium.System;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
@@ -7,6 +8,7 @@ using MFE.Net.Tcp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
+using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
@@ -33,7 +35,7 @@ namespace AquaExpert
         private ModulesManager modulesManager = new ModulesManager();
         //private GT.Timer timerWorkflow;
 
-        private Display display;
+        private Display_SP22 display;
 
         private static I2CDevice bus = new I2CDevice(null);
         public const int BusClockRate = 400; // 400 kHz
@@ -102,7 +104,16 @@ namespace AquaExpert
         }
         private void InitDisplay()
         {
-            display = new Display(ModelType.TFT01_22SP, 1);
+            if (Mainboard.NativeBitmapConverter == null)
+                Mainboard.NativeBitmapConverter = new Gadgeteer.Mainboard.BitmapConvertBPP(delegate(byte[] bitmapBytes, byte[] pixelBytes, GT.Mainboard.BPP bpp)
+                {
+                    if (bpp != GT.Mainboard.BPP.BPP16_BGR_BE)
+                        throw new ArgumentOutOfRangeException("bpp", "Only BPP16_BGR_LE supported");
+
+                    Util.BitmapConvertBPP(bitmapBytes, pixelBytes, Util.BPP_Type.BPP16_BGR_BE);
+                });
+
+            display = new Display_SP22(1);
 
             // Usage example #1. Passing a Bitmap to the driver.
             Bitmap picture = new Bitmap(Resources.GetBytes(Resources.BinaryResources.test_24b), Bitmap.BitmapImageType.Bmp);
@@ -119,7 +130,7 @@ namespace AquaExpert
 
             //DisplayDemo(display);
         }
-        void DisplayDemo(Display display)
+        void DisplayDemo(Display_SP22 display)
         {
             GT.Modules.Module.DisplayModule.SimpleGraphicsInterface graphics = display.SimpleGraphics;
             //int buf[318];
