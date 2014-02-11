@@ -78,13 +78,14 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 void DS18x20_ConvertToThemperature(uint8_t* data, uint8_t* themp)
 {
 	//Store temperature integer digits and decimal digits
-	themp[0] = data[0]>>4;
-	themp[0] |= (data[1]&0x07)<<4;
+	themp[0] = data[0] >> 4;
+	themp[0] |= (data[1] & 0x07) << 4;
 	//Store decimal digits
-	themp[1] = data[0]&0xf;
-	themp[1] *= 6;	
-	if (data[1]>0xFB){
-		themp[0] = 127-themp[0];
+	themp[1] = data[0] & 0xf;
+	themp[1] *= 6;
+	if (data[1] > 0xFB)
+	{
+		themp[0] = 127 - themp[0];
 		themp[0] |= 0b10000000; // если температура минусовая
 	} 
 }
@@ -92,22 +93,23 @@ float DS18x20_ConvertToThemperatureFl(uint8_t* data)
 {
 	float	Temperature;
 	uint8_t	digit, decimal;
+	
 	//Store temperature integer digits and decimal digits
-	digit = data[0]>>4;
-	digit |= (data[1]&0x07)<<4;
+	digit = data[0] >> 4;
+	digit |= (data[1] & 0x07) << 4;
 	//Store decimal digits
-	decimal = data[0]&0xf;
+	decimal = data[0] & 0xf;
 	decimal *= 6;	
 	
-	if (data[1]>0xFB) digit = 127-digit;
-	if (decimal<100) Temperature = digit + ((float)decimal/100);
-		else Temperature = digit + ((float)decimal/1000);
-	if (data[1]>0xFB) Temperature = -Temperature;
-	/*
-	if (data[1]>0xFB){
-		digit = 127-digit;
-		digit |= 0b10000000; // если температура минусовая
-	} */
+	if (data[1] > 0xFB)
+		digit = 127 - digit;
+	if (decimal < 100)
+		Temperature = digit + ((float)decimal / 100);
+	else
+		Temperature = digit + ((float)decimal / 1000);
+	if (data[1] > 0xFB)
+		Temperature = -Temperature;
+
 	return Temperature;
 }
 

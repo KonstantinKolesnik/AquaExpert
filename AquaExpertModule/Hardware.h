@@ -39,14 +39,17 @@ LOW = 0xE4 (valid)
 	#define WATER_SENSOR_COUNT		3
 	#define PH_SENSOR_COUNT			2
 	#define ORP_SENSOR_COUNT		2
+	#define CONDUCT_SENSOR_COUNT	1
 	#define TEMP_SENSOR_COUNT		1//3
+	#define DIMMER_COUNT			2
 #elif (MODULE_TYPE == 1)
 	#define RELAY_COUNT				8
 	#define WATER_SENSOR_COUNT		0
 	#define PH_SENSOR_COUNT			0
 	#define ORP_SENSOR_COUNT		0
+	#define CONDUCT_SENSOR_COUNT	0
 	#define TEMP_SENSOR_COUNT		0
-	
+	#define DIMMER_COUNT			0
 	
 	
 	

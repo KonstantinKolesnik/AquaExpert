@@ -634,22 +634,36 @@ namespace AquaExpert
             Font font = Resources.GetFont(Resources.FontResources.small);
             GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
 
-            display.SimpleGraphics.Clear();
-            display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
-
-            foreach (ushort address in modulesManager.Modules.Keys)
+            for (int j = 0; j < 10; j++)
             {
-                Module module = (Module)modulesManager.Modules[address];
-
-                display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.Name, fontTitle, color, x, y); y += lineHight;
-
-                display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
-                display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
-                display.SimpleGraphics.DisplayText("PH sensors: " + module.PhSensorCount, font, color, x + indent, y); y += lineHight;
-                display.SimpleGraphics.DisplayText("ORP sensors: " + module.OrpSensorCount, font, color, x + indent, y); y += lineHight;
-                display.SimpleGraphics.DisplayText("Temperature sensors: " + module.TemperatureSensorCount, font, color, x + indent, y); y += lineHight;
-
+                y = 10;
+                display.SimpleGraphics.Clear();
                 display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
+
+                foreach (ushort address in modulesManager.Modules.Keys)
+                {
+                    Module module = (Module)modulesManager.Modules[address];
+
+                    display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.Name, fontTitle, color, x, y); y += lineHight;
+
+                    //display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("PH sensors: " + module.PhSensorCount, font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("ORP sensors: " + module.OrpSensorCount, font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("Temperature sensors: " + module.TemperatureSensorCount, font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("Dimmers: " + module.DimmerCount, font, color, x + indent, y); y += lineHight;
+
+                    //display.SimpleGraphics.DisplayText("", font, color, x, y); y += lineHight;
+
+                    //foreach (ModuleControlLine controlLine in module.ControlLines)
+                    //{
+                    //    display.SimpleGraphics.DisplayText(controlLine.FriendlyName, font, color, x + indent, y); y += lineHight;
+                    //}
+
+                    display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
+
+                    display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
+                }
             }
         }
         #endregion

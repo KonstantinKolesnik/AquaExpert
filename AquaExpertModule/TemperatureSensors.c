@@ -1,6 +1,6 @@
 #include "TemperatureSensors.h"
 //****************************************************************************************
-float ReadTemperature(uint8_t channel)
+uint16_t ReadTemperature(uint8_t channel)
 {
 	uint8_t idx = 0;
 	
@@ -18,10 +18,11 @@ float ReadTemperature(uint8_t channel)
 					unsigned char data[2]; // переменная для хранения старшего и младшего байта данных
 					DS18x20_ReadData(owDevicesIDs[i], data); // считываем данные
 					
-					//uint8_t ttt[2];
-					//DS18x20_ConvertToThemperature(data, ttt);
+					uint8_t result[2];
+					DS18x20_ConvertToThemperature(data, result);
+					return (result[0] << 8) | result[1];
 					
-					return DS18x20_ConvertToThemperatureFl(data); // преобразовываем температуру в человекопонятный вид
+					//return DS18x20_ConvertToThemperatureFl(data); // преобразовываем температуру в человекопонятный вид
 				}
 				else
 					idx++;
@@ -30,5 +31,5 @@ float ReadTemperature(uint8_t channel)
 		}
 	}
 	
-	return 0.0;
+	return 0;
 }

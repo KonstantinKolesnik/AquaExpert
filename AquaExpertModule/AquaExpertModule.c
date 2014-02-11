@@ -10,7 +10,7 @@
 #define TWI_CMD_GET_SUMMARY				0
 #define TWI_CMD_GET_RELAY_STATE			1
 #define TWI_CMD_SET_RELAY_STATE			2
-
+#define TWI_CMD_GET_TEMPERATURE			3
 
 
 //****************************************************************************************
@@ -20,7 +20,9 @@ typedef struct
 	bool WaterSensors[WATER_SENSOR_COUNT];
 	uint8_t PhSensors[PH_SENSOR_COUNT];
 	uint16_t OrpSensors[ORP_SENSOR_COUNT];
-	float TemperatureSensors[TEMP_SENSOR_COUNT];
+	uint16_t ConductivitySensors[CONDUCT_SENSOR_COUNT];
+	uint16_t TemperatureSensors[TEMP_SENSOR_COUNT];
+	uint8_t Dimmers[DIMMER_COUNT];
 } State_t;
 //****************************************************************************************
 static volatile State_t moduleState;
@@ -77,8 +79,6 @@ void PopulateModuleState()
 		moduleState.TemperatureSensors[i] = ReadTemperature(i);
 		
 		
-		
-		
 }
 uint8_t OnLastTransmissionError(uint8_t TWIerrorMsg)
 {
@@ -115,8 +115,10 @@ void ProcessMasterMessages()
 							msg[2] = WATER_SENSOR_COUNT;
 							msg[3] = PH_SENSOR_COUNT;
 							msg[4] = ORP_SENSOR_COUNT;
-							msg[5] = TEMP_SENSOR_COUNT;
-							TWI_StartTransceiverWithData(msg, 6);
+							msg[5] = CONDUCT_SENSOR_COUNT;
+							msg[6] = TEMP_SENSOR_COUNT;
+							msg[7] = DIMMER_COUNT;
+							TWI_StartTransceiverWithData(msg, 8);
 							break;
 						case TWI_CMD_GET_RELAY_STATE:
 							msg[0] = moduleState.Relays[msg[1]];
@@ -125,6 +127,11 @@ void ProcessMasterMessages()
 						case TWI_CMD_SET_RELAY_STATE:
 							SetRelay(msg[1], msg[2]);
 							break;
+						case TWI_CMD_GET_TEMPERATURE:
+							msg[0] = moduleState.TemperatureSensors[msg[1]] >> 8;
+							msg[1] = moduleState.TemperatureSensors[msg[1]] & 0xFF;
+							TWI_StartTransceiverWithData(msg, 2);
+							break;	
 						default:
 							break;	
 					}

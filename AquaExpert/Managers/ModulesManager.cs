@@ -18,6 +18,19 @@ namespace AquaExpert.Managers
         {
             get { return modules; }
         }
+        public ArrayList ControlLines
+        {
+            get
+            {
+                ArrayList list = new ArrayList();
+
+                foreach (Module module in modules)
+                    foreach (ModuleControlLine controlLine in module.ControlLines)
+                        list.Add(controlLine);
+
+                return list;
+            }
+        }
         #endregion
 
         #region Events
@@ -62,7 +75,9 @@ namespace AquaExpert.Managers
                         WaterSensorCount = summary[2],
                         PhSensorCount = summary[3],
                         OrpSensorCount = summary[4],
-                        TemperatureSensorCount = summary[5]
+                        ConductivitySensorCount = summary[5],
+                        TemperatureSensorCount = summary[6],
+                        DimmerCount = summary[7]
                     };
                     modules.Add(address, module);
                     addressesAdded.Add(address);
@@ -73,8 +88,8 @@ namespace AquaExpert.Managers
         }
         private byte[] GetModuleSummary(ushort address)
         {
-            byte[] response = new byte[6];
-            response[0] = 255; // set unknown type
+            byte[] response = new byte[8];
+            response[0] = 255; // initially set "unknown" type
 
             I2CDevice.Configuration config = new I2CDevice.Configuration(address, Program.BusClockRate);
             if (Program.Bus.TryGetRegisters(config, Program.BusTimeout, Module.CMD_GET_SUMMARY, response))

@@ -39,9 +39,11 @@
   <!-- Everything below here is custom to .NET MF / Gadgeteer template-->
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Managers\Controller.cs" />
+    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Managers\CollectionChangedEventHandler.cs" />
+    <Compile Include="Managers\ModuleControlLine.cs" />
     <Compile Include="Managers\Module.cs" />
+    <Compile Include="Managers\ModulePortType.cs" />
     <Compile Include="Managers\ModulesManager.cs" />
     <Compile Include="Managers\TimeManager.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -149,6 +151,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Features.txt" />
     <Content Include="Resources\test_24b.bmp" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

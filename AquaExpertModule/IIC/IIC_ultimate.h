@@ -13,7 +13,7 @@
 #define TWI_SlaveAddress 			5	 // јдрес на который будем отзыватьс€, 1...127
 
 #define TWI_ACCEPT_BROADCAST		1	 // Accept broadcast messages
-#define TWI_BUFFER_SIZE				10	 // Reserves memory for the drivers transceiver buffer. Set this to the largest message size that will be sent including address byte.
+#define TWI_BUFFER_SIZE				20	 // Reserves memory for the drivers transceiver buffer. Set this to the largest message size that will be sent including address byte.
 
 // TWI Miscellaneous status codes
 #define TWI_NO_STATE               0xF8  // No relevant state information available; TWINT = У0Ф
