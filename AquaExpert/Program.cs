@@ -1,4 +1,4 @@
-﻿using AquaExpert.Managers;
+﻿using BusNetwork;
 using Gadgeteer.Modules.KKSolutions;
 using GHI.Premium.System;
 using MFE.Net.Http;
@@ -32,21 +32,16 @@ namespace AquaExpert
 
         private int ledNetwork = 0;
 
-        private ModulesManager modulesManager = new ModulesManager();
+        private BusNetworkManager busNetwork;
+        private BusConcentratorLocal busConcentratorLocal;
+        private GT.Timer timerUpdate;
+
         //private GT.Timer timerWorkflow;
 
         private Display_SP22 display;
-
-        private static I2CDevice bus = new I2CDevice(null);
-        public const int BusClockRate = 400; // 400 kHz
-        public const int BusTimeout = 1000; // 1 sec
         #endregion
 
         #region Properties
-        public static I2CDevice Bus
-        {
-            get { return bus; }
-        }
         public static string Name
         {
             get { return Assembly.GetExecutingAssembly().GetName().Name; }
@@ -90,10 +85,13 @@ namespace AquaExpert
         }
         private void InitHardware()
         {
-            indicators.TurnAllLedsOff();
+            busConcentratorLocal = new BusConcentratorLocal(new BusConfiguration(new I2CDevice(null)));
+            busConcentratorLocal.BusModulesCollectionChanged += busConcentratorLocal_CollectionChanged;
+            busNetwork.BusConcentrators.Add(busConcentratorLocal);
 
-            modulesManager.CollectionChanged += modulesManager_CollectionChanged;
             //Watchdog!!!
+
+            indicators.TurnAllLedsOff();
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
@@ -624,7 +622,7 @@ namespace AquaExpert
 
         //    timerWorkflow.Start();
         //}
-        private void modulesManager_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
+        private void busConcentratorLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
             uint x = 10;
             uint indent = 10;
@@ -640,10 +638,8 @@ namespace AquaExpert
                 display.SimpleGraphics.Clear();
                 display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
 
-                foreach (ushort address in modulesManager.Modules.Keys)
+                foreach (BusModule module in busConcentratorLocal.BusModules)
                 {
-                    Module module = (Module)modulesManager.Modules[address];
-
                     display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.Name, fontTitle, color, x, y); y += lineHight;
 
                     //display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
@@ -660,7 +656,7 @@ namespace AquaExpert
                     //    display.SimpleGraphics.DisplayText(controlLine.FriendlyName, font, color, x + indent, y); y += lineHight;
                     //}
 
-                    display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
+                    //display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
 
                     display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
                 }

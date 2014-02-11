@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
-Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "AquaExpertModule", "AquaExpertModule\AquaExpertModule.cproj", "{CC8FD423-314D-49CC-AEC4-98C5916CF74D}"
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BusModule", "BusModule\BusModule.cproj", "{CC8FD423-314D-49CC-AEC4-98C5916CF74D}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BusConcentrator", "BusConcentrator\BusConcentrator.cproj", "{59CC3870-5F0B-4108-B92E-D8D40D05A546}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,6 +14,10 @@ Global
 		{CC8FD423-314D-49CC-AEC4-98C5916CF74D}.Debug|AVR.Build.0 = Debug|AVR
 		{CC8FD423-314D-49CC-AEC4-98C5916CF74D}.Release|AVR.ActiveCfg = Release|AVR
 		{CC8FD423-314D-49CC-AEC4-98C5916CF74D}.Release|AVR.Build.0 = Release|AVR
+		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Debug|AVR.ActiveCfg = Debug|AVR
+		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Debug|AVR.Build.0 = Debug|AVR
+		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Release|AVR.ActiveCfg = Release|AVR
+		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,12 +40,7 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="Controllers\Controller.cs" />
-    <Compile Include="Managers\CollectionChangedEventHandler.cs" />
-    <Compile Include="Managers\ModuleControlLine.cs" />
-    <Compile Include="Managers\Module.cs" />
-    <Compile Include="Managers\ModulePortType.cs" />
-    <Compile Include="Managers\ModulesManager.cs" />
-    <Compile Include="Managers\TimeManager.cs" />
+    <Compile Include="TimeManager.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -148,6 +143,10 @@
     <ProjectReference Include="..\..\MFE\MFE.Storage\MFE.Storage.csproj">
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BusNetwork\BusNetwork.csproj">
+      <Project>{0E8971E9-1952-482F-8E7B-708E46E30E81}</Project>
+      <Name>BusNetwork</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 
-namespace AquaExpert.Managers
+namespace BusNetwork
 {
-    public enum ModulePortType
+    public enum ControlLineType
     {
         Relay,
         WaterSensor,

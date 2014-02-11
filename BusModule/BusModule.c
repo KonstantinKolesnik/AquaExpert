@@ -6,14 +6,6 @@
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
 //****************************************************************************************
-// commands (from Master)
-#define TWI_CMD_GET_SUMMARY				0
-#define TWI_CMD_GET_RELAY_STATE			1
-#define TWI_CMD_SET_RELAY_STATE			2
-#define TWI_CMD_GET_TEMPERATURE			3
-
-
-//****************************************************************************************
 typedef struct
 {
 	bool Relays[RELAY_COUNT];

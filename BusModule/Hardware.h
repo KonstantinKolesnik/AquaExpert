@@ -29,6 +29,7 @@ LOW = 0xE4 (valid)
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
+#include "BusModuleCommands.h"
 
 // module types:
 #define MODULE_TYPE				0 // test

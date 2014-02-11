@@ -10,7 +10,7 @@
     <AvrGccProjectExtensions>
     </AvrGccProjectExtensions>
     <AssemblyName>Adapter</AssemblyName>
-    <Name>AquaExpertModule</Name>
+    <Name>BusModule</Name>
     <RootNamespace>Adapter</RootNamespace>
     <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <avrtoolinterface>JTAG</avrtoolinterface>
@@ -139,7 +139,10 @@
     <Compile Include="ADC\ADC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="AquaExpertModule.c">
+    <Compile Include="BusModule.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="BusModuleCommands.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Hardware.h">
