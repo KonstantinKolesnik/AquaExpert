@@ -4,7 +4,9 @@ namespace BusNetwork
 {
     public class BusModule
     {
-        #region Commands
+        #region API
+        public const byte MaxControlLineTypes = 32;
+
         public const int CmdGetType = 0;
         public const int CmdGetControlLineCount = 1;
         //public const int CMD_GET_RELAY_STATE = 2;
@@ -16,7 +18,7 @@ namespace BusNetwork
         #region Fields
         private ushort address = 0;
         private byte type = 255; // unknown
-        private Hashtable controlLinesCountsHash = new Hashtable();
+        private ArrayList controlLines = new ArrayList();
         #endregion
 
         #region Properties
@@ -41,9 +43,9 @@ namespace BusNetwork
                 }
             }
         }
-        public Hashtable ControlLineTypesCounts
+        public ArrayList ControlLines
         {
-            get { return controlLinesCountsHash; }
+            get { return controlLines; }
         }
         #endregion
 

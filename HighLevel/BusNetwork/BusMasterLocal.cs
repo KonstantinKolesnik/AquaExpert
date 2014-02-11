@@ -28,11 +28,11 @@ namespace BusNetwork
             ArrayList onlineAddresses = busConfig.Bus.Scan(1, 127, BusConfiguration.ClockRate, BusConfiguration.Timeout);
 
             // remove nonexisting modules:
-            foreach (BusModule busModule in busModules)
+            foreach (BusModule busModule in BusModules)
                 if (!onlineAddresses.Contains(busModule.Address))
                 {
                     addressesRemoved.Add(busModule.Address);
-                    busModules.Remove(busModule);
+                    BusModules.Remove(busModule);
                 }
             
             // add new modules:
@@ -41,10 +41,10 @@ namespace BusNetwork
                 {
                     byte type = GetBusModuleType(address);
                     BusModule busModule = new BusModule(address, type);
-                    //GetBusModuleSummary(busModule);
+                    GetBusModuleControlLines(busModule);
 
                     addressesAdded.Add(address);
-                    busModules.Add(busModule);
+                    BusModules.Add(busModule);
                 }
 
             NotifyBusModulesCollectionChanged(addressesAdded, addressesRemoved);
@@ -60,27 +60,18 @@ namespace BusNetwork
 
             return type;
         }
-        private void GetBusModuleSummary(BusModule busModule)
+        private void GetBusModuleControlLines(BusModule busModule)
         {
+            for (byte i = 0; i < BusModule.MaxControlLineTypes; i++)
+            {
+                byte[] result = new byte[1];
+                I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
+                if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, i, result))
+                    result[0] = 0;
 
-            //byte[] summary = GetBusModuleSummary(module.Address);
-
-            //module.ControlLineTypesCounts.Add(ControlLineType.Relay, summary[1]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.WaterSensor, summary[2]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.PHSensor, summary[3]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.ORPSensor, summary[4]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.ConductivitySensor, summary[5]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.TemperatureSensor, summary[6]);
-            //module.ControlLineTypesCounts.Add(ControlLineType.Dimmer, summary[7]);
-
-
-
-            //I2CDevice.Configuration config = new I2CDevice.Configuration(busModuleAddress, BusConfiguration.ClockRate);
-            //if (busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, response))
-            //{
-            //}
-            
-            //return response;
+                for (int number = 0; number < result[0]; number++)
+                    busModule.ControlLines.Add(new ControlLine(0, busModule.Address, (ControlLineType)i, number));
+            }
         }
         #endregion
     }

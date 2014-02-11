@@ -1,7 +1,7 @@
 #ifndef BUSMODULECOMMANDS_H_
 #define BUSMODULECOMMANDS_H_
 
-#define MAX_CONTROL_LINE_TYPES					128
+#define MAX_CONTROL_LINE_TYPES					32
 #define MAX_1_WIRE_DEVICES						10
 
 // control line types
@@ -17,8 +17,8 @@
 
 
 // commands (from BusMaster)
-#define CMD_GET_TYPE				0
-#define CMD_GET_LINE_COUNT			1
+#define CMD_GET_TYPE							0
+#define CMD_GET_CONTROL_LINE_COUNT				1
 //#define CMD_GET_RELAY_STATE			2
 //#define CMD_SET_RELAY_STATE			3
 //#define CMD_GET_TEMPERATURE			4

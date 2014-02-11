@@ -7,7 +7,7 @@ namespace BusNetwork
     {
         #region Fields
         protected uint address = 0;
-        protected ArrayList busModules = new ArrayList();
+        private ArrayList busModules = new ArrayList();
         private Timer timerUpdate = null;
         private const int updateInterval = 2000;
         #endregion
@@ -35,9 +35,8 @@ namespace BusNetwork
                 ArrayList list = new ArrayList();
 
                 foreach (BusModule busModule in busModules)
-                    foreach (ControlLineType clt in busModule.ControlLineTypesCounts.Keys)
-                        for (int cln = 0; cln < (int)busModule.ControlLineTypesCounts[clt]; cln++)
-                            list.Add(new ControlLine(address, busModule.Address, clt, cln));
+                    foreach (ControlLine cl in busModule.ControlLines)
+                        list.Add(cl);
 
                 return list;
             }

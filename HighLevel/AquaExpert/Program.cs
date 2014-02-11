@@ -639,9 +639,19 @@ namespace AquaExpert
                 display.SimpleGraphics.Clear();
                 display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
 
-                foreach (BusModule module in busMasterLocal.BusModules)
+                foreach (BusModule busModule in busMasterLocal.BusModules)
                 {
-                    display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.FriendlyName, fontTitle, color, x, y); y += lineHight;
+                    display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.FriendlyName, fontTitle, color, x, y); y += lineHight;
+
+                    //foreach (ControlLine cl in busModule.ControlLines)
+                    //{
+                    //    int count = (int)busModule.ControlLines[clt];
+                    //    for (int i = 0; i < count; i++)
+                    //    {
+                    //        ControlLine cl = new ControlLine(0, busModule.Address, clt, i);
+                    //        display.SimpleGraphics.DisplayText(cl.FriendlyName, font, color, x + indent, y); y += lineHight;
+                    //    }
+                    //}
 
                     //display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
                     //display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
@@ -652,10 +662,10 @@ namespace AquaExpert
 
                     //display.SimpleGraphics.DisplayText("", font, color, x, y); y += lineHight;
 
-                    //foreach (ModuleControlLine controlLine in module.ControlLines)
-                    //{
-                    //    display.SimpleGraphics.DisplayText(controlLine.FriendlyName, font, color, x + indent, y); y += lineHight;
-                    //}
+                    foreach (ControlLine controlLine in busModule.ControlLines)
+                    {
+                        display.SimpleGraphics.DisplayText(controlLine.FriendlyName, font, color, x + indent, y); y += lineHight;
+                    }
 
                     //display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
 

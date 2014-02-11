@@ -123,8 +123,10 @@ void ProcessMasterMessages()
 						case CMD_GET_TYPE:
 							msg[0] = MODULE_TYPE;
 							TWI_StartTransceiverWithData(msg, 1);
-						case CMD_GET_LINE_COUNT:
-							msg[0] = controlLinesCount[msg[1]];
+							break;
+						case CMD_GET_CONTROL_LINE_COUNT:
+							msg[0] = (msg[1] < MAX_CONTROL_LINE_TYPES ? controlLinesCount[msg[1]] : 0);
+							//msg[0] = 4;//controlLinesCount[msg[1]];
 							TWI_StartTransceiverWithData(msg, 1);
 							break;
 						//case CMD_GET_RELAY_STATE:

@@ -3,7 +3,7 @@ namespace BusNetwork
 {
     public class ControlLine
     {
-        public uint BusConcentratorAddress { get; private set; }
+        public uint BusMasterAddress { get; private set; }
         public uint BusModuleAddress { get; private set; }
         public ControlLineType Type { get; private set; }
         public int Number { get; private set; }
@@ -27,13 +27,13 @@ namespace BusNetwork
                     default: type = "[Unknown]"; break;
                 }
 
-                return "[" + BusConcentratorAddress + ":" + BusModuleAddress + "] " + type + " # " + Number;
+                return "[" + BusMasterAddress + ":" + BusModuleAddress + "] " + type + " # " + Number;
             }
         }
 
-        public ControlLine(uint busConcentratorAddress, uint busModuleAddress, ControlLineType type, int number)
+        public ControlLine(uint busMasterAddress, uint busModuleAddress, ControlLineType type, int number)
         {
-            BusConcentratorAddress = busConcentratorAddress;
+            BusMasterAddress = busMasterAddress;
             BusModuleAddress = busModuleAddress;
             Type = type;
             Number = number;

@@ -32,8 +32,8 @@ LOW = 0xE4 (valid)
 #include "BusModuleAPI.h"
 //****************************************************************************************
 // module types:
-//#define MODULE_TYPE					0 // test full module
-#define MODULE_TYPE					1 // AE-R8
+#define MODULE_TYPE					0 // test full module
+//#define MODULE_TYPE					1 // AE-R8
 
 
 //****************************************************************************************
