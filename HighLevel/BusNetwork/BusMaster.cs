@@ -1,12 +1,15 @@
 using System.Collections;
+using System.Threading;
 
 namespace BusNetwork
 {
-    public abstract class BusConcentrator
+    public abstract class BusMaster
     {
         #region Fields
         protected uint address = 0;
         protected ArrayList busModules = new ArrayList();
+        private Timer timerUpdate = null;
+        private const int updateInterval = 2000;
         #endregion
 
         #region Properties
@@ -38,6 +41,13 @@ namespace BusNetwork
 
                 return list;
             }
+        }
+        #endregion
+
+        #region Constructor
+        public BusMaster()
+        {
+            StartTimer();
         }
         #endregion
 
@@ -76,16 +86,28 @@ namespace BusNetwork
         //}
 
 
+
         #region Private methods
+        protected abstract void ScanBusModules();
         protected void NotifyBusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
             if (BusModulesCollectionChanged != null && (addressesAdded.Count != 0 || addressesRemoved.Count != 0))
                 BusModulesCollectionChanged(addressesAdded, addressesRemoved);
         }
-        //private void UpdateControlLines()
-        //{
-
-        //}
+        private void StartTimer()
+        {
+            timerUpdate = new Timer(new TimerCallback(Update), null, 0, updateInterval);
+        }
+        private void StopTimer()
+        {
+            timerUpdate.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+        private void Update(object state)
+        {
+            StopTimer();
+            ScanBusModules();
+            StartTimer();
+        }
         #endregion
     }
 }

@@ -10,5 +10,12 @@ namespace BusNetwork
         TemperatureSensor,
         ConductivitySensor, //+ SalinitySensor,
         Dimmer
+
+
+
+
+
+
+
     }
 }

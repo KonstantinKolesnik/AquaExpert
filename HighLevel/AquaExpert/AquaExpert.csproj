@@ -116,31 +116,31 @@
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\KKSolutions\Display_SP22\Display_SP22_42\Display_SP22_42.csproj">
+    <ProjectReference Include="..\..\..\KKSolutions\Display_SP22\Display_SP22_42\Display_SP22_42.csproj">
       <Project>{AC1C1DBB-9AC4-47EF-A379-5DBC7424D95E}</Project>
       <Name>Display_SP22_42</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Core\MFE.Core.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Core\MFE.Core.csproj">
       <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
       <Name>MFE.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Hardware\MFE.Hardware.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Hardware\MFE.Hardware.csproj">
       <Project>{958D1DE8-C499-47DF-B192-DE712379089B}</Project>
       <Name>MFE.Hardware</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Net.Managers\MFE.Net.Managers.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Net.Managers\MFE.Net.Managers.csproj">
       <Project>{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}</Project>
       <Name>MFE.Net.Managers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj">
       <Project>{632B23F9-A020-4C66-93A3-DE9AF4529CB9}</Project>
       <Name>MFE.Net.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Net\MFE.Net.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Net\MFE.Net.csproj">
       <Project>{D87CB0D5-ED06-4E01-AA00-FFCDD0A3D708}</Project>
       <Name>MFE.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MFE\MFE.Storage\MFE.Storage.csproj">
+    <ProjectReference Include="..\..\..\MFE\MFE.Storage\MFE.Storage.csproj">
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
     </ProjectReference>

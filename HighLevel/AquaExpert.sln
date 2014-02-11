@@ -3,25 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaExpert", "AquaExpert\AquaExpert.csproj", "{CF58BDE7-6F41-4F94-9C4B-933FFCE62C9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net", "..\MFE\MFE.Net\MFE.Net.csproj", "{D87CB0D5-ED06-4E01-AA00-FFCDD0A3D708}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net", "..\..\MFE\MFE.Net\MFE.Net.csproj", "{D87CB0D5-ED06-4E01-AA00-FFCDD0A3D708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Core", "..\MFE\MFE.Core\MFE.Core.csproj", "{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Core", "..\..\MFE\MFE.Core\MFE.Core.csproj", "{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Managers", "..\MFE\MFE.Net.Managers\MFE.Net.Managers.csproj", "{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Managers", "..\..\MFE\MFE.Net.Managers\MFE.Net.Managers.csproj", "{A8ACC028-99A0-4E9F-84F7-33E9D08AF087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Storage", "..\MFE\MFE.Storage\MFE.Storage.csproj", "{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Storage", "..\..\MFE\MFE.Storage\MFE.Storage.csproj", "{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Messaging", "..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj", "{632B23F9-A020-4C66-93A3-DE9AF4529CB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Net.Messaging", "..\..\MFE\MFE.Net.Messaging\MFE.Net.Messaging.csproj", "{632B23F9-A020-4C66-93A3-DE9AF4529CB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Hardware", "..\MFE\MFE.Hardware\MFE.Hardware.csproj", "{958D1DE8-C499-47DF-B192-DE712379089B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFE.Hardware", "..\..\MFE\MFE.Hardware\MFE.Hardware.csproj", "{958D1DE8-C499-47DF-B192-DE712379089B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MFE", "MFE", "{4E6B81DB-E475-4252-8EFC-6E6680CF7768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display_SP22_42", "..\KKSolutions\Display_SP22\Display_SP22_42\Display_SP22_42.csproj", "{AC1C1DBB-9AC4-47EF-A379-5DBC7424D95E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display_SP22_42", "..\..\KKSolutions\Display_SP22\Display_SP22_42\Display_SP22_42.csproj", "{AC1C1DBB-9AC4-47EF-A379-5DBC7424D95E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusNetwork", "BusNetwork\BusNetwork.csproj", "{0E8971E9-1952-482F-8E7B-708E46E30E81}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusCoordinator", "BusCoordinator\BusCoordinator.csproj", "{27631181-618E-4FB3-B868-7F8E28DEE1CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GTM", "GTM", "{2BB05478-6127-43BA-A206-32B81D5E8B94}"
 EndProject
@@ -69,10 +67,6 @@ Global
 		{0E8971E9-1952-482F-8E7B-708E46E30E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E8971E9-1952-482F-8E7B-708E46E30E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E8971E9-1952-482F-8E7B-708E46E30E81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27631181-618E-4FB3-B868-7F8E28DEE1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27631181-618E-4FB3-B868-7F8E28DEE1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27631181-618E-4FB3-B868-7F8E28DEE1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27631181-618E-4FB3-B868-7F8E28DEE1CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

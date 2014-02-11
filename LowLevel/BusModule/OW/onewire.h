@@ -4,7 +4,7 @@
 #include "..\Hardware.h"
 #include "delay.h"
 //****************************************************************************************
-#define MAXDEVICES TEMP_SENSOR_COUNT // 3
+#define MAXDEVICES			MAX_1_WIRE_DEVICES
 
 // Если для эмуляции шины используется USART
 //#define UART_AS_OneWire

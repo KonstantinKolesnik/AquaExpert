@@ -2,35 +2,24 @@ using MFE.Hardware;
 using Microsoft.SPOT.Hardware;
 using System.Collections;
 using System.Threading;
-//using GT = Gadgeteer;
 
 namespace BusNetwork
 {
-    public class BusConcentratorLocal : BusConcentrator
+    public class BusMasterLocal : BusMaster
     {
         #region Fields
         private BusConfiguration busConfig;
-        //private GT.Timer timerUpdate;
-        private const int updateInterval = 2000;
         #endregion
 
         #region Constructor
-        public BusConcentratorLocal(BusConfiguration busConfig)
+        public BusMasterLocal(BusConfiguration busConfig)
         {
             this.busConfig = busConfig;
-
-            //timerUpdate = new GT.Timer(updateInterval);
-            //timerUpdate.Tick += ((GT.Timer timer) => {
-            //    timerUpdate.Stop();
-            //    ScanBusModules();
-            //    timerUpdate.Start();
-            //});
-            //timerUpdate.Start();
         }
         #endregion
 
         #region Private methods
-        private void ScanBusModules()
+        protected override void ScanBusModules()
         {
             ArrayList addressesAdded = new ArrayList();
             ArrayList addressesRemoved = new ArrayList();
@@ -52,7 +41,7 @@ namespace BusNetwork
                 {
                     byte type = GetBusModuleType(address);
                     BusModule busModule = new BusModule(address, type);
-                    GetBusModuleSummary(busModule);
+                    //GetBusModuleSummary(busModule);
 
                     addressesAdded.Add(address);
                     busModules.Add(busModule);
@@ -87,7 +76,7 @@ namespace BusNetwork
 
 
             //I2CDevice.Configuration config = new I2CDevice.Configuration(busModuleAddress, BusConfiguration.ClockRate);
-            //if (busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CMD_GET_SUMMARY, response))
+            //if (busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, response))
             //{
             //}
             

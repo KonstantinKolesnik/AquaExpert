@@ -32,9 +32,8 @@ namespace AquaExpert
 
         private int ledNetwork = 0;
 
-        private BusNetworkManager busNetwork;
-        private BusConcentratorLocal busConcentratorLocal;
-        private GT.Timer timerUpdate;
+        private NetworkCoordinator networkNetwork;
+        private BusMasterLocal busMasterLocal;
 
         //private GT.Timer timerWorkflow;
 
@@ -85,9 +84,11 @@ namespace AquaExpert
         }
         private void InitHardware()
         {
-            busConcentratorLocal = new BusConcentratorLocal(new BusConfiguration(new I2CDevice(null)));
-            busConcentratorLocal.BusModulesCollectionChanged += busConcentratorLocal_CollectionChanged;
-            busNetwork.BusConcentrators.Add(busConcentratorLocal);
+            networkNetwork = new NetworkCoordinator();
+
+            busMasterLocal = new BusMasterLocal(new BusConfiguration(new I2CDevice(null)));
+            busMasterLocal.BusModulesCollectionChanged += busMasterLocal_CollectionChanged;
+            networkNetwork.BusMasters.Add(busMasterLocal);
 
             //Watchdog!!!
 
@@ -622,7 +623,7 @@ namespace AquaExpert
 
         //    timerWorkflow.Start();
         //}
-        private void busConcentratorLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
+        private void busMasterLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
             uint x = 10;
             uint indent = 10;
@@ -632,15 +633,15 @@ namespace AquaExpert
             Font font = Resources.GetFont(Resources.FontResources.small);
             GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
 
-            for (int j = 0; j < 10; j++)
+            //for (int j = 0; j < 10; j++)
             {
                 y = 10;
                 display.SimpleGraphics.Clear();
-                display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
 
-                foreach (BusModule module in busConcentratorLocal.BusModules)
+                foreach (BusModule module in busMasterLocal.BusModules)
                 {
-                    display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.Name, fontTitle, color, x, y); y += lineHight;
+                    display.SimpleGraphics.DisplayText("[" + module.Address + "]   " + module.FriendlyName, fontTitle, color, x, y); y += lineHight;
 
                     //display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
                     //display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
@@ -658,7 +659,7 @@ namespace AquaExpert
 
                     //display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
 
-                    display.SimpleGraphics.DisplayText("*************************", fontTitle, color, x, y); y += lineHight;
+                    display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
                 }
             }
         }
