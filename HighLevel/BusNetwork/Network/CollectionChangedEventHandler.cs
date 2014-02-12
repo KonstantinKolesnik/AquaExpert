@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public delegate void CollectionChangedEventHandler(ArrayList itemsAdded, ArrayList itemsRemoved);
 }

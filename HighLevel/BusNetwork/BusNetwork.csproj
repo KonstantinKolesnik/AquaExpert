@@ -31,15 +31,16 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="BusMaster.cs" />
-    <Compile Include="BusMasterLocal.cs" />
-    <Compile Include="BusMasterRemote.cs" />
-    <Compile Include="BusConfiguration.cs" />
-    <Compile Include="BusModule.cs" />
-    <Compile Include="NetworkCoordinator.cs" />
-    <Compile Include="CollectionChangedEventHandler.cs" />
-    <Compile Include="ControlLine.cs" />
-    <Compile Include="ControlLineType.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Network\BusMaster.cs" />
+    <Compile Include="Network\BusMasterLocal.cs" />
+    <Compile Include="Network\BusMasterRemote.cs" />
+    <Compile Include="Network\BusConfiguration.cs" />
+    <Compile Include="Network\BusModule.cs" />
+    <Compile Include="Network\NetworkCoordinator.cs" />
+    <Compile Include="Network\CollectionChangedEventHandler.cs" />
+    <Compile Include="Network\ControlLine.cs" />
+    <Compile Include="Network\ControlLineType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,4 +53,5 @@
       <Name>MFE.Hardware</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
 </Project>

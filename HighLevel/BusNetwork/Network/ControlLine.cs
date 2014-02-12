@@ -1,8 +1,9 @@
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public class ControlLine
     {
+        #region Properties
         public uint BusMasterAddress
         {
             get;
@@ -22,6 +23,11 @@ namespace BusNetwork
         {
             get;
             private set;
+        }
+        public byte[] State
+        {
+            get;
+            set;
         }
 
         public string UserName
@@ -50,13 +56,25 @@ namespace BusNetwork
                 return "[" + BusMasterAddress + "][" + BusModuleAddress + "] " + type + " #" + Number;
             }
         }
+        #endregion
 
+        #region Constructor
         public ControlLine(uint busMasterAddress, ushort busModuleAddress, ControlLineType type, byte number)
         {
             BusMasterAddress = busMasterAddress;
             BusModuleAddress = busModuleAddress;
             Type = type;
             Number = number;
+
+            ResetState();
         }
+        #endregion
+
+        #region Public methods
+        public void ResetState()
+        {
+            State = new byte[2] { 0, 0 };
+        }
+        #endregion
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.SPOT;
 
-namespace AquaExpert.Controllers
+namespace BusNetwork.Controllers
 {
     public abstract class Controller
     {

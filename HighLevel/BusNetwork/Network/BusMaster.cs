@@ -1,34 +1,38 @@
 using System.Collections;
 using System.Threading;
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public abstract class BusMaster
     {
         #region Fields
-        protected uint address = 0;
+        private uint address = 0;
         private ArrayList busModules = new ArrayList();
         private Timer timerUpdate = null;
         private const int updateInterval = 2000;
         #endregion
 
         #region Properties
+        public uint Address
+        {
+            get { return address; }
+        }
         public ArrayList BusModules
         {
             get { return busModules; }
         }
-        public BusModule this[uint address]
+        public BusModule this[uint busModuleAddress]
         {
             get
             {
                 foreach (BusModule busModule in busModules)
-                    if (busModule.Address == address)
+                    if (busModule.Address == busModuleAddress)
                         return busModule;
 
                 return null;
             }
         }
-        public ArrayList ControlLines
+        public ArrayList BusControlLines
         {
             get
             {
@@ -40,12 +44,13 @@ namespace BusNetwork
 
                 return list;
             }
-        }
+        } // control lines of all bus modules
         #endregion
 
-        #region Constructor
-        public BusMaster()
+        #region Constructors
+        public BusMaster(uint address)
         {
+            this.address = address;
             StartTimer();
         }
         #endregion
@@ -59,14 +64,10 @@ namespace BusNetwork
         }
         #endregion
 
-        #region Private methods
-        protected abstract void ScanBusModules();
-        protected abstract byte GetBusModuleType(ushort busModuleAddress);
-        protected abstract void GetBusModuleControlLines(BusModule busModule);
-
-        public abstract byte[] GetControlLineState(ControlLine controlLine);
-
-
+        #region Public methods
+        public abstract byte GetBusModuleType(ushort busModuleAddress);
+        public abstract void GetBusModuleControlLines(BusModule busModule);
+        public abstract void GetControlLineState(ControlLine controlLine);
 
         ////TODO: test!!!!!!!!!!!!!!!!
         //public bool GetRelayState(int idx)
@@ -97,10 +98,10 @@ namespace BusNetwork
 
         //    return 0;
         //}
+        #endregion
 
-
-
-
+        #region Private methods
+        protected abstract void Scan();
 
         private void StartTimer()
         {
@@ -113,7 +114,7 @@ namespace BusNetwork
         private void Update(object state)
         {
             StopTimer();
-            ScanBusModules();
+            Scan();
             StartTimer();
         }
         #endregion

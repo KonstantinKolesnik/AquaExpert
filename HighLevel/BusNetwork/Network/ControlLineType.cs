@@ -1,5 +1,5 @@
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public enum ControlLineType : byte
     {

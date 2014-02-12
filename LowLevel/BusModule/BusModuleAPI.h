@@ -1,7 +1,7 @@
 #ifndef BUSMODULECOMMANDS_H_
 #define BUSMODULECOMMANDS_H_
 
-#define MAX_CONTROL_LINE_TYPES					32
+#define MAX_CONTROL_LINE_TYPES					255
 #define MAX_1_WIRE_DEVICES						10
 
 // control line types

@@ -1,11 +1,11 @@
 using System.Collections;
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public class BusModule
     {
         #region API
-        public const byte MaxControlLineTypes = 32;
+        public const byte ControlLineTypesToRequest = 32;
 
         public const int CmdGetType = 0;
         public const int CmdGetControlLineCount = 1;

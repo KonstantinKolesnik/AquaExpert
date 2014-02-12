@@ -1,4 +1,4 @@
-﻿using BusNetwork;
+﻿using BusNetwork.Network;
 using Gadgeteer.Modules.KKSolutions;
 using GHI.Premium.System;
 using MFE.Net.Http;
@@ -62,6 +62,7 @@ namespace AquaExpert
         private void ProgramStarted()
         {
             InitSettings();
+            InitBus();
             InitHardware();
             InitDisplay();
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
@@ -82,7 +83,7 @@ namespace AquaExpert
             //settings = Settings.LoadFromFlash(0);
             settings = new Settings();
         }
-        private void InitHardware()
+        private void InitBus()
         {
             //var socket = Socket.GetSocket(12, true, null, null);
             //var i2c = new I2CBus(socket, 1, busClockRate, null);
@@ -102,7 +103,9 @@ namespace AquaExpert
             busMasterLocal = new BusMasterLocal(new BusConfiguration(new I2CDevice(null)));
             busMasterLocal.BusModulesCollectionChanged += busMasterLocal_CollectionChanged;
             networkCoordinator.BusMasters.Add(busMasterLocal);
-
+        }
+        private void InitHardware()
+        {
             //Watchdog!!!
 
             indicators.TurnAllLedsOff();
@@ -490,21 +493,6 @@ namespace AquaExpert
             //if (sensorWaterMax.IsWet)
             //    state.IsWaterInMode = false;
         }
-        private void DoWork()
-        {
-            //relays[relayWaterIn] = state.IsWaterInMode;
-            //relays[relayWaterOut] = state.IsWaterOutMode;
-            //relays[relayLight] = state.IsLightOn;
-            //relays[relayHeater] = state.IsHeaterOn;
-            //relays[relayCO2] = state.IsCO2On;
-
-            //// double with indicators:
-            //indicators[ledWaterIn] = state.IsWaterInMode;
-            //indicators[ledWaterOut] = state.IsWaterOutMode;
-            //indicators[ledLight] = state.IsLightOn;
-            //indicators[ledHeater] = state.IsHeaterOn;
-            //indicators[ledCO2] = state.IsCO2On;
-        }
         private void SendStateToClients()
         {
             //NetworkMessage msg = new NetworkMessage("State");
@@ -630,7 +618,6 @@ namespace AquaExpert
         //    modulesManager.Scan();
 
         //    //SetState();
-        //    //DoWork();
         //    //SendStateToClients();
 
 
@@ -658,8 +645,10 @@ namespace AquaExpert
 
                 foreach (ControlLine controlLine in busModule.ControlLines)
                 {
-                    byte[] state = busMasterLocal.GetControlLineState(controlLine);
-                    display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state[0], font, color, x + indent, y); y += lineHight;
+                    busMasterLocal.GetControlLineState(controlLine);
+
+                    string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
+                    display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state, font, color, x + indent, y); y += lineHight;
                 }
 
                 display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;

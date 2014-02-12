@@ -1,6 +1,6 @@
 using Microsoft.SPOT.Hardware;
 
-namespace BusNetwork
+namespace BusNetwork.Network
 {
     public class BusConfiguration
     {
