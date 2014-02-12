@@ -3,12 +3,32 @@ namespace BusNetwork
 {
     public class ControlLine
     {
-        public uint BusMasterAddress { get; private set; }
-        public uint BusModuleAddress { get; private set; }
-        public ControlLineType Type { get; private set; }
-        public int Number { get; private set; }
+        public uint BusMasterAddress
+        {
+            get;
+            private set;
+        }
+        public ushort BusModuleAddress
+        {
+            get;
+            private set;
+        }
+        public ControlLineType Type
+        {
+            get;
+            private set;
+        }
+        public byte Number
+        {
+            get;
+            private set;
+        }
 
-        public string UserName { get; set; }
+        public string UserName
+        {
+            get;
+            set;
+        }
         public string FriendlyName
         {
             get
@@ -27,11 +47,11 @@ namespace BusNetwork
                     default: type = "[Unknown]"; break;
                 }
 
-                return "[" + BusMasterAddress + ":" + BusModuleAddress + "] " + type + " # " + Number;
+                return "[" + BusMasterAddress + "][" + BusModuleAddress + "] " + type + " #" + Number;
             }
         }
 
-        public ControlLine(uint busMasterAddress, uint busModuleAddress, ControlLineType type, int number)
+        public ControlLine(uint busMasterAddress, ushort busModuleAddress, ControlLineType type, byte number)
         {
             BusMasterAddress = busMasterAddress;
             BusModuleAddress = busModuleAddress;

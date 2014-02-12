@@ -9,10 +9,8 @@ namespace BusNetwork
 
         public const int CmdGetType = 0;
         public const int CmdGetControlLineCount = 1;
-        //public const int CMD_GET_RELAY_STATE = 2;
-        //public const int CMD_SET_RELAY_STATE = 3;
-        //public const int CMD_GET_TEMPERATURE = 4;
-
+        public const int CmdGetControlLineState = 2;
+        public const int CmdSetControlLineState = 3;
         #endregion
 
         #region Fields

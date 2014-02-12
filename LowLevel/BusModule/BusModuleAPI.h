@@ -19,10 +19,7 @@
 // commands (from BusMaster)
 #define CMD_GET_TYPE							0
 #define CMD_GET_CONTROL_LINE_COUNT				1
-//#define CMD_GET_RELAY_STATE			2
-//#define CMD_SET_RELAY_STATE			3
-//#define CMD_GET_TEMPERATURE			4
-//
-
+#define CMD_GET_CONTROL_LINE_STATE				2
+#define CMD_SET_CONTROL_LINE_STATE				3
 
 #endif /* BUSMODULECOMMANDS_H_ */

@@ -1,26 +1,25 @@
 #include "TemperatureSensors.h"
 //****************************************************************************************
-uint16_t ReadTemperature(uint8_t channel)
+void ReadTemperature(uint8_t channel, uint8_t* result)
 {
 	uint8_t idx = 0;
 	
 	for (unsigned char i = 0; i < owDevicesCount; i++)
 	{
-		// узнать устройство можно по его груповому коду, который расположен в первом байте адреса
-		switch (owDevicesIDs[i][0])
+		switch (owDevicesIDs[i][0]) // узнать устройство можно по его груповому коду, который расположен в первом байте адреса; owDevicesIDs[i] - адрес
 		{
 			case OW_DS18B20_FAMILY_CODE: // если найден термодатчик DS18B20
 				if (idx == channel)
 				{
-					//print_address(owDevicesIDs[i]); // печатаем адрес
 					DS18x20_StartMeasure(owDevicesIDs[i]); // запускаем измерение
-					timerDelayMs(800); // ждем минимум 750 мс, пока конвентируется температура
+					//timerDelayMs(800); // ждем минимум 750 мс, пока конвентируется температура
+					_delay_ms(800);
+					
 					unsigned char data[2]; // переменная для хранения старшего и младшего байта данных
 					DS18x20_ReadData(owDevicesIDs[i], data); // считываем данные
 					
-					uint8_t result[2];
 					DS18x20_ConvertToThemperature(data, result);
-					return (result[0] << 8) | result[1];
+					return;// (result[0] << 8) | result[1];
 					
 					//return DS18x20_ConvertToThemperatureFl(data); // преобразовываем температуру в человекопонятный вид
 				}
@@ -30,6 +29,4 @@ uint16_t ReadTemperature(uint8_t channel)
 				break;
 		}
 	}
-	
-	return 0;
 }

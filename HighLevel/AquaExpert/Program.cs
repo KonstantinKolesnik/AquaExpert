@@ -32,7 +32,7 @@ namespace AquaExpert
 
         private int ledNetwork = 0;
 
-        private NetworkCoordinator networkNetwork;
+        private NetworkCoordinator networkCoordinator;
         private BusMasterLocal busMasterLocal;
 
         //private GT.Timer timerWorkflow;
@@ -84,11 +84,24 @@ namespace AquaExpert
         }
         private void InitHardware()
         {
-            networkNetwork = new NetworkCoordinator();
+            //var socket = Socket.GetSocket(12, true, null, null);
+            //var i2c = new I2CBus(socket, 1, busClockRate, null);
+
+            //byte[] b = new byte[5];
+            //int i = i2c.Read(b, 1000);
+            //Debug.Print(b[0].ToString() + i);
+
+            //byte[] b = new byte[1];
+            //int i = i2c.WriteRead(new byte[] {0x00}, b, 1000);
+            //Debug.Print(b[0].ToString() + i);
+            //- See more at: https://www.ghielectronics.com/community/forum/topic?id=13503&page=2#msg137894
+
+
+            networkCoordinator = new NetworkCoordinator();
 
             busMasterLocal = new BusMasterLocal(new BusConfiguration(new I2CDevice(null)));
             busMasterLocal.BusModulesCollectionChanged += busMasterLocal_CollectionChanged;
-            networkNetwork.BusMasters.Add(busMasterLocal);
+            networkCoordinator.BusMasters.Add(busMasterLocal);
 
             //Watchdog!!!
 
@@ -625,6 +638,8 @@ namespace AquaExpert
         //}
         private void busMasterLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
+            //return;
+
             uint x = 10;
             uint indent = 10;
             uint y = 10;
@@ -633,44 +648,21 @@ namespace AquaExpert
             Font font = Resources.GetFont(Resources.FontResources.small);
             GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
 
-            //for (int j = 0; j < 10; j++)
+            y = 10;
+            display.SimpleGraphics.Clear();
+            display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+
+            foreach (BusModule busModule in busMasterLocal.BusModules)
             {
-                y = 10;
-                display.SimpleGraphics.Clear();
-                display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+                display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.FriendlyName, fontTitle, color, x, y); y += lineHight;
 
-                foreach (BusModule busModule in busMasterLocal.BusModules)
+                foreach (ControlLine controlLine in busModule.ControlLines)
                 {
-                    display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.FriendlyName, fontTitle, color, x, y); y += lineHight;
-
-                    //foreach (ControlLine cl in busModule.ControlLines)
-                    //{
-                    //    int count = (int)busModule.ControlLines[clt];
-                    //    for (int i = 0; i < count; i++)
-                    //    {
-                    //        ControlLine cl = new ControlLine(0, busModule.Address, clt, i);
-                    //        display.SimpleGraphics.DisplayText(cl.FriendlyName, font, color, x + indent, y); y += lineHight;
-                    //    }
-                    //}
-
-                    //display.SimpleGraphics.DisplayText("Relays: " + module.RelayCount, font, color, x + indent, y); y += lineHight;
-                    //display.SimpleGraphics.DisplayText("Water sensors: " + module.WaterSensorCount, font, color, x + indent, y); y += lineHight;
-                    //display.SimpleGraphics.DisplayText("PH sensors: " + module.PhSensorCount, font, color, x + indent, y); y += lineHight;
-                    //display.SimpleGraphics.DisplayText("ORP sensors: " + module.OrpSensorCount, font, color, x + indent, y); y += lineHight;
-                    //display.SimpleGraphics.DisplayText("Temperature sensors: " + module.TemperatureSensorCount, font, color, x + indent, y); y += lineHight;
-                    //display.SimpleGraphics.DisplayText("Dimmers: " + module.DimmerCount, font, color, x + indent, y); y += lineHight;
-
-                    //display.SimpleGraphics.DisplayText("", font, color, x, y); y += lineHight;
-
-                    foreach (ControlLine controlLine in busModule.ControlLines)
-                    {
-                        display.SimpleGraphics.DisplayText(controlLine.FriendlyName, font, color, x + indent, y); y += lineHight;
-                    }
-
-                    //display.SimpleGraphics.DisplayText("T, C: " + module.GetTemperature(0), font, color, x + indent, y); y += lineHight;
-
-                    display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+                    byte[] state = busMasterLocal.GetControlLineState(controlLine);
+                    display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state[0], font, color, x + indent, y); y += lineHight;
                 }
+
+                display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
             }
         }
         #endregion

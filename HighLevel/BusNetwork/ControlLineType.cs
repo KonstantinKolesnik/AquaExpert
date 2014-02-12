@@ -1,7 +1,7 @@
 
 namespace BusNetwork
 {
-    public enum ControlLineType
+    public enum ControlLineType : byte
     {
         Relay,
         WaterSensor,

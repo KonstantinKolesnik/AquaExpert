@@ -5,6 +5,6 @@
 #include "OW\onewire.h"
 #include "OW\ds18x20.h"
 //****************************************************************************************
-uint16_t ReadTemperature(uint8_t channel);
+void ReadTemperature(uint8_t channel, uint8_t* result);
 //****************************************************************************************
 #endif /* TEMPERATURESENSORS_H_ */

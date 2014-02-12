@@ -52,7 +52,21 @@ namespace BusNetwork
 
         #region Events
         public event CollectionChangedEventHandler BusModulesCollectionChanged;
+        protected void NotifyBusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
+        {
+            if (BusModulesCollectionChanged != null && (addressesAdded.Count != 0 || addressesRemoved.Count != 0))
+                BusModulesCollectionChanged(addressesAdded, addressesRemoved);
+        }
         #endregion
+
+        #region Private methods
+        protected abstract void ScanBusModules();
+        protected abstract byte GetBusModuleType(ushort busModuleAddress);
+        protected abstract void GetBusModuleControlLines(BusModule busModule);
+
+        public abstract byte[] GetControlLineState(ControlLine controlLine);
+
+
 
         ////TODO: test!!!!!!!!!!!!!!!!
         //public bool GetRelayState(int idx)
@@ -86,16 +100,11 @@ namespace BusNetwork
 
 
 
-        #region Private methods
-        protected abstract void ScanBusModules();
-        protected void NotifyBusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
-        {
-            if (BusModulesCollectionChanged != null && (addressesAdded.Count != 0 || addressesRemoved.Count != 0))
-                BusModulesCollectionChanged(addressesAdded, addressesRemoved);
-        }
+
+
         private void StartTimer()
         {
-            timerUpdate = new Timer(new TimerCallback(Update), null, 0, updateInterval);
+            timerUpdate = new Timer(new TimerCallback(Update), null, updateInterval, updateInterval);
         }
         private void StopTimer()
         {

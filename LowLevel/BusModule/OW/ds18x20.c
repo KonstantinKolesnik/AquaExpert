@@ -87,7 +87,9 @@ void DS18x20_ConvertToThemperature(uint8_t* data, uint8_t* themp)
 	{
 		themp[0] = 127 - themp[0];
 		themp[0] |= 0b10000000; // если температура минусовая
-	} 
+	}
+	
+	//themp[0] = 64;
 }
 float DS18x20_ConvertToThemperatureFl(uint8_t* data)
 {

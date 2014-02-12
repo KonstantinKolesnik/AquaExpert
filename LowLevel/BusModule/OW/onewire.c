@@ -262,7 +262,7 @@ void InitOW()
 	//OW_PORT |= (1<<OW_BIT);			// pull up
 	//OW_DDR  |= (0<<OW_BIT);    		// in
 	
-	timerDelayInit();
+	//timerDelayInit();
 
 	owDevicesCount = OW_Scan();
 }

@@ -17,7 +17,7 @@
 
 #define TIKS_1MS (F_CPU/T_PRESCALER/1000)
 
-void timerDelayInit(void)
+void timerDelayInit()
 {
 #if (T_PRESCALER==8)
 	TCCR0 = (1<<CS01); // prescaler = 8

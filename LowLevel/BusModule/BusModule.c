@@ -6,8 +6,8 @@
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
 //****************************************************************************************
-typedef struct
-{
+//typedef struct
+//{
 	//bool Relays[RELAY_COUNT];
 	//bool WaterSensors[WATER_SENSOR_COUNT];
 	//uint8_t PhSensors[PH_SENSOR_COUNT];
@@ -15,10 +15,18 @@ typedef struct
 	//uint16_t ConductivitySensors[CONDUCT_SENSOR_COUNT];
 	//uint16_t TemperatureSensors[TEMP_SENSOR_COUNT];
 	//uint8_t Dimmers[DIMMER_COUNT];
-} State_t;
+//} State_t;
+
+typedef struct
+{
+	uint8_t ControlLineType;
+	uint8_t ControlLineNumber;
+	uint8_t State[2];
+} ControlLineState_t;
+
 //****************************************************************************************
-static uint8_t controlLinesCount[MAX_CONTROL_LINE_TYPES]; // index = ControlLineType
-static volatile State_t moduleState;
+static uint16_t controlLinesCount = 0;
+static ControlLineState_t* controlLinesState;
 static uint8_t msg[TWI_BUFFER_SIZE];
 
 void ProcessMasterMessages();
@@ -29,24 +37,6 @@ void BlinkMsgLed()
 	_delay_ms(10);
 	LED_MSG_OFF;
 }
-void InitControlLinesCount()
-{
-	switch (MODULE_TYPE)
-	{
-		case 0:// test full module
-			controlLinesCount[CONTROL_LINE_TYPE_RELAY] = 8;
-			controlLinesCount[CONTROL_LINE_TYPE_WATER_SENSOR] = 3;
-			controlLinesCount[CONTROL_LINE_TYPE_PH_SENSOR] = 2;
-			controlLinesCount[CONTROL_LINE_TYPE_ORP_SENSOR] = 2;
-			controlLinesCount[CONTROL_LINE_TYPE_TEMPERATURE_SENSOR] = 1;
-			controlLinesCount[CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR] = 1;
-			controlLinesCount[CONTROL_LINE_TYPE_DIMMER] = 2;
-			break;
-		case 1: // AE-R8
-			controlLinesCount[CONTROL_LINE_TYPE_RELAY] = 8;
-			break;
-	}
-}
 void InitHardware()
 {
 	MCUCR &= 0b01111111;			// PUD bit = Off: pull up enabled
@@ -56,6 +46,8 @@ void InitHardware()
 	LED_MSG_OFF;
 	
 	InitRelays();
+	SetRelay(1, true);
+	SetRelay(3, true);
 	
 	InitADC(true); // use internal Vcc reference
 	
@@ -78,19 +70,91 @@ void InitHardware()
 
 	sei();
 }
+
+uint8_t GetControlLinesCount(uint8_t type)
+{
+	switch (MODULE_TYPE)
+	{
+		case 0:// test full module
+			if (type == CONTROL_LINE_TYPE_RELAY) return 8;
+			else if (type == CONTROL_LINE_TYPE_WATER_SENSOR) return 3;
+			else if (type == CONTROL_LINE_TYPE_PH_SENSOR) return 2;
+			else if (type == CONTROL_LINE_TYPE_ORP_SENSOR) return 2;
+			else if (type == CONTROL_LINE_TYPE_TEMPERATURE_SENSOR) return 1;
+			else if (type == CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR) return 1;
+			else if (type == CONTROL_LINE_TYPE_DIMMER) return 2;
+			break;
+		case 1: // AE-R8
+			if (type == CONTROL_LINE_TYPE_RELAY) return 8;
+			break;
+	}
+	
+	return 0;
+}
+
+void InitModuleState()
+{
+	for (uint8_t i = 0; i < MAX_CONTROL_LINE_TYPES; i++)
+		controlLinesCount += GetControlLinesCount(i);
+	
+	ControlLineState_t a[controlLinesCount];
+	controlLinesState = a;
+	
+	uint16_t idx = 0;
+	for (uint8_t i = 0; i < MAX_CONTROL_LINE_TYPES; i++)
+	{
+		uint8_t count = GetControlLinesCount(i);
+		for (uint8_t j = 0; j < count; j++)
+		{
+			controlLinesState[idx].ControlLineType = i;
+			controlLinesState[idx].ControlLineNumber = j;
+			controlLinesState[idx].State[0] = 0;
+			controlLinesState[idx].State[1] = 0;
+			
+			idx++;
+		}
+	}
+}
 void PopulateModuleState()
 {
-	//for (uint8_t i = 0; i < RELAY_COUNT; i++)
-		//moduleState.Relays[i] = GetRelay(i);
-		//
-	//for (uint8_t i = 0; i < WATER_SENSOR_COUNT; i++)
-		//moduleState.WaterSensors[i] = IsWaterSensorWet(i);
-		//
-	//for (uint8_t i = 0; i < TEMP_SENSOR_COUNT; i++)
-		//moduleState.TemperatureSensors[i] = ReadTemperature(i);
-		//
+	for (uint8_t i = 0; i < controlLinesCount; i++)
+	{
+		ControlLineState_t state = controlLinesState[i];
 		
+		state.State[0] = 0;
+		state.State[1] = 0;
+	
+		switch (state.ControlLineType)
+		{
+			case CONTROL_LINE_TYPE_RELAY:
+				state.State[0] = GetRelay(state.ControlLineNumber);
+				break;
+			case CONTROL_LINE_TYPE_WATER_SENSOR:
+				state.State[0] = IsWaterSensorWet(state.ControlLineNumber);
+				break;
+		
+		
+			case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
+				ReadTemperature(state.ControlLineNumber, state.State);
+				break;
+		
+		}
+	}
 }
+void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
+{
+	for (uint8_t i = 0; i < controlLinesCount; i++)
+	{
+		ControlLineState_t state = controlLinesState[i];
+		if (state.ControlLineType == type && state.ControlLineNumber == number)
+		{
+			result[0] = state.State[0];
+			result[1] = state.State[1];
+			return;
+		}
+	}
+}
+
 uint8_t OnLastTransmissionError(uint8_t TWIerrorMsg)
 {
 	// A failure has occurred, use TWIerrorMsg to determine the nature of the failure and take appropriate actions.
@@ -125,22 +189,16 @@ void ProcessMasterMessages()
 							TWI_StartTransceiverWithData(msg, 1);
 							break;
 						case CMD_GET_CONTROL_LINE_COUNT:
-							msg[0] = (msg[1] < MAX_CONTROL_LINE_TYPES ? controlLinesCount[msg[1]] : 0);
-							//msg[0] = 4;//controlLinesCount[msg[1]];
+							msg[0] = GetControlLinesCount(msg[1]);
 							TWI_StartTransceiverWithData(msg, 1);
 							break;
-						//case CMD_GET_RELAY_STATE:
-							//msg[0] = moduleState.Relays[msg[1]];
-							////TWI_StartTransceiverWithData(msg, 1);
-							//break;
-						//case CMD_SET_RELAY_STATE:
+						case CMD_GET_CONTROL_LINE_STATE:
+							GetControlLineState(msg[1], msg[2], msg);
+							TWI_StartTransceiverWithData(msg, 2);
+							break;
+						case CMD_SET_CONTROL_LINE_STATE:
 							////SetRelay(msg[1], msg[2]);
-							//break;
-						//case CMD_GET_TEMPERATURE:
-							//msg[0] = moduleState.TemperatureSensors[msg[1]] >> 8;
-							//msg[1] = moduleState.TemperatureSensors[msg[1]] & 0xFF;
-							////TWI_StartTransceiverWithData(msg, 2);
-							//break;	
+							break;
 						default:
 							break;	
 					}
@@ -162,12 +220,14 @@ void ProcessMasterMessages()
 
 int main()
 {
-	InitControlLinesCount();
+	InitModuleState();
 	InitHardware();
+	
+	PopulateModuleState();
 	
     while (true)
     {
 		wdt_reset();
-		//PopulateModuleState();
+		PopulateModuleState();
     }
 }
