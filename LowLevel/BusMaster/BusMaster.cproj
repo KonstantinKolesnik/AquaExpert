@@ -106,13 +106,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\BusModule\BusModuleCommands.h">
+    <Compile Include="..\BusModule\BusModuleAPI.h">
       <SubType>compile</SubType>
-      <Link>BusModuleCommands.h</Link>
+      <Link>BusModuleAPI.h</Link>
     </Compile>
     <Compile Include="BusMaster.c">
       <SubType>compile</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IIC" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

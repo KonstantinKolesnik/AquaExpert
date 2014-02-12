@@ -1,7 +1,7 @@
 #include "Hardware.h"
 #include "ADC\ADC.h"
 #include "OW\onewire.h"
-#include "IIC\IIC_ultimate.h"
+#include "IIC\IIC_slave.h"
 #include "Relays.h"
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
@@ -12,39 +12,14 @@ typedef struct
 	uint8_t ControlLineNumber;
 	uint8_t ControlLineState[2];
 } ControlLineState_t;
-
-typedef struct {
-	ControlLineState_t* array;
-	uint16_t used;
-	uint16_t size;
-} Array_t;
 //****************************************************************************************
-static volatile Array_t controlLinesStates;
 static uint8_t msg[TWI_BUFFER_SIZE];
+
+volatile ControlLineState_t* controlLinesStates = NULL;
+uint16_t controlLinesCount = 0;
 
 void ProcessMasterMessages();
 //****************************************************************************************
-void initArray(volatile Array_t *a, uint16_t initialSize)
-{
-	a->array = (ControlLineState_t*)malloc(initialSize * sizeof(ControlLineState_t));
-	a->used = 0;
-	a->size = initialSize;
-}
-void insertArray(volatile Array_t *a, ControlLineState_t element)
-{
-	if (a->used == a->size) {
-		a->size *= 2;
-		a->array = (ControlLineState_t*)realloc(a->array, a->size * sizeof(ControlLineState_t));
-	}
-	a->array[a->used++] = element;
-}
-void freeArray(Array_t *a)
-{
-	free(a->array);
-	a->array = NULL;
-	a->used = a->size = 0;
-}
-
 void BlinkMsgLed()
 {
 	LED_MSG_ON;
@@ -107,9 +82,9 @@ uint8_t GetControlLinesCount(uint8_t type)
 }
 void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
 {
-	for (uint8_t i = 0; i < controlLinesStates.used; i++)
+	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		ControlLineState_t state = controlLinesStates.array[i];
+		ControlLineState_t state = controlLinesStates[i];
 		
 		if (state.ControlLineType == type && state.ControlLineNumber == number)
 		{
@@ -122,30 +97,29 @@ void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
 
 void InitModuleState()
 {
-	initArray(&controlLinesStates, 1);
-	
 	for (uint8_t type = 0; type < MAX_CONTROL_LINE_TYPES; type++)
 	{
 		uint8_t count = GetControlLinesCount(type);
-		
+	
 		for (uint8_t number = 0; number < count; number++)
 		{
 			ControlLineState_t state;
-			
+	
 			state.ControlLineType = type;
 			state.ControlLineNumber = number;
 			state.ControlLineState[0] = 0;
 			state.ControlLineState[1] = 0;
-			
-			insertArray(&controlLinesStates, state);
+	
+			controlLinesStates = (ControlLineState_t*)realloc((void*)controlLinesStates, ++controlLinesCount * sizeof(ControlLineState_t));
+			controlLinesStates[controlLinesCount - 1] = state;
 		}
 	}
 }
 void PopulateModuleState()
 {
-	for (uint8_t i = 0; i < controlLinesStates.used; i++)
+	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		ControlLineState_t state = controlLinesStates.array[i];
+		ControlLineState_t state = controlLinesStates[i];
 		
 		state.ControlLineState[0] = 0;
 		state.ControlLineState[1] = 0;
@@ -244,6 +218,5 @@ int main()
 		PopulateModuleState();
     }
 }
-
 
 //printf("%d\n", );

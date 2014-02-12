@@ -148,10 +148,10 @@
     <Compile Include="Hardware.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IIC\IIC_ultimate.c">
+    <Compile Include="IIC\IIC_slave.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="IIC\IIC_ultimate.h">
+    <Compile Include="IIC\IIC_slave.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="OW\delay.c">

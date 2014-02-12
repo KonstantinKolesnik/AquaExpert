@@ -27,7 +27,7 @@ namespace BusNetwork.Network
         public byte[] State
         {
             get;
-            set;
+            private set;
         }
 
         public string UserName
@@ -50,6 +50,10 @@ namespace BusNetwork.Network
                     case ControlLineType.ConductivitySensor: type = "Conductivity sensor"; break;
                     case ControlLineType.TemperatureSensor: type = "Temperature sensor"; break;
                     case ControlLineType.Dimmer: type = "Dimmer"; break;
+
+
+
+
                     default: type = "[Unknown]"; break;
                 }
 

@@ -1,4 +1,4 @@
-#include "IIC_ultimate.h"
+#include "IIC_slave.h"
 //****************************************************************************************
 extern void ProcessMasterMessages();
 union TWI_statusReg_t TWI_statusReg = {0};  // TWI_statusReg is defined in IIC_ultimate.h

@@ -14,7 +14,7 @@
 
 #define TWI_ACCEPT_BROADCAST		1	 // Accept broadcast messages
 #define TWI_BUFFER_SIZE				10	 // Reserves memory for the drivers transceiver buffer. Set this to the largest message size that will be sent including address byte.
-
+//****************************************************************************************
 // TWI Miscellaneous status codes
 #define TWI_NO_STATE               0xF8  // No relevant state information available; TWINT = “0”
 #define TWI_BUS_ERROR              0x00  // Bus error due to an illegal START or STOP condition
