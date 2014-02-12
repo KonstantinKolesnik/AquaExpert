@@ -6,31 +6,45 @@
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
 //****************************************************************************************
-//typedef struct
-//{
-	//bool Relays[RELAY_COUNT];
-	//bool WaterSensors[WATER_SENSOR_COUNT];
-	//uint8_t PhSensors[PH_SENSOR_COUNT];
-	//uint16_t OrpSensors[ORP_SENSOR_COUNT];
-	//uint16_t ConductivitySensors[CONDUCT_SENSOR_COUNT];
-	//uint16_t TemperatureSensors[TEMP_SENSOR_COUNT];
-	//uint8_t Dimmers[DIMMER_COUNT];
-//} State_t;
-
 typedef struct
 {
 	uint8_t ControlLineType;
 	uint8_t ControlLineNumber;
-	uint8_t State[2];
+	uint8_t ControlLineState[2];
 } ControlLineState_t;
 
+typedef struct {
+	ControlLineState_t* array;
+	uint16_t used;
+	uint16_t size;
+} Array_t;
 //****************************************************************************************
-static uint16_t controlLinesCount = 0;
-static ControlLineState_t* controlLinesState;
+static volatile Array_t controlLinesStates;
 static uint8_t msg[TWI_BUFFER_SIZE];
 
 void ProcessMasterMessages();
 //****************************************************************************************
+void initArray(volatile Array_t *a, uint16_t initialSize)
+{
+	a->array = (ControlLineState_t*)malloc(initialSize * sizeof(ControlLineState_t));
+	a->used = 0;
+	a->size = initialSize;
+}
+void insertArray(volatile Array_t *a, ControlLineState_t element)
+{
+	if (a->used == a->size) {
+		a->size *= 2;
+		a->array = (ControlLineState_t*)realloc(a->array, a->size * sizeof(ControlLineState_t));
+	}
+	a->array[a->used++] = element;
+}
+void freeArray(Array_t *a)
+{
+	free(a->array);
+	a->array = NULL;
+	a->used = a->size = 0;
+}
+
 void BlinkMsgLed()
 {
 	LED_MSG_ON;
@@ -91,66 +105,65 @@ uint8_t GetControlLinesCount(uint8_t type)
 	
 	return 0;
 }
+void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
+{
+	for (uint8_t i = 0; i < controlLinesStates.used; i++)
+	{
+		ControlLineState_t state = controlLinesStates.array[i];
+		
+		if (state.ControlLineType == type && state.ControlLineNumber == number)
+		{
+			result[0] = state.ControlLineState[0];
+			result[1] = state.ControlLineState[1];
+			break;
+		}
+	}
+}
 
 void InitModuleState()
 {
-	for (uint8_t i = 0; i < MAX_CONTROL_LINE_TYPES; i++)
-		controlLinesCount += GetControlLinesCount(i);
+	initArray(&controlLinesStates, 1);
 	
-	ControlLineState_t a[controlLinesCount];
-	controlLinesState = a;
-	
-	uint16_t idx = 0;
-	for (uint8_t i = 0; i < MAX_CONTROL_LINE_TYPES; i++)
+	for (uint8_t type = 0; type < MAX_CONTROL_LINE_TYPES; type++)
 	{
-		uint8_t count = GetControlLinesCount(i);
-		for (uint8_t j = 0; j < count; j++)
+		uint8_t count = GetControlLinesCount(type);
+		
+		for (uint8_t number = 0; number < count; number++)
 		{
-			controlLinesState[idx].ControlLineType = i;
-			controlLinesState[idx].ControlLineNumber = j;
-			controlLinesState[idx].State[0] = 0;
-			controlLinesState[idx].State[1] = 0;
+			ControlLineState_t state;
 			
-			idx++;
+			state.ControlLineType = type;
+			state.ControlLineNumber = number;
+			state.ControlLineState[0] = 0;
+			state.ControlLineState[1] = 0;
+			
+			insertArray(&controlLinesStates, state);
 		}
 	}
 }
 void PopulateModuleState()
 {
-	for (uint8_t i = 0; i < controlLinesCount; i++)
+	for (uint8_t i = 0; i < controlLinesStates.used; i++)
 	{
-		ControlLineState_t state = controlLinesState[i];
+		ControlLineState_t state = controlLinesStates.array[i];
 		
-		state.State[0] = 0;
-		state.State[1] = 0;
+		state.ControlLineState[0] = 0;
+		state.ControlLineState[1] = 0;
 	
 		switch (state.ControlLineType)
 		{
 			case CONTROL_LINE_TYPE_RELAY:
-				state.State[0] = GetRelay(state.ControlLineNumber);
+				state.ControlLineState[0] = GetRelay(state.ControlLineNumber);
 				break;
 			case CONTROL_LINE_TYPE_WATER_SENSOR:
-				state.State[0] = IsWaterSensorWet(state.ControlLineNumber);
+				state.ControlLineState[0] = IsWaterSensorWet(state.ControlLineNumber);
 				break;
 		
 		
 			case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
-				ReadTemperature(state.ControlLineNumber, state.State);
+				ReadTemperature(state.ControlLineNumber, state.ControlLineState);
 				break;
 		
-		}
-	}
-}
-void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
-{
-	for (uint8_t i = 0; i < controlLinesCount; i++)
-	{
-		ControlLineState_t state = controlLinesState[i];
-		if (state.ControlLineType == type && state.ControlLineNumber == number)
-		{
-			result[0] = state.State[0];
-			result[1] = state.State[1];
-			return;
 		}
 	}
 }
@@ -231,3 +244,6 @@ int main()
 		PopulateModuleState();
     }
 }
+
+
+//printf("%d\n", );
