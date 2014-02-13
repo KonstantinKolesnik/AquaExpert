@@ -33,21 +33,18 @@ namespace BusNetwork.Network
         {
             for (byte type = 0; type < BusModule.ControlLineTypesToRequest; type++)
             {
-                byte[] result = new byte[1];
+                byte[] count = new byte[1]; // up to 256 numbers for one type
                 I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
-                if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, new byte[] { type }, result))
-                    result[0] = 0;
+                if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, new byte[] { type }, count))
+                    count[0] = 0;
 
-                //for (byte number = 0; number < result[0]; number++)
-                //    busModule.ControlLines.Add(new ControlLine(Address, busModule.Address, (ControlLineType)type, number));
-
-                for (byte number = 0; number < result[0]; number++)
+                for (byte number = 0; number < count[0]; number++)
                 {
                     ControlLine controlLine = new ControlLine(Address, busModule.Address, (ControlLineType)type, number);
                     busModule.ControlLines.Add(controlLine);
+                    // query control line state:
                     GetControlLineState(controlLine);
                 }
-
             }
         }
         public override void GetControlLineState(ControlLine controlLine)
@@ -58,7 +55,7 @@ namespace BusNetwork.Network
             if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineState, data, controlLine.State))
                 controlLine.ResetState();
         }
-        public void SetControlLineState(ControlLine controlLine, byte[] state)
+        public override void SetControlLineState(ControlLine controlLine, byte[] state)
         {
             byte[] data = new byte[state.Length + 2];
             data[0] = (byte)controlLine.Type;
@@ -67,11 +64,10 @@ namespace BusNetwork.Network
                 data[i + 2] = state[i];
 
             I2CDevice.Configuration config = new I2CDevice.Configuration(controlLine.BusModuleAddress, BusConfiguration.ClockRate);
-            if (busConfig.Bus.TrySetRegister(config, BusConfiguration.Timeout, BusModule.CmdSetControlLineState, data))
+            if (!busConfig.Bus.TrySetRegister(config, BusConfiguration.Timeout, BusModule.CmdSetControlLineState, data))
             {
             }
         }
-
         #endregion
 
         #region Private methods
@@ -84,46 +80,33 @@ namespace BusNetwork.Network
             // get all addresses on bus:
             ArrayList onlineAddresses = busConfig.Bus.Scan(1, 127, BusConfiguration.ClockRate, BusConfiguration.Timeout);
 
-            //// remove nonexisting modules:
-            //foreach (BusModule busModule in BusModules)
-            //    if (!onlineAddresses.Contains(busModule.Address))
-            //    {
-            //        addressesRemoved.Add(busModule.Address);
-            //        BusModules.Remove(busModule);
-            //    }
-
-            //// add new modules:
-            //foreach (ushort address in onlineAddresses)
-            //    if (this[address] == null) // no registered module with this address
-            //    {
-            //        byte type = GetBusModuleType(address);
-            //        BusModule busModule = new BusModule(address, type);
-            //        GetBusModuleControlLines(busModule);
-
-            //        addressesAdded.Add(address);
-            //        BusModules.Add(busModule);
-            //    }
-
-
-
             // for test!!!
             BusModules.Clear();
+
+            // remove nonexisting modules:
+            foreach (BusModule busModule in BusModules)
+                if (!onlineAddresses.Contains(busModule.Address))
+                {
+                    addressesRemoved.Add(busModule.Address);
+                    BusModules.Remove(busModule);
+                }
+
             // add new modules:
             foreach (ushort address in onlineAddresses)
-            {
-                byte type = GetBusModuleType(address);
-                BusModule busModule = new BusModule(address, type);
-                GetBusModuleControlLines(busModule);
-                
-                addressesAdded.Add(address);
-                BusModules.Add(busModule);
+                if (this[address] == null) // no registered module with this address
+                {
+                    byte type = GetBusModuleType(address);
+                    BusModule busModule = new BusModule(address, type);
+                    GetBusModuleControlLines(busModule);
 
-                on = !on;
-                SetControlLineState((ControlLine)busModule.ControlLines[3], new byte[] { (byte)(on ? 1 : 0), 0 });
-                GetBusModuleControlLines(busModule);
-            }
+                    addressesAdded.Add(address);
+                    BusModules.Add(busModule);
 
-
+                    // for test!!!
+                    on = !on;
+                    SetControlLineState((ControlLine)busModule.ControlLines[3], new byte[] { (byte)(on ? 1 : 0), 0 });
+                    GetBusModuleControlLines(busModule);
+                }
 
             NotifyBusModulesCollectionChanged(addressesAdded, addressesRemoved);
         }

@@ -1,6 +1,7 @@
 #include "IIC_slave.h"
 //****************************************************************************************
 extern void ProcessMasterMessages();
+
 union TWI_statusReg_t TWI_statusReg = {0};  // TWI_statusReg is defined in IIC_ultimate.h
 static uint8_t TWI_buf[TWI_BUFFER_SIZE];	// Transceiver buffer. Set the size in the header file
 static uint8_t TWI_msgSize = 0;             // Number of bytes to be transmitted.
@@ -142,7 +143,7 @@ void TWI_StartTransceiver()
 	
 	ClearInterruptFlag();
 			
-	TWI_busy = 0;
+	TWI_busy = false;
 }
 
 /****************************************************************************
@@ -168,12 +169,12 @@ void TWI_StartTransceiverWithData(unsigned char *msg, uint8_t msgSize)
 	
 	ClearInterruptFlag();
 			
-	TWI_busy = 1;
+	TWI_busy = true;
 }
 
 /****************************************************************************
 Call this function to read out the received data from the TWI transceiver buffer. I.e. first call
-TWI_Start_Transceiver to get the TWI Transceiver to fetch data. Then Run this function to collect the
+TWI_Start_Transceiver to get the TWI Transceiver to fetch data. Then run this function to collect the
 data when they have arrived. Include a pointer to where to place the data and the number of bytes
 to fetch in the function call. The function will hold execution (loop) until the TWI_ISR has completed
 with the previous operation, before reading out the data and returning.

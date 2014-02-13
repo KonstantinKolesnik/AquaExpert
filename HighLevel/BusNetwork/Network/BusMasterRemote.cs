@@ -21,6 +21,9 @@ namespace BusNetwork.Network
         public override void GetControlLineState(ControlLine controlLine)
         {
         }
+        public override void SetControlLineState(ControlLine controlLine, byte[] state)
+        {
+        }
         #endregion
 
         #region Private methods

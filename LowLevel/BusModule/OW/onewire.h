@@ -23,6 +23,7 @@
 	#define OW_PIN PIND
 	#ifndef OW_TWO_PINS //если используется один пин, укажите его номер
 		#define OW_BIT 6 // PD6
+		#define LINE_IS_ON 	(OW_PIN & (1<<OW_BIT))
 	#else // если используются 2 пина, укажите их номера
 		#define OW_BIT_OUT 5
 		#define OW_BIT_IN 6

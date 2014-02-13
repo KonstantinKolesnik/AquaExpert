@@ -68,36 +68,7 @@ namespace BusNetwork.Network
         public abstract byte GetBusModuleType(ushort busModuleAddress);
         public abstract void GetBusModuleControlLines(BusModule busModule);
         public abstract void GetControlLineState(ControlLine controlLine);
-
-        ////TODO: test!!!!!!!!!!!!!!!!
-        //public bool GetRelayState(int idx)
-        //{
-        //    byte res = 0;
-        //    I2CDevice.Configuration config = new I2CDevice.Configuration(address, Program.BusClockRate);
-        //    if (Program.Bus.TryGetRegisters2(config, Program.BusTimeout, CMD_GET_RELAY_STATE, (byte)idx, new byte[] { res }))
-        //        return res == 1;
-
-        //    return false;
-        //}
-        //public void SetRelayState(int idx, bool on)
-        //{
-        //    I2CDevice.Configuration config = new I2CDevice.Configuration(address, Program.BusClockRate);
-        //    if (Program.Bus.TrySetRegister(config, Program.BusTimeout, CMD_SET_RELAY_STATE, new byte[] { 0, (byte)(on ? 1 : 0) }))
-        //    {
-        //    }
-        //}
-
-        //public float GetTemperature(int idx)
-        //{
-        //    byte[] res = new byte[2];
-        //    I2CDevice.Configuration config = new I2CDevice.Configuration(address, Program.BusClockRate);
-        //    if (Program.Bus.TryGetRegisters2(config, Program.BusTimeout, CMD_GET_TEMPERATURE, (byte)idx, res))
-        //    {
-        //        return (float)res[0] + (float)res[1] / 100;
-        //    }
-
-        //    return 0;
-        //}
+        public abstract void SetControlLineState(ControlLine controlLine, byte[] state);
         #endregion
 
         #region Private methods

@@ -10,13 +10,13 @@ typedef struct
 {
 	uint8_t ControlLineType;
 	uint8_t ControlLineNumber;
-	uint8_t ControlLineState[2];
+	volatile uint8_t ControlLineState[2];
 } ControlLineState_t;
 //****************************************************************************************
 static uint8_t msg[TWI_BUFFER_SIZE];
 
 static ControlLineState_t* controlLinesStates = NULL;
-static uint16_t controlLinesCount = 0;
+static volatile uint16_t controlLinesCount = 0;
 
 void ProcessMasterMessages();
 //****************************************************************************************
@@ -167,7 +167,7 @@ void PopulateModuleState()
 				//pStates->ControlLineState[1] = 3;
 				break;
 			case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
-				ReadTemperature(pStates->ControlLineNumber, pStates->ControlLineState);
+				ReadTemperature(pStates->ControlLineNumber, (void*)pStates->ControlLineState);
 				break;
 			case CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR:
 				//pStates->ControlLineState[0] = 7;
@@ -256,11 +256,13 @@ int main()
 	InitHardware();
 	
 	PopulateModuleState();
+	_delay_ms(800); // needed to wait for temperature sensors conversion!!!!!!!!!!!!
 	
     while (true)
     {
 		wdt_reset();
 		PopulateModuleState();
+		_delay_ms(800); // needed to wait for temperature sensors conversion!!!!!!!!!!!!
     }
 	
 	return 0;
