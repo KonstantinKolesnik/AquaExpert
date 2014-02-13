@@ -1,8 +1,8 @@
 #include "onewire.h"
 //****************************************************************************************
-#ifdef UART_AS_OneWire
-	#include <avr/interrupt.h>
-#endif
+//#ifdef UART_AS_OneWire
+	//#include <avr/interrupt.h>
+//#endif
 
 #define sbi(reg,bit) reg |= (1<<bit)
 #define cbi(reg,bit) reg &= ~(1<<bit)
@@ -83,7 +83,7 @@ void OW_WriteBit(unsigned char bit)
 	//115200
 	UBRRL = USART_BAUDRATE_115200;
 	UBRRH = (USART_BAUDRATE_115200 >> 8);
-	UCSRA |= (1<<U2X);	
+	UCSRA |= (1<<U2X);
 	
 	unsigned char	d = 0x00;	
 	while(CheckBit(UCSRA, RXC)) UDR; //Зачистка буферов
@@ -168,9 +168,10 @@ unsigned char OW_WriteByte(unsigned char byte)
 	return byte&255;
 }
 #else
-void OW_WriteByte(unsigned char byte)
+void OW_WriteByte(uint8_t byte)
 {
-	for (unsigned char i=0; i<8; i++) OW_WriteBit(CheckBit(byte, i));
+	for (uint8_t i = 0; i < 8; i++)
+		OW_WriteBit(CheckBit(byte, i));
 }
 unsigned char OW_ReadByte(void)
 {
@@ -246,15 +247,17 @@ unsigned char OW_ReadROM(unsigned char *buffer)
 	}
  return 1;
 }
-unsigned char OW_MatchROM(unsigned char *rom)
+bool OW_MatchROM(uint8_t* rom)
 {
- 	if (!OW_Reset()) return 0;
+ 	if (!OW_Reset())
+		return false;
+		
 	OW_WriteByte(OW_CMD_MATCHROM);	
-	for(unsigned char i=0; i<8; i++)
-	{
+	
+	for (uint8_t i = 0; i < 8; i++)
 		OW_WriteByte(rom[i]);
-	}
- return 1;
+		
+	return true;
 }
 
 void InitOW()

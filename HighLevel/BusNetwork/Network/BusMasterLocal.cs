@@ -31,15 +31,23 @@ namespace BusNetwork.Network
         }
         public override void GetBusModuleControlLines(BusModule busModule)
         {
-            for (byte i = 0; i < BusModule.ControlLineTypesToRequest; i++)
+            for (byte type = 0; type < BusModule.ControlLineTypesToRequest; type++)
             {
                 byte[] result = new byte[1];
                 I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
-                if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, new byte[] { i }, result))
+                if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineCount, new byte[] { type }, result))
                     result[0] = 0;
 
+                //for (byte number = 0; number < result[0]; number++)
+                //    busModule.ControlLines.Add(new ControlLine(Address, busModule.Address, (ControlLineType)type, number));
+
                 for (byte number = 0; number < result[0]; number++)
-                    busModule.ControlLines.Add(new ControlLine(Address, busModule.Address, (ControlLineType)i, number));
+                {
+                    ControlLine controlLine = new ControlLine(Address, busModule.Address, (ControlLineType)type, number);
+                    busModule.ControlLines.Add(controlLine);
+                    GetControlLineState(controlLine);
+                }
+
             }
         }
         public override void GetControlLineState(ControlLine controlLine)
@@ -50,9 +58,24 @@ namespace BusNetwork.Network
             if (!busConfig.Bus.TryGetRegisters(config, BusConfiguration.Timeout, BusModule.CmdGetControlLineState, data, controlLine.State))
                 controlLine.ResetState();
         }
+        public void SetControlLineState(ControlLine controlLine, byte[] state)
+        {
+            byte[] data = new byte[state.Length + 2];
+            data[0] = (byte)controlLine.Type;
+            data[1] = controlLine.Number;
+            for (int i = 0; i < state.Length; i++)
+                data[i + 2] = state[i];
+
+            I2CDevice.Configuration config = new I2CDevice.Configuration(controlLine.BusModuleAddress, BusConfiguration.ClockRate);
+            if (busConfig.Bus.TrySetRegister(config, BusConfiguration.Timeout, BusModule.CmdSetControlLineState, data))
+            {
+            }
+        }
+
         #endregion
 
         #region Private methods
+        bool on = false;
         protected override void Scan()
         {
             ArrayList addressesAdded = new ArrayList();
@@ -91,9 +114,13 @@ namespace BusNetwork.Network
                 byte type = GetBusModuleType(address);
                 BusModule busModule = new BusModule(address, type);
                 GetBusModuleControlLines(busModule);
-
+                
                 addressesAdded.Add(address);
                 BusModules.Add(busModule);
+
+                on = !on;
+                SetControlLineState((ControlLine)busModule.ControlLines[3], new byte[] { (byte)(on ? 1 : 0), 0 });
+                GetBusModuleControlLines(busModule);
             }
 
 

@@ -69,13 +69,12 @@ unsigned char OW_ReadBit();
 unsigned char OW_SearchROM( unsigned char diff, unsigned char *id );
 void OW_FindROM(unsigned char *diff, unsigned char id[]);
 unsigned char OW_ReadROM(unsigned char *buffer);
-unsigned char OW_MatchROM(unsigned char *rom);
+bool OW_MatchROM(uint8_t* rom);
 
+uint16_t owDevicesCount;
+uint8_t	owDevicesIDs[MAXDEVICES][8];	// their IDs (8 bytes per device)
 
-unsigned char	owDevicesCount;
-unsigned char	owDevicesIDs[MAXDEVICES][8];	// »ı ID
-
-unsigned char OW_Scan();
+uint8_t OW_Scan();
 void InitOW();
 //****************************************************************************************
 #endif

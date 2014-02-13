@@ -2,31 +2,41 @@
 //****************************************************************************************
 void ReadTemperature(uint8_t channel, uint8_t* result)
 {
-	uint8_t idx = 0;
-	
-	for (unsigned char i = 0; i < owDevicesCount; i++)
+	uint16_t idx = 0;
+
+	for (uint16_t i = 0; i < owDevicesCount; i++)
 	{
-		switch (owDevicesIDs[i][0]) // узнать устройство можно по его груповому коду, который расположен в первом байте адреса; owDevicesIDs[i] - адрес
+		uint8_t* rom = owDevicesIDs[i];
+		
+		switch (rom[0]) // узнать устройство можно по его груповому коду, который расположен в первом байте адреса; rom - адрес
 		{
-			case OW_DS18B20_FAMILY_CODE: // если найден термодатчик DS18B20
-				if (idx == channel)
+			case OW_DS18B20_FAMILY_CODE: // DS18B20
+				if (idx == channel) // idx = index of temp. sensor
 				{
-					DS18x20_StartMeasure(owDevicesIDs[i]); // запускаем измерение
-					//timerDelayMs(800); // ждем минимум 750 мс, пока конвентируется температура
-					_delay_ms(800);
+					result[0] = 44;
+					result[1] = 44;
 					
-					unsigned char data[2]; // переменная для хранения старшего и младшего байта данных
-					DS18x20_ReadData(owDevicesIDs[i], data); // считываем данные
+					//DS18x20_StartMeasure(rom);
+					//timerDelayMs(800);
+					//_delay_ms(800); // ждем минимум 750 мс, пока конвентируется температура
 					
-					DS18x20_ConvertToThemperature(data, result);
-					return;// (result[0] << 8) | result[1];
+					uint8_t data[2];
+					//DS18x20_ReadData(rom, data);
+					//if (DS18x20_ReadData(rom, data)) // считываем данные
+					{
+						//result[0] = 55;
+						//result[1] = 55;
+						
+						DS18x20_ConvertToTemperature(data, result);
+						//return DS18x20_ConvertToTemperatureFloat(data); // преобразовываем температуру в человекопонятный вид
+					}
 					
-					//return DS18x20_ConvertToThemperatureFl(data); // преобразовываем температуру в человекопонятный вид
+					return;
 				}
-				else
-					idx++;
-				
+				idx++;
 				break;
+			//default:
+				//break;
 		}
 	}
 }

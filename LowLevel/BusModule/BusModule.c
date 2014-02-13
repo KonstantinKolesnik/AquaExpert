@@ -15,8 +15,8 @@ typedef struct
 //****************************************************************************************
 static uint8_t msg[TWI_BUFFER_SIZE];
 
-volatile ControlLineState_t* controlLinesStates = NULL;
-uint16_t controlLinesCount = 0;
+static ControlLineState_t* controlLinesStates = NULL;
+static uint16_t controlLinesCount = 0;
 
 void ProcessMasterMessages();
 //****************************************************************************************
@@ -80,18 +80,44 @@ uint8_t GetControlLinesCount(uint8_t type)
 	
 	return 0;
 }
-void GetControlLineState(uint8_t type, uint8_t number, uint8_t *result)
+void GetControlLineState(uint8_t type, uint8_t number, uint8_t* result)
 {
+	ControlLineState_t* pStates = controlLinesStates;
+	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		ControlLineState_t state = controlLinesStates[i];
-		
-		if (state.ControlLineType == type && state.ControlLineNumber == number)
+		if (pStates->ControlLineType == type && pStates->ControlLineNumber == number)
 		{
-			result[0] = state.ControlLineState[0];
-			result[1] = state.ControlLineState[1];
-			break;
+			result[0] = pStates->ControlLineState[0];
+			result[1] = pStates->ControlLineState[1];
+			return;
 		}
+		
+		pStates++;
+	}
+}
+void SetControlLineState(uint8_t type, uint8_t number, uint8_t* state)
+{
+	ControlLineState_t* pStates = controlLinesStates;
+	
+	for (uint8_t i = 0; i < controlLinesCount; i++)
+	{
+		if (pStates->ControlLineType == type && pStates->ControlLineNumber == number)
+		{
+			switch (type)
+			{
+				case CONTROL_LINE_TYPE_RELAY:
+					SetRelay(number, state[0]);
+					break;
+				case CONTROL_LINE_TYPE_DIMMER:
+
+					break;
+			}
+
+			return;
+		}
+		
+		pStates++;
 	}
 }
 
@@ -103,42 +129,59 @@ void InitModuleState()
 	
 		for (uint8_t number = 0; number < count; number++)
 		{
-			ControlLineState_t state;
-	
-			state.ControlLineType = type;
-			state.ControlLineNumber = number;
-			state.ControlLineState[0] = 0;
-			state.ControlLineState[1] = 0;
-	
-			controlLinesStates = (ControlLineState_t*)realloc((void*)controlLinesStates, ++controlLinesCount * sizeof(ControlLineState_t));
-			controlLinesStates[controlLinesCount - 1] = state;
+			uint16_t idx = controlLinesCount++;
+			controlLinesStates = (ControlLineState_t*)realloc((void*)controlLinesStates, controlLinesCount * sizeof(ControlLineState_t));
+			
+			controlLinesStates[idx].ControlLineType = type;
+			controlLinesStates[idx].ControlLineNumber = number;
+			controlLinesStates[idx].ControlLineState[0] = type;
+			controlLinesStates[idx].ControlLineState[1] = number;
 		}
 	}
 }
 void PopulateModuleState()
 {
+	ControlLineState_t* pStates = controlLinesStates;
+	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		ControlLineState_t state = controlLinesStates[i];
+		pStates->ControlLineState[0] = 0;
+		pStates->ControlLineState[1] = 0;
 		
-		state.ControlLineState[0] = 0;
-		state.ControlLineState[1] = 0;
-	
-		switch (state.ControlLineType)
+		switch (pStates->ControlLineType)
 		{
 			case CONTROL_LINE_TYPE_RELAY:
-				state.ControlLineState[0] = GetRelay(state.ControlLineNumber);
+				pStates->ControlLineState[0] = GetRelay(pStates->ControlLineNumber);
+				pStates->ControlLineState[1] = 0;
 				break;
 			case CONTROL_LINE_TYPE_WATER_SENSOR:
-				state.ControlLineState[0] = IsWaterSensorWet(state.ControlLineNumber);
+				pStates->ControlLineState[0] = IsWaterSensorWet(pStates->ControlLineNumber);
+				pStates->ControlLineState[1] = 0;
 				break;
-		
-		
+			case CONTROL_LINE_TYPE_PH_SENSOR:
+				//pStates->ControlLineState[0] = 7;
+				//pStates->ControlLineState[1] = 3;
+				break;
+			case CONTROL_LINE_TYPE_ORP_SENSOR:
+				//pStates->ControlLineState[0] = 7;
+				//pStates->ControlLineState[1] = 3;
+				break;
 			case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
-				ReadTemperature(state.ControlLineNumber, state.ControlLineState);
+				ReadTemperature(pStates->ControlLineNumber, pStates->ControlLineState);
 				break;
-		
+			case CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR:
+				//pStates->ControlLineState[0] = 7;
+				//pStates->ControlLineState[1] = 3;
+				break;
+			case CONTROL_LINE_TYPE_DIMMER:
+				//pStates->ControlLineState[0] = 7;
+				//pStates->ControlLineState[1] = 3;
+				break;
+			
+			
 		}
+		
+		pStates++;
 	}
 }
 
@@ -169,22 +212,24 @@ void ProcessMasterMessages()
 				}
 				else // last operation was a reception as Slave Address Match
 				{
+					uint8_t* response = msg;
+						
 					switch (msg[0]) // command type
 					{
 						case CMD_GET_TYPE:
-							msg[0] = MODULE_TYPE;
-							TWI_StartTransceiverWithData(msg, 1);
+							response[0] = MODULE_TYPE;
+							TWI_StartTransceiverWithData(response, 1);
 							break;
 						case CMD_GET_CONTROL_LINE_COUNT:
-							msg[0] = GetControlLinesCount(msg[1]);
-							TWI_StartTransceiverWithData(msg, 1);
+							response[0] = GetControlLinesCount(msg[1]);
+							TWI_StartTransceiverWithData(response, 1);
 							break;
 						case CMD_GET_CONTROL_LINE_STATE:
-							GetControlLineState(msg[1], msg[2], msg);
-							TWI_StartTransceiverWithData(msg, 2);
+							GetControlLineState(msg[1], msg[2], response);
+							TWI_StartTransceiverWithData(response, 2);
 							break;
 						case CMD_SET_CONTROL_LINE_STATE:
-							////SetRelay(msg[1], msg[2]);
+							SetControlLineState(msg[1], msg[2], &msg[3]);
 							break;
 						default:
 							break;	
@@ -217,6 +262,6 @@ int main()
 		wdt_reset();
 		PopulateModuleState();
     }
+	
+	return 0;
 }
-
-//printf("%d\n", );

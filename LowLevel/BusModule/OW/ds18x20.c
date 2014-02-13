@@ -47,6 +47,7 @@ uint8_t DS18x20_StartMeasure(uint8_t* rom)
 		OW_WriteByte(OW_CMD_SKIPROM);
 	
 	OW_WriteByte(THERM_CMD_CONVERTTEMP);
+	
 	return 1;
 }
 uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
@@ -64,9 +65,12 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 	
 #ifdef DS18X20_CHECK_CRC
 	uint8_t	buff[10] = {1,2,3,4,5,6,7,8,9};
-	for (uint8_t i=0; i<9; i++) buff[i] = OW_ReadByte();
-	buffer[0] = buff[0]; buffer[1] = buff[1];
-	if (crc8(buff, 9)) return 0;	// если контрольная сумма не совпала, возвращаем ошибку
+	for (uint8_t i=0; i<9; i++)
+		buff[i] = OW_ReadByte();
+	buffer[0] = buff[0];
+	buffer[1] = buff[1];
+	if (crc8(buff, 9))
+		return 0;	// если контрольная сумма не совпала, возвращаем ошибку
 #else 
 	//Read Scratchpad (only 2 first bytes)
 	buffer[0] = OW_ReadByte(); // Read TL
@@ -75,25 +79,24 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 
 	return 1;
 }
-void DS18x20_ConvertToThemperature(uint8_t* data, uint8_t* themp)
+
+void DS18x20_ConvertToTemperature(uint8_t* data, uint8_t* result)
 {
 	//Store temperature integer digits and decimal digits
-	themp[0] = data[0] >> 4;
-	themp[0] |= (data[1] & 0x07) << 4;
+	result[0] = data[0] >> 4;
+	result[0] |= (data[1] & 0x07) << 4;
 	//Store decimal digits
-	themp[1] = data[0] & 0xf;
-	themp[1] *= 6;
+	result[1] = data[0] & 0xf;
+	result[1] *= 6;
 	if (data[1] > 0xFB)
 	{
-		themp[0] = 127 - themp[0];
-		themp[0] |= 0b10000000; // если температура минусовая
+		result[0] = 127 - result[0];
+		result[0] |= 0b10000000; // если температура минусовая
 	}
-	
-	//themp[0] = 64;
 }
-float DS18x20_ConvertToThemperatureFl(uint8_t* data)
+float DS18x20_ConvertToTemperatureFloat(uint8_t* data)
 {
-	float	Temperature;
+	float	result;
 	uint8_t	digit, decimal;
 	
 	//Store temperature integer digits and decimal digits
@@ -106,12 +109,12 @@ float DS18x20_ConvertToThemperatureFl(uint8_t* data)
 	if (data[1] > 0xFB)
 		digit = 127 - digit;
 	if (decimal < 100)
-		Temperature = digit + ((float)decimal / 100);
+		result = digit + ((float)decimal / 100);
 	else
-		Temperature = digit + ((float)decimal / 1000);
+		result = digit + ((float)decimal / 1000);
 	if (data[1] > 0xFB)
-		Temperature = -Temperature;
+		result = -result;
 
-	return Temperature;
+	return result;
 }
 

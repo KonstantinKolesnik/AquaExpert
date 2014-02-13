@@ -625,8 +625,6 @@ namespace AquaExpert
         //}
         private void busMasterLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {
-            //return;
-
             uint x = 10;
             uint indent = 10;
             uint y = 10;
@@ -645,7 +643,7 @@ namespace AquaExpert
 
                 foreach (ControlLine controlLine in busModule.ControlLines)
                 {
-                    busMasterLocal.GetControlLineState(controlLine);
+                    //busMasterLocal.GetControlLineState(controlLine);
 
                     string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
                     display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state, font, color, x + indent, y); y += lineHight;
