@@ -11,18 +11,9 @@ namespace BusNetwork.Network
         #endregion
 
         #region Public methods
-        public override byte GetBusModuleType(ushort busModuleAddress)
+        public override bool BusModuleWriteRead(BusModule busModule, byte[] request, byte[] response)
         {
-            return 255;
-        }
-        public override void GetBusModuleControlLines(BusModule busModule)
-        {
-        }
-        public override void GetControlLineState(ControlLine controlLine)
-        {
-        }
-        public override void SetControlLineState(ControlLine controlLine, byte[] state)
-        {
+            return false;
         }
         #endregion
 

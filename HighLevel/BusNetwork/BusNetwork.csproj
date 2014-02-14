@@ -37,10 +37,12 @@
     <Compile Include="Network\BusMasterRemote.cs" />
     <Compile Include="Network\BusConfiguration.cs" />
     <Compile Include="Network\BusModule.cs" />
+    <Compile Include="Network\BusModuleName.cs" />
     <Compile Include="Network\NetworkCoordinator.cs" />
     <Compile Include="Network\CollectionChangedEventHandler.cs" />
     <Compile Include="Network\ControlLine.cs" />
     <Compile Include="Network\ControlLineType.cs" />
+    <Compile Include="Network\PropertyChangeEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

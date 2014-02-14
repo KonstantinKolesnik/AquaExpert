@@ -65,10 +65,7 @@ namespace BusNetwork.Network
         #endregion
 
         #region Public methods
-        public abstract byte GetBusModuleType(ushort busModuleAddress);
-        public abstract void GetBusModuleControlLines(BusModule busModule);
-        public abstract void GetControlLineState(ControlLine controlLine);
-        public abstract void SetControlLineState(ControlLine controlLine, byte[] state);
+        public abstract bool BusModuleWriteRead(BusModule busModule, byte[] request, byte[] response);
         #endregion
 
         #region Private methods
