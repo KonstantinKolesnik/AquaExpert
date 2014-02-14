@@ -643,7 +643,8 @@ namespace AquaExpert
 
                 foreach (ControlLine controlLine in busModule.ControlLines)
                 {
-                    //busMasterLocal.GetControlLineState(controlLine);
+                    if (y > display.Height)
+                        return;
 
                     string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
                     display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state, font, color, x + indent, y); y += lineHight;

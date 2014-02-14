@@ -30,11 +30,15 @@ LOW = 0xE4 (valid)
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
+#include <string.h>
 #include "BusModuleAPI.h"
+#include "Utils.h"
 //****************************************************************************************
 // module types:
 #define MODULE_TYPE					0 // test full module
 //#define MODULE_TYPE					1 // AE-R8
+
+
 
 
 //****************************************************************************************
@@ -71,8 +75,8 @@ LOW = 0xE4 (valid)
 //								7	//PA7 (ADC7)		pin 33
 //****************************************************************************************
 // Port C
-//#define SHORT_PROG				0	//PC0 (SCL)			pin 22
-//#define SHORT_MAIN				1	//PC1 (SD)			pin 23
+//#define SCL							0	//PC0 (SCL)			pin 22
+//#define SDA							1	//PC1 (SD)			pin 23
 //#define TCK						2	//PC2 (TCK)			pin 24
 //#define TMS						3	//PC3 (TMS)			pin 25
 //#define TDO						4	//PC4 (TDO)			pin 26

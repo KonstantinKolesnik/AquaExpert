@@ -7,10 +7,10 @@ namespace BusNetwork.Network
         #region API
         public const byte ControlLineTypesToRequest = 32;
 
-        public const int CmdGetType = 0;
-        public const int CmdGetControlLineCount = 1;
-        public const int CmdGetControlLineState = 2;
-        public const int CmdSetControlLineState = 3;
+        public const byte CmdGetType = 0;
+        public const byte CmdGetControlLineCount = 1;
+        public const byte CmdGetControlLineState = 2;
+        public const byte CmdSetControlLineState = 3;
         #endregion
 
         #region Fields

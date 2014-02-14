@@ -95,8 +95,8 @@ void InitI2C()
 	TWSR = 0x00;							// prescaler = 0
 	
 	// Bit rate (for 8MHz):
-	TWBR = 0x02;							// 400kHz
-	TWBR = 0x20;							// 100kHz
+	TWBR = 0x02;							// 400kHz; = 2
+	//TWBR = 0x20;							// 100kHz; = 32
 	
 	// slave mode:
 	TWAR = (TWI_SlaveAddress << 1) | (TWI_ACCEPT_BROADCAST << 0);

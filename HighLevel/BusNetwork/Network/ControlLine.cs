@@ -3,13 +3,17 @@ namespace BusNetwork.Network
 {
     public class ControlLine
     {
+        #region Fields
+        private byte[] state = new byte[2];
+        #endregion
+
         #region Properties
-        public uint BusMasterAddress
+        public BusMaster BusMaster
         {
             get;
             private set;
         }
-        public ushort BusModuleAddress
+        public BusModule BusModule
         {
             get;
             private set;
@@ -26,8 +30,19 @@ namespace BusNetwork.Network
         }
         public byte[] State
         {
-            get;
-            private set;
+            get
+            {
+                return state;
+
+                int length = state.Length;
+
+                byte[] result = new byte[length];
+
+                for (int i = 0; i < length; i++)
+                    result[i] = state[i];
+                
+                return result;
+            }
         }
 
         public string UserName
@@ -57,16 +72,16 @@ namespace BusNetwork.Network
                     default: type = "[Unknown]"; break;
                 }
 
-                return "[" + BusMasterAddress + "][" + BusModuleAddress + "] " + type + " #" + Number;
+                return "[" + (BusMaster != null ? BusMaster.Address.ToString() : "-") + "][" + (BusModule != null ? BusModule.Address.ToString() : "-") + "] " + type + " #" + Number;
             }
         }
         #endregion
 
         #region Constructor
-        public ControlLine(uint busMasterAddress, ushort busModuleAddress, ControlLineType type, byte number)
+        public ControlLine(BusMaster busMaster, BusModule busModule, ControlLineType type, byte number)
         {
-            BusMasterAddress = busMasterAddress;
-            BusModuleAddress = busModuleAddress;
+            BusMaster = busMaster;
+            BusModule = busModule;
             Type = type;
             Number = number;
 
@@ -77,7 +92,7 @@ namespace BusNetwork.Network
         #region Public methods
         public void ResetState()
         {
-            State = new byte[2] { 0, 0 };
+            state = new byte[2] { 0, 0 };
         }
         #endregion
     }

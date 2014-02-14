@@ -9,7 +9,7 @@ namespace BusNetwork.Network
         private uint address = 0;
         private ArrayList busModules = new ArrayList();
         private Timer timerUpdate = null;
-        private const int updateInterval = 2000;
+        private const int updateInterval = 1000;
         #endregion
 
         #region Properties
