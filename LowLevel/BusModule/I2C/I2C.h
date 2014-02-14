@@ -6,14 +6,12 @@
 #define TWI_BUFFER_LENGTH 10
 //****************************************************************************************
 void I2C_begin();
-void I2C_beginWithAddress(uint8_t address);
+void I2C_beginWithAddress(uint8_t slaveAddress);
 
 void I2C_beginTransmission(uint8_t address);
-//uint8_t I2C_endTransmission(void);
-uint8_t I2C_endTransmission(uint8_t sendStop);
+uint8_t I2C_endTransmission(uint8_t sendStop); // sendStop = true if by default
 
-//uint8_t I2C_requestFrom(uint8_t, uint8_t);
-uint8_t I2C_requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop);
+uint8_t I2C_requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop); // sendStop = true if by default
 
 size_t I2C_writeByte(uint8_t data);
 size_t I2C_write(const uint8_t *data, size_t quantity);
@@ -21,17 +19,10 @@ size_t I2C_write(const uint8_t *data, size_t quantity);
 int I2C_available(void);
 
 int I2C_read(void);
-
 int I2C_peek(void);
 
 void I2C_onReceive( void (*)(int) );
 void I2C_onRequest( void (*)(void) );
-
-//inline size_t write(unsigned long n) { return write((uint8_t)n); }
-//inline size_t write(long n) { return write((uint8_t)n); }
-//inline size_t write(unsigned int n) { return write((uint8_t)n); }
-//inline size_t write(int n) { return write((uint8_t)n); }
-//using Print::write;
 //****************************************************************************************
 #endif
 

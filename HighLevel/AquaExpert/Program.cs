@@ -33,9 +33,9 @@ namespace AquaExpert
         private int ledNetwork = 0;
 
         private NetworkCoordinator networkCoordinator;
-        private BusMasterLocal busMasterLocal;
+        private BusHubI2C busHubI2C;
 
-        //private GT.Timer timerWorkflow;
+        private GT.Timer timerTest;
 
         private Display_SP22 display;
         #endregion
@@ -100,9 +100,9 @@ namespace AquaExpert
 
             networkCoordinator = new NetworkCoordinator();
 
-            busMasterLocal = new BusMasterLocal(new BusConfiguration(new I2CDevice(null)));
-            busMasterLocal.BusModulesCollectionChanged += busMasterLocal_CollectionChanged;
-            networkCoordinator.BusMasters.Add(busMasterLocal);
+            busHubI2C = new BusHubI2C(new BusConfiguration(new I2CDevice(null)));
+            busHubI2C.BusModulesCollectionChanged += busHubI2C_BusModulesCollectionChanged;
+            networkCoordinator.BusMasters.Add(busHubI2C);
         }
         private void InitHardware()
         {
@@ -113,9 +113,9 @@ namespace AquaExpert
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
 
-            //timerWorkflow = new Gadgeteer.Timer(1000);
-            //timerWorkflow.Tick += timerWorkflow_Tick;
-            //timerWorkflow.Start();
+            timerTest = new Gadgeteer.Timer(800);
+            timerTest.Tick += timerTest_Tick;
+            timerTest.Start();
         }
         private void InitDisplay()
         {
@@ -609,49 +609,60 @@ namespace AquaExpert
             
         }
 
-        //private void timerWorkflow_Tick(Gadgeteer.Timer timer)
-        //{
-        //    timerWorkflow.Stop();
-
-        //    //DateTime dt = TimeManager.CurrentTime;
-
-        //    modulesManager.Scan();
-
-        //    //SetState();
-        //    //SendStateToClients();
-
-
-        //    timerWorkflow.Start();
-        //}
-        private void busMasterLocal_CollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
+        bool on = false;
+        private void timerTest_Tick(Gadgeteer.Timer timer)
         {
-            uint x = 10;
-            uint indent = 10;
-            uint y = 10;
-            uint lineHight = 15;
-            Font fontTitle = Resources.GetFont(Resources.FontResources.NinaB);
-            Font font = Resources.GetFont(Resources.FontResources.small);
-            GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
+            timerTest.Stop();
 
-            y = 10;
-            display.SimpleGraphics.Clear();
-            display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+            //DateTime dt = TimeManager.CurrentTime;
 
-            foreach (BusModule busModule in busMasterLocal.BusModules)
-            {
-                display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.FriendlyName, fontTitle, color, x, y); y += lineHight;
+            (busHubI2C.BusControlLines[1] as ControlLine).SetState(new byte[] { (byte)(on ? 1 : 0), 0 });
+            on = !on;
 
-                foreach (ControlLine controlLine in busModule.ControlLines)
+
+
+
+            //SetState();
+            //SendStateToClients();
+
+
+            timerTest.Start();
+        }
+        private void busHubI2C_BusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
+        {
+            new Thread(() => { 
+                uint x = 10;
+                uint indent = 10;
+                uint y = 10;
+                uint lineHight = 15;
+                Font fontTitle = Resources.GetFont(Resources.FontResources.NinaB);
+                Font font = Resources.GetFont(Resources.FontResources.small);
+                GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
+
+                y = 10;
+                display.SimpleGraphics.Clear();
+                //display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+                display.SimpleGraphics.DisplayText(busHubI2C.ProductName, fontTitle, color, x, y); y += lineHight;
+
+                foreach (BusModule busModule in busHubI2C.BusModules)
                 {
                     if (y > display.Height)
                         return;
 
-                    string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
-                    display.SimpleGraphics.DisplayText(controlLine.FriendlyName + ": " + state, font, color, x + indent, y); y += lineHight;
-                }
+                    display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.ProductName, fontTitle, color, x+5, y); y += lineHight;
 
-                display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
-            }
+                    foreach (ControlLine controlLine in busModule.ControlLines)
+                    {
+                        if (y > display.Height)
+                            return;
+
+                        string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
+                        display.SimpleGraphics.DisplayText(controlLine.ProductName + ": " + state, font, color, x + indent, y); y += lineHight;
+                    }
+
+                    display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+                }
+            }).Start();
         }
         #endregion
 

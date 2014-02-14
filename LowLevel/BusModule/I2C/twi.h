@@ -12,7 +12,6 @@
 #define TWI_SLAVE_ADDRESS 			5	 // Slave address, 1...127
 #define TWI_ACCEPT_BROADCAST		1	 // Accept broadcast messages
 
-
 #ifndef TWI_FREQ
 #define TWI_FREQ 100000L // 400 kHz
 #endif

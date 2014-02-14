@@ -13,7 +13,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <AssemblyName>BusConcentrator</AssemblyName>
-    <Name>BusMaster</Name>
+    <Name>BusHub</Name>
     <RootNamespace>BusConcentrator</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
@@ -110,12 +110,28 @@
       <SubType>compile</SubType>
       <Link>BusModuleAPI.h</Link>
     </Compile>
-    <Compile Include="BusMaster.c">
+    <Compile Include="..\BusModule\I2C\I2C.c">
+      <SubType>compile</SubType>
+      <Link>I2C\I2C.c</Link>
+    </Compile>
+    <Compile Include="..\BusModule\I2C\I2C.h">
+      <SubType>compile</SubType>
+      <Link>I2C\I2C.h</Link>
+    </Compile>
+    <Compile Include="..\BusModule\I2C\twi.c">
+      <SubType>compile</SubType>
+      <Link>I2C\twi.c</Link>
+    </Compile>
+    <Compile Include="..\BusModule\I2C\twi.h">
+      <SubType>compile</SubType>
+      <Link>I2C\twi.h</Link>
+    </Compile>
+    <Compile Include="BusHub.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IIC" />
+    <Folder Include="I2C" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

@@ -14,7 +14,6 @@ typedef struct
 } ControlLineState_t;
 //****************************************************************************************
 static uint8_t msg[TWI_BUFFER_LENGTH];
-//static uint8_t response[TWI_BUFFER_LENGTH];
 static uint8_t msg_size = 0;
 
 static ControlLineState_t* controlLinesStates = NULL;
@@ -56,9 +55,6 @@ void InitHardware()
 		  //
 		  //| (1<<OCIE0)      // Timer0/Counter0 Compare Interrupt
 		  //| (0<<TOIE0);     // Timer0/Counter0 Overflow Interrupt
-	
-	//InitI2C();
-	//TWI_StartTransceiver(); // Start the TWI transceiver to enable reception of the first command from the TWI Master.
 	
 	I2C_beginWithAddress(5);                // join i2c bus with address #4
 	I2C_onReceive(OnMasterWrite);
@@ -115,6 +111,7 @@ void SetControlLineState(uint8_t type, uint8_t number, uint8_t* state)
 			{
 				case CONTROL_LINE_TYPE_RELAY:
 					SetRelay(number, state[0]);
+					controlLinesStates[i].ControlLineState[0] = state[0];
 					break;
 				case CONTROL_LINE_TYPE_DIMMER:
 
@@ -223,6 +220,8 @@ void OnMasterRead()
 			break;
 		case CMD_SET_CONTROL_LINE_STATE:
 			SetControlLineState(msg[1], msg[2], &msg[3]);
+			GetControlLineState(msg[1], msg[2], msg);
+			msg_size = 2;
 			break;
 		default:
 			break;
@@ -230,73 +229,6 @@ void OnMasterRead()
 	
 	I2C_write(msg, msg_size);
 }
-
-/*
-//uint8_t OnLastTransmissionError(uint8_t TWIerrorMsg)
-//{
-	//// A failure has occurred, use TWIerrorMsg to determine the nature of the failure and take appropriate actions.
-	//// See header file for a list of possible failures messages.
-	//
-	//// This very simple example puts the error code on PORTB and restarts the transceiver with all the same data in the transmission buffers.
-	////PORTB = TWIerrorMsg;
-	//TWI_StartTransceiver();
-	//
-	//return TWIerrorMsg;
-//}
-//void ProcessMasterMessages()
-//{
-	//if (!TWI_TransceiverBusy()) // Check if the TWI Transceiver has completed an operation
-	//{
-		//if (TWI_statusReg.lastTransOK) // Check if the last operation was successful
-		//{
-			//if (TWI_statusReg.RxDataInBuf) // Check if the last operation was a reception
-			//{
-				//TWI_GetDataFromTransceiver(msg, TWI_BUFFER_SIZE);
-					//
-				//if (TWI_statusReg.genAddressCall) // last operation was a reception as General Call
-				//{
-					////uint8_t cmd = msg[0];
-				//}
-				//else // last operation was a reception as Slave Address Match
-				//{
-					//uint8_t* response = msg;
-						//
-					//switch (msg[0]) // command type
-					//{
-						//case CMD_GET_TYPE:
-							//response[0] = MODULE_TYPE;
-							//TWI_StartTransceiverWithData(response, 1);
-							//break;
-						//case CMD_GET_CONTROL_LINE_COUNT:
-							//response[0] = GetControlLinesCount(msg[1]);
-							//TWI_StartTransceiverWithData(response, 1);
-							//break;
-						//case CMD_GET_CONTROL_LINE_STATE:
-							//GetControlLineState(msg[1], msg[2], response);
-							//TWI_StartTransceiverWithData(response, 2);
-							//break;
-						//case CMD_SET_CONTROL_LINE_STATE:
-							//SetControlLineState(msg[1], msg[2], &msg[3]);
-							//break;
-						//default:
-							//break;	
-					//}
-				//}
-				//BlinkMsgLed();
-			//}
-			//else // last operation was a transmission
-			//{
-			//}
-				//
-			//// Check if the TWI Transceiver has already been started. If not then restart it to prepare it for new receptions.
-			//if (!TWI_TransceiverBusy())
-				//TWI_StartTransceiver();
-		//}
-		//else // Ends up here if the last operation completed unsuccessfully
-			//OnLastTransmissionError(TWI_GetStateInfo());
-	//}
-//}
-*/
 //****************************************************************************************
 int main()
 {

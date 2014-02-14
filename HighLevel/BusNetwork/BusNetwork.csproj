@@ -32,17 +32,18 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="Controllers\Controller.cs" />
-    <Compile Include="Network\BusMaster.cs" />
-    <Compile Include="Network\BusMasterLocal.cs" />
-    <Compile Include="Network\BusMasterRemote.cs" />
+    <Compile Include="Controllers\FunctionalController.cs" />
+    <Compile Include="Controllers\MonitorController.cs" />
+    <Compile Include="Network\BusHub.cs" />
+    <Compile Include="Network\BusHubI2C.cs" />
+    <Compile Include="Network\BusHubRF.cs" />
     <Compile Include="Network\BusConfiguration.cs" />
     <Compile Include="Network\BusModule.cs" />
-    <Compile Include="Network\BusModuleName.cs" />
+    <Compile Include="Network\BusModuleAPI.cs" />
+    <Compile Include="Network\BusModuleProductName.cs" />
     <Compile Include="Network\NetworkCoordinator.cs" />
-    <Compile Include="Network\CollectionChangedEventHandler.cs" />
     <Compile Include="Network\ControlLine.cs" />
     <Compile Include="Network\ControlLineType.cs" />
-    <Compile Include="Network\PropertyChangeEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +51,10 @@
     <Reference Include="Microsoft.SPOT.Native" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\MFE\MFE.Core\MFE.Core.csproj">
+      <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
+      <Name>MFE.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MFE\MFE.Hardware\MFE.Hardware.csproj">
       <Project>{958D1DE8-C499-47DF-B192-DE712379089B}</Project>
       <Name>MFE.Hardware</Name>

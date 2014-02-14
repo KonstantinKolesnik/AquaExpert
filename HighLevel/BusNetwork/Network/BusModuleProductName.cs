@@ -1,9 +1,7 @@
-using System;
-using Microsoft.SPOT;
 
 namespace BusNetwork.Network
 {
-    public class BusModuleName
+    public class BusModuleProductName
     {
         public static string Get(byte type)
         {
