@@ -70,11 +70,11 @@ namespace BusNetwork.Network
             I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
             return busConfig.Bus.TryGet(config, BusConfiguration.Timeout, request, response);
         }
-        internal override bool BusModuleWrite(BusModule busModule, byte[] request)
-        {
-            I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
-            return busConfig.Bus.TrySet(config, BusConfiguration.Timeout, request);
-        }
+        //internal override bool BusModuleWrite(BusModule busModule, byte[] request)
+        //{
+        //    I2CDevice.Configuration config = new I2CDevice.Configuration(busModule.Address, BusConfiguration.ClockRate);
+        //    return busConfig.Bus.TrySet(config, BusConfiguration.Timeout, request);
+        //}
         #endregion
     }
 }

@@ -74,7 +74,7 @@ namespace BusNetwork.Network
         #region Private methods
         protected abstract void Scan();
         internal abstract bool BusModuleWriteRead(BusModule busModule, byte[] request, byte[] response);
-        internal abstract bool BusModuleWrite(BusModule busModule, byte[] request);
+        //internal abstract bool BusModuleWrite(BusModule busModule, byte[] request);
 
         protected void NotifyBusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
         {

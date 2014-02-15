@@ -102,7 +102,7 @@ namespace AquaExpert
 
             busHubI2C = new BusHubI2C(new BusConfiguration(new I2CDevice(null)));
             busHubI2C.BusModulesCollectionChanged += busHubI2C_BusModulesCollectionChanged;
-            networkCoordinator.BusMasters.Add(busHubI2C);
+            networkCoordinator.BusHubs.Add(busHubI2C);
         }
         private void InitHardware()
         {
