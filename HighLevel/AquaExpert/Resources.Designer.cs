@@ -44,6 +44,7 @@ namespace AquaExpert
         internal enum BinaryResources : short
         {
             test_24b = -15341,
+            Bar = 16851,
         }
     }
 }

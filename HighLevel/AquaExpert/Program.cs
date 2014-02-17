@@ -1,6 +1,7 @@
 ﻿using BusNetwork.Network;
 using Gadgeteer.Modules.KKSolutions;
 using GHI.Premium.System;
+using MFE.Core;
 using MFE.Graphics;
 using MFE.Graphics.Controls;
 using MFE.Graphics.Geometry;
@@ -69,8 +70,8 @@ namespace AquaExpert
             InitBus();
             InitHardware();
             InitDisplay();
-            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
-            //    InitNetwork();
+            if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+                InitNetwork();
 
             Mainboard.SetDebugLED(true);
         }
@@ -119,8 +120,9 @@ namespace AquaExpert
 
             timerTest = new Gadgeteer.Timer(800);
             timerTest.Tick += timerTest_Tick;
-            timerTest.Start();
+            //timerTest.Start();
         }
+        
         private void InitDisplay()
         {
             if (Mainboard.NativeBitmapConverter == null)
@@ -149,23 +151,16 @@ namespace AquaExpert
 
             //DisplayDemo(display);
 
-
-            display.SimpleGraphics.Clear();
-
-            Panel pnl = new Panel(0, 0, 150, 180);
-            //pnl.Background = new LinearGradientBrush(Color.Blue, Color.Red);
-            pnl.Background = new SolidColorBrush(Color.Blue);
-
             GraphicsManager.Initialize(240, 320);
             GraphicsManager.OnRender += delegate(Bitmap bitmap, Rect dirtyArea)
             {
                 display.SimpleGraphics.DisplayImage(bitmap, (uint)dirtyArea.X, (uint)dirtyArea.Y, (uint)dirtyArea.X, (uint)dirtyArea.Y, (uint)dirtyArea.Width, (uint)dirtyArea.Height);
             };
 
-            GraphicsManager.Content = pnl;
-            CrashTest(pnl);
+            //CrashTest();
+            UIDemo();
         }
-        void DisplayDemo(Display_SP22 display)
+        private void DisplayDemo(Display_SP22 display)
         {
             GT.Modules.Module.DisplayModule.SimpleGraphicsInterface graphics = display.SimpleGraphics;
             //int buf[318];
@@ -176,7 +171,7 @@ namespace AquaExpert
             // Clear the screen and draw the frame
             graphics.Clear();
 
-        //  graphics.setColor(255, 0, 0);
+            graphics.BackgroundColor = GT.Color.Red;
         //  graphics.fillRect(0, 0, 319, 13);
         //  graphics.setColor(64, 64, 64);
         //  graphics.fillRect(0, 226, 319, 239);
@@ -458,7 +453,7 @@ namespace AquaExpert
 
             Thread.Sleep(10000);
         }
-        private void CrashTest(Panel pnl)
+        private void CrashTest()
         {
             //Width = 800;
             //Height = 480;
@@ -468,10 +463,17 @@ namespace AquaExpert
 
             font = Resources.GetFont(Resources.FontResources.small);
 
-            pnl.SuspendLayout();
+            display.SimpleGraphics.Clear();
+
+            Panel pnl = new Panel(0, 0, 150, 180);
+            //pnl.Background = new LinearGradientBrush(Color.Blue, Color.Red);
+            pnl.Background = new SolidColorBrush(Color.Blue);
+
+            GraphicsManager.Desktop.SuspendLayout();
             for (int i = 0; i < 10; i++)
                 pnl.Children.Add(new TextBlock(10, 15 * i, 140, 20, font, "label" + i.ToString()) { ForeColor = Color.Brown });
-            pnl.ResumeLayout();
+            GraphicsManager.Desktop.Children.Add(pnl);
+            GraphicsManager.Desktop.ResumeLayout();
 
             new Thread(delegate()
             {
@@ -509,55 +511,57 @@ namespace AquaExpert
 
             //Thread.Sleep(100);
 
-            //new Thread(delegate()
-            //{
-            //    while (true)
-            //    {
-            //        pnl.Translate(1, 1);
+            new Thread(delegate()
+            {
+                while (true)
+                {
+                    pnl.Translate(1, 1);
 
-            //        if (pnl.X >= display.Width - 10)
-            //            pnl.X = 0;
-            //        if (pnl.Y >= display.Height - 10)
-            //            pnl.Y = 0;
+                    if (pnl.X + pnl.Width >= display.Width - 10)
+                        pnl.X = 0;
+                    if (pnl.Y + pnl.Height >= display.Height - 10)
+                        pnl.Y = 0;
 
-            //        Thread.Sleep(1000);
-            //    }
-            //}
-            //).Start();
+                    //Thread.Sleep(100);
+                }
+            }
+            ).Start();
         }
-        private void UIDemo(Panel pnl)
+        private void UIDemo()
         {
             //Width = LCDManager.ScreenWidth;
             //Height = LCDManager.ScreenHeight;
             //Width = 320;
             //Height = 240;
 
+            Desktop desktop = GraphicsManager.Desktop;
 
+            int k = desktop.Height / 240;
+            font = Resources.GetFont(Resources.FontResources.CourierNew_10);
 
-        //    int k = Height / 240;
-        //    font = Resources.GetFont(Resources.FontResources.CourierNew_10);
+            desktop.SuspendLayout();
 
-        //    ImageBrush brush = new ImageBrush(Resources.GetBitmap(Resources.BinaryResources.Background_800_600));
-        //    brush.Stretch = Stretch.Fill;
-        //    Background = brush;
+            //ImageBrush brush = new ImageBrush(Resources.GetBitmap(Resources.BinaryResources.Background_800_600));
+            //brush.Stretch = Stretch.Fill;
+            //Background = brush;
 
-        //    int statusbarHeight = 24;
-        //    Panel statusbar = new Panel(0, Height - statusbarHeight, Width, statusbarHeight);
-        //    statusbar.Background = new ImageBrush(Resources.GetBitmap(Resources.BitmapResources.Bar));
-        //    Children.Add(statusbar);
+            int statusbarHeight = 24;
+            Panel statusbar = new Panel(0, desktop.Height - statusbarHeight, desktop.Width, statusbarHeight);
+            statusbar.Background = new ImageBrush(new Bitmap(Resources.GetBytes(Resources.BinaryResources.Bar), Bitmap.BitmapImageType.Bmp));
+            desktop.Children.Add(statusbar);
 
-        //    Label lblClock = new Label(statusbar.Width - 70, 4, font, "00:00:00");
-        //    lblClock.ForeColor = Color.White;
-        //    statusbar.Children.Add(lblClock);
+            Label lblClock = new Label(statusbar.Width - 70, 4, font, "00:00:00");
+            lblClock.ForeColor = Color.White;
+            statusbar.Children.Add(lblClock);
 
-        //    Level lvl2 = new Level(statusbar.Width - 120, 7, 40, 10, Orientation.Horizontal, 10);
-        //    lvl2.Foreground = new LinearGradientBrush(Color.LimeGreen, Color.Black);
-        //    //lvl2.Value = 50;
-        //    statusbar.Children.Add(lvl2);
+            Level lvl2 = new Level(statusbar.Width - 120, 7, 40, 10, Orientation.Horizontal, 10);
+            lvl2.Foreground = new LinearGradientBrush(Color.LimeGreen, Color.Black);
+            lvl2.Value = 50;
+            statusbar.Children.Add(lvl2);
 
-        //    statusbar.Children.Add(new Image(statusbar.Width - 160, 1, 23, 23, Resources.GetBitmap(Resources.BitmapResources.Drive)));
-        //    statusbar.Children.Add(new Image(statusbar.Width - 185, 1, 23, 23, Resources.GetBitmap(Resources.BitmapResources.Mouse)));
-        //    //statusbar.Children.Add(new Image(statusbar.Width - 210, 1, 23, 23, Resources.GetBitmap(Resources.BitmapResources.Keyboard)));
+            //statusbar.Children.Add(new Image(statusbar.Width - 160, 1, 23, 23, Resources.GetBitmap(Resources.BinaryResources.Drive)));
+            //statusbar.Children.Add(new Image(statusbar.Width - 185, 1, 23, 23, Resources.GetBitmap(Resources.BinaryResources.Mouse)));
+            //statusbar.Children.Add(new Image(statusbar.Width - 210, 1, 23, 23, Resources.GetBitmap(Resources.BinaryResources.Keyboard)));
 
         //    //ToolButton btnHome = new ToolButton(10, 0, 70, statusbar.Height);
         //    Button btnHome = new Button(10, 0, 70, statusbar.Height, null, "", Color.Black);
@@ -673,54 +677,47 @@ namespace AquaExpert
         //    Children.Add(lbl);
         //    slider.ValueChanged += delegate(object sender, ValueChangedEventArgs e) { lbl.Text = e.Value.ToString(); };
 
-        //    new Thread(delegate()
-        //    {
-        //        int v = 0;
-        //        while (true)
-        //        {
-        //            DateTime dt = DateTime.Now;
 
-        //            string hour = (dt.Hour < 10) ? "0" + dt.Hour.ToString() : dt.Hour.ToString();
-        //            string minute = (dt.Minute < 10) ? "0" + dt.Minute.ToString() : dt.Minute.ToString();
-        //            string second = (dt.Second < 10) ? "0" + dt.Second.ToString() : dt.Second.ToString();
-        //            string result = hour + ":" + minute + ":" + second;
-        //            lblClock.Text = result;
 
-        //            v += 10;
-        //            if (v > 100)
-        //                v = 0;
 
-        //            lvl.Value = v;
-        //            pg.Value = v;
-        //            lvl2.Value = v;
+            new Thread(delegate()
+            {
+                int v = 0;
+                while (true)
+                {
+                    desktop.SuspendLayout();
 
-        //            //Color temp = ((LinearGradientBrush)pnl.Background).StartColor;
-        //            //((LinearGradientBrush)pnl.Background).StartColor = ((LinearGradientBrush)pnl.Background).EndColor;
-        //            //((LinearGradientBrush)pnl.Background).EndColor = temp;
-        //            //pnl.Invalidate();
+                    DateTime dt = DateTime.Now;
 
-        //            Thread.Sleep(500);
-        //        }
-        //    }).Start();
+                    string hour = (dt.Hour < 10) ? "0" + dt.Hour.ToString() : dt.Hour.ToString();
+                    string minute = (dt.Minute < 10) ? "0" + dt.Minute.ToString() : dt.Minute.ToString();
+                    string second = (dt.Second < 10) ? "0" + dt.Second.ToString() : dt.Second.ToString();
+                    string result = hour + ":" + minute + ":" + second;
+                    lblClock.Text = result;
 
-        //    //new Thread(delegate()
-        //    //{
-        //    //    while (true)
-        //    //    {
-        //    //        Translate(1, 1);
+                    v += 10;
+                    if (v > 100)
+                        v = 0;
 
-        //    //        if (X >= LCDManager.ScreenWidth - 100)
-        //    //            X = 0;
-        //    //        if (Y >= LCDManager.ScreenHeight - 100)
-        //    //            Y = 0;
+                    //lvl.Value = v;
+                    //pg.Value = v;
+                    lvl2.Value = v;
 
-        //    //        Thread.Sleep(1);
-        //    //    }
-        //    //}
-        //    //).Start();
+                    //Color temp = ((LinearGradientBrush)pnl.Background).StartColor;
+                    //((LinearGradientBrush)pnl.Background).StartColor = ((LinearGradientBrush)pnl.Background).EndColor;
+                    //((LinearGradientBrush)pnl.Background).EndColor = temp;
+                    //pnl.Invalidate();
 
-        //    //wndModal wndModal = new wndModal();
-        //    //wndModal.Show();
+                    desktop.ResumeLayout();
+
+                    Thread.Sleep(500);
+                }
+            }).Start();
+
+            //wndModal wndModal = new wndModal();
+            //wndModal.Show();
+
+            desktop.ResumeLayout();
         }
 
 
