@@ -120,6 +120,10 @@
       <Project>{AC1C1DBB-9AC4-47EF-A379-5DBC7424D95E}</Project>
       <Name>Display_SP22_42</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\KKSolutions\RF24\RF24_42\RF24_42.csproj">
+      <Project>{9F07132A-00DD-48D7-A597-B2578F53D860}</Project>
+      <Name>RF24_42</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MFE\MFE.Core\MFE.Core.csproj">
       <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
       <Name>MFE.Core</Name>

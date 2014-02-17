@@ -57,18 +57,18 @@ namespace BusNetwork.Network
         }
         #endregion
 
+        #region Events
+        public event CollectionChangedEventHandler BusModulesCollectionChanged;
+        public event CollectionChangedEventHandler BusControlLinesCollectionChanged;
+        public event PropertyChangeEventHandler PropertyChanged;
+        #endregion
+
         #region Constructors
         public BusHub(uint address)
         {
             this.address = address;
             StartTimer();
         }
-        #endregion
-
-        #region Events
-        public event CollectionChangedEventHandler BusModulesCollectionChanged;
-        public event CollectionChangedEventHandler BusControlLinesCollectionChanged;
-        public event PropertyChangeEventHandler PropertyChanged;
         #endregion
 
         #region Private methods
