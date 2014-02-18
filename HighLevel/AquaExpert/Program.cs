@@ -42,6 +42,7 @@ namespace AquaExpert
 
         private GT.Timer timerTest;
 
+        private GraphicsManager gm;
         private Display_SP22 display;
         #endregion
 
@@ -70,8 +71,8 @@ namespace AquaExpert
             InitBus();
             InitHardware();
             InitDisplay();
-            if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
-                InitNetwork();
+            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+            //    InitNetwork();
 
             Mainboard.SetDebugLED(true);
         }
@@ -151,8 +152,8 @@ namespace AquaExpert
 
             //DisplayDemo(display);
 
-            GraphicsManager.Initialize(240, 320);
-            GraphicsManager.OnRender += delegate(Bitmap bitmap, Rect dirtyArea)
+            gm = new GraphicsManager(240, 320);
+            gm.OnRender += delegate(Bitmap bitmap, Rect dirtyArea)
             {
                 display.SimpleGraphics.DisplayImage(bitmap, (uint)dirtyArea.X, (uint)dirtyArea.Y, (uint)dirtyArea.X, (uint)dirtyArea.Y, (uint)dirtyArea.Width, (uint)dirtyArea.Height);
             };
@@ -469,11 +470,11 @@ namespace AquaExpert
             //pnl.Background = new LinearGradientBrush(Color.Blue, Color.Red);
             pnl.Background = new SolidColorBrush(Color.Blue);
 
-            GraphicsManager.Desktop.SuspendLayout();
+            gm.Desktop.SuspendLayout();
             for (int i = 0; i < 10; i++)
                 pnl.Children.Add(new TextBlock(10, 15 * i, 140, 20, font, "label" + i.ToString()) { ForeColor = Color.Brown });
-            GraphicsManager.Desktop.Children.Add(pnl);
-            GraphicsManager.Desktop.ResumeLayout();
+            gm.Desktop.Children.Add(pnl);
+            gm.Desktop.ResumeLayout();
 
             new Thread(delegate()
             {
@@ -534,7 +535,7 @@ namespace AquaExpert
             //Width = 320;
             //Height = 240;
 
-            Desktop desktop = GraphicsManager.Desktop;
+            Desktop desktop = gm.Desktop;
 
             int k = desktop.Height / 240;
             font = Resources.GetFont(Resources.FontResources.CourierNew_10);
@@ -720,7 +721,6 @@ namespace AquaExpert
             desktop.ResumeLayout();
         }
 
-
         private void InitNetwork()
         {
             //discoveryListener = new DiscoveryListener();
@@ -791,7 +791,7 @@ namespace AquaExpert
             new Thread(() =>
             {
                 indicators[led] = false;
-                Thread.Sleep(20);
+                Thread.Sleep(10);
                 indicators[led] = true;
             }).Start();
         }
