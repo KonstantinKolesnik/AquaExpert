@@ -149,13 +149,13 @@
       <Project>{D87CB0D5-ED06-4E01-AA00-FFCDD0A3D708}</Project>
       <Name>MFE.Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\MFE\MFE.SmartNetwork\MFE.SmartNetwork.csproj">
+      <Project>{77C6901A-F37E-4FD5-B99F-D89BE62ACFF9}</Project>
+      <Name>MFE.SmartNetwork</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MFE\MFE.Storage\MFE.Storage.csproj">
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BusNetwork\BusNetwork.csproj">
-      <Project>{0E8971E9-1952-482F-8E7B-708E46E30E81}</Project>
-      <Name>BusNetwork</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

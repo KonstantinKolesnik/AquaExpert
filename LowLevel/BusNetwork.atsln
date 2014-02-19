@@ -4,6 +4,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BusModule", "BusModule\BusM
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BusHub", "BusHub\BusHub.cproj", "{59CC3870-5F0B-4108-B92E-D8D40D05A546}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Interfaces", "Interfaces\Interfaces.cproj", "{53ECE589-B9B9-4FA9-8979-B97C5750CCAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -18,6 +20,10 @@ Global
 		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Debug|AVR.Build.0 = Debug|AVR
 		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Release|AVR.ActiveCfg = Release|AVR
 		{59CC3870-5F0B-4108-B92E-D8D40D05A546}.Release|AVR.Build.0 = Release|AVR
+		{53ECE589-B9B9-4FA9-8979-B97C5750CCAB}.Debug|AVR.ActiveCfg = Debug|AVR
+		{53ECE589-B9B9-4FA9-8979-B97C5750CCAB}.Debug|AVR.Build.0 = Debug|AVR
+		{53ECE589-B9B9-4FA9-8979-B97C5750CCAB}.Release|AVR.ActiveCfg = Release|AVR
+		{53ECE589-B9B9-4FA9-8979-B97C5750CCAB}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

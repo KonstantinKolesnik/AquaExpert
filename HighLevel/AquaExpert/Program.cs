@@ -1,7 +1,5 @@
-﻿using BusNetwork.Network;
-using Gadgeteer.Modules.KKSolutions;
+﻿using Gadgeteer.Modules.KKSolutions;
 using GHI.Premium.System;
-using MFE.Core;
 using MFE.Graphics;
 using MFE.Graphics.Controls;
 using MFE.Graphics.Geometry;
@@ -12,14 +10,13 @@ using MFE.Net.Messaging;
 using MFE.Net.Tcp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
-using Microsoft.SPOT.Hardware;
+using SmartNetwork.Network;
 using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
-using Gadgeteer.Modules.GHIElectronics;
 
 namespace AquaExpert
 {
