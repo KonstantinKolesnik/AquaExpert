@@ -117,13 +117,9 @@
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\KKSolutions\Display_SP22\Display_SP22_42\Display_SP22_42.csproj">
-      <Project>{AC1C1DBB-9AC4-47EF-A379-5DBC7424D95E}</Project>
-      <Name>Display_SP22_42</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\KKSolutions\RF24\RF24_42\RF24_42.csproj">
-      <Project>{9F07132A-00DD-48D7-A597-B2578F53D860}</Project>
-      <Name>RF24_42</Name>
+    <ProjectReference Include="..\..\..\MFE\DisplayS22\DisplayS22_42\DisplayS22_42.csproj">
+      <Project>{CEE343DA-F678-4EB7-8D0D-D6F0762A8A89}</Project>
+      <Name>DisplayS22_42</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\MFE\MFE.Core\MFE.Core.csproj">
       <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
@@ -156,6 +152,10 @@
     <ProjectReference Include="..\..\..\MFE\MFE.Storage\MFE.Storage.csproj">
       <Project>{B3AF4DFB-585D-477A-981A-0F5E69EC7A89}</Project>
       <Name>MFE.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MFE\NRF24\NRF24_42\NRF24_42.csproj">
+      <Project>{72D955AB-12CB-4EDA-BE8E-C2A99D10C737}</Project>
+      <Name>NRF24_42</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

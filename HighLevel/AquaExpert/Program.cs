@@ -1,4 +1,5 @@
-﻿using Gadgeteer.Modules.KKSolutions;
+﻿using Gadgeteer.Modules.KKS;
+using Gadgeteer.Modules.KKS.NRF24L01Plus;
 using GHI.Premium.System;
 using MFE.Graphics;
 using MFE.Graphics.Controls;
@@ -15,6 +16,7 @@ using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using GT = Gadgeteer;
 
@@ -22,7 +24,7 @@ namespace AquaExpert
 {
     public partial class Program
     {
-        #region fields
+        #region Fields
         private INetworkManager networkManager;
         private GT.Timer timerNetworkConnect;
         private HttpServer httpServer;
@@ -41,7 +43,9 @@ namespace AquaExpert
         private GT.Timer timerTest;
 
         private GraphicsManager gm;
-        private Display_SP22 display;
+        private DisplayS22 display;
+
+        private NRF24 nrf24;
         #endregion
 
         #region Properties
@@ -66,9 +70,10 @@ namespace AquaExpert
         private void ProgramStarted()
         {
             InitSettings();
+            InitRF();
             InitBus();
             InitHardware();
-            InitDisplay();
+            //InitDisplay();
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
             //    InitNetwork();
 
@@ -86,6 +91,26 @@ namespace AquaExpert
             //}
             //settings = Settings.LoadFromFlash(0);
             settings = new Settings();
+        }
+        private void InitRF()
+        {
+            const byte channel = 10;
+
+            nrf24 = new NRF24(1);
+
+            //nrf24.OnDataReceived += nrf24_Receive;
+            //nrf24.OnTransmitFailed += nrf24_OnSendFailure;
+            //nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
+
+            // we need to call Configure() befeore we start using the module
+            nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
+
+            // to start receiveing we need to call Enable(), call Disable() to stop/pause
+            nrf24.Enable();
+
+            // example of reading your own address
+            var myAddress = nrf24.GetAddress(AddressSlot.Zero, 5);
+            Debug.Print("I am " + new string(Encoding.UTF8.GetChars(myAddress)));
         }
         private void InitBus()
         {
@@ -133,7 +158,7 @@ namespace AquaExpert
                     Util.BitmapConvertBPP(bitmapBytes, pixelBytes, Util.BPP_Type.BPP16_BGR_BE);
                 });
 
-            display = new Display_SP22(1);
+            display = new DisplayS22(1);
 
             // Usage example #1. Passing a Bitmap to the driver.
             //Bitmap bitmap = new Bitmap(Resources.GetBytes(Resources.BinaryResources.test_24b), Bitmap.BitmapImageType.Bmp);
@@ -157,9 +182,9 @@ namespace AquaExpert
             };
 
             //CrashTest();
-            UIDemo();
+            //UIDemo();
         }
-        private void DisplayDemo(Display_SP22 display)
+        private void DisplayDemo(DisplayS22 display)
         {
             GT.Modules.Module.DisplayModule.SimpleGraphicsInterface graphics = display.SimpleGraphics;
             //int buf[318];
@@ -718,6 +743,7 @@ namespace AquaExpert
 
             desktop.ResumeLayout();
         }
+
 
         private void InitNetwork()
         {
