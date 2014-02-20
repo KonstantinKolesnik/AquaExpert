@@ -102,15 +102,17 @@ namespace AquaExpert
             //nrf24.OnTransmitFailed += nrf24_OnSendFailure;
             //nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
 
+            Debug.Print(nrf24.GetStatus().ToString());
+
             // we need to call Configure() befeore we start using the module
-            nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
+            //nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
 
             // to start receiveing we need to call Enable(), call Disable() to stop/pause
             nrf24.Enable();
 
             // example of reading your own address
-            var myAddress = nrf24.GetAddress(AddressSlot.Zero, 5);
-            Debug.Print("I am " + new string(Encoding.UTF8.GetChars(myAddress)));
+            //var myAddress = nrf24.GetAddress(AddressSlot.Zero, 5);
+            //Debug.Print("I am " + new string(Encoding.UTF8.GetChars(myAddress)));
         }
         private void InitBus()
         {
