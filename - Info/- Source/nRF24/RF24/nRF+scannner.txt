@@ -1,0 +1,117 @@
+// scanning all channels in the 2.4GHz band
+//Data is packed into RAWDATA reading for sending out of USB
+void nRFscanChannels(void) {
+    unsigned char curChannel;
+    unsigned char numberOfChannels = 126; //there ae 126, 0 to 125
+    unsigned int i,j;
+    unsigned char curConfig;
+    unsigned char curCE;
+    //get current values that are changed so they can be restored later
+    curConfig = nrf24l01_get_config();
+    curCE = nrf24l01_ce_pin_active();
+    curChannel = nrf24l01_get_rf_ch();
+
+    //Start with CE clear
+    nrf24l01_clear_ce();
+    //Set RX mode
+    nrf24l01_set_config(nrf24l01_get_config() | 0x01);
+
+    //clear RAWDATA
+    for (i = 0; i < RAWDATASIZE; i++){
+        RAWDATA[i] = 0;
+    }
+
+    RAWDATA[0] = (BYTE) numberOfChannels;
+
+    nrf24l01_clear_ce();
+    for (j = 0; j < 40; j++) {
+        USBDeviceTasks(); // USB Tasks
+        BlinkUSBStatus();
+
+        for (i = 0; i < numberOfChannels; i++) {
+            // select a new channel
+            nrf24l01_set_rf_ch(i); //will do every second one;
+            nrf24l01_set_ce();
+            //recomended at least 258uS but I found 350uS is need for reliability
+            Delay10uS(26);
+
+            // received power > -64dBm
+            if (nrf24l01_cd_active()){
+                RAWDATA[i + 1]++;
+            }
+
+            //this seems to be needed after the timeout not before
+            nrf24l01_clear_ce();
+            Delay10uS(4); //may not be needed
+
+        }
+    }
+
+    //restore values
+    nrf24l01_set_config(curConfig);
+    nrf24l01_set_rf_ch(curChannel);
+    if(curCE){
+        nrf24l01_set_ce();
+    } else
+    {nrf24l01_clear_ce();
+    }
+    Delay10uS(20); //may not be needed
+}// scanning all channels in the 2.4GHz band
+//Data is packed into RAWDATA reading for sending out of USB
+void nRFscanChannels(void) {
+    unsigned char curChannel;
+    unsigned char numberOfChannels = 126; //there ae 126, 0 to 125
+    unsigned int i,j;
+    unsigned char curConfig;
+    unsigned char curCE;
+    //get current values that are changed so they can be restored later
+    curConfig = nrf24l01_get_config();
+    curCE = nrf24l01_ce_pin_active();
+    curChannel = nrf24l01_get_rf_ch();
+
+    //Start with CE clear
+    nrf24l01_clear_ce();
+    //Set RX mode
+    nrf24l01_set_config(nrf24l01_get_config() | 0x01);
+
+    //clear RAWDATA
+    for (i = 0; i < RAWDATASIZE; i++){
+        RAWDATA[i] = 0;
+    }
+
+    RAWDATA[0] = (BYTE) numberOfChannels;
+
+    nrf24l01_clear_ce();
+    for (j = 0; j < 40; j++) {
+        USBDeviceTasks(); // USB Tasks
+        BlinkUSBStatus();
+
+        for (i = 0; i < numberOfChannels; i++) {
+            // select a new channel
+            nrf24l01_set_rf_ch(i); //will do every second one;
+            nrf24l01_set_ce();
+            //recomended at least 258uS but I found 350uS is need for reliability
+            Delay10uS(26);
+
+            // received power > -64dBm
+            if (nrf24l01_cd_active()){
+                RAWDATA[i + 1]++;
+            }
+
+            //this seems to be needed after the timeout not before
+            nrf24l01_clear_ce();
+            Delay10uS(4); //may not be needed
+
+        }
+    }
+
+    //restore values
+    nrf24l01_set_config(curConfig);
+    nrf24l01_set_rf_ch(curChannel);
+    if(curCE){
+        nrf24l01_set_ce();
+    } else
+    {nrf24l01_clear_ce();
+    }
+    Delay10uS(20); //may not be needed
+}
