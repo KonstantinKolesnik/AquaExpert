@@ -75,7 +75,7 @@ namespace AquaExpert
             InitSettings();
             InitRF();
             //InitBus();
-            InitHardware();
+            //InitHardware();
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
             //    InitNetwork();
 
@@ -96,25 +96,25 @@ namespace AquaExpert
         }
         private void InitRF()
         {
-            const byte channel = 10;
+            //const byte channel = 10;
 
-            nrf24 = new NRF24(11);
+            //nrf24 = new NRF24(11);
 
-            //nrf24.OnDataReceived += nrf24_Receive;
-            //nrf24.OnTransmitFailed += nrf24_OnSendFailure;
-            //nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
+            ////nrf24.OnDataReceived += nrf24_Receive;
+            ////nrf24.OnTransmitFailed += nrf24_OnSendFailure;
+            ////nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
 
 
-            // we need to call Configure() befeore we start using the module
-            //nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
+            //// we need to call Configure() befeore we start using the module
+            ////nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
 
-            // to start receiveing we need to call Enable(), call Disable() to stop/pause
-            nrf24.IsEnabled = true;
+            //// to start receiveing we need to call Enable(), call Disable() to stop/pause
+            //nrf24.IsEnabled = true;
 
-            // example of reading your own address
-            var myAddress = nrf24.GetAddress(RXAddressSlot.Zero, 5);
-            Debug.Print("Address0: " + new string(Encoding.UTF8.GetChars(myAddress)));
-            Debug.Print(nrf24.GetStatus().ToString());
+            //// example of reading your own address
+            //var myAddress = nrf24.GetAddress(RXAddressSlot.Zero, 5);
+            //Debug.Print("Address0: " + new string(Encoding.UTF8.GetChars(myAddress)));
+            //Debug.Print(nrf24.GetStatus().ToString());
         }
         private void InitBus()
         {
