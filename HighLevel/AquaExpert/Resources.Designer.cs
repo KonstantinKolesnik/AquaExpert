@@ -39,11 +39,13 @@ namespace AquaExpert
             CourierNew_10 = -22402,
             small = 13070,
             NinaB = 18060,
+            SegoeUI_BoldItalian_32 = 27220,
+            LucidaSansUnicode_8 = 30591,
         }
         [System.SerializableAttribute()]
         internal enum BinaryResources : short
         {
-            test_24b = -15341,
+            Background = 8010,
             Bar = 16851,
         }
     }

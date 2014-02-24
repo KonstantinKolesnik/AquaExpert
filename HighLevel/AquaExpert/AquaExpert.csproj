@@ -40,12 +40,12 @@
   <!-- Everything below here is custom to .NET MF / Gadgeteer template-->
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="TimeManager.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TimeManager.cs" />
     <Compile Include="Program.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -55,6 +55,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="State.cs" />
+    <Compile Include="UI\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Gadgeteer" />
@@ -72,6 +73,12 @@
     <Reference Include="GHIElectronics.Gadgeteer.FEZRaptor, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="GTM.GHIElectronics.Display_TE35, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="GTM.GHIElectronics.Extender, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="GTM.GHIElectronics.LED_Strip, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -81,7 +88,7 @@
     <Reference Include="GTM.GHIElectronics.UsbClientDP, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GTM.GHIElectronics.WiFi_RS21, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GTM.GHIElectronics.WiFi_RS21, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="MFDpwsExtensions" />
@@ -113,7 +120,9 @@
       <DependentUpon>Program.gadgeteer</DependentUpon>
     </None>
     <None Include="Resources\CourierNew_10.tinyfnt" />
+    <None Include="Resources\LucidaSansUnicode_8.tinyfnt" />
     <None Include="Resources\NinaB.tinyfnt" />
+    <None Include="Resources\SegoeUI_BoldItalian_32.tinyfnt" />
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
@@ -160,8 +169,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features.txt" />
+    <Content Include="Resources\Background.jpg" />
     <Content Include="Resources\Bar.bmp" />
-    <Content Include="Resources\test_24b.bmp" />
   </ItemGroup>
   <ItemGroup />
 </Project>
