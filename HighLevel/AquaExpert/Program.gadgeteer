@@ -115,13 +115,7 @@
         </sockets>
         <socketUses>
           <moduleHasSocketUses Id="2dd3153c-ffb0-41f4-a7e4-b3b340bacea9">
-            <socketUse Id="72bfab9b-3c98-4a7d-9fee-2969e081197c">
-              <socket>
-                <socketUseReferencesSocket Id="9e12d615-bfea-448e-aa20-868d665060cc">
-                  <socketMoniker Id="e2703303-fae4-4fa5-b247-54cf6536b782" />
-                </socketUseReferencesSocket>
-              </socket>
-            </socketUse>
+            <socketUse Id="72bfab9b-3c98-4a7d-9fee-2969e081197c" />
           </moduleHasSocketUses>
         </socketUses>
       </module>

@@ -1,11 +1,5 @@
-﻿using Gadgeteer.Modules.KKS;
-using Gadgeteer.Modules.KKS.NRF24L01Plus;
-using GHI.Premium.System;
-using MFE.Core;
-using MFE.Graphics;
-using MFE.Graphics.Controls;
-using MFE.Graphics.Geometry;
-using MFE.Graphics.Media;
+﻿using AquaExpert.UI;
+using Gadgeteer.Modules.KKS;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
@@ -13,15 +7,12 @@ using MFE.Net.Tcp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
 using SmartNetwork.Network;
-using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using GT = Gadgeteer;
 using Gadgeteer.Modules.GHIElectronics;
-using AquaExpert.UI;
 
 namespace AquaExpert
 {
@@ -44,8 +35,6 @@ namespace AquaExpert
         private BusHubI2C busHubI2C;
 
         private GT.Timer timerTest;
-
-        private UIManager uiManager;
 
         private NRF24 nrf24;
         #endregion
@@ -98,23 +87,37 @@ namespace AquaExpert
         {
             //const byte channel = 10;
 
-            //nrf24 = new NRF24(11);
+            UIManager.DebugPage.Text = "Init nRF24L01+";
 
-            ////nrf24.OnDataReceived += nrf24_Receive;
-            ////nrf24.OnTransmitFailed += nrf24_OnSendFailure;
-            ////nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
+            nrf24 = new NRF24(11);
 
+            //nrf24.OnDataReceived += nrf24_Receive;
+            //nrf24.OnTransmitFailed += nrf24_OnSendFailure;
+            //nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
 
-            //// we need to call Configure() befeore we start using the module
-            ////nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
+            // we need to call Configure() befeore we start using the module
+            //nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
 
-            //// to start receiveing we need to call Enable(), call Disable() to stop/pause
-            //nrf24.IsEnabled = true;
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("Status:");
+            //UIManager.DebugPage.AddLine(nrf24.Status.ToString());
 
-            //// example of reading your own address
-            //var myAddress = nrf24.GetAddress(RXAddressSlot.Zero, 5);
-            //Debug.Print("Address0: " + new string(Encoding.UTF8.GetChars(myAddress)));
-            //Debug.Print(nrf24.GetStatus().ToString());
+            UIManager.DebugPage.AddLine("---------------");
+            UIManager.DebugPage.AddLine("IsEnabled: " + nrf24.IsEnabled);
+            UIManager.DebugPage.AddLine("CRCType: " + (nrf24.CRCType == NRF24.CRCLength.CRC1Byte ? "1 byte" : "2 bytes"));
+            UIManager.DebugPage.AddLine("IsCRCEnabled: " + nrf24.IsCRCEnabled);
+            UIManager.DebugPage.AddLine("IsDataReceivedInterruptEnabled: " + nrf24.IsDataReceivedInterruptEnabled);
+            UIManager.DebugPage.AddLine("IsDataSentInterruptEnabled: " + nrf24.IsDataSentInterruptEnabled);
+            UIManager.DebugPage.AddLine("IsResendLimitReachedInterruptEnabled: " + nrf24.IsResendLimitReachedInterruptEnabled);
+            UIManager.DebugPage.AddLine("IsPowerOn: " + nrf24.IsPowerOn);
+            //nrf24.IsPowerOn = true;
+            //UIManager.DebugPage.AddLine("IsPowerOn: " + nrf24.IsPowerOn);
+            UIManager.DebugPage.AddLine("Channel: " + nrf24.Channel);
+
+            //new Thread(() => { byte a = nrf24.Channel; }).Start();
+
+            // to start receiveing we need to call Enable(), call Disable() to stop/pause
+            nrf24.IsEnabled = true;
         }
         private void InitBus()
         {
@@ -152,7 +155,16 @@ namespace AquaExpert
         }
         private void InitUI()
         {
-            uiManager = new UIManager();
+            //UIManager.SplashPage.Title = "Smart Network";// "Aqua Expert";
+            //UIManager.Desktop.Children.Add(UIManager.SplashPage);
+            //for (int i = 0; i <= 100; i++)
+            //{
+            //    UIManager.SplashPage.ProgressValue = i;
+            //    Thread.Sleep(10);
+            //}
+            //UIManager.Desktop.Children.Remove(UIManager.SplashPage);
+
+            UIManager.Desktop.Children.Add(UIManager.DebugPage);
         }
         private void InitNetwork()
         {

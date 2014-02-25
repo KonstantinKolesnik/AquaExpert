@@ -24,7 +24,7 @@ namespace AquaExpert {
         /// <summary>The SDCard module using socket 9 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.SDCard sdCard;
         
-        /// <summary>The Extender module using socket 11 of the mainboard.</summary>
+        /// <summary>The Extender module (not connected).</summary>
         private Gadgeteer.Modules.GHIElectronics.Extender extender;
         
         /// <summary>The WiFi_RS21 (Premium) module (not connected).</summary>
@@ -58,7 +58,7 @@ namespace AquaExpert {
             this.usbClientDP = new GTM.GHIElectronics.UsbClientDP(8);
             this.indicators = new GTM.GHIElectronics.LED_Strip(18);
             this.sdCard = new GTM.GHIElectronics.SDCard(9);
-            this.extender = new GTM.GHIElectronics.Extender(11);
+            Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
             Microsoft.SPOT.Debug.Print("The module \'wifi_RS21\' was not connected in the designer and will be null.");
             this.display_TE35 = new GTM.GHIElectronics.Display_TE35(15, 16, 17, 14);
         }

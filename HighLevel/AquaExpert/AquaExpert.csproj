@@ -55,6 +55,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="State.cs" />
+    <Compile Include="UI\DebugPage.cs" />
+    <Compile Include="UI\SplashPage.cs" />
     <Compile Include="UI\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
