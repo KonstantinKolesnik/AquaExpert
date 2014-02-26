@@ -1,15 +1,15 @@
-#ifndef RELAYS_H_
-#define RELAYS_H_
+#ifndef DIGITALS_H_
+#define DIGITALS_H_
 //****************************************************************************************
 #include "Hardware.h"
 //****************************************************************************************
-#define RELAY_ACTIVE_LEVEL		0		// 8-relay module active level is "0"
-#define RELAY_DEFAULT_STATE		false	// off
+#define DIGITAL_ACTIVE_STATE		false	// 8-relay module active level is "0"
+#define DIGITAL_DEFAULT_STATE		false	// off
 //****************************************************************************************
-void InitRelays();
-void SetRelay(uint8_t idx, bool active);
-void SetRelays(bool active);
-bool GetRelay(uint8_t idx);
-uint8_t GetRelays();
+void Digitals_Init();
+void SetDigital(uint8_t address, bool active);
+void SetDigitals(bool active);
+bool GetDigital(uint8_t address);
+uint8_t GetDigitals();
 //****************************************************************************************
-#endif /* RELAYS_H_ */
+#endif

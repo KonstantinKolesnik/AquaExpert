@@ -10,7 +10,7 @@
     <AvrGccProjectExtensions>
     </AvrGccProjectExtensions>
     <AssemblyName>Adapter</AssemblyName>
-    <Name>BusModule</Name>
+    <Name>Module</Name>
     <RootNamespace>Adapter</RootNamespace>
     <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <avrtoolinterface>JTAG</avrtoolinterface>
@@ -134,16 +134,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ADC\ADC.c">
+    <Compile Include="Analogs.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ADC\ADC.h">
+    <Compile Include="Analogs.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="BusModule.c">
+    <Compile Include="Module.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="BusModuleAPI.h">
+    <Compile Include="ModuleAPI.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Hardware.h">
@@ -179,10 +179,10 @@
     <Compile Include="OW\onewire.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Relays.c">
+    <Compile Include="Digitals.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Relays.h">
+    <Compile Include="Digitals.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TemperatureSensors.c">
@@ -205,7 +205,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ADC\" />
     <Folder Include="I2C" />
     <Folder Include="OW" />
   </ItemGroup>

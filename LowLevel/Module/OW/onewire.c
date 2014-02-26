@@ -1,18 +1,19 @@
 #include "onewire.h"
-//****************************************************************************************
 //#ifdef UART_AS_OneWire
 	//#include <avr/interrupt.h>
 //#endif
-
+//****************************************************************************************
 #define sbi(reg,bit) reg |= (1<<bit)
 #define cbi(reg,bit) reg &= ~(1<<bit)
 #define ibi(reg,bit) reg ^= (1<<bit)
 #define CheckBit(reg,bit) (reg&(1<<bit))
 //****************************************************************************************
-extern void RunTasks(unsigned char tasks);
+static uint16_t devicesCount;
+//extern void RunTasks(unsigned char tasks);
 //****************************************************************************************
-void OthersTasks(void){
-//	RunTasks(0xFF);
+void OthersTasks()
+{
+	//RunTasks(0xFF);
 }
 
 #ifndef UART_AS_OneWire
@@ -32,7 +33,6 @@ void OW_Set(unsigned char mode)
 	else sbi(OW_PORT, OW_BIT_OUT);
 #endif
 }
-
 unsigned char OW_CheckIn(void)
 {
 #ifndef OW_TWO_PINS
@@ -41,7 +41,6 @@ unsigned char OW_CheckIn(void)
 	return CheckBit(OW_PIN, OW_BIT_IN);
 #endif
 }
-
 #endif
 
 unsigned char OW_Reset(void)
@@ -260,24 +259,24 @@ bool OW_MatchROM(uint8_t* rom)
 	return true;
 }
 
-void InitOW()
+void OW_Init()
 {
 	//OW_PORT |= (1<<OW_BIT);			// pull up
 	//OW_DDR  |= (0<<OW_BIT);    		// in
 	
 	//timerDelayInit();
 
-	owDevicesCount = OW_Scan();
+	devicesCount = OW_Scan();
 }
 unsigned char OW_Scan()
 {
 	unsigned char	i;
 	unsigned char	id[OW_ROMCODE_SIZE];
-	unsigned char	diff, sensors_count;
+	unsigned char	diff, idx;
 
-	sensors_count = 0;
+	idx = 0;
 
-	for (diff = OW_SEARCH_FIRST; diff != OW_LAST_DEVICE && sensors_count < MAXDEVICES; )
+	for (diff = OW_SEARCH_FIRST; diff != OW_LAST_DEVICE && idx < MAXDEVICES; )
 	{
 		OW_FindROM(&diff, &id[0]);
 
@@ -288,10 +287,14 @@ unsigned char OW_Scan()
 			break;
 
 		for (i = 0; i < OW_ROMCODE_SIZE; i++)
-			owDevicesIDs[sensors_count][i] = id[i];
+			owDevicesIDs[idx][i] = id[i];
 		
-		sensors_count++;
+		idx++;
 	}
 	
-	return sensors_count;
+	return idx;
+}
+uint16_t OW_GetDeviceCount()
+{
+	return devicesCount;
 }

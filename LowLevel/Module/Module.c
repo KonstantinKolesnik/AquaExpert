@@ -1,22 +1,22 @@
 #include "Hardware.h"
-#include "ADC\ADC.h"
+#include "Digitals.h"
+#include "Analogs.h"
 #include "OW\onewire.h"
 #include "I2C\I2C.h"
-#include "Relays.h"
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
 //****************************************************************************************
 typedef struct
 {
-	uint8_t ControlLineType;
-	uint8_t ControlLineNumber;
-	uint8_t ControlLineState[2];
-} ControlLineState_t;
+	uint8_t Type;
+	uint8_t Address;
+	uint8_t State[2];
+} ControlLine_t;
 //****************************************************************************************
 static uint8_t msg[TWI_BUFFER_LENGTH];
 static uint8_t msg_size = 0;
 
-static ControlLineState_t* controlLinesStates = NULL;
+static ControlLine_t* controlLines = NULL;
 static volatile uint16_t controlLinesCount = 0;
 
 void OnMasterWrite(int howMany);
@@ -36,15 +36,11 @@ void InitHardware()
 	DDRD |= (1<<LED_MSG);
 	LED_MSG_OFF;
 	
-	InitRelays();
-	SetRelay(1, true);
-	SetRelay(3, true);
-	
-	InitADC(true); // use internal Vcc reference
-	
-	InitOW();
+	Digitals_Init();
+	Analogs_Init(true); // use internal Vcc reference
+	OW_Init();
 
-	//InitPWM();
+	//PWM_Init();
     //TIMSK = (1<<OCIE1A)     // Timer1/Counter1 Compare A Interrupt; reassigned in InitDCCOut
           //| (0<<OCIE1B)     // Timer1/Counter1 Compare B Interrupt
           //| (0<<TOIE1)      // Timer1/Counter1 Overflow Interrupt
@@ -56,7 +52,7 @@ void InitHardware()
 		  //| (1<<OCIE0)      // Timer0/Counter0 Compare Interrupt
 		  //| (0<<TOIE0);     // Timer0/Counter0 Overflow Interrupt
 	
-	I2C_beginWithAddress(5);                // join i2c bus with address #4
+	I2C_beginWithAddress(5);                // join i2c bus with address #5
 	I2C_onReceive(OnMasterWrite);
 	I2C_onRequest(OnMasterRead);
 
@@ -67,53 +63,50 @@ uint8_t GetControlLinesCount(uint8_t type)
 {
 	switch (MODULE_TYPE)
 	{
-		case 0:// test full module
-			if (type == CONTROL_LINE_TYPE_RELAY) return 8;
-			else if (type == CONTROL_LINE_TYPE_WATER_SENSOR) return 3;
-			else if (type == CONTROL_LINE_TYPE_PH_SENSOR) return 2;
-			else if (type == CONTROL_LINE_TYPE_ORP_SENSOR) return 2;
-			else if (type == CONTROL_LINE_TYPE_TEMPERATURE_SENSOR) return 1;
-			else if (type == CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR) return 1;
-			else if (type == CONTROL_LINE_TYPE_DIMMER) return 2;
+		case 0: // test full module
+			if		(type == CONTROL_LINE_TYPE_DIGITAL) return 8;
+			else if (type == CONTROL_LINE_TYPE_ANALOG) return 8;
+			else if (type == CONTROL_LINE_TYPE_PWM) return 2;
+			else if (type == CONTROL_LINE_TYPE_ONE_WIRE) return OW_GetDeviceCount();
 			break;
 		case 1: // AE-R8
-			if (type == CONTROL_LINE_TYPE_RELAY) return 8;
+			if (type == CONTROL_LINE_TYPE_DIGITAL) return 8;
 			break;
 	}
 	
 	return 0;
 }
-void GetControlLineState(uint8_t type, uint8_t number, uint8_t* result)
+void GetControlLineState(uint8_t type, uint8_t address, uint8_t* result)
 {
-	ControlLineState_t* pStates = controlLinesStates;
+	ControlLine_t* pLines = controlLines;
 	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		if (pStates->ControlLineType == type && pStates->ControlLineNumber == number)
+		if (pLines->Type == type && pLines->Address == address)
 		{
-			result[0] = pStates->ControlLineState[0];
-			result[1] = pStates->ControlLineState[1];
+			result[0] = pLines->State[0];
+			result[1] = pLines->State[1];
 			return;
 		}
 		
-		pStates++;
+		pLines++;
 	}
 }
-void SetControlLineState(uint8_t type, uint8_t number, uint8_t* state)
+void SetControlLineState(uint8_t type, uint8_t address, uint8_t* state)
 {
-	ControlLineState_t* pStates = controlLinesStates;
+	ControlLine_t* pLines = controlLines;
 	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		if (pStates->ControlLineType == type && pStates->ControlLineNumber == number)
+		if (pLines->Type == type && pLines->Address == address)
 		{
 			switch (type)
 			{
-				case CONTROL_LINE_TYPE_RELAY:
-					SetRelay(number, state[0]);
-					controlLinesStates[i].ControlLineState[0] = state[0];
+				case CONTROL_LINE_TYPE_DIGITAL:
+					SetDigital(address, state[0]);
+					controlLines[i].State[0] = state[0];
 					break;
-				case CONTROL_LINE_TYPE_DIMMER:
+				case CONTROL_LINE_TYPE_PWM:
 
 					break;
 			}
@@ -121,7 +114,7 @@ void SetControlLineState(uint8_t type, uint8_t number, uint8_t* state)
 			return;
 		}
 		
-		pStates++;
+		pLines++;
 	}
 }
 
@@ -134,58 +127,48 @@ void InitModuleState()
 		for (uint8_t number = 0; number < count; number++)
 		{
 			uint16_t idx = controlLinesCount++;
-			controlLinesStates = (ControlLineState_t*)realloc((void*)controlLinesStates, controlLinesCount * sizeof(ControlLineState_t));
+			controlLines = (ControlLine_t*)realloc((void*)controlLines, controlLinesCount * sizeof(ControlLine_t));
 			
-			controlLinesStates[idx].ControlLineType = type;
-			controlLinesStates[idx].ControlLineNumber = number;
-			memset(controlLinesStates[idx].ControlLineState, 0, sizeof(controlLinesStates[idx].ControlLineState));
+			controlLines[idx].Type = type;
+			controlLines[idx].Address = number;
+			memset(controlLines[idx].State, 0, sizeof(controlLines[idx].State));
 		}
 	}
 }
 void PopulateModuleState()
 {
-	ControlLineState_t* pStates = controlLinesStates;
+	ControlLine_t* pLines = controlLines;
 	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
-		pStates->ControlLineState[0] = 0;
-		pStates->ControlLineState[1] = 0;
+		pLines->State[0] = 0;
+		pLines->State[1] = 0;
 		
-		switch (pStates->ControlLineType)
+		switch (pLines->Type)
 		{
-			case CONTROL_LINE_TYPE_RELAY:
-				pStates->ControlLineState[0] = GetRelay(pStates->ControlLineNumber);
-				pStates->ControlLineState[1] = 0;
+			case CONTROL_LINE_TYPE_DIGITAL:
+				pLines->State[0] = GetDigital(pLines->Address);
+				pLines->State[1] = 0;
 				break;
-			case CONTROL_LINE_TYPE_WATER_SENSOR:
-				pStates->ControlLineState[0] = IsWaterSensorWet(pStates->ControlLineNumber);
-				pStates->ControlLineState[1] = 0;
+			case CONTROL_LINE_TYPE_ANALOG:
+				//pLines->State[0] = 7;
+				//pLines->State[1] = 3;
 				break;
-			case CONTROL_LINE_TYPE_PH_SENSOR:
-				//pStates->ControlLineState[0] = 7;
-				//pStates->ControlLineState[1] = 3;
+			case CONTROL_LINE_TYPE_PWM:
+				//pLines->State[0] = 7;
+				//pLines->State[1] = 3;
 				break;
-			case CONTROL_LINE_TYPE_ORP_SENSOR:
-				//pStates->ControlLineState[0] = 7;
-				//pStates->ControlLineState[1] = 3;
-				break;
-			case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
-				ReadTemperature(pStates->ControlLineNumber, (void*)pStates->ControlLineState);
-				_delay_ms(800); // needed to wait for temperature sensors conversion!!!!!!!!!!!!
-				break;
-			case CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR:
-				//pStates->ControlLineState[0] = 7;
-				//pStates->ControlLineState[1] = 3;
-				break;
-			case CONTROL_LINE_TYPE_DIMMER:
-				//pStates->ControlLineState[0] = 7;
-				//pStates->ControlLineState[1] = 3;
-				break;
-			
-			
+			//case CONTROL_LINE_TYPE_WATER_SENSOR:
+				//pLines->State[0] = IsWaterSensorWet(pLines->Address);
+				//pLines->State[1] = 0;
+				//break;
+			//case CONTROL_LINE_TYPE_TEMPERATURE_SENSOR:
+				//ReadTemperature(pLines->Address, (void*)pLines->State);
+				//_delay_ms(800); // needed to wait for temperature sensors conversion!!!!!!!!!!!!
+				//break;
 		}
 		
-		pStates++;
+		pLines++;
 	}
 }
 //****************************************************************************************
@@ -232,8 +215,8 @@ void OnMasterRead()
 //****************************************************************************************
 int main()
 {
-	InitModuleState();
 	InitHardware();
+	InitModuleState();
 	
 	PopulateModuleState();
 	

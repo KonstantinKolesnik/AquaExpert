@@ -1,8 +1,8 @@
 #ifndef BUSMODULECOMMANDS_H_
 #define BUSMODULECOMMANDS_H_
 //****************************************************************************************
-#define MAX_CONTROL_LINE_TYPES					255
-#define MAX_1_WIRE_DEVICES						10
+#define MAX_CONTROL_LINE_TYPES					4	// Digital, Analog, PWM, OneWire
+#define MAX_ONE_WIRE_DEVICES					10
 //****************************************************************************************
 // commands (from BusMaster)
 //****************************************************************************************
@@ -13,12 +13,9 @@
 //****************************************************************************************
 // control line types
 //****************************************************************************************
-#define CONTROL_LINE_TYPE_RELAY					0
-#define CONTROL_LINE_TYPE_WATER_SENSOR			1
-#define CONTROL_LINE_TYPE_PH_SENSOR				2
-#define CONTROL_LINE_TYPE_ORP_SENSOR			3
-#define CONTROL_LINE_TYPE_TEMPERATURE_SENSOR	4
-#define CONTROL_LINE_TYPE_CONDUCTIVITY_SENSOR	5
-#define CONTROL_LINE_TYPE_DIMMER				6
+#define CONTROL_LINE_TYPE_DIGITAL				0
+#define CONTROL_LINE_TYPE_ANALOG				1
+#define CONTROL_LINE_TYPE_PWM					2
+#define CONTROL_LINE_TYPE_ONE_WIRE				3
 //****************************************************************************************
 #endif

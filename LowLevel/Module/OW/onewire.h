@@ -2,9 +2,9 @@
 #define ONEWIRE_H
 //****************************************************************************************
 #include "..\Hardware.h"
-#include "delay.h"
+//#include "delay.h"
 //****************************************************************************************
-#define MAXDEVICES			MAX_1_WIRE_DEVICES
+#define MAXDEVICES			MAX_ONE_WIRE_DEVICES
 
 // Если для эмуляции шины используется USART
 //#define UART_AS_OneWire
@@ -71,11 +71,12 @@ unsigned char OW_SearchROM( unsigned char diff, unsigned char *id );
 void OW_FindROM(unsigned char *diff, unsigned char id[]);
 unsigned char OW_ReadROM(unsigned char *buffer);
 bool OW_MatchROM(uint8_t* rom);
-
-uint16_t owDevicesCount;
+//****************************************************************************************
+//uint16_t owDevicesCount;
 uint8_t	owDevicesIDs[MAXDEVICES][8];	// their IDs (8 bytes per device)
-
+//****************************************************************************************
 uint8_t OW_Scan();
-void InitOW();
+void OW_Init();
+uint16_t OW_GetDeviceCount();
 //****************************************************************************************
 #endif

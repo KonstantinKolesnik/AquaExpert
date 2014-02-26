@@ -31,7 +31,7 @@ LOW = 0xE4 (valid)
 #include <avr/wdt.h>
 #include <util/delay.h>
 #include <string.h>
-#include "BusModuleAPI.h"
+#include "ModuleAPI.h"
 #include "Utils.h"
 //****************************************************************************************
 // module types:
@@ -39,8 +39,15 @@ LOW = 0xE4 (valid)
 //#define MODULE_TYPE					1 // AE-R8
 
 
+//****************************************************************************************
+// peripheral definitions:
+#define DIGITAL_PORT					PORTB	// port of digital outputs
+#define DIGITAL_DDR						DDRB
+#define DIGITAL_PIN						PINB
 
-
+//#define ANALOG_PORT						PORTA	// port of analog inputs (ADC)
+//#define ANALOG_DDR						DDRA
+//
 //****************************************************************************************
 // 2. Ports Definition
 //****************************************************************************************
