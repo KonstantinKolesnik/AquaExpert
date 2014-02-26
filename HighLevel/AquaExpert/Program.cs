@@ -12,8 +12,6 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
-using Gadgeteer.Modules.GHIElectronics;
-using System.Text;
 
 namespace AquaExpert
 {

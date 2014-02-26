@@ -35,11 +35,11 @@ uint8_t crc8(uint8_t *data_in, unsigned int number_of_bytes_to_read )
 }
 #endif 
 
-uint8_t DS18x20_StartMeasure(uint8_t* rom)
+bool DS18x20_StartMeasure(uint8_t* rom)
 {
 	//Reset, skip ROM and start temperature conversion
 	if (!OW_Reset())
-		return 0;
+		return false;
 	
 	if (rom)
 		OW_MatchROM(rom);
@@ -48,13 +48,13 @@ uint8_t DS18x20_StartMeasure(uint8_t* rom)
 	
 	OW_WriteByte(THERM_CMD_CONVERTTEMP);
 	
-	return 1;
+	return true;
 }
-uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
+bool DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 {
 	//Reset, skip ROM and send command to read Scratchpad
 	if (!OW_Reset())
-		return 0;
+		return false;
 	
 	if (rom)
 		OW_MatchROM(rom);
@@ -77,7 +77,7 @@ uint8_t DS18x20_ReadData(uint8_t *rom, uint8_t *buffer)
 	buffer[1] = OW_ReadByte(); // Read TH	
 #endif
 
-	return 1;
+	return true;
 }
 
 void DS18x20_ConvertToTemperature(uint8_t* data, uint8_t* result)

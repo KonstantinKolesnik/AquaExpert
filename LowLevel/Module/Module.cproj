@@ -161,6 +161,12 @@
     <Compile Include="I2C\twi.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="OneWire.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OneWire.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="OW\delay.c">
       <SubType>compile</SubType>
     </Compile>
@@ -171,12 +177,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="OW\ds18x20.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OW\onewire.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="OW\onewire.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Digitals.c">

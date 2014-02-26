@@ -1,0 +1,4654 @@
+From: =?windows-1251?B?0e718ODt5e3uIFdpbmRvd3MgSW50ZXJuZXQgRXhwbG9yZXIgMTA=?=
+Subject: 1-Wire Device Command Code Table
+Date: Wed, 26 Feb 2014 18:08:55 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01CF331D.D06657F0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.2.9200.16384
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0000_01CF331D.D06657F0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://owfs.sourceforge.net/family.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" =
+""><HTML><HEAD><META=20
+content=3D"IE=3D5.0000" http-equiv=3D"X-UA-Compatible">
+  =20
+<STYLE type=3D"text/css"><!-- .dev { 	background-color: #CCFFFF; } .mem =
+{ 	background-color: #9999FF; } .nam { 	background-color: #99FFFF; } =
+.ovdr { 	background-color: #FFCC99; } .rom { 	background-color: #FFCCCC; =
+} .undoc { 	background-color: #CC66CC; } table { 	background-color: =
+#CCCCFF; } td { 	text-align: left; } th { 	font-weight: bold; 	=
+text-align: center; } --></STYLE>
+  =20
+<META http-equiv=3D"CONTENT-TYPE" content=3D"text/html; =
+charset=3Diso-8859-1">  =20
+<TITLE>1-Wire Device Command Code Table</TITLE>=20
+<META name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16798"></HEAD>=20
+<BODY lang=3D"en-US" style=3D"color: rgb(0, 0, 0); background-color: =
+rgb(173, 216, 230);"=20
+dir=3D"ltr">
+<TABLE style=3D"width: 100%; background-color: rgb(221, 221, 221);" =
+border=3D"1">
+  <THEAD>
+  <TR>
+    <TD align=3D"left"><A=20
+      =
+href=3D"http://owfs.sourceforge.net/index.html"><B>OWFS</B></A></TD>
+    <TD align=3D"center"><A =
+href=3D"http://sourceforge.net/projects/owfs/">SF.net
+       project page</A></TD>
+    <TD align=3D"center"><A href=3D"http://www.owfs.org/">New OWFS =
+Website!</A></TD>
+    <TD align=3D"center">by <A =
+href=3D"mailto:palfille@earthlink.net">Paul H=20
+      Alfille</A></TD>
+    <TD align=3D"right"><A href=3D"http://sourceforge.net/"><IMG =
+width=3D"88"=20
+      height=3D"31" alt=3D"SourceForge.net Logo" =
+src=3D"http://sourceforge.net/sflogo.php?group_id=3D85502&amp;type=3D1"=20
+      border=3D"0"></A></TD></TR></THEAD>
+  <TBODY></TBODY></TABLE><!--=0A=
+<address>&copy; 2003 Paul H. Alfille and The owfs Team</address>=0A=
+<address>$Id: top.ssi,v 1.3 2006/06/17 21:55:42 alfille Exp $</address>=0A=
+-->=20
+=20
+<H2 align=3D"center">Complete 1-wire command codes <I>(<A =
+href=3D"http://owfs.sourceforge.net/simple_commands.html">see=20
+simpler table</A>)</I></H2>
+<H3 align=3D"center">Sort by: <A=20
+href=3D"http://owfs.sourceforge.net/commands.html">Device number</A>, <A =
+href=3D"http://owfs.sourceforge.net/ibutton.html">iButton</A>=20
+or <A href=3D"http://owfs.sourceforge.net/family.html">Family =
+code</A></H3>
+<TABLE style=3D"width: 3392px; background-color: rgb(204, 204, 255);" =
+border=3D"1"=20
+cellspacing=3D"3" cellpadding=3D"2">
+  <COLGROUP>
+  <COL width=3D"46">
+  <COL width=3D"53">
+  <COL width=3D"95">
+  <COL width=3D"49">
+  <COL width=3D"60">
+  <COL width=3D"38">
+  <COL width=3D"34">
+  <COL width=3D"34">
+  <COL width=3D"35">
+  <COL width=3D"35">
+  <COL width=3D"30">
+  <COL width=3D"30">
+  <COL width=3D"34">
+  <COL width=3D"33">
+  <COL width=3D"34">
+  <COL width=3D"33">
+  <COL width=3D"34">
+  <COL width=3D"34">
+  <COL width=3D"29">
+  <COL width=3D"34">
+  <COL width=3D"34">
+  <COL width=3D"40">
+  <COL width=3D"33">
+  <COL width=3D"40">
+  <COL width=3D"46">
+  <COL width=3D"29">
+  <COL width=3D"56">
+  <COL width=3D"33">
+  <COL width=3D"43">
+  <COL width=3D"31">
+  <COL width=3D"49">
+  <COL width=3D"33">
+  <COL width=3D"29">
+  <COL width=3D"49">
+  <COL width=3D"33">
+  <COL width=3D"32">
+  <COL width=3D"34">
+  <COL width=3D"40">
+  <COL width=3D"49">
+  <COL width=3D"37">
+  <COL width=3D"45">
+  <COL width=3D"29">
+  <COL width=3D"31">
+  <COL width=3D"29">
+  <COL width=3D"29">
+  <COL width=3D"34">
+  <COL width=3D"38">
+  <COL width=3D"38">
+  <COL width=3D"38">
+  <COL width=3D"62">
+  <COL width=3D"67">
+  <COL width=3D"29">
+  <COL width=3D"29">
+  <COL width=3D"29">
+  <COL width=3D"45">
+  <COL width=3D"47">
+  <COL width=3D"35">
+  <COL width=3D"35">
+  <COL width=3D"29">
+  <COL width=3D"29">
+  <COL width=3D"49">
+  <COL width=3D"28">
+  <COL width=3D"36">
+  <COL width=3D"29">
+  <COL width=3D"64">
+  <COL width=3D"28">
+  <COL width=3D"48">
+  <COL width=3D"49">
+  <COL width=3D"37">
+  <COL width=3D"28">
+  <COL width=3D"42">
+  <COL width=3D"29">
+  <COL width=3D"38">
+  <COL width=3D"50">
+  <TBODY>
+  <TR>
+    <TH class=3D"dev">Device</TH>
+    <TH class=3D"dev">iButton</TH>
+    <TH class=3D"nam">Name</TH>
+    <TH class=3D"dev">Family</TH>
+    <TH class=3D"mem">Memory</TH>
+    <TH class=3D"mem">CRC</TH>
+    <TH>01</TH>
+    <TH>02</TH>
+    <TH>03</TH>
+    <TH>05</TH>
+    <TH>07</TH>
+    <TH>08</TH>
+    <TH>10</TH>
+    <TH>11</TH>
+    <TH>12</TH>
+    <TH>13</TH>
+    <TH>0C</TH>
+    <TH>0F</TH>
+    <TH>11</TH>
+    <TH>17</TH>
+    <TH>21</TH>
+    <TH>22</TH>
+    <TH>23</TH>
+    <TH>25</TH>
+    <TH>28</TH>
+    <TH class=3D"rom">33</TH>
+    <TH>33</TH>
+    <TH>37</TH>
+    <TH class=3D"rom">39</TH>
+    <TH class=3D"ovdr">3C</TH>
+    <TH>3C</TH>
+    <TH>41</TH>
+    <TH>43</TH>
+    <TH>44</TH>
+    <TH>48</TH>
+    <TH>49</TH>
+    <TH>4E</TH>
+    <TH class=3D"rom">55</TH>
+    <TH>55</TH>
+    <TH>5A</TH>
+    <TH>63</TH>
+    <TH>64</TH>
+    <TH>66</TH>
+    <TH>68</TH>
+    <TH class=3D"ovdr">69</TH>
+    <TH>69</TH>
+    <TH>6A</TH>
+    <TH>6C</TH>
+    <TH>71</TH>
+    <TH>77</TH>
+    <TH>7A</TH>
+    <TH>93</TH>
+    <TH>94</TH>
+    <TH>95</TH>
+    <TH>96</TH>
+    <TH>99</TH>
+    <TH>A0</TH>
+    <TH>A1</TH>
+    <TH>A2</TH>
+    <TH>A3</TH>
+    <TH class=3D"rom">A5</TH>
+    <TH>A5</TH>
+    <TH>AA</TH>
+    <TH>AC</TH>
+    <TH>B2</TH>
+    <TH>B4</TH>
+    <TH>B5</TH>
+    <TH>B8</TH>
+    <TH>BE</TH>
+    <TH>C3</TH>
+    <TH class=3D"rom">CC</TH>
+    <TH>CC</TH>
+    <TH>D2</TH>
+    <TH class=3D"rom">EC</TH>
+    <TH>EE</TH>
+    <TH class=3D"rom">F0</TH>
+    <TH>F0</TH>
+    <TH>F3</TH>
+    <TH>F5</TH></TR>
+  <TR>
+    <TD class=3D"dev">2401</TD>
+    <TD class=3D"dev">1990A</TD>
+    <TD class=3D"nam">silicon serial number</TD>
+    <TD class=3D"dev">01</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2411</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">silicon serial number Vcc input</TD>
+    <TD class=3D"dev">01</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">1425</TD>
+    <TD class=3D"dev">1991</TD>
+    <TD class=3D"nam">multikey 1153bit secure</TD>
+    <TD class=3D"dev">02</TD>
+    <TD class=3D"mem">1152</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD>write pw</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read sub</TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD>write sub</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2404</TD>
+    <TD class=3D"dev">1994</TD>
+    <TD class=3D"nam">econoram time chip</TD>
+    <TD class=3D"dev">04</TD>
+    <TD class=3D"mem">16*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2405</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">Addresable Switch</TD>
+    <TD class=3D"dev">05</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1993<BR></TD>
+    <TD class=3D"nam">4k memory ibutton</TD>
+    <TD class=3D"dev">06</TD>
+    <TD class=3D"mem">16*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1992<BR></TD>
+    <TD class=3D"nam">1k memory ibutton</TD>
+    <TD class=3D"dev">08</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2502</TD>
+    <TD class=3D"dev">1982</TD>
+    <TD class=3D"nam">1k add-only memory</TD>
+    <TD class=3D"dev">09</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>CRC read data</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1995<BR></TD>
+    <TD class=3D"nam">16k memory ibutton</TD>
+    <TD class=3D"dev">0A</TD>
+    <TD class=3D"mem">64*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2505</TD>
+    <TD class=3D"dev">1985</TD>
+    <TD class=3D"nam">16k add-only memory</TD>
+    <TD class=3D"dev">0B</TD>
+    <TD class=3D"mem">64*256</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD>speed write</TD>
+    <TD>speed write status</TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1996<BR></TD>
+    <TD class=3D"nam">64k memory ibutton</TD>
+    <TD class=3D"dev">0C</TD>
+    <TD class=3D"mem">256*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2506</TD>
+    <TD class=3D"dev">1986</TD>
+    <TD class=3D"nam">64k add-only&nbsp; memory<BR></TD>
+    <TD class=3D"dev">0F</TD>
+    <TD class=3D"mem">256*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD>speed write</TD>
+    <TD>speed write status</TD>
+  <TR>
+    <TD class=3D"dev">18S20</TD>
+    <TD class=3D"dev">1920</TD>
+    <TD class=3D"nam">high precision digital thermometer</TD>
+    <TD class=3D"dev">10</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">write trim2<BR></TD>
+    <TD class=3D"undoc">copy trim2<BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim2<BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim1</TD>
+    <TD class=3D"undoc">copy trim1<BR></TD>
+    <TD class=3D"undoc">write trim1<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>power</TD>
+    <TD><BR></TD>
+    <TD>recall EE</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2406</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">dual addressable switch plus 1k memory</TD>
+    <TD class=3D"dev">12</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD>channel access</TD>
+  <TR>
+    <TD class=3D"dev">2407</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">dual addressable switch plus 1k memory</TD>
+    <TD class=3D"dev">12</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD>channel access</TD>
+  <TR>
+    <TD class=3D"dev">2430A</TD>
+    <TD class=3D"dev">1971</TD>
+    <TD class=3D"nam">256 eeprom</TD>
+    <TD class=3D"dev">14</TD>
+    <TD class=3D"mem">1*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD>copy/lock</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write app</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read app</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1963L<BR></TD>
+    <TD class=3D"nam">4k Monetary<BR></TD>
+    <TD class=3D"dev">1A<BR></TD>
+    <TD class=3D"mem">256*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>read mem+<BR> counter<BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2436</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">battery id/monitor chip</TD>
+    <TD class=3D"dev">1B</TD>
+    <TD class=3D"mem">5*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD>sp1-&gt;nv1</TD>
+    <TD><BR></TD>
+    <TD>sp2-&gt;nv2</TD>
+    <TD>sp3-&gt;sram</TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>lock nv1</TD>
+    <TD>unlock nv1</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>nv1-&gt;sp1</TD>
+    <TD>nv2-&gt;sp2</TD>
+    <TD>sram-&gt;sp3</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read reg</TD>
+    <TD>convert V</TD>
+    <TD>incr</TD>
+    <TD>reset</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">28E04-100<BR></TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">4k EEPROM with PIO<BR></TD>
+    <TD class=3D"dev">1C<BR></TD>
+    <TD class=3D"mem">4096<BR></TD>
+    <TD class=3D"mem">16<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr skip<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match<BR></TD>
+    <TD>copy scratch<BR></TD>
+    <TD>PIO write<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume<BR></TD>
+    <TD>PIO pulse<BR></TD>
+    <TD>read scratch<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>reset latch<BR></TD>
+    <TD class=3D"rom">skip<BR></TD>
+    <TD>write register<BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search<BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom<BR></TD>
+    <TD>read mem<BR></TD>
+    <TD><BR></TD>
+    <TD>PIO read<BR></TD>
+  <TR>
+    <TD class=3D"dev">2423</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">4k ram with counter</TD>
+    <TD class=3D"dev">1D</TD>
+    <TD class=3D"mem">16*256</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>read mem + counter</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2409</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">microlan coupler</TD>
+    <TD class=3D"dev">1F</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD>smart-on aux</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD>status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>all off</TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>discharge</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>dir-on main</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD>smart-on main</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2450</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">quad a/d converter</TD>
+    <TD class=3D"dev">20</TD>
+    <TD class=3D"mem">4*8</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD>convert V</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1921<BR></TD>
+    <TD class=3D"nam">Thermachron</TD>
+    <TD class=3D"dev">21</TD>
+    <TD class=3D"mem">256*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD>clear mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>CRC read mem</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">1822</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">Econo Digital Thermometer</TD>
+    <TD class=3D"dev">22</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">write trim2<BR></TD>
+    <TD class=3D"undoc">copy trim2<BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim2<BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim1<BR></TD>
+    <TD class=3D"undoc">copy trim1<BR></TD>
+    <TD class=3D"undoc">write trim1<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>power</TD>
+    <TD><BR></TD>
+    <TD>recall EE</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">alarm search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2433</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">4k eeprom</TD>
+    <TD class=3D"dev">23</TD>
+    <TD class=3D"mem">16*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2415</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">time chip</TD>
+    <TD class=3D"dev">24</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read clock</TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write clock</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2438</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">smart battery monitor</TD>
+    <TD class=3D"dev">26</TD>
+    <TD class=3D"mem">8*8</TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert V</TD>
+    <TD><BR></TD>
+    <TD>recall EE</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2417</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">time chip with interrupt</TD>
+    <TD class=3D"dev">27</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read clock</TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write clock</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">18B20</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">programmable resolution digital thermometer</TD>
+    <TD class=3D"dev">28</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>convert T</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">write trim2<BR></TD>
+    <TD class=3D"undoc">copy trim2<BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim2<BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"undoc">read trim1</TD>
+    <TD class=3D"undoc">copy trim1<BR></TD>
+    <TD class=3D"undoc">write trim1<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>power</TD>
+    <TD><BR></TD>
+    <TD>recall EE</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">alarm search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2408</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">8-channel addressable switch</TD>
+    <TD class=3D"dev">29</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD>write channel</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>reset latch</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD>write cond</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read PIO</TD>
+    <TD><BR></TD>
+    <TD>read channel</TD>
+  <TR>
+    <TD class=3D"dev">2890</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">digital potentiometer</TD>
+    <TD class=3D"dev">2C</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write pos</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write control</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>decrement</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD>read control</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>increment</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read pos</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2431</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">1k eeprom</TD>
+    <TD class=3D"dev">2D</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2770</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">battery monitor and charge controller</TD>
+    <TD class=3D"dev">2E</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>refresh</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>swap</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>start charge</TD>
+    <TD>recall data</TD>
+    <TD>stop charge</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2760</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">high-precision li+ battery monitor</TD>
+    <TD class=3D"dev">30</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>swap</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>recall data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2761</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">high precision li+ battery monitor</TD>
+    <TD class=3D"dev">30</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>swap</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>recall data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2762</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">high precision li+ battery monitor with =
+alerts</TD>
+    <TD class=3D"dev">30</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>swap</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>recall data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2720</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">efficient addressable single-cell rechargable =
+lithium=20
+      protection ic</TD>
+    <TD class=3D"dev">31</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>recall data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2432</TD>
+    <TD class=3D"dev">1961S</TD>
+    <TD class=3D"nam">1k protected eeprom with SHA-1</TD>
+    <TD class=3D"dev">33</TD>
+    <TD class=3D"mem">4*256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD>compute next</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD>load first</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD>read auth page</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2740</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">high precision coulomb counter</TD>
+    <TD class=3D"dev">36</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD><BR></TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1977<BR></TD>
+    <TD class=3D"nam">Password protected 32k eeprom</TD>
+    <TD class=3D"dev">37</TD>
+    <TD class=3D"mem">512*64</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD>pw read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>pw copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>pw verify</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD>version</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2413</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">dual channel addressable switch</TD>
+    <TD class=3D"dev">3A</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match<BR></TD>
+    <TD><BR></TD>
+    <TD>PIO read<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip<BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>PIO write<BR></TD>
+  <TR>
+    <TD class=3D"dev">2422</TD>
+    <TD class=3D"dev">1922L<BR> 1922T<BR> 1923<BR></TD>
+    <TD class=3D"nam">Temperature Logger 8k mem</TD>
+    <TD class=3D"dev">41</TD>
+    <TD class=3D"mem">384*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD>pw stop mess</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>convert T</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD>pw read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>pw clear</TD>
+    <TD>pw copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">resume</TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD>pw start miss</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2751</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">multichemistry battery fuel gauge</TD>
+    <TD class=3D"dev">51</TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD>read data</TD>
+    <TD>lock</TD>
+    <TD>write data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>recall data</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">&nbsp;<BR></TD>
+    <TD class=3D"dev">1420<BR></TD>
+    <TD class=3D"nam">Serial ID Button<BR></TD>
+    <TD class=3D"dev">81<BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2404S</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">dual port plus time</TD>
+    <TD class=3D"dev">84</TD>
+    <TD class=3D"mem">16*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2502-E48<BR> 2502-UNW<BR></TD>
+    <TD class=3D"dev">1982U<BR></TD>
+    <TD class=3D"nam">48 bit node address chip</TD>
+    <TD class=3D"dev">89</TD>
+    <TD class=3D"mem">4*32</TD>
+    <TD class=3D"mem">8</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>CRC read data</TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2505-UNW</TD>
+    <TD class=3D"dev">1985U</TD>
+    <TD class=3D"nam">16k add-only<BR> uniqueware<BR><BR></TD>
+    <TD class=3D"dev">8B</TD>
+    <TD class=3D"mem">64*256</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD>speed write</TD>
+    <TD>speed write status</TD>
+  <TR>
+    <TD class=3D"dev">2506-UNW</TD>
+    <TD class=3D"dev">1986U</TD>
+    <TD class=3D"nam">64k add-only uniqueware<BR></TD>
+    <TD class=3D"dev">8F</TD>
+    <TD class=3D"mem">256*32</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>ext read mem</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD>speed write</TD>
+    <TD>speed write status</TD>
+  <TR>
+    <TD class=3D"dev">LCD</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">LCD (Swart)</TD>
+    <TD class=3D"dev">FF</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>LCD on</TD>
+    <TD>LCD off</TD>
+    <TD>light off</TD>
+    <TD>light on</TD>
+    <TD>write reg</TD>
+    <TD>copy from reg</TD>
+    <TD>write mem</TD>
+    <TD>copy from mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write GPIO out</TD>
+    <TD>copy GPIO in</TD>
+    <TD>copy GPIO counters</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD><BR></TD>
+    <TD>copy from eeprom</TD>
+    <TD>copy to eeprom</TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD>copy from version</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>copy to LCD</TD>
+    <TD>clear LCD</TD>
+    <TD>write scratch</TD>
+    <TD class=3D"rom">match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">cond search</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">28E01-100<BR></TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">1k EEPROM with SHA-1<BR></TD>
+    <TD class=3D"dev">XX<BR></TD>
+    <TD class=3D"mem">4*256<BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"ovdr">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"ovdr">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD class=3D"rom">*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+    <TD>*<BR></TD>
+  <TR>
+    <TD class=3D"dev">1821</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">programmable digital thermostat and =
+thermometer</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD>write TH</TD>
+    <TD>write TL</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>stop T</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD>load counter</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>read counter</TD>
+    <TD>read TH</TD>
+    <TD>read TL</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD>read temp</TD>
+    <TD>read status</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD>start T</TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2223</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">econoram</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev">2224</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"nam">econoram</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"mem">256</TD>
+    <TD class=3D"mem"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"dev">1962S<BR></TD>
+    <TD class=3D"nam">1k protected eeprom SHA-1</TD>
+    <TD class=3D"dev"><BR></TD>
+    <TD class=3D"mem">150*32</TD>
+    <TD class=3D"mem">16</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>write scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">read rom</TD>
+    <TD>compute next</TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD class=3D"ovdr">ovdr skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">match</TD>
+    <TD>copy scratch</TD>
+    <TD>load first</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"ovdr">ovdr match</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD>refresh scratch</TD>
+    <TD class=3D"rom">resume</TD>
+    <TD>read auth page</TD>
+    <TD>read scratch</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">skip</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom"><BR></TD>
+    <TD><BR></TD>
+    <TD class=3D"rom">search rom</TD>
+    <TD>read mem</TD>
+    <TD><BR></TD>
+    <TD><BR></TD>
+  <TR>
+    <TH class=3D"dev">Device</TH>
+    <TH class=3D"dev">iButton</TH>
+    <TH class=3D"nam">Name</TH>
+    <TH class=3D"dev">Family</TH>
+    <TH class=3D"mem">Memory</TH>
+    <TH class=3D"mem">CRC</TH>
+    <TH>01</TH>
+    <TH>02</TH>
+    <TH>03</TH>
+    <TH>05</TH>
+    <TH>07</TH>
+    <TH>08</TH>
+    <TH>10</TH>
+    <TH>11</TH>
+    <TH>12</TH>
+    <TH>13</TH>
+    <TH>0C</TH>
+    <TH>0F</TH>
+    <TH>11</TH>
+    <TH>17</TH>
+    <TH>21</TH>
+    <TH>22</TH>
+    <TH>23</TH>
+    <TH>25</TH>
+    <TH>28</TH>
+    <TH class=3D"rom">33</TH>
+    <TH>33</TH>
+    <TH>37</TH>
+    <TH class=3D"rom">39</TH>
+    <TH class=3D"ovdr">3C</TH>
+    <TH>3C</TH>
+    <TH>41</TH>
+    <TH>43</TH>
+    <TH>44</TH>
+    <TH>48</TH>
+    <TH>49</TH>
+    <TH>4E</TH>
+    <TH class=3D"rom">55</TH>
+    <TH>55</TH>
+    <TH>5A</TH>
+    <TH>63</TH>
+    <TH>64</TH>
+    <TH>66</TH>
+    <TH>68</TH>
+    <TH class=3D"ovdr">69</TH>
+    <TH>69</TH>
+    <TH>6A</TH>
+    <TH>6C</TH>
+    <TH>71</TH>
+    <TH>77</TH>
+    <TH>7A</TH>
+    <TH>93</TH>
+    <TH>94</TH>
+    <TH>95</TH>
+    <TH>96</TH>
+    <TH>99</TH>
+    <TH>A0</TH>
+    <TH>A1</TH>
+    <TH>A2</TH>
+    <TH>A3</TH>
+    <TH class=3D"rom">A5</TH>
+    <TH>A5</TH>
+    <TH>AA</TH>
+    <TH>AC</TH>
+    <TH>B2</TH>
+    <TH>B4</TH>
+    <TH>B5</TH>
+    <TH>B8</TH>
+    <TH>BE</TH>
+    <TH>C3</TH>
+    <TH class=3D"rom">CC</TH>
+    <TH>CC</TH>
+    <TH>D2</TH>
+    <TH class=3D"rom">EC</TH>
+    <TH>EE</TH>
+    <TH class=3D"rom">F0</TH>
+    <TH>F0</TH>
+    <TH>F3</TH>
+    <TH>F5</TH></TR></TBODY></TABLE>
+<P style=3D"margin-bottom: 0in;"><BR></P>
+<ADDRESS>=A9 2003 Paul H. Alfille and The owfs Team</ADDRESS>
+<ADDRESS>$Id: family.html,v 1.22 2005/09/04 23:26:45 alfille Exp =
+$</ADDRESS>
+<P><BR><BR></P></BODY></HTML>
+
+------=_NextPart_000_0000_01CF331D.D06657F0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://sourceforge.net/sflogo.php?group_id=85502&type=1
+
+iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAMAAABUFvrSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+bWFnZVJlYWR5ccllPAAAAFpQTFRF////7u7uX2pytLm9ipKYn6aqdH6F3+Hj6uvsf4iOv8PHanR7
+1NfZlJyhqrC09PX2ys3Qsri8kpqf7KqcmJ+k1kkqzdDTxcnMub7BoKarqpOR8cK4lp2j6Z6NbVan
+UgAAARFJREFUSMft08lu3DAURNHb93EUKbUcJ7Ez/f9vZiG3h2TdG0O1IMDNQaEIcrlTuHCXnPAJ
+n/Bng69deyXU3nIGUi5qEGpkX5JnVzdUe6tdjUV1gWQwTepxWC5cdisR25i0Xm5wEIZBzTlDM0Gz
+VLJZWfwxSiW2xQAgaZ0mE8BiHFPktcEIoPrlFc4jrQBZfVINA64OJfx6iItagGQp+1G2vcG03OMG
+r0Daiva5HvCt8Rtc3MOA5MNr41rKv41nr4S/x0LtfRuNOqLEdF8Mak8fpkiGtpFeLg8GPH57TLbq
+f1Ns6kZW12vrarqWYBrvHi8Bs+sIlN3+vajrs+rPP7+SjTimKO+mOD/ICZ/wJ4LvlL9T9gm7i8l6
+8gAAAABJRU5ErkJggg==
+
+------=_NextPart_000_0000_01CF331D.D06657F0--

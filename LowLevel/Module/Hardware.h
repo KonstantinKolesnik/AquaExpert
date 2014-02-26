@@ -44,10 +44,6 @@ LOW = 0xE4 (valid)
 #define DIGITAL_PORT					PORTB	// port of digital outputs
 #define DIGITAL_DDR						DDRB
 #define DIGITAL_PIN						PINB
-
-//#define ANALOG_PORT						PORTA	// port of analog inputs (ADC)
-//#define ANALOG_DDR						DDRA
-//
 //****************************************************************************************
 // 2. Ports Definition
 //****************************************************************************************

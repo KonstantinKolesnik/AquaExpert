@@ -1,7 +1,7 @@
 #include "Hardware.h"
 #include "Digitals.h"
 #include "Analogs.h"
-#include "OW\onewire.h"
+#include "OneWire.h"
 #include "I2C\I2C.h"
 #include "WaterSensors.h"
 #include "TemperatureSensors.h"
@@ -138,6 +138,7 @@ void InitModuleState()
 void PopulateModuleState()
 {
 	ControlLine_t* pLines = controlLines;
+	uint16_t val;
 	
 	for (uint8_t i = 0; i < controlLinesCount; i++)
 	{
@@ -151,13 +152,19 @@ void PopulateModuleState()
 				pLines->State[1] = 0;
 				break;
 			case CONTROL_LINE_TYPE_ANALOG:
-				//pLines->State[0] = 7;
-				//pLines->State[1] = 3;
+				val = GetAnalog(pLines->Address);
+				pLines->State[0] = val & 0xFF;
+				pLines->State[1] = (val >> 8) & 0xFF;
 				break;
 			case CONTROL_LINE_TYPE_PWM:
 				//pLines->State[0] = 7;
 				//pLines->State[1] = 3;
 				break;
+			case CONTROL_LINE_TYPE_ONE_WIRE:
+				//pLines->State[0] = 7;
+				//pLines->State[1] = 3;
+				break;
+				
 			//case CONTROL_LINE_TYPE_WATER_SENSOR:
 				//pLines->State[0] = IsWaterSensorWet(pLines->Address);
 				//pLines->State[1] = 0;

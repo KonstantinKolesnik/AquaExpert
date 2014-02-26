@@ -1,7 +1,7 @@
 #ifndef ONEWIRE_H
 #define ONEWIRE_H
 //****************************************************************************************
-#include "..\Hardware.h"
+#include "Hardware.h"
 //#include "delay.h"
 //****************************************************************************************
 #define MAXDEVICES			MAX_ONE_WIRE_DEVICES
@@ -40,43 +40,41 @@
 #define	OW_DATA_ERR	    0xFE
 #define OW_LAST_DEVICE	0x00		// last device found
 //			0x01 ... 0x40: continue searching
-
-#define OW_DS1990_FAMILY_CODE	1
-#define OW_DS2405_FAMILY_CODE	5
+//****************************************************************************************
+// family codes:
+#define OW_DS1990_FAMILY_CODE	0x01 // silicon serial number
+#define OW_DS2405_FAMILY_CODE	0x05 // addressable switch
 #define OW_DS2413_FAMILY_CODE	0x3A
 #define OW_DS1822_FAMILY_CODE	0x22
 #define OW_DS2430_FAMILY_CODE	0x14
-//#define OW_DS1990_FAMILY_CODE	1
 #define OW_DS2431_FAMILY_CODE	0x2d
 #define OW_DS18S20_FAMILY_CODE	0x10
 #define OW_DS18B20_FAMILY_CODE	0x28
 #define OW_DS2433_FAMILY_CODE	0x23
 
 // rom-code size including CRC
-#define OW_ROMCODE_SIZE	8
+#define OW_ROMCODE_SIZE			8
 //****************************************************************************************
-unsigned char OW_Reset();
-void OW_WriteBit(unsigned char bit);
-unsigned char OW_ReadBit();
+uint8_t	owDevicesIDs[MAXDEVICES][8];	// their IDs (8 bytes per device)
+//****************************************************************************************
+uint8_t OW_Reset();
+void OW_WriteBit(uint8_t bit);
+uint8_t OW_ReadBit();
 
 #ifndef UART_AS_OneWire
-	unsigned char OW_ReadByte();
-	void OW_WriteByte(unsigned char byte);
+	uint8_t OW_ReadByte();
+	void OW_WriteByte(uint8_t byte);
 #else
-	unsigned char OW_WriteByte(unsigned char byte);
+	uint8_t OW_WriteByte(uint8_t byte);
 	#define OW_ReadByte() OW_WriteByte(0xFF)
 #endif
 
-unsigned char OW_SearchROM( unsigned char diff, unsigned char *id );
-void OW_FindROM(unsigned char *diff, unsigned char id[]);
-unsigned char OW_ReadROM(unsigned char *buffer);
+uint8_t OW_SearchROM(uint8_t diff, uint8_t *id);
+bool OW_ReadROM(uint8_t *buffer);
 bool OW_MatchROM(uint8_t* rom);
-//****************************************************************************************
-//uint16_t owDevicesCount;
-uint8_t	owDevicesIDs[MAXDEVICES][8];	// their IDs (8 bytes per device)
-//****************************************************************************************
-uint8_t OW_Scan();
+
 void OW_Init();
+uint16_t OW_Scan();
 uint16_t OW_GetDeviceCount();
 //****************************************************************************************
 #endif

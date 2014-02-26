@@ -1,7 +1,7 @@
-#include "onewire.h"
-//#ifdef UART_AS_OneWire
-	//#include <avr/interrupt.h>
-//#endif
+#include "OneWire.h"
+#ifdef UART_AS_OneWire
+	#include <avr/interrupt.h>
+#endif
 //****************************************************************************************
 #define sbi(reg,bit) reg |= (1<<bit)
 #define cbi(reg,bit) reg &= ~(1<<bit)
@@ -43,7 +43,7 @@ unsigned char OW_CheckIn(void)
 }
 #endif
 
-unsigned char OW_Reset(void)
+uint8_t OW_Reset()
 {
 #ifdef UART_AS_OneWire
 	UCSRB=(1<<RXEN)|(1<<TXEN);
@@ -62,7 +62,7 @@ unsigned char OW_Reset(void)
 	if (UDR != 0xF0) return 1;
  return 0;
 #else
-	unsigned char	status;
+	uint8_t	status;
 	OW_Set(1);
 	_delay_us(480);
 	OW_Set(0);
@@ -76,7 +76,7 @@ unsigned char OW_Reset(void)
 //	return 1 if found
 //	return 0 if not found
 }
-void OW_WriteBit(unsigned char bit)
+void OW_WriteBit(uint8_t bit)
 {
 #ifdef UART_AS_OneWire	
 	//115200
@@ -84,7 +84,7 @@ void OW_WriteBit(unsigned char bit)
 	UBRRH = (USART_BAUDRATE_115200 >> 8);
 	UCSRA |= (1<<U2X);
 	
-	unsigned char	d = 0x00;	
+	uint8_t	d = 0x00;	
 	while(CheckBit(UCSRA, RXC)) UDR; //Зачистка буферов
 	if (bit) d = 0xFF;
 	cli();
@@ -105,7 +105,7 @@ void OW_WriteBit(unsigned char bit)
 	OW_Set(0);
 #endif	
 }
-unsigned char OW_ReadBit(void)
+uint8_t OW_ReadBit()
 {
 #ifdef UART_AS_OneWire	
 	//115200
@@ -113,7 +113,7 @@ unsigned char OW_ReadBit(void)
 	UBRRH = (USART_BAUDRATE_115200 >> 8);
 	UCSRA |= (1<<U2X);
 	
-	unsigned char	c;
+	uint8_t	c;
 	while(CheckBit(UCSRA, RXC)) UDR; //Зачистка буферов
 	cli();		
 	UDR = 0xFF;
@@ -125,7 +125,7 @@ unsigned char OW_ReadBit(void)
 	if (c>0xFE) return 1;
 	return 0;
 #else	
-	unsigned char	bit=0;
+	uint8_t	bit=0;
 	//Pull line low for 1uS
 	OW_Set(1);
 	_delay_us(1);
@@ -141,9 +141,9 @@ unsigned char OW_ReadBit(void)
 }
 
 #ifdef UART_AS_OneWire
-unsigned char OW_WriteByte(unsigned char byte)
+uint8_t OW_WriteByte(uint8_t byte)
 {
-	unsigned char	i = 8;
+	uint8_t	i = 8;
 	//115200
 	UBRRL = USART_BAUDRATE_115200;
 	UBRRH = (USART_BAUDRATE_115200 >> 8);
@@ -151,7 +151,7 @@ unsigned char OW_WriteByte(unsigned char byte)
   
 	do
 	{
-		unsigned char	d = 0x00;
+		uint8_t	d = 0x00;
 		if (byte&1) d = 0xFF;
 		cli();
 		UDR = d;
@@ -172,17 +172,19 @@ void OW_WriteByte(uint8_t byte)
 	for (uint8_t i = 0; i < 8; i++)
 		OW_WriteBit(CheckBit(byte, i));
 }
-unsigned char OW_ReadByte(void)
+uint8_t OW_ReadByte()
 {
-	unsigned char n=0;
+	uint8_t n = 0;
 
-	for (unsigned char i=0; i<8; i++) if (OW_ReadBit()) sbi(n, i);
+	for (uint8_t i = 0; i < 8; i++)
+		if (OW_ReadBit())
+			sbi(n, i);
 	
 	return n;
 }
 #endif
 
-unsigned char OW_SearchROM( unsigned char diff, unsigned char *id )
+uint8_t OW_SearchROM(uint8_t diff, uint8_t *id)
 { 	
 	unsigned char i, j, next_diff;
 	unsigned char b;
@@ -200,51 +202,50 @@ unsigned char OW_SearchROM( unsigned char diff, unsigned char *id )
 		do 
 		{ 
 			b = OW_ReadBit();			// read bit
-			if( OW_ReadBit() ) 
-			{ // read complement bit
-				if( b )                 // 11
-				return OW_DATA_ERR;  // data error
+			if (OW_ReadBit()) 
+			{	// read complement bit
+				if (b)                 // 11
+					return OW_DATA_ERR;  // data error
 			}
 			else 
 			{ 
-				if( !b ) { // 00 = 2 devices
-				if( diff > i || ((*id & 1) && diff != i) ) { 
+				if (!b) // 00 = 2 devices
+				{
+					if (diff > i || ((*id & 1) && diff != i))
+					{
 						b = 1;               // now 1
 						next_diff = i;       // next pass 0
 					}
 				}
 			}
-         OW_WriteBit( b );               // write bit
-         *id >>= 1;
-         if( b ) *id |= 0x80;			// store bit
-         i--;
-		} 
-		while( --j );
+			
+			OW_WriteBit(b);               // write bit
+			*id >>= 1;
+			if (b)
+				*id |= 0x80;			// store bit
+				
+			i--;
+		}
+		
+		while (--j);
+		
 		id++;                            // next byte
-    } 
-	while( i );
+    }
+	
+	while (i);
+	
 	return next_diff;                  // to continue search
 }
-void OW_FindROM(unsigned char *diff, unsigned char id[])
+bool OW_ReadROM(uint8_t *buffer)
 {
-	while (1)
-    {
-		*diff = OW_SearchROM( *diff, &id[0] );
-    	if (*diff == OW_PRESENCE_ERR || *diff == OW_DATA_ERR || *diff == OW_LAST_DEVICE)
-			return;
-    	//if (id[0] == DS18B20_ID || id[0] == DS18S20_ID) 
-		return;
-    }
-}
-unsigned char OW_ReadROM(unsigned char *buffer)
-{
-	if (!OW_Reset()) return 0;
+	if (!OW_Reset())
+		return false;
+		
 	OW_WriteByte(OW_CMD_READROM);
-	for (unsigned char i=0; i<8; i++)
-	{
+	for (uint8_t i = 0; i < 8; i++)
 		buffer[i] = OW_ReadByte();
-	}
- return 1;
+		
+	return true;
 }
 bool OW_MatchROM(uint8_t* rom)
 {
@@ -268,31 +269,27 @@ void OW_Init()
 
 	devicesCount = OW_Scan();
 }
-unsigned char OW_Scan()
+uint16_t OW_Scan()
 {
-	unsigned char	i;
-	unsigned char	id[OW_ROMCODE_SIZE];
-	unsigned char	diff, idx;
+	uint8_t	i;
+	uint8_t	id[OW_ROMCODE_SIZE];
+	uint8_t	diff;
+	uint8_t count = 0;
 
-	idx = 0;
-
-	for (diff = OW_SEARCH_FIRST; diff != OW_LAST_DEVICE && idx < MAXDEVICES; )
+	for (diff = OW_SEARCH_FIRST; diff != OW_LAST_DEVICE && count < MAXDEVICES; )
 	{
-		OW_FindROM(&diff, &id[0]);
+		diff = OW_SearchROM(diff, &id[0]);
 
-		if (diff == OW_PRESENCE_ERR)
-			break;
-
-		if (diff == OW_DATA_ERR)
+		if (diff == OW_PRESENCE_ERR || diff == OW_DATA_ERR)
 			break;
 
 		for (i = 0; i < OW_ROMCODE_SIZE; i++)
-			owDevicesIDs[idx][i] = id[i];
+			owDevicesIDs[count][i] = id[i];
 		
-		idx++;
+		count++;
 	}
 	
-	return idx;
+	return count;
 }
 uint16_t OW_GetDeviceCount()
 {
