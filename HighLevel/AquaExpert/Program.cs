@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
 using Gadgeteer.Modules.GHIElectronics;
+using System.Text;
 
 namespace AquaExpert
 {
@@ -102,22 +103,45 @@ namespace AquaExpert
             //UIManager.DebugPage.AddLine("Status:");
             //UIManager.DebugPage.AddLine(nrf24.Status.ToString());
 
-            UIManager.DebugPage.AddLine("---------------");
-            UIManager.DebugPage.AddLine("IsEnabled: " + nrf24.IsEnabled);
-            UIManager.DebugPage.AddLine("CRCType: " + (nrf24.CRCType == NRF24.CRCLength.CRC1Byte ? "1 byte" : "2 bytes"));
-            UIManager.DebugPage.AddLine("IsCRCEnabled: " + nrf24.IsCRCEnabled);
-            UIManager.DebugPage.AddLine("IsDataReceivedInterruptEnabled: " + nrf24.IsDataReceivedInterruptEnabled);
-            UIManager.DebugPage.AddLine("IsDataSentInterruptEnabled: " + nrf24.IsDataSentInterruptEnabled);
-            UIManager.DebugPage.AddLine("IsResendLimitReachedInterruptEnabled: " + nrf24.IsResendLimitReachedInterruptEnabled);
-            UIManager.DebugPage.AddLine("IsPowerOn: " + nrf24.IsPowerOn);
-            //nrf24.IsPowerOn = true;
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("CRCType: " + (nrf24.CRCType == NRF24.CRCLength.CRC1 ? "1 byte" : "2 bytes"));
+            //UIManager.DebugPage.AddLine("IsCRCEnabled: " + nrf24.IsCRCEnabled);
+            //UIManager.DebugPage.AddLine("IsDataReceivedInterruptEnabled: " + nrf24.IsDataReceivedInterruptEnabled);
+            //UIManager.DebugPage.AddLine("IsDataSentInterruptEnabled: " + nrf24.IsDataSentInterruptEnabled);
+            //UIManager.DebugPage.AddLine("IsResendLimitReachedInterruptEnabled: " + nrf24.IsResendLimitReachedInterruptEnabled);
             //UIManager.DebugPage.AddLine("IsPowerOn: " + nrf24.IsPowerOn);
+            //UIManager.DebugPage.AddLine("IsReceiver: " + nrf24.IsReceiver);
+
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("IsAckEnabledP0: " + nrf24.IsAckEnabledP0);
+            //UIManager.DebugPage.AddLine("IsAckEnabledP1: " + nrf24.IsAckEnabledP1);
+            //UIManager.DebugPage.AddLine("IsAckEnabledP2: " + nrf24.IsAckEnabledP2);
+            //UIManager.DebugPage.AddLine("IsAckEnabledP3: " + nrf24.IsAckEnabledP3);
+            //UIManager.DebugPage.AddLine("IsAckEnabledP4: " + nrf24.IsAckEnabledP4);
+            //UIManager.DebugPage.AddLine("IsAckEnabledP5: " + nrf24.IsAckEnabledP5);
+
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled0: " + nrf24.IsReceiverAddressEnabled0);
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled1: " + nrf24.IsReceiverAddressEnabled1);
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled2: " + nrf24.IsReceiverAddressEnabled2);
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled3: " + nrf24.IsReceiverAddressEnabled3);
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled4: " + nrf24.IsReceiverAddressEnabled4);
+            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled5: " + nrf24.IsReceiverAddressEnabled5);
+
+            UIManager.DebugPage.AddLine("---------------");
+            UIManager.DebugPage.AddLine("AddressType: " + nrf24.AddressType);
             UIManager.DebugPage.AddLine("Channel: " + nrf24.Channel);
 
-            //new Thread(() => { byte a = nrf24.Channel; }).Start();
+            //byte[] channels = nrf24.ScanChannels();
+            //for (int i = 0; i < channels.Length; i++)
+            //    Debug.Print("Challel # " + i+ ": " + channels[i]);
 
             // to start receiveing we need to call Enable(), call Disable() to stop/pause
             nrf24.IsEnabled = true;
+
+            //nrf24.SendTo(nrf24.RX_Adress, Encoding.UTF8.GetBytes("Test"));
+            //nrf24.SendTo(nrf24.RX_Adress, new byte[] { 123 });
+            //new string(Encoding.UTF8.GetChars())
         }
         private void InitBus()
         {
