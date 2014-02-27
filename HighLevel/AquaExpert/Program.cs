@@ -127,8 +127,60 @@ namespace AquaExpert
             //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled5: " + nrf24.IsReceiverAddressEnabled5);
 
             UIManager.DebugPage.AddLine("---------------");
-            UIManager.DebugPage.AddLine("AddressType: " + nrf24.AddressType);
+            //UIManager.DebugPage.AddLine("AddressType: " + nrf24.AddressType);
+            //UIManager.DebugPage.AddLine("AutoRetransmitCount: " + nrf24.AutoRetransmitCount);
+            //UIManager.DebugPage.AddLine("AutoRetransmitDelay: " + nrf24.AutoRetransmitDelay);
             UIManager.DebugPage.AddLine("Channel: " + nrf24.Channel);
+
+            //UIManager.DebugPage.AddLine("RetransmittedPacketsCount: " + nrf24.RetransmittedPacketsCount);
+            //UIManager.DebugPage.AddLine("LostPacketsCount: " + nrf24.LostPacketsCount);
+
+            UIManager.DebugPage.AddLine("---------------");
+            UIManager.DebugPage.AddLine("TransmitAddress: " +
+                "[" + nrf24.TransmitAddress[4] + "]" +
+                "[" + nrf24.TransmitAddress[3] + "]" +
+                "[" + nrf24.TransmitAddress[2] + "]" +
+                "[" + nrf24.TransmitAddress[1] + "]" +
+                "[" + nrf24.TransmitAddress[0] + "]"
+                );
+            UIManager.DebugPage.AddLine("ReceiveAddress0: " +
+                "[" + nrf24.ReceiveAddress0[4] + "]" +
+                "[" + nrf24.ReceiveAddress0[3] + "]" +
+                "[" + nrf24.ReceiveAddress0[2] + "]" +
+                "[" + nrf24.ReceiveAddress0[1] + "]" +
+                "[" + nrf24.ReceiveAddress0[0] + "]"
+                );
+            UIManager.DebugPage.AddLine("ReceiveAddress1: " +
+                "[" + nrf24.ReceiveAddress1[4] + "]" +
+                "[" + nrf24.ReceiveAddress1[3] + "]" +
+                "[" + nrf24.ReceiveAddress1[2] + "]" +
+                "[" + nrf24.ReceiveAddress1[1] + "]" +
+                "[" + nrf24.ReceiveAddress1[0] + "]"
+                );
+
+
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth0: " + nrf24.ReceiverPayloadWidth0);
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth1: " + nrf24.ReceiverPayloadWidth1);
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth2: " + nrf24.ReceiverPayloadWidth2);
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth3: " + nrf24.ReceiverPayloadWidth3);
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth4: " + nrf24.ReceiverPayloadWidth4);
+            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth5: " + nrf24.ReceiverPayloadWidth5);
+
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled0: " + nrf24.IsDynamicPayloadEnabled0);
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled1: " + nrf24.IsDynamicPayloadEnabled1);
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled2: " + nrf24.IsDynamicPayloadEnabled2);
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled3: " + nrf24.IsDynamicPayloadEnabled3);
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled4: " + nrf24.IsDynamicPayloadEnabled4);
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled5: " + nrf24.IsDynamicPayloadEnabled5);
+
+            //UIManager.DebugPage.AddLine("---------------");
+            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled: " + nrf24.IsDynamicPayloadEnabled);
+            //UIManager.DebugPage.AddLine("IsAckPayloadEnabled: " + nrf24.IsAckPayloadEnabled);
+            //UIManager.DebugPage.AddLine("IsDynamicAckEnabled: " + nrf24.IsDynamicAckEnabled);
+
+            
 
             //byte[] channels = nrf24.ScanChannels();
             //for (int i = 0; i < channels.Length; i++)
@@ -136,6 +188,14 @@ namespace AquaExpert
 
             // to start receiveing we need to call Enable(), call Disable() to stop/pause
             nrf24.IsEnabled = true;
+
+            byte[] address = new byte[5] { 0,1,2,3,4 };
+
+            nrf24.EnableAckPayload();
+            nrf24.OpenWritingPipe(address);
+
+            nrf24.StartWrite(new byte[] { 123 });
+
 
             //nrf24.SendTo(nrf24.RX_Adress, Encoding.UTF8.GetBytes("Test"));
             //nrf24.SendTo(nrf24.RX_Adress, new byte[] { 123 });
