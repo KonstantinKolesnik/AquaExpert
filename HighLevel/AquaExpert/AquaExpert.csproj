@@ -45,6 +45,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RFManager.cs" />
     <Compile Include="TimeManager.cs" />
     <Compile Include="Program.generated.cs">
       <AutoGen>True</AutoGen>

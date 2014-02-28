@@ -35,6 +35,7 @@ namespace AquaExpert
 
         private GT.Timer timerTest;
 
+        private RFManager rfManager;
         private NRF24 nrf24;
         #endregion
 
@@ -84,122 +85,7 @@ namespace AquaExpert
         }
         private void InitRF()
         {
-            //const byte channel = 10;
-
-            UIManager.DebugPage.Text = "Init nRF24L01+";
-
-            nrf24 = new NRF24(11);
-
-            //nrf24.OnDataReceived += nrf24_Receive;
-            //nrf24.OnTransmitFailed += nrf24_OnSendFailure;
-            //nrf24.OnTransmitSuccess += nrf24_OnSendSuccess;
-
-            // we need to call Configure() befeore we start using the module
-            //nrf24.Configure(Encoding.UTF8.GetBytes("COORD"), channel);
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("Status:");
-            //UIManager.DebugPage.AddLine(nrf24.Status.ToString());
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("CRCType: " + (nrf24.CRCType == NRF24.CRCLength.CRC1 ? "1 byte" : "2 bytes"));
-            //UIManager.DebugPage.AddLine("IsCRCEnabled: " + nrf24.IsCRCEnabled);
-            //UIManager.DebugPage.AddLine("IsDataReceivedInterruptEnabled: " + nrf24.IsDataReceivedInterruptEnabled);
-            //UIManager.DebugPage.AddLine("IsDataSentInterruptEnabled: " + nrf24.IsDataSentInterruptEnabled);
-            //UIManager.DebugPage.AddLine("IsResendLimitReachedInterruptEnabled: " + nrf24.IsResendLimitReachedInterruptEnabled);
-            //UIManager.DebugPage.AddLine("IsPowerOn: " + nrf24.IsPowerOn);
-            //UIManager.DebugPage.AddLine("IsReceiver: " + nrf24.IsReceiver);
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("IsAckEnabledP0: " + nrf24.IsAckEnabledP0);
-            //UIManager.DebugPage.AddLine("IsAckEnabledP1: " + nrf24.IsAckEnabledP1);
-            //UIManager.DebugPage.AddLine("IsAckEnabledP2: " + nrf24.IsAckEnabledP2);
-            //UIManager.DebugPage.AddLine("IsAckEnabledP3: " + nrf24.IsAckEnabledP3);
-            //UIManager.DebugPage.AddLine("IsAckEnabledP4: " + nrf24.IsAckEnabledP4);
-            //UIManager.DebugPage.AddLine("IsAckEnabledP5: " + nrf24.IsAckEnabledP5);
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled0: " + nrf24.IsReceiverAddressEnabled0);
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled1: " + nrf24.IsReceiverAddressEnabled1);
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled2: " + nrf24.IsReceiverAddressEnabled2);
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled3: " + nrf24.IsReceiverAddressEnabled3);
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled4: " + nrf24.IsReceiverAddressEnabled4);
-            //UIManager.DebugPage.AddLine("IsReceiverAddressEnabled5: " + nrf24.IsReceiverAddressEnabled5);
-
-            UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("AddressType: " + nrf24.AddressType);
-            //UIManager.DebugPage.AddLine("AutoRetransmitCount: " + nrf24.AutoRetransmitCount);
-            //UIManager.DebugPage.AddLine("AutoRetransmitDelay: " + nrf24.AutoRetransmitDelay);
-            UIManager.DebugPage.AddLine("Channel: " + nrf24.Channel);
-
-            //UIManager.DebugPage.AddLine("RetransmittedPacketsCount: " + nrf24.RetransmittedPacketsCount);
-            //UIManager.DebugPage.AddLine("LostPacketsCount: " + nrf24.LostPacketsCount);
-
-            UIManager.DebugPage.AddLine("---------------");
-            UIManager.DebugPage.AddLine("TransmitAddress: " +
-                "[" + nrf24.TransmitAddress[4] + "]" +
-                "[" + nrf24.TransmitAddress[3] + "]" +
-                "[" + nrf24.TransmitAddress[2] + "]" +
-                "[" + nrf24.TransmitAddress[1] + "]" +
-                "[" + nrf24.TransmitAddress[0] + "]"
-                );
-            UIManager.DebugPage.AddLine("ReceiveAddress0: " +
-                "[" + nrf24.ReceiveAddress0[4] + "]" +
-                "[" + nrf24.ReceiveAddress0[3] + "]" +
-                "[" + nrf24.ReceiveAddress0[2] + "]" +
-                "[" + nrf24.ReceiveAddress0[1] + "]" +
-                "[" + nrf24.ReceiveAddress0[0] + "]"
-                );
-            UIManager.DebugPage.AddLine("ReceiveAddress1: " +
-                "[" + nrf24.ReceiveAddress1[4] + "]" +
-                "[" + nrf24.ReceiveAddress1[3] + "]" +
-                "[" + nrf24.ReceiveAddress1[2] + "]" +
-                "[" + nrf24.ReceiveAddress1[1] + "]" +
-                "[" + nrf24.ReceiveAddress1[0] + "]"
-                );
-
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth0: " + nrf24.ReceiverPayloadWidth0);
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth1: " + nrf24.ReceiverPayloadWidth1);
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth2: " + nrf24.ReceiverPayloadWidth2);
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth3: " + nrf24.ReceiverPayloadWidth3);
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth4: " + nrf24.ReceiverPayloadWidth4);
-            //UIManager.DebugPage.AddLine("ReceiverPayloadWidth5: " + nrf24.ReceiverPayloadWidth5);
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled0: " + nrf24.IsDynamicPayloadEnabled0);
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled1: " + nrf24.IsDynamicPayloadEnabled1);
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled2: " + nrf24.IsDynamicPayloadEnabled2);
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled3: " + nrf24.IsDynamicPayloadEnabled3);
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled4: " + nrf24.IsDynamicPayloadEnabled4);
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled5: " + nrf24.IsDynamicPayloadEnabled5);
-
-            //UIManager.DebugPage.AddLine("---------------");
-            //UIManager.DebugPage.AddLine("IsDynamicPayloadEnabled: " + nrf24.IsDynamicPayloadEnabled);
-            //UIManager.DebugPage.AddLine("IsAckPayloadEnabled: " + nrf24.IsAckPayloadEnabled);
-            //UIManager.DebugPage.AddLine("IsDynamicAckEnabled: " + nrf24.IsDynamicAckEnabled);
-
-            
-
-            //byte[] channels = nrf24.ScanChannels();
-            //for (int i = 0; i < channels.Length; i++)
-            //    Debug.Print("Challel # " + i+ ": " + channels[i]);
-
-            // to start receiveing we need to call Enable(), call Disable() to stop/pause
-            nrf24.IsEnabled = true;
-
-            byte[] address = new byte[5] { 0,1,2,3,4 };
-
-            nrf24.EnableAckPayload();
-            nrf24.OpenWritingPipe(address);
-
-            nrf24.StartWrite(new byte[] { 123 });
-
-
-            //nrf24.SendTo(nrf24.RX_Adress, Encoding.UTF8.GetBytes("Test"));
-            //nrf24.SendTo(nrf24.RX_Adress, new byte[] { 123 });
-            //new string(Encoding.UTF8.GetChars())
+            rfManager = new RFManager();
         }
         private void InitBus()
         {
