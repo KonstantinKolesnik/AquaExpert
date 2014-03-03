@@ -12,6 +12,8 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.LoveElectronics;
 
 namespace AquaExpert
 {
@@ -36,7 +38,8 @@ namespace AquaExpert
         private GT.Timer timerTest;
 
         private RFManager rfManager;
-        private NRF24 nrf24;
+
+        internal static Gadgeteer.Modules.LoveElectronics.Button Button;
         #endregion
 
         #region Properties
@@ -60,6 +63,8 @@ namespace AquaExpert
 
         private void ProgramStarted()
         {
+            Button = button;
+
             InitUI();
             InitSettings();
             InitRF();
@@ -112,7 +117,7 @@ namespace AquaExpert
         {
             //Watchdog!!!
 
-            indicators.TurnAllLedsOff();
+            //indicators.TurnAllLedsOff();
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };

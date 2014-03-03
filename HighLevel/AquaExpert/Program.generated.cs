@@ -33,6 +33,9 @@ namespace AquaExpert {
         /// <summary>The Display TE35 module using sockets 15, 16, 17 and 14 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Display_TE35 display_TE35;
         
+        /// <summary>The Button module using socket 10 of the mainboard.</summary>
+        private Gadgeteer.Modules.LoveElectronics.Button button;
+        
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZRaptor Mainboard {
             get {
@@ -61,6 +64,7 @@ namespace AquaExpert {
             Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
             Microsoft.SPOT.Debug.Print("The module \'wifi_RS21\' was not connected in the designer and will be null.");
             this.display_TE35 = new GTM.GHIElectronics.Display_TE35(15, 16, 17, 14);
+            this.button = new GTM.LoveElectronics.Button(10);
         }
     }
 }

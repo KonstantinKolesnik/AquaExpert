@@ -28,7 +28,7 @@ namespace AquaExpert.UI
 
         public void AddLine(string txt)
         {
-            Text += "\n" + txt;
+            Text += (Text != "" ? "\n" : "") + txt;
         }
         public void Clear()
         {
