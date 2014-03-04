@@ -4,6 +4,7 @@ using Gadgeteer.Modules.KKS;
 using AquaExpert.UI;
 using System.Threading;
 using Gadgeteer.Modules.LoveElectronics;
+using Gadgeteer.Modules.Gralin;
 
 namespace AquaExpert
 {
@@ -11,13 +12,36 @@ namespace AquaExpert
     {
         private NRF24 rfMaster;
         private NRF24 rfSlave;
-        private byte[] address = new byte[5] { 0, 1, 2, 3, 4 };
+        private byte[] address1 = new byte[5] { 11, 22, 33, 44, 55 };
         private byte[] address2 = new byte[5] { 99, 88, 77, 66, 55 };
-        //byte msg = 77;
-        byte msgSlave = 77;
+
+        private Nordic nrf1, nrf2;
+        private byte msg1 = 0, msg2 = 0;
 
         public RFManager()
         {
+            nrf1 = new Nordic(11);
+            nrf1.DataReceived += nrf1_DataReceived;
+            nrf1.TransmitFailed += nrf1_TransmitFailed;
+            nrf1.Configure(address1, 2);
+            nrf1.Enable();
+
+            nrf2 = new Nordic(1);
+            nrf2.DataReceived += nrf2_DataReceived;
+            nrf2.TransmitFailed += nrf2_TransmitFailed;
+            nrf2.Configure(address2, 2);
+            nrf2.Enable();
+
+            Program.Button.ButtonReleased += delegate(Button sender, Button.ButtonState state)
+            {
+                UIManager.DebugPage.Clear();
+                UIManager.DebugPage.AddLine("A sends: " + msg1);
+                nrf1.SendTo(address2, new byte[] { msg1 });
+            };
+
+
+            return;
+
             rfMaster = new NRF24(11);
             rfMaster.Tag = "Master";
             rfMaster.DataReceived += rfMaster_DataReceived;
@@ -40,7 +64,7 @@ namespace AquaExpert
             //rfMaster.EnableAckPayload();
             //rfMaster.OpenReadingPipe(1, address);
             //rfMaster.OpenWritingPipe(address2);
-            rfMaster.Configure(address);
+            rfMaster.Configure(address1);
 
             //rfSlave.EnableAckPayload();
             //rfSlave.OpenReadingPipe(1, address2);
@@ -58,7 +82,7 @@ namespace AquaExpert
             Program.Button.ButtonReleased += delegate(Button sender, Button.ButtonState state)
             {
                 UIManager.DebugPage.Clear();
-                UIManager.DebugPage.AddLine("Send: " + 0);
+                UIManager.DebugPage.AddLine("A sends: " + 0);
                 rfMaster.SendTo(address2, new byte[] { 0 });
             };
 
@@ -79,6 +103,50 @@ namespace AquaExpert
             //    }
             //}).Start();
         }
+
+        int pause = 500;
+        void nrf1_TransmitFailed()
+        {
+            //UIManager.DebugPage.AddLine("A resends: " + msg1);
+            Thread.Sleep(pause);
+            nrf1.SendTo(address2, new byte[] { msg1 });
+        }
+        void nrf1_DataReceived(byte[] data)
+        {
+            msg1 = data[0];
+            //UIManager.DebugPage.AddLine("A received: " + msg);
+
+            UIManager.DebugPage.Clear();
+
+            UIManager.DebugPage.AddLine("A sends: " + msg1);
+            Thread.Sleep(pause);
+            nrf1.SendTo(address2, new byte[] { msg1 });
+        }
+
+        void nrf2_TransmitFailed()
+        {
+            //UIManager.DebugPage.AddLine("B resends: " + msg2);
+            Thread.Sleep(pause);
+            nrf2.SendTo(address1, new byte[] { msg2 });
+        }
+        void nrf2_DataReceived(byte[] data)
+        {
+            msg2 = data[0];
+            //UIManager.DebugPage.AddLine("B received: " + msg2);
+            if (msg2 == 255)
+                msg2 = 0;
+            else
+                msg2++;
+
+            //UIManager.DebugPage.AddLine("B sends: " + msg2);
+            Thread.Sleep(pause);
+            nrf2.SendTo(address1, new byte[] { msg2 });
+        }
+
+
+
+
+
 
         void rfMaster_TransmitSuccess(object sender, EventArgs e)
         {
@@ -139,7 +207,7 @@ namespace AquaExpert
             //rfSlave.StartListening();
 
             Thread.Sleep(500);
-            rfSlave.SendTo(address, new byte[] { msg });
+            rfSlave.SendTo(address1, new byte[] { msg });
         }
 
         private void PrintInfo(NRF24 rfModule)
