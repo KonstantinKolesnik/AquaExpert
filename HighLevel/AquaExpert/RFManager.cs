@@ -17,6 +17,7 @@ namespace AquaExpert
 
         private Nordic nrf1, nrf2;
         private byte msg1 = 0, msg2 = 0;
+        int pause = 100;
 
         public RFManager()
         {
@@ -26,16 +27,16 @@ namespace AquaExpert
             nrf1.Configure(address1, 2);
             nrf1.Enable();
 
-            nrf2 = new Nordic(1);
-            nrf2.DataReceived += nrf2_DataReceived;
-            nrf2.TransmitFailed += nrf2_TransmitFailed;
-            nrf2.Configure(address2, 2);
-            nrf2.Enable();
+            //nrf2 = new Nordic(1);
+            //nrf2.DataReceived += nrf2_DataReceived;
+            //nrf2.TransmitFailed += nrf2_TransmitFailed;
+            //nrf2.Configure(address2, 2);
+            //nrf2.Enable();
 
             Program.Button.ButtonReleased += delegate(Button sender, Button.ButtonState state)
             {
-                UIManager.DebugPage.Clear();
-                UIManager.DebugPage.AddLine("A sends: " + msg1);
+                //UIManager.DebugPage.Clear();
+                //UIManager.DebugPage.AddLine("A sends: " + msg1);
                 nrf1.SendTo(address2, new byte[] { msg1 });
             };
 
@@ -104,23 +105,24 @@ namespace AquaExpert
             //}).Start();
         }
 
-        int pause = 500;
         void nrf1_TransmitFailed()
         {
             //UIManager.DebugPage.AddLine("A resends: " + msg1);
-            Thread.Sleep(pause);
-            nrf1.SendTo(address2, new byte[] { msg1 });
+            //Debug.Print("A resends: " + msg1);
+            //Thread.Sleep(pause);
+            //nrf1.SendTo(address2, new[] { msg1 });
         }
         void nrf1_DataReceived(byte[] data)
         {
             msg1 = data[0];
+            Debug.Print("A received: " + msg1);
             //UIManager.DebugPage.AddLine("A received: " + msg);
 
             UIManager.DebugPage.Clear();
-
             UIManager.DebugPage.AddLine("A sends: " + msg1);
-            Thread.Sleep(pause);
-            nrf1.SendTo(address2, new byte[] { msg1 });
+            Debug.Print("A sends: " + msg1);
+            //Thread.Sleep(pause);
+            nrf1.SendTo(address2, new [] { msg1 });
         }
 
         void nrf2_TransmitFailed()
