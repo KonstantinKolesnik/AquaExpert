@@ -18,7 +18,7 @@ namespace AquaExpert {
         /// <summary>The UsbClientDP module using socket 8 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.UsbClientDP usbClientDP;
         
-        /// <summary>The LED Strip module using socket 18 of the mainboard.</summary>
+        /// <summary>The LED Strip module using socket 1 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.LED_Strip indicators;
         
         /// <summary>The SDCard module using socket 9 of the mainboard.</summary>
@@ -35,6 +35,12 @@ namespace AquaExpert {
         
         /// <summary>The Button module using socket 10 of the mainboard.</summary>
         private Gadgeteer.Modules.LoveElectronics.Button button;
+        
+        /// <summary>The Display T43 module (not connected).</summary>
+        private Gadgeteer.Modules.GHIElectronics.Display_T43 display_T43;
+        
+        /// <summary>The Tunes module using socket 18 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.Tunes tunes;
         
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZRaptor Mainboard {
@@ -59,12 +65,14 @@ namespace AquaExpert {
         
         private void InitializeModules() {
             this.usbClientDP = new GTM.GHIElectronics.UsbClientDP(8);
-            this.indicators = new GTM.GHIElectronics.LED_Strip(18);
+            this.indicators = new GTM.GHIElectronics.LED_Strip(1);
             this.sdCard = new GTM.GHIElectronics.SDCard(9);
             Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
             Microsoft.SPOT.Debug.Print("The module \'wifi_RS21\' was not connected in the designer and will be null.");
             this.display_TE35 = new GTM.GHIElectronics.Display_TE35(15, 16, 17, 14);
             this.button = new GTM.LoveElectronics.Button(10);
+            Microsoft.SPOT.Debug.Print("The module \'display_T43\' was not connected in the designer and will be null.");
+            this.tunes = new GTM.GHIElectronics.Tunes(18);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Gadgeteer.Modules.Gralin;
+﻿using Gadgeteer.Modules.Gralin;
 using System.Threading;
 using Gadgeteer.Modules.LoveElectronics;
 

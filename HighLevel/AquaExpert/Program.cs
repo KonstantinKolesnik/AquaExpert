@@ -73,6 +73,14 @@ namespace AquaExpert
             //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
             //    InitNetwork();
 
+            tunes.Play(200);
+            Thread.Sleep(500);
+            tunes.Play(1000);
+            Thread.Sleep(500);
+            tunes.Play(5000);
+            Thread.Sleep(500);
+            tunes.Stop();
+
             Mainboard.SetDebugLED(true);
         }
 

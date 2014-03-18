@@ -110,7 +110,7 @@ namespace AquaExpert
             //UIManager.DebugPage.AddLine("A resends: " + msg1);
             //Debug.Print("A resends: " + msg1);
             //Thread.Sleep(pause);
-            //nrf1.SendTo(address2, new[] { msg1 });
+            nrf1.SendTo(address2, new[] { msg1 });
         }
         void nrf1_DataReceived(byte[] data)
         {

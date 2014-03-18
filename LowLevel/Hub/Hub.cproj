@@ -126,12 +126,24 @@
       <SubType>compile</SubType>
       <Link>ModuleAPI.h</Link>
     </Compile>
+    <Compile Include="Hardware.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Hub.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI\SPI.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="I2C" />
+    <Folder Include="SPI" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SPI\SPI.c">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

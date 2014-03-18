@@ -52,6 +52,8 @@ namespace AquaExpert.UI
             FontTitle = Resources.GetFont(Resources.FontResources.SegoeUI_BoldItalian_32);
 
             gm = new GraphicsManager(320, 240);
+            //gm = new GraphicsManager(480, 272);
+            //gm = new GraphicsManager(800, 480);
             Desktop = gm.Desktop;
 
             //desktop.SuspendLayout();
