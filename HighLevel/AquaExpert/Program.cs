@@ -14,6 +14,7 @@ using System.Threading;
 using GT = Gadgeteer;
 using Gadgeteer.Modules.GHIElectronics;
 using Gadgeteer.Modules.LoveElectronics;
+using MFE.Core;
 
 namespace AquaExpert
 {
@@ -67,21 +68,25 @@ namespace AquaExpert
 
             InitUI();
             InitSettings();
-            InitRF();
+            //InitRF();
             //InitBus();
-            //InitHardware();
-            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
-            //    InitNetwork();
+            InitHardware();
+            if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+                InitNetwork();
 
-            tunes.Play(200);
-            Thread.Sleep(500);
-            tunes.Play(1000);
-            Thread.Sleep(500);
-            tunes.Play(5000);
-            Thread.Sleep(500);
-            tunes.Stop();
+            //tunes.Play(200);
+            //Thread.Sleep(500);
+            //tunes.Stop();
 
-            Mainboard.SetDebugLED(true);
+            //tunes.Play(1000);
+            //Thread.Sleep(500);
+            //tunes.Stop();
+
+            //tunes.Play(5000);
+            //Thread.Sleep(500);
+            //tunes.Stop();
+
+            //Mainboard.SetDebugLED(true);
         }
 
         #region Private methods
@@ -156,17 +161,17 @@ namespace AquaExpert
             //tcpServer.SessionDataReceived += Session_DataReceived;
             //tcpServer.SessionDisconnected += Session_Disconnected;
 
-            wsServer = new WSServer(Settings.WSPort);
-            wsServer.SessionConnected += Session_Connected;
-            wsServer.SessionDataReceived += Session_DataReceived;
-            wsServer.SessionDisconnected += Session_Disconnected;
+            //wsServer = new WSServer(Settings.WSPort);
+            //wsServer.SessionConnected += Session_Connected;
+            //wsServer.SessionDataReceived += Session_DataReceived;
+            //wsServer.SessionDisconnected += Session_Disconnected;
 
-            httpServer = new HttpServer();
-            httpServer.OnRequest += httpServer_OnRequest;
-            httpServer.OnGetRequest += httpServer_OnGetRequest;
-            httpServer.OnResponse += httpServer_OnResponse;
+            //httpServer = new HttpServer();
+            //httpServer.OnRequest += httpServer_OnRequest;
+            //httpServer.OnGetRequest += httpServer_OnGetRequest;
+            //httpServer.OnResponse += httpServer_OnResponse;
 
-            networkManager = new GadgeteerWiFiManager(wifi_RS21, settings.WiFiSSID, settings.WiFiPassword);
+            networkManager = new WiFiManager(wifi_RS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
 
@@ -247,10 +252,12 @@ namespace AquaExpert
             timerNetworkConnect.Stop();
             indicators[ledNetwork] = true;
 
-            httpServer.Start("http", 80);
-            wsServer.Start();
+            Mainboard.SetDebugLED(true);
+
+            //httpServer.Start("http", 80);
+            //wsServer.Start();
             //tcpServer.Start();
-            TimeManager.Start();
+            //TimeManager.Start();
 
             //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
         }
@@ -258,8 +265,8 @@ namespace AquaExpert
         {
             indicators[ledNetwork] = false;
 
-            httpServer.Stop();
-            wsServer.Stop();
+            //httpServer.Stop();
+            //wsServer.Stop();
             //tcpServer.Stop();
             TimeManager.Stop();
 

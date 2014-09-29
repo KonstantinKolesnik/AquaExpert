@@ -55,7 +55,7 @@
   <ItemGroup>
     <Reference Include="Gadgeteer" />
     <Reference Include="GTM.Gralin.Nordic">
-      <HintPath>..\..\- Info\- Source\nRF24\nrf24l01-18987\Gadgeteer Module\bin\Release\NETMF\GTM.Gralin.Nordic.dll</HintPath>
+      <HintPath>..\..\- Info\- Source\nRF24\- Libs\nrf24l01-18987\Gadgeteer Module\bin\Release\NETMF\GTM.Gralin.Nordic.dll</HintPath>
     </Reference>
     <Reference Include="GTM.LoveElectronics.LedArray, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

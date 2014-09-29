@@ -15,10 +15,37 @@ namespace AquaExpert {
     
     public partial class Program : Gadgeteer.Program {
         
+        /// <summary>The UsbClientDP module using socket 8 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.USBClientDP usbClientDP;
+        
+        /// <summary>The SDCard module using socket 9 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.SDCard sdCard;
+        
+        /// <summary>The Extender module (not connected).</summary>
+        private Gadgeteer.Modules.GHIElectronics.Extender extender;
+        
+        /// <summary>The Button module using socket 10 of the mainboard.</summary>
+        private Gadgeteer.Modules.LoveElectronics.Button button;
+        
+        /// <summary>The Tunes module using socket 18 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.Tunes tunes;
+        
+        /// <summary>The WiFi RS21 module using socket 3 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.WiFiRS21 wifi_RS21;
+        
+        /// <summary>The LED Strip module using socket 1 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.LEDStrip indicators;
+        
+        /// <summary>The Display T43 module (not connected).</summary>
+        private Gadgeteer.Modules.GHIElectronics.DisplayT43 display_T43;
+        
+        /// <summary>The Display TE35 module using sockets 15, 16, 17 and 14 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.DisplayTE35 display_TE35;
+        
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
-        protected new static Gadgeteer.Mainboard Mainboard {
+        protected new static GHIElectronics.Gadgeteer.FEZRaptor Mainboard {
             get {
-                return ((Gadgeteer.Mainboard)(Gadgeteer.Program.Mainboard));
+                return ((GHIElectronics.Gadgeteer.FEZRaptor)(Gadgeteer.Program.Mainboard));
             }
             set {
                 Gadgeteer.Program.Mainboard = value;
@@ -28,7 +55,7 @@ namespace AquaExpert {
         /// <summary>This method runs automatically when the device is powered, and calls ProgramStarted.</summary>
         public static void Main() {
             // Important to initialize the Mainboard first
-            throw new System.Exception("No mainboard is defined. Please add a mainboard in the Gadgeteer Designer.");
+            Program.Mainboard = new GHIElectronics.Gadgeteer.FEZRaptor();
             Program p = new Program();
             p.InitializeModules();
             p.ProgramStarted();
@@ -37,6 +64,15 @@ namespace AquaExpert {
         }
         
         private void InitializeModules() {
+            this.usbClientDP = new GTM.GHIElectronics.USBClientDP(8);
+            this.sdCard = new GTM.GHIElectronics.SDCard(9);
+            Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
+            this.button = new GTM.LoveElectronics.Button(10);
+            this.tunes = new GTM.GHIElectronics.Tunes(18);
+            this.wifi_RS21 = new GTM.GHIElectronics.WiFiRS21(3);
+            this.indicators = new GTM.GHIElectronics.LEDStrip(1);
+            Microsoft.SPOT.Debug.Print("The module \'display_T43\' was not connected in the designer and will be null.");
+            this.display_TE35 = new GTM.GHIElectronics.DisplayTE35(15, 16, 17, 14);
         }
     }
 }

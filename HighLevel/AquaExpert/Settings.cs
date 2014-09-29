@@ -17,7 +17,7 @@ namespace AquaExpert
 
         #region Settings
         public string WiFiSSID = "GothicMaestro";
-        public string WiFiPassword = "kotyara75";
+        public string WiFiPassword = "Kotyara75";
         //public string WiFiSSID = "TW";
         //public string WiFiPassword = "techwiregreyc";
 
