@@ -76,18 +76,12 @@
     <Reference Include="GHIElectronics.Gadgeteer.FEZRaptor, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GTM.GHIElectronics.Display_T43, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="GTM.GHIElectronics.Display_TE35, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="GTM.GHIElectronics.DisplayT43, Version=4.3.4.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GTM.GHIElectronics.DisplayTE35, Version=4.3.4.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GTM.GHIElectronics.Extender, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GTM.GHIElectronics.LED_Strip, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="GTM.GHIElectronics.LEDStrip, Version=4.3.4.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GTM.GHIElectronics.SDCard, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -97,9 +91,7 @@
     <Reference Include="GTM.GHIElectronics.UsbClientDP, Version=4.2.101.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GTM.GHIElectronics.WiFi_RS21, Version=4.2.102.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="GTM.GHIElectronics.WiFiRS21, Version=4.3.4.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GTM.Gralin.Nordic">
       <HintPath>..\..\- Info\- Source\nRF24\nrf24l01-18987\Gadgeteer Module\bin\Release\NETMF\GTM.Gralin.Nordic.dll</HintPath>
     </Reference>
@@ -141,9 +133,9 @@
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MFE\DisplayS22\DisplayS22_42\DisplayS22_42.csproj">
-      <Project>{CEE343DA-F678-4EB7-8D0D-D6F0762A8A89}</Project>
-      <Name>DisplayS22_42</Name>
+    <ProjectReference Include="..\..\..\MFE\DisplayS22\DisplayS22_43\DisplayS22_43.csproj">
+      <Project>{0F8B9090-F49A-4D22-85D4-8C66FFFB9019}</Project>
+      <Name>DisplayS22_43</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\MFE\MFE.Core\MFE.Core.csproj">
       <Project>{8EE96EBA-F6D8-4433-A72E-AED3A5A0EFDA}</Project>
