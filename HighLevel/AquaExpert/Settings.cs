@@ -10,8 +10,9 @@ namespace AquaExpert
     public class Settings
     {
         #region Constants
-        public const int IPPort = 7777;
+        public const int UDPPort = 13000;
         public const int WSPort = 12000;
+        public const int IPPort = 7777;
         private const string fileName = @"\AquaExpert\settings.xml";
         #endregion
 

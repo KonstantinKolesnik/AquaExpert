@@ -15,6 +15,7 @@ using GT = Gadgeteer;
 using Gadgeteer.Modules.GHIElectronics;
 using Gadgeteer.Modules.LoveElectronics;
 using MFE.Core;
+using MFE.Net.Udp;
 
 namespace AquaExpert
 {
@@ -26,12 +27,13 @@ namespace AquaExpert
         private HttpServer httpServer;
         private WSServer wsServer;
         //private TcpServer tcpServer;
+        private DiscoveryListener discoveryListener;
         private NetworkMessageFormat msgFormat = NetworkMessageFormat.Text;
 
         private State state = new State();
         private Settings settings = null;
 
-        private int ledNetwork = 0;
+        //private int ledNetwork = 0;
 
         private NetworkCoordinator networkCoordinator;
         private BusHubI2C busHubI2C;
@@ -71,7 +73,7 @@ namespace AquaExpert
             //InitRF();
             //InitBus();
             InitHardware();
-            if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
                 InitNetwork();
 
             //tunes.Play(200);
@@ -130,10 +132,10 @@ namespace AquaExpert
         {
             //Watchdog!!!
 
-            //indicators.TurnAllLedsOff();
+            indicators.TurnAllLedsOff();
 
             timerNetworkConnect = new Gadgeteer.Timer(500);
-            timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { indicators[ledNetwork] = !indicators[ledNetwork]; };
+            timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { SetLed(Leds.Network, !GetLed(Leds.Network)); };
 
             timerTest = new Gadgeteer.Timer(800);
             timerTest.Tick += timerTest_Tick;
@@ -154,7 +156,7 @@ namespace AquaExpert
         }
         private void InitNetwork()
         {
-            //discoveryListener = new DiscoveryListener();
+            discoveryListener = new DiscoveryListener();
 
             //tcpServer = new TcpServer(Settings.IPPort);
             //tcpServer.SessionConnected += Session_Connected;
@@ -171,7 +173,11 @@ namespace AquaExpert
             //httpServer.OnGetRequest += httpServer_OnGetRequest;
             //httpServer.OnResponse += httpServer_OnResponse;
 
-            networkManager = new WiFiManager(wifi_RS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
+
+
+            //networkManager = new WiFiManager(wifiRS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
+            networkManager = new EthernetManager(ethernetENC28.Interface);
+
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
 
@@ -217,14 +223,22 @@ namespace AquaExpert
             ////tcpServer.SendToAll(data);
         }
 
-        private void BlinkLED(int led)
+        private void BlinkLed(Leds led)
         {
             new Thread(() =>
             {
-                indicators[led] = false;
+                SetLed(led, false);
                 Thread.Sleep(10);
-                indicators[led] = true;
+                SetLed(led, true);
             }).Start();
+        }
+        private void SetLed(Leds led, bool state)
+        {
+            indicators[(int)led] = state;
+        }
+        private bool GetLed(Leds led)
+        {
+            return indicators[(int)led];
         }
         #endregion
 
@@ -246,29 +260,23 @@ namespace AquaExpert
         #region Event handlers
         private void Network_Started(object sender, EventArgs e)
         {
-            //HWConfig.WiFi.NetworkSettings.IPAddress
-            //HWConfig.Ethernet.Interface.NetworkInterface.IPAddress
-
             timerNetworkConnect.Stop();
-            indicators[ledNetwork] = true;
+            SetLed(Leds.Network, true);
 
-            Mainboard.SetDebugLED(true);
-
+            discoveryListener.Start(Settings.UDPPort, "AquaExpert");
             //httpServer.Start("http", 80);
             //wsServer.Start();
             //tcpServer.Start();
             //TimeManager.Start();
-
-            //discoveryListener.Start(Options.UDPPort, "TyphoonCentralStation");
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
-            indicators[ledNetwork] = false;
+            SetLed(Leds.Network, false);
 
             //httpServer.Stop();
             //wsServer.Stop();
             //tcpServer.Stop();
-            TimeManager.Stop();
+            //TimeManager.Stop();
 
             Thread.Sleep(1000);
 
@@ -277,7 +285,7 @@ namespace AquaExpert
 
         private void httpServer_OnRequest(HttpListenerRequest request)
         {
-            BlinkLED(ledNetwork);
+            BlinkLed(Leds.Network);
         }
         private void httpServer_OnGetRequest(string path, Hashtable parameters, HttpListenerResponse response)
         {
@@ -293,7 +301,7 @@ namespace AquaExpert
         }
         private void httpServer_OnResponse(HttpListenerResponse response)
         {
-            BlinkLED(ledNetwork);
+            BlinkLed(Leds.Network);
         }
 
         private void Session_Connected(TcpSession session)
@@ -302,7 +310,7 @@ namespace AquaExpert
         }
         private bool Session_DataReceived(TcpSession session, byte[] data)
         {
-            BlinkLED(ledNetwork);
+            BlinkLed(Leds.Network);
 
             NetworkMessageReceiver nmr = session.Tag as NetworkMessageReceiver;
             NetworkMessage[] msgs = nmr.Process(data);
@@ -313,7 +321,7 @@ namespace AquaExpert
                     if (response != null)
                     {
                         session.Send(WSDataFrame.WrapString(response.PackToString(nmr.MessageFormat)));
-                        BlinkLED(ledNetwork);
+                        BlinkLed(Leds.Network);
                     }
                 }
 

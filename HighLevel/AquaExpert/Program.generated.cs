@@ -30,17 +30,17 @@ namespace AquaExpert {
         /// <summary>The Tunes module using socket 18 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Tunes tunes;
         
-        /// <summary>The WiFi RS21 module using socket 3 of the mainboard.</summary>
-        private Gadgeteer.Modules.GHIElectronics.WiFiRS21 wifi_RS21;
+        /// <summary>The WiFi RS21 module (not connected).</summary>
+        private Gadgeteer.Modules.GHIElectronics.WiFiRS21 wifiRS21;
         
         /// <summary>The LED Strip module using socket 1 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.LEDStrip indicators;
         
-        /// <summary>The Display T43 module (not connected).</summary>
-        private Gadgeteer.Modules.GHIElectronics.DisplayT43 display_T43;
-        
         /// <summary>The Display TE35 module using sockets 15, 16, 17 and 14 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.DisplayTE35 display_TE35;
+        
+        /// <summary>The Ethernet ENC28 module using socket 3 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.EthernetENC28 ethernetENC28;
         
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZRaptor Mainboard {
@@ -69,10 +69,10 @@ namespace AquaExpert {
             Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
             this.button = new GTM.LoveElectronics.Button(10);
             this.tunes = new GTM.GHIElectronics.Tunes(18);
-            this.wifi_RS21 = new GTM.GHIElectronics.WiFiRS21(3);
+            Microsoft.SPOT.Debug.Print("The module \'wifiRS21\' was not connected in the designer and will be null.");
             this.indicators = new GTM.GHIElectronics.LEDStrip(1);
-            Microsoft.SPOT.Debug.Print("The module \'display_T43\' was not connected in the designer and will be null.");
             this.display_TE35 = new GTM.GHIElectronics.DisplayTE35(15, 16, 17, 14);
+            this.ethernetENC28 = new GTM.GHIElectronics.EthernetENC28(3);
         }
     }
 }
