@@ -6,6 +6,6 @@ namespace AquaExpert
         Network = 0,
 
 
-
+        Test = 6
     }
 }

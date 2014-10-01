@@ -65,9 +65,12 @@ namespace AquaExpert.Finder
             this.serverPort = serverPort;
             this.serverName = serverName;
 
-            client = new UdpClient();
-            client.Client.ReceiveTimeout = receiveTimeout;
+            //client = new UdpClient(9999);
+            //client.Client.ReceiveTimeout = receiveTimeout;
             //client.EnableBroadcast = true;
+
+            //client.Client.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast);
+            //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
         }
         #endregion
 
@@ -84,22 +87,37 @@ namespace AquaExpert.Finder
 
                     while (started)
                     {
-                        client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, serverPort));
+                        UdpClient client = new UdpClient(9999);
+                        client.EnableBroadcast = true;
+                        client.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 255);
+                        IPEndPoint groupEp = new IPEndPoint(IPAddress.Broadcast, serverPort);
+                        client.Send(request, request.Length, groupEp);
+                        client.Close();
+
+
+                        UdpClient udpResponse = new UdpClient(9999);
+                        udpResponse.EnableBroadcast = true;
+                        udpResponse.Client.ReceiveTimeout = receiveTimeout;
+                        IPEndPoint recvEp = new IPEndPoint(IPAddress.Any, serverPort);
                         try
                         {
-                            IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
-                            Byte[] receiveBytes = client.Receive(ref ep); // blocks until: 1) socket receives a message from a remote host; 2) timeout elapsed.
-                            string response = Encoding.UTF8.GetString(receiveBytes);
-                            if (String.Equals(response, responseExpected))
+                            if (udpResponse.Available > 0)
                             {
-                                if (!IsServerAvailable && ServerFound != null)
-                                    ServerFound(this, EventArgs.Empty);
+                                Byte[] receiveBytes = udpResponse.Receive(ref recvEp);
+                                string response = Encoding.UTF8.GetString(receiveBytes);
+                                if (String.Equals(response, responseExpected))
+                                {
+                                    if (!IsServerAvailable && ServerFound != null)
+                                        ServerFound(this, EventArgs.Empty);
 
-                                IsServerAvailable = true;
-                                ServerEP = ep;
+                                    IsServerAvailable = true;
+                                    ServerEP = recvEp;
 
-                                Thread.Sleep(pollPeriod);
+                                    Thread.Sleep(pollPeriod);
+                                }
                             }
+
+                            udpResponse.Close();
                         }
                         catch (SocketException e)
                         {
@@ -108,7 +126,48 @@ namespace AquaExpert.Finder
 
                             IsServerAvailable = false;
                             ServerEP = null;
+
                         }
+                        udpResponse.Close();
+
+                        
+
+
+
+
+
+                        
+                        //IPEndPoint hostEP = new IPEndPoint(IPAddress.Broadcast, serverPort);
+                        ////IPEndPoint hostEP = new IPEndPoint(IPAddress.Parse("192.168.1.84"), serverPort);
+                        //client.Send(request, request.Length, hostEP);
+
+                        //try
+                        //{
+                        //    if (client.Available > 0)
+                        //    {
+                        //        IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
+                        //        Byte[] receiveBytes = client.Receive(ref ep); // blocks until: 1) socket receives a message from a remote host; 2) timeout elapsed.
+                        //        string response = Encoding.UTF8.GetString(receiveBytes);
+                        //        if (String.Equals(response, responseExpected))
+                        //        {
+                        //            if (!IsServerAvailable && ServerFound != null)
+                        //                ServerFound(this, EventArgs.Empty);
+
+                        //            IsServerAvailable = true;
+                        //            ServerEP = ep;
+
+                        //            Thread.Sleep(pollPeriod);
+                        //        }
+                        //    }
+                        //}
+                        //catch (SocketException e)
+                        //{
+                        //    if (IsServerAvailable && ServerLost != null)
+                        //        ServerLost(this, EventArgs.Empty);
+
+                        //    IsServerAvailable = false;
+                        //    ServerEP = null;
+                        //}
                     }
 
                     if (ServerLost != null)

@@ -11,7 +11,7 @@ namespace AquaExpert.Finder
         {
             InitializeComponent();
 
-            serverFinder = new ServerFinder(13000, "AquaExpert");
+            serverFinder = new ServerFinder(8888, "AquaExpert");
             serverFinder.ServerFound += serverFinder_ServerFound;
             serverFinder.ServerLost += serverFinder_ServerLost;
         }

@@ -137,9 +137,9 @@ namespace AquaExpert
             timerNetworkConnect = new Gadgeteer.Timer(500);
             timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { SetLed(Leds.Network, !GetLed(Leds.Network)); };
 
-            timerTest = new Gadgeteer.Timer(800);
+            timerTest = new Gadgeteer.Timer(1000);
             timerTest.Tick += timerTest_Tick;
-            //timerTest.Start();
+            timerTest.Start();
         }
         private void InitUI()
         {
@@ -173,18 +173,10 @@ namespace AquaExpert
             //httpServer.OnGetRequest += httpServer_OnGetRequest;
             //httpServer.OnResponse += httpServer_OnResponse;
 
-
-
             //networkManager = new WiFiManager(wifiRS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
             networkManager = new EthernetManager(ethernetENC28.Interface);
-
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
-
-            StartNetwork();
-        }
-        private void StartNetwork()
-        {
             timerNetworkConnect.Start();
             new Thread(() => { networkManager.Start(); }).Start();
         }
@@ -263,11 +255,17 @@ namespace AquaExpert
             timerNetworkConnect.Stop();
             SetLed(Leds.Network, true);
 
+            //tunes.Play(1000);
+            //Thread.Sleep(500);
+            //tunes.Stop();
+
+            UIManager.DebugPage.Text = ethernetENC28.Interface.NetworkInterface.IPAddress;
+
             discoveryListener.Start(Settings.UDPPort, "AquaExpert");
             //httpServer.Start("http", 80);
             //wsServer.Start();
             //tcpServer.Start();
-            //TimeManager.Start();
+            TimeManager.Start();
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
@@ -276,11 +274,9 @@ namespace AquaExpert
             //httpServer.Stop();
             //wsServer.Stop();
             //tcpServer.Stop();
-            //TimeManager.Stop();
+            TimeManager.Stop();
 
-            Thread.Sleep(1000);
-
-            StartNetwork();
+            timerNetworkConnect.Start();
         }
 
         private void httpServer_OnRequest(HttpListenerRequest request)
@@ -337,6 +333,11 @@ namespace AquaExpert
         private void timerTest_Tick(Gadgeteer.Timer timer)
         {
             timerTest.Stop();
+
+            SetLed(Leds.Test, !GetLed(Leds.Test));
+
+
+
 
             //DateTime dt = TimeManager.CurrentTime;
 
