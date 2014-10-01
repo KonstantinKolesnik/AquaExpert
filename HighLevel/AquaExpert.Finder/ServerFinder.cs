@@ -1,49 +1,36 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Linq;
+using System.Windows;
 
 namespace AquaExpert.Finder
 {
     public class ServerFinder : INotifyPropertyChanged
     {
         #region Fields
-        private int serverPort;
-        private string serverName;
-        private UdpClient client;
-        private bool isServerAvailable = false;
-        private IPEndPoint serverEP = null;
+        private int port;
+        private string key;
         private int receiveTimeout = 2000;
-        private int pollPeriod = 2000;
-        private bool started = false;
+        //private ObservableCollection<IPEndPoint> servers = new ObservableCollection<IPEndPoint>();
         #endregion
 
         #region Properties
-        public bool IsServerAvailable
+        //public ObservableCollection<IPEndPoint> Servers
+        //{
+        //    get { return servers; }
+        //}
+
+        public static DependencyProperty ServersProperty = DependencyProperty.Register("Servers", typeof(ObservableCollection<IPEndPoint>), typeof(ServerFinder), new PropertyMetadata(new ObservableCollection<IPEndPoint>()));
+        public ObservableCollection<IPEndPoint> Servers
         {
-            get { return isServerAvailable; }
-            private set
-            {
-                if (isServerAvailable != value)
-                {
-                    isServerAvailable = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("IsServerAvailable"));
-                }
-            }
-        }
-        public IPEndPoint ServerEP
-        {
-            get { return serverEP; }
-            private set
-            {
-                if (serverEP != value)
-                {
-                    serverEP = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("ServerEP"));
-                }
-            }
+            get { return (ObservableCollection<IPEndPoint>)GetValue(ServersProperty); }
+            set { SetValue(ServersProperty, value); }
         }
         #endregion
 
@@ -60,127 +47,161 @@ namespace AquaExpert.Finder
         #endregion
 
         #region Constructor
-        public ServerFinder(int serverPort, string serverName)
+        public ServerFinder(int port, string key)
         {
-            this.serverPort = serverPort;
-            this.serverName = serverName;
+            this.port = port;
+            this.key = key;
+        }
+        #endregion
 
-            //client = new UdpClient(9999);
-            //client.Client.ReceiveTimeout = receiveTimeout;
-            //client.EnableBroadcast = true;
+        #region Public methods
+        public void Refresh()
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return;
 
-            //client.Client.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast);
-            //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
+            new Thread(Request).Start();
+        }
+        
+        private void Request()
+        {
+            //string localIP = "";
+            //IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            //foreach (IPAddress ip in host.AddressList)
+            //{
+            //    if (ip.AddressFamily == AddressFamily.InterNetwork)
+            //    {
+            //        localIP = ip.ToString();
+            //        break;
+            //    }
+            //}
+            //localIP = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
+
+
+
+
+            //IPEndPoint deviceEP = new IPEndPoint(IPAddress.Parse("192.168.1.84"), serverPort);
+            //IPEndPoint deviceEP = new IPEndPoint(IPAddress.Parse("192.168.255.255"), serverPort);
+            IPEndPoint deviceEP = new IPEndPoint(IPAddress.Broadcast, port);
+            
+            IPEndPoint itemEP = new IPEndPoint(IPAddress.Any, port);
+
+            byte[] request = Encoding.UTF8.GetBytes(key);
+            string responseExpected = key + "OK";
+
+            UdpClient client = new UdpClient();
+            client.EnableBroadcast = true;
+            client.Client.ReceiveTimeout = receiveTimeout;
+            //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+            //client.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 255);
+            
+            client.Send(request, request.Length, deviceEP);
+
+            try
+            {
+                byte[] receiveBytes = client.Receive(ref itemEP);
+                string response = Encoding.UTF8.GetString(receiveBytes);
+                if (String.Equals(response, responseExpected))
+                {
+                    SyncList(itemEP);
+                }
+            }
+            catch (Exception) {}
+
+            client.Close();
+        }
+        private void SyncList(IPEndPoint newServer)
+        {
+            if (!Servers.Any(server => server.Address.Equals(newServer.Address)))
+                Servers.Add(newServer);
+        }
+        #endregion
+    }
+
+    public class DiscoveryListener
+    {
+        #region Fields
+        private Socket socket;
+        private int port;
+        private string key;
+        private bool isStarted = false;
+        #endregion
+
+        #region Constructor
+        public DiscoveryListener(int port, string key)
+        {
+            this.port = port;
+            this.key = key;
         }
         #endregion
 
         #region Public methods
         public void Start()
         {
-            if (!started)
+            if (!isStarted)
             {
-                started = true;
+                isStarted = true;
 
-                new Thread(() => {
-                    byte[] request = Encoding.UTF8.GetBytes(serverName);
-                    string responseExpected = serverName + "OK";
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
+                socket.Bind(new IPEndPoint(IPAddress.Any, port));
 
-                    while (started)
-                    {
-                        UdpClient client = new UdpClient(9999);
-                        client.EnableBroadcast = true;
-                        client.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 255);
-                        IPEndPoint groupEp = new IPEndPoint(IPAddress.Broadcast, serverPort);
-                        client.Send(request, request.Length, groupEp);
-                        client.Close();
-
-
-                        UdpClient udpResponse = new UdpClient(9999);
-                        udpResponse.EnableBroadcast = true;
-                        udpResponse.Client.ReceiveTimeout = receiveTimeout;
-                        IPEndPoint recvEp = new IPEndPoint(IPAddress.Any, serverPort);
-                        try
-                        {
-                            if (udpResponse.Available > 0)
-                            {
-                                Byte[] receiveBytes = udpResponse.Receive(ref recvEp);
-                                string response = Encoding.UTF8.GetString(receiveBytes);
-                                if (String.Equals(response, responseExpected))
-                                {
-                                    if (!IsServerAvailable && ServerFound != null)
-                                        ServerFound(this, EventArgs.Empty);
-
-                                    IsServerAvailable = true;
-                                    ServerEP = recvEp;
-
-                                    Thread.Sleep(pollPeriod);
-                                }
-                            }
-
-                            udpResponse.Close();
-                        }
-                        catch (SocketException e)
-                        {
-                            if (IsServerAvailable && ServerLost != null)
-                                ServerLost(this, EventArgs.Empty);
-
-                            IsServerAvailable = false;
-                            ServerEP = null;
-
-                        }
-                        udpResponse.Close();
-
-                        
-
-
-
-
-
-                        
-                        //IPEndPoint hostEP = new IPEndPoint(IPAddress.Broadcast, serverPort);
-                        ////IPEndPoint hostEP = new IPEndPoint(IPAddress.Parse("192.168.1.84"), serverPort);
-                        //client.Send(request, request.Length, hostEP);
-
-                        //try
-                        //{
-                        //    if (client.Available > 0)
-                        //    {
-                        //        IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
-                        //        Byte[] receiveBytes = client.Receive(ref ep); // blocks until: 1) socket receives a message from a remote host; 2) timeout elapsed.
-                        //        string response = Encoding.UTF8.GetString(receiveBytes);
-                        //        if (String.Equals(response, responseExpected))
-                        //        {
-                        //            if (!IsServerAvailable && ServerFound != null)
-                        //                ServerFound(this, EventArgs.Empty);
-
-                        //            IsServerAvailable = true;
-                        //            ServerEP = ep;
-
-                        //            Thread.Sleep(pollPeriod);
-                        //        }
-                        //    }
-                        //}
-                        //catch (SocketException e)
-                        //{
-                        //    if (IsServerAvailable && ServerLost != null)
-                        //        ServerLost(this, EventArgs.Empty);
-
-                        //    IsServerAvailable = false;
-                        //    ServerEP = null;
-                        //}
-                    }
-
-                    if (ServerLost != null)
-                        ServerLost(this, EventArgs.Empty);
-
-                    IsServerAvailable = false;
-                    ServerEP = null;
-                }).Start();
+                new Thread(Listen).Start();
             }
         }
         public void Stop()
         {
-            started = false;
+            isStarted = false;
+        }
+        #endregion
+
+        #region Private methods
+        private void Listen()
+        {
+            byte[] response = Encoding.UTF8.GetBytes(key + "OK");
+
+            using (socket)
+            {
+                while (isStarted)
+                {
+                    try
+                    {
+                        if (socket.Poll(100, SelectMode.SelectRead))
+                        {
+                            if (socket.Available > 0)
+                            {
+                                EndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+                                byte[] buffer = new byte[socket.Available];
+
+                                int bytesRead = socket.ReceiveFrom(buffer, ref remoteEP);
+                                if (bytesRead > 0)
+                                {
+                                    string request = new string(Encoding.UTF8.GetChars(buffer, 0, bytesRead));
+                                    if (String.Compare(request, key) == 0)
+                                    {
+                                        try
+                                        {
+                                            socket.SendTo(response, remoteEP);
+                                        }
+                                        catch (Exception e) { }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                            Thread.Sleep(10);
+                    }
+                    catch (Exception e)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            socket.Close();
+            socket = null;
+
+            isStarted = false;
         }
         #endregion
     }

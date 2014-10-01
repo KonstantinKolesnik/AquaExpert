@@ -156,7 +156,7 @@ namespace AquaExpert
         }
         private void InitNetwork()
         {
-            discoveryListener = new DiscoveryListener();
+            discoveryListener = new DiscoveryListener(Settings.UDPPort, "AquaExpert");
 
             //tcpServer = new TcpServer(Settings.IPPort);
             //tcpServer.SessionConnected += Session_Connected;
@@ -261,7 +261,7 @@ namespace AquaExpert
 
             UIManager.DebugPage.Text = ethernetENC28.Interface.NetworkInterface.IPAddress;
 
-            discoveryListener.Start(Settings.UDPPort, "AquaExpert");
+            discoveryListener.Start();
             //httpServer.Start("http", 80);
             //wsServer.Start();
             //tcpServer.Start();
