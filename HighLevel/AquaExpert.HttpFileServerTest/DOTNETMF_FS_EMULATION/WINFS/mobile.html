@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Typhoon Central Station</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link href="KendoUI/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="KendoUI/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="KendoUI/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" /> 
+    
+    <!--<link href="KendoUI/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="KendoUI/styles/kendo.black.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="KendoUI/styles/kendo.blueopal.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.highcontrast.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.metro.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.metroblack.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.metro.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.silver.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.uniform.min.css" rel="stylesheet" type="text/css" />-->
+
+    
+    <script src="KendoUI/js/jquery.min.js" type="text/javascript"></script>
+    
+    <script src="KendoUI/js/kendo.all.min.js" type="text/javascript"></script>
+    <!--<script src="KendoUI/js/kendo.dataviz.min.js" type="text/javascript"></script>-->
+    <!--<script src="KendoUI/js/kendo.mobile.min.js" type="text/javascript"></script>-->
+    
+    <!--Typhoon-->
+    <link href="Style/Typhoon.mobile.css" rel="stylesheet" type="text/css"/>
+    <!--<link href="Style/Typhoon.css" rel="stylesheet" type="text/css"/>-->
+
+    <script type="text/javascript">
+        $(document).bind("APP_READY", function () {
+            $("#preLoad").css("opacity", "0").css("visibility", "hidden");
+        });
+    </script>
+</head>
+
+<body>
+    <section data-role="layout" data-id="default">
+        <header data-role="header">
+            <div data-role="navbar">
+                <!--Typhoon-->
+                <a class="nav-button" data-align="left" data-role="backbutton">Back</a>
+                <span data-role="view-title"></span>
+                <!--<a data-align="right" data-role="button" class="nav-button" href="#viewCab"><img src="Resources/Locomotive.ico" alt=""/></a>-->
+            </div>
+
+            <div data-role="tabstrip"><!-- class="k-header"-->
+                <a href="#viewCab" data-icon="play"></a>
+                <a href="#viewLocomotives"><img src="Resources/Locomotive.ico" alt="" height="auto"/></a>
+                <a href="#viewTurnouts"><img src="Resources/Turnout.ico" alt="" height="auto"/></a>
+                <a href="#viewSignals"><img src="Resources/Signal.ico" alt="" height="auto"/></a>
+                <a href="#viewSettings" data-icon="settings"></a>
+                <a href="#viewInfo" data-icon="info"></a>
+            </div> 
+
+        </header>
+
+        <!--View content will render here-->
+        
+        <footer data-role="footer">
+                <!--<button class="k-button" onclick="model.SetPower();"><img data-bind="attr: { src: BtnPowerImage}" alt="" width="48px" height="48px"/></button>
+                <span class="ButtonSpan">Power</span>-->
+
+            <div>
+                <!--<img src="./Resources/StationConnected.png" alt="" width="80px" style="margin-left:10px;"/>
+                <label style="color: white; font-size: 38px; vertical-align: top; display: inline-block; margin-top: 15px; text-transform: uppercase;">Typhoon</label>-->
+        
+                <div class="toolbar">
+                    <ul>
+                        <li><button class="k-button" onclick="model.MessageManager.BroadcastBrake();"><img src="Resources/LocoBrake.ico" alt=""/></li>
+                        <li><button class="k-button" onclick="model.MessageManager.BroadcastStop();"><img src="Resources/LocoStop.ico" alt=""/></button><span class="ButtonSpan">Stop</span></li>
+                        <li><button class="k-button" onclick="model.SetPower();"><img data-bind="attr: { src: BtnPowerImage}" alt=""/></button><span class="ButtonSpan">Power</span></li>
+                    </ul>
+                </div>
+        
+                <table style="margin: 10px 20px 0 0; float:right;">
+                    <tr>
+                        <td><span>Connection:</span></td>
+                        <td colspan="3">
+                            <img src="./Resources/LedGrey_16.ico" alt="" data-bind="visible: Disconnected"/>
+                            <img src="./Resources/LedGreen_16.ico" alt="" data-bind="visible: Connected"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Main track:</span></td>
+                        <td><img data-bind="attr: { src: LEDMainBoosterImage}" alt=""/></td>
+                        <td style="text-align:right; width:30px;"><span data-bind="text: MainBoosterCurrent"></span></td>
+                        <td><span>mA</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>Program track:</span></td>
+                        <td><img data-bind="attr: { src: LEDProgBoosterImage}" alt=""/></td>
+                        <td style="text-align:right; width:30px;"><span data-bind="text: ProgBoosterCurrent"></span></td>
+                        <td><span>mA</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!--<div data-role="tabstrip" class="k-header">
+                <a href="#viewCab" data-icon="play">Cab</a>
+                <a href="#viewLocomotives"><img src="./Resources/Locomotive.ico" alt="" height="auto"/>Locomotives</a>
+                <a href="#viewTurnouts"><img src="./Resources/Turnout.ico" alt="" height="auto"/>Turnouts</a>
+                <a href="#viewSignals"><img src="./Resources/Signal.ico" alt="" height="auto"/>Signals</a>
+                <a href="#viewSettings" data-icon="settings">Settings</a>
+                <a href="#viewInfo" data-icon="info">Info</a>
+            </div> -->
+        </footer>
+    </section>
+
+
+    <div data-role="view" data-layout="default" id="viewCab" data-title="Cab">
+        Hello Mobile World!
+    </div>
+
+    <div data-role="view" data-layout="default" id="viewLocomotives" data-title="Locomotives">
+        <ul id="lvLocomotives"></ul>
+        <script type="text/x-kendo-template" id="customListViewTemplate">
+            <label>${Name}</label>
+            <div>
+            <a data-role="detailbutton" data-style="detaildisclose"></a>
+            </div>
+
+        </script>
+        <!--<a data-role="button" class="details-link">Order</a>--><!--<p class="item-info">${Description}</p>-->
+<!--<img src="./Resources/Locomotive.ico" height="auto" />-->
+
+<!--                    <label>${Data.Address}</label><br/>
+                    <label>${Data.Protocol}</label>
+            <div>
+                
+            </div>
+--><!--<table>
+                <tr>
+                    <td><img src="./Resources/Locomotive.ico" height="auto" /></td>
+                    <td valign="top"><label>${Name}</label></td>
+                </tr>
+            </table>-->
+    </div>
+
+    <div data-role="view" data-layout="default" id="viewTurnouts" data-title="Turnouts">
+        ...
+    </div>
+
+    <div data-role="view" data-layout="default" id="viewSignals" data-title="Signals">
+        ...
+    </div>
+    
+    <div data-role="view" data-layout="default" id="viewSettings" data-title="Settings">
+        <ul data-role="listview" data-style="inset" data-type="group">
+            <li>
+                <h3>Power settings</h3>
+                <ul>
+                    <li><label>Main track I max, mA:</label><input id="mti" type="number" data-bind="value: Options.MainBridgeCurrentThreshould"/></li>
+                    <li><label>Program track I max, mA:</label><input id="pti" type="number" data-bind="value: Options.ProgBridgeCurrentThreshould"/></li>
+                    <li><label>Broadcast boosters current:</label><input id="Checkbox2" type="checkbox" data-role="switch" data-bind="checked: Options.BroadcastBoostersCurrent"/></li>
+                </ul>
+            </li>
+
+            <li>
+                <h3>Wi-Fi settings</h3>
+                <ul>
+                    <li><label>Use Wi-Fi:</label><input id="Checkbox1" type="checkbox" data-role="switch" data-bind="checked: Options.UseWiFi"/></li>
+                    <li><label>Wi-Fi SSID:</label><input id="wifiSSID" type="text" class="k-textbox" data-bind="value: Options.WiFiSSID"/></li>
+                    <li><label>Wi-Fi password:</label><input id="wifiPassword" type="text" class="k-textbox" data-bind="value: Options.WiFiPassword"/></li>
+                </ul>
+            </li>
+        </ul>
+        <br /><br />
+        <div style="text-align:center;">
+            <button class="k-button" style="width: 120px;" onclick="model.SetOptions();"><span class="k-icon k-i-tick"></span>Save</button>
+        </div>
+        <br />
+        <br />
+    </div>
+
+    <div data-role="view" data-layout="default" id="viewInfo" data-title="Information">
+        <div data-role="scroller">
+                <p>
+                    <img src="./Resources/StationConnected.png" alt="" width="80px" style="margin-left:10px;"/>
+                    <label style="font-size: 32px; vertical-align: top; display: inline-block; margin-top: 15px; text-transform: uppercase;">Typhoon</label><!--color: white; -->
+                </p>
+<!--                <p>When you launch Typhoon, it loads information about locomotives and accessories from the command station, and you are good to go.</p>
+                <p>Typhoon remembers where you were last time and picks up where you left with the same locomotive selected if possible.</p>
+                <p>Typhoon speaks six languages: English, German, Spanis, French, Danish and Swedish. For now, however, this instruction is only available in English.</p>
+-->            
+                <p>When you launch Typhoon, it loads information about locomotives and accessories from the command station, and you are good to go.
+                Typhoon remembers where you were last time and picks up where you left with the same locomotive selected if possible.
+                Typhoon speaks six languages: English, German, Spanis, French, Danish and Swedish. For now, however, this instruction is only available in English.</p>
+
+                <div id="infoTabs">
+					<ul>
+						<li class="k-state-active">Tabs review</li>
+						<li>Cab</li>
+                        <li>Locomotive List</li>
+                        <li>Turnouts</li>
+                        <li>Signals</li>
+                        <li>Options</li>
+					</ul>
+					
+                    <div>
+                        <p>At the bottom of the screen, you can select Typhoon screens from a row of tabs. Touch the tabs to navigate like any other tabbed application.</p>
+                        <h3>Cab tab</h3>
+                        <p>Where you control locomotives.</p>
+                        <h3>Locomotive List tab</h3>
+                        <p>Where you select locomotives.</p>
+                        <h3>Turnouts tab</h3>
+                        <p>Where you control routes and turnouts.</p>
+                        <h3>Signals tab</h3>
+                        <p>Where you control signals, lights, decouplers and doors.</p>
+                        <h3>Options tab</h3>
+                        <p>Where you set Typhoon options.</p>
+					</div>
+
+					<div>
+                        <p>The Cab screen is where you control your trains and locomotives. A lot of features are in this screen, and they are not all visible.</p>
+                        <p>At the top left, you can see the name of the locomotive you are controlling. Tapping the button with the name displays the last four selected locomotives. To go to the locomotive list, touch and hold the button, or simply touch the locomotive tab in the bottom of the screen.</p>
+                        <p>Track Status / Emergency Stop</p>
+                        <p>The big green button is the emergency stop button, which shows the status of the track power. Tap the button to cause a layout-wide emergency stop. When stopped, the button turns red. Tap the button again to resume operation. 
+                        If a short circuit occurs on the layout, the command station shuts off power to the tracks and the button turns yellow with the text ”SHUTDOWN”. Fix the short and tap the button to resume operation.
+                        </p>
+					</div>
+                </div>
+
+                <style scoped>
+                .info li 
+                {
+                    color: cornflowerblue;
+                }
+                .info h3 
+                {
+                    color: lightgrey;
+                }
+                
+                </style>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $("#infoTabs").kendoTabStrip({
+                            animation: {
+                                open: {
+                                    effects: "fadeIn"
+                                }
+                            }
+
+                        });
+                    });
+            </script>
+
+        </div>
+    </div>
+
+    <div id="preLoad">
+        <div>
+            <img src="KendoUI/styles/black/loading-image.gif" alt="" style="width:48px;" />
+            <br />Loading...
+        </div>
+    </div>
+
+    <div id="dlg"></div>
+
+    <script src="Script/NetworkMessageID.js" type="text/javascript"></script>
+    <script src="Script/NetworkMessage.js" type="text/javascript"></script>
+    <script src="Script/MessageManager.js" type="text/javascript"></script>
+    <script src="Script/LocomotiveOperator.js" type="text/javascript"></script>
+    <script src="Script/Model.js" type="text/javascript"></script>
+    <script src="Script/Typhoon.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        function detectDevice() {
+            //var isTablet = kendo.support.mobileOS.tablet;
+            var appLayout = "default"; // (isTablet) ? "tabletDefault" : "phoneDefault";
+            var app = new kendo.mobile.Application(document.body, {
+                layout: appLayout,
+                transition: 'slide'
+            });
+        }
+
+        $(document).ready(function () {
+            detectDevice();
+            onDocumentReady();
+
+            $(document).trigger("APP_READY");
+            return;
+
+            var baseUrl = "http://" + document.location.host; //.origin;
+            $("#lvLocomotives").kendoMobileListView({
+                //dataSource: kendo.data.DataSource.create({ data: groupedData, group: "letter" }),
+                dataSource: {
+                    transport: {
+                        //                        create: {
+                        //                            url: baseUrl + "/Content/Layout/Create.json",
+                        //                            dataType: "json"
+                        //                        },
+                        read: {
+                            url: baseUrl + "/Content/Layout.json",
+                            dataType: "json"
+                        }
+                        //                update: {
+                        //                    url: baseUrl + "/Content/Update.json",
+                        //                    dataType: "jsonp"
+                        //                },
+                        //                destroy: {
+                        //                    url: baseUrl + "/Content/Destroy.json",
+                        //                    dataType: "jsonp"
+                        //                }
+                    },
+                    //serverPaging: true,
+                    pageSize: 10
+                },
+                template: $("#customListViewTemplate").html()
+                //headerTemplate: "<h2>Letter ${value}</h2>"
+            });
+            $("#lvLocomotives").data("kendoMobileListView").dataSource.filter({ field: "Type", operator: "eq", value: "Locomotive" });
+
+        });
+    </script>
+
+</body>
+
+</html>

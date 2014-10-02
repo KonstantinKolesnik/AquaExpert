@@ -1,0 +1,60 @@
+[
+	{ "Image": "qqq", "Type": "Turnout", "Name": "Turnout 1", "Description": "shsshhd", "Data": { "Format2": "DCC28888" } },
+	{
+		"Image": "qqq",
+		"Type": "Locomotive",
+		"Name": "Blue Tiger MKB",
+		"Description": "qeweu rrtyurytot",
+		"Data": {
+			"Protocol": "DCC28",
+			"Address": "7",
+			"ExtAddress": "0",
+			"UseExtAddress": "false",
+			"UseInConsist": "true"
+		}
+	},
+	{
+		"Image": "qqq",
+		"Type": "Locomotive",
+		"Name": "M62",
+		"Description": "jvjvj hgjhg hgml",
+		"Data": {
+			"Protocol": "DCC128",
+			"Address": "50",
+			"ExtAddress": "0",
+			"UseExtAddress": "true",
+			"UseInConsist": "false"
+		}
+	},
+	{
+		"Image": "qqq",
+		"Type": "Locomotive",
+		"Name": "TE-109",
+		"Description": "",
+		"Data": {
+			"Protocol": "DCC28",
+			"Address": "3",
+			"ExtAddress": "0",
+			"UseExtAddress": "false",
+			"UseInConsist": "false"
+		}
+	},
+	{
+		"Image": "qqq",
+		"Type": "Consist",
+		"Name": "2M62",
+		"Description": "hgdgh",
+		"Data": {
+			"P1": "V1"
+		}
+	},
+	{
+		"Image": "qqq",
+		"Type": "Signal",
+		"Name": "S1",
+		"Description": "ghdhj hjghg mnvbbnv",
+		"Data": {
+			"P1": "V1"
+		}
+	}
+]
