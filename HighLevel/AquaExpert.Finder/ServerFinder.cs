@@ -17,20 +17,13 @@ namespace AquaExpert.Finder
         private int port;
         private string key;
         private int receiveTimeout = 2000;
-        //private ObservableCollection<IPEndPoint> servers = new ObservableCollection<IPEndPoint>();
+        private ObservableCollection<IPEndPoint> servers = new ObservableCollection<IPEndPoint>();
         #endregion
 
         #region Properties
-        //public ObservableCollection<IPEndPoint> Servers
-        //{
-        //    get { return servers; }
-        //}
-
-        public static DependencyProperty ServersProperty = DependencyProperty.Register("Servers", typeof(ObservableCollection<IPEndPoint>), typeof(ServerFinder), new PropertyMetadata(new ObservableCollection<IPEndPoint>()));
         public ObservableCollection<IPEndPoint> Servers
         {
-            get { return (ObservableCollection<IPEndPoint>)GetValue(ServersProperty); }
-            set { SetValue(ServersProperty, value); }
+            get { return servers; }
         }
         #endregion
 
