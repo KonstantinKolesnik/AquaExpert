@@ -25,11 +25,12 @@ namespace AquaExpert
             {
                 AutoDayLightSavings = true,
                 ForceSyncAtWakeUp = true,
-                RefreshTime = 24 * 60 * 60, // once a day
+                RefreshTime = 12 * 60 * 60, // twice a day
                 //public uint Tolerance = ?;
             };
-            FixedTimeService.SetTimeZoneOffset(+2 * 60); /// PST
-            FixedTimeService.SetDst("Mar Sun>=8 @2", "Nov Sun>=1 @2", 60); // US DST
+            FixedTimeService.SetTimeZoneOffset(+3 * 60); /// PST
+            //FixedTimeService.SetDst("Mar Sun>=8 @2", "Nov Sun>=1 @2", 60); // US DST
+            FixedTimeService.SetDst("Mar lastSun @1", "Oct lastSun @1", 60); // EU DST
 
             FixedTimeService.SystemTimeChanged += new SystemTimeChangedEventHandler(TimeService_SystemTimeChanged);
             FixedTimeService.TimeSyncFailed += new TimeSyncFailedEventHandler(TimeService_TimeSyncFailed);

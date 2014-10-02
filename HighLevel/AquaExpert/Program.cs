@@ -1,21 +1,18 @@
 ﻿using AquaExpert.UI;
-using Gadgeteer.Modules.KKS;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
 using MFE.Net.Tcp;
+using MFE.Net.Udp;
 using MFE.Net.WebSocket;
 using Microsoft.SPOT;
 using SmartNetwork.Network;
+using System;
 using System.Collections;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
-using Gadgeteer.Modules.GHIElectronics;
-using Gadgeteer.Modules.LoveElectronics;
-using MFE.Core;
-using MFE.Net.Udp;
 
 namespace AquaExpert
 {
@@ -23,7 +20,6 @@ namespace AquaExpert
     {
         #region Fields
         private INetworkManager networkManager;
-        private GT.Timer timerNetworkConnect;
         private HttpServer httpServer;
         private WSServer wsServer;
         //private TcpServer tcpServer;
@@ -33,11 +29,10 @@ namespace AquaExpert
         private State state = new State();
         private Settings settings = null;
 
-        //private int ledNetwork = 0;
-
         private NetworkCoordinator networkCoordinator;
         private BusHubI2C busHubI2C;
 
+        private GT.Timer timerNetworkOff;
         private GT.Timer timerTest;
 
         private RFManager rfManager;
@@ -69,29 +64,30 @@ namespace AquaExpert
             Button = button;
 
             InitUI();
+
             InitSettings();
             //InitRF();
             //InitBus();
             InitHardware();
-            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
-                InitNetwork();
-
-            //tunes.Play(200);
-            //Thread.Sleep(500);
-            //tunes.Stop();
-
-            //tunes.Play(1000);
-            //Thread.Sleep(500);
-            //tunes.Stop();
-
-            //tunes.Play(5000);
-            //Thread.Sleep(500);
-            //tunes.Stop();
+            InitNetwork();
 
             //Mainboard.SetDebugLED(true);
         }
 
         #region Private methods
+        private void InitUI()
+        {
+            //UIManager.SplashPage.Title = "Smart Network";// "Aqua Expert";
+            //UIManager.Desktop.Children.Add(UIManager.SplashPage);
+            //for (int i = 0; i <= 100; i++)
+            //{
+            //    UIManager.SplashPage.ProgressValue = i;
+            //    Thread.Sleep(10);
+            //}
+            //UIManager.Desktop.Children.Remove(UIManager.SplashPage);
+
+            UIManager.Desktop.Children.Add(UIManager.DebugPage);
+        }
         private void InitSettings()
         {
             //if (sdCard.IsCardInserted)
@@ -134,50 +130,39 @@ namespace AquaExpert
 
             indicators.TurnAllLedsOff();
 
-            timerNetworkConnect = new Gadgeteer.Timer(500);
-            timerNetworkConnect.Tick += delegate(Gadgeteer.Timer t) { SetLed(Leds.Network, !GetLed(Leds.Network)); };
-
-            timerTest = new Gadgeteer.Timer(1000);
+            timerTest = new Gadgeteer.Timer(500);
             timerTest.Tick += timerTest_Tick;
             timerTest.Start();
         }
-        private void InitUI()
-        {
-            //UIManager.SplashPage.Title = "Smart Network";// "Aqua Expert";
-            //UIManager.Desktop.Children.Add(UIManager.SplashPage);
-            //for (int i = 0; i <= 100; i++)
-            //{
-            //    UIManager.SplashPage.ProgressValue = i;
-            //    Thread.Sleep(10);
-            //}
-            //UIManager.Desktop.Children.Remove(UIManager.SplashPage);
-
-            UIManager.Desktop.Children.Add(UIManager.DebugPage);
-        }
         private void InitNetwork()
         {
-            discoveryListener = new DiscoveryListener(Settings.UDPPort, "AquaExpert");
-
             //tcpServer = new TcpServer(Settings.IPPort);
             //tcpServer.SessionConnected += Session_Connected;
             //tcpServer.SessionDataReceived += Session_DataReceived;
             //tcpServer.SessionDisconnected += Session_Disconnected;
 
-            //wsServer = new WSServer(Settings.WSPort);
-            //wsServer.SessionConnected += Session_Connected;
-            //wsServer.SessionDataReceived += Session_DataReceived;
-            //wsServer.SessionDisconnected += Session_Disconnected;
+            discoveryListener = new DiscoveryListener(Settings.UDPPort, "AquaExpert");
 
-            //httpServer = new HttpServer();
-            //httpServer.OnRequest += httpServer_OnRequest;
-            //httpServer.OnGetRequest += httpServer_OnGetRequest;
-            //httpServer.OnResponse += httpServer_OnResponse;
+            wsServer = new WSServer(Settings.WSPort);
+            wsServer.SessionConnected += Session_Connected;
+            wsServer.SessionDataReceived += Session_DataReceived;
+            wsServer.SessionDisconnected += Session_Disconnected;
 
-            //networkManager = new WiFiManager(wifiRS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
+            httpServer = new HttpServer();
+            httpServer.OnRequest += httpServer_OnRequest;
+            httpServer.OnGetRequest += httpServer_OnGetRequest;
+            httpServer.OnResponse += httpServer_OnResponse;
+
+            //if (!Utils.StringIsNullOrEmpty(Settings.WiFiSSID))
+                //networkManager = new WiFiManager(wifiRS21.Interface, settings.WiFiSSID, settings.WiFiPassword);
             networkManager = new EthernetManager(ethernetENC28.Interface);
             networkManager.Started += new EventHandler(Network_Started);
             networkManager.Stopped += new EventHandler(Network_Stopped);
-            timerNetworkConnect.Start();
+            
+            timerNetworkOff = new Gadgeteer.Timer(500);
+            timerNetworkOff.Tick += delegate(Gadgeteer.Timer t) { SetLed(Leds.Network, !GetLed(Leds.Network)); };
+            timerNetworkOff.Start();
+
             new Thread(() => { networkManager.Start(); }).Start();
         }
 
@@ -232,6 +217,13 @@ namespace AquaExpert
         {
             return indicators[(int)led];
         }
+
+        private void Beep(int frequency)
+        {
+            tunes.Play(frequency);
+            Thread.Sleep(100);
+            tunes.Stop();
+        }
         #endregion
 
         #region Public methods
@@ -252,31 +244,26 @@ namespace AquaExpert
         #region Event handlers
         private void Network_Started(object sender, EventArgs e)
         {
-            timerNetworkConnect.Stop();
+            timerNetworkOff.Stop();
             SetLed(Leds.Network, true);
 
-            //tunes.Play(1000);
-            //Thread.Sleep(500);
-            //tunes.Stop();
+            Beep(1000);
 
-            UIManager.DebugPage.Text = ethernetENC28.Interface.NetworkInterface.IPAddress;
-
-            discoveryListener.Start();
-            //httpServer.Start("http", 80);
-            //wsServer.Start();
             //tcpServer.Start();
+            discoveryListener.Start();
+            httpServer.Start("http", 80);
+            wsServer.Start();
             TimeManager.Start();
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
             SetLed(Leds.Network, false);
+            timerNetworkOff.Start();
 
-            //httpServer.Stop();
-            //wsServer.Stop();
             //tcpServer.Stop();
+            httpServer.Stop();
+            wsServer.Stop();
             TimeManager.Stop();
-
-            timerNetworkConnect.Start();
         }
 
         private void httpServer_OnRequest(HttpListenerRequest request)
@@ -336,16 +323,11 @@ namespace AquaExpert
 
             SetLed(Leds.Test, !GetLed(Leds.Test));
 
+            UIManager.DebugPage.Text = ethernetENC28.Interface.NetworkInterface.IPAddress + "\n" + TimeManager.CurrentTime.ToString();
 
-
-
-            //DateTime dt = TimeManager.CurrentTime;
 
             //(busHubI2C.BusControlLines[1] as ControlLine).SetState(new byte[] { (byte)(on ? 1 : 0), 0 });
             //on = !on;
-
-
-
 
             //SetState();
             //SendStateToClients();

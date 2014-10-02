@@ -58,7 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\..\..\MFE\MFE.Net\Udp\DiscoveryListener.cs">
+      <Link>DiscoveryListener.cs</Link>
+    </Compile>
     <Compile Include="ServerFinder.cs" />
+    <Compile Include="ServerInformation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

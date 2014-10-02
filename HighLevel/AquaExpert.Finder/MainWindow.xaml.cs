@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MFE.Net.Udp;
+using System;
 using System.Net.NetworkInformation;
 using System.Windows;
 
@@ -17,19 +18,19 @@ namespace AquaExpert.Finder
             serverFinder.ServerFound += serverFinder_ServerFound;
             serverFinder.ServerLost += serverFinder_ServerLost;
 
-            listener = new DiscoveryListener(8888, "AquaExpert");
+            //listener = new DiscoveryListener(8888, "AquaExpert");
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             btnRefresh.IsEnabled = NetworkInterface.GetIsNetworkAvailable();
-            //lvServers.ItemsSource = serverFinder.Servers;
+            lvServers.ItemsSource = serverFinder.Servers;
 
-            listener.Start();
+            //listener.Start();
         }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            listener.Stop();
+            //listener.Stop();
         }
 
         private void serverFinder_ServerFound(object sender, EventArgs e)

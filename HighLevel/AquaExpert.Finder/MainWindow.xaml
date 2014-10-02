@@ -21,10 +21,10 @@
             <Button Content="Open in browser"/>
         </StackPanel>
 
-        <ListBox Grid.Row="1" x:Name="lvServers" ItemsSource="{Binding serverFinder.Servers, ElementName=wndMain}">
+        <ListBox Grid.Row="1" x:Name="lvServers" ><!--ItemsSource="{Binding serverFinder.Servers, ElementName=wndMain}"-->
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Address}"/>
+                    <TextBlock Text="{Binding IPAddress}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
