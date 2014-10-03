@@ -13,6 +13,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using GT = Gadgeteer;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.LoveElectronics;
+using Networking;
+using System.Text;
+using System.IO;
+using Microsoft.SPOT.Hardware;
 
 namespace AquaExpert
 {
@@ -126,9 +132,10 @@ namespace AquaExpert
         }
         private void InitHardware()
         {
-            //Watchdog!!!
-
             indicators.TurnAllLedsOff();
+
+            GHI.Premium.Hardware.LowLevel.Watchdog.Disable();
+            //GHI.Premium.Hardware.LowLevel.Watchdog.Enable(10 * 1000); // 10 sec
 
             timerTest = new Gadgeteer.Timer(500);
             timerTest.Tick += timerTest_Tick;
@@ -251,9 +258,47 @@ namespace AquaExpert
 
             //tcpServer.Start();
             discoveryListener.Start();
-            httpServer.Start("http", 80);
+            //httpServer.Start("http", 80);
             wsServer.Start();
             TimeManager.Start();
+
+
+
+
+            // socket S:
+            // pin 3: inerrupt (PB1)
+            // pin 4: reset (PC23)
+            // pin 5: (PB3)
+            // pin 6: CS (PA28)
+            // pin 7: MOSI (PA12)
+            // pin 8: MISO (PA11)
+            // pin 9: SCK (PA13)
+
+            //var enc = new GHI.Premium.Net.EthernetENC28J60(
+            //    SPI.SPI_module.SPI1,
+            //    Cpu.Pin.GPIO_Pin0 , // chip select
+            //    Cpu.Pin.GPIO_Pin1 , // external interrupt
+            //    Cpu.Pin.GPIO_Pin2 // reset
+            //);
+            Adapter.Start(
+                new byte[] { 0x5c, 0x86, 0x4a, 0x00, 0x00, 0xde },
+                "AquaExpert",
+                GT.Socket.GetSocket(3, true, null, null).SPIModule,
+                GT.Socket.GetSocket(3, true, null, null).CpuPins[3],
+                GT.Socket.GetSocket(3, true, null, null).CpuPins[6]
+                );
+
+            //Adapter.Start(
+            //    new byte[] { 0x5c, 0x86, 0x4a, 0x00, 0x00, 0xde },
+            //    "AquaExpert",
+            //    SPI.SPI_module.SPI1,
+            //    GHI.Hardware.G400.Pin.PB1, //GT.Socket.GetSocket(3, true, null, null).CpuPins[3],
+            //    GHI.Hardware.G400.Pin.PA28 // GT.Socket.GetSocket(3, true, null, null).CpuPins[6]
+            //    );
+
+
+            Adapter.OnHttpReceivedPacketEvent += new Adapter.HttpPacketReceivedEventHandler(Adapter_OnHttpReceivedPacketEvent);
+            Adapter.ListenToPort(80);  // Listen on Port 80, the default web server port
         }
         private void Network_Stopped(object sender, EventArgs e)
         {
@@ -261,10 +306,23 @@ namespace AquaExpert
             timerNetworkOff.Start();
 
             //tcpServer.Stop();
-            httpServer.Stop();
+            //httpServer.Stop();
             wsServer.Stop();
             TimeManager.Stop();
+
+
+
+            Adapter.Stop();
         }
+
+
+        private void Adapter_OnHttpReceivedPacketEvent(HttpRequest request)
+        {
+            byte[] webPage = Encoding.UTF8.GetBytes("<html><head><meta http-equiv=\"refresh\" content=\"5\"></head><body><font face=\"verdana\"><h1>mip - A Managed TCP/IP Stack</h1><p>for .NET MicroFramework</p><p>This is just the beginning :)</p><p><a href=\"http://mip.codeplex.com\">Visit us at Codeplex!</a></p></font></body></html>");
+            var s = new MemoryStream(webPage);  // substitute a FileStream here when reading from MicroSD
+            request.SendResponse(new HttpResponse(s));
+        }
+
 
         private void httpServer_OnRequest(HttpListenerRequest request)
         {
@@ -320,6 +378,8 @@ namespace AquaExpert
         private void timerTest_Tick(Gadgeteer.Timer timer)
         {
             timerTest.Stop();
+
+            //GHI.Premium.Hardware.LowLevel.Watchdog.ResetCounter();
 
             SetLed(Leds.Test, !GetLed(Leds.Test));
 
