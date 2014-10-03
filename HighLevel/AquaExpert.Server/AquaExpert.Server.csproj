@@ -183,10 +183,6 @@
       <Project>{72D955AB-12CB-4EDA-BE8E-C2A99D10C737}</Project>
       <Name>NRF24_42</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\mip_v0.3\NetworkingService\NetworkingService.csproj">
-      <Project>{C6EA1E04-8418-4AFD-8A85-6343EC3F91B2}</Project>
-      <Name>NetworkingService</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features.txt" />
