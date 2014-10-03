@@ -5,20 +5,16 @@ using MFE.Net.Messaging;
 using MFE.Net.Tcp;
 using MFE.Net.Udp;
 using MFE.Net.WebSocket;
+using MFE.SmartNetwork.Network;
 using Microsoft.SPOT;
-using SmartNetwork.Network;
-using System;
+using Networking;
 using System.Collections;
+using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using GT = Gadgeteer;
-using Gadgeteer.Modules.GHIElectronics;
-using Gadgeteer.Modules.LoveElectronics;
-using Networking;
-using System.Text;
-using System.IO;
-using Microsoft.SPOT.Hardware;
 
 namespace AquaExpert.Server
 {
