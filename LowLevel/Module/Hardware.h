@@ -106,4 +106,17 @@ LOW = 0xE4 (valid)
 #define LED_MSG_ON	     		PORTD |= (1<<LED_MSG)
 #define LED_MSG_OFF	    		PORTD &= ~(1<<LED_MSG)
 //****************************************************************************************
+//JTAG:
+/*
+1 - 24
+2 - GND
+3 - 26
+4 - Vcc
+5 - 25
+6 - 
+7
+8
+9 - 27
+10 - GND
+*/
 #endif /* HARDWARE_H_ */
