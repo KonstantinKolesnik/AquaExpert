@@ -45,4 +45,9 @@ extern "C" void __cxa_pure_virtual() {;}
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\arduino.h"
 #include "C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h" 
 #include "D:\Work\AquaExpert\HighLevel\Module\Module.ino"
+#include "D:\Work\AquaExpert\HighLevel\Module\Digitals.cpp"
+#include "D:\Work\AquaExpert\HighLevel\Module\Digitals.h"
+#include "D:\Work\AquaExpert\HighLevel\Module\Hardware.h"
+#include "D:\Work\AquaExpert\HighLevel\Module\TemperatureSensors.cpp"
+#include "D:\Work\AquaExpert\HighLevel\Module\TemperatureSensors.h"
 #endif

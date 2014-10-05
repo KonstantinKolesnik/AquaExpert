@@ -20,7 +20,7 @@
       <UniqueIdentifier>{84c5fb22-8d36-4c89-a6c0-1292ed47a4aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\OneWire">
-      <UniqueIdentifier>{05e18280-11c1-4581-b449-0772cc19ba5e}</UniqueIdentifier>
+      <UniqueIdentifier>{604f88a3-ca7e-46cc-ba8e-beeeb3c9bfdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +87,15 @@
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h">
       <Filter>_core</Filter>
     </ClInclude>
+    <ClInclude Include="Hardware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Digitals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemperatureSensors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h">
       <Filter>_libraries\OneWire</Filter>
     </ClInclude>
@@ -145,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp">
       <Filter>_core</Filter>
+    </ClCompile>
+    <ClCompile Include="Digitals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemperatureSensors.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp">
       <Filter>_libraries\OneWire</Filter>
