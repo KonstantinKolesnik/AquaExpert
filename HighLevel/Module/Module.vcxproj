@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\utility;C:\Program Files (x86)\Arduino\libraries\EEPROM;C:\Program Files (x86)\Arduino\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Konstantin\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\variants\promicro;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\utility;C:\Program Files (x86)\Arduino\libraries\EEPROM;C:\Program Files (x86)\Arduino\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Konstantin\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>D:\Work\AquaExpert\HighLevel\Module\Visual Micro\.Module.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__AVR_ATmega32u4__;__AVR_ATmega32U4__;ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -100,7 +100,7 @@
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h" />
     <ClInclude Include="ControlLine.h" />
     <ClInclude Include="Hardware.h" />
-    <ClInclude Include="qqq.h" />
+    <ClInclude Include="NetworkModule.h" />
     <ClInclude Include="Visual Micro\.Module.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +124,7 @@
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp" />
     <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp" />
     <ClCompile Include="ControlLine.cpp" />
-    <ClCompile Include="qqq.cpp" />
+    <ClCompile Include="NetworkModule.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

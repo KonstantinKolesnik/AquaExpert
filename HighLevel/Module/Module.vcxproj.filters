@@ -96,7 +96,7 @@
     <ClInclude Include="ControlLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="qqq.h">
+    <ClInclude Include="NetworkModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -161,7 +161,7 @@
     <ClCompile Include="ControlLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="qqq.cpp">
+    <ClCompile Include="NetworkModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

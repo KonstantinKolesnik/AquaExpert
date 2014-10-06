@@ -5,7 +5,7 @@
 	        all non-arduino files created by visual micro and all visual studio project or solution files can be freely deleted and are not required to compile a sketch (do not delete your own code!).
 	        note: debugger breakpoints are stored in '.sln' or '.asln' files, knowledge of last uploaded breakpoints is stored in the upload.vmps.xml file. Both files are required to continue a previous debug session without needing to compile and upload again
 	
-	Hardware: SparkFun Pro Micro 5V/16MHz, Platform=avr, Package=SF32u4_boards-master
+	Hardware: SparkFun Pro Micro 5V/16MHz, Platform=avr, Package=SF32u4_boards
 */
 
 #ifndef _VSARDUINO_H_
@@ -40,15 +40,14 @@ typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 //
-void InitModule();
 //
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\arduino.h"
-#include "C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h" 
+#include "C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\variants\promicro\pins_arduino.h" 
 #include "D:\Work\AquaExpert\HighLevel\Module\Module.ino"
 #include "D:\Work\AquaExpert\HighLevel\Module\ControlLine.cpp"
 #include "D:\Work\AquaExpert\HighLevel\Module\ControlLine.h"
 #include "D:\Work\AquaExpert\HighLevel\Module\Hardware.h"
-#include "D:\Work\AquaExpert\HighLevel\Module\qqq.cpp"
-#include "D:\Work\AquaExpert\HighLevel\Module\qqq.h"
+#include "D:\Work\AquaExpert\HighLevel\Module\NetworkModule.cpp"
+#include "D:\Work\AquaExpert\HighLevel\Module\NetworkModule.h"
 #endif

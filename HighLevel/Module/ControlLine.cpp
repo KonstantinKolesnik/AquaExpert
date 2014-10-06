@@ -43,6 +43,7 @@ void ControlLine::SetState(uint8_t* state)
 		digitalWrite(m_pin, state[0] ? RELAY_ACTIVE_LEVEL : !RELAY_ACTIVE_LEVEL);
 		break;
 	case PWM:
+		analogWrite(m_pin, map(state[0], 0, 100, 0, 255));
 		break;
 	default:
 		break;
@@ -60,7 +61,12 @@ void ControlLine::UpdateState()
 	case Temperature:
 		GetTemperature();
 		break;
+	case Liquid:
+		analogRead(m_pin);
+		// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
+		// Yusupov:    660 for water; 1005 for short circuit; (2k / 100k)
 
+		break;
 
 
 
