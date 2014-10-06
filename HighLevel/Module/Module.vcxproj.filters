@@ -90,14 +90,14 @@
     <ClInclude Include="Hardware.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Digitals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TemperatureSensors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h">
       <Filter>_libraries\OneWire</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qqq.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,14 +155,14 @@
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp">
       <Filter>_core</Filter>
     </ClCompile>
-    <ClCompile Include="Digitals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TemperatureSensors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp">
       <Filter>_libraries\OneWire</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qqq.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -98,9 +98,9 @@
     <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.h" />
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h" />
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h" />
-    <ClInclude Include="Digitals.h" />
+    <ClInclude Include="ControlLine.h" />
     <ClInclude Include="Hardware.h" />
-    <ClInclude Include="TemperatureSensors.h" />
+    <ClInclude Include="qqq.h" />
     <ClInclude Include="Visual Micro\.Module.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -123,8 +123,8 @@
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WMath.cpp" />
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp" />
     <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp" />
-    <ClCompile Include="Digitals.cpp" />
-    <ClCompile Include="TemperatureSensors.cpp" />
+    <ClCompile Include="ControlLine.cpp" />
+    <ClCompile Include="qqq.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

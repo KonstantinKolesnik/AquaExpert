@@ -7,37 +7,31 @@
 	#include "WProgram.h"
 #endif
 //****************************************************************************************
-// module types:
-#define MODULE_TYPE_TEST				0 // test full module
-#define MODULE_TYPE_AE_R8				1 // AE-R8
+typedef enum
+{
+	Relay,
+	PWM,
+	Temperature,
+	Liquid,
+	Ph,
+    ORP,
+    Conductivity, // + Salinity
 
 
-// current module type:
-#define MODULE_TYPE						MODULE_TYPE_TEST
+} ControlLineType_t;
+typedef enum
+{
+	Test,		// test full module
+	D8,			// AE-D8
+
+
+} ModuleType_t;
 //****************************************************************************************
-#if MODULE_TYPE == MODULE_TYPE_TEST
-	#define DIGITAL_0					2
-	#define DIGITAL_1					3
-	#define DIGITAL_2					4
-	#define DIGITAL_3					5
-	#define DIGITAL_4					6
-	#define DIGITAL_5					7
-	#define DIGITAL_6					8
-	#define DIGITAL_7					9
-	#define TEMPERATURE_BUS				16
-#elif MODULE_TYPE == MODULE_TYPE_AE_R8
-
-
-#endif
-
-
-
-
-
-
-
-
-
-
+// commands (from BusMaster)
+//****************************************************************************************
+#define CMD_GET_TYPE							0
+#define CMD_GET_CONTROL_LINE_COUNT				1
+#define CMD_GET_CONTROL_LINE_STATE				2
+#define CMD_SET_CONTROL_LINE_STATE				3
 //****************************************************************************************
 #endif
