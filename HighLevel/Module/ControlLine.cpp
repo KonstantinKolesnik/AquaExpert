@@ -4,6 +4,8 @@
 #define DS18S20_ID				0x10
 #define DS18B20_ID				0x28
 #define DS1822_ID				0x22
+#define DS1820_ID				0x10//???
+
 //****************************************************************************************
 ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 {
@@ -20,8 +22,12 @@ ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 		break;
 	case Temperature:
 		m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
+		m_state[0] = -1000;
+		m_state[1] = 0;
 		break;
-
+	case Liquid:
+		analogRead(m_pin); // preread
+		break;
 
 
 
@@ -31,11 +37,20 @@ ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 	}
 }
 
-volatile uint8_t* ControlLine::GetState()
+uint8_t ControlLine::GetAddress()
+{
+	return m_address;
+}
+ControlLineType_t ControlLine::GetType()
+{
+	return m_type;
+}
+
+volatile int16_t* ControlLine::GetState()
 {
 	return m_state;
 }
-void ControlLine::SetState(uint8_t* state)
+void ControlLine::SetState(int16_t* state)
 {
 	switch (m_type)
 	{
@@ -62,10 +77,9 @@ void ControlLine::UpdateState()
 		GetTemperature();
 		break;
 	case Liquid:
-		analogRead(m_pin);
+		m_state[0] = analogRead(m_pin);
 		// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
-		// Yusupov:    660 for water; 1005 for short circuit; (2k / 100k)
-
+		// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
 		break;
 
 
@@ -90,10 +104,18 @@ bool ControlLine::GetTemperature()
 	if (!m_pds->search(addr))
 	{
 		m_pds->reset_search();
+		
+		//Serial.println("search error");
+
 		return false;
 	}
 	if (OneWire::crc8(addr, 7) != addr[7])
+	{
+		m_state[0] = -1000;
+		m_state[1] = 0;
+
 		return false;
+	}
 	 
 	if (addr[0] == DS18S20_ID)
 	{
@@ -112,8 +134,12 @@ bool ControlLine::GetTemperature()
 	}
 	else
 	{
-		//Serial.print("Device family is not recognized: 0x");
+		//Serial.println("Device family is not recognized: 0x");
 		//Serial.println(addr[0], HEX);
+
+		m_state[0] = -1000;
+		m_state[1] = 0;
+
 		return false;
 	}
 	 
@@ -169,7 +195,7 @@ bool ControlLine::GetTemperature()
 	// be stored to an “int16_t” type, which is always 16 bits
 	// even when compiled on a 32 bit processor.
 
-	//int16_t raw = (highByte << 8) | lowByte;
+	int16_t raw = (highByte << 8) | lowByte;
 	//if (type_s)
 	//{
 	//	raw = raw << 3; // 9 bit resolution default
@@ -199,6 +225,8 @@ bool ControlLine::GetTemperature()
 	//Serial.print(" Celsius, ");
 	//Serial.print(fahrenheit);
 	//Serial.println(" Fahrenheit");
+
+	delay(100);
 
 	return true;
 }

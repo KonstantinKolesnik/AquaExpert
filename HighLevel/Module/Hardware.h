@@ -27,7 +27,7 @@ typedef enum
 
 } ModuleType_t;
 //****************************************************************************************
-// commands (from BusMaster)
+// commands (from BusHub)
 //****************************************************************************************
 #define CMD_GET_TYPE							0
 #define CMD_GET_CONTROL_LINE_COUNT				1

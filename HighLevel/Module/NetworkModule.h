@@ -13,14 +13,17 @@ private:
 
 public:
 	NetworkModule();
-
+	
 	void Init(ModuleType_t type);
+
+	ModuleType_t GetType();
+	uint16_t GetControlLinesCount();
+	ControlLine* GetControlLines();
+
 	void UpdateState();
 
-	ControlLine* GetControlLines();
-	uint16_t GetControlLinesCount();
-	
-	ModuleType_t GetType();
+	void PrintState();
+	void PrintControlLineState(uint16_t idx);
 };
 
 extern NetworkModule Module;

@@ -10,20 +10,20 @@ class ControlLine
 	ControlLineType_t m_type;
 	uint8_t m_address;
 	uint8_t m_pin;
-	volatile uint8_t m_state[2];
+	volatile int16_t m_state[2];
 
 	OneWire* m_pds;
 	bool GetTemperature();
 
- protected:
-
-
  public:
 	ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin);
 
+	uint8_t GetAddress();
+	ControlLineType_t GetType();
+
 	void UpdateState();
-	volatile uint8_t* GetState();
-	void SetState(uint8_t* state);
+	volatile int16_t* GetState();
+	void SetState(int16_t* state);
 };
 //****************************************************************************************
 #endif
