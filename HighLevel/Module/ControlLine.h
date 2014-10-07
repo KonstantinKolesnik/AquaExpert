@@ -14,6 +14,7 @@ class ControlLine
 
 	OneWire* m_pds;
 	bool GetTemperature();
+	bool GetPh();
 
  public:
 	ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin);

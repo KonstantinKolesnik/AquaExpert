@@ -28,13 +28,13 @@ void NetworkModule::Init(ModuleType_t type)
 
 		m_pControlLines[8] = ControlLine(Temperature, 0, 16);
 		
-		m_pControlLines[9] = ControlLine(Liquid, 0, 19);
-		m_pControlLines[10] = ControlLine(Liquid, 1, 20);
-		m_pControlLines[11] = ControlLine(Liquid, 2, 21);
+		m_pControlLines[9] = ControlLine(Liquid, 0, A3);
+		m_pControlLines[10] = ControlLine(Liquid, 1, A2);
+		m_pControlLines[11] = ControlLine(Liquid, 2, A1);
 		
-		m_pControlLines[12] = ControlLine(Ph, 0, 18);
+		m_pControlLines[12] = ControlLine(Ph, 0, A0);
 		
-		m_pControlLines[13] = ControlLine(ORP, 0, 10);
+		m_pControlLines[13] = ControlLine(ORP, 0, A10);
 
 		
 		break;
@@ -42,7 +42,10 @@ void NetworkModule::Init(ModuleType_t type)
 		break;
 	}
 
-	// 15/14/16 - 1-Wire slave:
+	// set self as 1-Wire slave (pin either of 15/14/16):
+
+
+
 }
 
 ModuleType_t NetworkModule::GetType()
@@ -87,11 +90,20 @@ void NetworkModule::PrintControlLineState(uint16_t idx)
 		Serial.print("; Type=");
 		Serial.print(line.GetType());
 
-		Serial.print("; State=[");
+
+
+
+		//Serial.print("; State=[");
+		//Serial.print(state[0]);
+		//Serial.print(", ");
+		//Serial.print(state[1]);
+		//Serial.println("];");
+
+		Serial.print("; State=");
 		Serial.print(state[0]);
-		Serial.print(", ");
+		Serial.print(".");
 		Serial.print(state[1]);
-		Serial.println("];");
+		Serial.println(";");
 	}
 }
 

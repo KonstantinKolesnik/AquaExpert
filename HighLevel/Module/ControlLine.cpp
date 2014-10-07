@@ -1,4 +1,4 @@
-#include "ControlLine.h"
+ï»¿#include "ControlLine.h"
 //****************************************************************************************
 #define RELAY_ACTIVE_LEVEL		LOW	// 8-relay module active level is "0"
 #define DS18S20_ID				0x10
@@ -6,6 +6,7 @@
 #define DS1822_ID				0x22
 #define DS1820_ID				0x10//???
 
+#define PH_OFFSET				-0.12
 //****************************************************************************************
 ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 {
@@ -21,12 +22,21 @@ ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 		pinMode(m_pin, OUTPUT);
 		break;
 	case Temperature:
+		// DS18B20 water-proof:
+		// red:		+5V;
+		// blue:	signal;
+		// black:	GND;
+
 		m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
 		m_state[0] = -1000;
 		m_state[1] = 0;
 		break;
 	case Liquid:
 		analogRead(m_pin); // preread
+	case Ph:
+		analogRead(m_pin); // preread
+		m_state[0] = -1000;
+		m_state[1] = 0;
 		break;
 
 
@@ -73,13 +83,19 @@ void ControlLine::UpdateState()
 	case Relay:
 		m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
 		break;
+
 	case Temperature:
 		GetTemperature();
 		break;
+
 	case Liquid:
 		m_state[0] = analogRead(m_pin);
 		// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
 		// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
+		break;
+
+	case Ph:
+		GetPh();
 		break;
 
 
@@ -100,15 +116,16 @@ bool ControlLine::GetTemperature()
 	float temp;
 	float celsius, fahrenheit;
 
-	//find a device
-	if (!m_pds->search(addr))
+	if (m_pds->search(addr)) // first device found
+		m_pds->reset_search(); // reset search
+	else // no devices
 	{
-		m_pds->reset_search();
-		
-		//Serial.println("search error");
+		m_state[0] = -1000;
+		m_state[1] = 0;
 
 		return false;
 	}
+
 	if (OneWire::crc8(addr, 7) != addr[7])
 	{
 		m_state[0] = -1000;
@@ -178,37 +195,28 @@ bool ControlLine::GetTemperature()
 	Whole = Tc_100 / 100;  // separate off the whole and fractional portions
 	Fract = Tc_100 % 100;
 
-	m_state[0] = Whole;
-	m_state[1] = Fract;
-
-	//if (SignBit) // If its negative
-	//	Serial.print("-");
-	//Serial.print(Whole);
-	//Serial.print(".");
-	//if (Fract < 10)
-	//	Serial.print("0");
-	//Serial.print(Fract);
-	//Serial.println("\n");
+	m_state[0] = SignBit ? -Whole : Whole;
+	m_state[1] = Fract < 10 ? 0 : Fract;
 	//--------------------------------------------------------------------------
 	// Convert the data to actual temperature
 	// because the result is a 16 bit signed integer, it should
-	// be stored to an “int16_t” type, which is always 16 bits
+	// be stored to an â€œint16_tâ€ type, which is always 16 bits
 	// even when compiled on a 32 bit processor.
 
-	int16_t raw = (highByte << 8) | lowByte;
+	//int16_t raw = (highByte << 8) | lowByte;
 	//if (type_s)
 	//{
 	//	raw = raw << 3; // 9 bit resolution default
 	//	if (data[7] == 0x10)
 	//	{
-	//		// “count remain” gives full 12 bit resolution
+	//		// â€œcount remainâ€ gives full 12 bit resolution
 	//		raw = (raw & 0xFFF0) + 12 - data[6];
 	//	}
 	//}
 	//else
 	//{
 	//	byte cfg = (data[4] & 0x60);
-	//	// at lower res, the low bits are undefined, so let’s zero them
+	//	// at lower res, the low bits are undefined, so letâ€™s zero them
 	//	if (cfg == 0x00)
 	//		raw = raw & ~7; // 9 bit resolution, 93.75 ms
 	//	else
@@ -229,4 +237,59 @@ bool ControlLine::GetTemperature()
 	delay(100);
 
 	return true;
+}
+bool ControlLine::GetPh()
+{
+	/*
+	(1) Connect equipments according to the graphic, that is, the pH electrode is connected to the BNC connector on the pH meter board,
+		and then use the connection lines, the pH meter board is connected to the ananlong port 0 of the Arduino controller.
+		When the Arduino controller gets power, you will see the blue LED on board is on.
+	(2) Upload the sample code to the Arduino controller.
+	(3) Put the pH electrode into the standard solution whose pH value is 7.00, or directly shorten the input of the BNC connector.
+		Open the serial monitor of the Arduino IDE, you can see the pH value printed on it, and the error does not exceed 0.3.
+		Record the pH value printed, then compared with 7.00, and the difference should be assifned to the "Offset".
+		For example, the pH value printed is 6.88, so the difference is 0.12. You should change the "# define Offset 0.00" into "# define Offset 0.12" in your program.
+	(4) Put the pH electrode into the pH standard solution whose value is 4.00. Then wait about one minute, adjust the gain potential device,
+		let the value stabilise at around 4.00. At this time the acidic calibration has been completed and you can measure the pH value of an acidic solution.
+		Note: If you want to measure the pH value of other solution, you must wash the pH electrode first!
+	(5) According to the linear characteristics of pH electrode itself, after the above calibration, you can directly measure the pH value of the alkaline solution,
+		but if you want to get better accuracy, you can recalibrate it. Alkaline calibration use the standard solution whose pH value is 9.18.
+		Also adjust the gain potential device, let the value stabilise at around 9.18. After this calibration, you can measure the pH value of the alkaline solution.
+	*/
+
+	// get 10 sample value from the sensor for smooth the value:
+	int buf[10];
+	for (int i = 0; i < 10; i++)
+	{
+		buf[i] = analogRead(m_pin);
+		delay(10);
+	}
+
+	// sort the analog from small to large:
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = i + 1; j < 10; j++)
+		{
+			if (buf[i] > buf[j])
+			{
+				int temp = buf[i];
+				buf[i] = buf[j];
+				buf[j] = temp;
+			}
+		}
+	}
+	
+	// store the average value of the sensor feedback:
+	unsigned long int avgValue = 0;
+	for (int i = 2; i < 8; i++) // take the average value of 6 center sample
+		avgValue += buf[i];
+	float phValue = (float)(avgValue * 5.0 / 1024 / 6); // convert the analog into millivolt
+	phValue = 3.5 * phValue + PH_OFFSET; // convert the millivolt into pH value
+
+	//Serial.print("    pH:");
+	//Serial.print(phValue,2);
+	//Serial.println("");
+
+	m_state[0] = (int)phValue;
+	m_state[1] = (phValue - m_state[0]) * 100;
 }
