@@ -1,6 +1,5 @@
 #include <OneWireSlave.h>
 #include <OneWire.h>
-#include <EEPROM.h>
 #include "Hardware.h"
 #include "ControlLine.h"
 #include "NetworkModule.h"
@@ -30,9 +29,6 @@ void loop()
 
 	//st[0] = 0;
 	//pControlLines[0].SetState(st);
-
-	////Serial.println(EEPROM.read(0));
-
 
 	//delay(1000);
 }

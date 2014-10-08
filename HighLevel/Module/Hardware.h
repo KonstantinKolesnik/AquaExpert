@@ -6,6 +6,8 @@
 #else
 	#include "WProgram.h"
 #endif
+
+#define EEPROM_OFFSET			10 // 6 bytes reserved for 1-Wire slave address
 //****************************************************************************************
 typedef enum
 {

@@ -1,5 +1,7 @@
-﻿#include "ControlLine.h"
+﻿#include <EEPROM.h>
+#include "ControlLine.h"
 //****************************************************************************************
+
 #define RELAY_ACTIVE_LEVEL		LOW	// 8-relay module active level is "0"
 #define DS18S20_ID				0x10
 #define DS18B20_ID				0x28
@@ -13,37 +15,42 @@ ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 	m_type = type;
 	m_address = address;
 	m_pin = pin;
+
 	m_state[0] = 0;
 	m_state[1] = 0;
 
 	switch (m_type)
 	{
-	case Relay:
-		pinMode(m_pin, OUTPUT);
-		break;
-	case Temperature:
-		// DS18B20 water-proof:
-		// red:		+5V;
-		// blue:	signal;
-		// black:	GND;
+		case Relay:
+			pinMode(m_pin, OUTPUT);
+			int16_t st[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
+			SetState(st);
+			break;
+		case PWM:
+			int16_t st[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
+			SetState(st);
+			break;
+		case Temperature:
+			m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
+			m_state[0] = -1000;
+			m_state[1] = 0;
+			break;
+		case Liquid:
+			analogRead(m_pin); // preread
+		case Ph:
+			analogRead(m_pin); // preread
+			m_state[0] = -1000;
+			m_state[1] = 0;
+			break;
+		case ORP:
+			break;
+		case Conductivity:
+			break;
 
-		m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
-		m_state[0] = -1000;
-		m_state[1] = 0;
-		break;
-	case Liquid:
-		analogRead(m_pin); // preread
-	case Ph:
-		analogRead(m_pin); // preread
-		m_state[0] = -1000;
-		m_state[1] = 0;
-		break;
 
 
-
-
-	default:
-		break;
+		default:
+			break;
 	}
 }
 
@@ -64,14 +71,20 @@ void ControlLine::SetState(int16_t* state)
 {
 	switch (m_type)
 	{
-	case Relay:
-		digitalWrite(m_pin, state[0] ? RELAY_ACTIVE_LEVEL : !RELAY_ACTIVE_LEVEL);
-		break;
-	case PWM:
-		analogWrite(m_pin, map(state[0], 0, 100, 0, 255));
-		break;
-	default:
-		break;
+		case Relay:
+			if (state[0] != HIGH && state[0] != LOW)
+				state[0] = !RELAY_ACTIVE_LEVEL;
+			digitalWrite(m_pin, state[0] ? RELAY_ACTIVE_LEVEL : !RELAY_ACTIVE_LEVEL);
+			EEPROM.write(EEPROM_OFFSET + m_address, state[0]);
+			break;
+		case PWM:
+			if (state[0] < 0 || state[0] > 100)
+				state[0] = 0;
+			analogWrite(m_pin, map(state[0], 0, 100, 0, 255));
+			EEPROM.write(EEPROM_OFFSET + m_address, state[0]);
+			break;
+		default:
+			break;
 	}
 }
 void ControlLine::UpdateState()
@@ -80,33 +93,46 @@ void ControlLine::UpdateState()
 
 	switch (m_type)
 	{
-	case Relay:
-		m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
-		break;
+		case Relay:
+			m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
+			break;
+		case PWM:
+			m_state[0] = EEPROM.read(EEPROM_OFFSET + m_address);
+			break;
+		case Temperature:
+			GetTemperature();
+			break;
+		case Liquid:
+			m_state[0] = analogRead(m_pin);
+			// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
+			// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
+			break;
+		case Ph:
+			GetPh();
+			break;
+		case ORP:
+			break;
+		case Conductivity:
+			break;
+		
 
-	case Temperature:
-		GetTemperature();
-		break;
-
-	case Liquid:
-		m_state[0] = analogRead(m_pin);
-		// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
-		// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
-		break;
-
-	case Ph:
-		GetPh();
-		break;
 
 
 
-	default:
-		break;
+		default:
+			break;
 	}
 }
 
 bool ControlLine::GetTemperature()
 {
+	/*
+	DS18B20 water-proof:
+	red:	+5V;
+	blue:	signal;
+	black:	GND;
+	*/
+
 	byte i;
 	byte present = 0;
 	byte type_s;

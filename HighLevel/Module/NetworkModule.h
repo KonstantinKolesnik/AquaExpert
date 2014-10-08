@@ -11,6 +11,9 @@ private:
 	ControlLine* m_pControlLines;
 	uint16_t m_controlLinesCount;
 
+	unsigned char m_rom[8];
+	OneWireSlave* m_pds;
+
 public:
 	NetworkModule();
 	
