@@ -8,11 +8,14 @@ class NetworkModule
 {
 private:
 	ModuleType_t m_type;
+	char m_rom[8];
 	ControlLine* m_pControlLines;
 	uint16_t m_controlLinesCount;
 
-	unsigned char m_rom[8];
 	OneWireSlave* m_pds;
+
+	void InitROM();
+	void InitControlLines();
 
 public:
 	NetworkModule();

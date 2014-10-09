@@ -25,7 +25,11 @@ typedef enum
 {
 	Unknown,
 	Test,		// test full module
-	D8,			// AE-D8
+	D5,			// AE-D5
+	
+	
+	D6,			// AE-D6
+
 
 
 } ModuleType_t;

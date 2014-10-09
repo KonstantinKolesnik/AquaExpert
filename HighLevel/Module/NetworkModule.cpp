@@ -4,8 +4,8 @@
 //****************************************************************************************
 NetworkModule::NetworkModule()
 {
-	m_pControlLines = NULL;
 	m_controlLinesCount = 0;
+	m_pControlLines = NULL;
 	analogReference(DEFAULT);
 
 	// set self as 1-Wire slave (pin either of 15/14/16):
@@ -16,6 +16,48 @@ void NetworkModule::Init(ModuleType_t type)
 {
 	m_type = type;
 
+	InitROM();
+	InitControlLines();
+
+
+
+
+
+
+	//attachInterrupt(dsslaveassignedint, slave, CHANGE);
+	m_pds->init(m_rom);
+	//m_pds->setScratchpad(scratchpad);
+	//m_pds->setPower(PARASITE);
+	//m_pds->setResolution(9);
+	//value = -55;
+	//m_pds->attach44h(temper);
+
+
+
+
+}
+void NetworkModule::InitROM()
+{
+	// read ROM from eeprom:
+	for (int i = 0; i < 8; i++)
+		m_rom[i] = EEPROM.read(i);
+
+	// check ROM:
+	if (m_rom[0] != m_type || m_rom[7] != m_pds->crc8(m_rom, 7)) // type mismatch or crc mismatch
+	{
+		// generate new ROM:
+		m_rom[0] = m_type; // Family
+
+
+		m_rom[7] = m_pds->crc8(m_rom, 7); // CRC8
+
+		// save to eeprom:
+		for (int i = 0; i < 8; i++)
+			EEPROM.write(i, m_rom[i]);
+	}
+}
+void NetworkModule::InitControlLines()
+{
 	switch (m_type)
 	{
 		case Test:
@@ -48,29 +90,6 @@ void NetworkModule::Init(ModuleType_t type)
 		default:
 			break;
 	}
-
-	m_rom[0] = m_type; // Family
-	m_rom[1] = EEPROM.read(0);
-	m_rom[2] = EEPROM.read(1);
-	m_rom[3] = EEPROM.read(2);
-	m_rom[4] = EEPROM.read(3);
-	m_rom[5] = EEPROM.read(4);
-	m_rom[6] = EEPROM.read(5);
-	//m_rom[7] = 0; // CRC
-
-	//if !crc -> no rom -> generate rom
-
-	//attachInterrupt(dsslaveassignedint, slave, CHANGE);
-	//m_pds->init(m_rom);
-	//m_pds->setScratchpad(scratchpad);
-	//m_pds->setPower(PARASITE);
-	//m_pds->setResolution(9);
-	//value = -55;
-	//m_pds->attach44h(temper);
-
-
-
-
 }
 
 ModuleType_t NetworkModule::GetType()
