@@ -1,3 +1,4 @@
+#include <EEPROM.h>
 #include <OneWireSlave.h>
 #include "NetworkModule.h"
 //****************************************************************************************
@@ -55,10 +56,12 @@ void NetworkModule::Init(ModuleType_t type)
 	m_rom[4] = EEPROM.read(3);
 	m_rom[5] = EEPROM.read(4);
 	m_rom[6] = EEPROM.read(5);
-	m_rom[7] = 0; // CRC
+	//m_rom[7] = 0; // CRC
+
+	//if !crc -> no rom -> generate rom
 
 	//attachInterrupt(dsslaveassignedint, slave, CHANGE);
-	m_pds->init(m_rom);
+	//m_pds->init(m_rom);
 	//m_pds->setScratchpad(scratchpad);
 	//m_pds->setPower(PARASITE);
 	//m_pds->setResolution(9);

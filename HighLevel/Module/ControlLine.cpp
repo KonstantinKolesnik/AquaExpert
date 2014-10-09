@@ -8,7 +8,7 @@
 #define DS1822_ID				0x22
 #define DS1820_ID				0x10//???
 
-#define PH_OFFSET				-0.12
+#define PH_OFFSET				0.0//-0.12
 //****************************************************************************************
 ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 {
@@ -19,16 +19,16 @@ ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
 	m_state[0] = 0;
 	m_state[1] = 0;
 
+	int16_t initialState[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
+
 	switch (m_type)
 	{
 		case Relay:
 			pinMode(m_pin, OUTPUT);
-			int16_t st[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
-			SetState(st);
+			SetState(initialState);
 			break;
 		case PWM:
-			int16_t st[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
-			SetState(st);
+			SetState(initialState);
 			break;
 		case Temperature:
 			m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
@@ -65,6 +65,7 @@ ControlLineType_t ControlLine::GetType()
 
 volatile int16_t* ControlLine::GetState()
 {
+	//Serial.println(EEPROM.read(EEPROM_OFFSET + m_address));
 	return m_state;
 }
 void ControlLine::SetState(int16_t* state)
@@ -78,8 +79,7 @@ void ControlLine::SetState(int16_t* state)
 			EEPROM.write(EEPROM_OFFSET + m_address, state[0]);
 			break;
 		case PWM:
-			if (state[0] < 0 || state[0] > 100)
-				state[0] = 0;
+			state[0] = constrain(state[0], 0, 100);
 			analogWrite(m_pin, map(state[0], 0, 100, 0, 255));
 			EEPROM.write(EEPROM_OFFSET + m_address, state[0]);
 			break;

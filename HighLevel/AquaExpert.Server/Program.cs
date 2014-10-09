@@ -15,6 +15,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using GT = Gadgeteer;
+using Gadgeteer.Modules.GHIElectronics;
+using Gadgeteer.Modules.LoveElectronics;
+using MFE.Hardware;
+using Gadgeteer;
 
 namespace AquaExpert.Server
 {
@@ -37,7 +41,7 @@ namespace AquaExpert.Server
         private GT.Timer timerNetworkOff;
         private GT.Timer timerTest;
 
-        private RFManager rfManager;
+        //private RFManager rfManager;
 
         internal static Gadgeteer.Modules.LoveElectronics.Button Button;
         #endregion
@@ -69,9 +73,9 @@ namespace AquaExpert.Server
 
             InitSettings();
             //InitRF();
-            //InitBus();
+            InitBus();
             InitHardware();
-            InitNetwork();
+            //InitNetwork();
 
             //Mainboard.SetDebugLED(true);
         }
@@ -103,7 +107,7 @@ namespace AquaExpert.Server
         }
         private void InitRF()
         {
-            rfManager = new RFManager();
+            //rfManager = new RFManager();
         }
         private void InitBus()
         {
@@ -120,11 +124,16 @@ namespace AquaExpert.Server
             //- See more at: https://www.ghielectronics.com/community/forum/topic?id=13503&page=2#msg137894
 
 
-            networkCoordinator = new NetworkCoordinator();
+            //networkCoordinator = new NetworkCoordinator();
 
             //busHubI2C = new BusHubI2C(new BusConfiguration(new I2CDevice(null)));
             //busHubI2C.BusModulesCollectionChanged += busHubI2C_BusModulesCollectionChanged;
             //networkCoordinator.BusHubs.Add(busHubI2C);
+
+            //----------------------------------------------------------
+            OneWireExtension.Device[] devs = OneWireExtension.Scan(Socket.GetSocket(11, true, null, null).CpuPins[3]);
+            var b = devs;
+
         }
         private void InitHardware()
         {

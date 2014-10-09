@@ -1,5 +1,6 @@
 #include <OneWireSlave.h>
 #include <OneWire.h>
+#include <EEPROM.h>
 #include "Hardware.h"
 #include "ControlLine.h"
 #include "NetworkModule.h"

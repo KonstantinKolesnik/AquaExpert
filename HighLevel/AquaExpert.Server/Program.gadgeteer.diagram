@@ -105,13 +105,6 @@
         </socketUseShape>
       </nestedChildShapes>
     </moduleShape>
-    <socketConnector Id="895a024a-62c5-463c-8cc7-563d81d35fb2" edgePoints="[(8.525 : 8.19641732150427); (8.525 : 6.365); (8.58877952401138 : 6.365)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <socketUseReferencesSocketMoniker Id="50c7809f-5fc1-4ebb-a1d5-88df2ec8eb1a" />
-      <nodes>
-        <socketUseShapeMoniker Id="3c4e1544-01c9-457b-9afa-6be23a19f71a" />
-        <socketShapeMoniker Id="0ab2eb5a-5d22-43ac-84d3-bdb9f34f13a2" />
-      </nodes>
-    </socketConnector>
     <moduleShape Id="cafa7753-cf4c-48be-9910-835565233e6f" absoluteBounds="4.16, 0.5, 1.2598425196850394, 0.86614173228346458">
       <moduleMoniker Id="9f9c9c65-38f8-4045-ab66-9278e278b976" />
       <relativeChildShapes />

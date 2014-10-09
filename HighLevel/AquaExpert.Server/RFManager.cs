@@ -4,10 +4,11 @@ using Gadgeteer.Modules.KKS;
 using AquaExpert.Server.UI;
 using System.Threading;
 using Gadgeteer.Modules.LoveElectronics;
-using Gadgeteer.Modules.Gralin;
+//using Gadgeteer.Modules.Gralin;
 
 namespace AquaExpert.Server
 {
+    /*
     class RFManager
     {
         private NRF24 rfMaster;
@@ -306,4 +307,5 @@ namespace AquaExpert.Server
             //UIManager.DebugPage.AddLine("IsDynamicAckEnabled: " + rfModule.IsDynamicAckEnabled);
         }
     }
+    */
 }

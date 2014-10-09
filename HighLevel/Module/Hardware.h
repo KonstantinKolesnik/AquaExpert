@@ -23,6 +23,7 @@ typedef enum
 } ControlLineType_t;
 typedef enum
 {
+	Unknown,
 	Test,		// test full module
 	D8,			// AE-D8
 
