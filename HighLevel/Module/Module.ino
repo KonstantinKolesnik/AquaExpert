@@ -7,22 +7,22 @@
 //****************************************************************************************
 void setup()
 {
+	//while (!Serial) {
+	//	; // wait for serial port to connect. Needed for Leonardo only
+	//}
+
 	Serial.begin(9600);
-	
-	// current module type!!!:
-	Module.Init(Test);
+	module.Init(MODULE_TYPE);
 }
 //****************************************************************************************
 void loop()
 {
-	Module.UpdateState();
-
-	Module.PrintState();
-	Serial.println("");
+	module.LoopProc();
+	
 
 
 
-	//ControlLine* pControlLines = Module.GetControlLines();
+	//ControlLine* pControlLines = module.GetControlLines();
 	//int16_t st[2] = {1, 0};
 	//pControlLines[0].SetState(st);
 

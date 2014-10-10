@@ -21,6 +21,7 @@ public:
 	NetworkModule();
 	
 	void Init(ModuleType_t type);
+	void LoopProc();
 
 	ModuleType_t GetType();
 	uint16_t GetControlLinesCount();
@@ -32,7 +33,7 @@ public:
 	void PrintControlLineState(uint16_t idx);
 };
 
-extern NetworkModule Module;
+extern NetworkModule module;
 //****************************************************************************************
 #endif
 

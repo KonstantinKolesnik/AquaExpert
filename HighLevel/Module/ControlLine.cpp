@@ -97,7 +97,7 @@ void ControlLine::UpdateState()
 			m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
 			break;
 		case PWM:
-			m_state[0] = EEPROM.read(EEPROM_OFFSET + m_address);
+			//m_state[0] = EEPROM.read(EEPROM_OFFSET + m_address);
 			break;
 		case Temperature:
 			GetTemperature();

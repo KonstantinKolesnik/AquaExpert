@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaExpert.Server", "AquaEx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Module", "Module\Module.vcxproj", "{A3794A20-0720-4907-935E-98598B27871C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OneWireScaner", "OneWireScaner\OneWireScaner.vcxproj", "{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +227,16 @@ Global
 		{A3794A20-0720-4907-935E-98598B27871C}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{A3794A20-0720-4907-935E-98598B27871C}.Release|Win32.ActiveCfg = Release|Win32
 		{A3794A20-0720-4907-935E-98598B27871C}.Release|Win32.Build.0 = Release|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Debug|Win32.Build.0 = Debug|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Release|Win32.ActiveCfg = Release|Win32
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -248,5 +260,6 @@ Global
 		{72D955AB-12CB-4EDA-BE8E-C2A99D10C737} = {2BB05478-6127-43BA-A206-32B81D5E8B94}
 		{0F8B9090-F49A-4D22-85D4-8C66FFFB9019} = {2BB05478-6127-43BA-A206-32B81D5E8B94}
 		{A3794A20-0720-4907-935E-98598B27871C} = {AD3752C4-3B8C-447E-83A4-B37D5FA7C762}
+		{E1A4A11C-52D3-4EA4-AF12-248A64213C2D} = {AD3752C4-3B8C-447E-83A4-B37D5FA7C762}
 	EndGlobalSection
 EndGlobal
