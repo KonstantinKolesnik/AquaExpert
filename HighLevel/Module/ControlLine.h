@@ -22,7 +22,8 @@ class ControlLine
 	uint8_t GetAddress();
 	ControlLineType_t GetType();
 
-	void UpdateState();
+	void QueryState();
+
 	volatile int16_t* GetState();
 	void SetState(int16_t* state);
 };

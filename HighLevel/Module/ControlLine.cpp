@@ -1,8 +1,8 @@
 ﻿#include <EEPROM.h>
 #include "ControlLine.h"
 //****************************************************************************************
-
 #define RELAY_ACTIVE_LEVEL		LOW	// 8-relay module active level is "0"
+
 #define DS18S20_ID				0x10
 #define DS18B20_ID				0x28
 #define DS1822_ID				0x22
@@ -65,7 +65,6 @@ ControlLineType_t ControlLine::GetType()
 
 volatile int16_t* ControlLine::GetState()
 {
-	//Serial.println(EEPROM.read(EEPROM_OFFSET + m_address));
 	return m_state;
 }
 void ControlLine::SetState(int16_t* state)
@@ -87,7 +86,8 @@ void ControlLine::SetState(int16_t* state)
 			break;
 	}
 }
-void ControlLine::UpdateState()
+
+void ControlLine::QueryState()
 {
 	int level;
 
@@ -187,25 +187,21 @@ bool ControlLine::GetTemperature()
 	}
 	 
 	m_pds->reset();
-
 	m_pds->select(addr);
 	m_pds->write(0x44, 1); // start conversion, with parasite power on at the end
 
-	delay(1000); // wait for conversion; maybe 750ms is enough, maybe not
+	//delay(1000); // wait for conversion; maybe 750ms is enough, maybe not
+	while (!m_pds->read()) { }
 
 	present = m_pds->reset(); // we might do a ds.depower() here, but the reset will take care of it
-
 	m_pds->select(addr);
 	m_pds->write(0xBE); // Read scratchpad command
-
 	// Receive 9 bytes
 	for (i = 0; i < 9; i++)
 		data[i] = m_pds->read();
 
 	lowByte = data[0];
 	highByte = data[1];
-
-
 
 	//------------------------------------------------------------
 	// Calculate temperature value
@@ -260,7 +256,7 @@ bool ControlLine::GetTemperature()
 	//Serial.print(fahrenheit);
 	//Serial.println(" Fahrenheit");
 
-	delay(100);
+	//delay(100);
 
 	return true;
 }

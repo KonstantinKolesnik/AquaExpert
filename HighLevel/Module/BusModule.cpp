@@ -1,10 +1,12 @@
 #include <EEPROM.h>
 #include <OneWireSlave.h>
-#include "NetworkModule.h"
+#include "BusModule.h"
+//****************************************************************************************
+BusModule module;
 //****************************************************************************************
 void OnDuty(OneWireSlave* p);
-
-NetworkModule::NetworkModule()
+//****************************************************************************************
+BusModule::BusModule()
 {
 	m_controlLinesCount = 0;
 	m_pControlLines = NULL;
@@ -14,7 +16,7 @@ NetworkModule::NetworkModule()
 	m_pds = new OneWireSlave(15);
 }
 
-void NetworkModule::Init(ModuleType_t type)
+void BusModule::Init(ModuleType_t type)
 {
 	m_type = type;
 
@@ -24,7 +26,7 @@ void NetworkModule::Init(ModuleType_t type)
 	m_pds->setRom(m_rom);
 	m_pds->attachOnDuty(OnDuty);
 }
-void NetworkModule::InitROM()
+void BusModule::InitROM()
 {
 	// read ROM from eeprom:
 	for (int i = 0; i < 8; i++)
@@ -50,11 +52,11 @@ void NetworkModule::InitROM()
 			EEPROM.write(i, m_rom[i]);
 	}
 }
-void NetworkModule::InitControlLines()
+void BusModule::InitControlLines()
 {
 	switch (m_type)
 	{
-		case Test:
+		case Unknown:
 			m_controlLinesCount = 14;
 			m_pControlLines = (ControlLine*)malloc(m_controlLinesCount * sizeof(ControlLine));
 
@@ -86,32 +88,31 @@ void NetworkModule::InitControlLines()
 	}
 }
 
-void NetworkModule::LoopProc()
+void BusModule::LoopProc()
 {
-	UpdateState();
 	m_pds->waitForRequest(false);
 }
 
-ModuleType_t NetworkModule::GetType()
+ModuleType_t BusModule::GetType()
 {
 	return m_type;
 }
-uint16_t NetworkModule::GetControlLinesCount()
+uint16_t BusModule::GetControlLinesCount()
 {
 	return m_controlLinesCount;
 }
-ControlLine* NetworkModule::GetControlLines()
+ControlLine* BusModule::GetControlLines()
 {
 	return m_pControlLines;
 }
 
-void NetworkModule::UpdateState()
+void BusModule::QueryState()
 {
 	for (uint16_t i = 0; i < m_controlLinesCount; i++)
-		m_pControlLines[i].UpdateState();
+		m_pControlLines[i].QueryState();
 }
 
-void NetworkModule::PrintState()
+void BusModule::PrintState()
 {
 	//Serial.print("Type: ");
 	//Serial.println(m_type);
@@ -144,7 +145,7 @@ void NetworkModule::PrintState()
 
 	Serial.println("");
 }
-void NetworkModule::PrintControlLineState(uint16_t idx)
+void BusModule::PrintControlLineState(uint16_t idx)
 {
 	if (m_controlLinesCount == 0)
 		Serial.println("No control lines");
@@ -178,19 +179,17 @@ void NetworkModule::PrintControlLineState(uint16_t idx)
 		Serial.println(";");
 	}
 }
-
-NetworkModule module;
-
+//****************************************************************************************
 void OnDuty(OneWireSlave* p)
 {
-	//uint8_t b = p->recv();
-	char b[2];
-	p->recvData(b, 2);
+	//module.QueryState();
 
-	module.UpdateState();
 	Serial.print("OnDuty: ");
+	//uint8_t b = p->recv();
 	//Serial.println(b);
 
+	char b[2];
+	p->recvData(b, 2);
 	Serial.print((uint8_t)b[0]);
 	Serial.print(";");
 	Serial.println((uint8_t)b[1]);

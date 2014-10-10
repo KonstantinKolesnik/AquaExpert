@@ -99,9 +99,6 @@
     <ClInclude Include="ControlLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkModule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlave\OneWireSlave.h">
       <Filter>_libraries\OneWireSlave</Filter>
     </ClInclude>
@@ -252,6 +249,9 @@
     <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\variants\arduino_due_x\variant.h">
       <Filter>_core</Filter>
     </ClInclude>
+    <ClInclude Include="BusModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\CDC.cpp">
@@ -312,9 +312,6 @@
       <Filter>_libraries\OneWire</Filter>
     </ClCompile>
     <ClCompile Include="ControlLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlave\OneWireSlave.cpp">
@@ -460,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WString.cpp">
       <Filter>_core</Filter>
+    </ClCompile>
+    <ClCompile Include="BusModule.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 #include "Hardware.h"
 #include "ControlLine.h"
 //****************************************************************************************
-class NetworkModule
+class BusModule
 {
 private:
 	ModuleType_t m_type;
@@ -18,7 +18,7 @@ private:
 	void InitControlLines();
 
 public:
-	NetworkModule();
+	BusModule();
 	
 	void Init(ModuleType_t type);
 	void LoopProc();
@@ -27,13 +27,13 @@ public:
 	uint16_t GetControlLinesCount();
 	ControlLine* GetControlLines();
 
-	void UpdateState();
+	void QueryState();
 
 	void PrintState();
 	void PrintControlLineState(uint16_t idx);
 };
-
-extern NetworkModule module;
+//****************************************************************************************
+extern BusModule module;
 //****************************************************************************************
 #endif
 

@@ -45,9 +45,9 @@ extern "C" void __cxa_pure_virtual() {;}
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include "C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\avr\variants\promicro\pins_arduino.h" 
 #include "D:\Work\AquaExpert\HighLevel\Module\Module.ino"
+#include "D:\Work\AquaExpert\HighLevel\Module\BusModule.cpp"
+#include "D:\Work\AquaExpert\HighLevel\Module\BusModule.h"
 #include "D:\Work\AquaExpert\HighLevel\Module\ControlLine.cpp"
 #include "D:\Work\AquaExpert\HighLevel\Module\ControlLine.h"
 #include "D:\Work\AquaExpert\HighLevel\Module\Hardware.h"
-#include "D:\Work\AquaExpert\HighLevel\Module\NetworkModule.cpp"
-#include "D:\Work\AquaExpert\HighLevel\Module\NetworkModule.h"
 #endif

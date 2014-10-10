@@ -23,19 +23,16 @@ typedef enum
 } ControlLineType_t;
 typedef enum
 {
-	Unknown,
-	Test,		// test full module
+	Unknown,	// test module
 	D5,			// AE-D5
-	
-	
 	D6,			// AE-D6
-
+	D8,			// AE-D8
 
 
 } ModuleType_t;
 //****************************************************************************************
 // current module type!!!:
-#define MODULE_TYPE				Test
+#define MODULE_TYPE				Unknown
 //****************************************************************************************
 // commands (from BusHub)
 //****************************************************************************************

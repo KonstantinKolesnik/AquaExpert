@@ -19,6 +19,7 @@ using Gadgeteer.Modules.GHIElectronics;
 using Gadgeteer.Modules.LoveElectronics;
 using MFE.Hardware;
 using Gadgeteer;
+using Microsoft.SPOT.Hardware;
 
 namespace AquaExpert.Server
 {
@@ -36,7 +37,8 @@ namespace AquaExpert.Server
         private Settings settings = null;
 
         private NetworkCoordinator networkCoordinator;
-        private BusHubI2C busHubI2C;
+        private BusMasterI2C busHubI2C;
+        private BusMasterOneWire busHubOneWire;
 
         private GT.Timer timerNetworkOff;
         private GT.Timer timerTest;
@@ -131,8 +133,11 @@ namespace AquaExpert.Server
             //networkCoordinator.BusHubs.Add(busHubI2C);
 
             //----------------------------------------------------------
-            OneWireExtension.Device[] devs = OneWireExtension.Scan(Socket.GetSocket(11, true, null, null).CpuPins[3]);
-            var b = devs;
+            OneWire ow = new OneWire(new OutputPort(Socket.GetSocket(11, true, null, null).CpuPins[3], false));
+            busHubOneWire = new BusMasterOneWire(ow);
+            busHubOneWire.BusModulesCollectionChanged += busHub_BusModulesCollectionChanged;
+            //OneWireExtension.Device[] devs = OneWireExtension.Scan(Socket.GetSocket(11, true, null, null).CpuPins[3]);
+            //var b = devs;
 
         }
         private void InitHardware()
@@ -400,42 +405,42 @@ namespace AquaExpert.Server
 
             timerTest.Start();
         }
-        //private void busHubI2C_BusModulesCollectionChanged(ArrayList addressesAdded, ArrayList addressesRemoved)
-        //{
-        //    //new Thread(() => { 
-        //    //    uint x = 10;
-        //    //    uint indent = 10;
-        //    //    uint y = 10;
-        //    //    uint lineHight = 15;
-        //    //    Font fontTitle = Resources.GetFont(Resources.FontResources.NinaB);
-        //    //    Font font = Resources.GetFont(Resources.FontResources.small);
-        //    //    GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
+        private void busHub_BusModulesCollectionChanged(ArrayList modulesAdded, ArrayList modulesRemoved)
+        {
+            //new Thread(() => { 
+            //    uint x = 10;
+            //    uint indent = 10;
+            //    uint y = 10;
+            //    uint lineHight = 15;
+            //    Font fontTitle = Resources.GetFont(Resources.FontResources.NinaB);
+            //    Font font = Resources.GetFont(Resources.FontResources.small);
+            //    GT.Color color = GT.Color.FromRGB(101, 156, 239); // cornflower blue
 
-        //    //    y = 10;
-        //    //    display.SimpleGraphics.Clear();
-        //    //    //display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
-        //    //    display.SimpleGraphics.DisplayText(busHubI2C.ProductName, fontTitle, color, x, y); y += lineHight;
+            //    y = 10;
+            //    display.SimpleGraphics.Clear();
+            //    //display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+            //    display.SimpleGraphics.DisplayText(busHubI2C.ProductName, fontTitle, color, x, y); y += lineHight;
 
-        //    //    foreach (BusModule busModule in busHubI2C.BusModules)
-        //    //    {
-        //    //        if (y > display.Height)
-        //    //            return;
+            //    foreach (BusModule busModule in busHubI2C.BusModules)
+            //    {
+            //        if (y > display.Height)
+            //            return;
 
-        //    //        display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.ProductName, fontTitle, color, x+5, y); y += lineHight;
+            //        display.SimpleGraphics.DisplayText("[" + busModule.Address + "]   " + busModule.ProductName, fontTitle, color, x+5, y); y += lineHight;
 
-        //    //        foreach (ControlLine controlLine in busModule.ControlLines)
-        //    //        {
-        //    //            if (y > display.Height)
-        //    //                return;
+            //        foreach (ControlLine controlLine in busModule.ControlLines)
+            //        {
+            //            if (y > display.Height)
+            //                return;
 
-        //    //            string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
-        //    //            display.SimpleGraphics.DisplayText(controlLine.ProductName + ": " + state, font, color, x + indent, y); y += lineHight;
-        //    //        }
+            //            string state = "[" + controlLine.State[0] + "][" + controlLine.State[1] + "]";
+            //            display.SimpleGraphics.DisplayText(controlLine.ProductName + ": " + state, font, color, x + indent, y); y += lineHight;
+            //        }
 
-        //    //        display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
-        //    //    }
-        //    //}).Start();
-        //}
+            //        display.SimpleGraphics.DisplayText("****************************", fontTitle, color, x, y); y += lineHight;
+            //    }
+            //}).Start();
+        }
         #endregion
 
         #region Clients messages processing
