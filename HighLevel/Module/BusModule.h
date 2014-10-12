@@ -1,28 +1,23 @@
-#ifndef _MODULE_h
-#define _MODULE_h
+#ifndef _BUSMODULE_h
+#define _BUSMODULE_h
 //****************************************************************************************
 #include "Hardware.h"
 #include "ControlLine.h"
+#include "OneWireSlaveManager.h"
 //****************************************************************************************
-class BusModule
+class BusModule : public OneWireSlave
 {
 private:
 	ModuleType_t m_type;
-	char m_rom[8];
 	ControlLine* m_pControlLines;
 	uint16_t m_controlLinesCount;
 
-	OneWireSlave* m_pds;
-
-	void InitROM();
 	void InitControlLines();
+	bool OnDuty(OneWireSlaveManager * hub);
 
 public:
-	BusModule();
+	BusModule(ModuleType_t type);
 	
-	void Init(ModuleType_t type);
-	void LoopProc();
-
 	ModuleType_t GetType();
 	uint16_t GetControlLinesCount();
 	ControlLine* GetControlLines();
@@ -32,8 +27,6 @@ public:
 	void PrintState();
 	void PrintControlLineState(uint16_t idx);
 };
-//****************************************************************************************
-extern BusModule module;
 //****************************************************************************************
 #endif
 

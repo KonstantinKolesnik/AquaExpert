@@ -23,7 +23,8 @@ typedef enum
 } ControlLineType_t;
 typedef enum
 {
-	Unknown,	// test module
+	Invalid,	// family=0 hangs the 1-wire bus
+	Test,		// test module
 	D5,			// AE-D5
 	D6,			// AE-D6
 	D8,			// AE-D8
@@ -32,7 +33,7 @@ typedef enum
 } ModuleType_t;
 //****************************************************************************************
 // current module type!!!:
-#define MODULE_TYPE				Unknown
+#define MODULE_TYPE				Test
 //****************************************************************************************
 // commands (from BusHub)
 //****************************************************************************************

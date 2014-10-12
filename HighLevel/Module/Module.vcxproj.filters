@@ -20,10 +20,10 @@
       <UniqueIdentifier>{84c5fb22-8d36-4c89-a6c0-1292ed47a4aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\OneWire">
-      <UniqueIdentifier>{604f88a3-ca7e-46cc-ba8e-beeeb3c9bfdc}</UniqueIdentifier>
+      <UniqueIdentifier>{0ceba764-d04a-4217-9150-45ff156a47ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_libraries\OneWireSlave">
-      <UniqueIdentifier>{daf219ff-3954-47cd-9836-34ae40f9a061}</UniqueIdentifier>
+    <Filter Include="_libraries\OneWireSlaveManager">
+      <UniqueIdentifier>{bdf285ee-b881-4759-87be-dcf1fda37698}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,14 +93,8 @@
     <ClInclude Include="Hardware.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h">
-      <Filter>_libraries\OneWire</Filter>
-    </ClInclude>
     <ClInclude Include="ControlLine.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlave\OneWireSlave.h">
-      <Filter>_libraries\OneWireSlave</Filter>
     </ClInclude>
     <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Arduino.h">
       <Filter>_core</Filter>
@@ -252,6 +246,42 @@
     <ClInclude Include="BusModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h">
+      <Filter>_libraries\OneWire</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.h">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\CDC.cpp">
@@ -308,14 +338,8 @@
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp">
       <Filter>_core</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp">
-      <Filter>_libraries\OneWire</Filter>
-    </ClCompile>
     <ClCompile Include="ControlLine.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlave\OneWireSlave.cpp">
-      <Filter>_libraries\OneWireSlave</Filter>
     </ClCompile>
     <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\abi.cpp">
       <Filter>_core</Filter>
@@ -460,6 +484,42 @@
     </ClCompile>
     <ClCompile Include="BusModule.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp">
+      <Filter>_libraries\OneWire</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.cpp">
+      <Filter>_libraries\OneWireSlaveManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,22 +4,20 @@
 #define DS18B20_ID				0x28
 #define DS1822_ID				0x22
 
-
 OneWire ds(12);
 
 void setup()
 {
-
-  /* add setup code here */
-
+	Serial.begin(9600);
 }
 
 void loop()
 {
-	GetTemperature();
+	Scan();
+	delay(100);
 }
 
-bool GetTemperature()
+bool Scan()
 {
 	/*
 	DS18B20 water-proof:
@@ -36,6 +34,8 @@ bool GetTemperature()
 	int highByte, lowByte, TReading, SignBit, Tc_100, Whole, Fract;
 	float temp;
 	float celsius, fahrenheit;
+
+
 
 	//while (ds.search(addr))
 	//{
@@ -66,12 +66,12 @@ bool GetTemperature()
 		ds.reset_search(); // reset search
 	else // no devices
 	{
-		//Serial.println("No devices");
+		Serial.println("No devices");
 		return false;
 	}
 	if (OneWire::crc8(addr, 7) != addr[7])
 	{
-		Serial.println("Bad CRC");
+		Serial.println("Bad device address CRC");
 		return false;
 	}
 
@@ -93,66 +93,80 @@ bool GetTemperature()
 	Serial.print(addr[7]);
 	Serial.println("");
 
-	ds.reset();
-	ds.select(addr);
-	//ds.write(0x05, 0);
-	uint8_t buf[2] = {0x06, 0x07};
-	ds.write_bytes(buf, 2, 0);
-	
-	ds.reset();
 
-	//for (i = 0; i < 2; i++)
-	//	buf2[i] = ds.read();
-	uint8_t buf2[2] = {50,50};
-	ds.read_bytes(buf2, 2);
+	////ds.reset();
+	////ds.select(addr);
+	////ds.write(0xAA, 1);
 
-	Serial.print(buf2[0]);
-	Serial.print(";");
-	Serial.println(buf2[1]);
+	//ds.reset();
+	//ds.select(addr);
+	//ds.write(0xEE, 1);
+	////uint8_t buf[2] = {0x06, 0x07};
+	////ds.write_bytes(buf, 2, 0);
 
+	////while (!ds.read()) { }
 
-	delay(1000);
-	return true;
+	//uint8_t buf2[2] = {50,50};
+	//ds.read_bytes(buf2, 2);
+
+	//Serial.print(buf2[0]);
+	//Serial.print(";");
+	//Serial.println(buf2[1]);
+
+	//ds.reset();
+	//ds.select(addr);
+	//ds.write(0xBE); // Read scratchpad command
+	//// Receive 9 bytes
+	//for (i = 0; i < 9; i++)
+	//	data[i] = ds.read();
+	//lowByte = data[0];
+	//highByte = data[1];
+	//temp = ((highByte << 8) + lowByte) * 0.0625;
+	//Serial.println(temp);
+	//Serial.println("--------------------------------");
+
+	//delay(500);
+	//return true;
 
 	 
+
+
+
+
 	if (addr[0] == DS18S20_ID)
 	{
-		//Serial.println("DS18S20 family device.\n");
+		Serial.println("DS18S20 family device.");
 		type_s = 1;
 	}
 	else if (addr[0] == DS18B20_ID)
 	{
-		//Serial.println("DS18B20 family device.\n");
+		Serial.println("DS18B20 family device.");
 		type_s = 0;
 	}
 	else if (addr[0] == DS1822_ID)
 	{
-		//Serial.println("DS1822 family device.\n");
+		Serial.println("DS1822 family device.");
 		type_s = 0;
 	}
 	else
 	{
-		//Serial.println("Device family is not recognized: 0x");
-		//Serial.println(addr[0], HEX);
-
-		//m_state[0] = -1000;
-		//m_state[1] = 0;
+		Serial.print("Device family is not recognized: 0x");
+		Serial.println(addr[0], HEX);
 
 		return false;
 	}
 	 
 	ds.reset();
-
 	ds.select(addr);
 	ds.write(0x44, 1); // start conversion, with parasite power on at the end
 
-	delay(1000); // wait for conversion; maybe 750ms is enough, maybe not
+	//delay(1000); // wait for conversion; maybe 750ms is enough, maybe not
+	//while (!ds.read()) { Serial.println("DS18S20 converting.");}
+	while (!ds.read()) { }
 
 	present = ds.reset(); // we might do a ds.depower() here, but the reset will take care of it
-
 	ds.select(addr);
 	ds.write(0xBE); // Read scratchpad command
-
 	// Receive 9 bytes
 	for (i = 0; i < 9; i++)
 		data[i] = ds.read();
@@ -215,7 +229,7 @@ bool GetTemperature()
 	//Serial.print(fahrenheit);
 	//Serial.println(" Fahrenheit");
 
-	delay(100);
+	Serial.println("--------------------------------");
 
 	return true;
 }

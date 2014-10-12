@@ -1,62 +1,21 @@
-#include <EEPROM.h>
-#include <OneWireSlave.h>
 #include "BusModule.h"
 //****************************************************************************************
-BusModule module;
-//****************************************************************************************
-void OnDuty(OneWireSlave* p);
-//****************************************************************************************
-BusModule::BusModule()
+BusModule::BusModule(ModuleType_t type)
+	: OneWireSlave((uint8_t)type)
 {
+	m_type = type;
 	m_controlLinesCount = 0;
 	m_pControlLines = NULL;
 	analogReference(DEFAULT);
 
-	// set self as 1-Wire slave (pin either of 15/14/16):
-	m_pds = new OneWireSlave(15);
-}
-
-void BusModule::Init(ModuleType_t type)
-{
-	m_type = type;
-
-	InitROM();
 	InitControlLines();
-
-	m_pds->setRom(m_rom);
-	m_pds->attachOnDuty(OnDuty);
 }
-void BusModule::InitROM()
-{
-	// read ROM from eeprom:
-	for (int i = 0; i < 8; i++)
-		m_rom[i] = EEPROM.read(i);
 
-	// check ROM:
-	if (m_rom[0] != m_type || m_rom[7] != m_pds->crc8(m_rom, 7)) // type mismatch or crc mismatch
-	{
-		randomSeed(150);
-
-		// generate new ROM:
-		m_rom[0] = m_type; // Family
-		m_rom[1] = random(0, 255);
-		m_rom[2] = random(0, 255);
-		m_rom[3] = random(0, 255);
-		m_rom[4] = random(0, 255);
-		m_rom[5] = random(0, 255);
-		m_rom[6] = random(0, 255);
-		m_rom[7] = m_pds->crc8(m_rom, 7); // CRC8
-
-		// save ROM to eeprom:
-		for (int i = 0; i < 8; i++)
-			EEPROM.write(i, m_rom[i]);
-	}
-}
 void BusModule::InitControlLines()
 {
 	switch (m_type)
 	{
-		case Unknown:
+		case Test:
 			m_controlLinesCount = 14;
 			m_pControlLines = (ControlLine*)malloc(m_controlLinesCount * sizeof(ControlLine));
 
@@ -77,7 +36,7 @@ void BusModule::InitControlLines()
 		
 			m_pControlLines[12] = ControlLine(Ph, 12, A0);
 		
-			m_pControlLines[13] = ControlLine(ORP, 13, A10);
+			m_pControlLines[13] = ControlLine(ORP, 13, 10);
 
 			break;
 
@@ -86,11 +45,6 @@ void BusModule::InitControlLines()
 		default:
 			break;
 	}
-}
-
-void BusModule::LoopProc()
-{
-	m_pds->waitForRequest(false);
 }
 
 ModuleType_t BusModule::GetType()
@@ -179,21 +133,27 @@ void BusModule::PrintControlLineState(uint16_t idx)
 		Serial.println(";");
 	}
 }
-//****************************************************************************************
-void OnDuty(OneWireSlave* p)
+
+bool BusModule::OnDuty(OneWireSlaveManager* hub)
 {
-	//module.QueryState();
+	//QueryState();
 
 	Serial.print("OnDuty: ");
-	//uint8_t b = p->recv();
-	//Serial.println(b);
 
-	char b[2];
-	p->recvData(b, 2);
-	Serial.print((uint8_t)b[0]);
-	Serial.print(";");
-	Serial.println((uint8_t)b[1]);
+	uint8_t b = hub->recv();
+	Serial.println(b);
 
-	char buf[2] = {0x08, 0x09};
-	p->sendData(buf, 2);
+	//uint8_t b[2];
+	//hub->recvData(b, 2);
+	//Serial.print(b[0]);
+	//Serial.print(";");
+	//Serial.println(b[1]);
+
+	//uint8_t buf[2] = {0x08, 0x09};
+	//hub->sendData(buf, 2);
+	//if (hub->errno != ONEWIRE_NO_ERROR)
+	//	return FALSE;  
+
+	return TRUE;
 }
+//****************************************************************************************
