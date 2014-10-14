@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading;
 
-namespace AquaExpert.Server
+namespace SmartNetwork.Server
 {
     static class TimeManager
     {

@@ -1,4 +1,4 @@
-﻿using AquaExpert.Server.UI;
+﻿using Gadgeteer;
 using MFE.Net.Http;
 using MFE.Net.Managers;
 using MFE.Net.Messaging;
@@ -7,7 +7,9 @@ using MFE.Net.Udp;
 using MFE.Net.WebSocket;
 using MFE.SmartNetwork.Network;
 using Microsoft.SPOT;
+using Microsoft.SPOT.Hardware;
 using Networking;
+using SmartNetwork.Server.UI;
 using System.Collections;
 using System.IO;
 using System.Net;
@@ -15,13 +17,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using GT = Gadgeteer;
-using Gadgeteer.Modules.GHIElectronics;
-using Gadgeteer.Modules.LoveElectronics;
-using MFE.Hardware;
-using Gadgeteer;
-using Microsoft.SPOT.Hardware;
 
-namespace AquaExpert.Server
+namespace SmartNetwork.Server
 {
     public partial class Program
     {

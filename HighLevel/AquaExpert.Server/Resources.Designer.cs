@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AquaExpert.Server
+namespace SmartNetwork.Server
 {
     
     internal partial class Resources
@@ -20,7 +20,7 @@ namespace AquaExpert.Server
             {
                 if ((Resources.manager == null))
                 {
-                    Resources.manager = new System.Resources.ResourceManager("AquaExpert.Server.Resources", typeof(Resources).Assembly);
+                    Resources.manager = new System.Resources.ResourceManager("SmartNetwork.Server.Resources", typeof(Resources).Assembly);
                 }
                 return Resources.manager;
             }

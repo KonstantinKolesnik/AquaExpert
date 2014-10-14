@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace AquaExpert.HttpFileServerTest
+namespace SmartNetwork.HttpFileServerTest
 {
     public class Program
     {

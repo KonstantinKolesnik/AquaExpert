@@ -1,12 +1,12 @@
 using System;
 using Microsoft.SPOT;
 using Gadgeteer.Modules.KKS;
-using AquaExpert.Server.UI;
+using SmartNetwork.Server.UI;
 using System.Threading;
 using Gadgeteer.Modules.LoveElectronics;
 //using Gadgeteer.Modules.Gralin;
 
-namespace AquaExpert.Server
+namespace SmartNetwork.Server
 {
     /*
     class RFManager

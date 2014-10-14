@@ -1,7 +1,7 @@
 using System;
 using Microsoft.SPOT;
 
-namespace AquaExpert.Server
+namespace SmartNetwork.Server
 {
     public class State
     {

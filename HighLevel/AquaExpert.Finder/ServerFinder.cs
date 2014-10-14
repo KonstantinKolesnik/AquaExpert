@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace AquaExpert.Finder
+namespace SmartNetwork.ServerFinder
 {
     public class ServerFinder : INotifyPropertyChanged
     {

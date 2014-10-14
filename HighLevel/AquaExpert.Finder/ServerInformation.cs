@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AquaExpert.Finder
+namespace SmartNetwork.ServerFinder
 {
     public class ServerInformation : INotifyPropertyChanged
     {

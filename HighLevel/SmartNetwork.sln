@@ -29,15 +29,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgonRF", "ArgonRF\ArgonRF.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayS22_43", "..\..\MFE\DisplayS22\DisplayS22_43\DisplayS22_43.csproj", "{0F8B9090-F49A-4D22-85D4-8C66FFFB9019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaExpert.Finder", "AquaExpert.Finder\AquaExpert.Finder.csproj", "{64A98837-6BCB-4990-BA59-333ED11102F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.ServerFinder", "AquaExpert.Finder\SmartNetwork.ServerFinder.csproj", "{64A98837-6BCB-4990-BA59-333ED11102F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaExpert.HttpFileServerTest", "AquaExpert.HttpFileServerTest\AquaExpert.HttpFileServerTest.csproj", "{FF4E04E5-3794-4AE0-8292-65EAE452ED81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.HttpFileServerTest", "AquaExpert.HttpFileServerTest\SmartNetwork.HttpFileServerTest.csproj", "{FF4E04E5-3794-4AE0-8292-65EAE452ED81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{7730C7F0-4422-401E-8FE1-840AAC5A2B19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Network", "Network", "{AD3752C4-3B8C-447E-83A4-B37D5FA7C762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaExpert.Server", "AquaExpert.Server\AquaExpert.Server.csproj", "{CF58BDE7-6F41-4F94-9C4B-933FFCE62C9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Server", "AquaExpert.Server\SmartNetwork.Server.csproj", "{CF58BDE7-6F41-4F94-9C4B-933FFCE62C9A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Module", "Module\Module.vcxproj", "{A3794A20-0720-4907-935E-98598B27871C}"
 EndProject

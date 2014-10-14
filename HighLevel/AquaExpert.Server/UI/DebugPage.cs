@@ -1,7 +1,7 @@
 using MFE.Graphics.Controls;
 using MFE.Graphics.Media;
 
-namespace AquaExpert.Server.UI
+namespace SmartNetwork.Server.UI
 {
     class DebugPage : Panel
     {

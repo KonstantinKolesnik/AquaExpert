@@ -3,7 +3,7 @@ using MFE.Graphics.Controls;
 using MFE.Graphics.Media;
 using Microsoft.SPOT;
 
-namespace AquaExpert.Server.UI
+namespace SmartNetwork.Server.UI
 {
     static class UIManager
     {

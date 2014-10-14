@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AquaExpert.Finder")]
+[assembly: AssemblyTitle("SmartNetwork.ServerFinder")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AquaExpert.Finder")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("SmartNetwork.ServerFinder")]
+[assembly: AssemblyCopyright("Copyright ©  2014 Konstantin Kolesnik")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

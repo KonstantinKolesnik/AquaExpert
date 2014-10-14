@@ -3,7 +3,7 @@ using System;
 using System.Net.NetworkInformation;
 using System.Windows;
 
-namespace AquaExpert.Finder
+namespace SmartNetwork.ServerFinder
 {
     public partial class MainWindow : Window
     {

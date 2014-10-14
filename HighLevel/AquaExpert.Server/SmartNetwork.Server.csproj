@@ -7,8 +7,8 @@
     <!--This is an executable-->
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AquaExpert.Server</RootNamespace>
-    <AssemblyName>AquaExpert.Server</AssemblyName>
+    <RootNamespace>SmartNetwork.Server</RootNamespace>
+    <AssemblyName>SmartNetwork.Server</AssemblyName>
     <TargetFrameworkVersion>v4.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <!--Identify this as a MicroFramework, CSharp project-->
