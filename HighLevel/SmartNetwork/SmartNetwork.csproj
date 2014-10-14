@@ -9,8 +9,8 @@
     <ProjectGuid>{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartNetwork.API</RootNamespace>
-    <AssemblyName>SmartNetwork.API</AssemblyName>
+    <RootNamespace>SmartNetwork</RootNamespace>
+    <AssemblyName>SmartNetwork</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -100,16 +100,18 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands.cs" />
-    <Compile Include="ControlLine.cs" />
-    <Compile Include="ControlLineMode.cs" />
-    <Compile Include="Coordinator.cs" />
-    <Compile Include="Module.cs" />
-    <Compile Include="ModuleType.cs" />
-    <Compile Include="ObservableObject.cs" />
+    <Compile Include="Network\Commands.cs" />
+    <Compile Include="Network\ControlLine.cs" />
+    <Compile Include="Network\ControlLineMode.cs" />
+    <Compile Include="Network\Coordinator.cs" />
+    <Compile Include="Network\Module.cs" />
+    <Compile Include="Network\ModuleType.cs" />
+    <Compile Include="Network\ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsbSerialPort.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

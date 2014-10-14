@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SmartNetwork.API
+namespace SmartNetwork.Network
 {
     public class Module : ObservableObject
     {

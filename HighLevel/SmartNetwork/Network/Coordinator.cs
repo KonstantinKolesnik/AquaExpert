@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SmartNetwork.API
+namespace SmartNetwork.Network
 {
     public class Coordinator : ObservableObject
     {
@@ -35,6 +32,11 @@ namespace SmartNetwork.API
         {
             get { return controlLines; }
         }
+        #endregion
+
+        #region Events
+        //public event CollectionChangedEventHandler BusModulesCollectionChanged;
+        //public event CollectionChangedEventHandler BusControlLinesCollectionChanged;
         #endregion
 
         #region Constructors

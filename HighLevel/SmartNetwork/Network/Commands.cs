@@ -1,5 +1,5 @@
 ﻿
-namespace SmartNetwork.API
+namespace SmartNetwork.Network
 {
     public enum Commands : byte
     {
