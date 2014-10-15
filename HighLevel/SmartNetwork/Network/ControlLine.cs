@@ -94,7 +94,7 @@ namespace SmartNetwork.Network
         {
             if (Module != null && Module.Coordinator != null)
             {
-                byte[] request = new byte[] { (byte)Commands.SetControlLineMode, Address, (byte)mode };
+                byte[] request = new byte[] { (byte)CommandType.SetControlLineMode, Address, (byte)mode };
                 byte[] response = new byte[1];
 
                 if (Module.Coordinator.WriteRead(Module, request, response))
@@ -105,7 +105,7 @@ namespace SmartNetwork.Network
         {
             if (Module != null && Module.Coordinator != null)
             {
-                byte[] request = new byte[] { (byte)Commands.GetControlLineState, Address };
+                byte[] request = new byte[] { (byte)CommandType.GetControlLineState, Address };
                 byte[] response = new byte[state.Length];
 
                 if (Module.Coordinator.WriteRead(Module, request, response))
@@ -117,7 +117,7 @@ namespace SmartNetwork.Network
             if (Module != null && Module.Coordinator != null)
             {
                 byte[] request = new byte[2 + state.Length];
-                request[0] = (byte)Commands.SetControlLineState;
+                request[0] = (byte)CommandType.SetControlLineState;
                 request[1] = Address;
                 Array.Copy(state, 0, request, 2, state.Length);
 

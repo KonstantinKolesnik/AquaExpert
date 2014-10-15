@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace SmartNetwork.Network
 {
-    public class Module : ObservableObject
+    public class Module : ObservableObject, IEquatable<Module>//, IComparable<Module>
     {
         #region Fields
         private Coordinator coordinator;
@@ -69,18 +70,41 @@ namespace SmartNetwork.Network
         }
         #endregion
 
+        public bool Equals(Module other)
+        {
+            if (Object.ReferenceEquals(other, null)) return false;
+            if (Object.ReferenceEquals(this, other)) return true;
+            return AreAddressesEqual(Address, other.Address);
+        }
+        //public int CompareTo(Module other)
+        //{
+        //    if (other == null)
+        //        return 1;
+        //    return Address.CompareTo(other.Address);
+        //}
+        //public override int GetHashCode()
+        //{
+        //    return Address;
+        //}
+        public override string ToString()
+        {
+            return string.Format("[{0}] {1}", Address.ToString(), Name);
+        }
+
+
+
         #region Private methods
         private void QueryControlLines(bool updateState = false)
         {
             if (coordinator != null)
             {
                 byte[] linesCount = new byte[1] { 0 };
-                if (coordinator.WriteRead(this, new byte[] { (byte)Commands.GetControlLinesCount }, linesCount))
+                if (coordinator.WriteRead(this, new byte[] { (byte)CommandType.GetControlLinesCount }, linesCount))
                 {
                     for (byte i = 0; i < linesCount[0]; i++)
                     {
                         byte[] lineInfo = new byte[3];
-                        if (coordinator.WriteRead(this, new byte[] { (byte)Commands.GetControlLineInfo, i }, lineInfo))
+                        if (coordinator.WriteRead(this, new byte[] { (byte)CommandType.GetControlLineInfo, i }, lineInfo))
                         {
                             ControlLine line = new ControlLine(this, lineInfo[0], lineInfo[1], (ControlLineMode)lineInfo[2]);
                             controlLines.Add(line);
@@ -92,6 +116,25 @@ namespace SmartNetwork.Network
                     }
                 }
             }
+        }
+        private static bool AreAddressesEqual(byte[] a1, byte[] a2)
+        {
+            if (a1.Length == a2.Length)
+            {
+                bool equal = true;
+
+                for (ushort i = 0; i < a1.Length; i++)
+                    if (a1[i] != a2[i])
+                    {
+                        equal = false;
+                        break;
+                    }
+
+                if (equal)
+                    return true;
+            }
+
+            return false;
         }
         #endregion
     }

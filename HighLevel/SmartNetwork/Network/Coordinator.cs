@@ -8,12 +8,7 @@ namespace SmartNetwork.Network
     public class Coordinator : ObservableObject
     {
         #region Fields
-        //private const int updateInterval = 3000;
-
         private ObservableCollection<Module> modules = new ObservableCollection<Module>();
-        private ObservableCollection<ControlLine> controlLines = new ObservableCollection<ControlLine>();
-        //private Timer timerUpdate = null;
-        //private Windows.UI.Xaml.DispatcherTimer t;
         #endregion
 
         #region Properties
@@ -23,7 +18,7 @@ namespace SmartNetwork.Network
         }
         public ObservableCollection<ControlLine> ControlLines // control lines of all modules
         {
-            get { return controlLines; }
+            get { return new ObservableCollection<ControlLine>(modules.SelectMany(module => module.ControlLines).ToList()); }
         }
 
         public Module this[byte[] moduleAddress]
@@ -38,7 +33,7 @@ namespace SmartNetwork.Network
         {
             get
             {
-                var res = controlLines.Where(line => line.Module.Address == moduleAddress && line.Address == lineAddress);
+                var res = ControlLines.Where(line => line.Module.Address == moduleAddress && line.Address == lineAddress);
                 return res.Any() ? res.First() : null;
             }
         }
@@ -46,32 +41,33 @@ namespace SmartNetwork.Network
 
         #region Events
         public event NotifyCollectionChangedEventHandler ModulesCollectionChanged;
-        public event NotifyCollectionChangedEventHandler ControlLinesCollectionChanged;
         #endregion
 
         #region Constructors
         public Coordinator()
         {
-            //StartTimer();
         }
         #endregion
 
+        #region Private methods
+        public void UpdateNetwork()
+        {
+            var modulesOnline = GetOnlineModules();
+
+            var modulesRemoved = Modules.Except(modulesOnline);
+            foreach (var item in modulesRemoved)
+                Modules.Remove(item);
+
+            var modulesAdded = modulesOnline.Except(Modules);
+            foreach (var module in modulesAdded)
+                Modules.Add(module);
+
+            if (ModulesCollectionChanged != null && (modulesAdded.Count() != 0 || modulesRemoved.Count() != 0))
+                ModulesCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, modulesAdded, modulesRemoved));
+        }
+        #endregion
 
         #region Private methods
-        //private void StartTimer()
-        //{
-        //    timerUpdate = new Timer((state) =>
-        //    {
-        //        StopTimer();
-        //        Update();
-        //        StartTimer();
-        //    }, null, updateInterval, updateInterval);
-        //}
-        //private void StopTimer()
-        //{
-        //    timerUpdate.Change(Timeout.Infinite, Timeout.Infinite);
-        //}
-
         internal bool Write(Module target, byte[] request)
         {
             return false;
@@ -80,102 +76,20 @@ namespace SmartNetwork.Network
         {
             return false;
         }
-
         private IList<Module> GetOnlineModules()
         {
-            return null;
-        }
-        private void Update()
-        {
-            IList<Module> modulesOnline = GetOnlineModules();
-            IList<Module> modulesAdded = new List<Module>(), modulesRemoved = new List<Module>();
-
-            foreach (Module module in modulesOnline)
-            {
-                //if (module != null) // query module
-                //{
-                //    // module with this address is online;
-                //    // check if it's already registered in BusModules:
-
-                //    BusModule busModule = this[new byte[] { address }];
-
-                //    if (busModule == null) // module with this address isn't registered
-                //    {
-                //        busModule = new BusModule(this, new byte[] { address }, (BusModuleType)type);
-
-                //        // query module control lines count with updating lines states:
-                //        //busModule.QueryControlLines(true);
-
-                //        // register this module in BusModules:
-                //        modulesAdded.Add(busModule);
-                //        BusModules.Add(busModule);
-                //    }
-                //    else // module with this address is already registered
-                //    {
-                //        // updated when added;
-                //    }
-                //}
-                //else
-                //{
-                //    // module with this address is offline;
-                //    // check if it's already registered in BusModules:
-
-                //    BusModule busModule = this[new byte[] { address }];
-
-                //    if (busModule != null) // offline module
-                //    {
-                //        modulesRemoved.Add(busModule);
-                //        BusModules.Remove(busModule);
-                //    }
-                //}
-            }
+            //var newItems =
+            //    from str in data
+            //    let m = r.Match(str)
+            //    let id = int.Parse(m.Groups["ID"].Value)
+            //    let address = int.Parse(m.Groups["Address"].Value)
+            //    let strName = m.Groups["Name"].Value
+            //    let name = !string.IsNullOrEmpty(strName) ? strName.Replace("\"", "") : ""
+            //    let protocol = m.Groups["Protocol"].Value
+            //    select new Locomotive(id, address, name, protocol);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //ArrayList controlLinesAdded = new ArrayList();
-            //ArrayList controlLinesRemoved = new ArrayList();
-
-            //// removed control lines:
-            //foreach (BusModule moduleRemoved in modulesRemoved)
-            //    foreach (ControlLine controlLine in busControlLines)
-            //    {
-            //        if (controlLine.BusModule.Address == moduleRemoved.Address)
-            //        {
-            //            busControlLines.Remove(controlLine);
-            //            controlLinesRemoved.Add(controlLine);
-            //        }
-            //    }
-
-            //// added control lines:
-            //foreach (BusModule moduleAdded in modulesAdded)
-            //{
-            //    BusModule busModule = this[moduleAdded.Address];
-            //    foreach (ControlLine controlLine in busModule.ControlLines)
-            //    {
-            //        busControlLines.Add(controlLine);
-            //        controlLinesAdded.Add(controlLine);
-            //    }
-            //}
-
-            // ModulesCollectionChanged:
-            if (ModulesCollectionChanged != null && (modulesAdded.Count != 0 || modulesRemoved.Count != 0))
-                ModulesCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, modulesAdded, modulesRemoved));
-
-            //// BusControlLinesCollectionChanged:
-            //if (BusControlLinesCollectionChanged != null && (controlLinesAdded.Count != 0 || controlLinesRemoved.Count != 0))
-            //    BusControlLinesCollectionChanged(controlLinesAdded, controlLinesRemoved);
+            return new List<Module>();
         }
         #endregion
     }

@@ -1,7 +1,7 @@
 ﻿
 namespace SmartNetwork.Network
 {
-    public enum Commands : byte
+    public enum CommandType : byte
     {
         GetControlLinesCount,
         GetControlLineInfo,

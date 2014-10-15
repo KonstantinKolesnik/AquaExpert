@@ -1,7 +1,6 @@
 #include "BusModule.h"
 //****************************************************************************************
 BusModule::BusModule(ModuleType_t type)
-	//: OneWireSlave((uint8_t)type)
 {
 	m_type = type;
 	m_controlLinesCount = 0;
@@ -15,7 +14,7 @@ void BusModule::InitControlLines()
 {
 	switch (m_type)
 	{
-		case Test:
+		case Unknown:
 			m_controlLinesCount = 14;
 			m_pControlLines = (ControlLine*)malloc(m_controlLinesCount * sizeof(ControlLine));
 
@@ -40,7 +39,9 @@ void BusModule::InitControlLines()
 
 			break;
 
+		case D5:
 
+			break;
 
 		default:
 			break;
@@ -133,27 +134,4 @@ void BusModule::PrintControlLineState(uint16_t idx)
 		Serial.println(";");
 	}
 }
-
-//bool BusModule::OnDuty(OneWireSlaveManager* hub)
-//{
-//	//QueryState();
-//
-//	Serial.print("OnDuty: ");
-//
-//	uint8_t b = hub->recv();
-//	Serial.println(b);
-//
-//	//uint8_t b[2];
-//	//hub->recvData(b, 2);
-//	//Serial.print(b[0]);
-//	//Serial.print(";");
-//	//Serial.println(b[1]);
-//
-//	//uint8_t buf[2] = {0x08, 0x09};
-//	//hub->sendData(buf, 2);
-//	//if (hub->errno != ONEWIRE_NO_ERROR)
-//	//	return FALSE;  
-//
-//	return TRUE;
-//}
 //****************************************************************************************

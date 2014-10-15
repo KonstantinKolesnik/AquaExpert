@@ -103,7 +103,7 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Commands.cs" />
+    <Compile Include="Network\CommandType.cs" />
     <Compile Include="Network\ControlLine.cs" />
     <Compile Include="Network\ControlLineMode.cs" />
     <Compile Include="Network\Coordinator.cs" />

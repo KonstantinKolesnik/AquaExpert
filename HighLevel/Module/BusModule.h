@@ -3,9 +3,8 @@
 //****************************************************************************************
 #include "Hardware.h"
 #include "ControlLine.h"
-//#include "OneWireSlaveManager.h"
 //****************************************************************************************
-class BusModule// : public OneWireSlave
+class BusModule
 {
 private:
 	ModuleType_t m_type;
@@ -13,7 +12,6 @@ private:
 	uint16_t m_controlLinesCount;
 
 	void InitControlLines();
-	//bool OnDuty(OneWireSlaveManager * hub);
 
 public:
 	BusModule(ModuleType_t type);

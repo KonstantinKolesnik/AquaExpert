@@ -7,39 +7,50 @@
 	#include "WProgram.h"
 #endif
 
-#define EEPROM_OFFSET			10 // 6 bytes reserved for 1-Wire slave address
+#define EEPROM_OFFSET			10 // 6 bytes reserved for radio address
 //****************************************************************************************
 typedef enum
 {
-	Relay,
-	PWM,
-	Temperature,
-	Liquid,
-	Ph,
-    ORP,
-    Conductivity, // + Salinity
+    GetControlLinesCount,
+    GetControlLineInfo,
+    SetControlLineMode,
+    GetControlLineState,
+    SetControlLineState
+} CommandType_t;
 
-
-} ControlLineType_t;
 typedef enum
 {
-	Invalid,	// family=0 hangs the 1-wire bus
-	Test,		// test module
-	D5,			// AE-D5
-	D6,			// AE-D6
-	D8,			// AE-D8
+    // states: 0, 1;
+    DigitalInput = 0,
+        
+    // states: 0, 1
+    DigitalOutput = 1,
+        
+    // ADC; states: 0...1024
+    AnalogInput = 2,
+        
+    // states: 0...255
+    PWM = 4,
+        
+    // state: float?
+    OneWire = 8, // ?
+        
+    SPI = 16, // ?
+        
+    I2C = 32 // ?
+} ControlLineMode_t;
+
+typedef enum
+{
+    Unknown,	// test module
+    D5,			// SNM-D5
+    D6,			// SNM-D6
+    D8,			// SNM-D8
+
+
+
 
 
 } ModuleType_t;
-//****************************************************************************************
-// current module type!!!:
-#define MODULE_TYPE				Test
-//****************************************************************************************
-// commands (from BusHub)
-//****************************************************************************************
-#define CMD_GET_TYPE							0
-#define CMD_GET_CONTROL_LINE_COUNT				1
-#define CMD_GET_CONTROL_LINE_STATE				2
-#define CMD_SET_CONTROL_LINE_STATE				3
 //****************************************************************************************
 #endif

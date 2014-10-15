@@ -10,18 +10,19 @@
 
 #define PH_OFFSET				0.0//-0.12
 //****************************************************************************************
-ControlLine::ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin)
+ControlLine::ControlLine(uint8_t pin, uint8_t address, uint8_t modes, ControlLineMode_t mode)
 {
-	m_type = type;
-	m_address = address;
 	m_pin = pin;
+	m_address = address;
+	m_modes = modes;
+	m_mode = mode;
 
 	m_state[0] = 0;
 	m_state[1] = 0;
 
 	int16_t initialState[2] = {EEPROM.read(EEPROM_OFFSET + m_address), 0};
 
-	switch (m_type)
+	switch (m_mode)
 	{
 		case Relay:
 			pinMode(m_pin, OUTPUT);
@@ -58,9 +59,13 @@ uint8_t ControlLine::GetAddress()
 {
 	return m_address;
 }
-ControlLineType_t ControlLine::GetType()
+uint8_t ControlLine::GetModes()
 {
-	return m_type;
+	return m_modes;
+}
+ControlLineMode_t ControlLine::GetMode()
+{
+	return m_mode;
 }
 
 volatile int16_t* ControlLine::GetState()
@@ -69,7 +74,7 @@ volatile int16_t* ControlLine::GetState()
 }
 void ControlLine::SetState(int16_t* state)
 {
-	switch (m_type)
+	switch (m_mode)
 	{
 		case Relay:
 			if (state[0] != HIGH && state[0] != LOW)

@@ -6,26 +6,28 @@
 //****************************************************************************************
 class ControlLine
 {
- private:
-	ControlLineType_t m_type;
-	uint8_t m_address;
-	uint8_t m_pin;
-	volatile int16_t m_state[2];
+	private:
+		uint8_t m_pin;
+		uint8_t m_address;
+		uint8_t m_modes;
+		ControlLineMode_t m_mode;
+		volatile int16_t m_state[2];
 
-	OneWire* m_pds;
-	bool GetTemperature();
-	bool GetPh();
+		OneWire* m_pds;
+		bool GetTemperature();
+		bool GetPh();
 
- public:
-	ControlLine(ControlLineType_t type, uint8_t address, uint8_t pin);
+	public:
+		ControlLine(uint8_t pin, uint8_t address, uint8_t modes, ControlLineMode_t mode);
 
-	uint8_t GetAddress();
-	ControlLineType_t GetType();
+		uint8_t GetAddress();
+		uint8_t GetModes();
+		ControlLineMode_t GetMode();
 
-	void QueryState();
+		void QueryState();
 
-	volatile int16_t* GetState();
-	void SetState(int16_t* state);
+		volatile int16_t* GetState();
+		void SetState(int16_t* state);
 };
 //****************************************************************************************
 #endif
