@@ -18,10 +18,10 @@ namespace SmartNetwork.Network
         PWM = 4,
         
         // state: float?
-        OneWire = 8, // ?
+        OneWireBus = 8, // ?
         
-        SPI = 16, // ?
+        SPIBus = 16, // ?
         
-        I2C = 32 // ?
+        I2CBus = 32 // ?
     }
 }

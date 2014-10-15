@@ -24,29 +24,30 @@ ControlLine::ControlLine(uint8_t pin, uint8_t address, uint8_t modes, ControlLin
 
 	switch (m_mode)
 	{
-		case Relay:
+		case DigitalInput:
+			pinMode(m_pin, INPUT_PULLUP);//INPUT
+			break;
+		case DigitalOutput:
 			pinMode(m_pin, OUTPUT);
 			SetState(initialState);
+			break;
+		case AnalogInput:
+			analogRead(m_pin); // preread
 			break;
 		case PWM:
 			SetState(initialState);
 			break;
-		case Temperature:
+		case OneWireBus:
 			m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)
 			m_state[0] = -1000;
 			m_state[1] = 0;
+			GetTemperature();
 			break;
-		case Liquid:
-			analogRead(m_pin); // preread
-		case Ph:
-			analogRead(m_pin); // preread
-			m_state[0] = -1000;
-			m_state[1] = 0;
-			break;
-		case ORP:
-			break;
-		case Conductivity:
-			break;
+		//case Ph:
+		//	analogRead(m_pin); // preread
+		//	m_state[0] = -1000;
+		//	m_state[1] = 0;
+		//	break;
 
 
 
@@ -68,6 +69,41 @@ ControlLineMode_t ControlLine::GetMode()
 	return m_mode;
 }
 
+void ControlLine::QueryState()
+{
+	int level;
+
+	switch (m_mode)
+	{
+		case DigitalInput:
+			m_state[0] = digitalRead(m_pin);
+			break;
+		//case DigitalOutput:
+		//	m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
+		//	break;
+		case AnalogInput:
+			// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
+			// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
+			m_state[0] = analogRead(m_pin);
+			break;
+		//case PWM:
+		//	m_state[0] = EEPROM.read(EEPROM_OFFSET + m_address);
+		//	break;
+		case OneWireBus:
+			GetTemperature();
+			break;
+		//case Ph:
+		//	GetPh();
+		//	break;
+		
+
+
+
+
+		default:
+			break;
+	}
+}
 volatile int16_t* ControlLine::GetState()
 {
 	return m_state;
@@ -76,7 +112,7 @@ void ControlLine::SetState(int16_t* state)
 {
 	switch (m_mode)
 	{
-		case Relay:
+		case DigitalOutput:
 			if (state[0] != HIGH && state[0] != LOW)
 				state[0] = !RELAY_ACTIVE_LEVEL;
 			digitalWrite(m_pin, state[0] ? RELAY_ACTIVE_LEVEL : !RELAY_ACTIVE_LEVEL);
@@ -92,42 +128,6 @@ void ControlLine::SetState(int16_t* state)
 	}
 }
 
-void ControlLine::QueryState()
-{
-	int level;
-
-	switch (m_type)
-	{
-		case Relay:
-			m_state[0] = RELAY_ACTIVE_LEVEL ? digitalRead(m_pin) : !digitalRead(m_pin);
-			break;
-		case PWM:
-			//m_state[0] = EEPROM.read(EEPROM_OFFSET + m_address);
-			break;
-		case Temperature:
-			GetTemperature();
-			break;
-		case Liquid:
-			m_state[0] = analogRead(m_pin);
-			// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
-			// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
-			break;
-		case Ph:
-			GetPh();
-			break;
-		case ORP:
-			break;
-		case Conductivity:
-			break;
-		
-
-
-
-
-		default:
-			break;
-	}
-}
 
 bool ControlLine::GetTemperature()
 {
