@@ -68,11 +68,18 @@ ControlLineMode_t ControlLine::GetMode()
 {
 	return m_mode;
 }
+ControlLineInfo_t ControlLine::GetInfo()
+{
+	ControlLineInfo_t info;
+	info.address = m_address;
+	info.modes = m_modes;
+	info.mode = m_mode;
+
+	return info;
+}
 
 void ControlLine::QueryState()
 {
-	int level;
-
 	switch (m_mode)
 	{
 		case DigitalInput:

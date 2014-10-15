@@ -40,6 +40,13 @@ typedef enum
     I2CBus = 32 // ?
 } ControlLineMode_t;
 
+typedef struct
+{
+	uint8_t address;
+	uint8_t modes;
+	ControlLineMode_t mode;
+} ControlLineInfo_t;
+
 typedef enum
 {
     Unknown,	// test module

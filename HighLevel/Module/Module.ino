@@ -101,3 +101,29 @@ void loop()
 //			EEPROM.write(i, m_rom[i]);
 //	}
 //}
+//uint8_t* OneWireSlave::GetROM()
+//{
+//	return m_rom;
+//}
+//void OneWireSlave::PrintROM()
+//{
+//	Serial.print("ROM: ");
+//	Serial.print(m_rom[0]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[1]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[2]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[3]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[4]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[5]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[6]);
+//	Serial.print(" ");
+//	Serial.print(m_rom[7]);
+//	Serial.print(" / CRC8 = ");
+//	Serial.print(crc8(m_rom, 7));
+//	Serial.println("");
+//}

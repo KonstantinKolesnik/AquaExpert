@@ -23,6 +23,7 @@ class ControlLine
 		uint8_t GetAddress();
 		uint8_t GetModes();
 		ControlLineMode_t GetMode();
+		ControlLineInfo_t GetInfo();
 
 		void QueryState();
 

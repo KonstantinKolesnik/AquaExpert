@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace SmartNetwork.Network
 {
-    public class Module : ObservableObject, IEquatable<Module>//, IComparable<Module>
+    public class Module : ObservableObject, IEquatable<Module>, IComparable<Module>
     {
         #region Fields
         private Coordinator coordinator;
@@ -76,22 +76,20 @@ namespace SmartNetwork.Network
             if (Object.ReferenceEquals(this, other)) return true;
             return AreAddressesEqual(Address, other.Address);
         }
-        //public int CompareTo(Module other)
-        //{
-        //    if (other == null)
-        //        return 1;
-        //    return Address.CompareTo(other.Address);
-        //}
-        //public override int GetHashCode()
-        //{
-        //    return Address;
-        //}
+        public int CompareTo(Module other)
+        {
+            if (other == null)
+                return 1;
+            return Name.CompareTo(other.Name);
+        }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
         public override string ToString()
         {
             return string.Format("[{0}] {1}", Address.ToString(), Name);
         }
-
-
 
         #region Private methods
         private void QueryControlLines(bool updateState = false)
