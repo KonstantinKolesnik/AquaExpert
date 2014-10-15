@@ -8,13 +8,12 @@ namespace SmartNetwork.Network
         #region Fields
         private Coordinator coordinator;
         private byte[] address;
-        private ModuleType type = ModuleType.Unknown;
         private string name = "";
-        private IEnumerable<ControlLine> controlLines = new ObservableCollection<ControlLine>();
+        private ObservableCollection<ControlLine> controlLines = new ObservableCollection<ControlLine>();
         #endregion
 
         #region Properties
-        public Coordinator Coordinator
+        internal Coordinator Coordinator
         {
             get { return coordinator; }
         }
@@ -24,13 +23,13 @@ namespace SmartNetwork.Network
         }
         public ModuleType Type
         {
-            get { return type; }
+            get { return (ModuleType)address[0]; }
         }
         public string TypeName
         {
             get
             {
-                switch (type)
+                switch (Type)
                 {
                     case ModuleType.Unknown: return "SNM test module";
                     case ModuleType.D5: return "SNM-D5";
@@ -38,7 +37,7 @@ namespace SmartNetwork.Network
                     case ModuleType.D8: return "SNM-D8";
 
 
-                    default: return string.Format("{0} [Unknown]", type.ToString());
+                    default: return string.Format("{0} [Unknown]", Type.ToString());
                 }
             }
         }
@@ -61,46 +60,39 @@ namespace SmartNetwork.Network
         #endregion
 
         #region Constructor
-        public Module(Coordinator coordinator, byte[] address, ModuleType type)
+        internal Module(Coordinator coordinator, byte[] address)
         {
             this.coordinator = coordinator;
             this.address = address;
-            this.type = type;
+
+            QueryControlLines();
         }
         #endregion
 
         #region Private methods
-        //internal void QueryType()
-        //{
-        //    if (coordinator != null)
-        //    {
-        //        byte[] response = new byte[1];
-        //        if (coordinator.BusModuleWriteRead(this, new byte[] { Commands.GetType }, response))
-        //            Type = (ModuleType)response[0];
-        //    }
-        //}
-        //internal void QueryControlLines(bool updateState = false)
-        //{
-        //    if (busHub != null)
-        //    {
-        //        for (byte type = 0; type < BusModuleAPI.ControlLineTypesToRequest; type++)
-        //        {
-        //            byte[] response = new byte[1]; // up to 256 numbers for one type
-        //            if (busHub.BusModuleWriteRead(this, new byte[] { BusModuleAPI.CmdGetControlLineCount, type }, response))
-        //            {
-        //                for (byte number = 0; number < response[0]; number++)
-        //                {
-        //                    ControlLine controlLine = new ControlLine(busHub, this, (ControlLineType)type, number);
-        //                    ControlLines.Add(controlLine);
+        private void QueryControlLines(bool updateState = false)
+        {
+            if (coordinator != null)
+            {
+                byte[] linesCount = new byte[1] { 0 };
+                if (coordinator.WriteRead(this, new byte[] { (byte)Commands.GetControlLinesCount }, linesCount))
+                {
+                    for (byte i = 0; i < linesCount[0]; i++)
+                    {
+                        byte[] lineInfo = new byte[3];
+                        if (coordinator.WriteRead(this, new byte[] { (byte)Commands.GetControlLineInfo, i }, lineInfo))
+                        {
+                            ControlLine line = new ControlLine(this, lineInfo[0], lineInfo[1], (ControlLineMode)lineInfo[2]);
+                            controlLines.Add(line);
 
-        //                    // query control line state:
-        //                    if (updateState)
-        //                        controlLine.QueryState();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                            // query control line state:
+                            if (updateState)
+                                line.QueryState();
+                        }
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

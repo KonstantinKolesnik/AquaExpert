@@ -1,62 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartNetwork.Network
 {
     public class ControlLine : ObservableObject
     {
         #region Fields
-        private byte[] state = new byte[4];
         private string name = "";
+        private ControlLineMode mode;
+        private byte[] state = new byte[4];
         #endregion
 
         #region Properties
-        public Coordinator Coordinator
-        {
-            get;
-            private set;
-        }
-        public Module Module
-        {
-            get;
-            private set;
-        }
-        public IEnumerable<ControlLineMode> Modes
-        {
-            get;
-            private set;
-        }
-        public ControlLineMode Mode
-        {
-            get;
-            private set;
-        }
-        public byte Address // up to 256 lines in a single module
-        {
-            get;
-            private set;
-        }
-        //public string TypeName
-        //{
-        //    get
-        //    {
-        //        string type;
-
-        //        switch (Type)
-        //        {
-        //            case ControlLineType.PWM: type = "PWM"; break;
-        //            case ControlLineType.Relay: type = "Relay"; break;
-        //            case ControlLineType.Liquid: type = "Liquid"; break;
-        //            case ControlLineType.Ph: type = "Ph"; break;
-        //            default: type = "[Unknown]"; break;
-        //        }
-
-        //        return "[" + (BusHub != null ? BusHub.Address.ToString() : "-") + "][" + (BusModule != null ? BusModule.Address.ToString() : "-") + "] " + type + " #" + Address;
-        //    }
-        //}
         public string Name
         {
             get { return name; }
@@ -66,6 +20,33 @@ namespace SmartNetwork.Network
                 {
                     name = value;
                     NotifyPropertyChanged("Name");
+                }
+            }
+        }
+        public Module Module
+        {
+            get;
+            private set;
+        }
+        public byte Address // up to 256 lines in a single module
+        {
+            get;
+            private set;
+        }
+        public byte Modes // combination of ControlLineMode flags
+        {
+            get;
+            private set;
+        }
+        public ControlLineMode Mode // active mode
+        {
+            get { return mode; }
+            set
+            {
+                if (mode != value)
+                {
+                    mode = value;
+                    NotifyPropertyChanged("Mode");
                 }
             }
         }
@@ -89,47 +70,62 @@ namespace SmartNetwork.Network
                         }
             }
         }
+        public override string ToString()
+        {
+            return string.Format("[{0}][{1}][{2}] {3}", Module != null ? Module.Address.ToString() : "-",  Address, Mode.ToString(), Name);
+        }
         #endregion
 
         #region Constructor
-        public ControlLine(Coordinator coordinator, Module module, ControlLineMode mode, byte address)
+        public ControlLine(Module module, byte address, byte modes, ControlLineMode mode)
         {
-            Coordinator = coordinator;
             Module = module;
-            Mode = mode;
             Address = address;
+            Modes = modes;
+            Mode = mode;
 
-            //for (byte i = 0; i < state.Length; i++)
-            //    state[i] = 0;
+            for (byte i = 0; i < state.Length; i++)
+                state[i] = 0;
         }
         #endregion
 
         #region Public methods
-        //public void QueryState()
-        //{
-        //    if (BusHub != null && Module != null)
-        //    {
-        //        byte[] request = new byte[] { BusModuleAPI.CmdGetControlLineState, (byte)Type, Address };
-        //        byte[] response = new byte[state.Length];
-        //        if (BusHub.BusModuleWriteRead(Module, request, response))
-        //            state = response;
-        //    }
-        //}
-        //public void SetState(byte[] state)
-        //{
-        //    if (BusHub != null && Module != null)
-        //    {
-        //        byte[] data = new byte[3 + state.Length];
-        //        data[0] = BusModuleAPI.CmdSetControlLineState;
-        //        data[1] = (byte)Type;
-        //        data[2] = Address;
-        //        Array.Copy(state, 0, data, 3, state.Length);
+        public void SetMode(ControlLineMode mode)
+        {
+            if (Module != null && Module.Coordinator != null)
+            {
+                byte[] request = new byte[] { (byte)Commands.SetControlLineMode, Address, (byte)mode };
+                byte[] response = new byte[1];
 
-        //        byte[] response = new byte[state.Length];
-        //        if (BusHub.BusModuleWriteRead(Module, data, response))
-        //            State = response;
-        //    }
-        //}
+                if (Module.Coordinator.WriteRead(Module, request, response))
+                    Mode = (ControlLineMode)response[0];
+            }
+        }
+        public void QueryState()
+        {
+            if (Module != null && Module.Coordinator != null)
+            {
+                byte[] request = new byte[] { (byte)Commands.GetControlLineState, Address };
+                byte[] response = new byte[state.Length];
+
+                if (Module.Coordinator.WriteRead(Module, request, response))
+                    State = response;
+            }
+        }
+        public void SetState(byte[] state)
+        {
+            if (Module != null && Module.Coordinator != null)
+            {
+                byte[] request = new byte[2 + state.Length];
+                request[0] = (byte)Commands.SetControlLineState;
+                request[1] = Address;
+                Array.Copy(state, 0, request, 2, state.Length);
+
+                byte[] response = new byte[state.Length];
+                if (Module.Coordinator.WriteRead(Module, request, response))
+                    State = response;
+            }
+        }
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace SmartNetwork.Network
@@ -9,16 +10,22 @@ namespace SmartNetwork.Network
         #region Fields
         //private const int updateInterval = 3000;
 
-        private IEnumerable<Module> modules = new ObservableCollection<Module>();
-        private IEnumerable<ControlLine> controlLines = new ObservableCollection<ControlLine>();
+        private ObservableCollection<Module> modules = new ObservableCollection<Module>();
+        private ObservableCollection<ControlLine> controlLines = new ObservableCollection<ControlLine>();
         //private Timer timerUpdate = null;
+        //private Windows.UI.Xaml.DispatcherTimer t;
         #endregion
 
         #region Properties
-        public IEnumerable<Module> Modules
+        public ObservableCollection<Module> Modules
         {
             get { return modules; }
         }
+        public ObservableCollection<ControlLine> ControlLines // control lines of all modules
+        {
+            get { return controlLines; }
+        }
+
         public Module this[byte[] moduleAddress]
         {
             get
@@ -27,16 +34,19 @@ namespace SmartNetwork.Network
                 return res.Any() ? res.First() : null;
             }
         }
-
-        public IEnumerable<ControlLine> ControlLines // control lines of all modules
+        public ControlLine this[byte[] moduleAddress, byte lineAddress]
         {
-            get { return controlLines; }
+            get
+            {
+                var res = controlLines.Where(line => line.Module.Address == moduleAddress && line.Address == lineAddress);
+                return res.Any() ? res.First() : null;
+            }
         }
         #endregion
 
         #region Events
-        //public event CollectionChangedEventHandler BusModulesCollectionChanged;
-        //public event CollectionChangedEventHandler BusControlLinesCollectionChanged;
+        public event NotifyCollectionChangedEventHandler ModulesCollectionChanged;
+        public event NotifyCollectionChangedEventHandler ControlLinesCollectionChanged;
         #endregion
 
         #region Constructors
@@ -46,14 +56,6 @@ namespace SmartNetwork.Network
         }
         #endregion
 
-        #region Protected methods
-        //protected abstract ArrayList GetOnlineModules();
-        //protected abstract void ScanModules(out ArrayList modulesAdded, out ArrayList modulesRemoved);
-
-
-        //internal abstract bool BusModuleWriteRead(BusModule busModule, byte[] request, byte[] response);
-        //internal abstract bool BusModuleWrite(BusModule busModule, byte[] request);
-        #endregion
 
         #region Private methods
         //private void StartTimer()
@@ -69,13 +71,78 @@ namespace SmartNetwork.Network
         //{
         //    timerUpdate.Change(Timeout.Infinite, Timeout.Infinite);
         //}
+
+        internal bool Write(Module target, byte[] request)
+        {
+            return false;
+        }
+        internal bool WriteRead(Module target, byte[] request, byte[] response)
+        {
+            return false;
+        }
+
+        private IList<Module> GetOnlineModules()
+        {
+            return null;
+        }
         private void Update()
         {
-            //ArrayList modulesOnline = GetOnlineModules();
+            IList<Module> modulesOnline = GetOnlineModules();
+            IList<Module> modulesAdded = new List<Module>(), modulesRemoved = new List<Module>();
+
+            foreach (Module module in modulesOnline)
+            {
+                //if (module != null) // query module
+                //{
+                //    // module with this address is online;
+                //    // check if it's already registered in BusModules:
+
+                //    BusModule busModule = this[new byte[] { address }];
+
+                //    if (busModule == null) // module with this address isn't registered
+                //    {
+                //        busModule = new BusModule(this, new byte[] { address }, (BusModuleType)type);
+
+                //        // query module control lines count with updating lines states:
+                //        //busModule.QueryControlLines(true);
+
+                //        // register this module in BusModules:
+                //        modulesAdded.Add(busModule);
+                //        BusModules.Add(busModule);
+                //    }
+                //    else // module with this address is already registered
+                //    {
+                //        // updated when added;
+                //    }
+                //}
+                //else
+                //{
+                //    // module with this address is offline;
+                //    // check if it's already registered in BusModules:
+
+                //    BusModule busModule = this[new byte[] { address }];
+
+                //    if (busModule != null) // offline module
+                //    {
+                //        modulesRemoved.Add(busModule);
+                //        BusModules.Remove(busModule);
+                //    }
+                //}
+            }
 
 
-            //ArrayList modulesAdded, modulesRemoved;
-            //ScanModules(out modulesAdded, out modulesRemoved);
+
+
+
+
+
+
+
+
+
+
+
+
 
             //ArrayList controlLinesAdded = new ArrayList();
             //ArrayList controlLinesRemoved = new ArrayList();
@@ -102,9 +169,9 @@ namespace SmartNetwork.Network
             //    }
             //}
 
-            //// BusModulesCollectionChanged:
-            //if (BusModulesCollectionChanged != null && (modulesAdded.Count != 0 || modulesRemoved.Count != 0))
-            //    BusModulesCollectionChanged(modulesAdded, modulesRemoved);
+            // ModulesCollectionChanged:
+            if (ModulesCollectionChanged != null && (modulesAdded.Count != 0 || modulesRemoved.Count != 0))
+                ModulesCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, modulesAdded, modulesRemoved));
 
             //// BusControlLinesCollectionChanged:
             //if (BusControlLinesCollectionChanged != null && (controlLinesAdded.Count != 0 || controlLinesRemoved.Count != 0))

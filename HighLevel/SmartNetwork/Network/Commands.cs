@@ -3,17 +3,10 @@ namespace SmartNetwork.Network
 {
     public enum Commands : byte
     {
-        GetModuleType,
-        GetControlLineCount,
-
-
-
+        GetControlLinesCount,
+        GetControlLineInfo,
+        SetControlLineMode,
         GetControlLineState,
         SetControlLineState
-
-
-
-
-
     }
 }
