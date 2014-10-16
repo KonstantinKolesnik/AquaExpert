@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -78,169 +78,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Arduino.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\binary.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Client.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial_private.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Printable.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Server.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Udp.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBAPI.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBDesc.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WCharacter.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_private.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Arduino.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\binary.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Client.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HardwareSerial.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\IPAddress.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\new.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Platform.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Print.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Printable.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Server.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Stream.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Udp.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBAPI.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBCore.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBDesc.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WCharacter.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_private.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Arduino.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\binary.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Client.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\HardwareSerial.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\IPAddress.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\itoa.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Print.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Printable.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Reset.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\RingBuffer.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Server.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Stream.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\syscalls.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Tone.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\UARTClass.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Udp.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\USARTClass.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WCharacter.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WInterrupts.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_analog.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_constants.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_digital.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_private.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_pulse.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_shift.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WMath.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WString.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\variants\arduino_due_x\pins_arduino.h" />
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\variants\arduino_due_x\variant.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\variants\promicro\pins_arduino.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.h" />
-    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h" />
     <ClInclude Include="ControlLine.h" />
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="BusModule.h" />
     <ClInclude Include="Visual Micro\.Module.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\abi.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\CDC.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial0.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial1.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial2.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial3.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HID.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\hooks.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\main.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Tone.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WInterrupts.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_analog.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_digital.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_pulse.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_shift.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WMath.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\CDC.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HardwareSerial.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HID.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\IPAddress.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\main.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\new.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Print.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Stream.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Tone.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBCore.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WInterrupts.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_analog.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_digital.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_pulse.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_shift.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WMath.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\abi.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\cortex_handlers.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\hooks.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\iar_calls_sam3.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\IPAddress.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\itoa.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\main.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\new.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Print.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Reset.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\RingBuffer.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Stream.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\syscalls_sam3.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\UARTClass.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\USARTClass.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WInterrupts.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_analog.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_digital.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_pulse.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_shift.c" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WMath.cpp" />
-    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WString.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.cpp" />
-    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp" />
     <ClCompile Include="ControlLine.cpp" />
     <ClCompile Include="BusModule.cpp" />
   </ItemGroup>
