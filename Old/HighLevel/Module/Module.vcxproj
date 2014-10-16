@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A3794A20-0720-4907-935E-98598B27871C}</ProjectGuid>
+    <RootNamespace>Module</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\avr\variants\promicro;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\utility;C:\Program Files (x86)\Arduino\libraries\EEPROM;C:\Program Files (x86)\Arduino\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\avr\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Konstantin\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>D:\Work\SmartNetwork\Old\HighLevel\Module\Visual Micro\.Module.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__AVR_ATmega32u4__;__AVR_ATmega32U4__;ARDUINO=158;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire;C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Konstantin\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>D:\Work\AquaExpert\HighLevel\Module\Visual Micro\.Module.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__AVR_ATmega32u4__;__AVR_ATmega32U4__;ARDUINO=106;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="Module.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Arduino.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\binary.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Client.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Printable.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Server.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Udp.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBAPI.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBDesc.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WCharacter.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Arduino.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\binary.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Client.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HardwareSerial.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\IPAddress.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\new.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Platform.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Print.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Printable.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Server.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Stream.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Udp.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBAPI.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBCore.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBDesc.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WCharacter.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Arduino.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\binary.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Client.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\HardwareSerial.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\IPAddress.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\itoa.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Print.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Printable.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Reset.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\RingBuffer.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Server.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Stream.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\syscalls.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Tone.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\UARTClass.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Udp.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\USARTClass.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WCharacter.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WInterrupts.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_analog.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_constants.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_digital.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_pulse.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_shift.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WMath.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WString.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\variants\arduino_due_x\pins_arduino.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\variants\arduino_due_x\variant.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards-master\variants\promicro\pins_arduino.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\variants\promicro\pins_arduino.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.h" />
+    <ClInclude Include="ControlLine.h" />
+    <ClInclude Include="Hardware.h" />
+    <ClInclude Include="BusModule.h" />
+    <ClInclude Include="Visual Micro\.Module.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\abi.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\CDC.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial0.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial1.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial2.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial3.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HID.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\hooks.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\main.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Tone.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WInterrupts.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_analog.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_digital.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_pulse.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_shift.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WMath.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\CDC.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HardwareSerial.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\HID.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\IPAddress.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\main.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\new.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Print.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Stream.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\Tone.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\USBCore.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WInterrupts.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_analog.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_digital.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_pulse.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\wiring_shift.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WMath.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\WString.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\abi.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\cortex_handlers.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\hooks.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\iar_calls_sam3.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\IPAddress.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\itoa.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\main.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\new.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Print.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Reset.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\RingBuffer.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\Stream.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\syscalls_sam3.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\UARTClass.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\USARTClass.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WInterrupts.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_analog.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_digital.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_pulse.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\wiring_shift.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WMath.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\sam\cores\arduino\WString.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS18B20.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2401.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2405.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2408.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2413.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2423.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2433.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2438.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2450.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\DS2890.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWireSlaveManager\OneWireHub.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\OneWire\OneWire.cpp" />
+    <ClCompile Include="ControlLine.cpp" />
+    <ClCompile Include="BusModule.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.upload.port="COM20" arduino.board.name="promicro16" arduino.board.desc="SparkFun Pro Micro 5V/16MHz" arduino.board.property_bag="name=SparkFun Pro Micro 5V/16MHz&#xD;&#xA;upload.protocol=avr109&#xD;&#xA;upload.maximum_size=28672&#xD;&#xA;upload.speed=57600&#xD;&#xA;upload.disable_flushing=true&#xD;&#xA;bootloader.low_fuses=0xff&#xD;&#xA;bootloader.high_fuses=0xd8&#xD;&#xA;bootloader.extended_fuses=0xcb&#xD;&#xA;bootloader.path=caterina&#xD;&#xA;bootloader.file=Caterina-promicro16.hex&#xD;&#xA;bootloader.unlock_bits=0x3F&#xD;&#xA;bootloader.lock_bits=0x2F&#xD;&#xA;build.mcu=atmega32u4&#xD;&#xA;build.f_cpu=16000000L&#xD;&#xA;build.vid=0x1B4F&#xD;&#xA;build.pid=0x9206&#xD;&#xA;build.core=arduino:arduino&#xD;&#xA;build.variant=promicro&#xD;&#xA;runtime.ide.path=C:\Program Files (x86)\Arduino&#xD;&#xA;build.system.path=C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\avr\system&#xD;&#xA;runtime.ide.version=158&#xD;&#xA;originalid=promicro16&#xD;&#xA;tools.atprogram.cmd.path=%AVRSTUDIO_EXE_PATH%\atbackend\atprogram&#xD;&#xA;tools.atprogram.cmd.setwinpath=true&#xD;&#xA;tools.atprogram.program.params.verbose=-v&#xD;&#xA;tools.atprogram.program.params.quiet=-q&#xD;&#xA;tools.atprogram.program.pattern=&quot;{cmd.path}&quot; -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;tools.atprogram.program.xpattern=&quot;{cmd.path}&quot; {AVRSTUDIO_BACKEND_CONNECTION} -d {build.mcu} {program.verbose} {program.extra_params} program -c -f &quot;{build.path}\{build.project_name}.hex&quot;&#xD;&#xA;vm.platform.root.path=C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\arduino15x&#xD;&#xA;vm.core.include=arduino.h&#xD;&#xA;ide.hint=Arduino 1.5 Ide&#xD;&#xA;ide.location.key=Arduino15x&#xD;&#xA;ide.location.ide.winreg=Arduino 1.5.x Application&#xD;&#xA;ide.location.sketchbook.winreg=Arduino 1.5.x Sketchbook&#xD;&#xA;ide.location.sketchbook.preferences=sketchbook.path&#xD;&#xA;ide.location.preferences=%VM_APPDATA_ROAMING%\arduino15\preferences.txt&#xD;&#xA;ide.location.preferences_fallback=%VM_APPDATA_ROAMING%\arduino\preferences.txt&#xD;&#xA;ide.default.version=150&#xD;&#xA;ide.default.package=arduino&#xD;&#xA;ide.default.platform=avr&#xD;&#xA;ide.multiplatform=true&#xD;&#xA;ide.includes=arduino.h&#xD;&#xA;ide.platformswithoutpackage=false&#xD;&#xA;ide.includes.fallback=wprogram.h&#xD;&#xA;ide.extension=ino&#xD;&#xA;ide.extension.fallback=pde&#xD;&#xA;ide.versionGTEQ=150&#xD;&#xA;ide.exe=arduino.exe&#xD;&#xA;ide.hosts=atmel&#xD;&#xA;ide.url=http://arduino.cc/en/Main/Software&#xD;&#xA;vm.debug=true&#xD;&#xA;software=ARDUINO&#xD;&#xA;ssh.user.name=root&#xD;&#xA;ssh.user.default.password=arduino&#xD;&#xA;ssh.host.wwwfiles.path=/www/sd&#xD;&#xA;build.working_directory={runtime.ide.path}&#xD;&#xA;ide.appid=arduino15x&#xD;&#xA;location.sketchbook=C:\Users\Konstantin\Documents\Arduino&#xD;&#xA;build.board=AVR_PROMICRO16&#xD;&#xA;vm.boardsource.path=C:\Users\Konstantin\Documents\Arduino\hardware\SF32u4_boards\avr&#xD;&#xA;vm.platformname.name=avr&#xD;&#xA;build.arch=AVR&#xD;&#xA;" arduino.build.mcu="atmega32u4" arduino.build.f_cpu="16000000L" arduino.build.core="arduino" arduino.upload.protocol="avr109" arduino.upload.speed="57600" arduino.upload.maximum_size="28672" visualmicro.application.name="arduino15x" visualmicro.package.name="SF32u4_boards" visualmicro.platform.name="avr" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
