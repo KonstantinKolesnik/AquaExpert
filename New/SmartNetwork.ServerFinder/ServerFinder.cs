@@ -90,7 +90,7 @@ namespace SmartNetwork.ServerFinder
                 if (String.Equals(response, responseExpected))
                     SyncList(itemEP);
             }
-            catch (Exception) {}
+            catch (Exception ex) {}
 
             client.Close();
         }

@@ -1,4 +1,4 @@
-﻿using MFE.Net.Udp;
+﻿//using MFE.Net.Udp;
 using System;
 using System.Net.NetworkInformation;
 using System.Windows;
@@ -8,13 +8,13 @@ namespace SmartNetwork.ServerFinder
     public partial class MainWindow : Window
     {
         private ServerFinder serverFinder;
-        private DiscoveryListener listener;
+        //private DiscoveryListener listener;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            serverFinder = new ServerFinder(8888, "AquaExpert");
+            serverFinder = new ServerFinder(8888, "SmartNetworkCoordinator"); //12; 24 max
             serverFinder.ServerFound += serverFinder_ServerFound;
             serverFinder.ServerLost += serverFinder_ServerLost;
 
