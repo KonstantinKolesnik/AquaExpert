@@ -58,7 +58,7 @@ IPAddress ipAddress(192, 168, 1, 177);
 uint16_t udpPort = 8888;
 EthernetUDP udpServer;
 char udpRequestBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet
-char udpResponseBuffer[] = "SmartNetworkCoordinatorOK"; // a string to send back
+char udpResponseBuffer[] = "SNCOK"; // a string to send back
 
 const uint64_t radioAddress = 0xABCDABCD71LL;
 uint8_t radioCSPin = 8; //n != 04 (SD), 10 (ethernet);
@@ -232,7 +232,7 @@ void PollUDP()
 		Serial.println();
 #endif
 
-		if (udpRequestBuffer == "SmartNetworkCoordinator")
+		if (udpRequestBuffer == "SNC")
 		{
 			// send a reply, to the IP address and port that sent us the packet we received
 			udpServer.beginPacket(udpServer.remoteIP(), udpServer.remotePort());

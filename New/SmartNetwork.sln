@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Module", "Module\Module.vcxproj", "{A3794A20-0720-4907-935E-98598B27871C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.ServerFinder", "SmartNetwork.ServerFinder\SmartNetwork.ServerFinder.csproj", "{64A98837-6BCB-4990-BA59-333ED11102F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.ServiceLocator", "SmartNetwork.ServerFinder\SmartNetwork.ServiceLocator.csproj", "{64A98837-6BCB-4990-BA59-333ED11102F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork", "SmartNetwork\SmartNetwork.csproj", "{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}"
 EndProject

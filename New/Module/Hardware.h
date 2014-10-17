@@ -21,23 +21,23 @@ typedef enum
 typedef enum
 {
     // states: 0, 1;
-    DigitalInput = 0,
+    DigitalInput = 1,
         
     // states: 0, 1
-    DigitalOutput = 1,
+    DigitalOutput = 2,
         
     // ADC; states: 0...1024
-    AnalogInput = 2,
+    AnalogInput = 4,
         
     // states: 0...255
-    PWM = 4,
+    PWM = 8,
         
     // state: float?
-    OneWireBus = 8, // ?
+    OneWireBus = 16, // ?
         
-    SPIBus = 16, // ?
+    SPIBus = 32, // ?
         
-    I2CBus = 32 // ?
+    I2CBus = 64 // ?
 } ControlLineMode_t;
 
 typedef struct

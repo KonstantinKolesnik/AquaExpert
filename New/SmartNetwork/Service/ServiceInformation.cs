@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-
-namespace SmartNetwork.ServiceLocator
+﻿
+namespace SmartNetwork.Service
 {
-    public class ServerInformation : INotifyPropertyChanged
+    public class ServiceInformation : ObservableObject
     {
         private int port;
         private string ipAddress;
@@ -32,19 +31,10 @@ namespace SmartNetwork.ServiceLocator
             }
         }
 
-        public ServerInformation(string ipAddress, int port)
+        public ServiceInformation(string ipAddress, int port)
         {
             IPAddress = ipAddress;
             Port = port;
         }
-
-        #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

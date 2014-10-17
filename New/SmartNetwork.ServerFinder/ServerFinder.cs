@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace SmartNetwork.ServerFinder
+namespace SmartNetwork.ServiceLocator
 {
     public class ServerFinder : INotifyPropertyChanged
     {
@@ -90,7 +90,9 @@ namespace SmartNetwork.ServerFinder
                 if (String.Equals(response, responseExpected))
                     SyncList(itemEP);
             }
-            catch (Exception ex) {}
+            catch (Exception ex)
+            {
+            }
 
             client.Close();
         }

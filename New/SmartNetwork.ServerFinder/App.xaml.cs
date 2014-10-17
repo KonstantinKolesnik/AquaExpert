@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SmartNetwork.ServerFinder
+namespace SmartNetwork.ServiceLocator
 {
     public partial class App : Application
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SmartNetwork.Hardware
+namespace SmartNetwork
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

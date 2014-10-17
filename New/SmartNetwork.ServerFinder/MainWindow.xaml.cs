@@ -3,7 +3,7 @@ using System;
 using System.Net.NetworkInformation;
 using System.Windows;
 
-namespace SmartNetwork.ServerFinder
+namespace SmartNetwork.ServiceLocator
 {
     public partial class MainWindow : Window
     {
@@ -14,11 +14,11 @@ namespace SmartNetwork.ServerFinder
         {
             InitializeComponent();
 
-            serverFinder = new ServerFinder(8888, "SmartNetworkCoordinator"); //12; 24 max
+            serverFinder = new ServerFinder(8888, "SNC"); // 24 max
             serverFinder.ServerFound += serverFinder_ServerFound;
             serverFinder.ServerLost += serverFinder_ServerLost;
 
-            //listener = new DiscoveryListener(8888, "AquaExpert");
+            //listener = new DiscoveryListener(8888, "SNC");
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
