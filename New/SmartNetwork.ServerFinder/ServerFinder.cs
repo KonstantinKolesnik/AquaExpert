@@ -98,7 +98,7 @@ namespace SmartNetwork.ServiceLocator
         }
         private void SyncList(IPEndPoint newServer)
         {
-            if (!Servers.Any(server => server.IPAddress.Equals(newServer.Address.ToString())))
+            //if (!Servers.Any(server => server.IPAddress.Equals(newServer.Address.ToString())))
                 Servers.Add(new ServerInformation(newServer.Address.ToString(), newServer.Port));
         }
         #endregion

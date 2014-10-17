@@ -15,6 +15,7 @@ void BusModule::InitControlLines()
 	switch (m_type)
 	{
 		case Unknown:
+			// Arduino UNO
 			m_controlLinesCount = 14;
 			m_pControlLines = (ControlLine*)malloc(m_controlLinesCount * sizeof(ControlLine));
 
@@ -25,13 +26,13 @@ void BusModule::InitControlLines()
 			m_pControlLines[4] = ControlLine(6, 4, DigitalInput | DigitalOutput | PWM, DigitalOutput);
 			m_pControlLines[5] = ControlLine(7, 5, DigitalInput | DigitalOutput | PWM, DigitalOutput);
 			m_pControlLines[6] = ControlLine(8, 6, DigitalInput | DigitalOutput | PWM, DigitalOutput);
-			m_pControlLines[7] = ControlLine(9, 7, DigitalInput | DigitalOutput | PWM, DigitalOutput);
-			m_pControlLines[8] = ControlLine(16, 8, OneWireBus, OneWireBus); // Temperature
-			m_pControlLines[9] = ControlLine(A3, 9, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[10] = ControlLine(A2, 10, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[11] = ControlLine(A1, 11, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[12] = ControlLine(A0, 12, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // PH
-			m_pControlLines[13] = ControlLine(10, 13, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // ORP
+			m_pControlLines[7] = ControlLine(A4, 7, DigitalInput | DigitalOutput | PWM, DigitalOutput);
+			m_pControlLines[8] = ControlLine(A5, 8, OneWireBus, OneWireBus); // Temperature
+			m_pControlLines[9] = ControlLine(A0, 9, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[10] = ControlLine(A1, 10, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[11] = ControlLine(A2, 11, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[12] = ControlLine(A3, 12, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // PH
+			m_pControlLines[13] = ControlLine(A4, 13, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // ORP
 			break;
 
 		case D5:
@@ -68,7 +69,7 @@ void BusModule::InitControlLines()
 			m_pControlLines[4] = ControlLine(6, 4, DigitalOutput, DigitalOutput);
 			m_pControlLines[5] = ControlLine(7, 5, DigitalOutput, DigitalOutput);
 			m_pControlLines[6] = ControlLine(8, 6, DigitalOutput, DigitalOutput);
-			m_pControlLines[7] = ControlLine(9, 7, DigitalOutput, DigitalOutput);
+			m_pControlLines[7] = ControlLine(A0, 7, DigitalOutput, DigitalOutput);
 			break;
 
 

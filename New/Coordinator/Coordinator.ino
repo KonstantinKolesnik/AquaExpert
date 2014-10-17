@@ -60,7 +60,7 @@ EthernetUDP udpServer;
 char udpRequestBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet
 char udpResponseBuffer[] = "SNCOK"; // a string to send back
 
-const uint64_t radioAddress = 0xABCDABCD71LL;
+const uint64_t radioAddress = 0xABCDEFABCDLL;
 uint8_t radioCSPin = 8; //n != 04 (SD), 10 (ethernet);
 RF24 radio(9, radioCSPin);
 
@@ -68,19 +68,19 @@ EthernetServer ethernetServer(80);
 //****************************************************************************************
 void setup()
 {
-	Serial.begin(115200);
+	Serial.begin(9600);
 	while (!Serial) { }; // wait for serial port to connect. Needed for Leonardo only
 
-	StartEthernet(false);
+	StartEthernet(true);
 	udpServer.begin(udpPort);
 	ethernetServer.begin();
-	//StartRadio();
+	StartRadio();
 }
 void loop()
 {
 	PollUDP();
 	PollEthernet();
-	//PollRadio();
+	PollRadio();
 }
 //****************************************************************************************
 void StartEthernet(bool useStaticIP)
@@ -123,8 +123,6 @@ void StartRadio()
 
 	radio.openWritingPipe(radioAddress);
 	radio.openReadingPipe(1, radioAddress);
-
-	radio.startListening();
 
 #ifdef PRINT_DEBUG_INFO_RADIO
 	//radio.printDetails();
@@ -224,31 +222,42 @@ void PollUDP()
 #endif
 
 		// read the packet into packetBuffer
-		udpServer.read(udpRequestBuffer, UDP_TX_PACKET_MAX_SIZE);
+		udpServer.read(udpRequestBuffer, packetSize);// UDP_TX_PACKET_MAX_SIZE);
+		udpRequestBuffer[packetSize] = '\0';
 
 #ifdef PRINT_DEBUG_INFO_UDP
-		Serial.println("Contents:");
+		Serial.println("Content:");
 		Serial.println(udpRequestBuffer);
 		Serial.println();
 #endif
-
-		if (udpRequestBuffer == "SNC")
+		String s(udpRequestBuffer);
+		if (s == "SNC")
 		{
+#ifdef PRINT_DEBUG_INFO_UDP
+			Serial.println("Send response:");
+			Serial.println(udpResponseBuffer);
+			Serial.println();
+#endif
+
 			// send a reply, to the IP address and port that sent us the packet we received
 			udpServer.beginPacket(udpServer.remoteIP(), udpServer.remotePort());
 			udpServer.write(udpResponseBuffer);
-			udpServer.endPacket();
+			int res = udpServer.endPacket();
+
+#ifdef PRINT_DEBUG_INFO_UDP
+			if (res == 0)
+				Serial.println("Send fails.");
+			else
+				Serial.println("Send succeed.");
+#endif
 		}
 	}
 
-	delay(10);
+	delay(1);
 }
 void PollRadio()
 {
-	// First, stop listening so we can talk.
-	radio.stopListening();
-
-	// Take the time, and send it.  This will block until complete
+	// Take the time, and send it. This will block until complete.
 	unsigned long time = millis();
 
 	Serial.print("Sending ");
@@ -256,12 +265,8 @@ void PollRadio()
 	Serial.print(" ... ");
 
 	bool ok = radio.write(&time, sizeof(unsigned long));
-	if (ok)
-		Serial.println("OK");
-	else
-		Serial.println("Failed.");
+	Serial.println(ok ? "OK" : "Failed.");
 
-	// Now, continue listening
 	radio.startListening();
 
 	// Wait here until we get a response, or timeout (250ms)
@@ -286,5 +291,7 @@ void PollRadio()
 		Serial.println(millis() - got_time);
 	}
 
-	delay(1);//1000
+	radio.stopListening();
+
+	delay(500);
 }

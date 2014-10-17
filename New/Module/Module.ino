@@ -1,17 +1,24 @@
 #include <OneWire.h>
 #include <EEPROM.h>
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 #include "Hardware.h"
 #include "ControlLine.h"
 #include "BusModule.h"
 //****************************************************************************************
 #define MODULE_TYPE	Unknown
+//****************************************************************************************
+#define PRINT_DEBUG_INFO_RADIO
+//#define PRINT_DEBUG_INFO_STATE
+//****************************************************************************************
 BusModule* pModule = NULL;
 
 //radio address 3...5 bytes; the same for all modules
-const uint64_t PROGMEM radioPhysicalAddress = 0xABCDEFABCDLL;
+const uint64_t PROGMEM radioAddress = 0xABCDEFABCDLL;
 uint32_t id; // 2^32 = 4294967296 different addresses
-
-
+uint8_t radioCSPin = 10;
+RF24 radio(9, radioCSPin);
 
 //const int ledPin =  13;         // the number of the LED pin
 //int ledState = LOW;             // ledState used to set the LED
@@ -37,18 +44,22 @@ uint32_t id; // 2^32 = 4294967296 different addresses
 //}
 void setup()
 {
-	//while (!Serial) { }
 	Serial.begin(9600);
+	//while (!Serial) { }
 	//digitalWrite(ledPin, ledState);
 
 	pModule = new BusModule(MODULE_TYPE);
+	StartRadio();
 }
-//****************************************************************************************
 void loop()
 {
 	pModule->QueryState();
-	//pModule->PrintState();
 
+#ifdef PRINT_DEBUG_INFO_STATE
+	pModule->PrintState();
+#endif
+
+	PollRadio();
 
 	//blinkLed();
 
@@ -74,6 +85,59 @@ void loop()
 	//delay(200);
 }
 //****************************************************************************************
+void StartRadio()
+{
+	radio.begin();
+	radio.setRetries(15, 15);
+	radio.setPayloadSize(8);
+
+	//radio.setDataRate(RF24_250KBPS);
+	//radio.setDataRate(RF24_2MBPS);
+
+	radio.openWritingPipe(radioAddress);
+	radio.openReadingPipe(1, radioAddress);
+
+	radio.startListening();
+
+#ifdef PRINT_DEBUG_INFO_RADIO
+	//radio.printDetails();
+#endif
+}
+void PollRadio()
+{
+	if (radio.available())
+	{
+		unsigned long got_time;
+		bool done = false;
+		while (!done)
+		{
+			// Fetch the payload, and see if this was the last one.
+			done = radio.read(&got_time, sizeof(unsigned long));
+
+#ifdef PRINT_DEBUG_INFO_RADIO
+			Serial.print("Got payload ");
+			Serial.println(got_time);
+#endif
+
+			// Delay just a little bit to let the other unit make the transition to receiver
+			delay(10);
+		}
+
+		radio.stopListening();
+		bool res = radio.write(&got_time, sizeof(unsigned long));
+#ifdef PRINT_DEBUG_INFO_RADIO
+		Serial.print("Send response... ");
+		Serial.println(res ? "OK" : "Failed.");
+#endif
+		radio.startListening();
+	}
+
+	delay(1);
+}
+//****************************************************************************************
+
+
+
 //OneWireSlave::OneWireSlave(uint8_t family)
 //{
 //	// read ROM from eeprom:
