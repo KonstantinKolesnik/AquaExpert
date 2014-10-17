@@ -48,7 +48,7 @@ namespace SmartNetwork.Service
             if (!NetworkInterface.GetIsNetworkAvailable())
                 return;
 
-            new Thread(Request).Start();
+            //new Thread(Request).Start();
         }
 
         //private void Request()
@@ -106,10 +106,22 @@ namespace SmartNetwork.Service
             socket.Control.DontFragment = true;
             socket.MessageReceived += MessageReceived;
 
+            HostName hostName;
+            try
+            {
+                hostName = new HostName("localhost");
+            }
+            catch (ArgumentException)
+            {
+                //rootPage.NotifyUser("Error: Invalid host name.", NotifyType.ErrorMessage);
+                return;
+            }
+
+
             try
             {
                 // Connect to the server (in our case the listener we created in previous step).
-                await socket.ConnectAsync(hostName, port.ToString());
+                //Task t = await socket.ConnectAsync(hostName, port.ToString());
 
                 //rootPage.NotifyUser("Connected", NotifyType.StatusMessage);
 
@@ -126,8 +138,40 @@ namespace SmartNetwork.Service
 
                 //rootPage.NotifyUser("Connect failed with error: " + exception.Message, NotifyType.ErrorMessage);
             }
-
-
+        }
+        private void MessageReceived(DatagramSocket socket, DatagramSocketMessageReceivedEventArgs eventArguments)
+        {
+            try
+            {
+                uint stringLength = eventArguments.GetDataReader().UnconsumedBufferLength;
+                //NotifyUserFromAsyncThread(
+                //    "Receive data from remote peer: \"" +
+                //    eventArguments.GetDataReader().ReadString(stringLength) + "\"",
+                //    NotifyType.StatusMessage);
+            }
+            catch (Exception exception)
+            {
+                SocketErrorStatus socketError = SocketError.GetStatus(exception.HResult);
+                if (socketError == SocketErrorStatus.ConnectionResetByPeer)
+                {
+                    // This error would indicate that a previous send operation resulted in an 
+                    // ICMP "Port Unreachable" message.
+                    //NotifyUserFromAsyncThread(
+                    //    "Peer does not listen on the specific port. Please make sure that you run step 1 first " +
+                    //    "or you have a server properly working on a remote server.",
+                    //    NotifyType.ErrorMessage);
+                }
+                else if (socketError != SocketErrorStatus.Unknown)
+                {
+                    //NotifyUserFromAsyncThread(
+                    //    "Error happened when receiving a datagram: " + socketError.ToString(),
+                    //    NotifyType.ErrorMessage);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
 
