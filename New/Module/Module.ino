@@ -18,6 +18,9 @@ BusModule* pModule = NULL;
 const uint64_t PROGMEM radioAddress = 0xABCDEFABCDLL;
 uint32_t id; // 2^32 = 4294967296 different addresses
 uint8_t radioCSPin = 10;
+uint8_t requestBuffer[40];
+uint8_t responseBuffer[40];
+uint8_t payloadSize = 8; // default for static payload
 RF24 radio(9, radioCSPin);
 
 //const int ledPin =  13;         // the number of the LED pin
@@ -90,14 +93,11 @@ void StartRadio()
 	radio.begin();
 	radio.setRetries(15, 15);
 	
-	// for static payload size:
-	//radio.setPayloadSize(8);
-
-	// for dynamic payload size:
-	radio.enableDynamicPayloads();
+	//radio.setPayloadSize(payloadSize); // for static payload size
+	radio.enableDynamicPayloads(); // for dynamic payload size
 
 	//radio.setDataRate(RF24_250KBPS);
-	//radio.setDataRate(RF24_2MBPS);
+	radio.setDataRate(RF24_2MBPS);
 
 	radio.openWritingPipe(radioAddress);
 	radio.openReadingPipe(1, radioAddress);
@@ -143,51 +143,38 @@ void PollRadio2()
 {
 	if (radio.available())
 	{
-		//byte request[5];
-		byte response[5];
-
-		byte* request;
-
-
 		bool done = false;
+
 		while (!done)
 		{
-			// for static payload size:
-			//done = radio.read(request, sizeof(request));
-
-			// for dynamic payload size:
-			uint8_t len = radio.getDynamicPayloadSize();
-			Serial.println(len);
-			//memset(request, 0, len);
-			request = new byte[len];
-			done = radio.read(request, len);
+			payloadSize = radio.getDynamicPayloadSize(); // comment out for static payload
+			done = radio.read(requestBuffer, payloadSize);
 
 #ifdef PRINT_DEBUG_INFO_RADIO
 			Serial.print("Got payload ");
-			Serial.print(request[0]);
-			Serial.print(request[1]);
-			Serial.print(request[2]);
-			Serial.print(request[3]);
-			Serial.print(request[4]);
+			Serial.print(requestBuffer[0]);
+			Serial.print(requestBuffer[1]);
+			Serial.print(requestBuffer[2]);
+			Serial.print(requestBuffer[3]);
+			Serial.print(requestBuffer[4]);
 #endif
 			// Delay just a little bit to let the other unit make the transition to receiver
 			//delay(10);
 		}
 
 
-		if (request[0] == 0)
-			response[0] = pModule->GetControlLinesCount();
+		payloadSize = 1; // comment out for static payload
+		if (requestBuffer[0] == GetControlLinesCount)
+			responseBuffer[0] = pModule->GetControlLinesCount();
 		else
-			response[1] = 128;
+			responseBuffer[0] = 128;
 
-
-		delete request;
 
 
 		radio.stopListening();
-		bool res = radio.write((void*)response, sizeof(response));
+		bool res = radio.write(responseBuffer, payloadSize);
 #ifdef PRINT_DEBUG_INFO_RADIO
-		Serial.print(". Send response ... ");
+		Serial.print(". Send response... ");
 		Serial.println(res ? "OK" : "Failed.");
 #endif
 		radio.startListening();
@@ -195,7 +182,6 @@ void PollRadio2()
 
 	delay(1);
 }
-
 //****************************************************************************************
 
 

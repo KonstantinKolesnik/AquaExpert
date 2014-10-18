@@ -56,12 +56,16 @@ byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 IPAddress ipAddress(192, 168, 1, 177);
 
 uint16_t udpPort = 8888;
-EthernetUDP udpServer;
 char udpRequestBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet
 char udpResponseBuffer[] = "SNCOK"; // a string to send back
+EthernetUDP udpServer;
 
 const uint64_t radioAddress = 0xABCDEFABCDLL;
+uint32_t id; // 2^32 = 4294967296 different addresses
 uint8_t radioCSPin = 8; //n != 04 (SD), 10 (ethernet);
+uint8_t requestBuffer[40];
+uint8_t responseBuffer[40];
+uint8_t payloadSize = 8; // default for static payload
 RF24 radio(9, radioCSPin);
 
 EthernetServer ethernetServer(80);
@@ -117,14 +121,11 @@ void StartRadio()
 	radio.begin();
 	radio.setRetries(15, 15);
 
-	// for static payload size:
-	//radio.setPayloadSize(8);
-
-	// for dynamic payload size:
-	radio.enableDynamicPayloads();
+	//radio.setPayloadSize(payloadSize); // for static payload size
+	radio.enableDynamicPayloads(); // for dynamic payload size
 
 	//radio.setDataRate(RF24_250KBPS);
-	//radio.setDataRate(RF24_2MBPS);
+	radio.setDataRate(RF24_2MBPS);
 
 	radio.openWritingPipe(radioAddress);
 	radio.openReadingPipe(1, radioAddress);
@@ -302,10 +303,15 @@ void PollRadio()
 }
 void PollRadio2()
 {
-	byte request[5] = { 0, 1, 2, 3, 4 };
-
 	Serial.print("Sending command... ");
-	bool ok = radio.write(request, sizeof(request));
+	payloadSize = 5; // comment out for static payload
+	requestBuffer[0] = 8;
+	requestBuffer[1] = 1;
+	requestBuffer[2] = 2;
+	requestBuffer[3] = 3;
+	requestBuffer[4] = 4;
+
+	bool ok = radio.write(requestBuffer, payloadSize);
 	Serial.println(ok ? "OK" : "Failed.");
 
 	radio.startListening();
@@ -321,21 +327,11 @@ void PollRadio2()
 		Serial.println("Response timed out.");
 	else
 	{
-		// for static payload size:
-		//byte response[5];
-		//radio.read(response, sizeof(response));
-
-		// for dynamic payload size:
-		uint8_t len = radio.getDynamicPayloadSize();
-		byte* response;
-		memset(response, 0, len);
-		radio.read(response, len);
-
-
-
+		payloadSize = radio.getDynamicPayloadSize(); // comment out for static payload
+		radio.read(responseBuffer, payloadSize);
 
 		Serial.print("Got response ");
-		Serial.println(response[0]);
+		Serial.println(responseBuffer[0]);
 	}
 
 	radio.stopListening();
