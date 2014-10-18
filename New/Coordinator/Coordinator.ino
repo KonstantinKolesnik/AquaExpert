@@ -80,7 +80,7 @@ void loop()
 {
 	PollUDP();
 	PollEthernet();
-	PollRadio();
+	PollRadio2();
 }
 //****************************************************************************************
 void StartEthernet(bool useStaticIP)
@@ -116,7 +116,12 @@ void StartRadio()
 {
 	radio.begin();
 	radio.setRetries(15, 15);
-	radio.setPayloadSize(8);
+
+	// for static payload size:
+	//radio.setPayloadSize(8);
+
+	// for dynamic payload size:
+	radio.enableDynamicPayloads();
 
 	//radio.setDataRate(RF24_250KBPS);
 	//radio.setDataRate(RF24_2MBPS);
@@ -264,7 +269,7 @@ void PollRadio()
 	Serial.print(time);
 	Serial.print(" ... ");
 
-	bool ok = radio.write(&time, sizeof(unsigned long));
+	bool ok = radio.write(&time, sizeof(time));
 	Serial.println(ok ? "OK" : "Failed.");
 
 	radio.startListening();
@@ -273,7 +278,7 @@ void PollRadio()
 	unsigned long started_waiting_at = millis();
 	bool timeout = false;
 	while (!radio.available() && !timeout)
-		if (millis() - started_waiting_at > 200)
+		if (millis() - started_waiting_at > 1000)
 			timeout = true;
 
 	// Describe the results
@@ -283,7 +288,7 @@ void PollRadio()
 	{
 		// Grab the response, compare, and send to debugging spew
 		unsigned long got_time;
-		radio.read(&got_time, sizeof(unsigned long));
+		radio.read(&got_time, sizeof(got_time));
 
 		Serial.print("Got response ");
 		Serial.print(got_time);
@@ -294,4 +299,46 @@ void PollRadio()
 	radio.stopListening();
 
 	delay(500);
+}
+void PollRadio2()
+{
+	byte request[5] = { 0, 1, 2, 3, 4 };
+
+	Serial.print("Sending command... ");
+	bool ok = radio.write(request, sizeof(request));
+	Serial.println(ok ? "OK" : "Failed.");
+
+	radio.startListening();
+
+	// Wait here until we get a response, or timeout (250ms)
+	unsigned long started_waiting_at = millis();
+	bool timeout = false;
+	while (!radio.available() && !timeout)
+		if (millis() - started_waiting_at > 1000)
+			timeout = true;
+
+	if (timeout)
+		Serial.println("Response timed out.");
+	else
+	{
+		// for static payload size:
+		//byte response[5];
+		//radio.read(response, sizeof(response));
+
+		// for dynamic payload size:
+		uint8_t len = radio.getDynamicPayloadSize();
+		byte* response;
+		memset(response, 0, len);
+		radio.read(response, len);
+
+
+
+
+		Serial.print("Got response ");
+		Serial.println(response[0]);
+	}
+
+	radio.stopListening();
+
+	delay(10);
 }

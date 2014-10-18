@@ -59,7 +59,7 @@ void loop()
 	pModule->PrintState();
 #endif
 
-	PollRadio();
+	PollRadio2();
 
 	//blinkLed();
 
@@ -89,7 +89,12 @@ void StartRadio()
 {
 	radio.begin();
 	radio.setRetries(15, 15);
-	radio.setPayloadSize(8);
+	
+	// for static payload size:
+	//radio.setPayloadSize(8);
+
+	// for dynamic payload size:
+	radio.enableDynamicPayloads();
 
 	//radio.setDataRate(RF24_250KBPS);
 	//radio.setDataRate(RF24_2MBPS);
@@ -116,17 +121,17 @@ void PollRadio()
 
 #ifdef PRINT_DEBUG_INFO_RADIO
 			Serial.print("Got payload ");
-			Serial.println(got_time);
+			Serial.print(got_time);
 #endif
 
 			// Delay just a little bit to let the other unit make the transition to receiver
-			delay(10);
+			//delay(10);
 		}
 
 		radio.stopListening();
 		bool res = radio.write(&got_time, sizeof(unsigned long));
 #ifdef PRINT_DEBUG_INFO_RADIO
-		Serial.print("Send response... ");
+		Serial.print(". Send response ... ");
 		Serial.println(res ? "OK" : "Failed.");
 #endif
 		radio.startListening();
@@ -134,6 +139,63 @@ void PollRadio()
 
 	delay(1);
 }
+void PollRadio2()
+{
+	if (radio.available())
+	{
+		//byte request[5];
+		byte response[5];
+
+		byte* request;
+
+
+		bool done = false;
+		while (!done)
+		{
+			// for static payload size:
+			//done = radio.read(request, sizeof(request));
+
+			// for dynamic payload size:
+			uint8_t len = radio.getDynamicPayloadSize();
+			Serial.println(len);
+			//memset(request, 0, len);
+			request = new byte[len];
+			done = radio.read(request, len);
+
+#ifdef PRINT_DEBUG_INFO_RADIO
+			Serial.print("Got payload ");
+			Serial.print(request[0]);
+			Serial.print(request[1]);
+			Serial.print(request[2]);
+			Serial.print(request[3]);
+			Serial.print(request[4]);
+#endif
+			// Delay just a little bit to let the other unit make the transition to receiver
+			//delay(10);
+		}
+
+
+		if (request[0] == 0)
+			response[0] = pModule->GetControlLinesCount();
+		else
+			response[1] = 128;
+
+
+		delete request;
+
+
+		radio.stopListening();
+		bool res = radio.write((void*)response, sizeof(response));
+#ifdef PRINT_DEBUG_INFO_RADIO
+		Serial.print(". Send response ... ");
+		Serial.println(res ? "OK" : "Failed.");
+#endif
+		radio.startListening();
+	}
+
+	delay(1);
+}
+
 //****************************************************************************************
 
 
