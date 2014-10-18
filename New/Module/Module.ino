@@ -16,7 +16,7 @@ BusModule* pModule = NULL;
 
 //radio address 3...5 bytes; the same for all modules
 const uint64_t PROGMEM radioAddress = 0xABCDEFABCDLL;
-uint32_t id; // 2^32 = 4294967296 different addresses
+uint32_t rom; // 2^32 = 4294967296 different addresses
 uint8_t radioCSPin = 10;
 uint8_t requestBuffer[40];
 uint8_t responseBuffer[40];
@@ -48,16 +48,15 @@ RF24 radio(9, radioCSPin);
 void setup()
 {
 	Serial.begin(9600);
-	//while (!Serial) { }
+	while (!Serial) { }
 	//digitalWrite(ledPin, ledState);
 
 	pModule = new BusModule(MODULE_TYPE);
-	StartRadio();
+	SetupRadio();
 }
 void loop()
 {
 	pModule->QueryState();
-
 #ifdef PRINT_DEBUG_INFO_STATE
 	pModule->PrintState();
 #endif
@@ -88,7 +87,7 @@ void loop()
 	//delay(200);
 }
 //****************************************************************************************
-void StartRadio()
+void SetupRadio()
 {
 	radio.begin();
 	radio.setRetries(15, 15);
@@ -149,32 +148,15 @@ void PollRadio2()
 		{
 			payloadSize = radio.getDynamicPayloadSize(); // comment out for static payload
 			done = radio.read(requestBuffer, payloadSize);
-
-#ifdef PRINT_DEBUG_INFO_RADIO
-			Serial.print("Got payload ");
-			Serial.print(requestBuffer[0]);
-			Serial.print(requestBuffer[1]);
-			Serial.print(requestBuffer[2]);
-			Serial.print(requestBuffer[3]);
-			Serial.print(requestBuffer[4]);
-#endif
-			// Delay just a little bit to let the other unit make the transition to receiver
-			//delay(10);
+			//delay(10); // delay just a little bit to let the other unit make the transition to receiver
 		}
 
-
-		payloadSize = 1; // comment out for static payload
-		if (requestBuffer[0] == GetControlLinesCount)
-			responseBuffer[0] = pModule->GetControlLinesCount();
-		else
-			responseBuffer[0] = 128;
-
-
+		ProcessCommand();
 
 		radio.stopListening();
 		bool res = radio.write(responseBuffer, payloadSize);
 #ifdef PRINT_DEBUG_INFO_RADIO
-		Serial.print(". Send response... ");
+		Serial.print("Send response... ");
 		Serial.println(res ? "OK" : "Failed.");
 #endif
 		radio.startListening();
@@ -183,8 +165,69 @@ void PollRadio2()
 	delay(1);
 }
 //****************************************************************************************
+void ProcessCommand()
+{
+	// temp. variables:
+	uint8_t lineIdx;
+	ControlLineInfo_t lineInfo;
+	double lineState;
 
+	uint8_t offset = 0; //2 * sizeof(rom);
 
+#ifdef PRINT_DEBUG_INFO_RADIO
+	Serial.print("Got payload ");
+	for (int i = offset; i < payloadSize; i++)
+	{
+		Serial.print("[");
+		Serial.print(requestBuffer[i]);
+		Serial.print("]");
+	}
+	Serial.println();
+#endif
+
+	uint8_t* pRequest = &requestBuffer[offset];
+	uint8_t* pResponse = &responseBuffer[offset];
+
+	switch (*pRequest++)
+	{
+		case GetControlLinesCount:
+			*pResponse++ = pModule->GetControlLinesCount();
+			break;
+		case GetControlLineInfo:
+			lineIdx = *pRequest++;
+			lineInfo = pModule->GetControlLines()[lineIdx].GetInfo();
+			*pResponse++ = lineInfo.modes;
+			*pResponse++ = lineInfo.mode;
+			break;
+		case GetControlLineMode:
+			lineIdx = *pRequest++;
+			*pResponse++ = pModule->GetControlLines()[lineIdx].GetMode();
+			break;
+		case SetControlLineMode:
+			lineIdx = *pRequest++;
+			pModule->GetControlLines()[lineIdx].SetMode((ControlLineMode_t)*pRequest++);
+			*pResponse++ = pModule->GetControlLines()[lineIdx].GetMode();
+			break;
+		case GetControlLineState:
+			lineIdx = *pRequest++;
+			lineState = pModule->GetControlLines()[lineIdx].GetState();
+			memcpy(pResponse, &lineState, sizeof(lineState));
+			pResponse += sizeof(lineState);
+			break;
+		case SetControlLineState:
+			lineIdx = *pRequest++;
+			pModule->GetControlLines()[lineIdx].SetState((double)*pRequest++);
+
+			lineState = pModule->GetControlLines()[lineIdx].GetState();
+			memcpy(pResponse, &lineState, sizeof(lineState));
+			pResponse += sizeof(lineState);
+			break;
+		default:
+			break;
+	}
+
+	payloadSize = pResponse - responseBuffer; // comment out for static payload
+}
 
 //OneWireSlave::OneWireSlave(uint8_t family)
 //{

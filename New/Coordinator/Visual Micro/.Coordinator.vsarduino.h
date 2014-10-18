@@ -41,8 +41,8 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
-void StartEthernet(bool useStaticIP);
-void StartRadio();
+void SetupEthernet(bool useStaticIP);
+void SetupRadio();
 void PollEthernet();
 void PollUDP();
 void PollRadio();

@@ -26,13 +26,13 @@ void BusModule::InitControlLines()
 			m_pControlLines[4] = ControlLine(6, 4, DigitalInput | DigitalOutput | PWM, DigitalOutput);
 			m_pControlLines[5] = ControlLine(7, 5, DigitalInput | DigitalOutput | PWM, DigitalOutput);
 			m_pControlLines[6] = ControlLine(8, 6, DigitalInput | DigitalOutput | PWM, DigitalOutput);
-			m_pControlLines[7] = ControlLine(A4, 7, DigitalInput | DigitalOutput | PWM, DigitalOutput);
-			m_pControlLines[8] = ControlLine(A5, 8, OneWireBus, OneWireBus); // Temperature
-			m_pControlLines[9] = ControlLine(A0, 9, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[10] = ControlLine(A1, 10, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[11] = ControlLine(A2, 11, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
-			m_pControlLines[12] = ControlLine(A3, 12, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // PH
-			m_pControlLines[13] = ControlLine(A4, 13, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // ORP
+			m_pControlLines[7] = ControlLine(8, 7, DigitalInput | DigitalOutput | PWM, DigitalOutput);
+			m_pControlLines[8] = ControlLine(A0, 8, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[9] = ControlLine(A1, 9, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[10] = ControlLine(A2, 10, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // Liquid
+			m_pControlLines[11] = ControlLine(A3, 11, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // PH
+			m_pControlLines[12] = ControlLine(A4, 12, DigitalInput | DigitalOutput | PWM | AnalogInput, AnalogInput); // ORP
+			m_pControlLines[13] = ControlLine(A5, 13, OneWireBus, OneWireBus); // Temperature
 			break;
 
 		case D5:
@@ -143,13 +143,10 @@ void BusModule::PrintControlLineState(uint16_t idx)
 	else if (idx >= 0 && idx < m_controlLinesCount)
 	{
 		ControlLine line = m_pControlLines[idx];
-		volatile int16_t* state = line.GetState();
+		double state = line.GetState();
 
 		Serial.print("Line #");
 		Serial.print(idx);
-
-		Serial.print("; Address=");
-		Serial.print(line.GetAddress());
 
 		Serial.print("; Mode=");
 		Serial.print(line.GetMode());
@@ -164,9 +161,7 @@ void BusModule::PrintControlLineState(uint16_t idx)
 		//Serial.println("];");
 
 		Serial.print("; State=");
-		Serial.print(state[0]);
-		Serial.print(".");
-		Serial.print(state[1]);
+		Serial.print(state);
 		Serial.println(";");
 	}
 }

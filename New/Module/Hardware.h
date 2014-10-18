@@ -11,11 +11,12 @@
 //****************************************************************************************
 typedef enum
 {
-    GetControlLinesCount,
-    GetControlLineInfo,
-    SetControlLineMode,
-    GetControlLineState,
-    SetControlLineState
+    GetControlLinesCount, // no params
+    GetControlLineInfo, // [idx]
+	GetControlLineMode, // [idx]
+	SetControlLineMode, // [idx, mode]
+	GetControlLineState, // [idx]
+	SetControlLineState // [idx, state]
 } CommandType_t;
 
 typedef enum
@@ -42,7 +43,6 @@ typedef enum
 
 typedef struct
 {
-	uint8_t address;
 	uint8_t modes;
 	ControlLineMode_t mode;
 } ControlLineInfo_t;

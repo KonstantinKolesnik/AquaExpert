@@ -61,7 +61,7 @@ char udpResponseBuffer[] = "SNCOK"; // a string to send back
 EthernetUDP udpServer;
 
 const uint64_t radioAddress = 0xABCDEFABCDLL;
-uint32_t id; // 2^32 = 4294967296 different addresses
+uint32_t rom; // 2^32 = 4294967296 different addresses
 uint8_t radioCSPin = 8; //n != 04 (SD), 10 (ethernet);
 uint8_t requestBuffer[40];
 uint8_t responseBuffer[40];
@@ -75,10 +75,10 @@ void setup()
 	Serial.begin(9600);
 	while (!Serial) { }; // wait for serial port to connect. Needed for Leonardo only
 
-	StartEthernet(true);
+	SetupEthernet(true);
 	udpServer.begin(udpPort);
 	ethernetServer.begin();
-	StartRadio();
+	SetupRadio();
 }
 void loop()
 {
@@ -87,7 +87,7 @@ void loop()
 	PollRadio2();
 }
 //****************************************************************************************
-void StartEthernet(bool useStaticIP)
+void SetupEthernet(bool useStaticIP)
 {
 	if (useStaticIP)
 		Ethernet.begin(mac, ipAddress);
@@ -116,7 +116,7 @@ void StartEthernet(bool useStaticIP)
 
 	Serial.println(ipAddress);
 }
-void StartRadio()
+void SetupRadio()
 {
 	radio.begin();
 	radio.setRetries(15, 15);
@@ -303,16 +303,16 @@ void PollRadio()
 }
 void PollRadio2()
 {
-	Serial.print("Sending command... ");
-	payloadSize = 5; // comment out for static payload
-	requestBuffer[0] = 8;
-	requestBuffer[1] = 1;
-	requestBuffer[2] = 2;
-	requestBuffer[3] = 3;
-	requestBuffer[4] = 4;
+	payloadSize = 3; // comment out for static payload
+	requestBuffer[0] = 5;
+	requestBuffer[1] = 0;
+	requestBuffer[2] = 0;
 
 	bool ok = radio.write(requestBuffer, payloadSize);
+#ifdef PRINT_DEBUG_INFO_RADIO
+	Serial.print("Sending command... ");
 	Serial.println(ok ? "OK" : "Failed.");
+#endif
 
 	radio.startListening();
 
@@ -324,14 +324,28 @@ void PollRadio2()
 			timeout = true;
 
 	if (timeout)
+	{
+#ifdef PRINT_DEBUG_INFO_RADIO
 		Serial.println("Response timed out.");
+#endif
+	}
 	else
 	{
 		payloadSize = radio.getDynamicPayloadSize(); // comment out for static payload
 		radio.read(responseBuffer, payloadSize);
 
+#ifdef PRINT_DEBUG_INFO_RADIO
 		Serial.print("Got response ");
-		Serial.println(responseBuffer[0]);
+		for (int i = 0; i < payloadSize; i++)
+		{
+			Serial.print("[");
+			Serial.print(responseBuffer[i]);
+			Serial.print("]");
+		}
+		Serial.println();
+		double t = *((double*)responseBuffer);
+		Serial.println(t);
+#endif
 	}
 
 	radio.stopListening();

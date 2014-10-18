@@ -8,27 +8,27 @@ class ControlLine
 {
 	private:
 		uint8_t m_pin;
-		uint8_t m_address;
+		uint8_t m_idx;
 		uint8_t m_modes;
 		ControlLineMode_t m_mode;
-		volatile int16_t m_state[2];
+		double m_state; // 4 bytes
 
 		OneWire* m_pds;
 		bool GetTemperature();
 		bool GetPh();
 
 	public:
-		ControlLine(uint8_t pin, uint8_t address, uint8_t modes, ControlLineMode_t mode);
+		ControlLine(uint8_t pin, uint8_t idx, uint8_t modes, ControlLineMode_t mode);
 
-		uint8_t GetAddress();
-		uint8_t GetModes();
-		ControlLineMode_t GetMode();
 		ControlLineInfo_t GetInfo();
+
+		ControlLineMode_t GetMode();
+		void SetMode(ControlLineMode_t mode);
 
 		void QueryState();
 
-		volatile int16_t* GetState();
-		void SetState(int16_t* state);
+		double GetState();
+		void SetState(double state);
 };
 //****************************************************************************************
 #endif
