@@ -48,7 +48,7 @@ UNO:
 RF24 radio(9,10(8));
 */
 //****************************************************************************************
-#define PRINT_DEBUG_INFO_UDP
+//#define PRINT_DEBUG_INFO_UDP
 //#define PRINT_DEBUG_INFO_HTTP
 #define PRINT_DEBUG_INFO_RADIO
 //****************************************************************************************
@@ -304,7 +304,7 @@ void PollRadio()
 void PollRadio2()
 {
 	payloadSize = 3; // comment out for static payload
-	requestBuffer[0] = 5;
+	requestBuffer[0] = 4;
 	requestBuffer[1] = 0;
 	requestBuffer[2] = 0;
 
@@ -320,7 +320,7 @@ void PollRadio2()
 	unsigned long started_waiting_at = millis();
 	bool timeout = false;
 	while (!radio.available() && !timeout)
-		if (millis() - started_waiting_at > 1000)
+		if (millis() - started_waiting_at > 5000)
 			timeout = true;
 
 	if (timeout)
@@ -343,8 +343,8 @@ void PollRadio2()
 			Serial.print("]");
 		}
 		Serial.println();
-		double t = *((double*)responseBuffer);
-		Serial.println(t);
+		//double t = *((double*)responseBuffer);
+		//Serial.println(t);
 #endif
 	}
 

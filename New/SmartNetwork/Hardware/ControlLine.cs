@@ -7,7 +7,7 @@ namespace SmartNetwork.Hardware
         #region Fields
         private string name = "";
         private ControlLineMode mode;
-        private byte[] state = new byte[4];
+        private float state = 0;
         #endregion
 
         #region Properties
@@ -50,24 +50,16 @@ namespace SmartNetwork.Hardware
                 }
             }
         }
-        public byte[] State
+        public float State
         {
-            get
-            {
-                byte[] result = new byte[state.Length];
-                Array.Copy(state, result, state.Length);
-                return result;
-            }
+            get { return state; }
             private set
             {
-                if (value.Length == state.Length)
-                    for (ushort i = 0; i < state.Length; i++)
-                        if (state[i] != value[i])
-                        {
-                            Array.Copy(value, state, state.Length);
-                            NotifyPropertyChanged("State");
-                            break;
-                        }
+                if (state == value)
+                {
+                    state = value;
+                    NotifyPropertyChanged("State");
+                }
             }
         }
         public override string ToString()
@@ -83,13 +75,21 @@ namespace SmartNetwork.Hardware
             Address = address;
             Modes = modes;
             Mode = mode;
-
-            for (byte i = 0; i < state.Length; i++)
-                state[i] = 0;
         }
         #endregion
 
         #region Public methods
+        public void GetMode()
+        {
+            if (Module != null && Module.Coordinator != null)
+            {
+                byte[] request = new byte[] { (byte)CommandType.GetControlLineMode, Address };
+                byte[] response = new byte[1];
+
+                if (Module.Coordinator.WriteRead(Module, request, response))
+                    Mode = (ControlLineMode)response[0];
+            }
+        }
         public void SetMode(ControlLineMode mode)
         {
             if (Module != null && Module.Coordinator != null)
@@ -106,24 +106,30 @@ namespace SmartNetwork.Hardware
             if (Module != null && Module.Coordinator != null)
             {
                 byte[] request = new byte[] { (byte)CommandType.GetControlLineState, Address };
-                byte[] response = new byte[state.Length];
+                byte[] response = new byte[4];
 
                 if (Module.Coordinator.WriteRead(Module, request, response))
-                    State = response;
+                {
+                    byte[] newArray = new[] { response[2], response[3], response[0], response[1] };
+                    State = BitConverter.ToSingle(newArray, 0);
+                }
             }
         }
-        public void SetState(byte[] state)
+        public void SetState(float state)
         {
             if (Module != null && Module.Coordinator != null)
             {
-                byte[] request = new byte[2 + state.Length];
+                byte[] request = new byte[2 + 4];
                 request[0] = (byte)CommandType.SetControlLineState;
                 request[1] = Address;
-                Array.Copy(state, 0, request, 2, state.Length);
+                //Array.Copy(state, 0, request, 2, state.Length);
 
-                byte[] response = new byte[state.Length];
+                byte[] response = new byte[4];
                 if (Module.Coordinator.WriteRead(Module, request, response))
-                    State = response;
+                {
+                    byte[] newArray = new[] { response[2], response[3], response[0], response[1] };
+                    State = BitConverter.ToSingle(newArray, 0);
+                }
             }
         }
         #endregion

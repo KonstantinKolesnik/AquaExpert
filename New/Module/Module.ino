@@ -9,7 +9,7 @@
 //****************************************************************************************
 #define MODULE_TYPE	Unknown
 //****************************************************************************************
-#define PRINT_DEBUG_INFO_RADIO
+//#define PRINT_DEBUG_INFO_RADIO
 //#define PRINT_DEBUG_INFO_STATE
 //****************************************************************************************
 BusModule* pModule = NULL;
@@ -168,6 +168,7 @@ void PollRadio2()
 void ProcessCommand()
 {
 	// temp. variables:
+	ControlLine* pLines = pModule->GetControlLines();
 	uint8_t lineIdx;
 	ControlLineInfo_t lineInfo;
 	double lineState;
@@ -195,30 +196,30 @@ void ProcessCommand()
 			break;
 		case GetControlLineInfo:
 			lineIdx = *pRequest++;
-			lineInfo = pModule->GetControlLines()[lineIdx].GetInfo();
+			lineInfo = pLines[lineIdx].GetInfo();
 			*pResponse++ = lineInfo.modes;
 			*pResponse++ = lineInfo.mode;
 			break;
 		case GetControlLineMode:
 			lineIdx = *pRequest++;
-			*pResponse++ = pModule->GetControlLines()[lineIdx].GetMode();
+			*pResponse++ = pLines[lineIdx].GetMode();
 			break;
 		case SetControlLineMode:
 			lineIdx = *pRequest++;
-			pModule->GetControlLines()[lineIdx].SetMode((ControlLineMode_t)*pRequest++);
-			*pResponse++ = pModule->GetControlLines()[lineIdx].GetMode();
+			pLines[lineIdx].SetMode((ControlLineMode_t)*pRequest++);
+			*pResponse++ = pLines[lineIdx].GetMode();
 			break;
 		case GetControlLineState:
 			lineIdx = *pRequest++;
-			lineState = pModule->GetControlLines()[lineIdx].GetState();
+			lineState = pLines[lineIdx].GetState();
 			memcpy(pResponse, &lineState, sizeof(lineState));
 			pResponse += sizeof(lineState);
 			break;
 		case SetControlLineState:
 			lineIdx = *pRequest++;
-			pModule->GetControlLines()[lineIdx].SetState((double)*pRequest++);
+			pLines[lineIdx].SetState((double)*pRequest++);
 
-			lineState = pModule->GetControlLines()[lineIdx].GetState();
+			lineState = pLines[lineIdx].GetState();
 			memcpy(pResponse, &lineState, sizeof(lineState));
 			pResponse += sizeof(lineState);
 			break;
