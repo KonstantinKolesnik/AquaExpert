@@ -50,7 +50,8 @@ typedef struct
 typedef enum
 {
     Unknown,	// test module
-    D5,			// SNM-D5
+	D1,			// SNM-D1
+	D5,			// SNM-D5
     D6,			// SNM-D6
     D8,			// SNM-D8
 

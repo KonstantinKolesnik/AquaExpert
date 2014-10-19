@@ -49,7 +49,7 @@ namespace SmartNetwork.Hardware
         }
         #endregion
 
-        #region Private methods
+        #region Public methods
         public void UpdateNetwork()
         {
             var modulesOnline = GetOnlineModules();
