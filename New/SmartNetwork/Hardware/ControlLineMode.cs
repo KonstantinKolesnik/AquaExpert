@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartNetwork.Hardware
+namespace SmartNetwork.Core.Hardware
 {
     [Flags]
     public enum ControlLineMode : byte

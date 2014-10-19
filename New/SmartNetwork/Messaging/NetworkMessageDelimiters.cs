@@ -1,5 +1,5 @@
 
-namespace SmartNetwork.Messaging
+namespace SmartNetwork.Core.Messaging
 {
     public class NetworkMessageDelimiters
     {

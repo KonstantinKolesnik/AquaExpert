@@ -1,5 +1,5 @@
 ﻿
-namespace SmartNetwork.Hardware
+namespace SmartNetwork.Core.Hardware
 {
     public enum ModuleType : byte
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SmartNetwork.Hardware
+namespace SmartNetwork.Core.Hardware
 {
     public class Module : ObservableObject, IEquatable<Module>, IComparable<Module>
     {

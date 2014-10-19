@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Module", "Module\Module.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.ServiceLocator", "SmartNetwork.ServerFinder\SmartNetwork.ServiceLocator.csproj", "{64A98837-6BCB-4990-BA59-333ED11102F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork", "SmartNetwork\SmartNetwork.csproj", "{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Core", "SmartNetwork\SmartNetwork.Core.csproj", "{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Coordinator", "Coordinator\Coordinator.vcxproj", "{CB4B468C-DEA6-4B9E-8012-5DBC53AB26BD}"
 EndProject

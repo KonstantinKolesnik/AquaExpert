@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmartNetwork.Messaging
+namespace SmartNetwork.Core.Messaging
 {
     public class NetworkMessageReceiver
     {

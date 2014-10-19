@@ -11,7 +11,7 @@ using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 
-namespace SmartNetwork.Service
+namespace SmartNetwork.Core.Service
 {
     public class ServiceLocator : ObservableObject
     {

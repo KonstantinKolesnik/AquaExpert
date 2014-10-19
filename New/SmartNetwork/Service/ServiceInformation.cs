@@ -1,5 +1,5 @@
 ﻿
-namespace SmartNetwork.Service
+namespace SmartNetwork.Core.Service
 {
     public class ServiceInformation : ObservableObject
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartNetwork.Hardware
+namespace SmartNetwork.Core.Hardware
 {
     public class ControlLine : ObservableObject
     {

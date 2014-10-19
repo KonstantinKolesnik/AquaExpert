@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace SmartNetwork.Hardware
+namespace SmartNetwork.Core.Hardware
 {
     public class Coordinator : ObservableObject
     {
