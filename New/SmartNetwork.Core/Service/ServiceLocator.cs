@@ -103,7 +103,7 @@ namespace SmartNetwork.Core.Service
         private void Request()
         {
             DatagramSocket socket = new DatagramSocket();
-            socket.Control.DontFragment = true;
+            //socket.Control.DontFragment = true;
             socket.MessageReceived += MessageReceived;
 
             HostName hostName;

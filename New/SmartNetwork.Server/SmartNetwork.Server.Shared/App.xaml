@@ -3,21 +3,21 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SmartNetwork.Server"
-    xmlns:snCore="using:SmartNetwork.Core"
-    xmlns:snHardware="using:SmartNetwork.Core.Hardware"
     
     
     
     >
+    <!--xmlns:snCore="using:SmartNetwork.Core"
+    xmlns:snHardware="using:SmartNetwork.Core.Hardware"-->
+    <Application.Resources>
+        <!--<snHardware:Coordinator x:Key="coordinator"/>-->
 
-    <!--<snHardware:Coordinator x:Name="coord"/>-->
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+        </Application.Resources>
+
+
+
 </Application>

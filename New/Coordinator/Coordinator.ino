@@ -48,7 +48,7 @@ UNO:
 RF24 radio(9,10(8));
 */
 //****************************************************************************************
-//#define PRINT_DEBUG_INFO_UDP
+#define PRINT_DEBUG_INFO_UDP
 //#define PRINT_DEBUG_INFO_HTTP
 #define PRINT_DEBUG_INFO_RADIO
 //****************************************************************************************
@@ -237,7 +237,7 @@ void PollUDP()
 		Serial.println();
 #endif
 		String s(udpRequestBuffer);
-		if (s == "SNC")
+		//if (s == "SNC")
 		{
 #ifdef PRINT_DEBUG_INFO_UDP
 			Serial.println("Send response:");
