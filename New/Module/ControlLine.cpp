@@ -28,7 +28,7 @@ ControlLine::ControlLine(uint8_t pin, uint8_t idx, uint8_t modes, ControlLineMod
 			pinMode(m_pin, OUTPUT);
 			break;
 		case PWM:
-			SetState(EEPROM.read(EEPROM_OFFSET + m_idx));
+			pinMode(m_pin, OUTPUT);
 			break;
 		case OneWireBus:
 			m_pds = new OneWire(m_pin); // (a 4.7K resistor is necessary)

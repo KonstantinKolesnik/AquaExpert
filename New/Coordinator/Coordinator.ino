@@ -75,15 +75,15 @@ void setup()
 	while (!Serial) { }; // wait for serial port to connect. Needed for Leonardo only
 
 	SetupEthernet(true);
-	udpServer.begin(udpPort);
+	//udpServer.begin(udpPort);
 	ethernetServer.begin();
-	SetupRadio();
+	//SetupRadio();
 }
 void loop()
 {
-	PollUDP();
+	//PollUDP();
 	PollEthernet();
-	PollRadio2();
+	//PollRadio2();
 }
 //****************************************************************************************
 void SetupEthernet(bool useStaticIP)

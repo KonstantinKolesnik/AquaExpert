@@ -69,9 +69,6 @@ namespace SmartNetwork.Server
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
             this.DefaultViewModel["Section3Items"] = sampleDataGroup;
-
-
-            Locate();
         }
 
         /// <summary>
@@ -121,90 +118,5 @@ namespace SmartNetwork.Server
         }
 
         #endregion
-
-
-
-
-        DatagramSocket socket;
-
-        public async void Locate()
-        {
-            socket = new DatagramSocket();
-            //socket.Control.DontFragment = true;
-            socket.MessageReceived += MessageReceived;
-
-            try
-            {
-                //// Connect to the server (in our case the listener we created in previous step).
-                await socket.ConnectAsync(new HostName("255.255.255.255"), "8888");
-                //await socket.ConnectAsync(new HostName("192.168.1.177"), "8888");
-
-                //rootPage.NotifyUser("Connected", NotifyType.StatusMessage);
-
-                // Mark the socket as connected. Set the value to null, as we care only about the fact that the property is set.
-                //CoreApplication.Properties.Add("connected", null);
-
-                DataWriter udpWriter = new DataWriter(socket.OutputStream);
-                //socket.OutputStream.WriteAsync()
-                udpWriter.WriteString("SNC");
-                await udpWriter.StoreAsync();
-
-
-
-                //byte[] msg = new byte[] { 35, 36, 37 };
-                //IOutputStream stream = await socket.GetOutputStreamAsync(new HostName("255.255.255.255"), "8888");
-                //await stream.WriteAsync(BytesToBuffer(msg)); 
-
-            }
-            catch (Exception exception)
-            {
-                // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                {
-                    throw;
-                }
-
-                //rootPage.NotifyUser("Connect failed with error: " + exception.Message, NotifyType.ErrorMessage);
-            }
-        }
-        private void MessageReceived(DatagramSocket socket, DatagramSocketMessageReceivedEventArgs eventArguments)
-        {
-            try
-            {
-                uint stringLength = eventArguments.GetDataReader().UnconsumedBufferLength;
-                string a = eventArguments.GetDataReader().ReadString(stringLength);
-                string b = a;
-
-
-                //NotifyUserFromAsyncThread(
-                //    "Receive data from remote peer: \"" +
-                //    eventArguments.GetDataReader().ReadString(stringLength) + "\"",
-                //    NotifyType.StatusMessage);
-            }
-            catch (Exception exception)
-            {
-                SocketErrorStatus socketError = SocketError.GetStatus(exception.HResult);
-                if (socketError == SocketErrorStatus.ConnectionResetByPeer)
-                {
-                    // This error would indicate that a previous send operation resulted in an 
-                    // ICMP "Port Unreachable" message.
-                    //NotifyUserFromAsyncThread(
-                    //    "Peer does not listen on the specific port. Please make sure that you run step 1 first " +
-                    //    "or you have a server properly working on a remote server.",
-                    //    NotifyType.ErrorMessage);
-                }
-                else if (socketError != SocketErrorStatus.Unknown)
-                {
-                    //NotifyUserFromAsyncThread(
-                    //    "Error happened when receiving a datagram: " + socketError.ToString(),
-                    //    NotifyType.ErrorMessage);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
     }
 }

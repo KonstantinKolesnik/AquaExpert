@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SmartNetwork.Hardware", "Sm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Core", "SmartNetwork.Core\SmartNetwork.Core.csproj", "{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Device", "Device\Device.vcxproj", "{30B78C4C-15A3-4CA8-B570-57306B02095F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SmartNetwork.Server\SmartNetwork.Server.Shared\SmartNetwork.Server.Shared.projitems*{495db005-d2e1-4b60-9bd8-85058a2265ca}*SharedItemsImports = 4
@@ -188,6 +190,24 @@ Global
 		{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}.Release|x64.Build.0 = Release|x64
 		{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}.Release|x86.ActiveCfg = Release|x86
 		{C8FC3B4F-67E1-4912-8CA8-97C438F41D81}.Release|x86.Build.0 = Release|x86
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|ARM.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|Win32.Build.0 = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|x64.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|x86.ActiveCfg = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Debug|x86.Build.0 = Debug|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|ARM.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|Win32.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|Win32.Build.0 = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|x64.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|x86.ActiveCfg = Release|Win32
+		{30B78C4C-15A3-4CA8-B570-57306B02095F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,5 +218,6 @@ Global
 		{EAA93A4C-1BDE-44D4-9AB2-D1FF873579FD} = {AF4BFA8E-F829-49E6-B7CC-327C24CB2C04}
 		{FF33D483-900C-4670-8597-222271DE20B9} = {AF4BFA8E-F829-49E6-B7CC-327C24CB2C04}
 		{495DB005-D2E1-4B60-9BD8-85058A2265CA} = {AF4BFA8E-F829-49E6-B7CC-327C24CB2C04}
+		{30B78C4C-15A3-4CA8-B570-57306B02095F} = {25D759AB-9130-4DC9-8525-67CB500FAEE5}
 	EndGlobalSection
 EndGlobal

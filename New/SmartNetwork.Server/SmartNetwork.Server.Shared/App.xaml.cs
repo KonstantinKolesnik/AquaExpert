@@ -1,6 +1,7 @@
 ﻿//using SmartNetwork.Core.Hardware;
 using SmartNetwork.Server.Common;
 using System;
+using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Networking;
@@ -120,7 +121,7 @@ namespace SmartNetwork.Server
 
 
             //Coordinator.Locate();
-            //Locate();
+            Locate();
         }
 
 #if WINDOWS_PHONE_APP
@@ -153,41 +154,15 @@ namespace SmartNetwork.Server
         public async void Locate()
         {
             DatagramSocket socket = new DatagramSocket();
-            //socket.Control.DontFragment = true;
+            socket.Control.DontFragment = true;
             socket.MessageReceived += MessageReceived;
 
-            try
-            {
-                //// Connect to the server (in our case the listener we created in previous step).
-                await socket.ConnectAsync(new HostName("255.255.255.255"), "8888");
-                //await socket.ConnectAsync(new HostName("192.168.1.177"), "8888");
-
-                //rootPage.NotifyUser("Connected", NotifyType.StatusMessage);
-
-                // Mark the socket as connected. Set the value to null, as we care only about the fact that the property is set.
-                //CoreApplication.Properties.Add("connected", null);
-
-                DataWriter udpWriter = new DataWriter(socket.OutputStream);
-                udpWriter.WriteString("SNC");
-                await udpWriter.StoreAsync();
-
-
-
-                //byte[] msg = new byte[] { 35, 36, 37 };
-                //IOutputStream stream = await socket.GetOutputStreamAsync(new HostName("255.255.255.255"), "8888");
-                //await stream.WriteAsync(BytesToBuffer(msg)); 
-
-            }
-            catch (Exception exception)
-            {
-                // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+            using (var stream = await socket.GetOutputStreamAsync(new HostName("192.168.1.255"), "8888"))
+                using (var writer = new DataWriter(stream))
                 {
-                    throw;
+                    writer.WriteBytes(Encoding.UTF8.GetBytes("SNC"));
+                    await writer.StoreAsync();
                 }
-
-                //rootPage.NotifyUser("Connect failed with error: " + exception.Message, NotifyType.ErrorMessage);
-            }
         }
         private void MessageReceived(DatagramSocket socket, DatagramSocketMessageReceivedEventArgs eventArguments)
         {
