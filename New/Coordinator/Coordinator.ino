@@ -33,19 +33,18 @@ MEGA:
 */
 //****************************************************************************************
 /*
-NRF24LP+:
+NRF24LP+	UNO					MEGA
 
-UNO:
-1 -> GND
-2 -> VCC 3.3V !!! NOT 5V
-3 -> CE to Arduino pin 9
-4 -> CSN to Arduino pin 10(8)
-5 -> SCK to Arduino pin 13
-6 -> MOSI to Arduino pin 11
-7 -> MISO to Arduino pin 12
-8 -> UNUSED
+1 -> GND	GND					GND
+2 -> VCC	3.3V, NOT 5V!!!		3.3V, NOT 5V!!!
+3 -> CE		pin 9
+4 -> CSN	pin 10(8)
+5 -> SCK	pin 13
+6 -> MOSI	pin 11
+7 -> MISO	pin 12
+8 -> IRQ	-					-
 
-RF24 radio(9,10(8));
+RF24 radio(CE pin, CSN pin);
 */
 //****************************************************************************************
 #define PRINT_DEBUG_INFO_UDP
