@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGateway", "SerialGateway\SerialGateway.vcxproj", "{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EthernetGateway", "EthernetGateway\EthernetGateway.vcxproj", "{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQTTGateway", "MQTTGateway\MQTTGateway.vcxproj", "{DD57413F-118D-453B-98C7-04433952D2F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{B19DD1D2-F45E-433E-934E-888699F58C87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|ARM.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|Win32.Build.0 = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|x64.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|x86.ActiveCfg = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Debug|x86.Build.0 = Debug|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|Any CPU.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|ARM.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|Win32.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|Win32.Build.0 = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|x64.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|x86.ActiveCfg = Release|Win32
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}.Release|x86.Build.0 = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|ARM.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|Win32.Build.0 = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|x64.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|x86.ActiveCfg = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Debug|x86.Build.0 = Debug|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|ARM.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|Win32.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|Win32.Build.0 = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|x64.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|x86.ActiveCfg = Release|Win32
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}.Release|x86.Build.0 = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|ARM.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|Win32.Build.0 = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|x64.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|x86.ActiveCfg = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Debug|x86.Build.0 = Debug|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|Any CPU.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|ARM.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|Win32.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|Win32.Build.0 = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|x64.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|x86.ActiveCfg = Release|Win32
+		{DD57413F-118D-453B-98C7-04433952D2F4}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE} = {B19DD1D2-F45E-433E-934E-888699F58C87}
+		{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB} = {B19DD1D2-F45E-433E-934E-888699F58C87}
+		{DD57413F-118D-453B-98C7-04433952D2F4} = {B19DD1D2-F45E-433E-934E-888699F58C87}
+	EndGlobalSection
+EndGlobal
