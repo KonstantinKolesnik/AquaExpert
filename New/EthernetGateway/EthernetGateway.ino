@@ -104,7 +104,8 @@ void setup()
 }
 
 // This will be called when data should be written to ethernet 
-void writeEthernet(char *writeBuffer) {
+void writeEthernet(char *writeBuffer)
+{
 	server.write(writeBuffer);
 }
 
@@ -115,15 +116,19 @@ void loop()
 	// bytes available to read via the client object
 	EthernetClient client = server.available();
 
-	if (client) {
+	if (client)
+	{
 		// if got 1 or more bytes
-		if (client.available()) {
+		if (client.available())
+		{
 			// read the bytes incoming from the client
 			char inChar = client.read();
 
-			if (inputPos<MAX_RECEIVE_LENGTH - 1) {
+			if (inputPos<MAX_RECEIVE_LENGTH - 1)
+			{
 				// if newline then command is complete
-				if (inChar == '\n') {
+				if (inChar == '\n')
+				{
 					// a command was issued by the client
 					// we will now try to send it to the actuator
 					inputString[inputPos] = 0;
@@ -136,13 +141,15 @@ void loop()
 					// clear the string:
 					inputPos = 0;
 				}
-				else {
+				else
+				{
 					// add it to the inputString:
 					inputString[inputPos] = inChar;
 					inputPos++;
 				}
 			}
-			else {
+			else
+			{
 				// Incoming message too long. Throw away 
 				inputPos = 0;
 			}

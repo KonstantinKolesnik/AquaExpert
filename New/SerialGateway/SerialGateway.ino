@@ -44,8 +44,9 @@ void setup()
 void loop()
 {
 	gw.processRadioMessage();
-	if (commandComplete) {
-		// A command wass issued from serial interface
+	if (commandComplete)
+	{
+		// A command was issued from serial interface
 		// We will now try to send it to the actuator
 		gw.parseAndSend(inputString);
 		commandComplete = false;
@@ -53,31 +54,36 @@ void loop()
 	}
 }
 
-
 /*
 SerialEvent occurs whenever a new data comes in the
 hardware serial RX.  This routine is run between each
 time loop() runs, so using delay inside loop can delay
 response.  Multiple bytes of data may be available.
 */
-void serialEvent() {
-	while (Serial.available()) {
+void serialEvent()
+{
+	while (Serial.available())
+	{
 		// get the new byte:
 		char inChar = (char)Serial.read();
 		// if the incoming character is a newline, set a flag
 		// so the main loop can do something about it:
-		if (inputPos<MAX_RECEIVE_LENGTH - 1 && !commandComplete) {
-			if (inChar == '\n') {
+		if (inputPos < MAX_RECEIVE_LENGTH - 1 && !commandComplete)
+		{
+			if (inChar == '\n')
+			{
 				inputString[inputPos] = 0;
 				commandComplete = true;
 			}
-			else {
+			else
+			{
 				// add it to the inputString:
 				inputString[inputPos] = inChar;
 				inputPos++;
 			}
 		}
-		else {
+		else
+		{
 			// Incoming message too long. Throw away 
 			inputPos = 0;
 		}
