@@ -29,49 +29,49 @@ stream			4		Used for OTA firmware updates
 presentation:
 When a presentation message is sent, sub-type has to be set to one the following:
 
-Type	Value	Comment
-S_DOOR	0	Door and window sensors
-S_MOTION	1	Motion sensors
-S_SMOKE	2	Smoke sensor
-S_LIGHT	3	Light Actuator (on/off)
-S_DIMMER	4	Dimmable device of some kind
-S_COVER	5	Window covers or shades
-S_TEMP	6	Temperature sensor
-S_HUM	7	Humidity sensor
-S_BARO	8	Barometer sensor (Pressure)
-S_WIND	9	Wind sensor
-S_RAIN	10	Rain sensor
-S_UV	11	UV sensor
-S_WEIGHT	12	Weight sensor for scales etc.
-S_POWER	13	Power measuring device, like power meters
-S_HEATER	14	Heater device
-S_DISTANCE	15	Distance sensor
-S_LIGHT_LEVEL	16	Light sensor
-S_ARDUINO_NODE	17	Arduino node device
-S_ARDUINO_RELAY	18	Arduino repeating node device
-S_LOCK	19	Lock device
-S_IR	20	Ir sender/receiver device
-S_WATER	21	Water meter
-S_AIR_QUALITY	22	Air quality sensor e.g. MQ-2
-S_CUSTOM	23	Use this for custom sensors where no other fits.
-S_DUST	24	Dust level sensor
-S_SCENE_CONTROLLER	25	Scene controller device
+Type					Value	Comment
+S_DOOR					0		Door and window sensors
+S_MOTION				1		Motion sensors
+S_SMOKE					2		Smoke sensor
+S_LIGHT					3		Light Actuator (on/off)
+S_DIMMER				4		Dimmable device of some kind
+S_COVER					5		Window covers or shades
+S_TEMP					6		Temperature sensor
+S_HUM					7		Humidity sensor
+S_BARO					8		Barometer sensor (Pressure)
+S_WIND					9		Wind sensor
+S_RAIN					10		Rain sensor
+S_UV					11		UV sensor
+S_WEIGHT				12		Weight sensor for scales etc.
+S_POWER					13		Power measuring device, like power meters
+S_HEATER				14		Heater device
+S_DISTANCE				15		Distance sensor
+S_LIGHT_LEVEL			16		Light sensor
+S_ARDUINO_NODE			17		Arduino node device
+S_ARDUINO_RELAY			18		Arduino repeating node device
+S_LOCK					19		Lock device
+S_IR					20		IR sender/receiver device
+S_WATER					21		Water meter
+S_AIR_QUALITY			22		Air quality sensor e.g. MQ-2
+S_CUSTOM				23		Use this for custom sensors where no other fits.
+S_DUST					24		Dust level sensor
+S_SCENE_CONTROLLER		25		Scene controller device
 
 set, req:
 When a set or request message is being sent, the sub-type has to be one of the following:
 
-Type	Value	Comment
-V_TEMP	0	Temperature
-V_HUM	1	Humidity
-V_LIGHT	2	Light status. 0=off 1=on
-V_DIMMER	3	Dimmer value. 0-100%
-V_PRESSURE	4	Atmospheric Pressure
-V_FORECAST	5	Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
-V_RAIN	6	Amount of rain
-V_RAINRATE	7	Rate of rain
-V_WIND	8	Windspeed
-V_GUST	9	Gust
-V_DIRECTION	10	Wind direction
+Type					Value	Comment
+V_TEMP					0		Temperature
+V_HUM					1		Humidity
+V_LIGHT					2		Light status. 0=off 1=on
+V_DIMMER				3		Dimmer value. 0-100%
+V_PRESSURE				4		Atmospheric Pressure
+V_FORECAST				5		Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
+V_RAIN					6		Amount of rain
+V_RAINRATE				7		Rate of rain
+V_WIND					8		Windspeed
+V_GUST					9		Gust
+V_DIRECTION				10		Wind direction
 V_UV	11	UV light level
 V_WEIGHT	12	Weight (for scales etc)
 V_DISTANCE	13	Distance
@@ -137,17 +137,26 @@ Starting up the library
 To initialize radio and start the library, you must call begin(). Begin initializes the sensor node but you can also configure the sensor node operating parameters manually.
 Call this before anything else in the library
 
-void begin(void (*_msgCallback)(const MyMessage &), uint8_t nodeId, boolean repeaterMode, uint8_t parentNodeId, rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate);
-	incomingMessageCallback - Callback function for incoming messages from other nodes or controller and request responses. Default is NULL.
-	nodeId - The unique id (1-254) for this sensor. Default is AUTO(255) which means sensor tries to fetch an id from controller.
-	repeaterMode - Activate repeater mode. This node will forward messages to other nodes in the radio network. Make sure to call process() regularly. Default in false
-	parentNodeId - Use this to force node to always communicate with a certain parent node. Default is AUTO which means node automatically tries to find a parent.
-	paLevel - Radio PA Level for this sensor. Default RF24_PA_MAX
-	channel - Radio channel. Default is channel 76
-	dataRate - Radio transmission speed. Default RF24_250KBPS
+void begin(
+	void (*msgCallback)(const MyMessage &),
+	uint8_t nodeId,
+	boolean repeaterMode,
+	uint8_t parentNodeId,
+	rf24_pa_dbm_e paLevel,
+	uint8_t channel,
+	rf24_datarate_e dataRate);
+
+	msgCallback -	Callback function for incoming messages from other nodes or controller and request responses. Default is NULL.
+	nodeId -		The unique id (1-254) for this sensor. Default is AUTO(255) which means sensor tries to fetch an id from controller.
+	repeaterMode -	Activate repeater mode. This node will forward messages to other nodes in the radio network. Make sure to call process() regularly. Default in false
+	parentNodeId -	Use this to force node to always communicate with a certain parent node. Default is AUTO which means node automatically tries to find a parent.
+	paLevel -		Radio PA Level for this sensor. Default RF24_PA_MAX
+	channel -		Radio channel. Default is channel 76
+	dataRate -		Radio transmission speed. Default RF24_250KBPS
 
 --------------------------------------------------------------------------------------------------------------------------------------------
-When you enable auto mode, the sensor automatically fetches a unique node id (auto mode). The id received can be retrieved by calling this method.
+When you enable auto mode, the sensor automatically fetches a unique node id (auto mode).
+The id received can be retrieved by calling this method.
 
 uint8_t getNodeId();
 --------------------------------------------------------------------------------------------------------------------------------------------
@@ -220,7 +229,7 @@ Retrieving a state (from local EEPROM).
 uint8_t loadState(uint8_t pos);
 	pos - The position to fetch from EEPROM (0-255)
 --------------------------------------------------------------------------------------------------------------------------------------------
-Sleeping
+Sleeping:
 To save battery it is crucial to sleep you node as much as possible. The node can wake up from external interrupts or by a timer.
 
 The following sleep your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt.
@@ -238,15 +247,16 @@ mode - RISING, FALLING, CHANGE
 ms - Number of milliseconds to sleep or 0 to sleep forever.
 The sleep method returns true if wake up was triggered by pin change and false means timer woke it up.
 --------------------------------------------------------------------------------------------------------------------------------------------
-Message constructor
+--------------------------------------------------------------------------------------------------------------------------------------------
+Message constructor:
 Create an instance of MyMessage. This class holds the message data and have some helpers for setting payload.
 
 MyMessage(uint8_t childSensorId, uint8_t variableType);
-	childSensorId - The child sensor id to report data on. 0-254.
-	variableType - Variable type.
+	childSensorId -	The child sensor id to report data on; 0-254.
+	variableType -	Variable type.
 --------------------------------------------------------------------------------------------------------------------------------------------
-Message manipulation
-You can manipulate your outgoing and incoming messages with the following getter/setters.
+Message manipulation:
+You can manipulate your outgoing and incoming messages with the following getterS/setters.
 
 // Setters for building message "on the fly"
 MyMessage& setType(uint8_t type);

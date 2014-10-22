@@ -126,6 +126,8 @@ void onEthernetMessage()
 
 void onRadioMessage(const char *writeBuffer, uint8_t *writeSize)
 {
+	Serial.println("onRadioMessage");
+
 #ifdef TCPDUMP
 	Serial.print(">>");
 	char buf[4];
