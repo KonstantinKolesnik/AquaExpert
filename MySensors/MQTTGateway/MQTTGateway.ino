@@ -102,6 +102,7 @@ void processEthernetMessages()
 {
 	char inputString[MQTT_MAX_PACKET_SIZE] = "";
 	uint8_t inputSize = 0;
+
 	EthernetClient client = server.available();
 	if (client)
 	{
@@ -143,6 +144,7 @@ int main(void)
 	init();
 	Ethernet.begin(TCP_MAC, TCP_IP);
 	delay(1000);   // Wait for Ethernet to get configured.
+	
 	gw.begin(RF24_PA_LEVEL_GW, RF24_CHANNEL, RF24_DATARATE, writeEthernet, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
 	server.begin();
 

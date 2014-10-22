@@ -94,7 +94,7 @@ MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
 //MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
 
 
-char inputString[MAX_RECEIVE_LENGTH] = "";    // A string to hold incoming commands from serial/ethernet interface
+char inputCommand[MAX_RECEIVE_LENGTH] = "";    // A string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
 
 void setup()
@@ -131,19 +131,19 @@ void loop()
 			// read the bytes incoming from the client
 			char inChar = client.read();
 
-			if (inputPos<MAX_RECEIVE_LENGTH - 1)
+			if (inputPos < MAX_RECEIVE_LENGTH - 1)
 			{
 				// if newline then command is complete
 				if (inChar == '\n')
 				{
 					// a command was issued by the client
 					// we will now try to send it to the actuator
-					inputString[inputPos] = 0;
+					inputCommand[inputPos] = 0;
 
 					// echo the string to the serial port
-					Serial.print(inputString);
+					Serial.print(inputCommand);
 
-					gw.parseAndSend(inputString);
+					gw.parseAndSend(inputCommand);
 
 					// clear the string:
 					inputPos = 0;
@@ -151,7 +151,7 @@ void loop()
 				else
 				{
 					// add it to the inputString:
-					inputString[inputPos] = inChar;
+					inputCommand[inputPos] = inChar;
 					inputPos++;
 				}
 			}
@@ -162,5 +162,6 @@ void loop()
 			}
 		}
 	}
+
 	gw.processRadioMessage();
 }
