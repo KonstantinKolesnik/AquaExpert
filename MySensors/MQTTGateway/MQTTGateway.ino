@@ -98,7 +98,7 @@ uint8_t TCP_MAC[] = { 0xF2, 0xDE, 0xAD, 0x00, 0x00, 0x42 }; //x2, x6, xA or xE (
 EthernetServer server = EthernetServer(TCP_PORT);
 MyMQTT gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN);
 
-void processEthernetMessages()
+void onEthernetMessage()
 {
 	char inputString[MQTT_MAX_PACKET_SIZE] = "";
 	uint8_t inputSize = 0;
@@ -124,7 +124,7 @@ void processEthernetMessages()
 	}
 }
 
-void writeEthernet(const char *writeBuffer, uint8_t *writeSize)
+void onRadioMessage(const char *writeBuffer, uint8_t *writeSize)
 {
 #ifdef TCPDUMP
 	Serial.print(">>");
@@ -145,12 +145,12 @@ int main(void)
 	Ethernet.begin(TCP_MAC, TCP_IP);
 	delay(1000);   // Wait for Ethernet to get configured.
 	
-	gw.begin(RF24_PA_LEVEL_GW, RF24_CHANNEL, RF24_DATARATE, writeEthernet, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
+	gw.begin(RF24_PA_LEVEL_GW, RF24_CHANNEL, RF24_DATARATE, onRadioMessage, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
 	server.begin();
 
 	while (1)
 	{
-		processEthernetMessages();
+		onEthernetMessage();
 		gw.processRadioMessage();
 	}
 }

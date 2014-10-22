@@ -39,8 +39,8 @@
 typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
-void processEthernetMessages();
-void writeEthernet(const char *writeBuffer, uint8_t *writeSize);
+void onEthernetMessage();
+void onRadioMessage(const char *writeBuffer, uint8_t *writeSize);
 int main(void);
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
