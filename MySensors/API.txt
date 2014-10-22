@@ -1,0 +1,155 @@
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+MySensor constructor
+Create an instance of the library. You can skip the arguments if you want to use the default values.
+
+MySensor(uint8_t cepin = 9, uint8_t cspin = 10);
+	cepin - The pin attached to RF24 Chip Enable on the RF module (default 9)
+	cspin - The pin attached to RF24 Chip Select (default 10)
+--------------------------------------------------------------------------------------------------------------------------------------------
+Starting up the library
+To initialize radio and start the library, you must call begin(). Begin initializes the sensor node but you can also configure the sensor node operating parameters manually.
+Call this before anything else in the library
+
+void begin(void (*_msgCallback)(const MyMessage &), uint8_t nodeId, boolean repeaterMode, uint8_t parentNodeId, rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate);
+	incomingMessageCallback - Callback function for incoming messages from other nodes or controller and request responses. Default is NULL.
+	nodeId - The unique id (1-254) for this sensor. Default is AUTO(255) which means sensor tries to fetch an id from controller.
+	repeaterMode - Activate repeater mode. This node will forward messages to other nodes in the radio network. Make sure to call process() regularly. Default in false
+	parentNodeId - Use this to force node to always communicate with a certain parent node. Default is AUTO which means node automatically tries to find a parent.
+	paLevel - Radio PA Level for this sensor. Default RF24_PA_MAX
+	channel - Radio channel. Default is channel 76
+	dataRate - Radio transmission speed. Default RF24_250KBPS
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+When you enable auto mode, the sensor automatically fetches a unique node id (auto mode). The id received can be retrieved by calling this method.
+
+uint8_t getNodeId();
+--------------------------------------------------------------------------------------------------------------------------------------------
+Presentation
+The sensors should present themselves before they start reporting sensor data to the controller.
+
+void present(uint8_t childSensorId, uint8_t sensorType, bool ack);
+	childSensorId - The unique child id you want to choose for the sensor connected to this Arduino. Range 0-254.
+	sensorType - The sensor type you want to create.
+	ack - Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+
+You can also send in some optional meta information for this sensor node.
+
+void sendSketchInfo(const char *name, const char *version, bool ack);
+	name - String containing a short Sketch name or NULL if not applicable. Max 25 characters.
+	version - String containing a short Sketch version or NULL if not applicable.
+	ack - Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Sending data
+You can send data to the controller or some other sensor by using the send(msg) method.
+
+bool send(MyMessage &msg, bool ack);
+	msg - The message you want to send. See MyMessage for details.
+	ack - Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+
+If your node is running on batteries and you've implemented battery level measurements you can send the battery level back to the controller.
+
+void sendBatteryLevel(uint8_t level, bool ack);
+	level - Battery level between 0-100(%)
+	ack - Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Requesting data
+Requests a variable value from gateway or some other sensor in the radio network. Make sure to add callback-method in begin-method to handle request responses. If you send this request to some other sensor-node you must handle the reply message yourself in the destination node.
+
+void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination);
+	childSensorId - The unique child id for the different sensors connected to this Arduino. 0-254.
+	variableType - The variableType to fetch.
+	destination - The nodeId of other node to request data from in radio network. Default is gateway.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Fetching time from controller
+Requests time from controller. Answer will be delivered to the specified callback.
+
+void requestTime(void (* timeCallback)(unsigned long));
+	callback - Callback for time request. Incoming argument is seconds since 1970.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Controller configuration
+Your sensor is responsible for reporting data in the correct units of measure. The controller can give you a "hint" for which units of measure to report.
+The following returns the most recent node configuration received from controller.
+
+ControllerConfig getConfig();
+ControlleConfig only contains the filed isMetric today which has the followinf meaning:
+
+true (=metric) Report sensor data in Celsius, meter, cm, gram, km/h, m/s etc..
+false (=imperial) - Fahrenheit, feet, gallon, mph etc...
+--------------------------------------------------------------------------------------------------------------------------------------------
+Processing incoming radio messages
+Nodes that expects incoming messages, such as an actuator or repeating nodes, must check for new messages frequently. For repeater nodes this is crucial (otherwise messages will be lost on their way to gateway). All the magic happens in process() and this should be placed in your loop() section. Do not sleep!
+
+boolean process();
+--------------------------------------------------------------------------------------------------------------------------------------------
+Saving states in node
+You can save a state (in local EEPROM) which is good for actuators to "remember" state between power cycles. You have 256 bytes to play with. Note that there is a limitation on the number of writes the EEPROM can handle (~100 000 cycles).
+
+void saveState(uint8_t pos, uint8_t value);
+	pos - The position to store value in (0-255)
+	value - Value to store in position
+--------------------------------------------------------------------------------------------------------------------------------------------
+Retrieving a state (from local EEPROM).
+
+uint8_t loadState(uint8_t pos);
+	pos - The position to fetch from EEPROM (0-255)
+--------------------------------------------------------------------------------------------------------------------------------------------
+Sleeping
+To save battery it is crucial to sleep you node as much as possible. The node can wake up from external interrupts or by a timer.
+
+The following sleep your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt.
+
+void sleep(unsigned long ms);
+	ms - Number of milliseconds to sleep.
+
+The following sleeps your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt or from an external interrupt.
+
+See: http://arduino.cc/en/Reference/attachInterrupt for details on modes and which pin is assigned to what interrupt. On Nano/Pro Mini: 0=Pin2, 1=Pin3
+
+bool sleep(int interrupt, int mode, unsigned long ms=0);
+interrupt - Interrupt that should trigger the wakeup.
+mode - RISING, FALLING, CHANGE
+ms - Number of milliseconds to sleep or 0 to sleep forever.
+The sleep method returns true if wake up was triggered by pin change and false means timer woke it up.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Message constructor
+Create an instance of MyMessage. This class holds the message data and have some helpers for setting payload.
+
+MyMessage(uint8_t childSensorId, uint8_t variableType);
+	childSensorId - The child sensor id to report data on. 0-254.
+	variableType - Variable type.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Message manipulation
+You can manipulate your outgoing and incoming messages with the following getter/setters.
+
+// Setters for building message "on the fly"
+MyMessage& setType(uint8_t type);
+MyMessage& setSensor(uint8_t sensor);
+MyMessage& setDestination(uint8_t destination);
+
+// Setters for payload
+MyMessage& set(void* payload, uint8_t length);
+MyMessage& set(const char* value);
+MyMessage& set(uint8_t value);
+MyMessage& set(float value, uint8_t decimals);
+MyMessage& set(unsigned long value);
+MyMessage& set(long value);
+MyMessage& set(unsigned int value);
+MyMessage& set(int value);
+
+// Getter for ack-flag. Returns true if this is an ack message.
+bool isAck() const;
+
+// Getters for picking up payload on incoming messages
+char* getStream(char *buffer) const;
+char* getString(char *buffer) const;
+const char* getString() const;
+void* getCustom() const;
+uint8_t getByte() const;
+bool getBool() const;
+float getFloat() const;
+long getLong() const;
+unsigned long getULong() const;
+int getInt() const;
+unsigned int getUInt() const;
+--------------------------------------------------------------------------------------------------------------------------------------------

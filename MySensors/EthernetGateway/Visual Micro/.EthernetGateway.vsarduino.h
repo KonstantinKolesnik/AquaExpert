@@ -45,5 +45,5 @@ void writeEthernet(char *writeBuffer);
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h" 
-#include "D:\Work\SmartNetwork\New\EthernetGateway\EthernetGateway.ino"
+#include "D:\Work\SmartNetwork\MySensors\EthernetGateway\EthernetGateway.ino"
 #endif

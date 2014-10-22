@@ -53,23 +53,31 @@
 #include <stdarg.h>
 
 // Use this if you have attached a Ethernet ENC28J60 shields  
-#include <UIPEthernet.h>  
+//#include <UIPEthernet.h>  
 
 // Use this fo WizNET module and Arduino Ethernet Shield 
-//#include <Ethernet.h>   
+#include <Ethernet.h>   
 
 
 #define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
 #define INCLUSION_MODE_PIN  3 // Digital pin used for inclusion mode button
 
-#define RADIO_CE_PIN        5  // radio chip enable
-#define RADIO_SPI_SS_PIN    6  // radio SPI serial select
-#define RADIO_ERROR_LED_PIN 7  // Error led pin
-#define RADIO_RX_LED_PIN    8  // Receive led pin
-#define RADIO_TX_LED_PIN    9  // the PCB, on board LED
+//#define RADIO_CE_PIN        5  // radio chip enable
+//#define RADIO_SPI_SS_PIN    6  // radio SPI serial select
+//#define RADIO_ERROR_LED_PIN 7  // Error led pin
+//#define RADIO_RX_LED_PIN    8  // Receive led pin
+//#define RADIO_TX_LED_PIN    9  // the PCB, on board LED
+
+// UNO :
+#define RADIO_CE_PIN        9		// radio chip enable
+#define RADIO_SPI_SS_PIN    8		// radio SPI serial select
+#define RADIO_ERROR_LED_PIN 2		// Error led pin
+#define RADIO_RX_LED_PIN    3		// Receive led pin
+#define RADIO_TX_LED_PIN    4		// the PCB, on board LED*/
+
 
 #define IP_PORT 5003        // The port you want to open 
-IPAddress myIp(192, 168, 178, 66);  // Configure your static ip-address here    COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
+IPAddress myIp(192, 168, 1, 177);  // Configure your static ip-address here    COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
 
 // The MAC address can be anything you want but should be unique on your network.
 // Newer boards have a MAC address printed on the underside of the PCB, which you can (optionally) use.
@@ -108,7 +116,6 @@ void writeEthernet(char *writeBuffer)
 {
 	server.write(writeBuffer);
 }
-
 
 void loop()
 {
