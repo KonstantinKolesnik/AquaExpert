@@ -31,7 +31,7 @@
 
 
 //MyGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
-MyGateway gw(DEFAULT_CE_PIN, 8, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
+//MyGateway gw(DEFAULT_CE_PIN, 8, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
@@ -39,22 +39,37 @@ boolean commandComplete = false;  // whether the string is complete
 
 void setup()
 {
-	gw.begin();
+	//gw.begin();
+	Serial.begin(115200);
 }
 
 void loop()
 {
-	gw.processRadioMessage();
+	onSerialEvent();
+	//gw.processRadioMessage();
 
 	if (commandComplete)
 	{
-		// A command was issued from serial interface
-		// We will now try to send it to the actuator
-		gw.parseAndSend(inputCommand);
+		//Serial.print("received: ");
+		//Serial.println(inputCommand);
+
+		if (inputCommand[0] == 'S' && inputCommand[1] == 'G' && inputCommand[2] == 'W')
+			Serial.print("SGWOK\n");
+		else
+		{
+			// A command was issued from serial interface
+			// We will now try to send it to the actuator
+			//gw.parseAndSend(inputCommand);
+		}
 
 		commandComplete = false;
 		inputPos = 0;
 	}
+
+	// for test only:
+	Serial.print("12;6;1;0;0;36.5");
+	Serial.print('\n');
+	delay(500);
 }
 
 /*
@@ -63,7 +78,7 @@ hardware serial RX. This routine is run between each
 time loop() runs, so using delay inside loop can delay
 response. Multiple bytes of data may be available.
 */
-void serialEvent()
+void onSerialEvent()
 {
 	while (Serial.available())
 	{
