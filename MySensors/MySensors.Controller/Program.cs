@@ -9,8 +9,6 @@ namespace MySensors.Controller
 
         static void Main(string[] args)
         {
-            //Thread readThread = new Thread(Read);
-
             Console.WriteLine("Starting MySensors network automation Controller.");
             Console.WriteLine();
 
@@ -21,16 +19,14 @@ namespace MySensors.Controller
             {
 
 
-
+                Console.WriteLine("Controller started successfuly!");
             }
-
+            else
+                Console.WriteLine("Controller stopped.");
 
             Console.WriteLine();
-            Console.WriteLine("Controller started successfuly! Type quit to stop Controller and exit.");
+            Console.WriteLine("Type quit to exit.");
             Console.WriteLine();
-
-            //readThread.Start();
-
 
             while (!Console.ReadLine().Equals("quit")) ;
 
@@ -39,13 +35,9 @@ namespace MySensors.Controller
 
         private static bool StartConnector()
         {
-            Console.Write("Starting gateway connector.");
+            Console.Write("Starting gateway connector...");
             
-            int tries = 10;
-            while (tries-- > 0 && !controller.GatewayConnector.Connect())
-                Console.Write(".");
-
-            if (tries == 0)
+            if (!controller.GatewayConnector.Connect())
             {
                 Console.WriteLine(" Failed.");
                 return false;
@@ -53,7 +45,6 @@ namespace MySensors.Controller
             else
             {
                 Console.WriteLine(" Success.");
-
                 return true;
             }
         }
@@ -62,7 +53,6 @@ namespace MySensors.Controller
         private static void Stop()
         {
             controller.GatewayConnector.Disconnect();
-
         }
     }
 }

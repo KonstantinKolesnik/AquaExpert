@@ -11,7 +11,7 @@ namespace MySensors.Core.Messaging
         public MessageType MessageType { get; set; }
         public bool Ack { get; set; }
         public byte SubType { get; set; }
-        public float Payload { get; set; }
+        public string Payload { get; set; }
 
         public static Message FromRawString(string str)
         {
@@ -28,7 +28,7 @@ namespace MySensors.Core.Messaging
                 MessageType = (MessageType)byte.Parse(parts[2]),
                 Ack = byte.Parse(parts[3]) == 1,
                 SubType = byte.Parse(parts[4]),
-                Payload = float.Parse(parts[5].Replace(".", ",")),
+                Payload = parts[5],
             };
         }
 

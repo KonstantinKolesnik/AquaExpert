@@ -26,50 +26,42 @@
 #include <MyGateway.h>  
 #include <stdarg.h>
 
-#define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
-#define INCLUSION_MODE_PIN 3 // Digital pin used for inclusion mode button
-
+//#define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
+//#define INCLUSION_MODE_PIN 3 // Digital pin used for inclusion mode button
 
 //MyGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
-//MyGateway gw(DEFAULT_CE_PIN, 8, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
+MyGateway gw(DEFAULT_CE_PIN, 8);// , INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
-boolean commandComplete = false;  // whether the string is complete
+boolean commandComplete = false;
 
 void setup()
 {
-	//gw.begin();
-	Serial.begin(115200);
+	gw.begin();
 }
 
 void loop()
 {
-	onSerialEvent();
-	//gw.processRadioMessage();
+	gw.processRadioMessage();
 
 	if (commandComplete)
 	{
-		//Serial.print("received: ");
-		//Serial.println(inputCommand);
-
-		if (inputCommand[0] == 'S' && inputCommand[1] == 'G' && inputCommand[2] == 'W')
-			Serial.print("SGWOK\n");
+		if (inputCommand[0] == 'G' && inputCommand[1] == 'W')
+			Serial.print("GWOK\n");
 		else
 		{
-			// A command was issued from serial interface
-			// We will now try to send it to the actuator
-			//gw.parseAndSend(inputCommand);
+			// A command was issued from serial interface; send it to the actuator
+			gw.parseAndSend(inputCommand);
 		}
 
 		commandComplete = false;
-		inputPos = 0;
 	}
 
 	// for test only:
-	Serial.print("12;6;1;0;0;36.5");
-	Serial.print('\n');
-	delay(500);
+	//Serial.print("12;6;1;0;0;36.5");
+	//Serial.print('\n');
+	//delay(500);
 }
 
 /*
@@ -92,6 +84,7 @@ void onSerialEvent()
 			if (inChar == '\n')
 			{
 				inputCommand[inputPos] = 0;
+				inputPos = 0;
 				commandComplete = true;
 			}
 			else

@@ -123,7 +123,6 @@ void onEthernetMessage()
 		gw.processMQTTMessage(inputString, inputSize);
 	}
 }
-
 void onRadioMessage(const char *writeBuffer, uint8_t *writeSize)
 {
 	Serial.println("onRadioMessage");

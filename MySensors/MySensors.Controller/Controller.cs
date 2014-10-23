@@ -31,14 +31,10 @@ namespace MySensors.Controller
 
 
 
-        private void connector_MessageReceived(IGatewayConnector sender, string message)
+        private void connector_MessageReceived(IGatewayConnector sender, Message message)
         {
-            Message msg = Message.FromRawString(message);
-            if (msg != null)
-            {
-                Console.WriteLine(msg.ToString());
-                Console.WriteLine();
-            }
+            Console.WriteLine(message.ToString());
+            Console.WriteLine();
         }
     }
 }
