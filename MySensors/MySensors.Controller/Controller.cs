@@ -1,5 +1,5 @@
 ﻿using MySensors.Controller.Connectors;
-using MySensors.Controller.Messaging;
+using MySensors.Core.Messaging;
 using System;
 
 namespace MySensors.Controller
@@ -33,13 +33,12 @@ namespace MySensors.Controller
 
         private void connector_MessageReceived(IGatewayConnector sender, string message)
         {
-            Message msg = Message.FromString(message);
+            Message msg = Message.FromRawString(message);
             if (msg != null)
             {
                 Console.WriteLine(msg.ToString());
                 Console.WriteLine();
             }
         }
-
     }
 }

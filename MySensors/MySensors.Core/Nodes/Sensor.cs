@@ -1,5 +1,5 @@
 ﻿
-namespace MySensors.Core
+namespace MySensors.Core.Nodes
 {
     public class Sensor
     {
