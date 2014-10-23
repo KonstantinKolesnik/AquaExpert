@@ -1,70 +1,68 @@
-﻿using MySensors.Controller.Core.Connectors;
-using MySensors.Controller.Core.Messaging;
+﻿using MySensors.Controller.Connectors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MySensors.Controller
 {
     class Program
     {
-        static bool _continue;
-
-
-        static IGatewayConnector connector;
+        private static Controller controller;
 
         static void Main(string[] args)
         {
             //Thread readThread = new Thread(Read);
-            int tries = 10;
 
-            Console.WriteLine();
             Console.WriteLine("Starting MySensors network automation Controller.");
             Console.WriteLine();
 
-            Console.Write("Starting gateway connector.");
-            connector = new SerialGatewayConnector();
-            connector.MessageReceived += connector_MessageReceived;
-            while (tries > 0 && !connector.Connect())
+            controller = new Controller();
+            controller.GatewayConnector = new SerialGatewayConnector();
+
+            if (StartConnector())
             {
-                Console.Write(".");
-                tries--;
+
+
+
             }
-            if (tries == 0)
-                Console.WriteLine(" Failed.");
-            else
-            {
-                Console.WriteLine(" Success.");
 
 
-
-                Console.WriteLine();
-                Console.WriteLine("Controller started successfuly! Type quit to stop Controller and exit.");
-            }
+            Console.WriteLine();
+            Console.WriteLine("Controller started successfuly! Type quit to stop Controller and exit.");
             Console.WriteLine();
 
-
-
-            _continue = true;
             //readThread.Start();
 
 
             while (!Console.ReadLine().Equals("quit")) ;
 
-            connector.Disconnect();
+            Stop();
         }
 
-        static void connector_MessageReceived(IGatewayConnector sender, string message)
+        private static bool StartConnector()
         {
-            Message msg = Message.FromString(message);
-            if (msg != null)
+            Console.Write("Starting gateway connector.");
+            
+            int tries = 10;
+            while (tries-- > 0 && !controller.GatewayConnector.Connect())
+                Console.Write(".");
+
+            if (tries == 0)
             {
-                Console.WriteLine(msg.ToString());
-                Console.WriteLine();
+                Console.WriteLine(" Failed.");
+                return false;
             }
+            else
+            {
+                Console.WriteLine(" Success.");
+
+                return true;
+            }
+        }
+
+
+        private static void Stop()
+        {
+            controller.GatewayConnector.Disconnect();
+
         }
     }
 }

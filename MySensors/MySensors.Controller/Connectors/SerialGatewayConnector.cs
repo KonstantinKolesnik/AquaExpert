@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 
-namespace MySensors.Controller.Core.Connectors
+namespace MySensors.Controller.Connectors
 {
     public class SerialGatewayConnector : IGatewayConnector
     {

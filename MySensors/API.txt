@@ -72,7 +72,7 @@ V_RAINRATE				7		Rate of rain
 V_WIND					8		Windspeed
 V_GUST					9		Gust
 V_DIRECTION				10		Wind direction
-V_UV	11	UV light level
+V_UV					11		UV light level
 V_WEIGHT	12	Weight (for scales etc)
 V_DISTANCE	13	Distance
 V_IMPEDANCE	14	Impedance value

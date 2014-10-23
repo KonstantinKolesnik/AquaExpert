@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace MySensors.Controller.Core.Messaging
+namespace MySensors.Controller.Messaging
 {
     public class Message
     {

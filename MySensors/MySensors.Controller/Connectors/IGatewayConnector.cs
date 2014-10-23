@@ -1,5 +1,5 @@
 ﻿
-namespace MySensors.Controller.Core.Connectors
+namespace MySensors.Controller.Connectors
 {
     public delegate void MessageEventHandler(IGatewayConnector sender, string message);
 
