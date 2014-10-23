@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO.Ports;
 
 namespace MySensors.Controller.Core.Connectors
@@ -65,7 +64,6 @@ namespace MySensors.Controller.Core.Connectors
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string msg = serialPort.ReadLine();
-            Debug.Print(msg);
             if (MessageReceived != null)
                 MessageReceived(this, msg);
         }

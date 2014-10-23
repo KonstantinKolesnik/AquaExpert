@@ -17,17 +17,42 @@ namespace MySensors.Controller
 
         static void Main(string[] args)
         {
-            Thread readThread = new Thread(Read);
+            //Thread readThread = new Thread(Read);
+            int tries = 10;
 
-            Console.WriteLine("Starting Serial Gateway locator...");
+            Console.WriteLine();
+            Console.WriteLine("Starting MySensors network automation Controller.");
+            Console.WriteLine();
+
+            Console.Write("Starting gateway connector.");
             connector = new SerialGatewayConnector();
-            connector.Connect();
+            connector.MessageReceived += connector_MessageReceived;
+            while (tries > 0 && !connector.Connect())
+            {
+                Console.Write(".");
+                tries--;
+            }
+            if (tries == 0)
+                Console.WriteLine(" Failed.");
+            else
+            {
+                Console.WriteLine(" Success.");
+
+
+
+
+            }
+            Console.WriteLine();
+
 
 
             _continue = true;
-            readThread.Start();
+            //readThread.Start();
 
-            Console.WriteLine("Type quit to exit");
+            Console.WriteLine("Controller started successfuly.");
+            Console.WriteLine("Type quit to stop Controller and exit.");
+            Console.WriteLine();
+
             while (!Console.ReadLine().Equals("quit")) ;
 
             //while (_continue)
@@ -44,8 +69,14 @@ namespace MySensors.Controller
             //    }
             //}
 
-            readThread.Join();
-            //_serialPort.Close();
+            //readThread.Join();
+
+            connector.Disconnect();
+        }
+
+        static void connector_MessageReceived(IGatewayConnector sender, string message)
+        {
+            Console.WriteLine(message);
         }
 
         public static void Read()
