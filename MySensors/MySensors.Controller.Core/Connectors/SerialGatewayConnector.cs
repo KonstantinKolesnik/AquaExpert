@@ -6,7 +6,6 @@ namespace MySensors.Controller.Core.Connectors
     public class SerialGatewayConnector : IGatewayConnector
     {
         private SerialPort serialPort;
-        private string portName;
 
         public event MessageEventHandler MessageReceived;
 
@@ -21,8 +20,6 @@ namespace MySensors.Controller.Core.Connectors
 
         public bool Connect()
         {
-            portName = null;
-
             foreach (string pn in SerialPort.GetPortNames())
             {
                 serialPort.PortName = pn;

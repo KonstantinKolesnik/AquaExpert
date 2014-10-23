@@ -1,4 +1,5 @@
 ﻿using MySensors.Controller.Core.Connectors;
+using MySensors.Controller.Core.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,8 @@ namespace MySensors.Controller
 
 
 
-
+                Console.WriteLine();
+                Console.WriteLine("Controller started successfuly! Type quit to stop Controller and exit.");
             }
             Console.WriteLine();
 
@@ -49,46 +51,19 @@ namespace MySensors.Controller
             _continue = true;
             //readThread.Start();
 
-            Console.WriteLine("Controller started successfuly.");
-            Console.WriteLine("Type quit to stop Controller and exit.");
-            Console.WriteLine();
 
             while (!Console.ReadLine().Equals("quit")) ;
-
-            //while (_continue)
-            //{
-            //    message = Console.ReadLine();
-
-            //    if (stringComparer.Equals("quit", message))
-            //    {
-            //        _continue = false;
-            //    }
-            //    else
-            //    {
-            //        _serialPort.WriteLine(String.Format("<{0}>: {1}", name, message));
-            //    }
-            //}
-
-            //readThread.Join();
 
             connector.Disconnect();
         }
 
         static void connector_MessageReceived(IGatewayConnector sender, string message)
         {
-            Console.WriteLine(message);
-        }
-
-        public static void Read()
-        {
-            while (_continue)
+            Message msg = Message.FromString(message);
+            if (msg != null)
             {
-                try
-                {
-                    //string message = _serialPort.ReadLine();
-                    //Console.WriteLine(message);
-                }
-                catch (TimeoutException) { }
+                Console.WriteLine(msg.ToString());
+                Console.WriteLine();
             }
         }
     }

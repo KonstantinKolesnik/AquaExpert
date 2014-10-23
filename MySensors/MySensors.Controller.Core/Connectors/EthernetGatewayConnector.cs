@@ -5,54 +5,35 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace MySensors.Controller.Core.Locators
+namespace MySensors.Controller.Core.Connectors
 {
-    public class EthernetGatewayLocator// : INotifyPropertyChanged
+    public class EthernetGatewayConnector : IGatewayConnector
     {
         #region Fields
         private int port;
         private string key;
         private int receiveTimeout = 2000;
-        //private ObservableCollection<ServerInformation> servers = new ObservableCollection<ServerInformation>();
-        #endregion
-
-        #region Properties
-        //public ObservableCollection<ServerInformation> Servers
-        //{
-        //    get { return servers; }
-        //}
+        private IPEndPoint remoteEP;
         #endregion
 
         #region Events
-        //public event EventHandler ServerFound;
-        //public event EventHandler ServerLost;
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-        //private void OnPropertyChanged(PropertyChangedEventArgs e)
-        //{
-        //    if (PropertyChanged != null)
-        //        PropertyChanged(this, e);
-        //}
+        public event MessageEventHandler MessageReceived;
         #endregion
 
         #region Constructor
-        public EthernetGatewayLocator(int port, string key)
+        public EthernetGatewayConnector(int port, string key)
         {
             this.port = port;
             this.key = key;
         }
+        public EthernetGatewayConnector()
+            : this(8888, "EGW")
+        {
+        }
         #endregion
 
         #region Public methods
-        public void Refresh()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-                return;
-
-            new Thread(Request).Start();
-        }
-
-        private void Request()
+        public bool Connect()
         {
             //string localIP = "";
             //IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -69,9 +50,9 @@ namespace MySensors.Controller.Core.Locators
 
             IPEndPoint deviceEP = new IPEndPoint(IPAddress.Broadcast, port);
 
-            IPEndPoint itemEP = new IPEndPoint(IPAddress.Any, port);
+            remoteEP = new IPEndPoint(IPAddress.Any, port);
 
-            byte[] request = Encoding.UTF8.GetBytes(key);
+            byte[] request = Encoding.ASCII.GetBytes(key);
             string responseExpected = key + "OK";
 
             UdpClient client = new UdpClient();
@@ -82,21 +63,23 @@ namespace MySensors.Controller.Core.Locators
 
             try
             {
-                byte[] receiveBytes = client.Receive(ref itemEP);
+                byte[] receiveBytes = client.Receive(ref remoteEP);
                 string response = Encoding.UTF8.GetString(receiveBytes);
                 if (String.Equals(response, responseExpected))
-                    SyncList(itemEP);
+                    //SyncList(remoteEP);
+                    return true;
             }
             catch (Exception ex)
             {
             }
 
             client.Close();
+
+            return false;
         }
-        private void SyncList(IPEndPoint newServer)
+        public void Disconnect()
         {
-            //if (!Servers.Any(server => server.IPAddress.Equals(newServer.Address.ToString())))
-            //Servers.Add(new ServerInformation(newServer.Address.ToString(), newServer.Port));
+
         }
         #endregion
     }

@@ -6,13 +6,13 @@ The last part of each "command" is the payload. All commands ends with a newline
 
 where
 
-	node-id:				The unique id of the node that sends or should receive the message (address)
+	node-id:			The unique id of the node that sends or should receive the message (address)
 	child-sensor-id		Each node can have several sensors attached. This is the child-sensor-id that uniquely identifies one attached sensor
-	message-type			Type of message sent (see table below)
+	message-type		Type of message sent (see table below)
 	ack					The ack parameter has the following meaning:
-						Outgoing: 0 = unacknowledged message, 1 = request ack from destination node
-						Incoming: 0 = normal message, 1 = this is an ack message
-	sub-type				Depending on messageType this field has different meaning. See tables below
+							Outgoing: 0 = unacknowledged message, 1 = request ack from destination node
+							Incoming: 0 = normal message, 1 = this is an ack message
+	sub-type			Depending on messageType this field has different meaning. See tables below
 	payload				The payload holds the message coming in from sensors or instruction going out to actuators.
 
 The maximum payload size is 25 bytes! The NRF24L01+ has a maximum of 32 bytes. The MySensors library (version 1.4) uses 7 bytes for the message header.
