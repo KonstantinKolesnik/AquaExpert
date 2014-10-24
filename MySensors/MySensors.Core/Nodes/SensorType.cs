@@ -29,5 +29,11 @@ namespace MySensors.Core.Nodes
         Custom =                23,     // Use this for custom sensors where no other fits.
         Dust =                  24,     // Dust level sensor
         SceneController =       25,     // Scene controller device
+
+
+
+
+
+        //ArduinoGateway =        255,     // Arduino gateway device
     }
 }

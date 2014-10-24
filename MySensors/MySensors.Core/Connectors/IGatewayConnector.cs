@@ -11,7 +11,6 @@ namespace MySensors.Core.Connectors
         bool Connect();
         void Disconnect();
 
-        //void Send(Message message);
-
+        void Send(Message message);
     }
 }

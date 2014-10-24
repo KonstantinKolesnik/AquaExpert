@@ -7,21 +7,35 @@ namespace MySensors.Core.Connectors
 {
     public class SerialGatewayConnector : IGatewayConnector
     {
+        #region Fields
         private SerialPort serialPort;
+        #endregion
 
+        #region Properties
         public bool IsConnected { get { return serialPort.IsOpen; } }
+        #endregion
 
+        #region Events
         public event MessageEventHandler MessageReceived;
+        #endregion
 
+        #region Constructor
         public SerialGatewayConnector()
         {
             serialPort = new SerialPort();
             serialPort.BaudRate = 115200;
             serialPort.DtrEnable = true;
+            serialPort.NewLine = "\n";
             serialPort.ReadTimeout = 3000;
             serialPort.WriteTimeout = 3000;
-        }
 
+            serialPort.DataReceived += serialPort_DataReceived;
+            serialPort.ErrorReceived += serialPort_ErrorReceived;
+            serialPort.PinChanged += serialPort_PinChanged;
+        }
+        #endregion
+
+        #region Public methods
         public bool Connect()
         {
             foreach (string portName in SerialPort.GetPortNames())
@@ -40,12 +54,8 @@ namespace MySensors.Core.Connectors
                             Message msg = Message.FromRawString(str);
                             if (msg != null && msg.Type == MessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
                             {
-                                serialPort.DataReceived += serialPort_DataReceived;
-                                serialPort.ErrorReceived += serialPort_ErrorReceived;
-                                serialPort.PinChanged += serialPort_PinChanged;
-
-                                if (MessageReceived != null)
-                                    MessageReceived(this, msg);
+                                //if (MessageReceived != null)
+                                //    MessageReceived(this, msg);
 
                                 return true;
                             }
@@ -60,17 +70,20 @@ namespace MySensors.Core.Connectors
 
             return false;
         }
-
         public void Disconnect()
         {
-            serialPort.DataReceived -= serialPort_DataReceived;
-            serialPort.ErrorReceived -= serialPort_ErrorReceived;
-            serialPort.PinChanged -= serialPort_PinChanged;
-
             if (serialPort.IsOpen)
                 serialPort.Close();
         }
 
+        public void Send(Message message)
+        {
+            if (message != null)
+                serialPort.WriteLine(message.ToRawString());
+        }
+        #endregion
+
+        #region Event handlers
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string str = serialPort.ReadLine();
@@ -81,11 +94,14 @@ namespace MySensors.Core.Connectors
         }
         private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-            
+            int a = 0;
+            int b = a;
         }
         private void serialPort_PinChanged(object sender, SerialPinChangedEventArgs e)
         {
-            
+            int a = 0;
+            int b = a;
         }
+        #endregion
     }
 }

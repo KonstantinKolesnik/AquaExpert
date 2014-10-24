@@ -203,11 +203,12 @@ void requestTime(void (* timeCallback)(unsigned long));
 	callback - Callback for time request. Incoming argument is seconds since 1970.
 --------------------------------------------------------------------------------------------------------------------------------------------
 Controller configuration
-Your sensor is responsible for reporting data in the correct units of measure. The controller can give you a "hint" for which units of measure to report.
+Your sensor is responsible for reporting data in the correct units of measure.
+The controller can give you a "hint" for which units of measure to report.
 The following returns the most recent node configuration received from controller.
 
 ControllerConfig getConfig();
-ControlleConfig only contains the filed isMetric today which has the followinf meaning:
+ControllerConfig only contains the filed isMetric today which has the followinf meaning:
 
 true (=metric) Report sensor data in Celsius, meter, cm, gram, km/h, m/s etc..
 false (=imperial) - Fahrenheit, feet, gallon, mph etc...

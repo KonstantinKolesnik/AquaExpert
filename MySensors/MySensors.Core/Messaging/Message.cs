@@ -31,6 +31,16 @@ namespace MySensors.Core.Messaging
                 Payload = parts[5],
             };
         }
+        public string ToRawString()
+        {
+            return string.Format("{0};{1};{2};{3};{4};{5}\n",
+                NodeID,
+                SensorID,
+                (byte)Type,
+                IsAckNeeded ? "1" : "0",
+                (byte)SubType,
+                Payload);
+        }
 
         public override string ToString()
         {
@@ -38,8 +48,8 @@ namespace MySensors.Core.Messaging
 
             sb.AppendLine(string.Format("Node ID: \t\t{0:d3}", NodeID));
             sb.AppendLine(string.Format("Sensor ID: \t\t{0:d3}", SensorID));
-            sb.AppendLine(string.Format("Type: \t\t{0}", Type));
-            sb.AppendLine(string.Format("Is ack needed: \t\t\t{0}", IsAckNeeded));
+            sb.AppendLine(string.Format("Type: \t\t\t{0}", Type));
+            //sb.AppendLine(string.Format("Is ack needed: \t\t{0}", IsAckNeeded));
 
             string propertyName = "Sub-type";
             object propertyValue = SubType;
@@ -55,7 +65,7 @@ namespace MySensors.Core.Messaging
                     propertyValue = (SensorValueType)SubType;
                     break;
                 case MessageType.Internal:
-                    propertyName = "Internal value type";
+                    propertyName = "Data type";
                     propertyValue = (InternalValueType)SubType;
                     break;
                 default:

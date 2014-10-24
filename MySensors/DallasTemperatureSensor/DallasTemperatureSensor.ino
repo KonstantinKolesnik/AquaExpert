@@ -13,11 +13,9 @@ DallasTemperature sensors(&oneWire);
 float lastTemperature[MAX_ATTACHED_DS18B20];
 int numSensors = 0;
 boolean receivedConfig = false;
-boolean metric = true;
+//boolean metric = true;
 
-#define SENSOR_ID				0
-
-MyMessage msg(SENSOR_ID, V_TEMP); // Initialize temperature message
+MyMessage msg(0, V_TEMP); // Initialize temperature message (sensorID is temporary 0)
 MySensor gw(9, 10);
 
 void setup()
@@ -35,8 +33,8 @@ void setup()
 	numSensors = sensors.getDeviceCount();
 
 	// Present all sensors to controller
-	for (int i = 0; i < numSensors && i < MAX_ATTACHED_DS18B20; i++)
-		gw.present(i, S_TEMP);
+	for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
+		gw.present(sensorID, S_TEMP);
 }
 
 void loop()
@@ -48,17 +46,17 @@ void loop()
 	sensors.requestTemperatures();
 
 	// Read temperatures and send them to controller 
-	for (int i = 0; i < numSensors && i < MAX_ATTACHED_DS18B20; i++)
+	for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
 	{
 		// Fetch and round temperature to one decimal
-		float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(i) : sensors.getTempFByIndex(i)) * 10.)) / 10.;
+		float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
 
 		// Only send data if temperature has changed and no error
-		if (lastTemperature[i] != temperature && temperature != -127.00)
+		if (lastTemperature[sensorID] != temperature && temperature != -127.00)
 		{
 			// Send in the new temperature
-			gw.send(msg.setSensor(i).set(temperature, 1));
-			lastTemperature[i] = temperature;
+			gw.send(msg.setSensor(sensorID).set(temperature, 1));
+			lastTemperature[sensorID] = temperature;
 		}
 	}
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySensors.Core.Messaging;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -76,6 +77,10 @@ namespace MySensors.Core.Connectors
             return false;
         }
         public void Disconnect()
+        {
+
+        }
+        public void Send(Message message)
         {
 
         }
