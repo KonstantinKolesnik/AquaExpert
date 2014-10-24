@@ -8,8 +8,8 @@ namespace MySensors.Core.Messaging
     {
         public byte NodeID { get; set; }
         public byte SensorID { get; set; }
-        public MessageType MessageType { get; set; }
-        public bool Ack { get; set; }
+        public MessageType Type { get; set; }
+        public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
         public string Payload { get; set; }
 
@@ -25,8 +25,8 @@ namespace MySensors.Core.Messaging
             return new Message() {
                 NodeID = byte.Parse(parts[0]),
                 SensorID = byte.Parse(parts[1]),
-                MessageType = (MessageType)byte.Parse(parts[2]),
-                Ack = byte.Parse(parts[3]) == 1,
+                Type = (MessageType)byte.Parse(parts[2]),
+                IsAckNeeded = byte.Parse(parts[3]) == 1,
                 SubType = byte.Parse(parts[4]),
                 Payload = parts[5],
             };
@@ -36,30 +36,30 @@ namespace MySensors.Core.Messaging
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(string.Format("NodeID: \t\t{0:d3}", NodeID));
-            sb.AppendLine(string.Format("SensorID: \t\t{0:d3}", SensorID));
-            sb.AppendLine(string.Format("MessageType: \t\t{0}", MessageType));
-            sb.AppendLine(string.Format("Ack: \t\t\t{0}", Ack));
+            sb.AppendLine(string.Format("Node ID: \t\t{0:d3}", NodeID));
+            sb.AppendLine(string.Format("Sensor ID: \t\t{0:d3}", SensorID));
+            sb.AppendLine(string.Format("Type: \t\t{0}", Type));
+            sb.AppendLine(string.Format("Is ack needed: \t\t\t{0}", IsAckNeeded));
 
-            string propertyName = "SubType";
+            string propertyName = "Sub-type";
             object propertyValue = SubType;
-            switch (MessageType)
+            switch (Type)
             {
                 case MessageType.Presentation:
-                    propertyName = "SensorType";
+                    propertyName = "Sensor type";
                     propertyValue = (SensorType)SubType;
                     break;
                 case MessageType.Set:
                 case MessageType.Request:
-                    propertyName = "ValueType";
+                    propertyName = "Value type";
                     propertyValue = (SensorValueType)SubType;
                     break;
                 case MessageType.Internal:
-                    propertyName = "InternalValueType";
+                    propertyName = "Internal value type";
                     propertyValue = (InternalValueType)SubType;
                     break;
                 default:
-                    propertyName = "SubType";
+                    propertyName = "Sub-type";
                     propertyValue = SubType;
                     break;
             }

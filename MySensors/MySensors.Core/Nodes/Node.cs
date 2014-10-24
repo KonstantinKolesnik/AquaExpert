@@ -4,7 +4,7 @@ namespace MySensors.Core.Nodes
     public class Node
     {
         public byte NodeID { get; private set; }
-        public SensorType Type { get; private set; } // ArduinoNode / ArduinoRelay
+        public SensorType Type { get; internal set; } // ArduinoNode / ArduinoRelay
         public string Name { get; private set; }
         public string Version { get; private set; }
         public bool IsAckNeeded { get; private set; }

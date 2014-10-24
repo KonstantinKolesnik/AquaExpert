@@ -5,8 +5,14 @@ namespace MySensors.Core.Nodes
     {
         public byte NodeID { get; private set; }
         public byte SensorID { get; private set; }
-        public SensorType SensorType { get; private set; }
+        public SensorType Type { get; internal set; }
 
-        
+
+
+        public Sensor(byte nodeID, byte sensorID)
+        {
+            NodeID = nodeID;
+            SensorID = sensorID;
+        }
     }
 }
