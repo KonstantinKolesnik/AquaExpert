@@ -39,6 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connectors\EthernetGatewayConnector.cs" />
+    <Compile Include="Connectors\IGatewayConnector.cs" />
+    <Compile Include="Connectors\SerialGatewayConnector.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="ControllerComponent.cs" />
     <Compile Include="Messaging\Message.cs" />
     <Compile Include="Messaging\MessageType.cs" />
     <Compile Include="Nodes\InternalValueType.cs" />
@@ -47,7 +52,10 @@
     <Compile Include="Nodes\Sensor.cs" />
     <Compile Include="Nodes\SensorType.cs" />
     <Compile Include="Nodes\SensorValueType.cs" />
+    <Compile Include="Services\NameService.cs" />
+    <Compile Include="Services\UDPListener.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

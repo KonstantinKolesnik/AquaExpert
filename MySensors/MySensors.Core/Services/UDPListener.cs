@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace MySensors.Controller.UDP
+namespace MySensors.Core.Services
 {
     public class UDPListener
     {
@@ -71,13 +71,13 @@ namespace MySensors.Controller.UDP
                                         {
                                             socket.SendTo(response, remoteEP);
                                         }
-                                        catch (Exception e) { }
+                                        catch (Exception) { }
                                     }
                                 }
                             }
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         break;
                     }

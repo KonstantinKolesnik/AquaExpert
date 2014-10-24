@@ -1,6 +1,6 @@
 ﻿using MySensors.Core.Messaging;
 
-namespace MySensors.Controller.Connectors
+namespace MySensors.Core.Connectors
 {
     public delegate void MessageEventHandler(IGatewayConnector sender, Message message);
 
@@ -10,6 +10,8 @@ namespace MySensors.Controller.Connectors
 
         bool Connect();
         void Disconnect();
+
+        //void Send(Message message);
 
     }
 }

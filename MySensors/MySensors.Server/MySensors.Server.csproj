@@ -7,8 +7,8 @@
     <ProjectGuid>{4FF0C351-38B6-47EB-8127-24F32E585739}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MySensors.Controller</RootNamespace>
-    <AssemblyName>MySensors.Controller</AssemblyName>
+    <RootNamespace>MySensors.Server</RootNamespace>
+    <AssemblyName>MySensors.Server</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -35,20 +35,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connectors\EthernetGatewayConnector.cs" />
-    <Compile Include="Connectors\IGatewayConnector.cs" />
-    <Compile Include="Connectors\SerialGatewayConnector.cs" />
-    <Compile Include="Controller.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UDP\UDPListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

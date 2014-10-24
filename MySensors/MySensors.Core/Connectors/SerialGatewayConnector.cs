@@ -3,13 +3,13 @@ using MySensors.Core.Nodes;
 using System;
 using System.IO.Ports;
 
-namespace MySensors.Controller.Connectors
+namespace MySensors.Core.Connectors
 {
     public class SerialGatewayConnector : IGatewayConnector
     {
         private SerialPort serialPort;
 
-        public Node Node { get; private set; }
+        public bool IsConnected { get { return serialPort.IsOpen; } }
 
         public event MessageEventHandler MessageReceived;
 
@@ -40,8 +40,10 @@ namespace MySensors.Controller.Connectors
                             Message msg = Message.FromRawString(str);
                             if (msg != null && msg.MessageType == MessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
                             {
-                                Node = new Node(msg.NodeID);
                                 serialPort.DataReceived += serialPort_DataReceived;
+
+                                if (MessageReceived != null)
+                                    MessageReceived(this, msg);
 
                                 return true;
                             }
@@ -58,10 +60,10 @@ namespace MySensors.Controller.Connectors
         }
         public void Disconnect()
         {
+            serialPort.DataReceived -= serialPort_DataReceived;
+
             if (serialPort.IsOpen)
                 serialPort.Close();
-
-            serialPort.DataReceived -= serialPort_DataReceived;
         }
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)

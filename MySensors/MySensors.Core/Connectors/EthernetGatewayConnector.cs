@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 
-namespace MySensors.Controller.Connectors
+namespace MySensors.Core.Connectors
 {
     public class EthernetGatewayConnector : IGatewayConnector
     {
