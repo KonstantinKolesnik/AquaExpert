@@ -85,11 +85,9 @@ namespace MySensors.Core
 
         public Node GetNode(byte nodeID)
         {
-            Node result;
-            var res = nodes.Where(node => node.NodeID == nodeID);
-            if (res.Any())
-                result = res.First();
-            else
+            Node result = nodes.Where(node => node.NodeID == nodeID).FirstOrDefault();
+            
+            if (result == null)
             {
                 result = new Node(nodeID);
                 nodes.Add(result);
@@ -99,11 +97,9 @@ namespace MySensors.Core
         }
         public Sensor GetSensor(byte nodeID, byte sensorID)
         {
-            Sensor result;
-            var res = sensors.Where(sensor => sensor.NodeID == nodeID && sensor.SensorID == sensorID);
-            if (res.Any())
-                result = res.First();
-            else
+            Sensor result = sensors.Where(sensor => sensor.NodeID == nodeID && sensor.SensorID == sensorID).FirstOrDefault();
+
+            if (result == null)
             {
                 result = new Sensor(nodeID, sensorID);
                 sensors.Add(result);
@@ -118,7 +114,6 @@ namespace MySensors.Core
         {
             Console.WriteLine();
             Console.WriteLine(message.ToString());
-            //Console.WriteLine();
 
             bool isNode = message.NodeID == 0 || message.SensorID == 255;
             Node node = !isNode ? null : GetNode(message.NodeID);
@@ -131,21 +126,19 @@ namespace MySensors.Core
                     if (node != null)
                     {
                         node.Type = (SensorType)message.SubType;
-                        node.IsAckNeeded = message.IsAckNeeded;
-                        node.Version = message.Payload;
+                        node.ProtocolVersion = message.Payload;
                     }
                     else
                     {
                         sensor.Type = (SensorType)message.SubType;
-                        sensor.IsAckNeeded = message.IsAckNeeded;
-                        sensor.Version = message.Payload;
+                        sensor.ProtocolVersion = message.Payload;
                     }
                     break;
                 #endregion
 
                 #region Set
                 case MessageType.Set: // sent from or to a sensor when a sensor value should be updated
-
+                    //saveValue(message.NodeID, message.SensorID, (SensorValueType)message.SubType, message.Payload, db);
                     break;
                 #endregion
 
@@ -156,60 +149,80 @@ namespace MySensors.Core
 
                 #region Internal
                 case MessageType.Internal: // special internal message
-                    //BatteryLevel =              0,      // Use this to report the battery level (in percent 0-100).
-                    //Time =                      1,      // Sensors can request the current time from the Controller using this message. The time will be reported as the seconds since 1970
-                    //Version =                   2,      // Sensors report their library version at startup using this message type
-                    //IDRequest =             	3,      // Use this to request a unique node id from the controller.
-                    //IDResponse =                4,      // Id response back to sensor. Payload contains sensor id.
-                    //InclusionMode =             5,      // Start/stop inclusion mode of the Controller (1=start, 0=stop).
-                    //Config =                    6,      // Config request from node. Reply with (M)etric or (I)mperal back to sensor.
-                    //FindParent =                7,      // When a sensor starts up, it broadcast a search request to all neighbor nodes. They reply with a FindParentResponse.
-                    //FindParentResponse =        8,      // Reply message type to I_FIND_PARENT request.
-                    //LogMessage =                9,      // Sent by the gateway to the Controller to trace-log a message
-                    //Children =                  10,     // A message that can be used to transfer child sensors (from EEPROM routing table) of a repeating node.
-                    //SketchName =                11,     // Optional sketch name that can be used to identify sensor in the Controller GUI
-                    //SketchVersion =             12,     // Optional sketch version that can be reported to keep track of the version of sensor in the Controller GUI.
-                    //Reboot =                    13,     // Used by OTA firmware updates. Request for node to reboot.
-                    //GatewayReady =              14,     // Send by gateway to controller when startup is complete.
-                
-                
                     switch ((InternalValueType)message.SubType)
                     {
+                        case InternalValueType.BatteryLevel:
+                            //saveBatteryLevel(sender, payload, db);
+                            break;
+                        case InternalValueType.Time:
+                            //sendTime(sender, sensor, gw);
+                            break;
+                        case InternalValueType.Version:
+                            break;
+                        case InternalValueType.IDRequest:
+                            //sendNextAvailableSensorId(db, gw);
+                            break;
+                        case InternalValueType.IDResponse:
+                            break;
+                        case InternalValueType.InclusionMode:
+                            break;
+                        case InternalValueType.Config:
+                            connector.Send(new Message(message.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Config, "M")); //"M" or "I"
+                            break;
+                        case InternalValueType.FindParent:
+                            break;
+                        case InternalValueType.FindParentResponse:
+                            break;
+                        case InternalValueType.LogMessage:
+                            break;
+                        case InternalValueType.Children:
+                            break;
                         case InternalValueType.SketchName:
                             node.SketchName = message.Payload;
                             break;
                         case InternalValueType.SketchVersion:
                             node.SketchVersion = message.Payload;
                             break;
+                        case InternalValueType.Reboot:
+                            break;
                         case InternalValueType.GatewayReady:
-
                             break;
-                        case InternalValueType.Config:
-                            message.Payload = "I";
-                            connector.Send(message);
-                            break;
-
                     }
                     break;
                 #endregion
 
                 #region Stream
                 case MessageType.Stream: //used for OTA firmware updates
+                    switch ((StreamValueType)message.SubType)
+                    {
+                        case StreamValueType.FirmwareConfigRequest:
+                            //var fwtype = pullWord(payload, 0);
+                            //var fwversion = pullWord(payload, 2);
+                            //sendFirmwareConfigResponse(sender, fwtype, fwversion, db, gw);
+                            break;
+                        case StreamValueType.FirmwareConfigResponse:
+                            break;
+                        case StreamValueType.FirmwareRequest:
+                            break;
+                        case StreamValueType.FirmwareResponse:
+                            //var fwtype = pullWord(payload, 0);
+                            //var fwversion = pullWord(payload, 2);
+                            //var fwblock = pullWord(payload, 4);
+                            //sendFirmwareResponse(sender, fwtype, fwversion, fwblock, db, gw);
+                            break;
+                        case StreamValueType.Sound:
+                            break;
+                        case StreamValueType.Image:
+                            break;
+                    }
                     break;
                 #endregion
-
-                default:
-                    break;
             }
+
+            //if (node != null && node.Reboot)
+            //    connector.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
         #endregion
 
-
-
-
-        //private void RegisterNode(byte nodeID)
-        //{
-
-        //}
     }
 }

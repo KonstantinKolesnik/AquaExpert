@@ -1,13 +1,12 @@
 ﻿
 namespace MySensors.Core.Nodes
 {
-    public class Sensor
+    public class Sensor : ObservableObject
     {
         public byte NodeID { get; private set; }
         public byte SensorID { get; private set; }
         public SensorType Type { get; internal set; }
-        public string Version { get; internal set; } // library version
-        public bool IsAckNeeded { get; internal set; }
+        public string ProtocolVersion { get; internal set; } // library version
 
 
 

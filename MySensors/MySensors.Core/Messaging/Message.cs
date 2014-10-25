@@ -13,26 +13,61 @@ namespace MySensors.Core.Messaging
         public byte SubType { get; set; }
         public string Payload { get; set; }
 
+        public Message(byte nodeID, byte sensorID, MessageType type, bool isAckNeeded, byte subType, string payload)
+        {
+            NodeID = nodeID;
+            SensorID = sensorID;
+            Type = type;
+            IsAckNeeded = isAckNeeded;
+            SubType = subType;
+            Payload = payload;
+        }
+
         public static Message FromRawString(string str)
         {
             if (string.IsNullOrEmpty(str))
                 return null;
 
             string[] parts = str.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 6)
-                return null;
+            
+            string rawPayload = parts.Length == 6 ? parts[5].Trim() : "";
 
-            return new Message() {
-                NodeID = byte.Parse(parts[0]),
-                SensorID = byte.Parse(parts[1]),
-                Type = (MessageType)byte.Parse(parts[2]),
-                IsAckNeeded = byte.Parse(parts[3]) == 1,
-                SubType = byte.Parse(parts[4]),
-                Payload = parts[5],
-            };
+            //var payload;
+            //if (command == C_STREAM) {
+            //    payload = [];
+            //    for (var i = 0; i < rawpayload.length; i+=2)
+            //        payload.push(parseInt(rawpayload.substring(i, i + 2), 16));
+            //} else {
+            //    payload = rawpayload;
+            //}
+
+            
+            return new Message(
+                byte.Parse(parts[0]),
+                byte.Parse(parts[1]),
+                (MessageType)byte.Parse(parts[2]),
+                byte.Parse(parts[3]) == 1,
+                byte.Parse(parts[4]),
+                parts[5]);
         }
         public string ToRawString()
         {
+            //if (command == 4)
+            //{
+            //    for (var i = 0; i < payload.length; i++)
+            //    {
+            //        if (payload[i] < 16)
+            //            msg += "0";
+            //        msg += payload[i].toString(16);
+            //    }
+            //}
+            //else
+            //{
+            //    msg += payload;
+            //}
+
+
+
             return string.Format("{0};{1};{2};{3};{4};{5}\n",
                 NodeID,
                 SensorID,

@@ -26,8 +26,8 @@ namespace MySensors.Core.Connectors
             serialPort.BaudRate = 115200;
             serialPort.DtrEnable = true;
             serialPort.NewLine = "\n";
-            serialPort.ReadTimeout = 3000;
-            serialPort.WriteTimeout = 3000;
+            serialPort.ReadTimeout = 4000;
+            serialPort.WriteTimeout = 4000;
 
             serialPort.DataReceived += serialPort_DataReceived;
             serialPort.ErrorReceived += serialPort_ErrorReceived;
@@ -79,18 +79,23 @@ namespace MySensors.Core.Connectors
         public void Send(Message message)
         {
             if (message != null)
-                serialPort.WriteLine(message.ToRawString());
+                //serialPort.WriteLine(message.ToRawString());
+                serialPort.Write(message.ToRawString());
         }
         #endregion
 
         #region Event handlers
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            string str = serialPort.ReadLine();
-            Message msg = Message.FromRawString(str);
+            try
+            {
+                string str = serialPort.ReadLine();
+                Message msg = Message.FromRawString(str);
 
-            if (msg != null && MessageReceived != null)
-                MessageReceived(this, msg);
+                if (msg != null && MessageReceived != null)
+                    MessageReceived(this, msg);
+            }
+            catch (TimeoutException) { }
         }
         private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
