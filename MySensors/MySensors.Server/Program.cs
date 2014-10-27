@@ -10,54 +10,42 @@ namespace MySensors.Server
 
         static void Main(string[] args)
         {
-            Console.Title = "MySensors Controller";
+            Console.Title = "MySensors Windows Controller";
             Console.WriteLine("Starting MySensors Controller.");
-
             Console.WriteLine("*******************************************************");
 
             controller = new Controller(true);
-            controller.ComponentStartEvent += controller_ComponentStartEvent;
+            controller.Log += controller_Log;
 
             bool exit = false;
-            Thread thread = new Thread(() => {
+
+            Thread thread = new Thread(() =>
+            {
                 while (!exit && !controller.Start())
                 {
                     Console.WriteLine("*******************************************************");
                     Thread.Sleep(3000);
                 }
-                
+
                 if (!exit)
                     Console.WriteLine("Controller started successfuly!");
             });
             thread.Start();
 
-            //Console.WriteLine();
-            //Console.WriteLine("Type q to exit.");
-            //Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Type q to exit.");
+            Console.WriteLine();
 
-            while (!Console.ReadLine().Equals("q")) ;
-            //string s;
-            //while (!(s = Console.ReadLine()).Equals("\n")) ;
+            while (!exit)
+                if (Console.ReadLine().Equals("q"))
+                    exit = true;
 
-            bool _continue = true;
-            string msg;
-            while (_continue)
-            {
-                msg = Console.ReadLine();
-
-                if (msg.Equals("q"))
-                {
-                    _continue = false;
-                }
-            }
-
-            //exit = true;
             thread.Join();
 
             controller.Stop();
         }
 
-        private static void controller_ComponentStartEvent(Controller sender, string text, string textLine)
+        private static void controller_Log(Controller sender, string text, string textLine)
         {
             Console.ResetColor();
 

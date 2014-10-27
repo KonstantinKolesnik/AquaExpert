@@ -4,10 +4,13 @@ namespace MySensors.Core.Nodes
 {
     public class BatteryLevel : ObservableObject
     {
+        #region Fields
         private byte nodeID;
         private DateTime time;
         private byte percent;
+        #endregion
 
+        #region Properties
         public byte NodeID
         {
             get { return nodeID; }
@@ -44,12 +47,15 @@ namespace MySensors.Core.Nodes
                 }
             }
         }
+        #endregion
 
+        #region Constructors
         public BatteryLevel(byte nodeID, DateTime time, byte percent)
         {
             NodeID = nodeID;
             Time = time;
             Percent = percent;
         }
+        #endregion
     }
 }

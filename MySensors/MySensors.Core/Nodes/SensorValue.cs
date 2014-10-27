@@ -4,12 +4,15 @@ namespace MySensors.Core.Nodes
 {
     public class SensorValue : ObservableObject
     {
+        #region Fields
         private byte nodeID;
         private byte id;
         private DateTime time;
         private SensorValueType type;
         private float value;
+        #endregion
 
+        #region Properties
         public byte NodeID
         {
             get { return nodeID; }
@@ -70,7 +73,9 @@ namespace MySensors.Core.Nodes
                 }
             }
         }
+        #endregion
 
+        #region Constructors
         public SensorValue(byte nodeID, byte id, DateTime time, SensorValueType type, float value)
         {
             NodeID = nodeID;
@@ -79,5 +84,6 @@ namespace MySensors.Core.Nodes
             Type = type;
             Value = value;
         }
+        #endregion
     }
 }

@@ -3,26 +3,28 @@ using MySensors.Core.Messaging;
 using MySensors.Core.Nodes;
 using MySensors.Core.Services.Data;
 using MySensors.Core.Services.DNS;
+using MySensors.Core.Services.Web;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 
 namespace MySensors.Core
 {
-    public delegate void ControllerComponentStartEventHandler(Controller sender, string text, string textLine);
+    public delegate void LogEventHandler(Controller sender, string text, string textLine);
 
     public class Controller
     {
         #region Fields
         private DatabaseService dbService;
-        private NameService nameService;
+        //private NameService nameService;
         private IGatewayConnector connector;
         //private WebServer webServer;
 
         private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
-        private bool isNameServiceStarted = false;
+        //private bool isNameServiceStarted = false;
         private bool isWebServerStarted = false;
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
@@ -40,7 +42,7 @@ namespace MySensors.Core
         #endregion
 
         #region Events
-        public event ControllerComponentStartEventHandler ComponentStartEvent;
+        public event LogEventHandler Log;
         #endregion
 
         #region Constructor
@@ -54,7 +56,7 @@ namespace MySensors.Core
             nodes.CollectionChanged += nodes_CollectionChanged;
             sensors.CollectionChanged += sensors_CollectionChanged;
 
-            nameService = new NameService();
+            //nameService = new NameService();
             //webServer = new WebServer();
         }
         #endregion
@@ -65,8 +67,8 @@ namespace MySensors.Core
             // start database service:
             if (!isDBServiceStarted)
             {
-                if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, "Starting database... ", null);
+                if (Log != null)
+                    Log(this, "Starting database... ", null);
                 
                 isDBServiceStarted = dbService.Start();
                 
@@ -84,20 +86,20 @@ namespace MySensors.Core
                         sensor.Values = new ObservableCollection<SensorValue>(svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID));
                 }
                 
-                if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, null, isDBServiceStarted ? "Success." : "Failed.");
+                if (Log != null)
+                    Log(this, null, isDBServiceStarted ? "Success." : "Failed.");
             }
 
             // start gateway connector service:
             if (!isConnectorStarted)
             {
-                if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, "Connecting to gateway... ", null);
+                if (Log != null)
+                    Log(this, "Connecting to gateway... ", null);
 
                 isConnectorStarted = connector.Connect();
 
-                if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, null, isConnectorStarted ? "Success." : "Failed.");
+                if (Log != null)
+                    Log(this, null, isConnectorStarted ? "Success." : "Failed.");
             }
 
             // start DNS name service:
@@ -111,18 +113,29 @@ namespace MySensors.Core
             //}
 
             // start web-server service:
-
-
+            if (!isWebServerStarted)
+            {
+                WebServer ws = new WebServer(SendResponse, "http://localhost:8080/test/");
+                ws.Run();
+                //Console.WriteLine("A simple webserver. Press a key to quit.");
+                //Console.ReadKey();
+                //ws.Stop();
+            }
 
             return IsStarted;
+        }
+        public string SendResponse(HttpListenerRequest request)
+        {
+            return string.Format("<HTML><BODY>My web page.<br>{0}</BODY></HTML>", DateTime.Now);
         }
         public void Stop()
         {
             connector.Disconnect();
             dbService.Stop();
 
+            isDBServiceStarted = false;
             isConnectorStarted = false;
-            isNameServiceStarted = false;
+            //isNameServiceStarted = false;
             isWebServerStarted = false;
         }
 
@@ -217,7 +230,7 @@ namespace MySensors.Core
                             dbService.Insert(bl);
                             break;
                         case InternalValueType.Time:
-                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, DateTime.Now.TimeOfDay.ToString())); // seconds since 1970
+                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, GetTime().ToString()));
                             break;
                         case InternalValueType.Version:
                             break;
@@ -309,6 +322,14 @@ namespace MySensors.Core
 
                 connector.Send(new Message(255, 255, MessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
             }
+        }
+        private int GetTime() // seconds since 1970
+        {
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local); // from 1970/1/1 00:00:00 to now
+            DateTime dtNow = DateTime.Now;
+            TimeSpan result = dtNow.Subtract(dt);
+            int seconds = Convert.ToInt32(result.TotalSeconds);
+            return seconds;
         }
         #endregion
     }
