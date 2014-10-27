@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace MySensors.Core.Services
+namespace MySensors.Core.Services.DNS
 {
     // Usage example
     //NameService nameService = new NameService(); // Declare as global, name service will stop once the object gets disposed

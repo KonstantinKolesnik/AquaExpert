@@ -1,12 +1,14 @@
 ﻿using MySensors.Core.Nodes;
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 
-namespace MySensors.Core.Services
+namespace MySensors.Core.Services.Data
 {
+    [Table("BatteryLevels")]
     class BatteryLevelDto
     {
-        [ForeignKey(typeof(NodeDto))]     // Specify the foreign key
+        [ForeignKey(typeof(NodeDto))]
         public int NodeID { get; set; }
         public DateTime Time { get; set; }
         public int Percent { get; set; }

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace MySensors.Core.Services
+namespace MySensors.Core.Services.DNS
 {
     public class UDPListener
     {

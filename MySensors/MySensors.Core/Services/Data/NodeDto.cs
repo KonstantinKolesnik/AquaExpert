@@ -1,7 +1,7 @@
 ﻿using MySensors.Core.Nodes;
-using SQLite.Net.Attributes;
+using SQLite;
 
-namespace MySensors.Core.Services
+namespace MySensors.Core.Services.Data
 {
     [Table("Nodes")]
     class NodeDto

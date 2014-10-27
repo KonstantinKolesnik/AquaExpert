@@ -61,20 +61,22 @@
     <Compile Include="Nodes\BatteryLevel.cs" />
     <Compile Include="Nodes\InternalValueType.cs" />
     <Compile Include="Nodes\Node.cs" />
+    <Compile Include="Nodes\SensorValue.cs" />
     <Compile Include="Nodes\StreamValueType.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Nodes\Sensor.cs" />
     <Compile Include="Nodes\SensorType.cs" />
     <Compile Include="Nodes\SensorValueType.cs" />
-    <Compile Include="Services\BatteryLevelDto.cs" />
-    <Compile Include="Services\DatabaseService.cs" />
-    <Compile Include="Services\NameService.cs" />
-    <Compile Include="Services\NodeDto.cs" />
-    <Compile Include="Services\SensorDto.cs" />
-    <Compile Include="Services\UDPListener.cs" />
-    <Compile Include="Services\SQLite.cs" />
-    <Compile Include="Services\SQLiteAsync.cs" />
+    <Compile Include="Services\Data\BatteryLevelDto.cs" />
+    <Compile Include="Services\Data\DatabaseService.cs" />
+    <Compile Include="Services\Data\SensorValueDto.cs" />
+    <Compile Include="Services\DNS\NameService.cs" />
+    <Compile Include="Services\Data\NodeDto.cs" />
+    <Compile Include="Services\Data\SensorDto.cs" />
+    <Compile Include="Services\DNS\UDPListener.cs" />
+    <Compile Include="Services\Data\SQLite.cs" />
+    <Compile Include="Services\Data\SQLiteAsync.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

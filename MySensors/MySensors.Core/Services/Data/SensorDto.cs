@@ -2,15 +2,14 @@
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
-namespace MySensors.Core.Services
+namespace MySensors.Core.Services.Data
 {
     [Table("Sensors")]
     class SensorDto
     {
-        [PrimaryKey]
-        public int ID { get; set; }
         [ForeignKey(typeof(NodeDto))]     // Specify the foreign key
         public int NodeID { get; set; }
+        public int ID { get; set; }
         public int Type { get; set; }
         public string ProtocolVersion { get; set; }
 

@@ -1,7 +1,8 @@
 ﻿using MySensors.Core.Connectors;
 using MySensors.Core.Messaging;
 using MySensors.Core.Nodes;
-using MySensors.Core.Services;
+using MySensors.Core.Services.Data;
+using MySensors.Core.Services.DNS;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -167,7 +168,9 @@ namespace MySensors.Core
 
                 #region Set
                 case MessageType.Set: // sent from or to a sensor when a sensor value should be updated
-                    //saveValue(message.NodeID, message.SensorID, (SensorValueType)message.SubType, message.Payload, db);
+                    SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload));
+                    sensor.Values.Add(sv);
+                    dbService.Insert(sv);
                     break;
                 #endregion
 
@@ -191,7 +194,7 @@ namespace MySensors.Core
                         case InternalValueType.Version:
                             break;
                         case InternalValueType.IDRequest:
-                            //sendNextAvailableSensorId(db, gw);
+                            GetNextAvailableSensorID();
                             break;
                         case InternalValueType.IDResponse:
                             break;
@@ -210,9 +213,11 @@ namespace MySensors.Core
                             break;
                         case InternalValueType.SketchName:
                             node.SketchName = message.Payload;
+                            dbService.Update(node);
                             break;
                         case InternalValueType.SketchVersion:
                             node.SketchVersion = message.Payload;
+                            dbService.Update(node);
                             break;
                         case InternalValueType.Reboot:
                             break;
@@ -252,6 +257,30 @@ namespace MySensors.Core
 
             //if (node != null && node.Reboot)
             //    connector.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
+        }
+        #endregion
+
+        #region Private methods
+        private void GetNextAvailableSensorID()
+        {
+            var query = nodes.OrderBy(node => node.ID).ToList();
+
+            byte id = 1;
+            for (byte i = 1; i <= query.Count; i++)
+                if (query[i].ID > i)
+                {
+                    id = i;
+                    break;
+                }
+
+            if (id < 255)
+            {
+                Node result = new Node(id);
+                nodes.Add(result);
+                dbService.Insert(result);
+
+                connector.Send(new Message(255, 255, MessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
+            }
         }
         #endregion
     }
