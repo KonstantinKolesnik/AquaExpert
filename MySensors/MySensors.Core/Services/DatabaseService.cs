@@ -83,6 +83,10 @@ namespace MySensors.Core.Services
             List<SensorDto> sensors2 = sensors.Select(sensor => SensorDto.FromModel(sensor)).ToList();
             return con.InsertAll(sensors2);
         }
+        public int Insert(BatteryLevel bl)
+        {
+            return con.Insert(bl);
+        }
 
         public int Update(Node node)
         {

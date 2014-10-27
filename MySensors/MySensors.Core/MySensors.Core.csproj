@@ -67,6 +67,7 @@
     <Compile Include="Nodes\Sensor.cs" />
     <Compile Include="Nodes\SensorType.cs" />
     <Compile Include="Nodes\SensorValueType.cs" />
+    <Compile Include="Services\BatteryLevelDto.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\NameService.cs" />
     <Compile Include="Services\NodeDto.cs" />

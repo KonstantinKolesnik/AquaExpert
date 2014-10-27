@@ -4,9 +4,22 @@ namespace MySensors.Core.Nodes
 {
     public class BatteryLevel : ObservableObject
     {
+        private byte nodeID;
         private DateTime time;
         private byte percent;
 
+        public byte NodeID
+        {
+            get { return nodeID; }
+            private set
+            {
+                if (nodeID != value)
+                {
+                    nodeID = value;
+                    NotifyPropertyChanged("NodeID");
+                }
+            }
+        }
         public DateTime Time
         {
             get { return time; }
@@ -30,6 +43,13 @@ namespace MySensors.Core.Nodes
                     NotifyPropertyChanged("Percent");
                 }
             }
+        }
+
+        public BatteryLevel(byte nodeID, DateTime time, byte percent)
+        {
+            NodeID = nodeID;
+            Time = time;
+            Percent = percent;
         }
     }
 }

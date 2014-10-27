@@ -181,7 +181,9 @@ namespace MySensors.Core
                     switch ((InternalValueType)message.SubType)
                     {
                         case InternalValueType.BatteryLevel: // int, in %
-                            //saveBatteryLevel(sender, payload, db);
+                            BatteryLevel bl = new BatteryLevel(message.NodeID, DateTime.Now, byte.Parse(message.Payload));
+                            node.BatteryLevels.Add(bl);
+                            dbService.Insert(bl);
                             break;
                         case InternalValueType.Time:
                             connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, DateTime.Now.TimeOfDay.ToString()));

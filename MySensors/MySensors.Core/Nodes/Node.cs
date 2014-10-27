@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.ObjectModel;
+
 namespace MySensors.Core.Nodes
 {
     public class Node : ObservableObject
@@ -9,6 +10,7 @@ namespace MySensors.Core.Nodes
         private string protocolVersion = "";
         private string sketchName = "";
         private string sketchVersion = "";
+        private ObservableCollection<BatteryLevel> batteryLevels = new ObservableCollection<BatteryLevel>();
         #endregion
 
         #region Properties
@@ -20,7 +22,7 @@ namespace MySensors.Core.Nodes
                 if (id != value)
                 {
                     id = value;
-                    NotifyPropertyChanged("NodeID");
+                    NotifyPropertyChanged("ID");
                 }
             }
         }
@@ -73,8 +75,15 @@ namespace MySensors.Core.Nodes
                 }
             }
         }
+        public ObservableCollection<BatteryLevel> BatteryLevels
+        {
+            get { return batteryLevels; }
+        }
         
-        public bool IsRepeater { get { return Type == SensorType.ArduinoRelay; } }
+        public bool IsRepeater
+        {
+            get { return Type == SensorType.ArduinoRelay; }
+        }
         #endregion
 
         #region Constructors
