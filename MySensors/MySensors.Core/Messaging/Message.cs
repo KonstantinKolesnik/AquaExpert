@@ -33,13 +33,14 @@ namespace MySensors.Core.Messaging
             string rawPayload = parts.Length == 6 ? parts[5].Trim() : "";
 
             //var payload;
-            //if (command == C_STREAM) {
+            //if ((MessageType)byte.Parse(parts[2]) == MessageType.Stream)
+            //{
             //    payload = [];
             //    for (var i = 0; i < rawpayload.length; i+=2)
             //        payload.push(parseInt(rawpayload.substring(i, i + 2), 16));
-            //} else {
-            //    payload = rawpayload;
             //}
+            //else
+            //    payload = rawpayload;
 
             
             return new Message(

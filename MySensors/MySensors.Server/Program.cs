@@ -12,10 +12,6 @@ namespace MySensors.Server
         {
             Console.Title = "MySensors Controller";
             Console.WriteLine("Starting MySensors Controller.");
-            //Console.WriteLine("Controller will start the following components:");
-            //Console.WriteLine("\t1) gateway connector;");
-            //Console.WriteLine("\t2) DNS network name;");
-            //Console.WriteLine("\t3) http server.");
 
             Console.WriteLine("*******************************************************");
 
@@ -32,11 +28,11 @@ namespace MySensors.Server
             });
             thread.Start();
 
-            Console.WriteLine();
-            Console.WriteLine("Type q to exit.");
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine("Type q to exit.");
+            //Console.WriteLine();
 
-            //while (!Console.ReadLine().Equals("q")) ;
+            while (!Console.ReadLine().Equals("q")) ;
             //string s;
             //while (!(s = Console.ReadLine()).Equals("\n")) ;
 
@@ -46,7 +42,7 @@ namespace MySensors.Server
             {
                 msg = Console.ReadLine();
 
-                if (msg.Equals("quit"))
+                if (msg.Equals("q"))
                 {
                     _continue = false;
                 }
@@ -58,23 +54,16 @@ namespace MySensors.Server
             controller.Stop();
         }
 
-        private static void controller_ComponentStartEvent(Controller sender, ControllerComponent component, bool? result)
+        private static void controller_ComponentStartEvent(Controller sender, string text, string textLine)
         {
             Console.ResetColor();
 
-            if (!result.HasValue)
-            {
-                switch (component)
-                {
-                    case ControllerComponent.GatewayConnector: Console.Write("Connecting to gateway..."); break;
-                    case ControllerComponent.NameService: Console.Write("Starting name service..."); break;
-                    case ControllerComponent.WebServer: Console.Write("Starting web-server..."); break;
-                }
-            }
+            if (!string.IsNullOrEmpty(text))
+                Console.Write(text);
             else
             {
-                Console.ForegroundColor = result.Value ? ConsoleColor.Green : ConsoleColor.Red;
-                Console.WriteLine(result.Value ? " Success." : " Failed.");
+                //Console.ForegroundColor = result.Value ? ConsoleColor.Green : ConsoleColor.Red;
+                Console.WriteLine(textLine);
             }
 
             Console.ResetColor();

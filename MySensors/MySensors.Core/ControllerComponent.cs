@@ -5,6 +5,7 @@ namespace MySensors.Core
     {
         GatewayConnector,
         NameService,
-        WebServer
+        WebServer,
+        DatabaseService
     }
 }

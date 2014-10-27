@@ -4,19 +4,22 @@ using MySensors.Core.Nodes;
 using MySensors.Core.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace MySensors.Core
 {
-    public delegate void ControllerComponentStartEventHandler(Controller sender, ControllerComponent component, bool? result);
+    public delegate void ControllerComponentStartEventHandler(Controller sender, string text, string textLine);
 
     public class Controller
     {
         #region Fields
+        private DatabaseService dbService;
         private NameService nameService;
         private IGatewayConnector connector;
         //private WebServer webServer;
 
+        private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
         private bool isNameServiceStarted = false;
         private bool isWebServerStarted = false;
@@ -39,8 +42,13 @@ namespace MySensors.Core
         #region Constructor
         public Controller(bool isSerial = true)
         {
+            dbService = new DatabaseService();
+
             connector = isSerial ? (IGatewayConnector)new SerialGatewayConnector() : (IGatewayConnector)new EthernetGatewayConnector();
             connector.MessageReceived += connector_MessageReceived;
+
+            nodes.CollectionChanged += nodes_CollectionChanged;
+            sensors.CollectionChanged += sensors_CollectionChanged;
 
             nameService = new NameService();
             //webServer = new WebServer();
@@ -50,29 +58,38 @@ namespace MySensors.Core
         #region Public methods
         public bool Start()
         {
-            if (!isConnectorStarted)
+            if (!isDBServiceStarted)
             {
                 if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, ControllerComponent.GatewayConnector, null);
-                isConnectorStarted = connector.Connect();
+                    ComponentStartEvent(this, "Starting database... ", null);
+                isDBServiceStarted = dbService.Start();
                 if (ComponentStartEvent != null)
-                    ComponentStartEvent(this, ControllerComponent.GatewayConnector, isConnectorStarted);
+                    ComponentStartEvent(this, null, isDBServiceStarted ? "Success." : "Failed.");
             }
+
+            //if (!isConnectorStarted)
+            //{
+            //    if (ComponentStartEvent != null)
+            //        ComponentStartEvent(this, "Connecting to gateway... ", null);
+            //    isConnectorStarted = connector.Connect();
+            //    if (ComponentStartEvent != null)
+            //        ComponentStartEvent(this, null, isConnectorStarted ? "Success." : "Failed.");
+            //}
 
             //if (!isNameServiceStarted)
             //{
             //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, ControllerComponent.NameService, null);
+            //        ComponentStartEvent(this, "Starting name service... ", null);
             //    isNameServiceStarted = nameService.AddName("mysensors", NameService.NameType.Unique, NameService.MsSuffix.Default); // register on the local network
             //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, ControllerComponent.NameService, isNameServiceStarted);
+            //        ComponentStartEvent(this, null, isNameServiceStarted ? "Success." : "Failed.");
             //}
 
 
 
 
 
-            return isConnectorStarted;// && isNameServiceStarted;// && isWebServerStarted;
+            return isDBServiceStarted;// && isConnectorStarted;// && isNameServiceStarted;// && isWebServerStarted;
         }
         public void Stop()
         {
@@ -85,24 +102,26 @@ namespace MySensors.Core
 
         public Node GetNode(byte nodeID)
         {
-            Node result = nodes.Where(node => node.NodeID == nodeID).FirstOrDefault();
+            Node result = nodes.Where(node => node.ID == nodeID).FirstOrDefault();
             
             if (result == null)
             {
                 result = new Node(nodeID);
                 nodes.Add(result);
+                dbService.Insert(result);
             }
 
             return result;
         }
         public Sensor GetSensor(byte nodeID, byte sensorID)
         {
-            Sensor result = sensors.Where(sensor => sensor.NodeID == nodeID && sensor.SensorID == sensorID).FirstOrDefault();
+            Sensor result = sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
 
             if (result == null)
             {
                 result = new Sensor(nodeID, sensorID);
                 sensors.Add(result);
+                dbService.Insert(result);
             }
 
             return result;
@@ -110,6 +129,14 @@ namespace MySensors.Core
         #endregion
 
         #region Event handlers
+        private void nodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
+        }
+        private void sensors_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
+        }
         private void connector_MessageReceived(IGatewayConnector sender, Message message)
         {
             Console.WriteLine();
@@ -127,11 +154,13 @@ namespace MySensors.Core
                     {
                         node.Type = (SensorType)message.SubType;
                         node.ProtocolVersion = message.Payload;
+                        dbService.Update(node);
                     }
                     else
                     {
                         sensor.Type = (SensorType)message.SubType;
                         sensor.ProtocolVersion = message.Payload;
+                        dbService.Update(sensor);
                     }
                     break;
                 #endregion
@@ -151,11 +180,11 @@ namespace MySensors.Core
                 case MessageType.Internal: // special internal message
                     switch ((InternalValueType)message.SubType)
                     {
-                        case InternalValueType.BatteryLevel:
+                        case InternalValueType.BatteryLevel: // int, in %
                             //saveBatteryLevel(sender, payload, db);
                             break;
                         case InternalValueType.Time:
-                            //sendTime(sender, sensor, gw);
+                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, DateTime.Now.TimeOfDay.ToString()));
                             break;
                         case InternalValueType.Version:
                             break;
@@ -223,6 +252,5 @@ namespace MySensors.Core
             //    connector.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
         #endregion
-
     }
 }

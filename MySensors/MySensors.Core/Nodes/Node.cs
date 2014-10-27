@@ -3,29 +3,85 @@ namespace MySensors.Core.Nodes
 {
     public class Node : ObservableObject
     {
-        public byte NodeID { get; private set; }
-        public SensorType Type { get; internal set; } // ArduinoNode / ArduinoRelay
-        public string ProtocolVersion { get; internal set; } // library version
-        public string SketchName { get; internal set; }
-        public string SketchVersion { get; internal set; }
+        #region Fields
+        private byte id;
+        private SensorType type;
+        private string protocolVersion = "";
+        private string sketchName = "";
+        private string sketchVersion = "";
+        #endregion
 
+        #region Properties
+        public byte ID
+        {
+            get { return id; }
+            private set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    NotifyPropertyChanged("NodeID");
+                }
+            }
+        }
+        public SensorType Type // ArduinoNode / ArduinoRelay
+        {
+            get { return type; }
+            internal set
+            {
+                if (type != value)
+                {
+                    type = value;
+                    NotifyPropertyChanged("Type");
+                    NotifyPropertyChanged("IsRepeater");
+                }
+            }
+        }
+        public string ProtocolVersion // library version
+        {
+            get { return protocolVersion; }
+            internal set
+            {
+                if (protocolVersion != value)
+                {
+                    protocolVersion = value;
+                    NotifyPropertyChanged("ProtocolVersion");
+                }
+            }
+        }
+        public string SketchName
+        {
+            get { return sketchName; }
+            internal set
+            {
+                if (sketchName != value)
+                {
+                    sketchName = value;
+                    NotifyPropertyChanged("SketchName");
+                }
+            }
+        }
+        public string SketchVersion
+        {
+            get { return sketchVersion; }
+            internal set
+            {
+                if (sketchVersion != value)
+                {
+                    sketchVersion = value;
+                    NotifyPropertyChanged("SketchVersion");
+                }
+            }
+        }
+        
         public bool IsRepeater { get { return Type == SensorType.ArduinoRelay; } }
+        #endregion
 
-
-
-
-
-
-
-
-        public Node(byte nodeID)
+        #region Constructors
+        public Node(byte id)
         {
-            NodeID = nodeID;
+            ID = id;
         }
-        public Node(byte nodeID, SensorType type)
-        {
-            NodeID = nodeID;
-            Type = type;
-        }
+        #endregion
     }
 }
