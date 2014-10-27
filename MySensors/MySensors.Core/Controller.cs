@@ -30,9 +30,12 @@ namespace MySensors.Core
         #endregion
 
         #region Properties
-        public IGatewayConnector GatewayConnector
+        public bool IsStarted
         {
-            get { return connector; }
+            get
+            {
+                return isDBServiceStarted && isConnectorStarted;// && isNameServiceStarted;// && isWebServerStarted;
+            }
         }
         #endregion
 
@@ -59,24 +62,45 @@ namespace MySensors.Core
         #region Public methods
         public bool Start()
         {
+            // start database service:
             if (!isDBServiceStarted)
             {
                 if (ComponentStartEvent != null)
                     ComponentStartEvent(this, "Starting database... ", null);
+                
                 isDBServiceStarted = dbService.Start();
+                
+                if (isDBServiceStarted)
+                {
+                    nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
+                    sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
+
+                    var bls = dbService.GetAllBatteryLevels();
+                    foreach (var node in nodes)
+                        node.BatteryLevels = new ObservableCollection<BatteryLevel>(bls.Where(bl => bl.NodeID == node.ID));
+
+                    var svs = dbService.GetAllSensorValues();
+                    foreach (var sensor in sensors)
+                        sensor.Values = new ObservableCollection<SensorValue>(svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID));
+                }
+                
                 if (ComponentStartEvent != null)
                     ComponentStartEvent(this, null, isDBServiceStarted ? "Success." : "Failed.");
             }
 
-            //if (!isConnectorStarted)
-            //{
-            //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, "Connecting to gateway... ", null);
-            //    isConnectorStarted = connector.Connect();
-            //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, null, isConnectorStarted ? "Success." : "Failed.");
-            //}
+            // start gateway connector service:
+            if (!isConnectorStarted)
+            {
+                if (ComponentStartEvent != null)
+                    ComponentStartEvent(this, "Connecting to gateway... ", null);
 
+                isConnectorStarted = connector.Connect();
+
+                if (ComponentStartEvent != null)
+                    ComponentStartEvent(this, null, isConnectorStarted ? "Success." : "Failed.");
+            }
+
+            // start DNS name service:
             //if (!isNameServiceStarted)
             //{
             //    if (ComponentStartEvent != null)
@@ -86,15 +110,16 @@ namespace MySensors.Core
             //        ComponentStartEvent(this, null, isNameServiceStarted ? "Success." : "Failed.");
             //}
 
+            // start web-server service:
 
 
 
-
-            return isDBServiceStarted;// && isConnectorStarted;// && isNameServiceStarted;// && isWebServerStarted;
+            return IsStarted;
         }
         public void Stop()
         {
             connector.Disconnect();
+            dbService.Stop();
 
             isConnectorStarted = false;
             isNameServiceStarted = false;
@@ -147,6 +172,9 @@ namespace MySensors.Core
             Node node = !isNode ? null : GetNode(message.NodeID);
             Sensor sensor = !isNode ? GetSensor(message.NodeID, message.SensorID) : null;
 
+            if (!IsStarted)
+                return;
+
             switch (message.Type)
             {
                 #region Presentation
@@ -168,7 +196,7 @@ namespace MySensors.Core
 
                 #region Set
                 case MessageType.Set: // sent from or to a sensor when a sensor value should be updated
-                    SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload));
+                    SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
                     sensor.Values.Add(sv);
                     dbService.Insert(sv);
                     break;
@@ -189,7 +217,7 @@ namespace MySensors.Core
                             dbService.Insert(bl);
                             break;
                         case InternalValueType.Time:
-                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, DateTime.Now.TimeOfDay.ToString()));
+                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, DateTime.Now.TimeOfDay.ToString())); // seconds since 1970
                             break;
                         case InternalValueType.Version:
                             break;

@@ -7,8 +7,8 @@ namespace MySensors.Core.Services.Data
     class NodeDto
     {
         [PrimaryKey]//, AutoIncrement]
-        public int ID { get; set; }
-        public int Type { get; set; }
+        public byte ID { get; set; }
+        public byte Type { get; set; }
         public string ProtocolVersion { get; set; }
         public string SketchName { get; set; }
         public string SketchVersion { get; set; }
@@ -33,7 +33,7 @@ namespace MySensors.Core.Services.Data
         }
         public Node ToModel()
         {
-            return new Node((byte)ID)
+            return new Node(ID)
             {
                 Type = (SensorType)Type,
                 ProtocolVersion = ProtocolVersion,

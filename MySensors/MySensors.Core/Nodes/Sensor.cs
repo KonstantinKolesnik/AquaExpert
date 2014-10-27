@@ -1,5 +1,5 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+
 namespace MySensors.Core.Nodes
 {
     public class Sensor : ObservableObject
@@ -64,6 +64,7 @@ namespace MySensors.Core.Nodes
         public ObservableCollection<SensorValue> Values
         {
             get { return values; }
+            internal set { values = value == null ? new ObservableCollection<SensorValue>() : value; }
         }
         #endregion
 

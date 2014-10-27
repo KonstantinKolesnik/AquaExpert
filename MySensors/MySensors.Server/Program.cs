@@ -21,7 +21,10 @@ namespace MySensors.Server
             bool exit = false;
             Thread thread = new Thread(() => {
                 while (!exit && !controller.Start())
+                {
                     Console.WriteLine("*******************************************************");
+                    Thread.Sleep(3000);
+                }
                 
                 if (!exit)
                     Console.WriteLine("Controller started successfuly!");

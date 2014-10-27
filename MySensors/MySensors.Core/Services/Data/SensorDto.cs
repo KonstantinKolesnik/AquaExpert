@@ -7,10 +7,12 @@ namespace MySensors.Core.Services.Data
     [Table("Sensors")]
     class SensorDto
     {
+        [PrimaryKey]
+        public int PK { get; set; }
         [ForeignKey(typeof(NodeDto))]     // Specify the foreign key
-        public int NodeID { get; set; }
-        public int ID { get; set; }
-        public int Type { get; set; }
+        public byte NodeID { get; set; }
+        public byte ID { get; set; }
+        public byte Type { get; set; }
         public string ProtocolVersion { get; set; }
 
         //[ManyToOne]      // Many to one relationship with Stock
@@ -23,6 +25,7 @@ namespace MySensors.Core.Services.Data
 
             return new SensorDto()
             {
+                PK = sensor.NodeID << 8 + sensor.ID,
                 NodeID = sensor.NodeID,
                 ID = sensor.ID,
                 Type = (byte)sensor.Type,
@@ -31,7 +34,7 @@ namespace MySensors.Core.Services.Data
         }
         public Sensor ToModel()
         {
-            return new Sensor((byte)NodeID, (byte)ID)
+            return new Sensor(NodeID, ID)
             {
                 Type = (SensorType)Type,
                 ProtocolVersion = ProtocolVersion

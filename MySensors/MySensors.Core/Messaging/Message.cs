@@ -28,9 +28,11 @@ namespace MySensors.Core.Messaging
             if (string.IsNullOrEmpty(str))
                 return null;
 
-            string[] parts = str.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = str.Split(new char[] {';'}, StringSplitOptions.None);
+            if (parts.Length != 6)
+                return null;
             
-            string rawPayload = parts.Length == 6 ? parts[5].Trim() : "";
+            string rawPayload = parts[5].Trim();
 
             //var payload;
             //if ((MessageType)byte.Parse(parts[2]) == MessageType.Stream)
@@ -42,14 +44,21 @@ namespace MySensors.Core.Messaging
             //else
             //    payload = rawpayload;
 
-            
-            return new Message(
-                byte.Parse(parts[0]),
-                byte.Parse(parts[1]),
-                (MessageType)byte.Parse(parts[2]),
-                byte.Parse(parts[3]) == 1,
-                byte.Parse(parts[4]),
-                parts[5]);
+            Message msg = null;
+
+            try
+            {
+                msg = new Message(
+                    byte.Parse(parts[0]),
+                    byte.Parse(parts[1]),
+                    (MessageType)byte.Parse(parts[2]),
+                    byte.Parse(parts[3]) == 1,
+                    byte.Parse(parts[4]),
+                    parts[5]);
+            }
+            catch (Exception) { }
+
+            return msg;
         }
         public string ToRawString()
         {

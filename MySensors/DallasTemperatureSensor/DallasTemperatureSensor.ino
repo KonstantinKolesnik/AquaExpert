@@ -2,18 +2,18 @@
 #include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
+//#include <avr/pgmspace.h>
+//#include <Time.h>
 
 #define ONE_WIRE_BUS			A5 // pin where dallase sensor is connected 
 #define MAX_ATTACHED_DS18B20	16
 
-unsigned long SLEEP_TIME = 1000; // Sleep time between reads (in milliseconds)
+unsigned long SLEEP_TIME = 3000; // Sleep time between reads (in milliseconds)
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 float lastTemperature[MAX_ATTACHED_DS18B20];
 int numSensors = 0;
-boolean receivedConfig = false;
-//boolean metric = true;
 
 MyMessage msg(0, V_TEMP); // Initialize temperature message (sensorID is temporary 0)
 MySensor gw(9, 10);
@@ -27,7 +27,7 @@ void setup()
 	gw.begin();
 
 	// Send the sketch version information to the gateway and Controller
-	gw.sendSketchInfo("Temperature Sensor", "1.0");
+	gw.sendSketchInfo("Test Node", "1.0");
 
 	// Fetch the number of attached temperature sensors  
 	numSensors = sensors.getDeviceCount();
@@ -60,5 +60,16 @@ void loop()
 		}
 	}
 
+	//gw.requestTime(receiveTime);
+
 	gw.sleep(SLEEP_TIME);
+}
+
+void receiveTime(unsigned long time) //Incoming argument is seconds since 1970.
+{
+	//setTime(time);
+}
+void printTime() {
+	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());
+	//myGLCD.print(timeBuf, 60, 7);
 }

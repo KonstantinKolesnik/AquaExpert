@@ -11,10 +11,13 @@ namespace MySensors.Core.Services.Data
     public class DatabaseService
     {
         private const string dbFileName = "MySensors.dat";
-        private SQLiteConnection con;
+        private SQLiteConnection con = null;
 
         public bool Start()
         {
+            if (con != null)
+                return true;
+
             try
             {
                 string dbPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + dbFileName;
@@ -25,77 +28,49 @@ namespace MySensors.Core.Services.Data
                 if (!exists)
                 {
                     con.CreateTable<NodeDto>();
-                    con.CreateTable<SensorDto>();
                     con.CreateTable<BatteryLevelDto>();
+                    con.CreateTable<SensorDto>();
                     con.CreateTable<SensorValueDto>();
-
-
-                    //var node = new NodeDto()
-                    //{
-                    //    ID = 1,
-                    //    Type = (byte)SensorType.ArduinoNode
-                    //};
-                    //con.Insert(node);   // Insert the object in the database
-
-                    //var sensor = new SensorDto()
-                    //{
-                    //    ID = 0,
-                    //    Type = (byte)SensorType.Heater
-                    //};
-                    //con.Insert(sensor);   // Insert the object in the database
-
-                    // Objects created, let's stablish the relationship
-                    //node.Sensors = new List<SensorDto> { sensor };
-
-                    //con.UpdateWithChildren(node);   // Update the changes into the database
-                    //if (sensor.Node == node)
-                    //{
-                    //    Debug.WriteLine("Inverse relationship already set, yay!");
-                    //}
-
-                    //// Get the object and the relationships
-                    //var storedSensor = con.GetWithChildren<SensorDto>(sensor.ID);
-                    //if (node.Type.Equals(storedSensor.Node.Type))
-                    //{
-                    //    Debug.WriteLine("Object and relationships loaded correctly!");
-                    //}
-
-                    //NodeDto n = con.Get<NodeDto>(1);
-
-
-                    return true;
                 }
+                
+                return true;
             }
             catch (Exception) { }
 
             return false;
         }
+        public void Stop()
+        {
+            con.Close();
+            con.Dispose();
+            con = null;
+        }
 
         public int Insert(Node node)
         {
-            return con.Insert(NodeDto.FromModel(node));
+            return con.Insert(NodeDto.FromModel(node), "OR REPLACE");
         }
-        public int Insert(List<Node> nodes)
-        {
-            List<NodeDto> nodes2 = nodes.Select(node => NodeDto.FromModel(node)).ToList();
-            return con.InsertAll(nodes2);
-        }
+        //public int Insert(List<Node> nodes)
+        //{
+        //    List<NodeDto> nodes2 = nodes.Select(node => NodeDto.FromModel(node)).ToList();
+        //    return con.InsertAll(nodes2);
+        //}
         public int Insert(Sensor sensor)
         {
-            return con.Insert(SensorDto.FromModel(sensor));
+            return con.Insert(SensorDto.FromModel(sensor), "OR REPLACE");
         }
-        public int Insert(List<Sensor> sensors)
-        {
-            List<SensorDto> sensors2 = sensors.Select(sensor => SensorDto.FromModel(sensor)).ToList();
-            return con.InsertAll(sensors2);
-        }
+        //public int Insert(List<Sensor> sensors)
+        //{
+        //    List<SensorDto> sensors2 = sensors.Select(sensor => SensorDto.FromModel(sensor)).ToList();
+        //    return con.InsertAll(sensors2);
+        //}
         public int Insert(BatteryLevel bl)
         {
-            return con.Insert(bl);
+            return con.Insert(BatteryLevelDto.FromModel(bl));
         }
         public int Insert(SensorValue sv)
         {
-            return con.Insert(sv);
+            return con.Insert(SensorValueDto.FromModel(sv));
         }
 
         public int Update(Node node)
@@ -105,6 +80,23 @@ namespace MySensors.Core.Services.Data
         public int Update(Sensor sensor)
         {
             return con.Update(SensorDto.FromModel(sensor));
+        }
+
+        public List<Node> GetAllNodes()
+        {
+            return con.Table<NodeDto>().ToList().Select(item => item.ToModel()).ToList();
+        }
+        public List<Sensor> GetAllSensors()
+        {
+            return con.Table<SensorDto>().ToList().Select(item => item.ToModel()).ToList();
+        }
+        public List<BatteryLevel> GetAllBatteryLevels()
+        {
+            return con.Table<BatteryLevelDto>().ToList().Select(item => item.ToModel()).ToList();
+        }
+        public List<SensorValue> GetAllSensorValues()
+        {
+            return con.Table<SensorValueDto>().ToList().Select(item => item.ToModel()).ToList();
         }
     }
 }

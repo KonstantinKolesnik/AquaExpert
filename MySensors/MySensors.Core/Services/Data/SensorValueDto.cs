@@ -1,6 +1,5 @@
 ﻿using MySensors.Core.Nodes;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 
 namespace MySensors.Core.Services.Data
@@ -8,12 +7,12 @@ namespace MySensors.Core.Services.Data
     [Table("SensorValues")]
     class SensorValueDto
     {
-        [ForeignKey(typeof(NodeDto))]
-        public int NodeID { get; set; }
-        [ForeignKey(typeof(SensorDto))]
-        public int ID { get; set; }
+        //[ForeignKey(typeof(NodeDto))]
+        public byte NodeID { get; set; }
+        //[ForeignKey(typeof(SensorDto))]
+        public byte ID { get; set; }
         public DateTime Time { get; set; }
-        public int Type { get; set; }
+        public byte Type { get; set; }
         public float Value { get; set; }
 
         public static SensorValueDto FromModel(SensorValue sv)
@@ -32,7 +31,7 @@ namespace MySensors.Core.Services.Data
         }
         public SensorValue ToModel()
         {
-            return new SensorValue((byte)NodeID, (byte)ID, Time, (SensorValueType)Type, Value);
+            return new SensorValue(NodeID, ID, Time, (SensorValueType)Type, Value);
         }
     }
 }

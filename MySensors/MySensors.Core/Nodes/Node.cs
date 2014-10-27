@@ -78,6 +78,7 @@ namespace MySensors.Core.Nodes
         public ObservableCollection<BatteryLevel> BatteryLevels
         {
             get { return batteryLevels; }
+            internal set { batteryLevels = value == null ? new ObservableCollection<BatteryLevel>() : value; }
         }
         
         public bool IsRepeater
