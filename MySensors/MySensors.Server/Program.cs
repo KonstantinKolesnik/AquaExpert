@@ -17,44 +17,39 @@ namespace MySensors.Server
             controller = new Controller(true);
             controller.Log += controller_Log;
 
-            bool exit = false;
-
-            Thread thread = new Thread(() =>
+            while (!controller.Start())
             {
-                while (!exit && !controller.Start())
-                {
-                    Console.WriteLine("*******************************************************");
-                    Thread.Sleep(1000);
-                }
+                Console.WriteLine("*******************************************************");
+                Thread.Sleep(1000);
+            }
 
-                if (!exit)
-                    Console.WriteLine("Controller started successfuly!");
-            });
-            thread.Start();
-
+            Console.WriteLine("Controller started successfuly!");
             Console.WriteLine();
             Console.WriteLine("Type q to exit.");
-            Console.WriteLine();
 
-            while (!exit)
-                if (Console.ReadLine().Equals("q"))
-                    exit = true;
-
-            thread.Join();
+            while (!Console.ReadLine().ToLower().Equals("q")) ;
 
             controller.Stop();
         }
 
-        private static void controller_Log(Controller sender, string text, string textLine)
+        private static void controller_Log(Controller sender, string text, bool isLine, LogLevel logLevel)
         {
-            Console.ResetColor();
-
             if (!string.IsNullOrEmpty(text))
-                Console.Write(text);
-            else
             {
-                //Console.ForegroundColor = result.Value ? ConsoleColor.Green : ConsoleColor.Red;
-                Console.WriteLine(textLine);
+                switch (logLevel)
+                {
+                    case LogLevel.Success: Console.ForegroundColor = ConsoleColor.Green; break;
+                    case LogLevel.Error: Console.ForegroundColor = ConsoleColor.Red; break;
+                    case LogLevel.Warning: Console.ForegroundColor = ConsoleColor.Yellow; break;
+                    case LogLevel.Normal:
+                    default:
+                        Console.ResetColor(); break;
+                }
+
+                if (isLine)
+                    Console.WriteLine(text);
+                else
+                    Console.Write(text);
             }
 
             Console.ResetColor();

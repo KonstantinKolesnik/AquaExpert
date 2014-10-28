@@ -15,18 +15,19 @@
     <!--<link href="KendoUI/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />--> 
     
     <!--<link href="KendoUI/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />-->
-    <link href="KendoUI/styles/kendo.black.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="KendoUI/styles/kendo.black.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="KendoUI/styles/kendo.blueopal.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="KendoUI/styles/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.flat.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="KendoUI/styles/kendo.highcontrast.min.css" rel="stylesheet" type="text/css" />-->
-    <!--<link href="KendoUI/styles/kendo.metro.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="KendoUI/styles/kendo.metro.min.css" rel="stylesheet" type="text/css" />
     <!--<link href="KendoUI/styles/kendo.metroblack.min.css" rel="stylesheet" type="text/css" />-->
-    <!--<link href="KendoUI/styles/kendo.metro.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="KendoUI/styles/kendo.moonlight.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="KendoUI/styles/kendo.silver.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="KendoUI/styles/kendo.uniform.min.css" rel="stylesheet" type="text/css" />-->
     
     <!--Typhoon-->
-    <link href="Style/Typhoon.css" rel="stylesheet" type="text/css"/>
+    <link href="Style/MySensors.css" rel="stylesheet" type="text/css" />
     
     <script src="KendoUI/js/jquery.min.js" type="text/javascript"></script>
     <script src="KendoUI/js/kendo.all.min.js" type="text/javascript"></script>
@@ -35,7 +36,7 @@
     <script src="Script/MessageManager.js" type="text/javascript"></script>
     <script src="Script/LocomotiveOperator.js" type="text/javascript"></script>
     <script src="Script/Model.js" type="text/javascript"></script>
-    <script src="Script/Typhoon.js" type="text/javascript"></script>
+    <script src="Script/MySensors.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 //        $(document).bind("APP_READY", function () {
@@ -48,11 +49,11 @@
     </script>
 </head>
 
-<body data-role="pane" class="km-pane km-ios km-vertical">
+<body>
 
     <div class="k-header" style="padding: 5px">
         <img src="./Resources/StationConnected.png" alt="" width="80px" style="margin-left:10px;"/>
-        <label style="color: white; font-size: 38px; vertical-align: top; display: inline-block; margin-top: 15px; text-transform: uppercase;">MySensors</label>
+        <label style="color: white; font-size: 38px; vertical-align: top; display: inline-block; margin-top: 15px; text-transform: uppercase2;">Smart Network</label>
         
         <div class="toolbar">
             <ul>
@@ -658,7 +659,7 @@
     </div>
 
     <div class="k-header" style="text-align:center; padding: 5px 0;">
-        <a href="http://www.typhoon.at.ua" target="_blank" class="k-link">&copy;&nbsp;Typhoon</a>
+        <a href="http://www.smartnetwork.at.ua" target="_blank" class="k-link">&copy;&nbsp;Smart Network</a>
     </div>
 
     <div id="dlg" style="display:none;"></div>
@@ -673,12 +674,12 @@
 //        kendo.ui.progress($("#preLoad"), true);
         $(document).ready(function () {
             onDocumentReady();
-            //            $(document).trigger("APP_READY");
-//            kendo.ui.progress($("#preLoad"), false);
+            //$(document).trigger("APP_READY");
+            //kendo.ui.progress($("#preLoad"), false);
         });
         
         function showMain() {
-            model.set('UIState', UIStateType.Main);
+            //model.set('UIState', UIStateType.Main);
         }
     </script>
 </body>

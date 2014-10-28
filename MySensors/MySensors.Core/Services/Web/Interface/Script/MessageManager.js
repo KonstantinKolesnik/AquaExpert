@@ -158,8 +158,4 @@ function MessageManager(socket) {
         msg.SetParameter("F28", F28 ? "True" : "False");
         this.Send(msg);
     }
-
-
-
-
 }

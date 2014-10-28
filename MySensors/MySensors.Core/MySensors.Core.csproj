@@ -66,7 +66,7 @@
     <Compile Include="Connectors\IGatewayConnector.cs" />
     <Compile Include="Connectors\SerialGatewayConnector.cs" />
     <Compile Include="Controller.cs" />
-    <Compile Include="ControllerComponent.cs" />
+    <Compile Include="LogLevel.cs" />
     <Compile Include="Messaging\Message.cs" />
     <Compile Include="Messaging\MessageType.cs" />
     <Compile Include="Nodes\BatteryLevel.cs" />
@@ -215,9 +215,6 @@
     <None Include="Services\Web\Interface\KendoUI\styles\images\kendoui.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Services\Web\Interface\Content\Train_template.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Services\Web\Interface\desktop.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1003,13 +1000,13 @@
     <Content Include="Services\Web\Interface\Script\NetworkMessageID.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Services\Web\Interface\Script\Typhoon.js">
+    <Content Include="Services\Web\Interface\Script\MySensors.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Services\Web\Interface\Style\Typhoon.css">
+    <Content Include="Services\Web\Interface\Style\MySensors.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Services\Web\Interface\Style\Typhoon.mobile.css">
+    <Content Include="Services\Web\Interface\Style\MySensors.mobile.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="sqlite3.dll">

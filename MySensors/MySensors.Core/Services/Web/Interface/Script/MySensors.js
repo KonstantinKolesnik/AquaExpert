@@ -30,73 +30,73 @@ function onDocumentReady() {
     return;
 
     createMainMenu();
-    createLayout();
-    createOperation();
-    //createDecoders();
-    createOptions();
+    //createLayout();
+    //createOperation();
+    ////createDecoders();
+    //createOptions();
 
 
 //    onWindowResize();
 
     // for test!!!
-    var loco1 = new Locomotive(1, "MKV", "aaaaaaa", new LocomotiveAddress(7, false), Protocol.DCC28);
-    var loco2 = new Locomotive(2, "M62", "bbbbbbb", new LocomotiveAddress(3, false), Protocol.DCC28);
-    model.get("OperationList").push(kendo.observable(new LocomotiveOperator(loco1)));
-    model.get("OperationList").push(kendo.observable(new LocomotiveOperator(loco2)));
+    //var loco1 = new Locomotive(1, "MKV", "aaaaaaa", new LocomotiveAddress(7, false), Protocol.DCC28);
+    //var loco2 = new Locomotive(2, "M62", "bbbbbbb", new LocomotiveAddress(3, false), Protocol.DCC28);
+    //model.get("OperationList").push(kendo.observable(new LocomotiveOperator(loco1)));
+    //model.get("OperationList").push(kendo.observable(new LocomotiveOperator(loco2)));
 
 
-    kendo.init($(".SpeedSlider"));
-    kendo.init($(".SpeedGauge"));
+    //kendo.init($(".SpeedSlider"));
+    //kendo.init($(".SpeedGauge"));
 
-    $("#lvOperation .SpeedSlider").each(function (idx, b) {
-        //        var slider = $(b).kendoSlider({
-        //                increaseButtonTitle: "Right",
-        //                decreaseButtonTitle: "Left",
-        //                min: -10,
-        //                max: 10,
-        //                smallStep: 2,
-        //                largeStep: 1,
-        //            });
-//        kendo.init($(b));
+//    $("#lvOperation .SpeedSlider").each(function (idx, b) {
+//        //        var slider = $(b).kendoSlider({
+//        //                increaseButtonTitle: "Right",
+//        //                decreaseButtonTitle: "Left",
+//        //                min: -10,
+//        //                max: 10,
+//        //                smallStep: 2,
+//        //                largeStep: 1,
+//        //            });
+////        kendo.init($(b));
 
-        //$(b).getKendoSlider().value(20);
+//        //$(b).getKendoSlider().value(20);
 
-        var lo = $('#lvOperation').data('kendoListView').dataSource._data[idx];
-        //kendo.bind($(b).getKendoSlider(), lo);
-    });
-    $("#lvOperation .SpeedGauge").each(function (idx, b) {
-        var gaugeConfig = {
-            theme: "black",
-            pointer: {
-                value: 0
-            },
-            scale: {
-                startAngle: 0,
-                endAngle: 180,
-                labels: {
-                    //font: "10px Georgia, Helvetical, sans-serif",
-                    //template: "#=value# km/h"
-                    position: "outside"
-                },
-//                ranges: [
-//                    { from: 0, to: 9, color: "#00ab00" }, //green
-//                    {from: 9, to: 18, color: "#d3ce37" }, //yellow
-//                    {from: 18, to: 28, color: "#ae130f" } //red
-//                ],
-                min: 0,
-                max: 28,
-                majorUnit: 2,
-                minorUnit: 1
-            }
-        };
+//        var lo = $('#lvOperation').data('kendoListView').dataSource._data[idx];
+//        //kendo.bind($(b).getKendoSlider(), lo);
+//    });
+//    $("#lvOperation .SpeedGauge").each(function (idx, b) {
+//        var gaugeConfig = {
+//            theme: "black",
+//            pointer: {
+//                value: 0
+//            },
+//            scale: {
+//                startAngle: 0,
+//                endAngle: 180,
+//                labels: {
+//                    //font: "10px Georgia, Helvetical, sans-serif",
+//                    //template: "#=value# km/h"
+//                    position: "outside"
+//                },
+////                ranges: [
+////                    { from: 0, to: 9, color: "#00ab00" }, //green
+////                    {from: 9, to: 18, color: "#d3ce37" }, //yellow
+////                    {from: 18, to: 28, color: "#ae130f" } //red
+////                ],
+//                min: 0,
+//                max: 28,
+//                majorUnit: 2,
+//                minorUnit: 1
+//            }
+//        };
 
-        //var speedGauge = $(b).kendoRadialGauge(gaugeConfig).data('kendoRadialGauge');
+//        //var speedGauge = $(b).kendoRadialGauge(gaugeConfig).data('kendoRadialGauge');
 
-        //$(b).getKendoSlider().value(20);
+//        //$(b).getKendoSlider().value(20);
 
-        //var lo = $('#lvOperation').data('kendoListView').dataSource._data[idx];
-        //kendo.bind($(b).getKendoSlider(), lo);
-    });
+//        //var lo = $('#lvOperation').data('kendoListView').dataSource._data[idx];
+//        //kendo.bind($(b).getKendoSlider(), lo);
+//    });
 
     
 }

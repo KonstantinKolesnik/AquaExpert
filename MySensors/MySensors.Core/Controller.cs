@@ -16,7 +16,7 @@ using System.Reflection;
 
 namespace MySensors.Core
 {
-    public delegate void LogEventHandler(Controller sender, string text, string textLine);
+    public delegate void LogEventHandler(Controller sender, string text, bool isLine, LogLevel logLevel);
 
     public class Controller
     {
@@ -72,7 +72,7 @@ namespace MySensors.Core
             if (!isDBServiceStarted)
             {
                 if (Log != null)
-                    Log(this, "Starting database... ", null);
+                    Log(this, "Starting database... ", false, LogLevel.Normal);
                 
                 isDBServiceStarted = dbService.Start();
                 
@@ -91,20 +91,23 @@ namespace MySensors.Core
                 }
                 
                 if (Log != null)
-                    Log(this, null, isDBServiceStarted ? "Success." : "Failed.");
+                    Log(this, isDBServiceStarted ? "Success." : "Failed.", true, isDBServiceStarted ? LogLevel.Success : LogLevel.Error);
             }
 
             // start web-server service:
             if (!isWebServerStarted)
             {
                 if (Log != null)
-                    Log(this, "Starting web server... ", null);
+                    Log(this, "Starting web server... ", false, LogLevel.Normal);
 
                 try
                 {
                     var moduleManager = new ModuleManager();
 
-                    var fileService = new DiskFileService("/", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Services\Web\Interface\");
+                    //string root = Path.GetPathRoot(Assembly.GetExecutingAssembly().Location);
+                    string root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Services\Web\Interface\";
+
+                    var fileService = new DiskFileService("/", root);
                     var module = new FileModule(fileService) { ListFiles = false };
 
                     // Add the module
@@ -124,29 +127,29 @@ namespace MySensors.Core
                 }
 
                 if (Log != null)
-                    Log(this, null, isWebServerStarted ? "Success." : "Failed.");
+                    Log(this, isWebServerStarted ? "Success." : "Failed.", true, isWebServerStarted ? LogLevel.Success : LogLevel.Error);
             }
 
             // start gateway connector service:
             //if (!isConnectorStarted)
             //{
             //    if (Log != null)
-            //        Log(this, "Connecting to gateway... ", null);
+            //        Log(this, "Connecting to gateway... ", false, LogLevel.Normal);
 
             //    isConnectorStarted = connector.Connect();
 
             //    if (Log != null)
-            //        Log(this, null, isConnectorStarted ? "Success." : "Failed.");
+            //        Log(this, isConnectorStarted ? "Success." : "Failed.", true, isConnectorStarted ? LogLevel.Success : LogLevel.Error);
             //}
 
             // start DNS name service:
             //if (!isNameServiceStarted)
             //{
             //    if (Log != null)
-            //        Log(this, "Starting name service... ", null);
+            //        Log(this, "Starting name service... ", false, LogLevel.Normal);
             //    isNameServiceStarted = nameService.AddName("mysensors", NameService.NameType.Unique, NameService.MsSuffix.Default); // register on the local network
             //    if (Log != null)
-            //        Log(this, null, isNameServiceStarted ? "Success." : "Failed.");
+            //        Log(this, isNameServiceStarted ? "Success." : "Failed.", true, isNameServiceStarted ? LogLevel.Success : LogLevel.Error);
             //}
 
             return IsStarted;
