@@ -1,10 +1,9 @@
 ﻿using Griffin.WebServer;
 using Griffin.WebServer.Files;
-using MySensors.Core.Connectors;
 using MySensors.Core.Messaging;
 using MySensors.Core.Nodes;
+using MySensors.Core.Services.Connectors;
 using MySensors.Core.Services.Data;
-using MySensors.Core.Services.DNS;
 using MySensors.Core.Services.Web;
 using SuperSocket.SocketBase;
 using SuperWebSocket;
@@ -266,7 +265,8 @@ namespace MySensors.Core
         private void wsServer_newMessage(WebSocketSession session, string message)
         {
             Console.WriteLine(session.RemoteEndPoint + ": " + message);
-            SendToAllClients(session.RemoteEndPoint + ": " + message);
+            //SendToAllClients(session.RemoteEndPoint + ": " + message);
+            SendToAllClients(message);
         }
         #endregion
 

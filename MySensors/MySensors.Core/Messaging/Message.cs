@@ -6,13 +6,16 @@ namespace MySensors.Core.Messaging
 {
     public class Message
     {
+        #region Properties
         public byte NodeID { get; set; }
         public byte SensorID { get; set; }
         public MessageType Type { get; set; }
         public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
         public string Payload { get; set; }
+        #endregion
 
+        #region Constructor
         public Message(byte nodeID, byte sensorID, MessageType type, bool isAckNeeded, byte subType, string payload)
         {
             NodeID = nodeID;
@@ -22,7 +25,9 @@ namespace MySensors.Core.Messaging
             SubType = subType;
             Payload = payload;
         }
+        #endregion
 
+        #region Public methods
         public static Message FromRawString(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -77,8 +82,7 @@ namespace MySensors.Core.Messaging
             //}
 
 
-
-            return string.Format("{0};{1};{2};{3};{4};{5}\n",
+            return string.Format("{0};{1};{2};{3};{4};{5}",
                 NodeID,
                 SensorID,
                 (byte)Type,
@@ -124,5 +128,6 @@ namespace MySensors.Core.Messaging
 
             return sb.ToString();
         }
+        #endregion
     }
 }
