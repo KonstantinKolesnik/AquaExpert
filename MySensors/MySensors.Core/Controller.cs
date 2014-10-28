@@ -24,7 +24,7 @@ namespace MySensors.Core
         private DatabaseService dbService;
         //private NameService nameService;
         private IGatewayConnector connector;
-        //private WebServer webServer;
+        private HttpServer webServer;
 
         private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
@@ -40,7 +40,7 @@ namespace MySensors.Core
         {
             get
             {
-                return isDBServiceStarted && isConnectorStarted && isWebServerStarted;
+                return isDBServiceStarted && isWebServerStarted;// && isConnectorStarted;
             }
         }
         #endregion
@@ -113,8 +113,8 @@ namespace MySensors.Core
                     //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
 
                     // And start the server.
-                    var server = new HttpServer(moduleManager);
-                    server.Start(IPAddress.Any, 80);
+                    webServer = new HttpServer(moduleManager);
+                    webServer.Start(IPAddress.Any, 8080);
 
                     isWebServerStarted = true;
                 }
@@ -128,27 +128,26 @@ namespace MySensors.Core
             }
 
             // start gateway connector service:
-            if (!isConnectorStarted)
-            {
-                if (Log != null)
-                    Log(this, "Connecting to gateway... ", null);
+            //if (!isConnectorStarted)
+            //{
+            //    if (Log != null)
+            //        Log(this, "Connecting to gateway... ", null);
 
-                isConnectorStarted = connector.Connect();
+            //    isConnectorStarted = connector.Connect();
 
-                if (Log != null)
-                    Log(this, null, isConnectorStarted ? "Success." : "Failed.");
-            }
+            //    if (Log != null)
+            //        Log(this, null, isConnectorStarted ? "Success." : "Failed.");
+            //}
 
             // start DNS name service:
             //if (!isNameServiceStarted)
             //{
-            //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, "Starting name service... ", null);
+            //    if (Log != null)
+            //        Log(this, "Starting name service... ", null);
             //    isNameServiceStarted = nameService.AddName("mysensors", NameService.NameType.Unique, NameService.MsSuffix.Default); // register on the local network
-            //    if (ComponentStartEvent != null)
-            //        ComponentStartEvent(this, null, isNameServiceStarted ? "Success." : "Failed.");
+            //    if (Log != null)
+            //        Log(this, null, isNameServiceStarted ? "Success." : "Failed.");
             //}
-
 
             return IsStarted;
         }
@@ -156,6 +155,8 @@ namespace MySensors.Core
         {
             connector.Disconnect();
             dbService.Stop();
+            webServer.Stop();
+            webServer = null;
 
             isDBServiceStarted = false;
             isConnectorStarted = false;

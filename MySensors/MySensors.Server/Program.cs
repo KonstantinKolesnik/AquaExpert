@@ -24,7 +24,7 @@ namespace MySensors.Server
                 while (!exit && !controller.Start())
                 {
                     Console.WriteLine("*******************************************************");
-                    Thread.Sleep(3000);
+                    Thread.Sleep(1000);
                 }
 
                 if (!exit)
