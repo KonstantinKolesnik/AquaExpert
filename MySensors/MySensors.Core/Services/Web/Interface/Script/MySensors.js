@@ -113,6 +113,7 @@ function createMainMenu() {
 
     $("#lvMainMenu").kendoListView({ template: kendo.template($("#tmpltMainMenuItem").html()), dataSource: { data: mainMenuItems } });
 }
+
 //    function getLayouts() {
 //        var crudServiceBaseUrl = "http://demos.kendoui.com/service",
 //        dataSource = new kendo.data.DataSource({

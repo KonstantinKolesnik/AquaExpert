@@ -6,6 +6,8 @@ using MySensors.Core.Nodes;
 using MySensors.Core.Services.Data;
 using MySensors.Core.Services.DNS;
 using MySensors.Core.Services.Web;
+using SuperSocket.SocketBase;
+using SuperWebSocket;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -25,11 +27,13 @@ namespace MySensors.Core
         //private NameService nameService;
         private IGatewayConnector connector;
         private HttpServer webServer;
+        private WebSocketServer wsServer;
 
         private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
         //private bool isNameServiceStarted = false;
         private bool isWebServerStarted = false;
+        private bool isWSServerStarted = false;
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         private ObservableCollection<Sensor> sensors = new ObservableCollection<Sensor>();
@@ -40,7 +44,7 @@ namespace MySensors.Core
         {
             get
             {
-                return isDBServiceStarted && isWebServerStarted;// && isConnectorStarted;
+                return isDBServiceStarted && isWebServerStarted && isWSServerStarted;// && isConnectorStarted;
             }
         }
         #endregion
@@ -52,119 +56,47 @@ namespace MySensors.Core
         #region Constructor
         public Controller(bool isSerial = true)
         {
+            nodes.CollectionChanged += nodes_CollectionChanged;
+            sensors.CollectionChanged += sensors_CollectionChanged;
+
             dbService = new DatabaseService();
 
             connector = isSerial ? (IGatewayConnector)new SerialGatewayConnector() : (IGatewayConnector)new EthernetGatewayConnector();
             connector.MessageReceived += connector_MessageReceived;
 
-            nodes.CollectionChanged += nodes_CollectionChanged;
-            sensors.CollectionChanged += sensors_CollectionChanged;
-
             //nameService = new NameService();
-            //webServer = new WebServer();
         }
         #endregion
 
         #region Public methods
         public bool Start()
         {
-            // start database service:
-            if (!isDBServiceStarted)
-            {
-                if (Log != null)
-                    Log(this, "Starting database... ", false, LogLevel.Normal);
-                
-                isDBServiceStarted = dbService.Start();
-                
-                if (isDBServiceStarted)
-                {
-                    nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
-                    sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
-
-                    var bls = dbService.GetAllBatteryLevels();
-                    foreach (var node in nodes)
-                        node.BatteryLevels = new ObservableCollection<BatteryLevel>(bls.Where(bl => bl.NodeID == node.ID));
-
-                    var svs = dbService.GetAllSensorValues();
-                    foreach (var sensor in sensors)
-                        sensor.Values = new ObservableCollection<SensorValue>(svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID));
-                }
-                
-                if (Log != null)
-                    Log(this, isDBServiceStarted ? "Success." : "Failed.", true, isDBServiceStarted ? LogLevel.Success : LogLevel.Error);
-            }
-
-            // start web-server service:
-            if (!isWebServerStarted)
-            {
-                if (Log != null)
-                    Log(this, "Starting web server... ", false, LogLevel.Normal);
-
-                try
-                {
-                    var moduleManager = new ModuleManager();
-
-                    //string root = Path.GetPathRoot(Assembly.GetExecutingAssembly().Location);
-                    string root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Services\Web\Interface\";
-
-                    var fileService = new DiskFileService("/", root);
-                    var module = new FileModule(fileService) { ListFiles = false };
-
-                    // Add the module
-                    moduleManager.Add(new RootModule());
-                    moduleManager.Add(module);
-                    //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
-
-                    // And start the server.
-                    webServer = new HttpServer(moduleManager);
-                    webServer.Start(IPAddress.Any, 8080);
-
-                    isWebServerStarted = true;
-                }
-                catch (Exception)
-                {
-                    isWebServerStarted = false;
-                }
-
-                if (Log != null)
-                    Log(this, isWebServerStarted ? "Success." : "Failed.", true, isWebServerStarted ? LogLevel.Success : LogLevel.Error);
-            }
-
-            // start gateway connector service:
-            //if (!isConnectorStarted)
-            //{
-            //    if (Log != null)
-            //        Log(this, "Connecting to gateway... ", false, LogLevel.Normal);
-
-            //    isConnectorStarted = connector.Connect();
-
-            //    if (Log != null)
-            //        Log(this, isConnectorStarted ? "Success." : "Failed.", true, isConnectorStarted ? LogLevel.Success : LogLevel.Error);
-            //}
-
-            // start DNS name service:
-            //if (!isNameServiceStarted)
-            //{
-            //    if (Log != null)
-            //        Log(this, "Starting name service... ", false, LogLevel.Normal);
-            //    isNameServiceStarted = nameService.AddName("mysensors", NameService.NameType.Unique, NameService.MsSuffix.Default); // register on the local network
-            //    if (Log != null)
-            //        Log(this, isNameServiceStarted ? "Success." : "Failed.", true, isNameServiceStarted ? LogLevel.Success : LogLevel.Error);
-            //}
+            StartDatabase();
+            StartWebServer();
+            StartWSServer();
+            //StartNameService();
+            //StartGatewayConnector();
 
             return IsStarted;
         }
         public void Stop()
         {
             connector.Disconnect();
+
             dbService.Stop();
+            
             webServer.Stop();
             webServer = null;
+            
+            wsServer.Stop();
+            wsServer.Dispose();
+            wsServer = null;
 
             isDBServiceStarted = false;
             isConnectorStarted = false;
             //isNameServiceStarted = false;
             isWebServerStarted = false;
+            isWSServerStarted = false;
         }
 
         public Node GetNode(byte nodeID)
@@ -327,9 +259,138 @@ namespace MySensors.Core
             //if (node != null && node.Reboot)
             //    connector.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
+        private void wsServer_newConnection(WebSocketSession session)
+        {
+            Console.WriteLine("New connection received from " + session.RemoteEndPoint);
+        }
+        private void wsServer_newMessage(WebSocketSession session, string message)
+        {
+            Console.WriteLine(session.RemoteEndPoint + ": " + message);
+            SendToAllClients(session.RemoteEndPoint + ": " + message);
+        }
         #endregion
 
         #region Private methods
+        private void StartDatabase()
+        {
+            if (!isDBServiceStarted)
+            {
+                if (Log != null)
+                    Log(this, "Starting database... ", false, LogLevel.Normal);
+
+                isDBServiceStarted = dbService.Start();
+
+                if (isDBServiceStarted)
+                {
+                    nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
+                    sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
+
+                    var bls = dbService.GetAllBatteryLevels();
+                    foreach (var node in nodes)
+                        node.BatteryLevels = new ObservableCollection<BatteryLevel>(bls.Where(bl => bl.NodeID == node.ID));
+
+                    var svs = dbService.GetAllSensorValues();
+                    foreach (var sensor in sensors)
+                        sensor.Values = new ObservableCollection<SensorValue>(svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID));
+                }
+
+                if (Log != null)
+                    Log(this, isDBServiceStarted ? "Success." : "Failed.", true, isDBServiceStarted ? LogLevel.Success : LogLevel.Error);
+            }
+        }
+        private void StartWebServer()
+        {
+            if (!isWebServerStarted)
+            {
+                if (Log != null)
+                    Log(this, "Starting web server... ", false, LogLevel.Normal);
+
+                try
+                {
+                    var moduleManager = new ModuleManager();
+
+                    //string root = Path.GetPathRoot(Assembly.GetExecutingAssembly().Location);
+                    string root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Services\Web\Interface\";
+
+                    var fileService = new DiskFileService("/", root);
+                    var module = new FileModule(fileService) { ListFiles = false };
+
+                    // Add the module
+                    moduleManager.Add(new RootModule());
+                    moduleManager.Add(module);
+                    //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
+
+                    // And start the server.
+                    webServer = new HttpServer(moduleManager);
+                    webServer.Start(IPAddress.Any, 8080);
+
+                    isWebServerStarted = true;
+                }
+                catch (Exception)
+                {
+                    isWebServerStarted = false;
+                }
+
+                if (Log != null)
+                    Log(this, isWebServerStarted ? "Success." : "Failed.", true, isWebServerStarted ? LogLevel.Success : LogLevel.Error);
+            }
+        }
+        private void StartNameService()
+        {
+            //if (!isNameServiceStarted)
+            //{
+            //    if (Log != null)
+            //        Log(this, "Starting name service... ", false, LogLevel.Normal);
+            //    isNameServiceStarted = nameService.AddName("mysensors", NameService.NameType.Unique, NameService.MsSuffix.Default); // register on the local network
+            //    if (Log != null)
+            //        Log(this, isNameServiceStarted ? "Success." : "Failed.", true, isNameServiceStarted ? LogLevel.Success : LogLevel.Error);
+            //}
+        }
+        private void StartGatewayConnector()
+        {
+            if (!isConnectorStarted)
+            {
+                if (Log != null)
+                    Log(this, "Connecting to gateway... ", false, LogLevel.Normal);
+
+                isConnectorStarted = connector.Connect();
+
+                if (Log != null)
+                    Log(this, isConnectorStarted ? "Success." : "Failed.", true, isConnectorStarted ? LogLevel.Success : LogLevel.Error);
+            }
+        }
+        private void StartWSServer()
+        {
+            if (!isWSServerStarted)
+            {
+                if (Log != null)
+                    Log(this, "Starting websocket server... ", false, LogLevel.Normal);
+
+                wsServer = new WebSocketServer();
+
+                if (wsServer.Setup(12000))
+                {
+                    wsServer.NewSessionConnected += new SessionHandler<WebSocketSession>(wsServer_newConnection);
+                    wsServer.NewMessageReceived += new SessionHandler<WebSocketSession, string>(wsServer_newMessage);
+
+                    //SuperSocket.SocketBase.Config.ServerConfig s = new SuperSocket.SocketBase.Config.ServerConfig();
+                    //s.Name = "SuperWebSocket";
+                    //s.ServiceName = "SuperWebSocket";
+                    //s.Ip = "Any";
+                    //s.Port = 8089;
+                    //s.Mode = SocketMode.Async;
+
+                    wsServer.Start();
+
+                    isWSServerStarted = true;
+                }
+
+                if (Log != null)
+                    Log(this, isWSServerStarted ? "Success." : "Failed.", true, isWSServerStarted ? LogLevel.Success : LogLevel.Error);
+            }
+        }
+
+
         private void GetNextAvailableSensorID()
         {
             var query = nodes.OrderBy(node => node.ID).ToList();
@@ -358,6 +419,11 @@ namespace MySensors.Core
             TimeSpan result = dtNow.Subtract(dt);
             int seconds = Convert.ToInt32(result.TotalSeconds);
             return seconds;
+        }
+        private void SendToAllClients(string message)
+        {
+            foreach (WebSocketSession session in wsServer.GetAllSessions())
+                session.Send(message);
         }
         #endregion
     }

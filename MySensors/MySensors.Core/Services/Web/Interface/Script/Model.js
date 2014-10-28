@@ -1,11 +1,15 @@
 var model;
 
+//var model = kendo.observable({
+
+//});
+
 function Model() {
     // Fields:
     var me = this;
     var socket = null;
     var port = 12000;
-    var resourcePath = "Typhoon";
+    var resourcePath = "SmartNetwork";
 
     // Properties:
     this.Connected = false;
@@ -88,6 +92,7 @@ function Model() {
     function createWebSocket() {
         var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
         if (support) {
+            debugger;
             //socket = new WebSocket("ws://" + document.location.hostname + ":" + port + '/' + resourcePath);
             socket = new window[support]("ws://" + document.location.hostname + ":" + port + '/' + resourcePath);
             socket.onopen = onSocketOpen;
@@ -98,6 +103,7 @@ function Model() {
             showDialog("No WebSocket support! Please try another browser.", "Warning");
         //alert("No WebSocket support! Please try another browser.");
         function onSocketOpen() {
+            alert("open!");
             model.set("Connected", true);
             model.MessageManager.GetPower();
         }
