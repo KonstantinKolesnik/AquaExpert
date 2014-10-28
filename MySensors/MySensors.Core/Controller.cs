@@ -1,4 +1,6 @@
-﻿using MySensors.Core.Connectors;
+﻿using Griffin.WebServer;
+using Griffin.WebServer.Files;
+using MySensors.Core.Connectors;
 using MySensors.Core.Messaging;
 using MySensors.Core.Nodes;
 using MySensors.Core.Services.Data;
@@ -7,8 +9,10 @@ using MySensors.Core.Services.Web;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace MySensors.Core
 {
@@ -36,7 +40,7 @@ namespace MySensors.Core
         {
             get
             {
-                return isDBServiceStarted && isConnectorStarted;// && isNameServiceStarted;// && isWebServerStarted;
+                return isDBServiceStarted && isConnectorStarted && isWebServerStarted;
             }
         }
         #endregion
@@ -90,6 +94,43 @@ namespace MySensors.Core
                     Log(this, null, isDBServiceStarted ? "Success." : "Failed.");
             }
 
+            // start web-server service:
+            if (!isWebServerStarted)
+            {
+                if (Log != null)
+                    Log(this, "Starting web server... ", null);
+
+                try
+                {
+                    var moduleManager = new ModuleManager();
+
+                    // Let's serve our downloaded files (Windows 7 users)
+                    //var fileService = new DiskFileService("/", string.Format(@"C:\Users\{0}\Downloads", Environment.UserName));
+                    //var fileService = new DiskFileService("/", @"D:\Work\telerik.kendoui.professional.2014.2.716.commercial\examples\");
+                    var fileService = new DiskFileService("/", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\");
+
+
+
+                    // Create the file module and allow files to be listed.
+                    var module = new FileModule(fileService) { ListFiles = false };
+
+                    // Add the module
+                    moduleManager.Add(new RootModule());
+                    moduleManager.Add(module);
+                    //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
+
+                    // And start the server.
+                    var server = new HttpServer(moduleManager);
+                    server.Start(IPAddress.Any, 80);
+
+                    isWebServerStarted = true;
+                }
+                catch (Exception) { isWebServerStarted = false; }
+
+                if (Log != null)
+                    Log(this, null, isWebServerStarted ? "Success." : "Failed.");
+            }
+
             // start gateway connector service:
             if (!isConnectorStarted)
             {
@@ -112,21 +153,8 @@ namespace MySensors.Core
             //        ComponentStartEvent(this, null, isNameServiceStarted ? "Success." : "Failed.");
             //}
 
-            // start web-server service:
-            if (!isWebServerStarted)
-            {
-                WebServer ws = new WebServer(SendResponse, "http://localhost:8080/test/");
-                ws.Run();
-                //Console.WriteLine("A simple webserver. Press a key to quit.");
-                //Console.ReadKey();
-                //ws.Stop();
-            }
 
             return IsStarted;
-        }
-        public string SendResponse(HttpListenerRequest request)
-        {
-            return string.Format("<HTML><BODY>My web page.<br>{0}</BODY></HTML>", DateTime.Now);
         }
         public void Stop()
         {
