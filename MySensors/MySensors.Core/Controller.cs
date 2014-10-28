@@ -104,14 +104,7 @@ namespace MySensors.Core
                 {
                     var moduleManager = new ModuleManager();
 
-                    // Let's serve our downloaded files (Windows 7 users)
-                    //var fileService = new DiskFileService("/", string.Format(@"C:\Users\{0}\Downloads", Environment.UserName));
-                    //var fileService = new DiskFileService("/", @"D:\Work\telerik.kendoui.professional.2014.2.716.commercial\examples\");
-                    var fileService = new DiskFileService("/", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\");
-
-
-
-                    // Create the file module and allow files to be listed.
+                    var fileService = new DiskFileService("/", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Services\Web\Interface\");
                     var module = new FileModule(fileService) { ListFiles = false };
 
                     // Add the module
@@ -125,7 +118,10 @@ namespace MySensors.Core
 
                     isWebServerStarted = true;
                 }
-                catch (Exception) { isWebServerStarted = false; }
+                catch (Exception)
+                {
+                    isWebServerStarted = false;
+                }
 
                 if (Log != null)
                     Log(this, null, isWebServerStarted ? "Success." : "Failed.");
