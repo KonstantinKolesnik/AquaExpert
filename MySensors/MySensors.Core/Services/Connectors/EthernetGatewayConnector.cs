@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Messaging;
+﻿using MySensors.Core.Sensors;
 using System;
 using System.Net;
 using System.Net.Sockets;

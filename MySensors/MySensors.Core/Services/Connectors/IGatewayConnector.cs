@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Messaging;
+﻿using MySensors.Core.Sensors;
 
 namespace MySensors.Core.Services.Connectors
 {

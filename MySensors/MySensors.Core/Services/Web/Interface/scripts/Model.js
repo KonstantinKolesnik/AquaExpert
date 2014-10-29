@@ -1,13 +1,7 @@
 
-//var model = kendo.observable({
-
-//});
-
 function Model() {
     // Properties:
     this.IsConnected = false;
-
-
 
 
     //this.StationPower = false;
@@ -17,14 +11,14 @@ function Model() {
     //this.ProgBoosterIsActive = false;
     //this.ProgBoosterIsOverloaded = false;
     //this.ProgBoosterCurrent = 0;
-    //this.Options = {
-    //    MainBridgeCurrentThreshould: 3500,
-    //    ProgBridgeCurrentThreshould: 500,
-    //    BroadcastBoostersCurrent: false,
-    //    UseWiFi: true,
-    //    WiFiSSID: "",
-    //    WiFiPassword: ""
-    //};
+    this.Settings = {
+        WebTheme: "default",
+        UnitSystem: "M"
+        //BroadcastBoostersCurrent: false,
+        //UseWiFi: true,
+        //WiFiSSID: "",
+        //WiFiPassword: ""
+    };
     //this.Version = "";
     //this.OperationList = new kendo.data.ObservableArray([]);
 

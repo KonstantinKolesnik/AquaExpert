@@ -1,5 +1,5 @@
 ﻿
-namespace MySensors.Core.Nodes
+namespace MySensors.Core.Sensors
 {
     public enum SensorValueType : byte
     {

@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Nodes;
+﻿using MySensors.Core.Sensors;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
@@ -18,18 +18,18 @@ namespace MySensors.Core.Services.Data
         //[ManyToOne]      // Many to one relationship with Stock
         //public NodeDto Node { get; set; }
 
-        public static SensorDto FromModel(Sensor sensor)
+        public static SensorDto FromModel(Sensor item)
         {
-            if (sensor == null)
+            if (item == null)
                 return null;
 
             return new SensorDto()
             {
-                PK = sensor.NodeID << 8 + sensor.ID,
-                NodeID = sensor.NodeID,
-                ID = sensor.ID,
-                Type = (byte)sensor.Type,
-                ProtocolVersion = sensor.ProtocolVersion
+                PK = item.NodeID << 8 + item.ID,
+                NodeID = item.NodeID,
+                ID = item.ID,
+                Type = (byte)item.Type,
+                ProtocolVersion = item.ProtocolVersion
             };
         }
         public Sensor ToModel()

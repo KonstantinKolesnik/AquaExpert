@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Nodes;
+﻿using MySensors.Core.Sensors;
 using SQLite;
 using System;
 
@@ -15,18 +15,18 @@ namespace MySensors.Core.Services.Data
         public byte Type { get; set; }
         public float Value { get; set; }
 
-        public static SensorValueDto FromModel(SensorValue sv)
+        public static SensorValueDto FromModel(SensorValue item)
         {
-            if (sv == null)
+            if (item == null)
                 return null;
 
             return new SensorValueDto()
             {
-                NodeID = sv.NodeID,
-                ID = sv.ID,
-                Time = sv.Time,
-                Type = (byte)sv.Type,
-                Value = sv.Value
+                NodeID = item.NodeID,
+                ID = item.ID,
+                Time = item.Time,
+                Type = (byte)item.Type,
+                Value = item.Value
             };
         }
         public SensorValue ToModel()

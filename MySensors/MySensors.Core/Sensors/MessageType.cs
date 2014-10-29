@@ -1,5 +1,5 @@
 ﻿
-namespace MySensors.Core.Messaging
+namespace MySensors.Core.Sensors
 {
     public enum MessageType : byte
     {

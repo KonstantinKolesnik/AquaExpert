@@ -1,5 +1,4 @@
-﻿using MySensors.Core.Messaging;
-using MySensors.Core.Nodes;
+﻿using MySensors.Core.Sensors;
 using System;
 using System.IO.Ports;
 

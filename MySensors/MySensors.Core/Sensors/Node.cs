@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace MySensors.Core.Nodes
+namespace MySensors.Core.Sensors
 {
     public class Node : ObservableObject
     {

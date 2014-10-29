@@ -1,13 +1,14 @@
 ﻿using Griffin.WebServer;
 using Griffin.WebServer.Files;
 using MySensors.Core.Messaging;
-using MySensors.Core.Nodes;
+using MySensors.Core.Sensors;
 using MySensors.Core.Services.Connectors;
 using MySensors.Core.Services.Data;
 using MySensors.Core.Services.Web;
 using SuperSocket.SocketBase;
 using SuperWebSocket;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
@@ -27,6 +28,7 @@ namespace MySensors.Core
         private IGatewayConnector connector;
         private HttpServer webServer;
         private WebSocketServer wsServer;
+        private NetworkMessageReceiver nmr;
 
         private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
@@ -36,6 +38,7 @@ namespace MySensors.Core
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         private ObservableCollection<Sensor> sensors = new ObservableCollection<Sensor>();
+        private ObservableCollection<Setting> settings = new ObservableCollection<Setting>();
         #endregion
 
         #region Properties
@@ -44,6 +47,65 @@ namespace MySensors.Core
             get
             {
                 return isDBServiceStarted && isWSServerStarted;// && isWebServerStarted;// && isConnectorStarted;
+            }
+        }
+
+        public string WebTheme
+        {
+            get
+            {
+                var item = settings.Where(s => s.Name == "WebTheme").FirstOrDefault();
+                if (item == null)
+                {
+                    item = new Setting("WebTheme", "default");
+                    dbService.Insert(item);
+                }
+
+                return item.Value;
+            }
+            private set
+            {
+                var item = settings.Where(s => s.Name == "WebTheme").FirstOrDefault();
+                if (item == null)
+                {
+                    item = new Setting("WebTheme", "default");
+                    dbService.Insert(item);
+                }
+
+                if (item.Value != value)
+                {
+                    item.Value = value;
+                    dbService.Update(item);
+                }
+            }
+        }
+        public string UnitSystem //"M" or "I"
+        {
+            get
+            {
+                var item = settings.Where(s => s.Name == "UnitSystem").FirstOrDefault();
+                if (item == null)
+                {
+                    item = new Setting("UnitSystem", "M");
+                    dbService.Insert(item);
+                }
+
+                return item.Value;
+            }
+            private set
+            {
+                var item = settings.Where(s => s.Name == "UnitSystem").FirstOrDefault();
+                if (item == null)
+                {
+                    item = new Setting("UnitSystem", "M");
+                    dbService.Insert(item);
+                }
+
+                if (item.Value != value)
+                {
+                    item.Value = value;
+                    dbService.Update(item);
+                }
             }
         }
         #endregion
@@ -62,6 +124,8 @@ namespace MySensors.Core
 
             connector = isSerial ? (IGatewayConnector)new SerialGatewayConnector() : (IGatewayConnector)new EthernetGatewayConnector();
             connector.MessageReceived += connector_MessageReceived;
+
+            nmr = new NetworkMessageReceiver();
 
             //nameService = new NameService();
         }
@@ -201,7 +265,7 @@ namespace MySensors.Core
                         case InternalValueType.InclusionMode:
                             break;
                         case InternalValueType.Config:
-                            connector.Send(new Message(message.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Config, "M")); //"M" or "I"
+                            connector.Send(new Message(message.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Config, UnitSystem));
                             break;
                         case InternalValueType.FindParent:
                             break;
@@ -263,11 +327,18 @@ namespace MySensors.Core
             if (Log != null)
                 Log(this, "New connection received from " + session.RemoteEndPoint, true, LogLevel.Normal);
         }
-        private void wsServer_newMessage(WebSocketSession session, string message)
+        private void wsServer_newMessage(WebSocketSession session, string txt)
         {
-            Console.WriteLine(session.RemoteEndPoint + ": " + message);
-            //SendToAllClients(session.RemoteEndPoint + ": " + message);
-            SendToAllClients(message);
+            Console.WriteLine(session.RemoteEndPoint + ": " + txt);
+            //SendToAllClients(txt);
+
+            List<NetworkMessage> msgs = nmr.Process(txt);
+            foreach (NetworkMessage msg in msgs)
+            {
+                NetworkMessage response = ProcessNetworkMessage(msg);
+                if (response != null)
+                    session.Send(response.PackToString());
+            }
         }
         #endregion
 
@@ -295,6 +366,8 @@ namespace MySensors.Core
                     var svs = dbService.GetAllSensorValues();
                     foreach (var sensor in sensors)
                         sensor.Values = new ObservableCollection<SensorValue>(svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID));
+
+                    settings = new ObservableCollection<Setting>(dbService.GetAllSettings());
                 }
 
                 if (Log != null)
@@ -419,6 +492,66 @@ namespace MySensors.Core
         {
             foreach (WebSocketSession session in wsServer.GetAllSessions())
                 session.Send(message);
+        }
+        #endregion
+
+        #region Network message processing
+        private NetworkMessage ProcessNetworkMessage(NetworkMessage msg)
+        {
+            NetworkMessage response = null;
+
+            if (msg != null)
+            {
+                switch (msg.ID)
+                {
+                    #region Settings
+                    case NetworkMessageID.Settings:
+                        if (msg.ParametersCount == 0) // client asks for options
+                            response = GetSettingsMessage();
+                        else // client sets options
+                        {
+                            WebTheme = msg["WebTheme"];
+                            UnitSystem = msg["UnitSystem"];
+                            //options.BroadcastBoostersCurrent = msg["BroadcastBoostersCurrent"] == bool.TrueString;
+                            //options.UseWiFi = msg["UseWiFi"] == bool.TrueString;
+                            //options.WiFiSSID = msg["WiFiSSID"];
+                            //options.WiFiPassword = msg["WiFiPassword"];
+
+                            //options.SaveToFlash();
+                            //ApplyOptions();
+                            //BroadcastOptions();
+
+                            //response = GetOKMessage(null);
+                        }
+                        break;
+                    #endregion
+
+
+                    default: break;
+                }
+            }
+
+            return response;
+        }
+
+
+        private NetworkMessage GetOKMessage(string text)
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.OK);
+            if (!string.IsNullOrEmpty(text))
+                msg["Msg"] = text;
+            return msg;
+        }
+        private NetworkMessage GetSettingsMessage()
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.Settings);
+            msg["WebTheme"] = WebTheme;
+            msg["UnitSystem"] = UnitSystem;
+            //msg["BroadcastBoostersCurrent"] = options.BroadcastBoostersCurrent ? bool.TrueString : bool.FalseString;
+            //msg["UseWiFi"] = options.UseWiFi ? bool.TrueString : bool.FalseString;
+            //msg["WiFiSSID"] = options.WiFiSSID;
+            //msg["WiFiPassword"] = options.WiFiPassword;
+            return msg;
         }
         #endregion
     }

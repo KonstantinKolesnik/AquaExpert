@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Nodes;
+﻿using MySensors.Core.Sensors;
 using SQLite;
 
 namespace MySensors.Core.Services.Data
@@ -17,18 +17,18 @@ namespace MySensors.Core.Services.Data
         //public List<SensorDto> Sensors { get; set; }
 
 
-        public static NodeDto FromModel(Node node)
+        public static NodeDto FromModel(Node item)
         {
-            if (node == null)
+            if (item == null)
                 return null;
 
             return new NodeDto()
             {
-                ID = node.ID,
-                Type = (byte)node.Type,
-                ProtocolVersion = node.ProtocolVersion,
-                SketchName = node.SketchName,
-                SketchVersion = node.SketchVersion
+                ID = item.ID,
+                Type = (byte)item.Type,
+                ProtocolVersion = item.ProtocolVersion,
+                SketchName = item.SketchName,
+                SketchVersion = item.SketchVersion
             };
         }
         public Node ToModel()

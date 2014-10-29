@@ -2,19 +2,18 @@
 var msgManager;
 var wsClient;
 var mainView;
-var model;
+var viewModel;
 //----------------------------------------------------------------------------------------------------------------------
 function onWSClientOpen() {
-    //mainView.showDialog("Open!");
-    model.set("IsConnected", true);
-    msgManager.HelloWorld();
+    viewModel.set("IsConnected", true);
+    msgManager.GetSettings();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
         msgManager.onReceive(txt);
 }
 function onWSClientClose() {
-    model.set("IsConnected", false);
+    viewModel.set("IsConnected", false);
     wsClient.start();
 }
 function onWSClientError() {
@@ -22,6 +21,26 @@ function onWSClientError() {
 }
 function onMsgManagerSend(txt) {
     wsClient.send(txt);
+}
+function onViewModelGet(e) {
+    //debugger;
+}
+function onViewModelBeforeSet(e) {
+}
+function onViewModelAfterSet(e) {
+    switch (e.field) {
+        case "Settings.WebTheme":
+            mainView.applyTheme();
+            msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
+            break;
+        case "Settings.UnitSystem":
+            msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
+            break;
+
+
+        default:
+            break;
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 function MainView() {
@@ -52,6 +71,48 @@ function MainView() {
             win.title(title);
 
         win.center().open();
+    }
+    this.applyTheme = function () {
+        var skinName = viewModel.Settings.WebTheme || "default";
+        var animate = false;
+
+        var doc = document,
+        kendoLinks = $("link[href*='kendo.']", doc.getElementsByTagName("head")[0]),
+        commonLink = kendoLinks.filter("[href*='kendo.common']"),
+        skinLink = kendoLinks.filter(":not([href*='kendo.common'])"),
+        href = location.href,
+        skinRegex = /kendo\.\w+(\.min)?\.css/i,
+        extension = skinLink.attr("rel") === "stylesheet" ? ".css" : ".less",
+        url = commonLink.attr("href").replace(skinRegex, "kendo." + skinName + "$1" + extension),
+        exampleElement = $("#example");
+
+        if (animate)
+            preloadStylesheet(url, replaceTheme);
+        else
+            replaceTheme();
+
+        function preloadStylesheet(file, callback) {
+            var element = $("<link rel='stylesheet' media='print' href='" + file + "'").appendTo("head");
+
+            setTimeout(function () {
+                callback();
+                element.remove();
+            }, 100);
+        }
+        function replaceTheme() {
+            var oldSkinName = $(doc).data("kendoSkin"),
+                newLink;
+
+            //if ($.browser.msie)
+            //newLink = doc.createStyleSheet(url);
+            //else
+            newLink = skinLink.eq(0).clone().attr("href", url);
+
+            newLink.insertBefore(skinLink[0]);
+            skinLink.remove();
+
+            $(doc.documentElement).removeClass("k-" + oldSkinName).addClass("k-" + skinName);
+        }
     }
 
     function onWindowResize() {
@@ -98,7 +159,8 @@ function MainView() {
                     if (lastContent) {
                         lastContent.insertAfter(pnlContentHeader);
                         lastContent.toggle(true);
-                        pnlContentHeader.find("label").text($(e.item).text());
+                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " -> " + $(e.item).text();
+                        pnlContentHeader.find("label").text(title);
                     }
                 }
             }
@@ -120,54 +182,8 @@ function MainView() {
                 { text: "Uniform", value: "uniform" }
             ],
             dataTextField: "text",
-            dataValueField: "value",
-            change: function (e) {
-                var theme = (this.value() || "default").toLowerCase();
-                changeTheme(theme, false);
-            }
+            dataValueField: "value"
         });
-
-        function changeTheme(skinName, animate) {
-            var doc = document,
-                kendoLinks = $("link[href*='kendo.']", doc.getElementsByTagName("head")[0]),
-                commonLink = kendoLinks.filter("[href*='kendo.common']"),
-                skinLink = kendoLinks.filter(":not([href*='kendo.common'])"),
-                href = location.href,
-                skinRegex = /kendo\.\w+(\.min)?\.css/i,
-                extension = skinLink.attr("rel") === "stylesheet" ? ".css" : ".less",
-                url = commonLink.attr("href").replace(skinRegex, "kendo." + skinName + "$1" + extension),
-                exampleElement = $("#example");
-
-            function preloadStylesheet(file, callback) {
-                var element = $("<link rel='stylesheet' media='print' href='" + file + "'").appendTo("head");
-
-                setTimeout(function () {
-                    callback();
-                    element.remove();
-                }, 100);
-            }
-
-            function replaceTheme() {
-                var oldSkinName = $(doc).data("kendoSkin"),
-                    newLink;
-
-                //if ($.browser.msie)
-                    //newLink = doc.createStyleSheet(url);
-                //else
-                    newLink = skinLink.eq(0).clone().attr("href", url);
-
-                newLink.insertBefore(skinLink[0]);
-                skinLink.remove();
-
-                $(doc.documentElement).removeClass("k-" + oldSkinName).addClass("k-" + skinName);
-            }
-
-            if (animate) {
-                preloadStylesheet(url, replaceTheme);
-            } else {
-                replaceTheme();
-            }
-        }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,8 +191,11 @@ function onDocumentReady() {
     msgManager = new MessageManager();
     msgManager.onSend = onMsgManagerSend;
 
-    model = kendo.observable(new Model());
-    kendo.bind($("body"), model);
+    viewModel = kendo.observable(new Model());
+    kendo.bind($("body"), viewModel);
+    viewModel.bind("get", onViewModelGet);
+    viewModel.bind("set", onViewModelBeforeSet);
+    viewModel.bind("change", onViewModelAfterSet);
 
     mainView = new MainView();
 

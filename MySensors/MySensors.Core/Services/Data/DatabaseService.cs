@@ -1,4 +1,4 @@
-﻿using MySensors.Core.Nodes;
+﻿using MySensors.Core.Sensors;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -31,6 +31,7 @@ namespace MySensors.Core.Services.Data
                     con.CreateTable<BatteryLevelDto>();
                     con.CreateTable<SensorDto>();
                     con.CreateTable<SensorValueDto>();
+                    con.CreateTable<SettingDto>();
                 }
                 
                 return true;
@@ -46,40 +47,48 @@ namespace MySensors.Core.Services.Data
             con = null;
         }
 
-        public int Insert(Node node)
+        public int Insert(Node item)
         {
-            return con.Insert(NodeDto.FromModel(node), "OR REPLACE");
+            return con.Insert(NodeDto.FromModel(item), "OR REPLACE");
         }
         //public int Insert(List<Node> nodes)
         //{
         //    List<NodeDto> nodes2 = nodes.Select(node => NodeDto.FromModel(node)).ToList();
         //    return con.InsertAll(nodes2);
         //}
-        public int Insert(Sensor sensor)
+        public int Insert(Sensor item)
         {
-            return con.Insert(SensorDto.FromModel(sensor), "OR REPLACE");
+            return con.Insert(SensorDto.FromModel(item), "OR REPLACE");
         }
         //public int Insert(List<Sensor> sensors)
         //{
         //    List<SensorDto> sensors2 = sensors.Select(sensor => SensorDto.FromModel(sensor)).ToList();
         //    return con.InsertAll(sensors2);
         //}
-        public int Insert(BatteryLevel bl)
+        public int Insert(BatteryLevel item)
         {
-            return con.Insert(BatteryLevelDto.FromModel(bl));
+            return con.Insert(BatteryLevelDto.FromModel(item));
         }
-        public int Insert(SensorValue sv)
+        public int Insert(SensorValue item)
         {
-            return con.Insert(SensorValueDto.FromModel(sv));
+            return con.Insert(SensorValueDto.FromModel(item));
+        }
+        public int Insert(Setting item)
+        {
+            return con.Insert(SettingDto.FromModel(item), "OR REPLACE");
         }
 
-        public int Update(Node node)
+        public int Update(Node item)
         {
-            return con.Update(NodeDto.FromModel(node));
+            return con.Update(NodeDto.FromModel(item));
         }
-        public int Update(Sensor sensor)
+        public int Update(Sensor item)
         {
-            return con.Update(SensorDto.FromModel(sensor));
+            return con.Update(SensorDto.FromModel(item));
+        }
+        public int Update(Setting item)
+        {
+            return con.Update(SettingDto.FromModel(item));
         }
 
         public List<Node> GetAllNodes()
@@ -97,6 +106,10 @@ namespace MySensors.Core.Services.Data
         public List<SensorValue> GetAllSensorValues()
         {
             return con.Table<SensorValueDto>().ToList().Select(item => item.ToModel()).ToList();
+        }
+        public List<Setting> GetAllSettings()
+        {
+            return con.Table<SettingDto>().ToList().Select(item => item.ToModel()).ToList();
         }
     }
 }

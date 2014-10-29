@@ -22,26 +22,12 @@ NetworkMessageID = {
 
     //-----------------------------------------------------------------------
 
-    // Sender: STATION
-    // - Param "Layout": station layout xml
-    // Sender: CLIENT
-    // - No params: request for station layout
-    // Sender: CLIENT
-    // - Param "Layout": client layout xml
-    Layout: "Layout",
-
-    //-----------------------------------------------------------------------
-
     // Sender: STATION / CLIENT
-    // - Param "MainBridgeCurrentThreshould"
-    // - Param "ProgBridgeCurrentThreshould"
-    // - Param "BroadcastBoostersCurrent"
-    // - Param "UseWiFi"
-    // - Param "WiFiSSID"
-    // - Param "WiFiPassword"
+    // - Param "WebTheme"
+    // - Param "UnitSystem", M or I
     // Sender: CLIENT
-    // - No params: request for station options
-    Options: "Options",
+    // - No params: request for station settings
+    Settings: "Settings",
 
     Version: "Version",
 

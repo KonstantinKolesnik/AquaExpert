@@ -1,8 +1,7 @@
-﻿using MySensors.Core.Nodes;
-using System;
+﻿using System;
 using System.Text;
 
-namespace MySensors.Core.Messaging
+namespace MySensors.Core.Sensors
 {
     public class Message
     {
