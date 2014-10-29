@@ -45,54 +45,44 @@
     </script>
 </head>
 
-<body>
+<body class="k-content">
+    <!-- Header  -->
+    <div class="k-block k-header" style="padding:5px 15px;">
+        <table style="width:100%">
+            <tr>
+                <td width="30%">
+                    <img src="./Resources/StationConnected.png" alt="" style="width:40px; vertical-align:middle;"/>
+                    <span style="font-size:32px; vertical-align:middle; display:inline-block;">Smart Network</span>
+                </td>
+                <td></td>
+                <td width="10%">
+                    <span>Connection:</span>
+                    <img src="./resources/LedGrey_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected"/>
+                    <img src="./resources/LedGreen_16.ico" style="vertical-align:sub;" alt="" data-bind="visible: IsConnected"/>
+                </td>
+                <td width="8%"><span class="k-icon k-i-clock"></span><span id="lblTime" style="margin-left:5px; vertical-align:sub;"></span></td>
+                <td width="8%"><span class="k-icon k-i-calendar"></span><span id="lblDate" style="margin-left:5px; vertical-align:sub;"></span></td>
+                <td width="20%"><label style="margin:0 10px; vertical-align:middle;">Theme:</label><input class="themeChooser" value="default"/></td>
+            </tr>
+        </table>
 
-    <div class="k-block k-header" style="padding:10px 15px;">
-        <!--<img src="./Resources/StationConnected.png" alt="" width="80px" style="margin-left:10px;"/>-->
-        <label style="font-size:32px; vertical-align:top; display:inline-block;">Smart Network</label>
-
-        <div class="toolbar">
-            <label id="lblTime" style="margin-right:15px;"></label>
-            <label id="lblDate"></label>
-
-            <!--<ul>
+        <!--<div class="toolbar">
+            <ul>
                 <li><button class="k-button" onclick="model.MessageManager.BroadcastBrake();"><img src="./Resources/LocoBrake.ico" alt="" height="100%"/></button><span class="ButtonSpan">Brake</span></li>
                 <li><button class="k-button" onclick="model.MessageManager.BroadcastStop();"><img src="./Resources/LocoStop.ico" alt="" height="100%"/></button><span class="ButtonSpan">Stop</span></li>
                 <li><button class="k-button" onclick="model.SetPower();"><img data-bind="attr: { src: BtnPowerImage}" alt="" height="100%"/></button><span class="ButtonSpan">Power</span></li>
-            </ul>-->
-        </div>
-
-        <!--<table style="margin: 10px 20px 0 0; float:right;">
-            <tr>
-                <td><span>Connection:</span></td>
-                <td colspan="3">
-                    <img src="./Resources/LedGrey_16.ico" alt="" data-bind="visible: Disconnected"/>
-                    <img src="./Resources/LedGreen_16.ico" alt="" data-bind="visible: Connected"/>
-                </td>
-            </tr>
-            <tr>
-                <td><span>Main track:</span></td>
-                <td><img data-bind="attr: { src: LEDMainBoosterImage}" alt=""/></td>
-                <td style="text-align:right; width:30px;"><span data-bind="text: MainBoosterCurrent"></span></td>
-                <td><span>mA</span></td>
-            </tr>
-            <tr>
-                <td><span>Program track:</span></td>
-                <td><img data-bind="attr: { src: LEDProgBoosterImage}" alt=""/></td>
-                <td style="text-align:right; width:30px;"><span data-bind="text: ProgBoosterCurrent"></span></td>
-                <td><span>mA</span></td>
-            </tr>
-        </table>-->
+            </ul>
+        </div>-->
     </div>
 
+    <!-- Content  -->
     <div class="k-block">
         <table style="width:100%">
             <tr>
                 <td width="20%">
                     <ul id="panelbar">
                         <li>
-                            <!--<span class="k-link k-state-selected">Network</span>-->
-                            <span class="k-link" style="color:cornflowerblue;">Network</span>
+                            <span class="k-link" style="font-weight:bold;">Network</span><!-- k-state-selected-->
                             <ul>
                                 <li contentid="pnlDevices">Devices</li>
                                 <li contentid="pnlSensors">Sensors</li>
@@ -100,16 +90,16 @@
                             </ul>
                         </li>
                         <li>
-                            <span class="k-link" style="color:cornflowerblue;">Logical modules</span>
+                            <span class="k-link" style="font-weight:bold;">Logical modules</span>
                             <ul>
                                 <li>Sub Item 1</li>
                                 <li>Sub Item 2</li>
                                 <li>Sub Item 3</li>
                             </ul>
                         </li>
-                        <li disabled="disabled">
-                            <span class="k-link" style="color:cornflowerblue;">Settings</span>
-                        </li>
+                        <!--<li disabled="disabled">
+                            <span class="k-link" style="font-weight:bold;">Settings</span>
+                        </li>-->
                     </ul>
                 </td>
                 <td style="vertical-align:top;">
@@ -695,14 +685,22 @@
         </div>
     </div>
 
+    <!-- Footer  -->
     <div class="k-block k-header" style="padding:10px 15px; text-align:center;">
         <a href="http://www.smartnetwork.at.ua" target="_blank" class="k-link">&copy;&nbsp;Smart Network</a>
     </div>
 
+
     <div id="dlg" style="display:none;"></div>
+
     <div id="pnlDevices" class="pnlContent">
         Devices
     </div>
+
+
+
+
+
 
     <div id="preLoad" style="display:none;">
         <!--<div>
