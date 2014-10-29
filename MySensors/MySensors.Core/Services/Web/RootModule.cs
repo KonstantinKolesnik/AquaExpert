@@ -25,6 +25,7 @@ namespace MySensors.Core.Services.Web
         {
             if (context.Request.Uri.LocalPath == "/")
                 context.Request.Uri = new Uri(context.Request.Uri, "index.html");
+                //context.Request.Uri = new Uri(context.Request.Uri, "desktop.html");
 
             return ModuleResult.Continue;
         }

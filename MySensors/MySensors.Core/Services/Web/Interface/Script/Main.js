@@ -5,14 +5,14 @@ var mainView;
 //----------------------------------------------------------------------------------------------------------------------
 function onWSClientOpen() {
     //alert("open!");
+    msgManager.HelloWorld();
 }
 function onWSClientMessage(txt) {
-    debugger;
     if (msgManager)
-        msgManager.onReceived(txt);
+        msgManager.onReceive(txt);
 }
 function onWSClientClose() {
-    //wsClient.start();
+    wsClient.start();
 }
 function onWSClientError() {
     //showDialog("WebSocket error: " + e);
@@ -30,9 +30,9 @@ function MainView() {
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
             actions: ["Close"],
-            width: "300px",
-            height: "100px",
-            title: "Typhoon",
+            width: "400px",
+            height: "200px",
+            title: "Smart Network",
             visible: false,
             draggable: true,
             resizable: false,
@@ -43,6 +43,7 @@ function MainView() {
             win.content(txt);
         if (title)
             win.title(title);
+
         win.center().open();
     }
 
@@ -62,8 +63,6 @@ function MainView() {
         //gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
     }
 }
-
-
 //----------------------------------------------------------------------------------------------------------------------
 function onDocumentReady() {
     msgManager = new MessageManager();
@@ -76,11 +75,8 @@ function onDocumentReady() {
     wsClient.onError = onWSClientError;
     wsClient.start();
 
-
-
     mainView = new MainView();
-
-    msgManager.HelloWorld();
+    //mainView.showDialog("test");
 
     //model = kendo.observable(new Model());
     //kendo.bind($("body"), model);

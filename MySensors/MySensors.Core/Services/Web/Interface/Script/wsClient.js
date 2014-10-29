@@ -23,7 +23,10 @@ function WSClient(port, resourcePath) {
         var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
         if (support) {
             //socket = new WebSocket("ws://" + document.location.hostname + ":" + port + '/' + resourcePath);
-            socket = new window[support]("ws://" + document.location.hostname + ":" + port + '/' + resourcePath);
+            //socket = new window[support]("ws://" + document.location.hostname + ":" + port + '/' + resourcePath);
+
+            // for development test only!!!
+            socket = new window[support]("ws://localhost:" + port + '/' + resourcePath);
 
             socket.onopen = onSocketOpen;
             socket.onmessage = onSocketMessage;

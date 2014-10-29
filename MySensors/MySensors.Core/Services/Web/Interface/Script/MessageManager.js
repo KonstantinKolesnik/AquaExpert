@@ -9,7 +9,6 @@ function MessageManager() {
         var msg = new NetworkMessage(NetworkMessageID.Undefined);
         msg.FromText(txt);
 
-        alert(txt);
         var response = processMessage(msg);
         send(response);
     }
@@ -22,7 +21,7 @@ function MessageManager() {
 
     this.HelloWorld = function () {
         var msg = new NetworkMessage(NetworkMessageID.Information);
-        msg.SetParameter("msg", "Hello world!");
+        msg.SetParameter("Msg", "Hello world!");
         send(msg);
     }
 
@@ -161,20 +160,20 @@ function MessageManager() {
     function processMessage(msg) {
         var response = null;
 
-        //switch (msg.GetID()) {
-        //    case NetworkMessageID.OK:
-        //        var s = "Operation completed successfully!";
-        //        var ss = msg.GetParameter("Msg");
-        //        if (ss)
-        //            s = ss;
-        //        showDialog(s);
-        //        break;
-        //    case NetworkMessageID.Information:
-        //        showDialog(msg.GetParameter("Msg"), "Information");
-        //        break;
-        //    case NetworkMessageID.Warning:
-        //        showDialog(msg.GetParameter("Msg"), "Warning");
-        //        break;
+        switch (msg.GetID()) {
+            case NetworkMessageID.OK:
+                var s = "Operation completed successfully!";
+                var ss = msg.GetParameter("Msg");
+                if (ss)
+                    s = ss;
+                mainView.showDialog(s);
+                break;
+            case NetworkMessageID.Information:
+                mainView.showDialog(msg.GetParameter("Msg"), "Information");
+                break;
+            case NetworkMessageID.Warning:
+                mainView.showDialog(msg.GetParameter("Msg"), "Warning");
+                break;
         //    case NetworkMessageID.Error:
         //        showDialog(msg.GetParameter("Msg"), "Error");
         //        break;
@@ -200,11 +199,10 @@ function MessageManager() {
         //        model.set("MainBoosterCurrent", msg.GetParameter("Main"));
         //        model.set("ProgBoosterCurrent", msg.GetParameter("Prog"));
         //        break;
-        //    default:
-        //        break;
-        //}
+            default:
+                break;
+        }
 
         return response;
     }
-
 }
