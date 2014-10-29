@@ -11,6 +11,7 @@ namespace MySensors.Core.Nodes
         private string sketchName = "";
         private string sketchVersion = "";
         private ObservableCollection<BatteryLevel> batteryLevels = new ObservableCollection<BatteryLevel>();
+        private ObservableCollection<Sensor> sensors = new ObservableCollection<Sensor>();
         #endregion
 
         #region Properties
@@ -80,7 +81,11 @@ namespace MySensors.Core.Nodes
             get { return batteryLevels; }
             internal set { batteryLevels = value == null ? new ObservableCollection<BatteryLevel>() : value; }
         }
-        
+        public ObservableCollection<Sensor> Sensors
+        {
+            get { return sensors; }
+            internal set { sensors = value == null ? new ObservableCollection<Sensor>() : value; }
+        }
         public bool IsRepeater
         {
             get { return Type == SensorType.ArduinoRelay; }

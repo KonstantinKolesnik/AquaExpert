@@ -138,15 +138,15 @@ namespace MySensors.Core
         }
         private void connector_MessageReceived(IGatewayConnector sender, Message message)
         {
+            if (!IsStarted)
+                return;
+
             Console.WriteLine();
             Console.WriteLine(message.ToString());
 
             bool isNode = message.NodeID == 0 || message.SensorID == 255;
             Node node = !isNode ? null : GetNode(message.NodeID);
             Sensor sensor = !isNode ? GetSensor(message.NodeID, message.SensorID) : null;
-
-            if (!IsStarted)
-                return;
 
             switch (message.Type)
             {
@@ -190,7 +190,7 @@ namespace MySensors.Core
                             dbService.Insert(bl);
                             break;
                         case InternalValueType.Time:
-                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, GetTime().ToString()));
+                            connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
                             break;
                         case InternalValueType.Version:
                             break;
@@ -261,7 +261,8 @@ namespace MySensors.Core
         }
         private void wsServer_newConnection(WebSocketSession session)
         {
-            Console.WriteLine("New connection received from " + session.RemoteEndPoint);
+            if (Log != null)
+                Log(this, "New connection received from " + session.RemoteEndPoint, true, LogLevel.Normal);
         }
         private void wsServer_newMessage(WebSocketSession session, string message)
         {
@@ -284,6 +285,8 @@ namespace MySensors.Core
                 {
                     nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
                     sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
+                    foreach (var node in nodes)
+                        node.Sensors = new ObservableCollection<Sensor>(sensors.Where(sensor => sensor.NodeID == node.ID));
 
                     var bls = dbService.GetAllBatteryLevels();
                     foreach (var node in nodes)
@@ -373,13 +376,6 @@ namespace MySensors.Core
                     wsServer.NewSessionConnected += new SessionHandler<WebSocketSession>(wsServer_newConnection);
                     wsServer.NewMessageReceived += new SessionHandler<WebSocketSession, string>(wsServer_newMessage);
 
-                    //SuperSocket.SocketBase.Config.ServerConfig s = new SuperSocket.SocketBase.Config.ServerConfig();
-                    //s.Name = "SuperWebSocket";
-                    //s.ServiceName = "SuperWebSocket";
-                    //s.Ip = "Any";
-                    //s.Port = 8089;
-                    //s.Mode = SocketMode.Async;
-
                     wsServer.Start();
 
                     isWSServerStarted = true;
@@ -389,7 +385,6 @@ namespace MySensors.Core
                     Log(this, isWSServerStarted ? "Success." : "Failed.", true, isWSServerStarted ? LogLevel.Success : LogLevel.Error);
             }
         }
-
 
         private void GetNextAvailableSensorID()
         {
@@ -412,7 +407,7 @@ namespace MySensors.Core
                 connector.Send(new Message(255, 255, MessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
             }
         }
-        private int GetTime() // seconds since 1970
+        private int GetTimeForSensors() // seconds since 1970
         {
             DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local); // from 1970/1/1 00:00:00 to now
             DateTime dtNow = DateTime.Now;
