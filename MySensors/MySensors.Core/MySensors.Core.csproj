@@ -1010,25 +1010,25 @@
     <Content Include="Services\Web\Interface\Resources\Update.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Services\Web\Interface\script\LocomotiveOperator.js">
+    <None Include="Services\Web\Interface\scripts\LocomotiveOperator.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\messageManager.js">
+    <None Include="Services\Web\Interface\scripts\messageManager.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\model.js">
+    <None Include="Services\Web\Interface\scripts\model.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\networkMessage.js">
+    <None Include="Services\Web\Interface\scripts\networkMessage.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\networkMessageID.js">
+    <None Include="Services\Web\Interface\scripts\networkMessageID.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\main.js">
+    <None Include="Services\Web\Interface\scripts\main.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\Web\Interface\script\wsClient.js">
+    <None Include="Services\Web\Interface\scripts\wsClient.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Services\Web\Interface\styles\main.css">

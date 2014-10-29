@@ -26,6 +26,7 @@ function MainView() {
     var me = this;
 
     $(window).bind("resize", onWindowResize);
+    createLeftPanelBar();
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -61,6 +62,23 @@ function MainView() {
         //    otherElementsHeight += $(this).outerHeight();
         //});
         //gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
+    }
+    function createLeftPanelBar() {
+        $("#panelbar").kendoPanelBar({
+            //expandMode: "single",
+            animation: {
+                // fade-out closing items over 1000 milliseconds
+                collapse: {
+                    duration: 1000,
+                    effects: "fadeOut"
+                },
+                // fade-in and expand opening items over 500 milliseconds
+                expand: {
+                    duration: 500,
+                    effects: "expandVertical fadeIn"
+                }
+            }
+        });
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
