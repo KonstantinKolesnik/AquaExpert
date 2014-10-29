@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace MySensors.Core.Connectors
+namespace MySensors.Core.Services.Connectors
 {
     public class EthernetGatewayConnector : IGatewayConnector
     {

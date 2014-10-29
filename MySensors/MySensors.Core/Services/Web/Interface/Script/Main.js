@@ -1,35 +1,89 @@
-﻿UIStateType = {
-    Main: 0,
-    Layout: 1,
-    Operation: 2,
-    Decoders: 3,
-    Settings: 4,
-    Information: 5,
-    Firmware: 6
+﻿
+var msgManager;
+var wsClient;
+var mainView;
+//----------------------------------------------------------------------------------------------------------------------
+function onWSClientOpen() {
+    //alert("open!");
+    msgManager.HelloWorld();
+}
+function onWSClientMessage(txt) {
+    if (msgManager)
+        msgManager.onReceive(txt);
+}
+function onWSClientClose() {
+    wsClient.start();
+}
+function onWSClientError() {
+    //showDialog("WebSocket error: " + e);
+}
+
+function onMsgManagerSend(txt) {
+    wsClient.send(txt);
 }
 //----------------------------------------------------------------------------------------------------------------------
-function onWindowResize() {
-//    var h1 = $("header").height();
-    //alert($("body").height());
+function MainView() {
+    var me = this;
 
-    //$("#content").height($(document).height() - $("header").height() - $("footer").height());
+    $(window).bind("resize", onWindowResize);
+
+    this.showDialog = function (txt, title) {
+        var win = $("#dlg").kendoWindow({
+            actions: ["Close"],
+            width: "400px",
+            height: "200px",
+            title: "Smart Network",
+            visible: false,
+            draggable: true,
+            resizable: false,
+            modal: true
+        }).data("kendoWindow");
+
+        if (txt)
+            win.content(txt);
+        if (title)
+            win.title(title);
+
+        win.center().open();
+    }
+
+    function onWindowResize() {
+        //var h1 = $("header").height();
+        //alert($("body").height());
+
+        //$("#content").height($(document).height() - $("header").height() - $("footer").height());
     
-//    var gridElement = $("#gridLayout"),
-//        newHeight = gridElement.innerHeight(),
-//        otherElements = gridElement.children().not(".k-grid-content"),
-//        otherElementsHeight = 0;
-//    otherElements.each(function () {
-//        otherElementsHeight += $(this).outerHeight();
-//    });
-//    gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
+        //var gridElement = $("#gridLayout"),
+        //    newHeight = gridElement.innerHeight(),
+        //    otherElements = gridElement.children().not(".k-grid-content"),
+        //    otherElementsHeight = 0;
+        //otherElements.each(function () {
+        //    otherElementsHeight += $(this).outerHeight();
+        //});
+        //gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
+    }
 }
+//----------------------------------------------------------------------------------------------------------------------
 function onDocumentReady() {
-    model = kendo.observable(new Model());
-    model.Init();
-    kendo.bind($("body"), model);
-    return;
+    msgManager = new MessageManager();
+    msgManager.onSend = onMsgManagerSend;
 
-    createMainMenu();
+    wsClient = new WSClient(12000, "SmartNetwork");
+    wsClient.onOpen = onWSClientOpen;
+    wsClient.onMessage = onWSClientMessage;
+    wsClient.onClose = onWSClientClose;
+    wsClient.onError = onWSClientError;
+    wsClient.start();
+
+    mainView = new MainView();
+    //mainView.showDialog("test");
+
+    //model = kendo.observable(new Model());
+    //kendo.bind($("body"), model);
+
+
+
+    //createMainMenu();
     //createLayout();
     //createOperation();
     ////createDecoders();
@@ -97,8 +151,6 @@ function onDocumentReady() {
 //        //var lo = $('#lvOperation').data('kendoListView').dataSource._data[idx];
 //        //kendo.bind($(b).getKendoSlider(), lo);
 //    });
-
-    
 }
 //----------------------------------------------------------------------------------------------------------------------
 function createMainMenu() {
@@ -114,61 +166,71 @@ function createMainMenu() {
     $("#lvMainMenu").kendoListView({ template: kendo.template($("#tmpltMainMenuItem").html()), dataSource: { data: mainMenuItems } });
 }
 
-//    function getLayouts() {
-//        var crudServiceBaseUrl = "http://demos.kendoui.com/service",
-//        dataSource = new kendo.data.DataSource({
-//            transport: {
-//                read: {
-//                    url: crudServiceBaseUrl + "/Products",
-//                    dataType: "jsonp"
-//                },
-//                update: {
-//                    url: crudServiceBaseUrl + "/Products/Update",
-//                    dataType: "jsonp"
-//                },
-//                destroy: {
-//                    url: crudServiceBaseUrl + "/Products/Destroy",
-//                    dataType: "jsonp"
-//                },
-//                create: {
-//                    url: crudServiceBaseUrl + "/Products/Create",
-//                    dataType: "jsonp"
-//                },
-//                parameterMap: function (options, operation) {
-//                    if (operation !== "read" && options.models) {
-//                        return { models: kendo.stringify(options.models) };
-//                    }
-//                }
-//            },
-//            batch: true,
-//            pageSize: 4, //4
-//            schema: {
-//                model: {
-//                    id: "ProductID",
-//                    fields: {
-//                        ProductID: { editable: false, nullable: true },
-//                        ProductName: "ProductName",
-//                        UnitPrice: { type: "number" },
-//                        Discontinued: { type: "boolean" },
-//                        UnitsInStock: { type: "number" }
-//                    }
-//                }
-//            }
-//        });
+//UIStateType = {
+//    Main: 0,
+//    Layout: 1,
+//    Operation: 2,
+//    Decoders: 3,
+//    Settings: 4,
+//    Information: 5,
+//    Firmware: 6
+//}
 
 
-//        $("#lvLayoutsPager").kendoPager({ dataSource: dataSource });
-//        var listView = $("#lvLayouts").kendoListView({
-//            dataSource: dataSource,
-//            template: kendo.template($("#template").html()),
-//            editTemplate: kendo.template($("#editTemplate").html())
-//        }).data("kendoListView");
-//        $(".k-add-button").click(function (e) {
-//            listView.add();
-//            e.preventDefault();
-//        });
-//    }
+function getLayouts() {
+    //var crudServiceBaseUrl = "http://demos.kendoui.com/service",
+    //dataSource = new kendo.data.DataSource({
+    //    transport: {
+    //        read: {
+    //            url: crudServiceBaseUrl + "/Products",
+    //            dataType: "jsonp"
+    //        },
+    //        update: {
+    //            url: crudServiceBaseUrl + "/Products/Update",
+    //            dataType: "jsonp"
+    //        },
+    //        destroy: {
+    //            url: crudServiceBaseUrl + "/Products/Destroy",
+    //            dataType: "jsonp"
+    //        },
+    //        create: {
+    //            url: crudServiceBaseUrl + "/Products/Create",
+    //            dataType: "jsonp"
+    //        },
+    //        parameterMap: function (options, operation) {
+    //            if (operation !== "read" && options.models) {
+    //                return { models: kendo.stringify(options.models) };
+    //            }
+    //        }
+    //    },
+    //    batch: true,
+    //    pageSize: 4, //4
+    //    schema: {
+    //        model: {
+    //            id: "ProductID",
+    //            fields: {
+    //                ProductID: { editable: false, nullable: true },
+    //                ProductName: "ProductName",
+    //                UnitPrice: { type: "number" },
+    //                Discontinued: { type: "boolean" },
+    //                UnitsInStock: { type: "number" }
+    //            }
+    //        }
+    //    }
+    //});
 
+
+    //$("#lvLayoutsPager").kendoPager({ dataSource: dataSource });
+    //var listView = $("#lvLayouts").kendoListView({
+    //    dataSource: dataSource,
+    //    template: kendo.template($("#template").html()),
+    //    editTemplate: kendo.template($("#editTemplate").html())
+    //}).data("kendoListView");
+    //$(".k-add-button").click(function (e) {
+    //    listView.add();
+    //    e.preventDefault();
+    //});
+}
 function createLayout() {
     var baseUrl = "http://" + document.location.host;//.origin;
     //alert(baseUrl);
@@ -480,52 +542,52 @@ function createSpeedGauge() {
 //----------------------------------------------------------------------------------------------------------------------
 
 
-var speed = 0;
-var forward = true;
-var address = new LocomotiveAddress(7, false);
+//var speed = 0;
+//var forward = true;
+//var address = new LocomotiveAddress(7, false);
 
-function ff() {
-    speed++;
-    speed = Math.min(speed, 28);
-    forward = speed > 0;
-    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
+//function ff() {
+//    speed++;
+//    speed = Math.min(speed, 28);
+//    forward = speed > 0;
+//    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
 
-    //speedGauge.value(Math.abs(speed));
-    //speedGauge.value(speed);
-}
-function ss() {
-    speed = 0;
-    model.MessageManager.SetLocoSpeed28(address, speed, forward);
+//    //speedGauge.value(Math.abs(speed));
+//    //speedGauge.value(speed);
+//}
+//function ss() {
+//    speed = 0;
+//    model.MessageManager.SetLocoSpeed28(address, speed, forward);
 
-    //speedGauge.value(Math.abs(speed));
-    //speedGauge.value(speed);
-}
-function rr() {
-    speed--;
-    speed = Math.max(speed, -28);
-    forward = speed > 0;
-    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
+//    //speedGauge.value(Math.abs(speed));
+//    //speedGauge.value(speed);
+//}
+//function rr() {
+//    speed--;
+//    speed = Math.max(speed, -28);
+//    forward = speed > 0;
+//    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
 
-    //speedGauge.value(Math.abs(speed));
-    //speedGauge.value(speed);
-}
-function lightOn() { model.MessageManager.SetLocoFunctionGroup1(address, true, false, false, false, false); }
-function lightOff() { model.MessageManager.SetLocoFunctionGroup1(address, false, false, false, false, false); }
-
-
-
-function aaa(item) {
-    var a = 0;
-    var b = a;
+//    //speedGauge.value(Math.abs(speed));
+//    //speedGauge.value(speed);
+//}
+//function lightOn() { model.MessageManager.SetLocoFunctionGroup1(address, true, false, false, false, false); }
+//function lightOff() { model.MessageManager.SetLocoFunctionGroup1(address, false, false, false, false, false); }
 
 
 
-    //var a = $(item).kendoSlider().data('kendoSlider');
-    kendo.init($(item));
+//function aaa(item) {
+//    var a = 0;
+//    var b = a;
 
-    //var b = $(item).parents('.OperationItem:first').find('.SpeedSlider')[1];//.kendoSlider().data('kendoListView');
-    //kendo.init($(b));
+
+
+//    //var a = $(item).kendoSlider().data('kendoSlider');
+//    kendo.init($(item));
+
+//    //var b = $(item).parents('.OperationItem:first').find('.SpeedSlider')[1];//.kendoSlider().data('kendoListView');
+//    //kendo.init($(b));
     
-    //($(b)).kendoSlider().data("kendoSlider").value(20);
+//    //($(b)).kendoSlider().data("kendoSlider").value(20);
 
-}
+//}

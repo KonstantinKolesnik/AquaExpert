@@ -13,8 +13,7 @@ namespace MySensors.Core.Services.Web
         public WebServer(string[] prefixes, Func<HttpListenerRequest, string> method)
         {
             if (!HttpListener.IsSupported)
-                throw new NotSupportedException(
-                    "Needs Windows XP SP2, Server 2003 or later.");
+                throw new NotSupportedException("Needs Windows XP SP2, Server 2003 or later.");
 
             // URI prefixes are required, for example 
             // "http://localhost:8080/index/".

@@ -3,7 +3,7 @@ using MySensors.Core.Nodes;
 using System;
 using System.IO.Ports;
 
-namespace MySensors.Core.Connectors
+namespace MySensors.Core.Services.Connectors
 {
     public class SerialGatewayConnector : IGatewayConnector
     {
@@ -79,8 +79,7 @@ namespace MySensors.Core.Connectors
         public void Send(Message message)
         {
             if (message != null)
-                //serialPort.WriteLine(message.ToRawString());
-                serialPort.Write(message.ToRawString());
+                serialPort.WriteLine(message.ToRawString());
         }
         #endregion
 

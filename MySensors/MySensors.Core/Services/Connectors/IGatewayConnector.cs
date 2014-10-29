@@ -1,6 +1,6 @@
 ﻿using MySensors.Core.Messaging;
 
-namespace MySensors.Core.Connectors
+namespace MySensors.Core.Services.Connectors
 {
     public delegate void MessageEventHandler(IGatewayConnector sender, Message message);
 
