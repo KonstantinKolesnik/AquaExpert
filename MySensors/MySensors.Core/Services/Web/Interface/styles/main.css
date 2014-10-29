@@ -13,6 +13,16 @@ body::before, body::after
     /*height: 0;*/
 }
 /*------------------------------------------------------------------------------*/
+.pnlContent
+{
+    display:none;
+    padding:5px 15px;
+}
+
+
+
+
+
 .toolbar
 {
     /*margin-right: 10px;*/
@@ -20,7 +30,7 @@ body::before, body::after
     /*vertical-align:top;*/
     /*text-align: center;*/
 }
-.toolbar ul
+/*.toolbar ul
 {
     display: block;
     overflow: hidden;
@@ -38,9 +48,9 @@ body::before, body::after
     height: 32px;
     display: block;
     margin: auto;
-}
+}*/
 /*------------------------------------------------------------------------------*/
-.toolbarsmall
+/*.toolbarsmall
 {
     margin-right: 10px;
     float: right;
@@ -64,7 +74,7 @@ body::before, body::after
     height: 24px;
     display: block;
     margin: -5px 0px -5px 0px;
-}
+}*/
 
 .smallTlbBtn
 {

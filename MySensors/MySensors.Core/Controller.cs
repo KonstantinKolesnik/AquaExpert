@@ -43,7 +43,7 @@ namespace MySensors.Core
         {
             get
             {
-                return isDBServiceStarted && isWSServerStarted;// && isWebServerStarted && isConnectorStarted;
+                return isDBServiceStarted && isWSServerStarted;// && isWebServerStarted;// && isConnectorStarted;
             }
         }
         #endregion

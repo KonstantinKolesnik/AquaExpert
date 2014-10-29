@@ -24,6 +24,9 @@ function onMsgManagerSend(txt) {
 //----------------------------------------------------------------------------------------------------------------------
 function MainView() {
     var me = this;
+    var pnlContentHolder = $("#pnlContentHolder");
+    var pnlContentHeader = $("#pnlContentHeader");
+    var lastContent = null;
 
     $(window).bind("resize", onWindowResize);
     createLeftPanelBar();
@@ -76,6 +79,24 @@ function MainView() {
                 expand: {
                     duration: 500,
                     effects: "expandVertical fadeIn"
+                }
+            },
+            select: function (e) {
+                var contentID = $(e.item).attr("contentid");
+                pnlContentHolder.toggle(contentID != null);
+
+                if (lastContent) {
+                    lastContent.insertAfter($("#dlg"));
+                    lastContent.toggle(false);
+                }
+
+                if (contentID) {
+                    lastContent = $("#" + contentID);
+                    if (lastContent) {
+                        lastContent.insertAfter(pnlContentHeader);
+                        lastContent.toggle(true);
+                        pnlContentHeader.find("label").text($(e.item).text());
+                    }
                 }
             }
         });
@@ -171,6 +192,15 @@ function onDocumentReady() {
 //    });
 }
 //----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 function createMainMenu() {
     var mainMenuItems = [
         { Name: "Layout", Url: "Database.png", Action: "model.set('UIState', UIStateType.Layout);" },

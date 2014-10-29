@@ -27,6 +27,8 @@ namespace MySensors.Core.Services.Web
                 context.Request.Uri = new Uri(context.Request.Uri, "index.html");
                 //context.Request.Uri = new Uri(context.Request.Uri, "desktop.html");
 
+            //context.Response.AddHeader("Expires:", "1");
+
             return ModuleResult.Continue;
         }
     }

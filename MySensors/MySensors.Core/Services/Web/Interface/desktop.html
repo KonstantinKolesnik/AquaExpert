@@ -3,6 +3,7 @@
 <head>
     <title>Smart Network</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--<meta http-equiv="refresh" content="1"/>-->
     <!--<meta name="viewport" content="width=device-width; height=device-height; maximum-scale=1.4; initial-scale=1.0; user-scalable=yes"/>-->
     <!--<meta name="viewport" content="width=device-width; maximum-scale=1.4; initial-scale=1.0; user-scalable=yes"/>-->
     <!--<meta name="viewport" content="height=device-height; maximum-scale=1.4; initial-scale=1.0; user-scalable=yes"/>-->
@@ -91,15 +92,15 @@
                     <ul id="panelbar">
                         <li>
                             <!--<span class="k-link k-state-selected">Network</span>-->
-                            Network
+                            <span class="k-link" style="color:cornflowerblue;">Network</span>
                             <ul>
-                                <li>Devices</li>
-                                <li>Sensors</li>
-                                <li>Sub Item 3</li>
+                                <li contentid="pnlDevices">Devices</li>
+                                <li contentid="pnlSensors">Sensors</li>
+                                <li>All</li>
                             </ul>
                         </li>
                         <li>
-                            Item 2
+                            <span class="k-link" style="color:cornflowerblue;">Logical modules</span>
                             <ul>
                                 <li>Sub Item 1</li>
                                 <li>Sub Item 2</li>
@@ -107,15 +108,13 @@
                             </ul>
                         </li>
                         <li disabled="disabled">
-                            Disabled item
+                            <span class="k-link" style="color:cornflowerblue;">Settings</span>
                         </li>
                     </ul>
                 </td>
                 <td style="vertical-align:top;">
-                    <div class="k-block">
-                        <div class="k-header">Header</div>
-                        bhhhjj'hgjl'hh'j'j
-                        
+                    <div id="pnlContentHolder" class="k-block" style="display:none;">
+                        <div id="pnlContentHeader" class="k-header"><label style="padding-left:15px;">Header</label></div>
                     </div>
                 </td>
             </tr>
@@ -701,6 +700,10 @@
     </div>
 
     <div id="dlg" style="display:none;"></div>
+    <div id="pnlDevices" class="pnlContent">
+        Devices
+    </div>
+
     <div id="preLoad" style="display:none;">
         <!--<div>
             <img src="KendoUI/styles/black/loading-image.gif" alt="Loading Image" />
