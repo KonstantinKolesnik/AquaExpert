@@ -13,32 +13,31 @@ namespace MySensors.Core.Services.Data
         private const string dbFileName = "MySensors.dat";
         private SQLiteConnection con = null;
 
-        public bool Start()
+        public bool IsStarted
         {
-            if (con != null)
-                return true;
+            get { return con != null; }
+        }
+
+        public void Start()
+        {
+            if (IsStarted)
+                return;
 
             try
             {
                 string dbPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + dbFileName;
-                bool exists = File.Exists(dbPath);
-
                 con = new SQLiteConnection(dbFileName);
 
-                if (!exists)
-                {
-                    con.CreateTable<NodeDto>();
-                    con.CreateTable<BatteryLevelDto>();
-                    con.CreateTable<SensorDto>();
-                    con.CreateTable<SensorValueDto>();
-                    con.CreateTable<SettingDto>();
-                }
-                
-                return true;
+                con.CreateTable<NodeDto>();
+                con.CreateTable<BatteryLevelDto>();
+                con.CreateTable<SensorDto>();
+                con.CreateTable<SensorValueDto>();
+                con.CreateTable<SettingDto>();
             }
-            catch (Exception) { }
-
-            return false;
+            catch (Exception)
+            {
+                Stop();
+            }
         }
         public void Stop()
         {

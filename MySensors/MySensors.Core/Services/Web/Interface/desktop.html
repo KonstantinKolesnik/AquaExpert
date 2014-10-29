@@ -57,12 +57,11 @@
                 <td></td>
                 <td width="10%">
                     <span>Connection:</span>
-                    <img src="./resources/LedGrey_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected"/>
+                    <img src="./resources/LedRed_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected"/>
                     <img src="./resources/LedGreen_16.ico" style="vertical-align:sub;" alt="" data-bind="visible: IsConnected"/>
                 </td>
                 <td width="8%"><span class="k-icon k-i-clock"></span><span id="lblTime" style="margin-left:5px; vertical-align:sub;"></span></td>
                 <td width="8%"><span class="k-icon k-i-calendar"></span><span id="lblDate" style="margin-left:5px; vertical-align:sub;"></span></td>
-                <td width="20%"><label style="margin:0 10px; vertical-align:middle;">Theme:</label><input class="themeChooser" data-bind="value: Settings.WebTheme"/></td>
             </tr>
         </table>
 
@@ -95,6 +94,32 @@
                                 <li>Sub Item 1</li>
                                 <li>Sub Item 2</li>
                                 <li>Sub Item 3</li>
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <span class="k-link" style="font-weight:bold;">Clients</span>
+                            <ul>
+                                <li>Connected clients</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="k-link" style="font-weight:bold;">System</span>
+                            <ul>
+                                <li>Server status</li>
+                                <li>Peripherals</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="k-link" style="font-weight:bold;">Settings</span>
+                            <ul>
+                                <li>Locations</li>
+                                <li>Categories</li>
+                                <li>Presences</li>
+                                <li>Day parts</li>
+                                <li contentid="pnlSettingsServer">Server</li>
+                                <li>Firmware</li>
                             </ul>
                         </li>
                         <!--<li disabled="disabled">
@@ -696,7 +721,16 @@
     <div id="pnlDevices" class="pnlContent">
         Devices
     </div>
+    <div id="pnlSettingsServer" class="pnlContent">
+        <table style="width:100%;">
+            <tr><td><span>Theme:</span></td><td><select id="ddlTheme" data-bind="value: Settings.WebTheme" /></td></tr>
+            <tr><td><span>Unit system:</span></td><td><select id="ddlUnitSystem" data-bind="value: Settings.UnitSystem" /></td></tr>
 
+        </table>
+    </div>
+
+
+    
 
 
 

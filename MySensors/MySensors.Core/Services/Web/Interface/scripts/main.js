@@ -50,8 +50,10 @@ function MainView() {
     var lastContent = null;
 
     $(window).bind("resize", onWindowResize);
+
     createLeftPanelBar();
-    createThemeChooser();
+    createThemeSelector();
+    createUnitSystemSelector();
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -130,6 +132,7 @@ function MainView() {
         //});
         //gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
     }
+
     function createLeftPanelBar() {
         $("#panelbar").kendoPanelBar({
             //expandMode: "single",
@@ -159,15 +162,15 @@ function MainView() {
                     if (lastContent) {
                         lastContent.insertAfter(pnlContentHeader);
                         lastContent.toggle(true);
-                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " -> " + $(e.item).text();
+                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " > " + $(e.item).text();
                         pnlContentHeader.find("label").text(title);
                     }
                 }
             }
         });
     }
-    function createThemeChooser() {
-        $(".themeChooser").kendoDropDownList({
+    function createThemeSelector() {
+        $("#ddlTheme").kendoDropDownList({
             dataSource: [
                 { text: "Black", value: "black" },
                 { text: "Blue Opal", value: "blueopal" },
@@ -180,6 +183,16 @@ function MainView() {
                 { text: "Moonlight", value: "moonlight" },
                 { text: "Silver", value: "silver" },
                 { text: "Uniform", value: "uniform" }
+            ],
+            dataTextField: "text",
+            dataValueField: "value"
+        });
+    }
+    function createUnitSystemSelector() {
+        $("#ddlUnitSystem").kendoDropDownList({
+            dataSource: [
+                { text: "Metric", value: "M" },
+                { text: "Imperial", value: "I" }
             ],
             dataTextField: "text",
             dataValueField: "value"
@@ -288,16 +301,20 @@ function onDocumentReady() {
 
 
 function createMainMenu() {
-    var mainMenuItems = [
-        { Name: "Layout", Url: "Database.png", Action: "model.set('UIState', UIStateType.Layout);" },
-        { Name: "Operation", Url: "Operation.png", Action: "model.set('UIState', UIStateType.Operation);" },
-        { Name: "Decoders", Url: "Decoder.png", Action: "model.set('UIState', UIStateType.Decoders);" },
-        { Name: "Settings", Url: "Settings.png", Action: "model.set('UIState', UIStateType.Settings); model.MessageManager.GetOptions();" },
-        { Name: "Information", Url: "Info.png", Action: "model.set('UIState', UIStateType.Information);" },
-        { Name: "Firmware", Url: "Update.png", Action: "model.set('UIState', UIStateType.Firmware); model.MessageManager.GetVersion();" }
+    var mainMenuItems =
+        [
+            { Name: "Layout", Url: "Database.png", Action: "model.set('UIState', UIStateType.Layout);" },
+            { Name: "Operation", Url: "Operation.png", Action: "model.set('UIState', UIStateType.Operation);" },
+            { Name: "Decoders", Url: "Decoder.png", Action: "model.set('UIState', UIStateType.Decoders);" },
+            { Name: "Settings", Url: "Settings.png", Action: "model.set('UIState', UIStateType.Settings); model.MessageManager.GetOptions();" },
+            { Name: "Information", Url: "Info.png", Action: "model.set('UIState', UIStateType.Information);" },
+            { Name: "Firmware", Url: "Update.png", Action: "model.set('UIState', UIStateType.Firmware); model.MessageManager.GetVersion();" }
         ];
 
-    $("#lvMainMenu").kendoListView({ template: kendo.template($("#tmpltMainMenuItem").html()), dataSource: { data: mainMenuItems } });
+    $("#lvMainMenu").kendoListView({
+        dataSource: { data: mainMenuItems },
+        template: kendo.template($("#tmpltMainMenuItem").html())
+    });
 }
 
 //UIStateType = {

@@ -30,7 +30,6 @@ namespace MySensors.Core
         private WebSocketServer wsServer;
         private NetworkMessageReceiver nmr;
 
-        private bool isDBServiceStarted = false;
         private bool isConnectorStarted = false;
         //private bool isNameServiceStarted = false;
         private bool isWebServerStarted = false;
@@ -46,7 +45,7 @@ namespace MySensors.Core
         {
             get
             {
-                return isDBServiceStarted && isWSServerStarted;// && isWebServerStarted;// && isConnectorStarted;
+                return dbService.IsStarted && isWSServerStarted;// && isWebServerStarted;// && isConnectorStarted;
             }
         }
 
@@ -155,7 +154,6 @@ namespace MySensors.Core
             wsServer.Dispose();
             wsServer = null;
 
-            isDBServiceStarted = false;
             isConnectorStarted = false;
             //isNameServiceStarted = false;
             isWebServerStarted = false;
@@ -345,14 +343,14 @@ namespace MySensors.Core
         #region Private methods
         private void StartDatabase()
         {
-            if (!isDBServiceStarted)
+            if (!dbService.IsStarted)
             {
                 if (Log != null)
                     Log(this, "Starting database... ", false, LogLevel.Normal);
 
-                isDBServiceStarted = dbService.Start();
+                dbService.Start();
 
-                if (isDBServiceStarted)
+                if (dbService.IsStarted)
                 {
                     nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
                     sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
@@ -371,7 +369,7 @@ namespace MySensors.Core
                 }
 
                 if (Log != null)
-                    Log(this, isDBServiceStarted ? "Success." : "Failed.", true, isDBServiceStarted ? LogLevel.Success : LogLevel.Error);
+                    Log(this, dbService.IsStarted ? "Success." : "Failed.", true, dbService.IsStarted ? LogLevel.Success : LogLevel.Error);
             }
         }
         private void StartWebServer()
