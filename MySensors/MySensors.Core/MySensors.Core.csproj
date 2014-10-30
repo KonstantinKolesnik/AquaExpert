@@ -92,6 +92,13 @@
     <Compile Include="Messaging\NetworkMessageEventHandler.cs" />
     <Compile Include="Messaging\NetworkMessageID.cs" />
     <Compile Include="Messaging\NetworkMessageReceiver.cs" />
+    <Compile Include="Scripting\Compilers\CSharpCompiler.cs" />
+    <Compile Include="Scripting\Compilers\VBCompiler.cs" />
+    <Compile Include="Scripting\IScriptCompiler.cs" />
+    <Compile Include="Scripting\Language.cs" />
+    <Compile Include="Scripting\Script.cs" />
+    <Compile Include="Scripting\ScriptCompilerOutput.cs" />
+    <Compile Include="Scripting\ScriptingEngine.cs" />
     <Compile Include="Services\Connectors\EthernetGatewayConnector.cs" />
     <Compile Include="Services\Connectors\IGatewayConnector.cs" />
     <Compile Include="Services\Connectors\SerialGatewayConnector.cs" />
