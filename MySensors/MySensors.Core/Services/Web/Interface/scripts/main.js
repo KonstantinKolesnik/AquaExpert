@@ -200,6 +200,7 @@ function MainView() {
                 pageSizes: [10, 20, 50, 100, 300],
                 pageSize: 50
             },
+            majorGridLines: false,
             columns:
                 [
                   { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
@@ -250,7 +251,15 @@ function MainView() {
 
                 kendo.bind(detailRow, e.data);
                 //$(document).bind("kendo:skinChange", createChart);
-
+                //detailRow.find(".deviceDetailsBatteryLevels").data("kendoChart").setOptions({
+                //    categoryAxis: {
+                //        baseUnit: "hours"
+                //        //baseUnit: "days",
+                //        //baseUnit: "months",
+                //        //baseUnit: "weeks",
+                //        //baseUnit: "years",
+                //    }
+                //});
 
 
                 //var templ = kendo.template($("#deviceDetailsTemplate").html());
@@ -401,7 +410,7 @@ function MainView() {
                 line: { visible: true },
                 majorGridLines: { visible: true },
                 min: 0,
-                max: 150,
+                max: 120,
                 color: "#000000"
             },
             categoryAxis: {
@@ -429,7 +438,6 @@ function MainView() {
                         weeks: "M-d",
                         years: "yyyy"
                     },
-
                     //format: "{0} aa}",
                     visible: true
                 },
