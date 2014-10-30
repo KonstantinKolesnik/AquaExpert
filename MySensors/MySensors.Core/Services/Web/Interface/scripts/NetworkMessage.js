@@ -4,7 +4,9 @@ function NetworkMessage(ID) {
     var id = ID;
     var parameters = [];
 
-    this.GetID = function () { return id; }
+    this.GetID = function () {
+        return id;
+    }
     this.SetParameter = function (name, value) {
         for (var i = 0; i < parameters.length; i++) {
             var pair = parameters[i];
@@ -24,6 +26,7 @@ function NetworkMessage(ID) {
         }
         return null;
     }
+
     this.ToText = function () {
         var res = "";
 

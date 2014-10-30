@@ -26,7 +26,6 @@ function onMsgManagerSend(txt) {
     wsClient.send(txt);
 }
 function onViewModelGet(e) {
-    //debugger;
 }
 function onViewModelBeforeSet(e) {
 }
@@ -39,8 +38,6 @@ function onViewModelAfterSet(e) {
         case "Settings.UnitSystem":
             msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
             break;
-
-
         default:
             break;
     }
@@ -58,8 +55,8 @@ function MainView() {
     createThemeSelector();
     createUnitSystemSelector();
 
-    $(window).bind("resize", adjustGridSize);
-    $(window).resize(adjustGridSize);
+    $(window).bind("resize", adjustSizes);
+    $(window).resize(adjustSizes);
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -122,34 +119,35 @@ function MainView() {
             $(doc.documentElement).removeClass("k-" + oldSkinName).addClass("k-" + skinName);
         }
     }
+    this.adjustSizes = adjustSizes;
 
-    function adjustGridSize() {
-        //$("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight() - 7/*don't change!*/);
+    function adjustSizes() {
+        $("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight());
 
-        adjust($("#gridDevices"));
-        adjust($("#gridSensors"));
+        adjustGrid($("#gridDevices"));
+        adjustGrid($("#gridSensors"));
 
-        function adjust(grid) {
-            grid.height($(window).height() - getY(grid) - $("#footer").outerHeight() - 9/*don't change!*/);
+        function adjustGrid(grid) {
+            grid.height($(window).height() - getY(grid) - $("#footer").outerHeight() - 8/*don't change!*/);
             arrangeGridContent(grid);
-        }
-        function getY(grid) {
-            var el = grid[0];
-            var yPosition = el.offsetTop;
-            while (el = el.offsetParent)
-                yPosition += el.offsetTop;
-            return yPosition;
-        }
-        function arrangeGridContent(grid) {
-            var newHeight = grid.innerHeight(),
-                otherElements = grid.children().not(".k-grid-content"),
-                otherElementsHeight = 0;
 
-            otherElements.each(function () { otherElementsHeight += $(this).outerHeight(); });
-            grid.children(".k-grid-content").height(newHeight - otherElementsHeight);
+            function getY() {
+                var el = grid[0];
+                var yPosition = el.offsetTop;
+                while (el = el.offsetParent)
+                    yPosition += el.offsetTop;
+                return yPosition;
+            }
+            function arrangeGridContent() {
+                var newHeight = grid.innerHeight(),
+                    otherElements = grid.children().not(".k-grid-content"),
+                    otherElementsHeight = 0;
+
+                otherElements.each(function () { otherElementsHeight += $(this).outerHeight(); });
+                grid.children(".k-grid-content").height(newHeight - otherElementsHeight);
+            }
         }
     }
-
     function createMenu() {
         $("#panelbar").kendoPanelBar({
             //expandMode: "single",
@@ -164,23 +162,24 @@ function MainView() {
                 }
             },
             select: function (e) {
-                var contentID = $(e.item).attr("contentid");
-                pnlContentHolder.toggle(contentID != null);
-
                 if (lastContent) {
                     lastContent.insertAfter($("#dlg"));
                     lastContent.toggle(false);
                 }
+
+                var contentID = $(e.item).attr("contentid");
+                pnlContentHolder.toggle(contentID != null);
 
                 if (contentID) {
                     lastContent = $("#" + contentID);
                     if (lastContent) {
                         lastContent.insertAfter(pnlContentHeader);
                         lastContent.toggle(true);
+
                         var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " > " + $(e.item).text();
                         pnlContentHeader.find("label").text(title);
 
-                        adjustGridSize();
+                        adjustSizes();
                     }
                 }
             }
@@ -336,6 +335,7 @@ function onDocumentReady() {
     msgManager.onSend = onMsgManagerSend;
 
     mainView = new MainView();
+    mainView.adjustSizes();
 
     viewModel = kendo.observable(new Model());
     kendo.bind($("body"), viewModel);
@@ -825,12 +825,6 @@ function createSpeedGauge() {
 }
 
 
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-
-
 //var speed = 0;
 //var forward = true;
 //var address = new LocomotiveAddress(7, false);
@@ -868,8 +862,6 @@ function createSpeedGauge() {
 //function aaa(item) {
 //    var a = 0;
 //    var b = a;
-
-
 
 //    //var a = $(item).kendoSlider().data('kendoSlider');
 //    kendo.init($(item));

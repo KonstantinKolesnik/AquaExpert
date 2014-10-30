@@ -2,15 +2,6 @@
 function Model() {
     // Properties:
     this.IsConnected = false;
-
-
-    //this.StationPower = false;
-    //this.MainBoosterIsActive = false;
-    //this.MainBoosterIsOverloaded = false;
-    //this.MainBoosterCurrent = 0;
-    //this.ProgBoosterIsActive = false;
-    //this.ProgBoosterIsOverloaded = false;
-    //this.ProgBoosterCurrent = 0;
     this.Settings = {
         WebTheme: "default",
         UnitSystem: "M"
@@ -28,8 +19,6 @@ function Model() {
 
         return res;
     };
-
-    //this.UIState = UIStateType.Main;
 
     //this.LEDConnectionImage = function () {
     //    return "Resources/Led" + (this.get("Connected") ? "Green" : "Grey") + "_16.ico";
@@ -63,20 +52,4 @@ function Model() {
     //this.IsFirmwareVisible = function () { return this.get("UIState") == UIStateType.Firmware; }
 
     // Public functions:
-
-
-
-    //this.SetPower = function () {
-    //    this.MessageManager.SetPower(!this.get("StationPower"));
-    //}
-    //this.SetOptions = function () {
-    //    this.MessageManager.SetOptions(
-    //        this.get("Options.MainBridgeCurrentThreshould"),
-    //        this.get("Options.ProgBridgeCurrentThreshould"),
-    //        this.get("Options.BroadcastBoostersCurrent"),
-    //        this.get("Options.UseWiFi"),
-    //        this.get("Options.WiFiSSID"),
-    //        this.get("Options.WiFiPassword")
-    //        );
-    //}
 }
