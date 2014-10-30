@@ -10,8 +10,9 @@ function Model() {
 
     this.Devices = [];
     this.Sensors = function () {
-        var nodes = this.get("Devices");
         var res = [];
+
+        var nodes = this.get("Devices");
 
         for (var i = 0; i < nodes.length; i++)
             for (var j = 0; j < nodes[i].Sensors.length; j++)

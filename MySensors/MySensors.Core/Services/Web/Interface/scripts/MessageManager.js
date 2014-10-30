@@ -80,12 +80,18 @@ function MessageManager() {
             case NetworkMessageID.GetNodes:
                 var items = JSON.parse(msg.GetParameter("Nodes"));
 
-                //var coll = viewModel.get("Devices");
-                //for (var i = 0; i < items.length; i++) {
-                //    coll.push(items[i]);
-                //}
+                //debugger;
+                var coll = viewModel.get("Devices");
+                for (var i = 0; i < items.length; i++) {
+                    var node = items[i];
 
-                viewModel.set("Devices", items);
+                    for (var j = 0; j < node.BatteryLevels.length; j++)
+                        node.BatteryLevels[j].Time = new Date(node.BatteryLevels[j].Time);
+
+                    coll.push(node);
+                }
+
+                //viewModel.set("Devices", items);
                 break;
             default:
                 break;

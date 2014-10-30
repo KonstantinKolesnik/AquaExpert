@@ -38,6 +38,9 @@ function onViewModelAfterSet(e) {
         case "Settings.UnitSystem":
             msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
             break;
+        case "Devices":
+            //$("#gridDevices").data("kendoGrid").refresh();
+            break;
         default:
             break;
     }
@@ -188,19 +191,14 @@ function MainView() {
     function createDevicesGrid() {
         $("#gridDevices").kendoGrid({
             groupable: true,
-            scrollable: { virtual: true },
+            scrollable: true,
             sortable: true,
             reorderable: true,
             //filterable: true,
             //resizable: true,
             pageable: {
-                //refresh: true,
                 pageSizes: [10, 20, 50, 100, 300],
-                pageSize: 50,
-                numeric: true, // show numeric buttons
-                buttonCount: 10, // default 10
-                //input: true,
-                info: true
+                pageSize: 50
             },
             columns:
                 [
@@ -212,13 +210,52 @@ function MainView() {
                   { field: "SketchVersion", title: "Sketch Version" },
                   { field: "IsRepeater", title: "Is Repeater" },
                   { field: "Sensors.length", title: "Sensors Count" },
-                  { field: "BatteryLevels[BatteryLevels.length - 1]", title: "Battery, %" },
+                  { field: "BatteryLevels[BatteryLevels.length - 1].Percent", title: "Battery, %" },
                 ],
+            detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
-                // work item summary:
-                var templ = kendo.template($("#deviceDetailsTemplate").html());
-                e.detailCell.append(templ);
-                kendo.bind(e.detailCell, e.data);
+                var detailRow = e.detailRow;
+
+                detailRow.find(".deviceDetailsTabStrip").kendoTabStrip({
+                    animation: {
+                        open: { effects: "fadeIn" }
+                    }
+                });
+
+                detailRow.find(".deviceDetailsSensors").kendoGrid({
+                    height: 300
+                    //dataSource: {
+                    //    type: "odata",
+                    //    transport: {
+                    //        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+                    //    },
+                    //    serverPaging: true,
+                    //    serverSorting: true,
+                    //    serverFiltering: true,
+                    //    pageSize: 7,
+                    //    filter: { field: "EmployeeID", operator: "eq", value: e.data.EmployeeID }
+                    //},
+                    //scrollable: false,
+                    //sortable: true,
+                    //pageable: true,
+                    //columns: [
+                    //    { field: "OrderID", title: "ID", width: "70px" },
+                    //    { field: "ShipCountry", title: "Ship Country", width: "110px" },
+                    //    { field: "ShipAddress", title: "Ship Address" },
+                    //    { field: "ShipName", title: "Ship Name", width: "300px" }
+                    //]
+                });
+
+                createBatteryLevelsChart(detailRow.find(".deviceDetailsBatteryLevels"));
+
+                kendo.bind(detailRow, e.data);
+                //$(document).bind("kendo:skinChange", createChart);
+
+
+
+                //var templ = kendo.template($("#deviceDetailsTemplate").html());
+                //e.detailCell.append(templ);
+                //kendo.bind(e.detailCell, e.data);
 
                 //// child work items grid:
                 //if (e.data.Items && e.data.Items.length != 0) {
@@ -245,7 +282,7 @@ function MainView() {
     function createSensorsGrid() {
         $("#gridSensors").kendoGrid({
             groupable: true,
-            scrollable: { virtual: true },
+            scrollable: true,
             sortable: true,
             reorderable: true,
             //filterable: true,
@@ -326,6 +363,81 @@ function MainView() {
             ],
             dataTextField: "text",
             dataValueField: "value"
+        });
+    }
+
+    function createBatteryLevelsChart(selector) {
+        selector.kendoChart({
+            //theme: "blueOpal",
+            transitions: true,
+            style: "smooth",
+            //title: { text: "Internet Users in United States" },
+            legend: { visible: true, position: "bottom" },
+            //seriesDefaults: {
+            //    type: "line",
+            //    labels: {
+            //        visible: true,
+            //        format: "{0}%",
+            //        background: "transparent"
+            //    }
+            //},
+            series: [
+                {
+                    //name: "Levels",
+                    categoryField: "Time",
+                    field: "Percent",
+                    //axis: "levels",
+                    type: "line",
+                    labels: {
+                        visible: true,
+                        format: "{0}%",
+                        background: "transparent"
+                    }
+                }
+            ],
+            valueAxis: {
+                //name: "levels",
+                labels: { format: "{0}%", visible: true },
+                line: { visible: true },
+                majorGridLines: { visible: true },
+                min: 0,
+                max: 150,
+                color: "#000000"
+            },
+            categoryAxis: {
+                //field: "Time",
+                // or
+                //categories: [2005, 2006, 2007, 2008, 2009],
+
+                //name: "levels",
+
+                //axisCrossingValue: [0, 3],
+
+                type: "date",
+
+                baseUnit: "hours",
+                //baseUnit: "days",
+                //baseUnit: "months",
+                //baseUnit: "weeks",
+                //baseUnit: "years",
+
+                labels: {
+                    dateFormats: {
+                        hours: "HH:mm",
+                        days: "MMM, d",
+                        months: "MMM-yy",
+                        weeks: "M-d",
+                        years: "yyyy"
+                    },
+
+                    //format: "{0} aa}",
+                    visible: true
+                },
+
+                line: { visible: true },
+                majorGridLines: { visible: true },
+                color: "#000000"
+            }
         });
     }
 }

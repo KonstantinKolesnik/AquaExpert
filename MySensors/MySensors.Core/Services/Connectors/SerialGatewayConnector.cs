@@ -11,7 +11,10 @@ namespace MySensors.Core.Services.Connectors
         #endregion
 
         #region Properties
-        public bool IsConnected { get { return serialPort.IsOpen; } }
+        public bool IsStarted
+        {
+            get { return serialPort.IsOpen; }
+        }
         #endregion
 
         #region Events
@@ -35,8 +38,11 @@ namespace MySensors.Core.Services.Connectors
         #endregion
 
         #region Public methods
-        public bool Connect()
+        public void Connect()
         {
+            if (serialPort.IsOpen)
+                return;
+
             foreach (string portName in SerialPort.GetPortNames())
             {
                 serialPort.PortName = portName;
@@ -56,7 +62,7 @@ namespace MySensors.Core.Services.Connectors
                                 //if (MessageReceived != null)
                                 //    MessageReceived(this, msg);
 
-                                return true;
+                                return;
                             }
                         }
                         catch (TimeoutException) { }
@@ -66,8 +72,6 @@ namespace MySensors.Core.Services.Connectors
                 }
                 catch (Exception) {}
             }
-
-            return false;
         }
         public void Disconnect()
         {
@@ -77,7 +81,7 @@ namespace MySensors.Core.Services.Connectors
 
         public void Send(Message message)
         {
-            if (message != null)
+            if (serialPort.IsOpen && message != null)
                 serialPort.WriteLine(message.ToRawString());
         }
         #endregion

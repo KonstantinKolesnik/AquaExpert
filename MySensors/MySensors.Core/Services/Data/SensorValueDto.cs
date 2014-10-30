@@ -11,6 +11,7 @@ namespace MySensors.Core.Services.Data
         public byte NodeID { get; set; }
         //[ForeignKey(typeof(SensorDto))]
         public byte ID { get; set; }
+        [PrimaryKey]
         public DateTime Time { get; set; }
         public byte Type { get; set; }
         public float Value { get; set; }

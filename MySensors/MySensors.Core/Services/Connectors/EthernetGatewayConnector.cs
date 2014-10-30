@@ -13,6 +13,14 @@ namespace MySensors.Core.Services.Connectors
         private string key;
         private int receiveTimeout = 2000;
         private IPEndPoint remoteEP;
+        private bool isConnected = false;
+        #endregion
+
+        #region Properties
+        public bool IsStarted
+        {
+            get { return isConnected; }
+        }
         #endregion
 
         #region Events
@@ -32,7 +40,7 @@ namespace MySensors.Core.Services.Connectors
         #endregion
 
         #region Public methods
-        public bool Connect()
+        public void Connect()
         {
             //string localIP = "";
             //IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -66,25 +74,29 @@ namespace MySensors.Core.Services.Connectors
                 string response = Encoding.UTF8.GetString(receiveBytes);
                 if (String.Equals(response, responseExpected))
                     //SyncList(remoteEP);
-                    return true;
+
+                    isConnected = true;
+                    return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
             client.Close();
-
-            return false;
         }
         public void Disconnect()
         {
 
+
+            isConnected = false;
         }
         public void Send(Message message)
         {
+            if (isConnected)
+            {
 
+            }
         }
         #endregion
     }
-
 }

@@ -8,7 +8,9 @@ namespace MySensors.Core.Services.Connectors
     {
         event MessageEventHandler MessageReceived;
 
-        bool Connect();
+        bool IsStarted { get; }
+
+        void Connect();
         void Disconnect();
 
         void Send(Message message);

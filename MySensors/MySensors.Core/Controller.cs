@@ -31,7 +31,6 @@ namespace MySensors.Core
         private WebSocketServer wsServer;
         private NetworkMessageReceiver nmr;
 
-        private bool isConnectorStarted = false;
         //private bool isNameServiceStarted = false;
         private bool isWebServerStarted = false;
         private bool isWSServerStarted = false;
@@ -46,7 +45,7 @@ namespace MySensors.Core
         {
             get
             {
-                return dbService.IsStarted && isWSServerStarted;// && isWebServerStarted;// && isConnectorStarted;
+                return dbService.IsStarted && isWSServerStarted;// && isWebServerStarted;// && connector.IsStarted;
             }
         }
 
@@ -159,7 +158,6 @@ namespace MySensors.Core
             wsServer.Dispose();
             wsServer = null;
 
-            isConnectorStarted = false;
             //isNameServiceStarted = false;
             isWebServerStarted = false;
             isWSServerStarted = false;
@@ -427,15 +425,15 @@ namespace MySensors.Core
         }
         private void StartGatewayConnector()
         {
-            if (!isConnectorStarted)
+            if (!connector.IsStarted)
             {
                 if (Log != null)
                     Log(this, "Connecting to gateway... ", false, LogLevel.Normal);
 
-                isConnectorStarted = connector.Connect();
+                connector.Connect();
 
                 if (Log != null)
-                    Log(this, isConnectorStarted ? "Success." : "Failed.", true, isConnectorStarted ? LogLevel.Success : LogLevel.Error);
+                    Log(this, connector.IsStarted ? "Success." : "Failed.", true, connector.IsStarted ? LogLevel.Success : LogLevel.Error);
             }
         }
         private void StartWSServer()
@@ -580,13 +578,29 @@ namespace MySensors.Core
         }
         private NetworkMessage GetNodesListMessage()
         {
-            //string output = Newtonsoft.Json.JsonConvert.SerializeObject(person);
-            //person = Newtonsoft.Json.JsonConvert.DeserializeObject<Person> (output);
+            List<Node> coll = new List<Node>();
+            for (byte i = 20; i < 50; i++)
+            {
+                Node node = new Node(i) {
+                    Type = SensorType.ArduinoNode,
+                    ProtocolVersion = "1.4",
+                    SketchName = "Sketch " + i,
+                    SketchVersion = "1.0"
+                };
 
-            string json = JsonConvert.SerializeObject(nodes, Formatting.Indented);
+                for (byte p = 100; p > 80; p--)
+                    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(100 - p), p));
+
+                coll.Add(node);
+            }
+
+
+
+
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetNodes);
-            msg["Nodes"] = json;
+            //msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
+            msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
             return msg;
         }
 

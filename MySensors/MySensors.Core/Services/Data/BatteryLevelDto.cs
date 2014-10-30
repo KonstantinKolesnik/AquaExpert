@@ -10,6 +10,7 @@ namespace MySensors.Core.Services.Data
     {
         //[ForeignKey(typeof(NodeDto))]
         public byte NodeID { get; set; }
+        [PrimaryKey]
         public DateTime Time { get; set; }
         public byte Percent { get; set; }
 
