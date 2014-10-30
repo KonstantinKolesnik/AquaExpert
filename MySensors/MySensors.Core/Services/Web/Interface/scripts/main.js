@@ -7,6 +7,9 @@ var viewModel;
 function onWSClientOpen() {
     viewModel.set("IsConnected", true);
     msgManager.GetSettings();
+    msgManager.GetVersion();
+
+    msgManager.GetNodes();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -49,11 +52,14 @@ function MainView() {
     var pnlContentHeader = $("#pnlContentHeader");
     var lastContent = null;
 
-    $(window).bind("resize", onWindowResize);
-
-    createLeftPanelBar();
+    createMenu();
+    createDevicesGrid();
+    createSensorsGrid();
     createThemeSelector();
     createUnitSystemSelector();
+
+    $(window).bind("resize", adjustGridSize);
+    $(window).resize(adjustGridSize);
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -117,33 +123,42 @@ function MainView() {
         }
     }
 
-    function onWindowResize() {
-        //var h1 = $("header").height();
-        //alert($("body").height());
+    function adjustGridSize() {
+        //$("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight() - 7/*don't change!*/);
 
-        //$("#content").height($(document).height() - $("header").height() - $("footer").height());
-    
-        //var gridElement = $("#gridLayout"),
-        //    newHeight = gridElement.innerHeight(),
-        //    otherElements = gridElement.children().not(".k-grid-content"),
-        //    otherElementsHeight = 0;
-        //otherElements.each(function () {
-        //    otherElementsHeight += $(this).outerHeight();
-        //});
-        //gridElement.children(".k-grid-content").height(newHeight - otherElementsHeight);
+        adjust($("#gridDevices"));
+        adjust($("#gridSensors"));
+
+        function adjust(grid) {
+            grid.height($(window).height() - getY(grid) - $("#footer").outerHeight() - 9/*don't change!*/);
+            arrangeGridContent(grid);
+        }
+        function getY(grid) {
+            var el = grid[0];
+            var yPosition = el.offsetTop;
+            while (el = el.offsetParent)
+                yPosition += el.offsetTop;
+            return yPosition;
+        }
+        function arrangeGridContent(grid) {
+            var newHeight = grid.innerHeight(),
+                otherElements = grid.children().not(".k-grid-content"),
+                otherElementsHeight = 0;
+
+            otherElements.each(function () { otherElementsHeight += $(this).outerHeight(); });
+            grid.children(".k-grid-content").height(newHeight - otherElementsHeight);
+        }
     }
 
-    function createLeftPanelBar() {
+    function createMenu() {
         $("#panelbar").kendoPanelBar({
             //expandMode: "single",
             animation: {
-                // fade-out closing items over 1000 milliseconds
-                collapse: {
+                collapse: { // fade-out closing items over 1000 milliseconds
                     duration: 1000,
                     effects: "fadeOut"
                 },
-                // fade-in and expand opening items over 500 milliseconds
-                expand: {
+                expand: { // fade-in and expand opening items over 500 milliseconds
                     duration: 500,
                     effects: "expandVertical fadeIn"
                 }
@@ -164,9 +179,125 @@ function MainView() {
                         lastContent.toggle(true);
                         var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " > " + $(e.item).text();
                         pnlContentHeader.find("label").text(title);
+
+                        adjustGridSize();
                     }
                 }
             }
+        });
+    }
+    function createDevicesGrid() {
+        $("#gridDevices").kendoGrid({
+            groupable: true,
+            scrollable: { virtual: true },
+            sortable: true,
+            reorderable: true,
+            //filterable: true,
+            //resizable: true,
+            pageable: {
+                //refresh: true,
+                pageSizes: [10, 20, 50, 100, 300],
+                pageSize: 50,
+                numeric: true, // show numeric buttons
+                buttonCount: 10, // default 10
+                //input: true,
+                info: true
+            },
+            columns:
+                [
+                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
+                  { field: "ID", title: "ID", groupable: false, width: 80 },
+                  { field: "Type", title: "Type" },
+                  { field: "ProtocolVersion", title: "Protocol Version" },
+                  { field: "SketchName", title: "Sketch Name" },
+                  { field: "SketchVersion", title: "Sketch Version" },
+                  { field: "IsRepeater", title: "Is Repeater" },
+                  { field: "Sensors.length", title: "Sensors Count" },
+                  { field: "BatteryLevels[BatteryLevels.length - 1]", title: "Battery, %" },
+                ],
+            detailInit: function (e) {
+                // work item summary:
+                var templ = kendo.template($("#deviceDetailsTemplate").html());
+                e.detailCell.append(templ);
+                kendo.bind(e.detailCell, e.data);
+
+                //// child work items grid:
+                //if (e.data.Items && e.data.Items.length != 0) {
+                //    selector = $("<div class='wiGrid'/>");
+                //    selector.appendTo(e.detailCell);
+
+                //    //wiSaveScrollState();
+                //    initGrid(selector, e.data, false);
+                //    //wiRestoreScrollState();
+                //}
+            },
+            detailExpand: function (e) {
+                //if (this.dataItem(e.masterRow).wiIsToDoItem)
+                //    e.masterRow.find(".pap").toggle(false);
+                //resizeWIResourceTables();
+                //wiAddToVisualState(e.masterRow);
+            },
+            detailCollapse: function (e) {
+                //e.masterRow.find(".pap").toggle(true);
+                //wiRemoveFromVisualState(e.masterRow);
+            },
+        });
+    }
+    function createSensorsGrid() {
+        $("#gridSensors").kendoGrid({
+            groupable: true,
+            scrollable: { virtual: true },
+            sortable: true,
+            reorderable: true,
+            //filterable: true,
+            //resizable: true,
+            pageable: {
+                //refresh: true,
+                pageSizes: [10, 20, 50, 100, 300],
+                pageSize: 50,
+                numeric: true, // show numeric buttons
+                buttonCount: 10, // default 10
+                //input: true,
+                info: true
+            },
+            //columns:
+            //    [
+            //      { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
+            //      { field: "ID", title: "ID", groupable: false, width: 80 },
+            //      { field: "Type", title: "Type" },
+            //      { field: "ProtocolVersion", title: "Protocol Version" },
+            //      { field: "SketchName", title: "Sketch Name" },
+            //      { field: "SketchVersion", title: "Sketch Version" },
+            //      { field: "IsRepeater", title: "Is Repeater" },
+            //      { field: "Sensors.length", title: "Sensors Count" },
+            //      { field: "BatteryLevels[BatteryLevels.length - 1]", title: "Battery, %" },
+            //    ],
+            detailInit: function (e) {
+                // work item summary:
+                //var templ = kendo.template($("#deviceDetailsTemplate").html());
+                //e.detailCell.append(templ);
+                //kendo.bind(e.detailCell, e.data);
+
+                //// child work items grid:
+                //if (e.data.Items && e.data.Items.length != 0) {
+                //    selector = $("<div class='wiGrid'/>");
+                //    selector.appendTo(e.detailCell);
+
+                //    //wiSaveScrollState();
+                //    initGrid(selector, e.data, false);
+                //    //wiRestoreScrollState();
+                //}
+            },
+            detailExpand: function (e) {
+                //if (this.dataItem(e.masterRow).wiIsToDoItem)
+                //    e.masterRow.find(".pap").toggle(false);
+                //resizeWIResourceTables();
+                //wiAddToVisualState(e.masterRow);
+            },
+            detailCollapse: function (e) {
+                //e.masterRow.find(".pap").toggle(true);
+                //wiRemoveFromVisualState(e.masterRow);
+            },
         });
     }
     function createThemeSelector() {
@@ -204,13 +335,13 @@ function onDocumentReady() {
     msgManager = new MessageManager();
     msgManager.onSend = onMsgManagerSend;
 
+    mainView = new MainView();
+
     viewModel = kendo.observable(new Model());
     kendo.bind($("body"), viewModel);
     viewModel.bind("get", onViewModelGet);
     viewModel.bind("set", onViewModelBeforeSet);
     viewModel.bind("change", onViewModelAfterSet);
-
-    mainView = new MainView();
 
     wsClient = new WSClient(12000, "SmartNetwork");
     wsClient.onOpen = onWSClientOpen;
@@ -218,7 +349,6 @@ function onDocumentReady() {
     wsClient.onClose = onWSClientClose;
     wsClient.onError = onWSClientError;
     wsClient.start();
-
 
 
     //createMainMenu();
@@ -292,13 +422,21 @@ function onDocumentReady() {
 }
 //----------------------------------------------------------------------------------------------------------------------
 
+/*
+Следующие методы позволяют устанавливать компоненты даты и времени:
 
+setFullYear(year [, month, date])
+setMonth(month [, date])
+setDate(date)
+setHours(hour [, min, sec, ms])
+setMinutes(min [, sec, ms])
+setSeconds(sec [, ms])
+setMilliseconds(ms)
+setTime(milliseconds) (устанавливает всю дату по миллисекундам с 01.01.1970 UTC)
 
-
-
-
-
-
+Все они, кроме setTime(), обладают также UTC-вариантом, например: setUTCHours().
+Как видно, некоторые методы могут устанавливать несколько компонентов даты одновременно, в частности, setHours. При этом если какая-то компонента не указана, она не меняется.
+*/
 
 function createMainMenu() {
     var mainMenuItems =

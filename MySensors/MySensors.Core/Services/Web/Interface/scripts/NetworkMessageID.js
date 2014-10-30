@@ -29,7 +29,19 @@ NetworkMessageID = {
     // - No params: request for station settings
     Settings: "Settings",
 
+    // Sender: STATION / CLIENT
+    // - Param "Version"
+    // Sender: CLIENT
+    // - No params: request for station version
     Version: "Version",
+
+    // Sender: CLIENT
+    // - No params: request for all nodes list
+    GetNodes: "GetNodes",
+
+
+
+
 
     //-----------------------------------------------------------------------
 

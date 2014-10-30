@@ -44,9 +44,15 @@ function MessageManager() {
         send(msg);
     }
 
-    //this.GetVersion = function () {
-    //    send(new NetworkMessage(NetworkMessageID.Version));
-    //}
+    this.GetVersion = function () {
+        send(new NetworkMessage(NetworkMessageID.Version));
+    }
+
+    this.GetNodes = function () {
+        send(new NetworkMessage(NetworkMessageID.GetNodes));
+    }
+
+
 
     //this.BroadcastBrake = function () {
     //    send(new NetworkMessage(NetworkMessageID.BroadcastBrake));
@@ -183,18 +189,20 @@ function MessageManager() {
             case NetworkMessageID.Settings:
                 viewModel.set("Settings.WebTheme", msg.GetParameter("WebTheme"));
                 viewModel.set("Settings.UnitSystem", msg.GetParameter("UnitSystem"));
-                //viewModel.set("Settings.BroadcastBoostersCurrent", msg.GetParameter("BroadcastBoostersCurrent") == "True");
-                //viewModel.set("Settings.UseWiFi", msg.GetParameter("UseWiFi") == "True");
-                //viewModel.set("Settings.WiFiSSID", msg.GetParameter("WiFiSSID"));
-                //viewModel.set("Settings.WiFiPassword", msg.GetParameter("WiFiPassword"));
                 break;
-            //case NetworkMessageID.Version:
-            //    viewModel.set("Version", msg.GetParameter("Version"));
-            //    break;
-            //case NetworkMessageID.BoostersCurrent:
-            //    viewModel.set("MainBoosterCurrent", msg.GetParameter("Main"));
-            //    viewModel.set("ProgBoosterCurrent", msg.GetParameter("Prog"));
-            //    break;
+            case NetworkMessageID.Version:
+                viewModel.set("Version", msg.GetParameter("Version"));
+                break;
+            case NetworkMessageID.GetNodes:
+                var items = JSON.parse(msg.GetParameter("Nodes"));
+
+                //var coll = viewModel.get("Devices");
+                //for (var i = 0; i < items.length; i++) {
+                //    coll.push(items[i]);
+                //}
+
+                viewModel.set("Devices", items);
+                break;
             default:
                 break;
         }

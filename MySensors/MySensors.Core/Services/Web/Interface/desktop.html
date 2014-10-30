@@ -47,7 +47,7 @@
 
 <body class="k-content">
     <!-- Header  -->
-    <div class="k-block k-header" style="padding:5px 15px;">
+    <div id="header" class="k-block k-header" style="padding:5px 15px;">
         <table style="width:100%">
             <tr>
                 <td width="30%">
@@ -75,60 +75,62 @@
     </div>
 
     <!-- Content  -->
-    <div class="k-block">
+    <div id="content" class="k-content">
         <table style="width:100%">
             <tr>
-                <td width="20%">
-                    <ul id="panelbar">
-                        <li>
-                            <span class="k-link" style="font-weight:bold;">Network</span><!-- k-state-selected-->
-                            <ul>
-                                <li contentid="pnlDevices">Devices</li>
-                                <li contentid="pnlSensors">Sensors</li>
-                                <li>All</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="k-link" style="font-weight:bold;">Logical modules</span>
-                            <ul>
-                                <li>Sub Item 1</li>
-                                <li>Sub Item 2</li>
-                                <li>Sub Item 3</li>
-                            </ul>
-                        </li>
+                <td style="vertical-align:top;" width="250px">
+                    <div class="k-content">
+                        <ul id="panelbar">
+                            <li>
+                                <span class="k-link" style="font-weight:bold;">Network</span><!-- k-state-selected-->
+                                <ul>
+                                    <li contentid="pnlDevices">Devices</li>
+                                    <li contentid="pnlSensors">Sensors</li>
+                                    <li>All</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="k-link" style="font-weight:bold;">Logical modules</span>
+                                <ul>
+                                    <li>Sub Item 1</li>
+                                    <li>Sub Item 2</li>
+                                    <li>Sub Item 3</li>
+                                </ul>
+                            </li>
 
 
-                        <li>
-                            <span class="k-link" style="font-weight:bold;">Clients</span>
-                            <ul>
-                                <li>Connected clients</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="k-link" style="font-weight:bold;">System</span>
-                            <ul>
-                                <li>Server status</li>
-                                <li>Peripherals</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="k-link" style="font-weight:bold;">Settings</span>
-                            <ul>
-                                <li>Locations</li>
-                                <li>Categories</li>
-                                <li>Presences</li>
-                                <li>Day parts</li>
-                                <li contentid="pnlSettingsServer">Server</li>
-                                <li>Firmware</li>
-                            </ul>
-                        </li>
-                        <!--<li disabled="disabled">
-                            <span class="k-link" style="font-weight:bold;">Settings</span>
-                        </li>-->
-                    </ul>
+                            <li>
+                                <span class="k-link" style="font-weight:bold;">Clients</span>
+                                <ul>
+                                    <li>Connected clients</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="k-link" style="font-weight:bold;">System</span>
+                                <ul>
+                                    <li>Server status</li>
+                                    <li>Peripherals</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="k-link" style="font-weight:bold;">Settings</span>
+                                <ul>
+                                    <li>Locations</li>
+                                    <li>Categories</li>
+                                    <li>Presences</li>
+                                    <li>Day parts</li>
+                                    <li contentid="pnlSettingsServer">Server</li>
+                                    <li contentid="pnlSettingsFirmware">Firmware</li>
+                                </ul>
+                            </li>
+                            <!--<li disabled="disabled">
+                <span class="k-link" style="font-weight:bold;">Settings</span>
+            </li>-->
+                        </ul>
+                    </div>
                 </td>
                 <td style="vertical-align:top;">
-                    <div id="pnlContentHolder" class="k-block" style="display:none;">
+                    <div id="pnlContentHolder" class="k-content k-block" style="display:none;">
                         <div id="pnlContentHeader" class="k-header"><label style="padding-left:15px;">Header</label></div>
                     </div>
                 </td>
@@ -711,7 +713,7 @@
     </div>
 
     <!-- Footer  -->
-    <div class="k-block k-header" style="padding:10px 15px; text-align:center;">
+    <div id="footer" class="k-block k-header" style="padding:10px 15px; text-align:center;">
         <a href="http://www.smartnetwork.at.ua" target="_blank" class="k-link">&copy;&nbsp;Smart Network</a>
     </div>
 
@@ -719,19 +721,30 @@
     <div id="dlg" style="display:none;"></div>
 
     <div id="pnlDevices" class="pnlContent">
-        Devices
+        <div id="gridDevices" data-bind="source: Devices"></div>
+    </div>
+    <div id="pnlSensors" class="pnlContent">
+        <div id="gridSensors" data-bind="source: Sensors"></div>
     </div>
     <div id="pnlSettingsServer" class="pnlContent">
         <table style="width:100%;">
-            <tr><td><span>Theme:</span></td><td><select id="ddlTheme" data-bind="value: Settings.WebTheme" /></td></tr>
-            <tr><td><span>Unit system:</span></td><td><select id="ddlUnitSystem" data-bind="value: Settings.UnitSystem" /></td></tr>
-
+            <tr><td class="propName"><span>Theme:</span></td><td><select id="ddlTheme" data-bind="value: Settings.WebTheme" /></td></tr>
+            <tr><td class="propName"><span>Unit system:</span></td><td><select id="ddlUnitSystem" data-bind="value: Settings.UnitSystem" /></td></tr>
+        </table>
+    </div>
+    <div id="pnlSettingsFirmware" class="pnlContent">
+        <table style="width:100%;">
+            <tr><td class="propName"><span>Version:</span></td><td><span data-bind="text: Version"></span></td></tr>
         </table>
     </div>
 
-
     
 
+    <script id="deviceDetailsTemplate" type="text/x-kendo-tmpl">
+        <div>
+            <div id="gridDeviceSensors"></div>
+        </div>
+    </script>
 
 
 

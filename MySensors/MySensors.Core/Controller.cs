@@ -5,6 +5,7 @@ using MySensors.Core.Sensors;
 using MySensors.Core.Services.Connectors;
 using MySensors.Core.Services.Data;
 using MySensors.Core.Services.Web;
+using Newtonsoft.Json;
 using SuperSocket.SocketBase;
 using SuperWebSocket;
 using System;
@@ -106,6 +107,10 @@ namespace MySensors.Core
                     dbService.Update(item);
                 }
             }
+        }
+        public string Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
         }
         #endregion
 
@@ -524,6 +529,27 @@ namespace MySensors.Core
                         break;
                     #endregion
 
+                    #region Version
+                    case NetworkMessageID.Version:
+                        if (msg.ParametersCount == 0) // client asks for version
+                            response = GetVersionMessage();
+                        break;
+                    #endregion
+
+                    #region GetNodesList
+                    case NetworkMessageID.GetNodes:
+                        if (msg.ParametersCount == 0)
+                            response = GetNodesListMessage();
+                        break;
+                    #endregion
+
+
+
+
+
+                        
+
+
 
                     default: break;
                 }
@@ -531,7 +557,6 @@ namespace MySensors.Core
 
             return response;
         }
-
 
         private NetworkMessage GetOKMessage(string text)
         {
@@ -545,12 +570,28 @@ namespace MySensors.Core
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.Settings);
             msg["WebTheme"] = WebTheme;
             msg["UnitSystem"] = UnitSystem;
-            //msg["BroadcastBoostersCurrent"] = options.BroadcastBoostersCurrent ? bool.TrueString : bool.FalseString;
-            //msg["UseWiFi"] = options.UseWiFi ? bool.TrueString : bool.FalseString;
-            //msg["WiFiSSID"] = options.WiFiSSID;
-            //msg["WiFiPassword"] = options.WiFiPassword;
             return msg;
         }
+        private NetworkMessage GetVersionMessage()
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.Version);
+            msg["Version"] = Version;
+            return msg;
+        }
+        private NetworkMessage GetNodesListMessage()
+        {
+            //string output = Newtonsoft.Json.JsonConvert.SerializeObject(person);
+            //person = Newtonsoft.Json.JsonConvert.DeserializeObject<Person> (output);
+
+            string json = JsonConvert.SerializeObject(nodes, Formatting.Indented);
+
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetNodes);
+            msg["Nodes"] = json;
+            return msg;
+        }
+
+
+
         #endregion
     }
 }

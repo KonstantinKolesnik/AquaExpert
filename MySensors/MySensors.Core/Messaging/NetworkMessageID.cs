@@ -24,15 +24,33 @@ namespace MySensors.Core.Messaging
         // Sender: STATION / CLIENT
         // - Param "WebTheme"
         // - Param "UnitSystem", M or I
-        // - Param "BroadcastBoostersCurrent"
-        // - Param "UseWiFi"
-        // - Param "WiFiSSID"
-        // - Param "WiFiPassword"
         // Sender: CLIENT
         // - No params: request for station settings
         public const string Settings = "Settings";
 
+        // Sender: STATION / CLIENT
+        // - Param "Version"
+        // Sender: CLIENT
+        // - No params: request for station version
         public const string Version = "Version";
+
+        // Sender: CLIENT
+        // - No params: request for all nodes list
+        public const string GetNodes = "GetNodes";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //-----------------------------------------------------------------------
 

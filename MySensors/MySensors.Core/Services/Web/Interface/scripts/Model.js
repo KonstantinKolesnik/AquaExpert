@@ -14,13 +14,20 @@ function Model() {
     this.Settings = {
         WebTheme: "default",
         UnitSystem: "M"
-        //BroadcastBoostersCurrent: false,
-        //UseWiFi: true,
-        //WiFiSSID: "",
-        //WiFiPassword: ""
     };
-    //this.Version = "";
-    //this.OperationList = new kendo.data.ObservableArray([]);
+    this.Version = "";
+
+    this.Devices = [];
+    this.Sensors = function () {
+        var nodes = this.get("Devices");
+        var res = [];
+
+        for (var i = 0; i < nodes.length; i++)
+            for (var j = 0; j < nodes[i].Sensors.length; j++)
+                res.push(nodes[i].Sensors[j]);
+
+        return res;
+    };
 
     //this.UIState = UIStateType.Main;
 
@@ -55,7 +62,10 @@ function Model() {
     //this.IsInformationVisible = function () { return this.get("UIState") == UIStateType.Information; }
     //this.IsFirmwareVisible = function () { return this.get("UIState") == UIStateType.Firmware; }
 
-    //// Public functions:
+    // Public functions:
+
+
+
     //this.SetPower = function () {
     //    this.MessageManager.SetPower(!this.get("StationPower"));
     //}
