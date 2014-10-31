@@ -85,13 +85,17 @@ function Model() {
     this.Sensors = function () {
         var res = [];
 
-        var nodes = this.get("Devices");
+        var nodes = this.get("Devices") || [];
         for (var i = 0; i < nodes.length; i++)
             for (var j = 0; j < nodes[i].Sensors.length; j++)
                 res.push(nodes[i].Sensors[j]);
 
         return res;
     };
+
+
+
+
 
     //this.LEDConnectionImage = function () {
     //    return "Resources/Led" + (this.get("Connected") ? "Green" : "Grey") + "_16.ico";

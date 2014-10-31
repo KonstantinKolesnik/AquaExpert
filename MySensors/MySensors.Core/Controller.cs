@@ -45,7 +45,7 @@ namespace MySensors.Core
         {
             get
             {
-                return dbService.IsStarted && isWSServerStarted;// && isWebServerStarted;// && connector.IsStarted;
+                return dbService.IsStarted && isWSServerStarted && isWebServerStarted;// && connector.IsStarted;
             }
         }
 
@@ -138,7 +138,7 @@ namespace MySensors.Core
         public bool Start()
         {
             StartDatabase();
-            //StartWebServer();
+            StartWebServer();
             StartWSServer();
             //StartNameService();
             //StartGatewayConnector();
@@ -221,12 +221,14 @@ namespace MySensors.Core
                         node.Type = (SensorType)message.SubType;
                         node.ProtocolVersion = message.Payload;
                         dbService.Update(node);
+                        // TODO broadcast
                     }
                     else
                     {
                         sensor.Type = (SensorType)message.SubType;
                         sensor.ProtocolVersion = message.Payload;
                         dbService.Update(sensor);
+                        // TODO broadcast
                     }
                     break;
                 #endregion
@@ -236,6 +238,7 @@ namespace MySensors.Core
                     SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
                     sensor.Values.Add(sv);
                     dbService.Insert(sv);
+                    Broadcast(GetSensorValueMessage(sv));
                     break;
                 #endregion
 
@@ -252,6 +255,7 @@ namespace MySensors.Core
                             BatteryLevel bl = new BatteryLevel(message.NodeID, DateTime.Now, byte.Parse(message.Payload));
                             node.BatteryLevels.Add(bl);
                             dbService.Insert(bl);
+                            Broadcast(GetNodeBatteryLevelMessage(bl));
                             break;
                         case InternalValueType.Time:
                             connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
@@ -279,10 +283,12 @@ namespace MySensors.Core
                         case InternalValueType.SketchName:
                             node.SketchName = message.Payload;
                             dbService.Update(node);
+                            // TODO broadcast
                             break;
                         case InternalValueType.SketchVersion:
                             node.SketchVersion = message.Payload;
                             dbService.Update(node);
+                            // TODO broadcast
                             break;
                         case InternalValueType.Reboot:
                             break;
@@ -512,7 +518,7 @@ namespace MySensors.Core
                 {
                     #region Settings
                     case NetworkMessageID.Settings:
-                        if (msg.ParametersCount == 0) // client asks for options
+                        if (msg.ParametersCount == 0) // client asks for settings
                             response = GetSettingsMessage();
                         else // client sets options
                         {
@@ -528,6 +534,10 @@ namespace MySensors.Core
                     case NetworkMessageID.Version:
                         if (msg.ParametersCount == 0) // client asks for version
                             response = GetVersionMessage();
+
+                        // for test!!!!
+                        //Broadcast(GetSensorValueMessage(new SensorValue(20, 0, DateTime.Now, SensorValueType.Temperature, 24.5f)));
+
                         break;
                     #endregion
 
@@ -608,8 +618,18 @@ namespace MySensors.Core
             msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
             return msg;
         }
-
-
+        private NetworkMessage GetNodeBatteryLevelMessage(BatteryLevel bl)
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.BatteryLevel);
+            msg["Level"] = JsonConvert.SerializeObject(bl);
+            return msg;
+        }
+        private NetworkMessage GetSensorValueMessage(SensorValue sv)
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.SensorValue);
+            msg["Value"] = JsonConvert.SerializeObject(sv);
+            return msg;
+        }
 
         #endregion
     }

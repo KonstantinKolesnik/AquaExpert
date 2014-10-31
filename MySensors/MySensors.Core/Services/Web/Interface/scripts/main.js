@@ -7,9 +7,9 @@ var viewModel;
 function onWSClientOpen() {
     viewModel.set("IsConnected", true);
     msgManager.GetSettings();
+    msgManager.GetNodes();
     msgManager.GetVersion();
 
-    msgManager.GetNodes();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -201,7 +201,7 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" alt=""/>' },
+                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "ID", title: "ID", groupable: false, width: 80 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
@@ -217,8 +217,8 @@ function MainView() {
                 createTabs();
                 createSensorsGrid();
                 createBatteryLevelsChart(detailRow.find(".deviceDetailsBatteryLevels"));
-
                 kendo.bind(detailRow, e.data);
+
                 //$(document).bind("kendo:skinChange", createChart);
                 //detailRow.find(".deviceDetailsBatteryLevels").data("kendoChart").setOptions({
                 //    categoryAxis: {
@@ -244,7 +244,7 @@ function MainView() {
                         sortable: true,
                         reorderable: true,
                         columns: [
-                            { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="32px" alt=""/>' },
+                            { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                             { field: "ID", title: "ID", groupable: false, width: 80 },
                             { field: "TypeName()", title: "Type" },
                             { field: "ProtocolVersion", title: "Protocol Version" },
@@ -267,7 +267,7 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="32px" alt=""/>' },
+                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "NodeID", title: "Device ID", width: 80 },
                   { field: "ID", title: "ID", groupable: false, width: 80 },
                   { field: "TypeName()", title: "Type" },
@@ -333,7 +333,7 @@ function MainView() {
                     categoryField: "Time",
                     field: "Percent",
                     //axis: "levels",
-                    type: "line",
+                    type: "area",//"line",
                     labels: {
                         visible: true,
                         format: "{0}%",
@@ -389,27 +389,33 @@ function MainView() {
         selector.kendoChart({
             //theme: "blueOpal",
             transitions: true,
-            style: "smooth",
+            style: "step",//"smooth",
             title: { text: sensor.TypeName() + " values" },
             legend: { visible: true, position: "bottom" },
             series: [
                 {
                     categoryField: "Time",
                     field: "Value",
-                    type: "line",
+                    type: "area",
                     labels: {
                         visible: true,
                         //format: "{0}%",
                         background: "transparent"
+                    },
+                    line: {
+                        color: "green",
+                        opacity: 0.5,
+                        width: 5,
+                        style: "step"
                     }
                 }
             ],
             valueAxis: {
-                labels: { format: "{0}%", visible: true },
+                //labels: { format: "{0}%", visible: true },
                 line: { visible: true },
-                majorGridLines: { visible: true },
-                min: 0,
-                max: 120
+                majorGridLines: { visible: true }
+                //min: 0,
+                //max: 120
             },
             categoryAxis: {
                 type: "date",

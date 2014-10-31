@@ -103,19 +103,19 @@
                                     <li>Macros</li>
                                 </ul>
                             </li>
-                            <li>
+                            <!--<li>
                                 <span class="k-link menuGroupItem">Clients</span>
                                 <ul>
                                     <li>Connected clients</li>
                                 </ul>
-                            </li>
-                            <li>
+                            </li>-->
+                            <!--<li>
                                 <span class="k-link menuGroupItem">System</span>
                                 <ul>
                                     <li>Server status</li>
                                     <li>Peripherals</li>
                                 </ul>
-                            </li>
+                            </li>-->
                             <li>
                                 <span class="k-link menuGroupItem">Settings</span>
                                 <ul>
@@ -735,6 +735,7 @@
         <table style="width:100%;">
             <tr><td class="propName"><span>Theme:</span></td><td><select id="ddlTheme" data-bind="value: Settings.WebTheme" /></td></tr>
             <tr><td class="propName"><span>Unit system:</span></td><td><select id="ddlUnitSystem" data-bind="value: Settings.UnitSystem" /></td></tr>
+            <tr><td class="propName"><span>Time:</span></td><td></td></tr>
         </table>
     </div>
     <div id="pnlSettingsFirmware" class="pnlContent">
@@ -748,7 +749,7 @@
         <div class="deviceDetailsTabStrip">
             <ul>
                 <li class="k-state-active">Sensors</li>
-                <li>Battery level</li>
+                <li>Battery</li>
             </ul>
             <div><div class="deviceDetailsSensors k-grid" style="height:250px;" data-bind="source: Sensors"></div></div>
             <div>

@@ -85,6 +85,16 @@ function MessageManager() {
                 //}
 
                 break;
+            case NetworkMessageID.BatteryLevel:
+                var bl = JSON.parse(msg.GetParameter("Level"));
+                bl.Time = new Date(bl.Time);
+                addBatteryLevel(bl);
+                break;
+            case NetworkMessageID.SensorValue:
+                var sv = JSON.parse(msg.GetParameter("Value"));
+                sv.Time = new Date(sv.Time);
+                addSensorValue(sv);
+                break;
             default:
                 break;
         }
@@ -142,6 +152,25 @@ function MessageManager() {
                     if (sensor.Values)
                         for (var j = 0; j < sensor.Values.length; j++)
                             sensor.Values[j].Time = new Date(sensor.Values[j].Time);
+                }
+        }
+        function addBatteryLevel(bl) {
+            var nodes = viewModel.Devices || [];
+            for (var i = 0; i < nodes.length; i++)
+                if (nodes[i].ID == bl.NodeID)
+                    nodes[i].BatteryLevels.push(bl);
+        }
+        function addSensorValue(sv) {
+            var nodes = viewModel.Devices || [];
+            for (var i = 0; i < nodes.length; i++)
+                if (nodes[i].ID == sv.NodeID) {
+                    var sensors = nodes[i].Sensors || [];
+                    for (var j = 0; j < sensors.length; j++)
+                        if (sensors[j].ID == sv.ID) {
+                            if (!sensors[j].Values)
+                                sensors[j].Values = new kendo.observableArray();
+                            sensors[j].Values.push(sv);
+                        }
                 }
         }
     }
