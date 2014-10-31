@@ -33,13 +33,12 @@ function onViewModelAfterSet(e) {
     switch (e.field) {
         case "Settings.WebTheme":
             mainView.applyTheme();
-            msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
+            if (!msgManager.IsFromServer)
+                msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
             break;
         case "Settings.UnitSystem":
-            msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
-            break;
-        case "Devices":
-            //$("#gridDevices").data("kendoGrid").refresh();
+            if (!msgManager.IsFromServer)
+                msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
             break;
         default:
             break;
@@ -200,53 +199,23 @@ function MainView() {
                 pageSizes: [10, 20, 50, 100, 300],
                 pageSize: 50
             },
-            majorGridLines: false,
             columns:
                 [
                   { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
                   { field: "ID", title: "ID", groupable: false, width: 80 },
-                  { field: "Type", title: "Type" },
+                  { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
                   { field: "SketchName", title: "Sketch Name" },
                   { field: "SketchVersion", title: "Sketch Version" },
-                  { field: "IsRepeater", title: "Is Repeater" },
                   { field: "Sensors.length", title: "Sensors Count" },
-                  //{ field: "BatteryLevels[BatteryLevels.length - 1].Percent", title: "Battery, %" },
+                  { field: "LastBatteryLevel()", title: "Battery, %" }
                 ],
             detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
                 var detailRow = e.detailRow;
 
-                detailRow.find(".deviceDetailsTabStrip").kendoTabStrip({
-                    animation: {
-                        open: { effects: "fadeIn" }
-                    }
-                });
-
-                detailRow.find(".deviceDetailsSensors").kendoGrid({
-                    height: 300
-                    //dataSource: {
-                    //    type: "odata",
-                    //    transport: {
-                    //        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
-                    //    },
-                    //    serverPaging: true,
-                    //    serverSorting: true,
-                    //    serverFiltering: true,
-                    //    pageSize: 7,
-                    //    filter: { field: "EmployeeID", operator: "eq", value: e.data.EmployeeID }
-                    //},
-                    //scrollable: false,
-                    //sortable: true,
-                    //pageable: true,
-                    //columns: [
-                    //    { field: "OrderID", title: "ID", width: "70px" },
-                    //    { field: "ShipCountry", title: "Ship Country", width: "110px" },
-                    //    { field: "ShipAddress", title: "Ship Address" },
-                    //    { field: "ShipName", title: "Ship Name", width: "300px" }
-                    //]
-                });
-
+                createTabs();
+                createSensorsGrid();
                 createBatteryLevelsChart(detailRow.find(".deviceDetailsBatteryLevels"));
 
                 kendo.bind(detailRow, e.data);
@@ -261,31 +230,27 @@ function MainView() {
                 //    }
                 //});
 
-
-                //var templ = kendo.template($("#deviceDetailsTemplate").html());
-                //e.detailCell.append(templ);
-                //kendo.bind(e.detailCell, e.data);
-
-                //// child work items grid:
-                //if (e.data.Items && e.data.Items.length != 0) {
-                //    selector = $("<div class='wiGrid'/>");
-                //    selector.appendTo(e.detailCell);
-
-                //    //wiSaveScrollState();
-                //    initGrid(selector, e.data, false);
-                //    //wiRestoreScrollState();
-                //}
-            },
-            detailExpand: function (e) {
-                //if (this.dataItem(e.masterRow).wiIsToDoItem)
-                //    e.masterRow.find(".pap").toggle(false);
-                //resizeWIResourceTables();
-                //wiAddToVisualState(e.masterRow);
-            },
-            detailCollapse: function (e) {
-                //e.masterRow.find(".pap").toggle(true);
-                //wiRemoveFromVisualState(e.masterRow);
-            },
+                function createTabs() {
+                    detailRow.find(".deviceDetailsTabStrip").kendoTabStrip({
+                        animation: {
+                            open: { effects: "fadeIn" }
+                        }
+                    });
+                }
+                function createSensorsGrid() {
+                    detailRow.find(".deviceDetailsSensors").kendoGrid({
+                        groupable: true,
+                        scrollable: true,
+                        sortable: true,
+                        reorderable: true,
+                        columns: [
+                            { field: "ID", title: "ID", groupable: false, width: 80 },
+                            { field: "TypeName()", title: "Type" },
+                            { field: "ProtocolVersion", title: "Protocol Version" }
+                        ]
+                    });
+                }
+            }
         });
     }
     function createSensorsGrid() {
@@ -297,16 +262,11 @@ function MainView() {
             //filterable: true,
             //resizable: true,
             pageable: {
-                //refresh: true,
-                pageSizes: [10, 20, 50, 100, 300],
-                pageSize: 50,
-                numeric: true, // show numeric buttons
-                buttonCount: 10, // default 10
-                //input: true,
-                info: true
+                pageSizes: [50, 100, 500, 1000],
+                pageSize: 100
             },
-            //columns:
-            //    [
+            columns:
+                [
             //      { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
             //      { field: "ID", title: "ID", groupable: false, width: 80 },
             //      { field: "Type", title: "Type" },
@@ -316,33 +276,14 @@ function MainView() {
             //      { field: "IsRepeater", title: "Is Repeater" },
             //      { field: "Sensors.length", title: "Sensors Count" },
             //      { field: "BatteryLevels[BatteryLevels.length - 1]", title: "Battery, %" },
-            //    ],
+                ],
+            detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
             detailInit: function (e) {
-                // work item summary:
-                //var templ = kendo.template($("#deviceDetailsTemplate").html());
-                //e.detailCell.append(templ);
-                //kendo.bind(e.detailCell, e.data);
+                var detailRow = e.detailRow;
 
-                //// child work items grid:
-                //if (e.data.Items && e.data.Items.length != 0) {
-                //    selector = $("<div class='wiGrid'/>");
-                //    selector.appendTo(e.detailCell);
 
-                //    //wiSaveScrollState();
-                //    initGrid(selector, e.data, false);
-                //    //wiRestoreScrollState();
-                //}
-            },
-            detailExpand: function (e) {
-                //if (this.dataItem(e.masterRow).wiIsToDoItem)
-                //    e.masterRow.find(".pap").toggle(false);
-                //resizeWIResourceTables();
-                //wiAddToVisualState(e.masterRow);
-            },
-            detailCollapse: function (e) {
-                //e.masterRow.find(".pap").toggle(true);
-                //wiRemoveFromVisualState(e.masterRow);
-            },
+
+            }
         });
     }
     function createThemeSelector() {

@@ -2,6 +2,7 @@
 function MessageManager() {
     var me = this;
     
+    this.IsFromServer = false;
     //----------------------------------------------------------------------------------------------------------------------
     // Events:
     this.onSend = null;
@@ -14,12 +15,6 @@ function MessageManager() {
     }
     //----------------------------------------------------------------------------------------------------------------------
     // Public functions (commands):
-
-    this.HelloWorld = function () {
-        var msg = new NetworkMessage(NetworkMessageID.Information);
-        msg.SetParameter("Msg", "Hello world!");
-        send(msg);
-    }
 
     this.GetSettings = function () {
         send(new NetworkMessage(NetworkMessageID.Settings));
@@ -44,6 +39,8 @@ function MessageManager() {
             me.onSend(msg.ToText());
     }
     function processMessage(msg) {
+        me.IsFromServer = true;
+
         var response = null;
 
         switch (msg.GetID()) {
@@ -63,13 +60,6 @@ function MessageManager() {
             case NetworkMessageID.Error:
                 mainView.showDialog(msg.GetParameter("Msg"), "Error");
                 break;
-            //case NetworkMessageID.Power:
-            //    viewModel.set("StationPower", msg.GetParameter("Power") == "True");
-            //    viewModel.set("MainBoosterIsActive", msg.GetParameter("MainActive") == "True");
-            //    viewModel.set("MainBoosterIsOverloaded", msg.GetParameter("MainOverload") == "True");
-            //    viewModel.set("ProgBoosterIsActive", msg.GetParameter("ProgActive") == "True");
-            //    viewModel.set("ProgBoosterIsOverloaded", msg.GetParameter("ProgOverload") == "True");
-            //    break;
             case NetworkMessageID.Settings:
                 viewModel.set("Settings.WebTheme", msg.GetParameter("WebTheme"));
                 viewModel.set("Settings.UnitSystem", msg.GetParameter("UnitSystem"));
@@ -78,25 +68,74 @@ function MessageManager() {
                 viewModel.set("Version", msg.GetParameter("Version"));
                 break;
             case NetworkMessageID.GetNodes:
-                //debugger;
-                var items = JSON.parse(msg.GetParameter("Nodes"));
+                var newItems = JSON.parse(msg.GetParameter("Nodes"));
 
-                var coll = viewModel.get("Devices");
-                for (var i = 0; i < items.length; i++) {
-                    var node = items[i];
+                // approach #1:
+                for (var i = 0; i < newItems.length; i++)
+                    enrichItem(newItems[i]);
+                viewModel.set("Devices", newItems);
 
-                    for (var j = 0; j < node.BatteryLevels.length; j++)
-                        node.BatteryLevels[j].Time = new Date(node.BatteryLevels[j].Time);
+                // approach #2:
+                //var oldItems = viewModel.get("Devices");
+                //oldItems.splice(0, oldItems.length); // remove all old nodes
+                //for (var i = 0; i < newItems.length; i++) {
+                //    var item = newItems[i];
+                //    enrichItem(item);
+                //    oldItems.push(item);
+                //}
 
-                    coll.push(node);
-                }
-
-                //viewModel.set("Devices", items);
                 break;
             default:
                 break;
         }
 
+        me.IsFromServer = false;
+
         return response;
+
+        function enrichItem(item) {
+            item.TypeName = function () {
+                var type = this.get("Type");
+
+                var result = "Unknown";
+
+                for (var val in SensorType)
+                    if (SensorType[val] == type) {
+                        result = val;
+                        break;
+                    }
+
+                return result;
+            };
+            item.HasBatteryLevels = function () {
+                var bls = this.get("BatteryLevels");
+                return bls && bls.length;
+            };
+            item.LastBatteryLevel = function () {
+                var bls = this.get("BatteryLevels");
+                return this.HasBatteryLevels() ? bls[bls.length - 1].Percent : "-";
+            };
+
+            // format battery level's date/time:
+            if (item.BatteryLevels)
+                for (var i = 0; i < item.BatteryLevels.length; i++)
+                    item.BatteryLevels[i].Time = new Date(item.BatteryLevels[i].Time);
+
+            if (item.Sensors)
+                for (var i = 0; i < item.Sensors.length; i++)
+                    item.Sensors[i].TypeName = function () {
+                        var type = this.get("Type");
+
+                        var result = "Unknown";
+
+                        for (var val in SensorType)
+                            if (SensorType[val] == type) {
+                                result = val;
+                                break;
+                            }
+
+                        return result;
+                    };
+        }
     }
 }

@@ -744,13 +744,24 @@
                 <li class="k-state-active">Sensors</li>
                 <li>Battery level</li>
             </ul>
-            <div><div class="deviceDetailsSensors k-grid"></div></div>
-            <div><div class="deviceDetailsBatteryLevels k-grid" style="height:150px;" data-bind="source: BatteryLevels"></div></div>
+            <div><div class="deviceDetailsSensors k-grid" style="height:200px;" data-bind="source: Sensors()"></div></div>
+            <div><div class="deviceDetailsBatteryLevels k-grid" style="height:200px;" data-bind="source: BatteryLevels"></div></div>
+        </div>
+    </script>
+    <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
+        <div class="deviceDetailsTabStrip">
+            <ul>
+                <li class="k-state-active">Sensors</li>
+                <li>Battery level</li>
+            </ul>
+            <div><div class="deviceDetailsSensors k-grid" style="height:200px;" data-bind="source: Sensors()"></div></div>
+            <div><div class="deviceDetailsBatteryLevels k-grid" style="height:200px;" data-bind="source: BatteryLevels"></div></div>
         </div>
     </script>
 
 
 
+    
 
     <div id="preLoad" style="display:none;">
         <!--<div>
@@ -760,6 +771,14 @@
     </div>
 
     <script type="text/javascript">
+        window.debugOutput = function (obj) {
+            if (!$('#debugOutput').size()) {
+                $('<div id="debugOutput" style="position:fixed;top:0;right:330px;width:300px;height:200px;white-space:nowrap;overflow:auto;border:1px solid black;background:white;color:black;font-size:11px;z-index:10000"/>')
+                    .appendTo(document.body).dblclick(function () { $('#debugOutput').empty() });
+            }
+            $('#debugOutput').append('<div>' + (obj ? obj.toString() : "") + '</div>').scrollTop(1000000);
+        };
+
         //kendo.ui.progress($("#preLoad"), true);
         $(document).ready(function () {
             setInterval(showLocalDateTime, 500);
@@ -780,6 +799,8 @@
         function showMain() {
             //model.set('UIState', UIStateType.Main);
         }
+
+
     </script>
 </body>
 

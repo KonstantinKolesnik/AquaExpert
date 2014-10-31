@@ -578,29 +578,33 @@ namespace MySensors.Core
         }
         private NetworkMessage GetNodesListMessage()
         {
-            //List<Node> coll = new List<Node>();
-            //for (byte i = 20; i < 50; i++)
-            //{
-            //    Node node = new Node(i) {
-            //        Type = SensorType.ArduinoNode,
-            //        ProtocolVersion = "1.4",
-            //        SketchName = "Sketch " + i,
-            //        SketchVersion = "1.0"
-            //    };
+            List<Node> coll = new List<Node>();
+            for (byte i = 20; i < 50; i++)
+            {
+                Node node = new Node(i)
+                {
+                    Type = SensorType.ArduinoNode,
+                    ProtocolVersion = "1.4",
+                    SketchName = "Sketch " + i,
+                    SketchVersion = "1.0"
+                };
 
-            //    for (byte p = 100; p > 80; p--)
-            //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(100 - p), p));
+                for (byte p = 100; p > 80; p--)
+                    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(100 - p), p));
 
-            //    coll.Add(node);
-            //}
+                for (byte j = 0; j < 25; j++)
+                {
+                    Sensor sensor = new Sensor(node.ID, j) { Type = (SensorType)j, ProtocolVersion = "1.4" };
+                    node.Sensors.Add(sensor);
+                }
 
-
-
+                coll.Add(node);
+            }
 
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetNodes);
-            msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
-            //msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
+            //msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
+            msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
             return msg;
         }
 
