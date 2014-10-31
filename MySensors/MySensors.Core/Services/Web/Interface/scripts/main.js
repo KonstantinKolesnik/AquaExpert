@@ -178,7 +178,7 @@ function MainView() {
                         lastContent.insertAfter(pnlContentHeader);
                         lastContent.toggle(true);
 
-                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + " > " + $(e.item).text();
+                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + "  >  " + $(e.item).text();
                         pnlContentHeader.find("label").text(title);
 
                         adjustSizes();
@@ -201,12 +201,12 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
+                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" alt=""/>' },
                   { field: "ID", title: "ID", groupable: false, width: 80 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
-                  { field: "SketchName", title: "Sketch Name" },
-                  { field: "SketchVersion", title: "Sketch Version" },
+                  { field: "SketchName", title: "Firmware Name" },
+                  { field: "SketchVersion", title: "Firmware Version" },
                   { field: "Sensors.length", title: "Sensors Count" },
                   { field: "LastBatteryLevel()", title: "Battery, %" }
                 ],
@@ -244,9 +244,11 @@ function MainView() {
                         sortable: true,
                         reorderable: true,
                         columns: [
+                            { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="32px" alt=""/>' },
                             { field: "ID", title: "ID", groupable: false, width: 80 },
                             { field: "TypeName()", title: "Type" },
-                            { field: "ProtocolVersion", title: "Protocol Version" }
+                            { field: "ProtocolVersion", title: "Protocol Version" },
+                            { field: "LastValue()", title: "Value" }
                         ]
                     });
                 }
@@ -259,30 +261,25 @@ function MainView() {
             scrollable: true,
             sortable: true,
             reorderable: true,
-            //filterable: true,
-            //resizable: true,
             pageable: {
                 pageSizes: [50, 100, 500, 1000],
                 pageSize: 100
             },
             columns:
                 [
-            //      { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/Decoder.png" height="28px" alt=""/>' },
-            //      { field: "ID", title: "ID", groupable: false, width: 80 },
-            //      { field: "Type", title: "Type" },
-            //      { field: "ProtocolVersion", title: "Protocol Version" },
-            //      { field: "SketchName", title: "Sketch Name" },
-            //      { field: "SketchVersion", title: "Sketch Version" },
-            //      { field: "IsRepeater", title: "Is Repeater" },
-            //      { field: "Sensors.length", title: "Sensors Count" },
-            //      { field: "BatteryLevels[BatteryLevels.length - 1]", title: "Battery, %" },
+                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 50, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="32px" alt=""/>' },
+                  { field: "NodeID", title: "Device ID", width: 80 },
+                  { field: "ID", title: "ID", groupable: false, width: 80 },
+                  { field: "TypeName()", title: "Type" },
+                  { field: "ProtocolVersion", title: "Protocol Version" },
+                  { field: "LastValue()", title: "Value" }
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
             detailInit: function (e) {
                 var detailRow = e.detailRow;
 
-
-
+                createSensorValuesChart(detailRow.find(".sensorDetailsValues"), e.data);
+                kendo.bind(detailRow, e.data);
             }
         });
     }
@@ -315,7 +312,6 @@ function MainView() {
             dataValueField: "value"
         });
     }
-
     function createBatteryLevelsChart(selector) {
         selector.kendoChart({
             //theme: "blueOpal",
@@ -386,6 +382,57 @@ function MainView() {
                 line: { visible: true },
                 majorGridLines: { visible: true },
                 color: "#000000"
+            }
+        });
+    }
+    function createSensorValuesChart(selector, sensor) {
+        selector.kendoChart({
+            //theme: "blueOpal",
+            transitions: true,
+            style: "smooth",
+            title: { text: sensor.TypeName() + " values" },
+            legend: { visible: true, position: "bottom" },
+            series: [
+                {
+                    categoryField: "Time",
+                    field: "Value",
+                    type: "line",
+                    labels: {
+                        visible: true,
+                        //format: "{0}%",
+                        background: "transparent"
+                    }
+                }
+            ],
+            valueAxis: {
+                labels: { format: "{0}%", visible: true },
+                line: { visible: true },
+                majorGridLines: { visible: true },
+                min: 0,
+                max: 120
+            },
+            categoryAxis: {
+                type: "date",
+
+                baseUnit: "hours",
+                //baseUnit: "days",
+                //baseUnit: "months",
+                //baseUnit: "weeks",
+                //baseUnit: "years",
+
+                labels: {
+                    dateFormats: {
+                        hours: "HH:mm",
+                        days: "MMM, d",
+                        months: "MMM-yy",
+                        weeks: "M-d",
+                        years: "yyyy"
+                    },
+                    visible: true
+                },
+
+                line: { visible: true },
+                majorGridLines: { visible: true }
             }
         });
     }

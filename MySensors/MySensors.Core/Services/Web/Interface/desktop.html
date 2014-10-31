@@ -52,7 +52,7 @@
         <table style="width:100%">
             <tr>
                 <td width="30%">
-                    <img src="./Resources/StationConnected.png" alt="" style="width:40px; vertical-align:middle;"/>
+                    <img src="./Resources/StationConnected.png" alt="" style="width:48px; vertical-align:middle;"/>
                     <span style="font-size:32px; vertical-align:middle; display:inline-block;">Smart Network</span>
                 </td>
                 <td></td>
@@ -83,6 +83,12 @@
                     <div class="k-content">
                         <ul id="panelbar">
                             <li>
+                                <span class="k-link menuGroupItem">Dashboard</span>
+                                <ul>
+                                    <li>Dashboard</li>
+                                </ul>
+                            </li>
+                            <li>
                                 <span class="k-link menuGroupItem">Network</span><!-- k-state-selected-->
                                 <ul>
                                     <li contentid="pnlDevices">Devices</li>
@@ -90,11 +96,11 @@
                                 </ul>
                             </li>
                             <li>
-                                <span class="k-link menuGroupItem">Logical modules</span>
+                                <span class="k-link menuGroupItem">Automation</span>
                                 <ul>
-                                    <li>Sub Item 1</li>
-                                    <li>Sub Item 2</li>
-                                    <li>Sub Item 3</li>
+                                    <li>Triggers</li>
+                                    <li>Rules</li>
+                                    <li>Macros</li>
                                 </ul>
                             </li>
                             <li>
@@ -113,10 +119,10 @@
                             <li>
                                 <span class="k-link menuGroupItem">Settings</span>
                                 <ul>
-                                    <li>Locations</li>
+                                    <!--<li>Locations</li>
                                     <li>Categories</li>
                                     <li>Presences</li>
-                                    <li>Day parts</li>
+                                    <li>Day parts</li>-->
                                     <li contentid="pnlSettingsServer">Server</li>
                                     <li contentid="pnlSettingsFirmware">Firmware</li>
                                 </ul>
@@ -744,19 +750,12 @@
                 <li class="k-state-active">Sensors</li>
                 <li>Battery level</li>
             </ul>
-            <div><div class="deviceDetailsSensors k-grid" style="height:200px;" data-bind="source: Sensors()"></div></div>
-            <div><div class="deviceDetailsBatteryLevels k-grid" style="height:200px;" data-bind="source: BatteryLevels"></div></div>
+            <div><div class="deviceDetailsSensors k-grid" style="height:250px;" data-bind="source: Sensors"></div></div>
+            <div><div class="deviceDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div></div>
         </div>
     </script>
     <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
-        <div class="deviceDetailsTabStrip">
-            <ul>
-                <li class="k-state-active">Sensors</li>
-                <li>Battery level</li>
-            </ul>
-            <div><div class="deviceDetailsSensors k-grid" style="height:200px;" data-bind="source: Sensors()"></div></div>
-            <div><div class="deviceDetailsBatteryLevels k-grid" style="height:200px;" data-bind="source: BatteryLevels"></div></div>
-        </div>
+        <div class="sensorDetailsValues" style="height:150px;" data-bind="source: Values"></div>
     </script>
 
 

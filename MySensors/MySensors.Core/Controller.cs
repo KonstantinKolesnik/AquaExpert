@@ -595,6 +595,10 @@ namespace MySensors.Core
                 for (byte j = 0; j < 25; j++)
                 {
                     Sensor sensor = new Sensor(node.ID, j) { Type = (SensorType)j, ProtocolVersion = "1.4" };
+
+                    for (byte p = 0; p < 15; p++)
+                        sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
+
                     node.Sensors.Add(sensor);
                 }
 

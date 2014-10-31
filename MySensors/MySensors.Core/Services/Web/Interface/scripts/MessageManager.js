@@ -107,13 +107,9 @@ function MessageManager() {
 
                 return result;
             };
-            item.HasBatteryLevels = function () {
-                var bls = this.get("BatteryLevels");
-                return bls && bls.length;
-            };
             item.LastBatteryLevel = function () {
                 var bls = this.get("BatteryLevels");
-                return this.HasBatteryLevels() ? bls[bls.length - 1].Percent : "-";
+                return (bls && bls.length) ? bls[bls.length - 1].Percent : "-";
             };
 
             // format battery level's date/time:
@@ -122,8 +118,9 @@ function MessageManager() {
                     item.BatteryLevels[i].Time = new Date(item.BatteryLevels[i].Time);
 
             if (item.Sensors)
-                for (var i = 0; i < item.Sensors.length; i++)
-                    item.Sensors[i].TypeName = function () {
+                for (var i = 0; i < item.Sensors.length; i++) {
+                    var sensor = item.Sensors[i];
+                    sensor.TypeName = function () {
                         var type = this.get("Type");
 
                         var result = "Unknown";
@@ -136,6 +133,16 @@ function MessageManager() {
 
                         return result;
                     };
+                    sensor.LastValue = function () {
+                        var vs = this.get("Values");
+                        return (vs && vs.length) ? vs[vs.length - 1].Value : "-";
+                    };
+
+                    // format sensor value's date/time:
+                    if (sensor.Values)
+                        for (var j = 0; j < sensor.Values.length; j++)
+                            sensor.Values[j].Time = new Date(sensor.Values[j].Time);
+                }
         }
     }
 }
