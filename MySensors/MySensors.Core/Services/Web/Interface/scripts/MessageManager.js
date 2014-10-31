@@ -78,9 +78,9 @@ function MessageManager() {
                 viewModel.set("Version", msg.GetParameter("Version"));
                 break;
             case NetworkMessageID.GetNodes:
+                //debugger;
                 var items = JSON.parse(msg.GetParameter("Nodes"));
 
-                //debugger;
                 var coll = viewModel.get("Devices");
                 for (var i = 0; i < items.length; i++) {
                     var node = items[i];

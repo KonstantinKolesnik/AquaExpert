@@ -211,7 +211,7 @@ function MainView() {
                   { field: "SketchVersion", title: "Sketch Version" },
                   { field: "IsRepeater", title: "Is Repeater" },
                   { field: "Sensors.length", title: "Sensors Count" },
-                  { field: "BatteryLevels[BatteryLevels.length - 1].Percent", title: "Battery, %" },
+                  //{ field: "BatteryLevels[BatteryLevels.length - 1].Percent", title: "Battery, %" },
                 ],
             detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
