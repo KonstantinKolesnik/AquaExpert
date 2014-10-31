@@ -85,6 +85,16 @@ function MessageManager() {
                 //}
 
                 break;
+            case NetworkMessageID.NodePresentation:
+                var node = JSON.parse(msg.GetParameter("Node"));
+
+
+                break;
+            case NetworkMessageID.SensorPresentation:
+                var sensor = JSON.parse(msg.GetParameter("Sensor"));
+
+
+                break;
             case NetworkMessageID.BatteryLevel:
                 var bl = JSON.parse(msg.GetParameter("Level"));
                 bl.Time = new Date(bl.Time);
@@ -146,6 +156,10 @@ function MessageManager() {
                     sensor.LastValue = function () {
                         var vs = this.get("Values");
                         return (vs && vs.length) ? vs[vs.length - 1].Value : "-";
+                    };
+                    sensor.LastValueType = function () {
+                        var vs = this.get("Values");
+                        return (vs && vs.length) ? vs[vs.length - 1].Type : "-";
                     };
 
                     // format sensor value's date/time:

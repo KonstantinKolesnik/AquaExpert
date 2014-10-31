@@ -11,7 +11,6 @@ using SuperWebSocket;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,8 +18,6 @@ using System.Reflection;
 
 namespace MySensors.Core
 {
-    public delegate void LogEventHandler(Controller sender, string text, bool isLine, LogLevel logLevel);
-
     public class Controller
     {
         #region Fields
@@ -36,7 +33,6 @@ namespace MySensors.Core
         private bool isWSServerStarted = false;
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
-        private ObservableCollection<Sensor> sensors = new ObservableCollection<Sensor>();
         private ObservableCollection<Setting> settings = new ObservableCollection<Setting>();
         #endregion
 
@@ -45,7 +41,7 @@ namespace MySensors.Core
         {
             get
             {
-                return dbService.IsStarted && isWSServerStarted && isWebServerStarted;// && connector.IsStarted;
+                return dbService.IsStarted && isWSServerStarted && isWebServerStarted && connector.IsStarted;
             }
         }
 
@@ -120,9 +116,6 @@ namespace MySensors.Core
         #region Constructor
         public Controller(bool isSerial = true)
         {
-            nodes.CollectionChanged += nodes_CollectionChanged;
-            sensors.CollectionChanged += sensors_CollectionChanged;
-
             dbService = new DatabaseService();
 
             connector = isSerial ? (IGatewayConnector)new SerialGatewayConnector() : (IGatewayConnector)new EthernetGatewayConnector();
@@ -141,7 +134,7 @@ namespace MySensors.Core
             StartWebServer();
             StartWSServer();
             //StartNameService();
-            //StartGatewayConnector();
+            StartGatewayConnector();
 
             return IsStarted;
         }
@@ -153,64 +146,30 @@ namespace MySensors.Core
             
             webServer.Stop();
             webServer = null;
+            isWebServerStarted = false;
             
             wsServer.Stop();
             wsServer.Dispose();
             wsServer = null;
+            isWSServerStarted = false;
 
             //isNameServiceStarted = false;
-            isWebServerStarted = false;
-            isWSServerStarted = false;
-        }
-
-        public Node GetNode(byte nodeID)
-        {
-            Node result = nodes.Where(node => node.ID == nodeID).FirstOrDefault();
-            
-            if (result == null)
-            {
-                result = new Node(nodeID);
-                nodes.Add(result);
-                dbService.Insert(result);
-            }
-
-            return result;
-        }
-        public Sensor GetSensor(byte nodeID, byte sensorID)
-        {
-            Sensor result = sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
-
-            if (result == null)
-            {
-                result = new Sensor(nodeID, sensorID);
-                sensors.Add(result);
-                dbService.Insert(result);
-            }
-
-            return result;
         }
         #endregion
 
         #region Event handlers
-        private void nodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            
-        }
-        private void sensors_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            
-        }
         private void connector_MessageReceived(IGatewayConnector sender, Message message)
         {
             if (!IsStarted)
                 return;
 
-            Console.WriteLine();
-            Console.WriteLine(message.ToString());
+            // for debug!!!
+            if (Log != null)
+                Log(this, message.ToString(), true, LogLevel.Normal);
 
             bool isNode = message.NodeID == 0 || message.SensorID == 255;
-            Node node = !isNode ? null : GetNode(message.NodeID);
-            Sensor sensor = !isNode ? GetSensor(message.NodeID, message.SensorID) : null;
+            Node node = !isNode ? null : GetOrCreateNode(message.NodeID);
+            Sensor sensor = !isNode ? GetOrCreateSensor(message.NodeID, message.SensorID) : null;
 
             switch (message.Type)
             {
@@ -221,14 +180,14 @@ namespace MySensors.Core
                         node.Type = (SensorType)message.SubType;
                         node.ProtocolVersion = message.Payload;
                         dbService.Update(node);
-                        // TODO broadcast
+                        Broadcast(CreateNodePresentationMessage(node));
                     }
                     else
                     {
                         sensor.Type = (SensorType)message.SubType;
                         sensor.ProtocolVersion = message.Payload;
                         dbService.Update(sensor);
-                        // TODO broadcast
+                        Broadcast(CreateSensorPresentationMessage(sensor));
                     }
                     break;
                 #endregion
@@ -238,7 +197,7 @@ namespace MySensors.Core
                     SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
                     sensor.Values.Add(sv);
                     dbService.Insert(sv);
-                    Broadcast(GetSensorValueMessage(sv));
+                    Broadcast(CreateSensorValueMessage(sv));
                     break;
                 #endregion
 
@@ -255,7 +214,7 @@ namespace MySensors.Core
                             BatteryLevel bl = new BatteryLevel(message.NodeID, DateTime.Now, byte.Parse(message.Payload));
                             node.BatteryLevels.Add(bl);
                             dbService.Insert(bl);
-                            Broadcast(GetNodeBatteryLevelMessage(bl));
+                            Broadcast(CreateNodeBatteryLevelMessage(bl));
                             break;
                         case InternalValueType.Time:
                             connector.Send(new Message(message.NodeID, message.SensorID, MessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
@@ -283,12 +242,12 @@ namespace MySensors.Core
                         case InternalValueType.SketchName:
                             node.SketchName = message.Payload;
                             dbService.Update(node);
-                            // TODO broadcast
+                            Broadcast(CreateNodePresentationMessage(node));
                             break;
                         case InternalValueType.SketchVersion:
                             node.SketchVersion = message.Payload;
                             dbService.Update(node);
-                            // TODO broadcast
+                            Broadcast(CreateNodePresentationMessage(node));
                             break;
                         case InternalValueType.Reboot:
                             break;
@@ -332,7 +291,7 @@ namespace MySensors.Core
         private void wsServer_newConnection(WebSocketSession session)
         {
             if (Log != null)
-                Log(this, "New connection received from " + session.RemoteEndPoint, true, LogLevel.Normal);
+                Log(this, "New web-socket connection from " + session.RemoteEndPoint, true, LogLevel.Normal);
         }
         private void wsServer_newMessage(WebSocketSession session, string txt)
         {
@@ -348,6 +307,34 @@ namespace MySensors.Core
         #endregion
 
         #region Private methods
+        private Node GetOrCreateNode(byte nodeID)
+        {
+            Node result = nodes.Where(node => node.ID == nodeID).FirstOrDefault();
+
+            if (result == null)
+            {
+                result = new Node(nodeID);
+                nodes.Add(result);
+                dbService.Insert(result);
+            }
+
+            return result;
+        }
+        private Sensor GetOrCreateSensor(byte nodeID, byte sensorID)
+        {
+            Node node = GetOrCreateNode(nodeID);
+            Sensor result = node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
+
+            if (result == null)
+            {
+                result = new Sensor(nodeID, sensorID);
+                node.Sensors.Add(result);
+                dbService.Insert(result);
+            }
+
+            return result;
+        }
+
         private void StartDatabase()
         {
             if (!dbService.IsStarted)
@@ -360,7 +347,7 @@ namespace MySensors.Core
                 if (dbService.IsStarted)
                 {
                     nodes = new ObservableCollection<Node>(dbService.GetAllNodes());
-                    sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
+                    var sensors = new ObservableCollection<Sensor>(dbService.GetAllSensors());
                     foreach (var node in nodes)
                         node.Sensors = new ObservableCollection<Sensor>(sensors.Where(sensor => sensor.NodeID == node.ID));
 
@@ -513,19 +500,18 @@ namespace MySensors.Core
             NetworkMessage response = null;
 
             if (msg != null)
-            {
                 switch (msg.ID)
                 {
                     #region Settings
                     case NetworkMessageID.Settings:
                         if (msg.ParametersCount == 0) // client asks for settings
-                            response = GetSettingsMessage();
+                            response = CreateSettingsMessage();
                         else // client sets options
                         {
                             WebTheme = msg["WebTheme"];
                             UnitSystem = msg["UnitSystem"];
 
-                            Broadcast(GetSettingsMessage());
+                            Broadcast(CreateSettingsMessage());
                         }
                         break;
                     #endregion
@@ -533,104 +519,104 @@ namespace MySensors.Core
                     #region Version
                     case NetworkMessageID.Version:
                         if (msg.ParametersCount == 0) // client asks for version
-                            response = GetVersionMessage();
-
-                        // for test!!!!
-                        //Broadcast(GetSensorValueMessage(new SensorValue(20, 0, DateTime.Now, SensorValueType.Temperature, 24.5f)));
-
+                            response = CreateVersionMessage();
                         break;
                     #endregion
 
                     #region GetNodesList
                     case NetworkMessageID.GetNodes:
                         if (msg.ParametersCount == 0)
-                            response = GetNodesListMessage();
+                            response = CreateNodesListMessage();
                         break;
                     #endregion
 
-
-
-
-
-                        
-
-
-
                     default: break;
                 }
-            }
 
             return response;
         }
 
-        private NetworkMessage GetOKMessage(string text)
+        private NetworkMessage CreateOKMessage(string text)
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.OK);
             if (!string.IsNullOrEmpty(text))
                 msg["Msg"] = text;
             return msg;
         }
-        private NetworkMessage GetSettingsMessage()
+        private NetworkMessage CreateSettingsMessage()
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.Settings);
             msg["WebTheme"] = WebTheme;
             msg["UnitSystem"] = UnitSystem;
             return msg;
         }
-        private NetworkMessage GetVersionMessage()
+        private NetworkMessage CreateVersionMessage()
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.Version);
             msg["Version"] = Version;
             return msg;
         }
-        private NetworkMessage GetNodesListMessage()
+        private NetworkMessage CreateNodesListMessage()
         {
-            List<Node> coll = new List<Node>();
-            for (byte i = 20; i < 50; i++)
-            {
-                Node node = new Node(i)
-                {
-                    Type = SensorType.ArduinoNode,
-                    ProtocolVersion = "1.4",
-                    SketchName = "Sketch " + i,
-                    SketchVersion = "1.0"
-                };
+            //List<Node> coll = new List<Node>();
+            //for (byte i = 20; i < 50; i++)
+            //{
+            //    Node node = new Node(i)
+            //    {
+            //        Type = SensorType.ArduinoNode,
+            //        ProtocolVersion = "1.4",
+            //        SketchName = "Sketch " + i,
+            //        SketchVersion = "1.0"
+            //    };
 
-                for (byte p = 100; p > 80; p--)
-                    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(100 - p), p));
+            //    for (byte p = 100; p > 80; p--)
+            //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(100 - p), p));
 
-                for (byte j = 0; j < 25; j++)
-                {
-                    Sensor sensor = new Sensor(node.ID, j) { Type = (SensorType)j, ProtocolVersion = "1.4" };
+            //    for (byte j = 0; j < 25; j++)
+            //    {
+            //        Sensor sensor = new Sensor(node.ID, j) { Type = (SensorType)j, ProtocolVersion = "1.4" };
 
-                    for (byte p = 0; p < 15; p++)
-                        sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
+            //        for (byte p = 0; p < 15; p++)
+            //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
 
-                    node.Sensors.Add(sensor);
-                }
+            //        node.Sensors.Add(sensor);
+            //    }
 
-                coll.Add(node);
-            }
+            //    coll.Add(node);
+            //}
+            //NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetNodes);
+            //msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
+            //return msg;
 
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetNodes);
-            //msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
-            msg["Nodes"] = JsonConvert.SerializeObject(coll, Formatting.Indented);
+            msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
             return msg;
         }
-        private NetworkMessage GetNodeBatteryLevelMessage(BatteryLevel bl)
+        private NetworkMessage CreateNodePresentationMessage(Node node)
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.NodePresentation);
+            msg["Node"] = JsonConvert.SerializeObject(node);
+            return msg;
+        }
+        private NetworkMessage CreateSensorPresentationMessage(Sensor sensor)
+        {
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.SensorPresentation);
+            msg["Sensor"] = JsonConvert.SerializeObject(sensor);
+            return msg;
+        }
+        private NetworkMessage CreateNodeBatteryLevelMessage(BatteryLevel bl)
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.BatteryLevel);
             msg["Level"] = JsonConvert.SerializeObject(bl);
             return msg;
         }
-        private NetworkMessage GetSensorValueMessage(SensorValue sv)
+        private NetworkMessage CreateSensorValueMessage(SensorValue sv)
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.SensorValue);
             msg["Value"] = JsonConvert.SerializeObject(sv);
             return msg;
         }
-
         #endregion
     }
 }

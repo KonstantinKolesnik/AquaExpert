@@ -21,6 +21,10 @@ body::before, body::after
 {
     font-weight:bold;
 }
+.menuItem
+{
+    padding-left:20px;
+}
 .pnlContent
 {
     display:none;

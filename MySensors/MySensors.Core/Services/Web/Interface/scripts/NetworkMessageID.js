@@ -60,6 +60,14 @@ NetworkMessageID = {
     GetNodes: "GetNodes",
 
     // Sender: STATION
+    // - Param "Node"
+    NodePresentation: "NodePresentation",
+
+    // Sender: STATION
+    // - Param "Sensor"
+    SensorPresentation: "SensorPresentation",
+
+    // Sender: STATION
     // - Param "Level"
     BatteryLevel: "BatteryLevel",
 

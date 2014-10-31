@@ -59,6 +59,14 @@ namespace MySensors.Core.Messaging
         public const string GetNodes = "GetNodes";
 
         // Sender: STATION
+        // - Param "Node"
+        public const string NodePresentation = "NodePresentation";
+
+        // Sender: STATION
+        // - Param "Sensor"
+        public const string SensorPresentation = "SensorPresentation";
+
+        // Sender: STATION
         // - Param "Level"
         public const string BatteryLevel = "BatteryLevel";
 

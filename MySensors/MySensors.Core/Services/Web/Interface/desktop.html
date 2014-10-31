@@ -85,46 +85,46 @@
                             <li>
                                 <span class="k-link menuGroupItem">Dashboard</span>
                                 <ul>
-                                    <li>Dashboard</li>
+                                    <li class="menuItem">Dashboard</li>
                                 </ul>
                             </li>
                             <li>
                                 <span class="k-link menuGroupItem">Network</span><!-- k-state-selected-->
                                 <ul>
-                                    <li contentid="pnlDevices">Devices</li>
-                                    <li contentid="pnlSensors">Sensors</li>
+                                    <li class="menuItem" contentid="pnlDevices">Devices</li>
+                                    <li class="menuItem" contentid="pnlSensors">Sensors</li>
                                 </ul>
                             </li>
                             <li>
                                 <span class="k-link menuGroupItem">Automation</span>
                                 <ul>
-                                    <li>Triggers</li>
-                                    <li>Rules</li>
-                                    <li>Macros</li>
+                                    <li class="menuItem">Triggers</li>
+                                    <li class="menuItem">Rules</li>
+                                    <li class="menuItem">Macros</li>
                                 </ul>
                             </li>
                             <!--<li>
                                 <span class="k-link menuGroupItem">Clients</span>
                                 <ul>
-                                    <li>Connected clients</li>
+                                    <li class="menuItem">Connected clients</li>
                                 </ul>
                             </li>-->
                             <!--<li>
                                 <span class="k-link menuGroupItem">System</span>
                                 <ul>
-                                    <li>Server status</li>
-                                    <li>Peripherals</li>
+                                    <li class="menuItem">Server status</li>
+                                    <li class="menuItem">Peripherals</li>
                                 </ul>
                             </li>-->
                             <li>
                                 <span class="k-link menuGroupItem">Settings</span>
                                 <ul>
-                                    <!--<li>Locations</li>
-                                    <li>Categories</li>
-                                    <li>Presences</li>
-                                    <li>Day parts</li>-->
-                                    <li contentid="pnlSettingsServer">Server</li>
-                                    <li contentid="pnlSettingsFirmware">Firmware</li>
+                                    <!--<li class="menuItem">Locations</li>
+                                    <li class="menuItem">Categories</li>
+                                    <li class="menuItem">Presences</li>
+                                    <li class="menuItem">Day parts</li>-->
+                                    <li class="menuItem" contentid="pnlSettingsServer">Server</li>
+                                    <li class="menuItem" contentid="pnlSettingsFirmware">Firmware</li>
                                 </ul>
                             </li>
                             <!--<li disabled="disabled">
@@ -761,10 +761,33 @@
     <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
         <div>
             <div>filter</div>
-            <div class="sensorDetailsValues" style="height:150px;" data-bind="source: Values"></div>
+            <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>
         </div>
     </script>
+    <!--<script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
+        #
+        debugger;
+        #
+        <div>
+            QQQQ
+        </div>
 
+    </script>-->
+    <!--<tr data-uid="#: uid #">
+        <td class="photo">
+            <img src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
+        </td>
+        <td class="details">
+            <span class="name">#: FirstName# #: LastName# </span>
+            <span class="title">Title: #: Title #</span>
+        </td>
+        <td class="country">
+            #: Country #
+        </td>
+        <td class="employeeID">
+            #: EmployeeID #
+        </td>
+    </tr>-->
 
 
     

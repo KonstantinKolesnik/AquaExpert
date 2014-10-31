@@ -121,6 +121,51 @@ function MainView() {
             $(doc.documentElement).removeClass("k-" + oldSkinName).addClass("k-" + skinName);
         }
     }
+    this.getSensorValueUnit = function (sensor) {
+        switch (sensor.LastValueType()) {
+            case SensorValueType.Temperature: return viewModel.Settings.UnitSystem == "M" ? "°C" : "°F";
+            case SensorValueType.Humidity: return "%";
+                //case SensorValueType.Light:                 2,      // Light status. 0=off 1=on
+            case SensorValueType.Dimmer: return "%";
+                //case SensorValueType.Pressure:              4,      // Atmospheric Pressure
+                //case SensorValueType.Forecast:              5,      // Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
+                //case SensorValueType.Rain:                  6,      // Amount of rain
+                //case SensorValueType.RainRate:              7,      // Rate of rain
+                //case SensorValueType.Wind:                  8,      // Windspeed
+                //case Gust:                  9,      // Gust
+                //case Direction:             10,     // Wind direction
+                //case UV:                    11,     // UV light level
+                //case Weight:                12,     // Weight (for scales etc)
+                //case Distance:              13,     // Distance
+                //case Impedance:             14,     // Impedance value
+                //case Armed:                 15,     // Armed status of a security sensor. 1=Armed, 0=Bypassed
+                //case Tripped:               16,     // Tripped status of a security sensor. 1=Tripped, 0=Untripped
+                //case Watt:                  17,     // Watt value for power meters
+                //case KWH:                   18,     // Accumulated number of KWH for a power meter
+                //case SceneOn:               19,     // Turn on a scene
+                //case SceneOff:              20,     // Turn of a scene
+                //case Heater:                21,     // Mode of header. One of "Off", "HeatOn", "CoolOn", or "AutoChangeOver"
+                //case HeaterSW:              22,     // Heater switch power. 1=On, 0=Off
+                //case LightLevel:            23,     // Light level. 0-100%
+                //case Var1:	                24,     // Custom value
+                //case Var2:	                25,     // Custom value
+                //case Var3:	                26,     // Custom value
+                //case Var4:	                27,     // Custom value
+                //case Var5:	                28,     // Custom value
+                //case Up:	                    29,     // Window covering. Up.
+                //case Down:	                30,     // Window covering. Down.
+                //case Stop:	                31,     // Window covering. Stop.
+                //case IRSend: 	            32,     // Send out an IR-command
+                //case IRReceive:	            33,     // This message contains a received IR-command
+                //case Flow:	                34,     // Flow of water (in meter)
+                //case Volume: 	            35,     // Water volume
+                //case LockStatus: 	        36,     // Set or get lock status. 1=Locked, 0=Unlocked
+                //case case DustLevel:	            37,     // Dust level
+                //case Voltage:	            38,     // Voltage level
+                //case Current:	            39,     // Current level
+            default: return "";
+        }
+    }
     this.adjustSizes = adjustSizes;
 
     function adjustSizes() {
@@ -150,6 +195,7 @@ function MainView() {
             }
         }
     }
+
     function createMenu() {
         $("#panelbar").kendoPanelBar({
             //expandMode: "single",
@@ -187,6 +233,7 @@ function MainView() {
             }
         });
     }
+
     function createDevicesGrid() {
         $("#gridDevices").kendoGrid({
             groupable: true,
@@ -248,7 +295,8 @@ function MainView() {
                             { field: "ID", title: "ID", groupable: false, width: 80 },
                             { field: "TypeName()", title: "Type" },
                             { field: "ProtocolVersion", title: "Protocol Version" },
-                            { field: "LastValue()", title: "Value" }
+                            //{ field: "LastValue()", title: "Value", template: kendo.template($("#sensorValueCellTemplate").html()) }
+                            { field: "LastValue()", title: "Value", template: "#: data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
                         ]
                     });
                 }
@@ -272,7 +320,8 @@ function MainView() {
                   { field: "ID", title: "ID", groupable: false, width: 80 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
-                  { field: "LastValue()", title: "Value" }
+                  { field: "LastValue()", title: "Value", template: "#: data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
+
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
             detailInit: function (e) {
@@ -283,6 +332,7 @@ function MainView() {
             }
         });
     }
+
     function createThemeSelector() {
         $("#ddlTheme").kendoDropDownList({
             dataSource: [
@@ -312,6 +362,7 @@ function MainView() {
             dataValueField: "value"
         });
     }
+
     function createBatteryLevelsChart(selector) {
         selector.kendoChart({
             //theme: "blueOpal",
@@ -389,8 +440,8 @@ function MainView() {
         selector.kendoChart({
             //theme: "blueOpal",
             transitions: true,
-            style: "step",//"smooth",
-            title: { text: sensor.TypeName() + " values" },
+            //style: "step",//"smooth",
+            title: { text: sensor.TypeName() + " statistics" },
             legend: { visible: true, position: "bottom" },
             series: [
                 {
@@ -398,43 +449,61 @@ function MainView() {
                     field: "Value",
                     type: "area",
                     labels: {
-                        visible: true,
-                        //format: "{0}%",
-                        background: "transparent"
+                        format: "{0}" + me.getSensorValueUnit(sensor),
+                        visible: true
+                        //background: "transparent"
                     },
                     line: {
-                        color: "green",
-                        opacity: 0.5,
-                        width: 5,
-                        style: "step"
+                        color: "cornflowerblue",
+                        //opacity: 0.5,
+                        width: 0.5,
+                        style: "smooth" // "step", ""
                     }
                 }
             ],
             valueAxis: {
-                //labels: { format: "{0}%", visible: true },
+                labels: {
+                    format: "{0}" + me.getSensorValueUnit(sensor),
+                    visible: true
+                },
                 line: { visible: true },
-                majorGridLines: { visible: true }
+                majorGridLines: { visible: true },
+                //title: {
+                //    text: "wwwww",
+                //    background: "green",
+                //    border: {
+                //        width: 1,
+                //    }
+                //}
                 //min: 0,
                 //max: 120
             },
             categoryAxis: {
                 type: "date",
 
-                baseUnit: "hours",
+                baseUnit: "fit",
+                //baseUnit: "seconds",
+                //baseUnit: "minutes",
+                //baseUnit: "hours",
                 //baseUnit: "days",
-                //baseUnit: "months",
                 //baseUnit: "weeks",
+                //baseUnit: "months",
                 //baseUnit: "years",
 
                 labels: {
                     dateFormats: {
-                        hours: "HH:mm",
-                        days: "MMM, d",
-                        months: "MMM-yy",
-                        weeks: "M-d",
+                        hours: "MMM d HH:mm",
+                        //hours: "HH:mm",
+
+                        days: "MMM d",
+                        weeks: "MMM d",
+                        months: "yyyy MMM",
                         years: "yyyy"
                     },
-                    visible: true
+                    visible: true,
+                    rotation: 270,
+                    step: 3
+                    //min: 5//new Date()
                 },
 
                 line: { visible: true },
@@ -442,6 +511,7 @@ function MainView() {
             }
         });
     }
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 function onDocumentReady() {
