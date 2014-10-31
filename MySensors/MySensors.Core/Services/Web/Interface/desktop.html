@@ -751,11 +751,17 @@
                 <li>Battery level</li>
             </ul>
             <div><div class="deviceDetailsSensors k-grid" style="height:250px;" data-bind="source: Sensors"></div></div>
-            <div><div class="deviceDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div></div>
+            <div>
+                <div>filter</div>
+                <div class="deviceDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>
+            </div>
         </div>
     </script>
     <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
-        <div class="sensorDetailsValues" style="height:150px;" data-bind="source: Values"></div>
+        <div>
+            <div>filter</div>
+            <div class="sensorDetailsValues" style="height:150px;" data-bind="source: Values"></div>
+        </div>
     </script>
 
 

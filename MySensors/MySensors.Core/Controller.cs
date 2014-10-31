@@ -331,14 +331,12 @@ namespace MySensors.Core
         private void wsServer_newMessage(WebSocketSession session, string txt)
         {
             Console.WriteLine(session.RemoteEndPoint + ": " + txt);
-            //SendToAllClients(txt);
 
             List<NetworkMessage> msgs = nmr.Process(txt);
             foreach (NetworkMessage msg in msgs)
             {
                 NetworkMessage response = ProcessNetworkMessage(msg);
-                if (response != null)
-                    session.Send(response.PackToString());
+                Send(session, response);
             }
         }
         #endregion
@@ -489,10 +487,17 @@ namespace MySensors.Core
             int seconds = Convert.ToInt32(result.TotalSeconds);
             return seconds;
         }
-        private void SendToAllClients(string message)
+
+        private void Send(WebSocketSession session, NetworkMessage msg)
         {
-            foreach (WebSocketSession session in wsServer.GetAllSessions())
-                session.Send(message);
+            if (msg != null)
+                session.Send(msg.PackToString());
+        }
+        private void Broadcast(NetworkMessage msg)
+        {
+            if (msg != null)
+                foreach (WebSocketSession session in wsServer.GetAllSessions())
+                    Send(session, msg);
         }
         #endregion
 
@@ -513,16 +518,8 @@ namespace MySensors.Core
                         {
                             WebTheme = msg["WebTheme"];
                             UnitSystem = msg["UnitSystem"];
-                            //options.BroadcastBoostersCurrent = msg["BroadcastBoostersCurrent"] == bool.TrueString;
-                            //options.UseWiFi = msg["UseWiFi"] == bool.TrueString;
-                            //options.WiFiSSID = msg["WiFiSSID"];
-                            //options.WiFiPassword = msg["WiFiPassword"];
 
-                            //options.SaveToFlash();
-                            //ApplyOptions();
-                            //BroadcastOptions();
-
-                            //response = GetOKMessage(null);
+                            Broadcast(GetSettingsMessage());
                         }
                         break;
                     #endregion
