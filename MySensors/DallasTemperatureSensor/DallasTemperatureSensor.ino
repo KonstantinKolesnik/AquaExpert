@@ -60,12 +60,12 @@ void loop()
 		}
 	}
 
-	//gw.requestTime(receiveTime);
+	//gw.requestTime(onReceiveTime);
 
 	gw.sleep(SLEEP_TIME);
 }
 
-void receiveTime(unsigned long time) //Incoming argument is seconds since 1970.
+void onReceiveTime(unsigned long time) //Incoming argument is seconds since 1970.
 {
 	//setTime(time);
 }

@@ -42,11 +42,7 @@ function MessageManager() {
 
         switch (msg.GetID()) {
             case NetworkMessageID.OK:
-                var s = "Operation completed successfully!";
-                var ss = msg.GetParameter("Msg");
-                if (ss)
-                    s = ss;
-                mainView.showDialog(s);
+                mainView.showDialog(msg.GetParameter("Msg") || "Operation completed successfully!");
                 break;
             case NetworkMessageID.Information:
                 mainView.showDialog(msg.GetParameter("Msg"), "Information");
@@ -109,62 +105,44 @@ function MessageManager() {
         return response;
 
         function enrichItem(item) {
+            item.BatteryLevels = item.BatteryLevels || [];//new kendo.observableArray();
+            for (var i = 0; i < item.BatteryLevels.length; i++)
+                item.BatteryLevels[i].Time = new Date(item.BatteryLevels[i].Time); // convert battery level's date/time
+
             item.TypeName = function () {
-                var type = this.get("Type");
-
-                var result = "Unknown";
-
-                for (var val in SensorType)
-                    if (SensorType[val] == type) {
-                        result = val;
-                        break;
-                    }
-
-                return result;
+                return getSensorTypeName(this.get("Type"));
             };
             item.LastBatteryLevel = function () {
                 var bls = this.get("BatteryLevels");
-                return (bls && bls.length) ? bls[bls.length - 1].Percent : "-";
+                return bls.length ? bls[bls.length - 1].Percent : "-";
             };
 
-            // format battery level's date/time:
-            if (item.BatteryLevels)
-                for (var i = 0; i < item.BatteryLevels.length; i++)
-                    item.BatteryLevels[i].Time = new Date(item.BatteryLevels[i].Time);
+            item.Sensors = item.Sensors || [];//new kendo.observableArray();
+            for (var i = 0; i < item.Sensors.length; i++) {
+                var sensor = item.Sensors[i];
 
-            if (item.Sensors)
-                for (var i = 0; i < item.Sensors.length; i++) {
-                    var sensor = item.Sensors[i];
-                    sensor.TypeName = function () {
-                        var type = this.get("Type");
+                sensor.Values = sensor.Values || [];//new kendo.observableArray();
+                for (var j = 0; j < sensor.Values.length; j++)
+                    sensor.Values[j].Time = new Date(sensor.Values[j].Time); // convert sensor value's date/time
 
-                        var result = "Unknown";
-
-                        for (var val in SensorType)
-                            if (SensorType[val] == type) {
-                                result = val;
-                                break;
-                            }
-
-                        return result;
-                    };
-                    sensor.LastValue = function () {
-                        var vs = this.get("Values");
-                        return (vs && vs.length) ? vs[vs.length - 1].Value : "-";
-                    };
-                    sensor.LastValueType = function () {
-                        var vs = this.get("Values");
-                        return (vs && vs.length) ? vs[vs.length - 1].Type : "-";
-                    };
-
-                    // format sensor value's date/time:
-                    if (sensor.Values)
-                        for (var j = 0; j < sensor.Values.length; j++)
-                            sensor.Values[j].Time = new Date(sensor.Values[j].Time);
-                }
+                sensor.TypeName = function () {
+                    return getSensorTypeName(this.get("Type"));
+                };
+                sensor.LastValue = function () {
+                    var vs = this.get("Values");
+                    return vs.length ? vs[vs.length - 1].Value : "-";
+                };
+                sensor.LastValueType = function () {
+                    var vs = this.get("Values");
+                    return vs.length ? vs[vs.length - 1].Type : "-";
+                };
+            }
         }
         function addOrUpdateNode(node) {
-            var nodes = viewModel.Devices || [];
+            if (!viewModel.Devices)
+                viewModel.Devices = new kendo.observableArray();
+
+            var nodes = viewModel.Devices;
             for (var i = 0; i < nodes.length; i++) {
                 var nd = nodes[i];
                 if (nd.ID == node.ID) {
@@ -172,18 +150,34 @@ function MessageManager() {
                     nd.set("ProtocolVersion", node.ProtocolVersion);
                     nd.set("SketchName", node.SketchName );
                     nd.set("SketchVersion", node.SketchVersion);
-
                     return;
                 }
             }
 
             // node isn't in list; add it:
-            viewModel.Devices.push(node);
+            nodes.push(node);
         }
         function addOrUpdateSensor(sensor) {
-            debugger;
+            var nodes = viewModel.Devices || [];
+            for (var i = 0; i < nodes.length; i++) {
+                var nd = nodes[i];
+                if (nd.ID == sensor.NodeID) {
+                    if (!nd.Sensors)
+                        nd.Sensors = new kendo.observableArray();
 
+                    for (var j = 0; j < nd.Sensors.length; j++) {
+                        var snsr = nd.Sensors[j];
+                        if (snsr.NodeID == sensor.NodeID && snsr.ID == sensor.ID) {
+                            snsr.set("Type", sensor.Type);
+                            snsr.set("ProtocolVersion", sensor.ProtocolVersion);
+                            return;
+                        }
+                    }
 
+                    // sensor isn't in list; add it:
+                    nd.Sensors.push(sensor);
+                }
+            }
         }
         function addBatteryLevel(bl) {
             var nodes = viewModel.Devices || [];
@@ -197,12 +191,19 @@ function MessageManager() {
                 if (nodes[i].ID == sv.NodeID) {
                     var sensors = nodes[i].Sensors || [];
                     for (var j = 0; j < sensors.length; j++)
-                        if (sensors[j].ID == sv.ID) {
+                        if (sensors[j].NodeID == sv.NodeID && sensors[j].ID == sv.ID) {
                             if (!sensors[j].Values)
                                 sensors[j].Values = new kendo.observableArray();
                             sensors[j].Values.push(sv);
                         }
                 }
+        }
+        function getSensorTypeName(value) {
+            for (var name in SensorType)
+                if (SensorType[name] == value)
+                    return name;
+
+            return "Unknown";
         }
     }
 }
