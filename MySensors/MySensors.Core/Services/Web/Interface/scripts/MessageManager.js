@@ -6,7 +6,7 @@ function MessageManager() {
     //----------------------------------------------------------------------------------------------------------------------
     // Events:
     this.onSend = null;
-    this.onReceive = function (txt) {
+    this.ProcessMessage = function (txt) {
         var msg = new NetworkMessage(NetworkMessageID.Undefined);
         msg.FromText(txt);
 
@@ -15,7 +15,6 @@ function MessageManager() {
     }
     //----------------------------------------------------------------------------------------------------------------------
     // Public functions (commands):
-
     this.GetSettings = function () {
         send(new NetworkMessage(NetworkMessageID.Settings));
     }
@@ -25,11 +24,9 @@ function MessageManager() {
         msg.SetParameter("UnitSystem", unitSystem);
         send(msg);
     }
-
     this.GetVersion = function () {
         send(new NetworkMessage(NetworkMessageID.Version));
     }
-
     this.GetNodes = function () {
         send(new NetworkMessage(NetworkMessageID.GetNodes));
     }
@@ -87,13 +84,11 @@ function MessageManager() {
                 break;
             case NetworkMessageID.NodePresentation:
                 var node = JSON.parse(msg.GetParameter("Node"));
-
-
+                addOrUpdateNode(node);
                 break;
             case NetworkMessageID.SensorPresentation:
                 var sensor = JSON.parse(msg.GetParameter("Sensor"));
-
-
+                addOrUpdateSensor(sensor);
                 break;
             case NetworkMessageID.BatteryLevel:
                 var bl = JSON.parse(msg.GetParameter("Level"));
@@ -167,6 +162,28 @@ function MessageManager() {
                         for (var j = 0; j < sensor.Values.length; j++)
                             sensor.Values[j].Time = new Date(sensor.Values[j].Time);
                 }
+        }
+        function addOrUpdateNode(node) {
+            var nodes = viewModel.Devices || [];
+            for (var i = 0; i < nodes.length; i++) {
+                var nd = nodes[i];
+                if (nd.ID == node.ID) {
+                    nd.set("Type", node.Type);
+                    nd.set("ProtocolVersion", node.ProtocolVersion);
+                    nd.set("SketchName", node.SketchName );
+                    nd.set("SketchVersion", node.SketchVersion);
+
+                    return;
+                }
+            }
+
+            // node isn't in list; add it:
+            viewModel.Devices.push(node);
+        }
+        function addOrUpdateSensor(sensor) {
+            debugger;
+
+
         }
         function addBatteryLevel(bl) {
             var nodes = viewModel.Devices || [];

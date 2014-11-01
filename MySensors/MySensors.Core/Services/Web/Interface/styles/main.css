@@ -12,10 +12,6 @@ body
     padding: 0;
     /*background-color: #3d3d3d;*/
 }
-body::before, body::after
-{
-    /*height: 0;*/
-}
 /*------------------------------------------------------------------------------*/
 .menuGroupItem
 {
@@ -110,31 +106,31 @@ td.propName
 /*------------------------------------------------------------------------------*/
 div
 {
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 span, label
 {
-    color: #cccccc;
-    font-size: 14px;
+    /*color: #cccccc;
+    font-size: 14px;*/
 }
 .ButtonSpan
 {
-    color: #f1f1f1;
+    /*color: #f1f1f1;*/
     /*font-size: 14px;*/
 }
 .TitleSpan
 {
-    color: #ffffff;
     /*font-size: 22px;*/
+    /*color: #ffffff;
     font-size: 1em;
     margin: auto;
-    text-transform: uppercase;
+    text-transform: uppercase;*/
 }
 .TitleImage 
 {
-    height: 54px;
+    /*height: 54px;
     vertical-align: middle;
-    margin: auto 20px ;
+    margin: auto 20px ;*/
 }
 /*------------------------------------------------------------------------------*/
 #preLoad {           
@@ -160,7 +156,7 @@ span, label
 /*------------------------------------------------------------------------------*/
 .MainMenuItem
 {
-    float: left;
+    /*float: left;
     width: 381px;
     height: 202px;
     margin: 3px;
@@ -174,87 +170,45 @@ span, label
     
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
-    border-radius: 15px;
+    border-radius: 15px;*/
 }
 .MainMenuItem img
 {
-    width: 192px;
+    /*width: 192px;
     height: 192px;
     margin-left: 20px;
     
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px;*/
 }
 .MainMenuItem div
 {
-    display: inline-block;
+    /*display: inline-block;*/
 }
 .MainMenuItem h3
 {
-    display: inline-block;
     /*margin: 10px 0 0 0;
     padding: 10px 10px 10px 20px;*/
+
+    /*display: inline-block;
     font-size: 1em;
     max-width: 120px;
-    text-transform: uppercase;
+    text-transform: uppercase;*/
 }
 
 .k-listview:after, .MainMenuItem h3:after
 {
-    content: ".";
+    /*content: ".";
     display: block;
     height: 0;
     clear: both;
-    visibility: hidden;
+    visibility: hidden;*/
 }
 .k-listview
 {
-    border: 0;
-    min-width: 0;
+    /*border: 0;
+    min-width: 0;*/
 }
-/**/
-
 
 /*------------------------------------------------------------------------------*/
-.OperationItem
-{
-    /*float: left;*/
-    width: auto;
-    min-width: 400px;
-    height: auto;
-    margin: 5px;
-    padding: 5px;
-    background-image: none;
-    
-    -moz-box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
-    -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
-    
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-}
-.OperationItem button
-{
-    font-size: 11px;
-}
-
-.ActionButtons button
-{
-    width: 50px;
-}
-.FButtons button
-{
-    width: 35px;
-    height: 40px;
-    color: cornflowerblue;
-}
-.FButtons button img
-{
-    height: 10px;   
-}
-.SpeedSlider
-{
-    color: Red;
-}

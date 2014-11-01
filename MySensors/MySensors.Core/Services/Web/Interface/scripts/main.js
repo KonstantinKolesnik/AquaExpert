@@ -7,13 +7,12 @@ var viewModel;
 function onWSClientOpen() {
     viewModel.set("IsConnected", true);
     msgManager.GetSettings();
-    msgManager.GetNodes();
     msgManager.GetVersion();
-
+    msgManager.GetNodes();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
-        msgManager.onReceive(txt);
+        msgManager.ProcessMessage(txt);
 }
 function onWSClientClose() {
     viewModel.set("IsConnected", false);
@@ -249,7 +248,7 @@ function MainView() {
             columns:
                 [
                   { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "ID", title: "ID", groupable: false, width: 80 },
+                  { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
                   { field: "SketchName", title: "Firmware Name" },
@@ -292,7 +291,7 @@ function MainView() {
                         reorderable: true,
                         columns: [
                             { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                            { field: "ID", title: "ID", groupable: false, width: 80 },
+                            { field: "ID", title: "ID", groupable: false, width: 100 },
                             { field: "TypeName()", title: "Type" },
                             { field: "ProtocolVersion", title: "Protocol Version" },
                             //{ field: "LastValue()", title: "Value", template: kendo.template($("#sensorValueCellTemplate").html()) }
@@ -316,8 +315,8 @@ function MainView() {
             columns:
                 [
                   { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "NodeID", title: "Device ID", width: 80 },
-                  { field: "ID", title: "ID", groupable: false, width: 80 },
+                  { field: "NodeID", title: "Device ID", width: 100 },
+                  { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
                   { field: "LastValue()", title: "Value", template: "#: data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
