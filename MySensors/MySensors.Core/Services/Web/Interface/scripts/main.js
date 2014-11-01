@@ -8,7 +8,7 @@ function onWSClientOpen() {
     viewModel.set("IsConnected", true);
     msgManager.GetSettings();
     msgManager.GetVersion();
-    msgManager.GetNodes();
+    //msgManager.GetNodes();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -19,7 +19,6 @@ function onWSClientClose() {
     wsClient.start();
 }
 function onWSClientError() {
-    //showDialog("WebSocket error: " + e);
 }
 function onMsgManagerSend(txt) {
     wsClient.send(txt);
@@ -46,8 +45,6 @@ function onViewModelAfterSet(e) {
 //----------------------------------------------------------------------------------------------------------------------
 function MainView() {
     var me = this;
-    var pnlContentHolder = $("#pnlContentHolder");
-    var pnlContentHeader = $("#pnlContentHeader");
     var lastContent = null;
 
     createMenu();
@@ -121,6 +118,7 @@ function MainView() {
         }
     }
     this.getSensorValueUnit = function (sensor) {
+        debugger;
         switch (sensor.LastValueType()) {
             case SensorValueType.Temperature: return viewModel.Settings.UnitSystem == "M" ? "°C" : "°F";
             case SensorValueType.Humidity: return "%";
@@ -209,6 +207,9 @@ function MainView() {
                 }
             },
             select: function (e) {
+                var pnlContentHolder = $("#pnlContentHolder");
+                var pnlContentHeader = $("#pnlContentHeader");
+
                 if (lastContent) {
                     lastContent.insertAfter($("#dlg"));
                     lastContent.toggle(false);
@@ -254,7 +255,7 @@ function MainView() {
                   { field: "SketchName", title: "Firmware Name" },
                   { field: "SketchVersion", title: "Firmware Version" },
                   { field: "Sensors.length", title: "Sensors Count" },
-                  { field: "LastBatteryLevel()", title: "Battery, %" }
+                  { field: "LastBatteryLevel()", title: "Battery, %", template: kendo.template($("#batteryLevelCellTemplate").html()) }
                 ],
             detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
@@ -294,8 +295,7 @@ function MainView() {
                             { field: "ID", title: "ID", groupable: false, width: 100 },
                             { field: "TypeName()", title: "Type" },
                             { field: "ProtocolVersion", title: "Protocol Version" },
-                            //{ field: "LastValue()", title: "Value", template: kendo.template($("#sensorValueCellTemplate").html()) }
-                            { field: "LastValue()", title: "Value", template: "#: data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
+                            { field: "LastValue()", title: "Value", template: kendo.template($("#sensorValueCellTemplate").html()) }
                         ]
                     });
                 }
@@ -319,7 +319,7 @@ function MainView() {
                   { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
-                  { field: "LastValue()", title: "Value", template: "#: data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
+                  { field: "LastValue()", title: "Value", template: "#: data.LastValue() == null ? '-' : data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
 
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
@@ -510,7 +510,6 @@ function MainView() {
             }
         });
     }
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 function onDocumentReady() {
@@ -533,15 +532,6 @@ function onDocumentReady() {
     wsClient.onError = onWSClientError;
     wsClient.start();
 
-
-    //createMainMenu();
-    //createLayout();
-    //createOperation();
-    ////createDecoders();
-    //createOptions();
-
-
-//    onWindowResize();
 
     // for test!!!
     //var loco1 = new Locomotive(1, "MKV", "aaaaaaa", new LocomotiveAddress(7, false), Protocol.DCC28);

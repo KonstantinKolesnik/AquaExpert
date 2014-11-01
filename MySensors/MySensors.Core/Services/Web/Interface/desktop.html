@@ -36,14 +36,6 @@
     <script src="scripts/model.js" type="text/javascript"></script>
     <script src="scripts/wsClient.js" type="text/javascript"></script>
     <script src="scripts/main.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-        //$(document).bind("APP_READY", function () {
-        //    //$("#preLoad").fadeOut();
-        //    $("#preLoad").css("opacity", "0").css("visibility", "hidden");
-        //});
-        //kendo.ui.progress($("#preLoad"), true);
-    </script>
 </head>
 
 <body class="k-content">
@@ -764,15 +756,20 @@
             <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>
         </div>
     </script>
-
-    
-
-    <div id="preLoad" style="display:none;">
-        <!--<div>
-            <img src="KendoUI/styles/black/loading-image.gif" alt="Loading Image" />
-            <br />Loading...
-        </div>-->
-    </div>
+    <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
+        #
+        var val = data.LastBatteryLevel();
+        var res = val == null ? "-" : val == 0 ? 0 : val;
+        #
+        <div>#: res #</div>
+    </script>
+    <script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
+        #
+        var val = data.LastValue();
+        var res = val == null ? "-" : data.LastValue() + " " + mainView.getSensorValueUnit(data);
+        #
+        <div>#: res #</div>
+    </script>
 
     <script type="text/javascript">
         window.debugOutput = function (obj) {
@@ -783,12 +780,9 @@
             $('#debugOutput').append('<div>' + (obj ? obj.toString() : "") + '</div>').scrollTop(1000000);
         };
 
-        //kendo.ui.progress($("#preLoad"), true);
         $(document).ready(function () {
             setInterval(showLocalDateTime, 500);
             onDocumentReady();
-            //$(document).trigger("APP_READY");
-            //kendo.ui.progress($("#preLoad"), false);
         });
 
         function showLocalDateTime() {
@@ -803,8 +797,6 @@
         function showMain() {
             //model.set('UIState', UIStateType.Main);
         }
-
-
     </script>
 </body>
 
