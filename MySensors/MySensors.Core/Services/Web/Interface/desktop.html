@@ -48,6 +48,10 @@
                     <span style="font-size:32px; vertical-align:middle; display:inline-block;">Smart Network</span>
                 </td>
                 <td></td>
+                <td>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,0);">button 0</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,1);">button 1</button>
+                </td>
                 <td width="10%">
                     <span>Connection:</span>
                     <img src="./resources/LedRed_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected"/>

@@ -30,6 +30,14 @@ function MessageManager() {
     this.GetNodes = function () {
         send(new NetworkMessage(NetworkMessageID.GetNodes));
     }
+    this.SendNodeMessage = function (nodeID, messageType, valueType, value) {
+        me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
+    }
+    this.SendSensorMessage = function (nodeID, sensorID, messageType, valueType, value) {
+        var msg = new NetworkMessage(NetworkMessageID.SensorMessage);
+        msg.SetParameter("Msg", nodeID + "-" + sensorID + "-" + messageType + "-" + "0" + "-" + valueType + "-" + value);
+        send(msg);
+    }
     //----------------------------------------------------------------------------------------------------------------------
     function send(msg) {
         if (me.onSend && msg)
@@ -72,10 +80,10 @@ function MessageManager() {
             case NetworkMessageID.SensorPresentation: addOrUpdateSensor(JSON.parse(msg.GetParameter("Sensor"))); break;
             case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter("Level"))); break;
             case NetworkMessageID.SensorValue: addSensorValue(JSON.parse(msg.GetParameter("Value"))); break;
-            default:
-                break;
+            default: break;
         }
 
+        $("#gridSensors").data("kendoGrid").refresh();
         me.IsFromServer = false;
 
         return response;

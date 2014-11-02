@@ -530,6 +530,13 @@ namespace MySensors.Core
                         break;
                     #endregion
 
+                    #region Sensor message
+                    case NetworkMessageID.SensorMessage:
+                        connector.Send(Message.FromRawString(msg["Msg"].Replace("-", ";")));
+                        break;
+                    #endregion
+
+
                     default: break;
                 }
 

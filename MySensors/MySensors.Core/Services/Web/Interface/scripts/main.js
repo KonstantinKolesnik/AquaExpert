@@ -8,7 +8,7 @@ function onWSClientOpen() {
     viewModel.set("IsConnected", true);
     msgManager.GetSettings();
     msgManager.GetVersion();
-    //msgManager.GetNodes();
+    msgManager.GetNodes();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -118,7 +118,6 @@ function MainView() {
         }
     }
     this.getSensorValueUnit = function (sensor) {
-        debugger;
         switch (sensor.LastValueType()) {
             case SensorValueType.Temperature: return viewModel.Settings.UnitSystem == "M" ? "°C" : "°F";
             case SensorValueType.Humidity: return "%";
@@ -319,8 +318,7 @@ function MainView() {
                   { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
-                  { field: "LastValue()", title: "Value", template: "#: data.LastValue() == null ? '-' : data.LastValue() + ' ' + mainView.getSensorValueUnit(data) #" }
-
+                  { field: "LastValue()", title: "Value", template: kendo.template($("#sensorValueCellTemplate").html()) }
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
             detailInit: function (e) {

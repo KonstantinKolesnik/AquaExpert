@@ -50,20 +50,10 @@ namespace MySensors.Core.Services.Data
         {
             return con.Insert(NodeDto.FromModel(item), "OR REPLACE");
         }
-        //public int Insert(List<Node> nodes)
-        //{
-        //    List<NodeDto> nodes2 = nodes.Select(node => NodeDto.FromModel(node)).ToList();
-        //    return con.InsertAll(nodes2);
-        //}
         public int Insert(Sensor item)
         {
             return con.Insert(SensorDto.FromModel(item), "OR REPLACE");
         }
-        //public int Insert(List<Sensor> sensors)
-        //{
-        //    List<SensorDto> sensors2 = sensors.Select(sensor => SensorDto.FromModel(sensor)).ToList();
-        //    return con.InsertAll(sensors2);
-        //}
         public int Insert(BatteryLevel item)
         {
             return con.Insert(BatteryLevelDto.FromModel(item));

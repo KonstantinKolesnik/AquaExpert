@@ -1,6 +1,5 @@
 ﻿using MySensors.Core.Sensors;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 
 namespace MySensors.Core.Services.Data
@@ -8,9 +7,10 @@ namespace MySensors.Core.Services.Data
     [Table("BatteryLevels")]
     class BatteryLevelDto
     {
+        [PrimaryKey]
+        public string PK { get; set; }
         //[ForeignKey(typeof(NodeDto))]
         public byte NodeID { get; set; }
-        [PrimaryKey]
         public DateTime Time { get; set; }
         public byte Percent { get; set; }
 
@@ -21,6 +21,7 @@ namespace MySensors.Core.Services.Data
 
             return new BatteryLevelDto()
             {
+                PK = GetPK(item.Time),
                 NodeID = item.NodeID,
                 Time = item.Time,
                 Percent = item.Percent
@@ -29,6 +30,16 @@ namespace MySensors.Core.Services.Data
         public BatteryLevel ToModel()
         {
             return new BatteryLevel(NodeID, Time, Percent);
+        }
+
+        private static string GetPK(DateTime dt)
+        {
+            long ticks = dt.Ticks;
+            byte[] bytes = BitConverter.GetBytes(ticks);
+            return Convert.ToBase64String(bytes)
+                                    .Replace('+', '_')
+                                    .Replace('/', '-')
+                                    .TrimEnd('=');
         }
     }
 }

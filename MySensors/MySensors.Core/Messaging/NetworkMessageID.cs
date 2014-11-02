@@ -74,7 +74,9 @@ namespace MySensors.Core.Messaging
         // - Param "Value"
         public const string SensorValue = "SensorValue";
 
-
+        // Sender: CLIENT
+        // - Param "Msg"
+        public const string SensorMessage = "SensorMsg";
         
     }
 }

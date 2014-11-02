@@ -73,11 +73,11 @@ NetworkMessageID = {
 
     // Sender: STATION
     // - Param "Value"
-    SensorValue: "SensorValue"
+    SensorValue: "SensorValue",
 
-
-
-
+    // Sender: CLIENT
+    // - Param "Msg"
+    SensorMessage: "SensorMsg"
 
 
 }
