@@ -26,8 +26,8 @@
 #include <MyGateway.h>  
 #include <stdarg.h>
 
-//#define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
-//#define INCLUSION_MODE_PIN 3 // Digital pin used for inclusion mode button
+#define INCLUSION_MODE_TIME 1	// Number of minutes inclusion mode is enabled
+#define INCLUSION_MODE_PIN	3	// Digital pin used for inclusion mode button
 
 //MyGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
 MyGateway gw(DEFAULT_CE_PIN, 8);
@@ -45,6 +45,7 @@ void loop()
 {
 	gw.processRadioMessage();
 
+	readSerialEvent();
 	if (commandComplete)
 	{
 		// A command was issued from serial interface; send it to the actuator
@@ -52,11 +53,6 @@ void loop()
 		commandComplete = false;
 		inputPos = 0;
 	}
-
-	// for test only:
-	//Serial.print("12;6;1;0;0;36.5");
-	//Serial.print('\n');
-	//delay(500);
 }
 
 /*
@@ -65,7 +61,7 @@ hardware serial RX. This routine is run between each
 time loop() runs, so using delay inside loop can delay
 response. Multiple bytes of data may be available.
 */
-void onSerialEvent()
+void readSerialEvent()
 {
 	while (Serial.available())
 	{

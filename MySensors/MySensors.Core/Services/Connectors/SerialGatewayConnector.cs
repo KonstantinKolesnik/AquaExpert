@@ -1,5 +1,6 @@
 ﻿using MySensors.Core.Sensors;
 using System;
+using System.IO;
 using System.IO.Ports;
 
 namespace MySensors.Core.Services.Connectors
@@ -98,6 +99,7 @@ namespace MySensors.Core.Services.Connectors
                     MessageReceived(this, msg);
             }
             catch (TimeoutException) { }
+            catch (IOException) { }
         }
         private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {

@@ -48,6 +48,7 @@ void setup()
 		digitalWrite(pin, lastState ? RELAY_ON : RELAY_OFF);
 
 		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
+		delay(10);
 	}
 
 
@@ -58,31 +59,28 @@ void setup()
 	// Present all sensors to controller
 	for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
 		gw.present(NUMBER_OF_RELAYS + sensorID, S_TEMP);
-
-
-	Serial.println("begin done");
 }
 void loop()
 {
 	gw.process();
 
-	//// Fetch temperatures from Dallas sensors
-	//sensors.requestTemperatures();
+	// Fetch temperatures from Dallas sensors
+	sensors.requestTemperatures();
 
-	//// Read temperatures and send them to controller 
-	//for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
-	//{
-	//	// Fetch and round temperature to one decimal
-	//	float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
+	// Read temperatures and send them to controller 
+	for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
+	{
+		// Fetch and round temperature to one decimal
+		float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
 
-	//	// Only send data if temperature has changed and no error
-	//	if (lastTemperature[sensorID] != temperature && temperature != -127.00)
-	//	{
-	//		// Send in the new temperature
-	//		gw.send(msgTemperature.setSensor(NUMBER_OF_RELAYS + sensorID).set(temperature, 1));
-	//		lastTemperature[sensorID] = temperature;
-	//	}
-	//}
+		// Only send data if temperature has changed and no error
+		if (lastTemperature[sensorID] != temperature && temperature != -127.00)
+		{
+			// Send in the new temperature
+			gw.send(msgTemperature.setSensor(NUMBER_OF_RELAYS + sensorID).set(temperature, 1));
+			lastTemperature[sensorID] = temperature;
+		}
+	}
 
 	//gw.requestTime(onTimeReceived);
 
@@ -91,7 +89,7 @@ void loop()
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
 {
-	Serial.println("onMessageReceived");
+	//Serial.println("onMessageReceived");
 
 	if (message.type == V_LIGHT)
 	{
@@ -99,17 +97,20 @@ void onMessageReceived(const MyMessage &message)
 		digitalWrite(message.sensor + FIRST_RELAY_PIN, message.getBool() ? RELAY_ON : RELAY_OFF);
 		// Store state in eeprom
 		gw.saveState(message.sensor, message.getBool());
+		//gw.send(msgRelay.setSensor(message.sensor).set(message.getBool() ? 1 : 0));
 
 		// Write some debug info
-		//Serial.print("Incoming change for sensor:");
-		//Serial.print(message.sensor);
-		//Serial.print(", New status: ");
-		//Serial.println(message.getBool());
+		Serial.print("Incoming change for sensor:");
+		Serial.print(message.sensor);
+		Serial.print(", New status: ");
+		Serial.println(message.getBool());
 	}
 }
 void onTimeReceived(unsigned long time) //Incoming argument is seconds since 1970.
 {
 	//setTime(time);
+	//Serial.print("Time: ");
+	//Serial.println(time);
 }
 void printTime() {
 	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());

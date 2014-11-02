@@ -76,8 +76,8 @@
 #define RADIO_TX_LED_PIN    4		// the PCB, on board LED*/
 
 
-#define IP_PORT 5003        // The port you want to open 
-IPAddress myIp(192, 168, 1, 177);  // Configure your static ip-address here    COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
+#define IP_PORT 5003				// The port you want to open 
+IPAddress myIp(192, 168, 1, 177);	// Configure your static ip-address here    COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
 
 // The MAC address can be anything you want but should be unique on your network.
 // Newer boards have a MAC address printed on the underside of the PCB, which you can (optionally) use.
