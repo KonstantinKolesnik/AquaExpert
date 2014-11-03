@@ -8,8 +8,8 @@ namespace MySensors.Core
 
         bool IsStarted { get; }
 
-        void Connect();
-        void Disconnect();
+        void Start();
+        void Stop();
 
         void Send(SensorMessage message);
     }

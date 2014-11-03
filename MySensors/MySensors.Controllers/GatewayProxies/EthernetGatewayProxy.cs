@@ -40,7 +40,7 @@ namespace MySensors.Controllers.GatewayProxies
         #endregion
 
         #region Public methods
-        public void Connect()
+        public void Start()
         {
             //string localIP = "";
             //IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -84,7 +84,7 @@ namespace MySensors.Controllers.GatewayProxies
 
             client.Close();
         }
-        public void Disconnect()
+        public void Stop()
         {
 
 

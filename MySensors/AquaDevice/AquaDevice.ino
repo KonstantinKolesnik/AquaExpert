@@ -97,7 +97,7 @@ void onMessageReceived(const MyMessage &message)
 		digitalWrite(message.sensor + FIRST_RELAY_PIN, message.getBool() ? RELAY_ON : RELAY_OFF);
 		// Store state in eeprom
 		gw.saveState(message.sensor, message.getBool());
-		//gw.send(msgRelay.setSensor(message.sensor).set(message.getBool() ? 1 : 0));
+		gw.send(msgRelay.setSensor(message.sensor).set(message.getBool() ? 1 : 0));
 
 		// Write some debug info
 		Serial.print("Incoming change for sensor:");

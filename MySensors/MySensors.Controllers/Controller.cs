@@ -115,15 +115,15 @@ namespace MySensors.Controllers
         public bool Start()
         {
             StartDatabase();
-            StartCommunicator();
             StartGatewayConnector();
+            StartCommunicator();
 
             return IsStarted;
         }
         public void Stop()
         {
             communicator.Stop();
-            gatewayProxy.Disconnect();
+            gatewayProxy.Stop();
             dbService.Stop();
         }
         #endregion
@@ -263,7 +263,6 @@ namespace MySensors.Controllers
         }
         private NetworkMessage communicator_NetworkMessageProcessor(NetworkMessage request)
         {
-            //Console.WriteLine(session.RemoteEndPoint + ": " + txt);
             return ProcessNetworkMessage(request);
         }
         #endregion
@@ -371,7 +370,7 @@ namespace MySensors.Controllers
 
                 try
                 {
-                    gatewayProxy.Connect();
+                    gatewayProxy.Start();
                 }
                 catch (Exception) { }
 

@@ -39,7 +39,7 @@ namespace MySensors.Controllers.GatewayProxies
         #endregion
 
         #region Public methods
-        public void Connect()
+        public void Start()
         {
             if (serialPort.IsOpen)
                 return;
@@ -68,13 +68,13 @@ namespace MySensors.Controllers.GatewayProxies
                         }
                         catch (TimeoutException) { }
 
-                        Disconnect();
+                        Stop();
                     }
                 }
                 catch (Exception) {}
             }
         }
-        public void Disconnect()
+        public void Stop()
         {
             if (serialPort.IsOpen)
                 serialPort.Close();
