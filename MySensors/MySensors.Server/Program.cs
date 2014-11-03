@@ -1,4 +1,4 @@
-﻿using MySensors.Core;
+﻿using MySensors.Controllers;
 using System;
 using System.Threading;
 

@@ -12,7 +12,7 @@ namespace MySensors.Core
         public string Name
         {
             get { return name; }
-            internal set
+            set
             {
                 if (name != value)
                 {
@@ -24,7 +24,7 @@ namespace MySensors.Core
         public string Value
         {
             get { return value; }
-            internal set
+            set
             {
                 if (this.value != value)
                 {
