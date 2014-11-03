@@ -116,12 +116,13 @@ namespace MySensors.Controllers.Communication
 
         private void wsServer_newConnection(WebSocketSession session)
         {
+            Console.WriteLine("New web-socket connection from " + session.RemoteEndPoint);
             //if (Log != null)
             //    Log(this, "New web-socket connection from " + session.RemoteEndPoint, true, LogLevel.Normal);
         }
         private void wsServer_newMessage(WebSocketSession session, string txt)
         {
-            //Console.WriteLine(session.RemoteEndPoint + ": " + txt);
+            Console.WriteLine(session.RemoteEndPoint + ": " + txt);
 
             if (NetworkMessageProcessor != null)
             {
