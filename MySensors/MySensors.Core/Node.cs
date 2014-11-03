@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace MySensors.Core
 {
@@ -78,20 +80,15 @@ namespace MySensors.Core
         public ObservableCollection<BatteryLevel> BatteryLevels
         {
             get { return batteryLevels; }
-            //set
-            //{
-            //    batteryLevels = value == null ? new ObservableCollection<BatteryLevel>() : value;
-            //    NotifyPropertyChanged("BatteryLevels");
-            //}
         }
         public ObservableCollection<Sensor> Sensors
         {
             get { return sensors; }
-            //set
-            //{
-            //    sensors = value == null ? new ObservableCollection<Sensor>() : value;
-            //    NotifyPropertyChanged("Sensors");
-            //}
+        }
+
+        public BatteryLevel BatteryLevel
+        {
+            get { return batteryLevels != null && batteryLevels.Count != 0 ? batteryLevels.Where(v => v.Time == batteryLevels.Select(vv => vv.Time).Max()).FirstOrDefault() : null; }
         }
         #endregion
 
@@ -99,6 +96,8 @@ namespace MySensors.Core
         public Node(byte id)
         {
             ID = id;
+
+            batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
         }
         public Node(byte id, SensorType type, string protocolVersion, string sketchName, string sketchVersion)
         {
@@ -107,6 +106,15 @@ namespace MySensors.Core
             ProtocolVersion = protocolVersion;
             SketchName = sketchName;
             SketchVersion = sketchVersion;
+
+            batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
+        }
+        #endregion
+
+        #region Event handlers
+        private void batteryLevels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            NotifyPropertyChanged("BatteryLevel");
         }
         #endregion
     }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace MySensors.Core
 {
@@ -64,7 +66,11 @@ namespace MySensors.Core
         public ObservableCollection<SensorValue> Values
         {
             get { return values; }
-            //set { values = value == null ? new ObservableCollection<SensorValue>() : value; }
+        }
+
+        public SensorValue Value
+        {
+            get { return values != null && values.Count != 0 ? values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault() : null; }
         }
         #endregion
 
@@ -73,6 +79,8 @@ namespace MySensors.Core
         {
             NodeID = nodeID;
             ID = id;
+
+            values.CollectionChanged += values_CollectionChanged;
         }
         public Sensor(byte nodeID, byte id, SensorType type, string protocolVersion)
         {
@@ -80,6 +88,15 @@ namespace MySensors.Core
             ID = id;
             Type = type;
             ProtocolVersion = protocolVersion;
+
+            values.CollectionChanged += values_CollectionChanged;
+        }
+        #endregion
+
+        #region Event handlers
+        private void values_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            NotifyPropertyChanged("Value");
         }
         #endregion
     }

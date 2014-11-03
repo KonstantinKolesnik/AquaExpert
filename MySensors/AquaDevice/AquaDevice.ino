@@ -93,17 +93,20 @@ void onMessageReceived(const MyMessage &message)
 
 	if (message.type == V_LIGHT)
 	{
+		bool value = message.getBool();
+
 		// Change relay state
-		digitalWrite(message.sensor + FIRST_RELAY_PIN, message.getBool() ? RELAY_ON : RELAY_OFF);
+		digitalWrite(message.sensor + FIRST_RELAY_PIN, value ? RELAY_ON : RELAY_OFF);
 		// Store state in eeprom
-		gw.saveState(message.sensor, message.getBool());
-		gw.send(msgRelay.setSensor(message.sensor).set(message.getBool() ? 1 : 0));
+		gw.saveState(message.sensor, value);
+
+		gw.send(msgRelay.setSensor(message.sensor).set(value));
 
 		// Write some debug info
 		Serial.print("Incoming change for sensor:");
 		Serial.print(message.sensor);
 		Serial.print(", New status: ");
-		Serial.println(message.getBool());
+		Serial.println(value);
 	}
 }
 void onTimeReceived(unsigned long time) //Incoming argument is seconds since 1970.

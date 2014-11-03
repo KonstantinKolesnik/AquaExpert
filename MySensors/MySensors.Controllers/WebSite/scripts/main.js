@@ -247,7 +247,7 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                  //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
                   { field: "ProtocolVersion", title: "Protocol Version" },
@@ -290,7 +290,7 @@ function MainView() {
                         sortable: true,
                         reorderable: true,
                         columns: [
-                            { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                            //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                             { field: "ID", title: "ID", groupable: false, width: 100 },
                             { field: "TypeName()", title: "Type" },
                             { field: "ProtocolVersion", title: "Protocol Version" },
@@ -313,7 +313,7 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                  //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "NodeID", title: "Device ID", width: 100 },
                   { field: "ID", title: "ID", groupable: false, width: 100 },
                   { field: "TypeName()", title: "Type" },
@@ -326,6 +326,32 @@ function MainView() {
 
                 createSensorValuesChart(detailRow.find(".sensorDetailsValues"), e.data);
                 kendo.bind(detailRow, e.data);
+            },
+            dataBinding: function (e) {
+                //if (e.action == "itemchange") {
+                //    e.preventDefault();
+
+                //    var item = e.items[0];
+
+                //    //get the current column names, in their current order
+                //    var grid = $("#gridSensors").data('kendoGrid');
+                //    var columns = grid.columns;
+                //    var columnNames = $.map(columns, function (column) {
+                //        return column.field;
+                //    });
+
+                //    //get the column tds for update
+                //    var masterRow = $('#gridSensors > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
+                //    var tds = masterRow.find('td:not(.k-hierarchy-cell)');
+
+                //    //collapse the detail row that was saved.
+                //    grid.collapseRow(masterRow);
+
+                //    //update the tds with the value from the current item stored in items
+                //    for (var i = 0 ; i < tds.length ; i++) {
+                //        $(tds[i]).html(item[columnNames[i]]);
+                //    }
+                //}
             }
         });
     }
