@@ -13,6 +13,8 @@ DallasTemperature sensors(&oneWire);
 float lastTemperature[MAX_ATTACHED_DS18B20];
 int numSensors = 0;
 MyMessage msgTemperature(0, V_TEMP);
+unsigned long previousMillis = 0;  // stores last time temperature was sent
+const long interval = 3000;		   // interval at which to send measurements (milliseconds)
 
 // Relays section
 #define RELAY_ON				0  // GPIO value to write to turn on attached relay
@@ -21,9 +23,9 @@ MyMessage msgTemperature(0, V_TEMP);
 #define NUMBER_OF_RELAYS		7  // Total number of attached relays
 MyMessage msgRelay(0, V_LIGHT);
 
-
+// common section
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
-unsigned long SLEEP_TIME = 3000;	// Sleep time between reads (in milliseconds)
+//unsigned long SLEEP_TIME = 3000;	// Sleep time between reads (in milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -64,21 +66,27 @@ void loop()
 {
 	gw.process();
 
-	// Fetch temperatures from Dallas sensors
-	sensors.requestTemperatures();
-
-	// Read temperatures and send them to controller 
-	for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
+	unsigned long currentMillis = millis();
+	if (currentMillis - previousMillis >= interval)
 	{
-		// Fetch and round temperature to one decimal
-		float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
+		previousMillis = currentMillis;
 
-		// Only send data if temperature has changed and no error
-		if (lastTemperature[sensorID] != temperature && temperature != -127.00)
+		// Fetch temperatures from Dallas sensors
+		sensors.requestTemperatures();
+
+		// Read temperatures and send them to controller 
+		for (int sensorID = 0; sensorID < numSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
 		{
-			// Send in the new temperature
-			gw.send(msgTemperature.setSensor(NUMBER_OF_RELAYS + sensorID).set(temperature, 1));
-			lastTemperature[sensorID] = temperature;
+			// Fetch and round temperature to one decimal
+			float temperature = static_cast<float>(static_cast<int>((gw.getConfig().isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
+
+			// Only send data if temperature has changed and no error
+			if (lastTemperature[sensorID] != temperature && temperature != -127.00)
+			{
+				// Send in the new temperature
+				gw.send(msgTemperature.setSensor(NUMBER_OF_RELAYS + sensorID).set(temperature, 1));
+				lastTemperature[sensorID] = temperature;
+			}
 		}
 	}
 
