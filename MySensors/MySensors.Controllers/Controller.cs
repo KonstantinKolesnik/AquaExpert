@@ -140,26 +140,45 @@ namespace MySensors.Controllers
             if (Log != null)
                 Log(this, message.ToString(), true, LogLevel.Normal);
 
-            bool isNode = message.NodeID == 0 || message.SensorID == 255;
-            Node node = !isNode ? null : GetOrCreateNode(message.NodeID);
-            Sensor sensor = !isNode ? GetOrCreateSensor(message.NodeID, message.SensorID) : null;
+
+            bool isNodeMessage = message.NodeID == 0 || message.SensorID == 255;
+            Node node = GetNode(message.NodeID);
+            Sensor sensor = GetSensor(message.NodeID, message.SensorID); // if message.SensorID == 255 it returns null
 
             switch (message.Type)
             {
                 #region Presentation
                 case SensorMessageType.Presentation: // sent by a nodes when they present attached sensors.
-                    if (node != null)
+                    if (isNodeMessage)
                     {
-                        node.Type = (SensorType)message.SubType;
-                        node.ProtocolVersion = message.Payload;
-                        dbService.Update(node);
+                        if (node == null)
+                        {
+                            node = new Node(message.NodeID, (SensorType)message.SubType, message.Payload);
+                            nodes.Add(node);
+                            dbService.Insert(node);
+                        }
+                        else
+                        {
+                            node.Type = (SensorType)message.SubType;
+                            node.ProtocolVersion = message.Payload;
+                            dbService.Update(node);
+                        }
                         communicator.Broadcast(CreateNodePresentationMessage(node));
                     }
                     else
                     {
-                        sensor.Type = (SensorType)message.SubType;
-                        sensor.ProtocolVersion = message.Payload;
-                        dbService.Update(sensor);
+                        if (sensor == null)
+                        {
+                            sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
+                            node.Sensors.Add(sensor);
+                            dbService.Insert(sensor);
+                        }
+                        else
+                        {
+                            sensor.Type = (SensorType)message.SubType;
+                            sensor.ProtocolVersion = message.Payload;
+                            dbService.Update(sensor);
+                        }
                         communicator.Broadcast(CreateSensorPresentationMessage(sensor));
                     }
                     break;
@@ -167,10 +186,13 @@ namespace MySensors.Controllers
 
                 #region Set
                 case SensorMessageType.Set: // sent from or to a sensor when a sensor value should be updated
-                    SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
-                    sensor.Values.Add(sv);
-                    dbService.Insert(sv);
-                    communicator.Broadcast(CreateSensorValueMessage(sv));
+                    if (sensor != null)
+                    {
+                        SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
+                        sensor.Values.Add(sv);
+                        dbService.Insert(sv);
+                        communicator.Broadcast(CreateSensorValueMessage(sv));
+                    }
                     break;
                 #endregion
 
@@ -184,10 +206,13 @@ namespace MySensors.Controllers
                     switch ((InternalValueType)message.SubType)
                     {
                         case InternalValueType.BatteryLevel: // int, in %
-                            BatteryLevel bl = new BatteryLevel(message.NodeID, DateTime.Now, byte.Parse(message.Payload));
-                            node.BatteryLevels.Add(bl);
-                            dbService.Insert(bl);
-                            communicator.Broadcast(CreateNodeBatteryLevelMessage(bl));
+                            if (node != null)
+                            {
+                                BatteryLevel bl = new BatteryLevel(node.ID, DateTime.Now, byte.Parse(message.Payload));
+                                node.BatteryLevels.Add(bl);
+                                dbService.Insert(bl);
+                                communicator.Broadcast(CreateNodeBatteryLevelMessage(bl));
+                            }
                             break;
                         case InternalValueType.Time:
                             gatewayProxy.Send(new SensorMessage(message.NodeID, message.SensorID, SensorMessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
@@ -195,7 +220,7 @@ namespace MySensors.Controllers
                         case InternalValueType.Version:
                             break;
                         case InternalValueType.IDRequest:
-                            GetNextAvailableSensorID();
+                            GetNextAvailableNodeID();
                             break;
                         case InternalValueType.IDResponse:
                             break;
@@ -213,14 +238,20 @@ namespace MySensors.Controllers
                         case InternalValueType.Children:
                             break;
                         case InternalValueType.SketchName:
-                            node.SketchName = message.Payload;
-                            dbService.Update(node);
-                            communicator.Broadcast(CreateNodePresentationMessage(node));
+                            if (node != null)
+                            {
+                                node.SketchName = message.Payload;
+                                dbService.Update(node);
+                                communicator.Broadcast(CreateNodePresentationMessage(node));
+                            }
                             break;
                         case InternalValueType.SketchVersion:
-                            node.SketchVersion = message.Payload;
-                            dbService.Update(node);
-                            communicator.Broadcast(CreateNodePresentationMessage(node));
+                            if (node != null)
+                            {
+                                node.SketchVersion = message.Payload;
+                                dbService.Update(node);
+                                communicator.Broadcast(CreateNodePresentationMessage(node));
+                            }
                             break;
                         case InternalValueType.Reboot:
                             break;
@@ -259,7 +290,7 @@ namespace MySensors.Controllers
             }
 
             //if (node != null && node.Reboot)
-            //    connector.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
+            //    gatewayProxy.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
         private NetworkMessage communicator_NetworkMessageProcessor(NetworkMessage request)
         {
@@ -268,32 +299,17 @@ namespace MySensors.Controllers
         #endregion
 
         #region Private methods
-        private Node GetOrCreateNode(byte nodeID)
+        private Node GetNode(byte nodeID)
         {
-            Node result = nodes.Where(node => node.ID == nodeID).FirstOrDefault();
-
-            if (result == null)
-            {
-                result = new Node(nodeID);
-                nodes.Add(result);
-                dbService.Insert(result);
-            }
-
-            return result;
+            return nodes.Where(node => node.ID == nodeID).FirstOrDefault();
         }
-        private Sensor GetOrCreateSensor(byte nodeID, byte sensorID)
+        private Sensor GetSensor(byte nodeID, byte sensorID)
         {
-            Node node = GetOrCreateNode(nodeID);
-            Sensor result = node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
+            Node node = GetNode(nodeID);
+            if (node == null)
+                return null;
 
-            if (result == null)
-            {
-                result = new Sensor(nodeID, sensorID);
-                node.Sensors.Add(result);
-                dbService.Insert(result);
-            }
-
-            return result;
+            return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
         }
 
         private void StartDatabase()
@@ -379,7 +395,7 @@ namespace MySensors.Controllers
             }
         }
 
-        private void GetNextAvailableSensorID()
+        private void GetNextAvailableNodeID()
         {
             var query = nodes.OrderBy(node => node.ID).ToList();
 

@@ -99,6 +99,15 @@ namespace MySensors.Core
 
             batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
         }
+        public Node(byte id, SensorType type, string protocolVersion)
+        {
+            ID = id;
+            Type = type;
+            ProtocolVersion = protocolVersion;
+
+            batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
+        }
+
         public Node(byte id, SensorType type, string protocolVersion, string sketchName, string sketchVersion)
         {
             ID = id;

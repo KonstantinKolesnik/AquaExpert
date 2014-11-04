@@ -200,7 +200,7 @@
     <None Include="WebSite\scripts\Model.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="WebSite\scripts\MessageManager.js">
+    <None Include="WebSite\scripts\messageManager.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\scripts\main.js">
