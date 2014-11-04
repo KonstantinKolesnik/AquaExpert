@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using Microsoft.CSharp;
+using System.Text;
 
 namespace MySensors.Controllers
 {
@@ -319,6 +321,10 @@ namespace MySensors.Controllers
 
             return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
         }
+        private AutomationModule GetModule(Guid id)
+        {
+            return modules.Where(module => module.ID == id).FirstOrDefault();
+        }
 
         private void StartDatabase()
         {
@@ -492,6 +498,13 @@ namespace MySensors.Controllers
                         break;
                     #endregion
 
+                    #region SetModule
+                    case NetworkMessageID.SetModule:
+                        if (msg.ParametersCount == 1)
+                            response = CreateSetModuleMessage(msg["Module"]);
+                        break;
+                    #endregion
+
                     #region Sensor message
                     case NetworkMessageID.SensorMessage:
                         gatewayProxy.Send(SensorMessage.FromRawMessage(msg["Msg"].Replace("-", ";")));
@@ -563,18 +576,15 @@ namespace MySensors.Controllers
         }
         private NetworkMessage CreateGetModulesMessage()
         {
-            //List<AutomationModule> coll = new List<AutomationModule>();
-            //for (byte i = 0; i < 20; i++)
-            //{
-            //    AutomationModule module = new AutomationModule("Module " + i, "dzrfyxy rtdr yrdydyt tydty tyftyifti trfiftf", "gfugoy igiuiuh uhiophuio iojoiu");
-            //    coll.Add(module);
-            //}
-            //NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);
-            //msg["Modules"] = JsonConvert.SerializeObject(coll);
-            //return msg;
+            var obj = modules.Select(module => new {
+                ID = module.ID,
+                Name = module.Name,
+                Description = module.Description,
+                Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script))
+            });
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);
-            msg["Modules"] = JsonConvert.SerializeObject(modules);
+            msg["Modules"] = JsonConvert.SerializeObject(obj);
             return msg;
         }
 
@@ -585,6 +595,22 @@ namespace MySensors.Controllers
             modules.Add(module);
 
             return CreateGetModulesMessage();
+        }
+        private NetworkMessage CreateSetModuleMessage(string m)//AutomationModule module)
+        {
+            dynamic obj = JsonConvert.DeserializeObject(m);
+            //foreach (dynamic item in obj.Metadata)
+            //    convertedObject.MetaData[i++].Id = Guid.Parse(item.Id.ToString());
+
+            AutomationModule module = GetModule(Guid.Parse(obj.ID.ToString()));
+            module.Name = obj.Name;
+            module.Description = obj.Description;
+            string s = obj.Script;
+            module.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
+
+            dbService.Update(module);
+
+            return null;//CreateMsgMessage("Success!", "");
         }
 
         private NetworkMessage CreateNodePresentationMessage(Node node)

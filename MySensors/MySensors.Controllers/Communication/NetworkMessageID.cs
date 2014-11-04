@@ -77,5 +77,9 @@ namespace MySensors.Controllers.Communication
         // - No params: request for new module
         public const string AddModule = "AddModule";
 
+        // Sender: CLIENT
+        // - Param "Module"
+        public const string SetModule = "SetModule";
+
     }
 }

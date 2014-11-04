@@ -36,6 +36,14 @@ function MessageManager() {
     this.AddModule = function () {
         send(new NetworkMessage(NetworkMessageID.AddModule));
     }
+    this.SetModule = function (module) {
+        var obj = $.extend({}, module);
+        obj.Script = btoa(obj.Script);
+
+        var msg = new NetworkMessage(NetworkMessageID.SetModule);
+        msg.SetParameter("Module", JSON.stringify(obj));
+        send(msg);
+    }
     this.SendNodeMessage = function (nodeID, messageType, valueType, value) {
         me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
     }
@@ -55,7 +63,7 @@ function MessageManager() {
         var response = null;
 
         switch (msg.GetID()) {
-            case NetworkMessageID.Information: mainView.showDialog(msg.GetParameter("Msg"), msg.GetParameter("Type")); break;
+            case NetworkMessageID.Message: mainView.showDialog(msg.GetParameter("Msg"), msg.GetParameter("Type")); break;
             case NetworkMessageID.Settings:
                 viewModel.set("Settings.WebTheme", msg.GetParameter("WebTheme"));
                 viewModel.set("Settings.UnitSystem", msg.GetParameter("UnitSystem"));
@@ -81,6 +89,10 @@ function MessageManager() {
                 break;
             case NetworkMessageID.GetModules:
                 var newItems = JSON.parse(msg.GetParameter("Modules"));
+
+                for (var i = 0; i < newItems.length; i++)
+                    newItems[i].Script = atob(newItems[i].Script);
+
                 viewModel.set("Modules", newItems);
                 break;
             case NetworkMessageID.NodePresentation: addOrUpdateNode(JSON.parse(msg.GetParameter("Node"))); break;

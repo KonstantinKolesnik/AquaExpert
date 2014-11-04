@@ -29,7 +29,6 @@ function onViewModelGet(e) {
 function onViewModelBeforeSet(e) {
 }
 function onViewModelAfterSet(e) {
-
     switch (e.field) {
         case "Settings.WebTheme":
             mainView.applyTheme();
@@ -40,14 +39,12 @@ function onViewModelAfterSet(e) {
             if (!msgManager.IsFromServer)
                 msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
             break;
+        case "Modules":
+            if (e.action == "itemchange")
+                msgManager.SetModule(e.items[0]);
+            break;
         default:
             break;
-    }
-
-    if (e.action == "itemchange" && e.field == "Modules") {
-    //debugger;
-        var module = e.items[0];
-        e.preventDefault();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -403,8 +400,7 @@ function MainView() {
 
                     //get the current column names, in their current order
                     var grid = $("#gridModules").data("kendoGrid");
-                    var columns = grid.columns;
-                    var columnNames = $.map(columns, function (column) { return column.field; });
+                    var columnNames = $.map(grid.columns, function (column) { return column.field ? column.field : ""; });
 
                     //get the column tds for update
                     var masterRow = $('#gridModules > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
@@ -415,7 +411,8 @@ function MainView() {
 
                     //update the tds with the value from the current item stored in items
                     for (var i = 0 ; i < tds.length ; i++)
-                        $(tds[i]).html(item[columnNames[i]]);
+                        if (columnNames[i])
+                            $(tds[i]).html(item[columnNames[i]]);
                 }
             }
         });

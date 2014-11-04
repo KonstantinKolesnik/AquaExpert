@@ -76,5 +76,12 @@ NetworkMessageID = {
     // - Param "Modules"
     // Sender: CLIENT
     // - No params: request for new module
-    AddModule: "AddModule"
+    AddModule: "AddModule",
+
+    // Sender: CLIENT
+    // - Param "Module"
+    SetModule: "SetModule"
+
+
+
 }

@@ -83,8 +83,13 @@ namespace MySensors.Controllers.Communication
                 {
                     if (!string.IsNullOrEmpty(pair))
                     {
-                        string[] s = pair.Split(new Char[] { '=' });
-                        parameters.Add(s[0], s[1]);
+                        // 1) 'cause base64 string contains "=" chars:
+                        int idx = pair.IndexOf("=");
+                        parameters.Add(pair.Substring(0, idx), pair.Substring(idx + 1));
+
+                        // 2) use this if not using base64:
+                        //string[] s = pair.Split(new Char[] { '=' });
+                        //parameters.Add(s[0], s[1]);
                     }
                 }
 

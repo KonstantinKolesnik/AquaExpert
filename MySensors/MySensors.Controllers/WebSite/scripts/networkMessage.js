@@ -52,7 +52,15 @@ function NetworkMessage(ID) {
             for (var i = 0; i < pairs.length; i++) {
                 var entry = pairs[i];
                 if (entry && entry.length) {
-                    var pair = entry.split("=");
+                    // 1) 'cause base64 containes "=":
+                    var idx = entry.indexOf("=");
+                    var pair = [];
+                    pair.push(entry.substr(0, idx));
+                    pair.push(entry.substr(idx + 1));
+
+                    // 2) use this if not using base64:
+                    //var pair = entry.split("=");
+
                     if (pair && pair.length) {
                         if (pair[0] == "ID")
                             id = pair[1];

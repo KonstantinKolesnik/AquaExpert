@@ -88,6 +88,10 @@ namespace MySensors.Controllers.Data
         {
             return con.Update(SettingDto.FromModel(item));
         }
+        public int Update(AutomationModule item)
+        {
+            return con.Update(AutomationModuleDto.FromModel(item));
+        }
 
         public List<Node> GetAllNodes()
         {
