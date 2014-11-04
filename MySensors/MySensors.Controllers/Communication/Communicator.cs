@@ -16,7 +16,7 @@ namespace MySensors.Controllers.Communication
         private WebSocketServer wsServer;
         private bool isWebServerStarted = false;
         private bool isWSServerStarted = false;
-        private NetworkMessageReceiver nmr = new NetworkMessageReceiver();
+        private NetworkMessageDecoder nmr = new NetworkMessageDecoder();
 
         public bool IsStarted
         {
@@ -126,7 +126,7 @@ namespace MySensors.Controllers.Communication
 
             if (NetworkMessageProcessor != null)
             {
-                List<NetworkMessage> msgs = nmr.Process(txt);
+                List<NetworkMessage> msgs = nmr.Decode(txt);
                 foreach (NetworkMessage msg in msgs)
                 {
                     NetworkMessage response = NetworkMessageProcessor(msg);

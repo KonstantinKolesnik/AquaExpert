@@ -12,12 +12,13 @@ namespace MySensors.Controllers.Scripting.Compilers
 
         public void Compile(Script script, ScriptCompilerOutput output)
         {
-            CompilerParameters parameters = new CompilerParameters();
-
-            parameters.GenerateExecutable = false; //Генерировать библиотеку
-            parameters.GenerateInMemory = true;    //Создать её в памяти
-            parameters.IncludeDebugInformation = false; //Создать debug информацию
-            parameters.TreatWarningsAsErrors = false;   //Не принимать сообшения как ошибки
+            CompilerParameters parameters = new CompilerParameters()
+            {
+                GenerateExecutable = false, //Генерировать библиотеку
+                GenerateInMemory = true,    //Создать её в памяти
+                IncludeDebugInformation = false, //Создать debug информацию
+                TreatWarningsAsErrors = false   //Не принимать предупреждения как ошибки
+            };
             parameters.ReferencedAssemblies.AddRange(script.ReferencedAssemblies); //Добавить информацию о ссылках
 
             CompilerResults result = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, script.Source); //Компилировать

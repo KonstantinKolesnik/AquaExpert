@@ -30,6 +30,12 @@ function MessageManager() {
     this.GetNodes = function () {
         send(new NetworkMessage(NetworkMessageID.GetNodes));
     }
+    this.GetModules = function () {
+        send(new NetworkMessage(NetworkMessageID.GetModules));
+    }
+    this.AddModule = function () {
+        send(new NetworkMessage(NetworkMessageID.AddModule));
+    }
     this.SendNodeMessage = function (nodeID, messageType, valueType, value) {
         me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
     }
@@ -49,10 +55,7 @@ function MessageManager() {
         var response = null;
 
         switch (msg.GetID()) {
-            case NetworkMessageID.OK: mainView.showDialog(msg.GetParameter("Msg") || "Operation completed successfully!"); break;
-            case NetworkMessageID.Information: mainView.showDialog(msg.GetParameter("Msg"), "Information"); break;
-            case NetworkMessageID.Warning: mainView.showDialog(msg.GetParameter("Msg"), "Warning"); break;
-            case NetworkMessageID.Error: mainView.showDialog(msg.GetParameter("Msg"), "Error"); break;
+            case NetworkMessageID.Information: mainView.showDialog(msg.GetParameter("Msg"), msg.GetParameter("Type")); break;
             case NetworkMessageID.Settings:
                 viewModel.set("Settings.WebTheme", msg.GetParameter("WebTheme"));
                 viewModel.set("Settings.UnitSystem", msg.GetParameter("UnitSystem"));
@@ -75,6 +78,10 @@ function MessageManager() {
                 //    oldItems.push(item);
                 //}
 
+                break;
+            case NetworkMessageID.GetModules:
+                var newItems = JSON.parse(msg.GetParameter("Modules"));
+                viewModel.set("Modules", newItems);
                 break;
             case NetworkMessageID.NodePresentation: addOrUpdateNode(JSON.parse(msg.GetParameter("Node"))); break;
             case NetworkMessageID.SensorPresentation: addOrUpdateSensor(JSON.parse(msg.GetParameter("Sensor"))); break;

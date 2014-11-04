@@ -6,21 +6,8 @@ NetworkMessageID = {
     
     // Sender: STATION
     // - Param "Msg": message
-    OK: "OK",
-
-    // Sender: STATION
-    // - Param "Msg": message
-    Information: "Information",
-
-    // Sender: STATION
-    // - Param "Msg": message
-    Warning: "Warning",
-
-    // Sender: STATION
-    // - Param "Msg": message
-    Error: "Error",
-
-    //-----------------------------------------------------------------------
+    // - Param "Type": type - "", "Warning", "Error"
+    Message: "Message",
 
     // Sender: STATION
     // - Param "WebTheme"
@@ -77,5 +64,17 @@ NetworkMessageID = {
 
     // Sender: CLIENT
     // - Param "Msg"
-    SensorMessage: "SensorMsg"
+    SensorMessage: "SensorMsg",
+
+    // Sender: STATION
+    // - Param "Modules"
+    // Sender: CLIENT
+    // - No params: request for all modules list
+    GetModules: "GetModules",
+
+    // Sender: STATION
+    // - Param "Modules"
+    // Sender: CLIENT
+    // - No params: request for new module
+    AddModule: "AddModule"
 }

@@ -38,7 +38,7 @@
     <script src="scripts/main.js" type="text/javascript"></script>
 </head>
 
-<body class="k-content" ><!--style="font-size:14px;"-->
+<body class="k-content">
     <!-- Header  -->
     <div id="header" class="k-block k-header" style="padding:5px 15px;">
         <table style="width:100%">
@@ -94,9 +94,10 @@
                             <li>
                                 <span class="k-link menuGroupItem">Automation</span>
                                 <ul>
-                                    <li class="menuItem">Triggers</li>
+                                    <li class="menuItem" contentid="pnlModules">Modules</li>
+                                    <!--<li class="menuItem">Triggers</li>
                                     <li class="menuItem">Rules</li>
-                                    <li class="menuItem">Macros</li>
+                                    <li class="menuItem">Macros</li>-->
                                 </ul>
                             </li>
                             <!--<li>
@@ -131,7 +132,7 @@
                 </td>
                 <td style="vertical-align:top;">
                     <div id="pnlContentHolder" class="k-content k-block" style="display:none;">
-                        <div id="pnlContentHeader" class="k-header"><label style="padding-left:15px;">Header</label></div>
+                        <div id="pnlContentHeader" class="k-header"><label style="padding-left:15px; font-weight:bold;">Header</label></div>
                     </div>
                 </td>
             </tr>
@@ -727,11 +728,14 @@
     <div id="pnlSensors" class="pnlContent">
         <div id="gridSensors" data-bind="source: Sensors"></div>
     </div>
+    <div id="pnlModules" class="pnlContent">
+        <div id="gridModules" data-bind="source: Modules"></div>
+    </div>
     <div id="pnlSettingsServer" class="pnlContent">
         <table style="width:100%;">
             <tr><td class="propName"><span>Theme:</span></td><td><select id="ddlTheme" data-bind="value: Settings.WebTheme" /></td></tr>
             <tr><td class="propName"><span>Unit system:</span></td><td><select id="ddlUnitSystem" data-bind="value: Settings.UnitSystem" /></td></tr>
-            <tr><td class="propName"><span>Time:</span></td><td></td></tr>
+            <!--<tr><td class="propName"><span>Time:</span></td><td></td></tr>-->
         </table>
     </div>
     <div id="pnlSettingsFirmware" class="pnlContent">
@@ -760,6 +764,15 @@
             <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>
         </div>
     </script>
+    <script id="moduleDetailsTemplate" type="text/x-kendo-tmpl">
+        <table style="width:100%;">
+            <tr><td class="propName"><span>Name:</span></td><td><input class="k-textbox" id="tbModuleName" style="width:100%;" data-bind="value: Name" /></td></tr>
+            <tr><td class="propName"><span>Description:</span></td><td><input class="k-textbox" id="tbModuleDescription" style="width:100%;" data-bind="value: Description" /></td></tr>
+            <tr><td class="propName"><span>Script:</span></td><td><input class="k-textbox" id="tbModuleScript" data-bind="value: Script" /></td></tr>
+        </table>
+    </script>
+
+    
     <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
         #
         var val = data.LastBatteryLevel();
@@ -774,6 +787,9 @@
         #
         <div>#: res #</div>
     </script>
+
+
+
 
     <script type="text/javascript">
         window.debugOutput = function (obj) {

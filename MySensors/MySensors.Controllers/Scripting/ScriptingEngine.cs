@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySensors.Controllers.Scripting.Compilers;
+using System;
 
 namespace MySensors.Controllers.Scripting
 {
@@ -18,12 +19,12 @@ namespace MySensors.Controllers.Scripting
 
             compiler.Compile(script, output);
         }
-        public object Execute(Script script, string type, string entrypoint, params object[] args)
+        public object Execute(Script script, string typeName, string methodName, params object[] args)
         {
             if (!script.IsCompiled)
                 throw new Exception("Script is not compiled!");
 
-            return script.CompiledAssembly.GetType(type).GetMethod(entrypoint).Invoke(null, args);
+            return script.CompiledAssembly.GetType(typeName).GetMethod(methodName).Invoke(null, args);
         }
     }
 }

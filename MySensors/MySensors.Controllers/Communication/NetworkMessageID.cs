@@ -5,21 +5,8 @@ namespace MySensors.Controllers.Communication
     {
         // Sender: STATION
         // - Param "Msg": message
-        public const string OK = "OK";
-
-        // Sender: STATION
-        // - Param "Msg": message
-        public const string Information = "Information";
-
-        // Sender: STATION
-        // - Param "Msg": message
-        public const string Warning = "Warning";
-
-        // Sender: STATION
-        // - Param "Msg": message
-        public const string Error = "Error";
-
-        //-----------------------------------------------------------------------
+        // - Param "Type": type - "", "Warning", "Error"
+        public const string Message = "Message";
 
         // Sender: STATION
         // - Param "WebTheme"
@@ -77,5 +64,18 @@ namespace MySensors.Controllers.Communication
         // Sender: CLIENT
         // - Param "Msg"
         public const string SensorMessage = "SensorMsg";
+
+        // Sender: STATION
+        // - Param "Modules"
+        // Sender: CLIENT
+        // - No params: request for all modules list
+        public const string GetModules = "GetModules";
+
+        // Sender: STATION
+        // - Param "Modules"
+        // Sender: CLIENT
+        // - No params: request for new module
+        public const string AddModule = "AddModule";
+
     }
 }

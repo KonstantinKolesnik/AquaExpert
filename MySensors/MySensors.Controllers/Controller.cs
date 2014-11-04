@@ -1,9 +1,13 @@
-﻿using MySensors.Controllers.Communication;
+﻿using MySensors.Controllers.Automation;
+using MySensors.Controllers.Communication;
 using MySensors.Controllers.Data;
 using MySensors.Controllers.GatewayProxies;
+using MySensors.Controllers.Scripting;
+using MySensors.Controllers.Scripting.Compilers;
 using MySensors.Core;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -16,9 +20,11 @@ namespace MySensors.Controllers
         private DatabaseService dbService;
         private IGatewayProxy gatewayProxy;
         private Communicator communicator;
+        private ScriptingEngine scriptEngine;
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         private ObservableCollection<Setting> settings = new ObservableCollection<Setting>();
+        private ObservableCollection<AutomationModule> modules = new ObservableCollection<AutomationModule>();
         #endregion
 
         #region Properties
@@ -26,7 +32,7 @@ namespace MySensors.Controllers
         {
             get
             {
-                return dbService.IsStarted && communicator.IsStarted && gatewayProxy.IsStarted;
+                return dbService.IsStarted && communicator.IsStarted;// && gatewayProxy.IsStarted;
             }
         }
 
@@ -108,6 +114,8 @@ namespace MySensors.Controllers
 
             communicator = new Communicator();
             communicator.NetworkMessageProcessor += communicator_NetworkMessageProcessor;
+
+            scriptEngine = new ScriptingEngine(new CSharpCompiler());
         }
         #endregion
 
@@ -115,7 +123,7 @@ namespace MySensors.Controllers
         public bool Start()
         {
             StartDatabase();
-            StartGatewayConnector();
+            //StartGatewayProxy();
             StartCommunicator();
 
             return IsStarted;
@@ -123,7 +131,7 @@ namespace MySensors.Controllers
         public void Stop()
         {
             communicator.Stop();
-            gatewayProxy.Stop();
+            //gatewayProxy.Stop();
             dbService.Stop();
         }
         #endregion
@@ -332,6 +340,8 @@ namespace MySensors.Controllers
                     var bls = dbService.GetAllBatteryLevels();
                     var sensors = dbService.GetAllSensors();
                     var svs = dbService.GetAllSensorValues();
+                    var stngs = dbService.GetAllSettings();
+                    var mdls = dbService.GetAllModules();
 
                     nodes.Clear();
                     foreach (var node in nds)
@@ -353,7 +363,13 @@ namespace MySensors.Controllers
                         }
                     }
 
-                    settings = new ObservableCollection<Setting>(dbService.GetAllSettings());
+                    settings.Clear();
+                    foreach (var stng in stngs)
+                        settings.Add(stng);
+
+                    modules.Clear();
+                    foreach (var mdl in mdls)
+                        modules.Add(mdl);
                 }
 
                 if (Log != null)
@@ -377,7 +393,7 @@ namespace MySensors.Controllers
                     Log(this, communicator.IsStarted ? "Success." : "Failed.", true, communicator.IsStarted ? LogLevel.Success : LogLevel.Error);
             }
         }
-        private void StartGatewayConnector()
+        private void StartGatewayProxy()
         {
             if (!gatewayProxy.IsStarted)
             {
@@ -455,10 +471,24 @@ namespace MySensors.Controllers
                         break;
                     #endregion
 
-                    #region GetNodesList
+                    #region GetNodes
                     case NetworkMessageID.GetNodes:
                         if (msg.ParametersCount == 0)
-                            response = CreateNodesListMessage();
+                            response = CreateGetNodesMessage();
+                        break;
+                    #endregion
+
+                    #region GetModules
+                    case NetworkMessageID.GetModules:
+                        if (msg.ParametersCount == 0)
+                            response = CreateGetModulesMessage();
+                        break;
+                    #endregion
+
+                    #region AddModule
+                    case NetworkMessageID.AddModule:
+                        if (msg.ParametersCount == 0)
+                            response = CreateAddModuleMessage();
                         break;
                     #endregion
 
@@ -468,18 +498,17 @@ namespace MySensors.Controllers
                         break;
                     #endregion
 
-
                     default: break;
                 }
 
             return response;
         }
 
-        private NetworkMessage CreateOKMessage(string text)
+        private NetworkMessage CreateMsgMessage(string text, string type)
         {
-            NetworkMessage msg = new NetworkMessage(NetworkMessageID.OK);
-            if (!string.IsNullOrEmpty(text))
-                msg["Msg"] = text;
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.Message);
+            msg["Msg"] = text;
+            msg["Type"] = type;
             return msg;
         }
         private NetworkMessage CreateSettingsMessage()
@@ -495,7 +524,7 @@ namespace MySensors.Controllers
             msg["Version"] = Version;
             return msg;
         }
-        private NetworkMessage CreateNodesListMessage()
+        private NetworkMessage CreateGetNodesMessage()
         {
             //List<Node> coll = new List<Node>();
             //for (byte i = 20; i < 50; i++)
@@ -532,6 +561,32 @@ namespace MySensors.Controllers
             msg["Nodes"] = JsonConvert.SerializeObject(nodes, Formatting.Indented);
             return msg;
         }
+        private NetworkMessage CreateGetModulesMessage()
+        {
+            //List<AutomationModule> coll = new List<AutomationModule>();
+            //for (byte i = 0; i < 20; i++)
+            //{
+            //    AutomationModule module = new AutomationModule("Module " + i, "dzrfyxy rtdr yrdydyt tydty tyftyifti trfiftf", "gfugoy igiuiuh uhiophuio iojoiu");
+            //    coll.Add(module);
+            //}
+            //NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);
+            //msg["Modules"] = JsonConvert.SerializeObject(coll);
+            //return msg;
+
+            NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);
+            msg["Modules"] = JsonConvert.SerializeObject(modules);
+            return msg;
+        }
+
+        private NetworkMessage CreateAddModuleMessage()
+        {
+            AutomationModule module = new AutomationModule("Untitled", "", "");
+            dbService.Insert(module);
+            modules.Add(module);
+
+            return CreateGetModulesMessage();
+        }
+
         private NetworkMessage CreateNodePresentationMessage(Node node)
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.NodePresentation);

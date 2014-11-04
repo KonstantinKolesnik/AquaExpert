@@ -91,4 +91,5 @@ function Model() {
 
         return res;
     };
+    this.Modules = [];
 }

@@ -1,4 +1,5 @@
-﻿using MySensors.Core;
+﻿using MySensors.Controllers.Automation;
+using MySensors.Core;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace MySensors.Controllers.Data
                 con.CreateTable<SensorDto>();
                 con.CreateTable<SensorValueDto>();
                 con.CreateTable<SettingDto>();
+                con.CreateTable<AutomationModuleDto>();
             }
             catch (Exception)
             {
@@ -69,6 +71,10 @@ namespace MySensors.Controllers.Data
         {
             return con.Insert(SettingDto.FromModel(item), "OR REPLACE");
         }
+        public int Insert(AutomationModule item)
+        {
+            return con.Insert(AutomationModuleDto.FromModel(item), "OR REPLACE");
+        }
 
         public int Update(Node item)
         {
@@ -102,6 +108,10 @@ namespace MySensors.Controllers.Data
         public List<Setting> GetAllSettings()
         {
             return con.Table<SettingDto>().ToList().Select(item => item.ToModel()).ToList();
+        }
+        public List<AutomationModule> GetAllModules()
+        {
+            return con.Table<AutomationModuleDto>().ToList().Select(item => item.ToModel()).ToList();
         }
     }
 }

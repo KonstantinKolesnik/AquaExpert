@@ -9,6 +9,7 @@ function onWSClientOpen() {
     msgManager.GetSettings();
     msgManager.GetVersion();
     msgManager.GetNodes();
+    msgManager.GetModules();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -28,6 +29,7 @@ function onViewModelGet(e) {
 function onViewModelBeforeSet(e) {
 }
 function onViewModelAfterSet(e) {
+
     switch (e.field) {
         case "Settings.WebTheme":
             mainView.applyTheme();
@@ -41,6 +43,12 @@ function onViewModelAfterSet(e) {
         default:
             break;
     }
+
+    if (e.action == "itemchange" && e.field == "Modules") {
+    //debugger;
+        var module = e.items[0];
+        e.preventDefault();
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 function MainView() {
@@ -50,6 +58,7 @@ function MainView() {
     createMenu();
     createDevicesGrid();
     createSensorsGrid();
+    createModulesGrid();
     createThemeSelector();
     createUnitSystemSelector();
 
@@ -169,6 +178,7 @@ function MainView() {
 
         adjustGrid($("#gridDevices"));
         adjustGrid($("#gridSensors"));
+        adjustGrid($("#gridModules"));
 
         function adjustGrid(grid) {
             grid.height($(window).height() - getY(grid) - $("#footer").outerHeight() - 8/*don't change!*/);
@@ -223,8 +233,8 @@ function MainView() {
                         lastContent.insertAfter(pnlContentHeader);
                         lastContent.toggle(true);
 
-                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + "  >  " + $(e.item).text();
-                        pnlContentHeader.find("label").text(title);
+                        var title = $(e.item).closest("ul").closest("li").find("span.k-link:first").text() + "&nbsp;&nbsp;>&nbsp;&nbsp;" + $(e.item).text();
+                        pnlContentHeader.find("label").html(title);
 
                         adjustSizes();
                     }
@@ -352,6 +362,61 @@ function MainView() {
                 //        $(tds[i]).html(item[columnNames[i]]);
                 //    }
                 //}
+            }
+        });
+    }
+    function createModulesGrid() {
+        $("#gridModules").kendoGrid({
+            scrollable: true,
+            sortable: true,
+            reorderable: true,
+            resizable: true,
+            //toolbar: ["create", "save", "cancel"],
+            //toolbar: "<p>My string template in a paragraph.</p>",
+            //toolbar: kendo.template("<p>My function template.</p>"),
+            toolbar: [
+                //{ name: "create" },
+                //{ name: "save" },
+                //{ name: "cancel" }
+                //{ template: kendo.template($("#template").html()) }
+                { name: "aaa", template: '<a class="k-button" href="\\#" onclick="msgManager.AddModule();">Add new module</a>' }
+            ],
+            pageable: {
+                pageSizes: [10, 20, 50, 100, 500],
+                pageSize: 20
+            },
+            columns:
+                [
+                  { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: '<img src="resources/Operation.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                  { field: "Name", title: "Name" },
+                  { field: "Description", title: "Description" }
+                ],
+            detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
+            detailInit: function (e) {
+                kendo.bind(e.detailRow, e.data);
+            },
+            dataBinding: function (e) {
+                if (e.action == "itemchange") {
+                    e.preventDefault();
+
+                    var item = e.items[0];
+
+                    //get the current column names, in their current order
+                    var grid = $("#gridModules").data("kendoGrid");
+                    var columns = grid.columns;
+                    var columnNames = $.map(columns, function (column) { return column.field; });
+
+                    //get the column tds for update
+                    var masterRow = $('#gridModules > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
+                    var tds = masterRow.find('td:not(.k-hierarchy-cell)');
+
+                    //collapse the detail row that was saved.
+                    //grid.collapseRow(masterRow);
+
+                    //update the tds with the value from the current item stored in items
+                    for (var i = 0 ; i < tds.length ; i++)
+                        $(tds[i]).html(item[columnNames[i]]);
+                }
             }
         });
     }
