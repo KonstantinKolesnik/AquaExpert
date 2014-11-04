@@ -493,15 +493,31 @@ namespace MySensors.Controllers
 
                     #region AddModule
                     case NetworkMessageID.AddModule:
-                        if (msg.ParametersCount == 0)
-                            response = CreateAddModuleMessage();
+                        AutomationModule module = new AutomationModule("Untitled", "", "");
+                        dbService.Insert(module);
+                        modules.Add(module);
+                        communicator.Broadcast(CreateGetModulesMessage());
                         break;
                     #endregion
 
                     #region SetModule
                     case NetworkMessageID.SetModule:
                         if (msg.ParametersCount == 1)
-                            response = CreateSetModuleMessage(msg["Module"]);
+                        {
+                            dynamic obj = JsonConvert.DeserializeObject(msg["Module"]);
+                            //foreach (dynamic item in obj.Metadata)
+                            //    convertedObject.MetaData[i++].Id = Guid.Parse(item.Id.ToString());
+
+                            AutomationModule m = GetModule(Guid.Parse(obj.ID.ToString()));
+                            m.Name = obj.Name;
+                            m.Description = obj.Description;
+                            string s = obj.Script;
+                            m.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
+
+                            dbService.Update(m);
+
+                            communicator.Broadcast(CreateGetModulesMessage());
+                        }
                         break;
                     #endregion
 
@@ -586,31 +602,6 @@ namespace MySensors.Controllers
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);
             msg["Modules"] = JsonConvert.SerializeObject(obj);
             return msg;
-        }
-
-        private NetworkMessage CreateAddModuleMessage()
-        {
-            AutomationModule module = new AutomationModule("Untitled", "", "");
-            dbService.Insert(module);
-            modules.Add(module);
-
-            return CreateGetModulesMessage();
-        }
-        private NetworkMessage CreateSetModuleMessage(string m)//AutomationModule module)
-        {
-            dynamic obj = JsonConvert.DeserializeObject(m);
-            //foreach (dynamic item in obj.Metadata)
-            //    convertedObject.MetaData[i++].Id = Guid.Parse(item.Id.ToString());
-
-            AutomationModule module = GetModule(Guid.Parse(obj.ID.ToString()));
-            module.Name = obj.Name;
-            module.Description = obj.Description;
-            string s = obj.Script;
-            module.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
-
-            dbService.Update(module);
-
-            return null;//CreateMsgMessage("Success!", "");
         }
 
         private NetworkMessage CreateNodePresentationMessage(Node node)

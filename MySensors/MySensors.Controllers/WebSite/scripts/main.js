@@ -414,6 +414,17 @@ function MainView() {
                         if (columnNames[i])
                             $(tds[i]).html(item[columnNames[i]]);
                 }
+                else if (e.action == "rebind") {
+                    if (e.items.length) {
+                        //debugger;
+                        //e.preventDefault();
+
+
+
+
+
+                    }
+                }
             }
         });
     }
