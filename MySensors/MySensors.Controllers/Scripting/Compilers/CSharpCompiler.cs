@@ -17,6 +17,7 @@ namespace MySensors.Controllers.Scripting.Compilers
                 GenerateExecutable = false, //Генерировать библиотеку
                 GenerateInMemory = true,    //Создать её в памяти
                 IncludeDebugInformation = false, //Создать debug информацию
+                CompilerOptions = "/optimize",
                 TreatWarningsAsErrors = false   //Не принимать предупреждения как ошибки
             };
             parameters.ReferencedAssemblies.AddRange(script.ReferencedAssemblies); //Добавить информацию о ссылках

@@ -2,16 +2,12 @@
 using MySensors.Controllers.Communication;
 using MySensors.Controllers.Data;
 using MySensors.Controllers.GatewayProxies;
-using MySensors.Controllers.Scripting;
-using MySensors.Controllers.Scripting.Compilers;
 using MySensors.Core;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using Microsoft.CSharp;
 using System.Text;
 
 namespace MySensors.Controllers
@@ -22,7 +18,6 @@ namespace MySensors.Controllers
         private DatabaseService dbService;
         private IGatewayProxy gatewayProxy;
         private Communicator communicator;
-        private ScriptingEngine scriptEngine;
 
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         private ObservableCollection<Setting> settings = new ObservableCollection<Setting>();
@@ -34,7 +29,7 @@ namespace MySensors.Controllers
         {
             get
             {
-                return dbService.IsStarted && communicator.IsStarted;// && gatewayProxy.IsStarted;
+                return dbService.IsStarted && communicator.IsStarted && gatewayProxy.IsStarted;
             }
         }
 
@@ -116,8 +111,6 @@ namespace MySensors.Controllers
 
             communicator = new Communicator();
             communicator.NetworkMessageProcessor += communicator_NetworkMessageProcessor;
-
-            scriptEngine = new ScriptingEngine(new CSharpCompiler());
         }
         #endregion
 
@@ -125,7 +118,7 @@ namespace MySensors.Controllers
         public bool Start()
         {
             StartDatabase();
-            //StartGatewayProxy();
+            StartGatewayProxy();
             StartCommunicator();
 
             return IsStarted;
@@ -133,7 +126,7 @@ namespace MySensors.Controllers
         public void Stop()
         {
             communicator.Stop();
-            //gatewayProxy.Stop();
+            gatewayProxy.Stop();
             dbService.Stop();
         }
         #endregion
@@ -374,12 +367,16 @@ namespace MySensors.Controllers
                         settings.Add(stng);
 
                     modules.Clear();
-                    foreach (var mdl in mdls)
-                        modules.Add(mdl);
+                    foreach (var m in mdls)
+                        modules.Add(m);
                 }
 
                 if (Log != null)
                     Log(this, dbService.IsStarted ? "Success." : "Failed.", true, dbService.IsStarted ? LogLevel.Success : LogLevel.Error);
+
+
+                foreach (var m in modules)
+                    RunAutomationService(m);
             }
         }
         private void StartCommunicator()
@@ -445,6 +442,13 @@ namespace MySensors.Controllers
             TimeSpan result = dtNow.Subtract(dt);
             int seconds = Convert.ToInt32(result.TotalSeconds);
             return seconds;
+        }
+
+        private void RunAutomationService(AutomationModule module)
+        {
+            string error = module.RunService();
+            if (!string.IsNullOrEmpty(error) && Log != null)
+                Log(this, error, true, LogLevel.Error);
         }
         #endregion
 
@@ -517,6 +521,8 @@ namespace MySensors.Controllers
                             dbService.Update(m);
 
                             communicator.Broadcast(CreateGetModulesMessage());
+
+                            RunAutomationService(m);
                         }
                         break;
                     #endregion

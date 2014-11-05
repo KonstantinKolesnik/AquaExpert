@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Automation\AutomationModule.cs" />
+    <Compile Include="Automation\IAutomationService.cs" />
     <Compile Include="Communication\Communicator.cs" />
     <Compile Include="Communication\DNS\NameService.cs" />
     <Compile Include="Communication\DNS\UDPListener.cs" />

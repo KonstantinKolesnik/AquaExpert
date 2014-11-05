@@ -7,14 +7,19 @@ namespace MySensors.Controllers.Scripting
     public class Script
     {
         #region Fields
-        private Assembly compiledAssembly = null;
         private Language language;
         private string source = null;
+        private Assembly compiledAssembly = null;
         private StringCollection references = null;
         private bool isCompiled = false;
         #endregion
 
         #region Properties
+        public Language Language
+        {
+            get { return language; }
+            set { if (!isCompiled) language = value; }
+        }
         public Assembly CompiledAssembly
         {
             get { return (isCompiled ? compiledAssembly : null); }
@@ -45,11 +50,6 @@ namespace MySensors.Controllers.Scripting
         {
             get { return source; }
             set { if (!isCompiled) source = value; }
-        }
-        public Language Language
-        {
-            get { return language; }
-            set { if (!isCompiled) language = value; }
         }
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using MySensors.Controllers.Scripting.Compilers;
 using System;
+using System.Reflection;
 
 namespace MySensors.Controllers.Scripting
 {
@@ -7,9 +8,9 @@ namespace MySensors.Controllers.Scripting
     {
         private IScriptCompiler compiler = null;
 
-        public ScriptingEngine(IScriptCompiler comp)
+        public ScriptingEngine(IScriptCompiler compiler)
         {
-            compiler = comp;
+            this.compiler = compiler;
         }
 
         public void Compile(Script script, ScriptCompilerOutput output)
@@ -24,7 +25,28 @@ namespace MySensors.Controllers.Scripting
             if (!script.IsCompiled)
                 throw new Exception("Script is not compiled!");
 
-            return script.CompiledAssembly.GetType(typeName).GetMethod(methodName).Invoke(null, args);
+            object obj = CreateObject(script, typeName);
+
+            Type type = script.CompiledAssembly.GetType(typeName);
+            MethodInfo method = type.GetMethod(methodName);
+
+            return method.Invoke(obj, args);//new object[] { 100 });
+            //return method.Invoke(null, args);// for static methods
+        }
+        public object CreateObject(Script script, string typeName)
+        {
+            if (!script.IsCompiled)
+                throw new Exception("Script is not compiled!");
+
+            Type type = script.CompiledAssembly.GetType(typeName);
+
+            if (type != null)
+            {
+                ConstructorInfo ctor = type.GetConstructor(Type.EmptyTypes);
+                return ctor.Invoke(new object[] { });
+            }
+            else
+                return null;
         }
     }
 }

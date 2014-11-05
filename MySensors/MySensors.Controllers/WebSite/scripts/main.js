@@ -408,6 +408,7 @@ function MainView() {
 
                     //collapse the detail row that was saved.
                     //grid.collapseRow(masterRow);
+                    //grid.expandRow(masterRow);
 
                     //update the tds with the value from the current item stored in items
                     for (var i = 0 ; i < tds.length ; i++)
