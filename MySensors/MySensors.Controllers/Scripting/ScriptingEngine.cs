@@ -1,23 +1,14 @@
-﻿using MySensors.Controllers.Scripting.Compilers;
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace MySensors.Controllers.Scripting
 {
     class ScriptingEngine
     {
-        private IScriptCompiler compiler = null;
-
-        public ScriptingEngine(IScriptCompiler compiler)
-        {
-            this.compiler = compiler;
-        }
+        private ScriptCompiler compiler = new ScriptCompiler();
 
         public void Compile(Script script, ScriptCompilerOutput output)
         {
-            if (script.Language != compiler.Language)
-                throw new Exception("Different language!");
-
             compiler.Compile(script, output);
         }
         public object Execute(Script script, string typeName, string methodName, params object[] args)

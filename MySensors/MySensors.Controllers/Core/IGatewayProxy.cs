@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Core
 {
-    public interface IGatewayProxy
+    interface IGatewayProxy
     {
         event SensorMessageEventHandler MessageReceived;
 

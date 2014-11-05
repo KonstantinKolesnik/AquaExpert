@@ -76,7 +76,7 @@ namespace MySensors.Controllers.Core
         #endregion
 
         #region Constructors
-        public SensorValue(byte nodeID, byte id, DateTime time, SensorValueType type, float value)
+        internal SensorValue(byte nodeID, byte id, DateTime time, SensorValueType type, float value)
         {
             NodeID = nodeID;
             ID = id;

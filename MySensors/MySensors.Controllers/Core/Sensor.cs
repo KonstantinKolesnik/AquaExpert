@@ -42,7 +42,7 @@ namespace MySensors.Controllers.Core
         public SensorType Type
         {
             get { return type; }
-            set
+            internal set
             {
                 if (type != value)
                 {
@@ -54,7 +54,7 @@ namespace MySensors.Controllers.Core
         public string ProtocolVersion // library version
         {
             get { return protocolVersion; }
-            set
+            internal set
             {
                 if (protocolVersion != value)
                 {
@@ -70,19 +70,19 @@ namespace MySensors.Controllers.Core
 
         public SensorValue Value
         {
-            get { return values != null && values.Count != 0 ? values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault() : null; }
+            get { return values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault(); }
         }
         #endregion
 
         #region Constructors
-        public Sensor(byte nodeID, byte id)
+        internal Sensor(byte nodeID, byte id)
         {
             NodeID = nodeID;
             ID = id;
 
             values.CollectionChanged += values_CollectionChanged;
         }
-        public Sensor(byte nodeID, byte id, SensorType type, string protocolVersion)
+        internal Sensor(byte nodeID, byte id, SensorType type, string protocolVersion)
         {
             NodeID = nodeID;
             ID = id;

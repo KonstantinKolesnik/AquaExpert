@@ -1,17 +1,21 @@
 ﻿using Microsoft.CSharp;
+using Microsoft.VisualBasic;
+using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MySensors.Controllers.Scripting.Compilers
+namespace MySensors.Controllers.Scripting
 {
-    class CSharpCompiler : IScriptCompiler
+    class ScriptCompiler
     {
-        public Language Language
-        {
-            get { return Language.CSharp; }
-        }
-
         public void Compile(Script script, ScriptCompilerOutput output)
         {
+            if (script == null)
+                throw new Exception("Script is null!");
+
             CompilerParameters parameters = new CompilerParameters()
             {
                 GenerateExecutable = false, //Генерировать библиотеку
@@ -22,7 +26,18 @@ namespace MySensors.Controllers.Scripting.Compilers
             };
             parameters.ReferencedAssemblies.AddRange(script.ReferencedAssemblies); //Добавить информацию о ссылках
 
-            CompilerResults result = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, script.Source); //Компилировать
+            CodeDomProvider cdp = null;
+            switch (script.Language)
+            {
+                case Language.CSharp: cdp = new CSharpCodeProvider(); break;
+                case Language.VisualBasic: cdp = new VBCodeProvider(); break;
+            }
+
+            if (cdp == null)
+                throw new Exception("Unsupported script language!");
+
+            CompilerResults result = cdp.CompileAssemblyFromSource(parameters, script.Source); //Компилировать
+
             if (result.Errors.HasErrors) //Если есть ошибки, перечислить их и выйти ...
             {
                 if (output != null)

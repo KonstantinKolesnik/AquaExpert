@@ -121,9 +121,7 @@
     <Compile Include="LogEventHandler.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripting\Compilers\CSharpCompiler.cs" />
-    <Compile Include="Scripting\Compilers\VBCompiler.cs" />
-    <Compile Include="Scripting\Compilers\IScriptCompiler.cs" />
+    <Compile Include="Scripting\ScriptCompiler.cs" />
     <Compile Include="Scripting\Language.cs" />
     <Compile Include="Scripting\Script.cs" />
     <Compile Include="Scripting\ScriptCompilerOutput.cs" />

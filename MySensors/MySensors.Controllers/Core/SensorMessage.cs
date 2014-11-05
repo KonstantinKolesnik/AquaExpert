@@ -3,7 +3,7 @@ using System.Text;
 
 namespace MySensors.Controllers.Core
 {
-    public class SensorMessage
+    class SensorMessage
     {
         #region Properties
         public byte NodeID { get; set; }

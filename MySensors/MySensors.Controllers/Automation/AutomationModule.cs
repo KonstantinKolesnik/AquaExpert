@@ -1,6 +1,5 @@
 ﻿using MySensors.Controllers.Core;
 using MySensors.Controllers.Scripting;
-using MySensors.Controllers.Scripting.Compilers;
 using System;
 
 namespace MySensors.Controllers.Automation
@@ -105,7 +104,7 @@ namespace MySensors.Controllers.Automation
                 script.AddReference("System.dll");
                 script.AddReference("MySensors.Controllers.dll");
 
-                ScriptingEngine scriptEngine = new ScriptingEngine(new CSharpCompiler());
+                ScriptingEngine scriptEngine = new ScriptingEngine();
                 scriptEngine.Compile(script, null);
                 if (script.IsCompiled)
                 {

@@ -32,7 +32,7 @@ namespace MySensors.Controllers.Core
         public SensorType Type // ArduinoNode / ArduinoRelay
         {
             get { return type; }
-            set
+            internal set
             {
                 if (type != value)
                 {
@@ -44,7 +44,7 @@ namespace MySensors.Controllers.Core
         public string ProtocolVersion // library version
         {
             get { return protocolVersion; }
-            set
+            internal set
             {
                 if (protocolVersion != value)
                 {
@@ -56,7 +56,7 @@ namespace MySensors.Controllers.Core
         public string SketchName
         {
             get { return sketchName; }
-            set
+            internal set
             {
                 if (sketchName != value)
                 {
@@ -68,7 +68,7 @@ namespace MySensors.Controllers.Core
         public string SketchVersion
         {
             get { return sketchVersion; }
-            set
+            internal set
             {
                 if (sketchVersion != value)
                 {
@@ -88,18 +88,18 @@ namespace MySensors.Controllers.Core
 
         public BatteryLevel BatteryLevel
         {
-            get { return batteryLevels != null && batteryLevels.Count != 0 ? batteryLevels.Where(v => v.Time == batteryLevels.Select(vv => vv.Time).Max()).FirstOrDefault() : null; }
+            get { return batteryLevels.Where(v => v.Time == batteryLevels.Select(vv => vv.Time).Max()).FirstOrDefault(); }
         }
         #endregion
 
         #region Constructors
-        public Node(byte id)
+        internal Node(byte id)
         {
             ID = id;
 
             batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
         }
-        public Node(byte id, SensorType type, string protocolVersion)
+        internal Node(byte id, SensorType type, string protocolVersion)
         {
             ID = id;
             Type = type;
@@ -108,7 +108,7 @@ namespace MySensors.Controllers.Core
             batteryLevels.CollectionChanged += batteryLevels_CollectionChanged;
         }
 
-        public Node(byte id, SensorType type, string protocolVersion, string sketchName, string sketchVersion)
+        internal Node(byte id, SensorType type, string protocolVersion, string sketchName, string sketchVersion)
         {
             ID = id;
             Type = type;

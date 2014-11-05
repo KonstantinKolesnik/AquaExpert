@@ -50,7 +50,7 @@ namespace MySensors.Controllers.Core
         #endregion
 
         #region Constructors
-        public BatteryLevel(byte nodeID, DateTime time, byte percent)
+        internal BatteryLevel(byte nodeID, DateTime time, byte percent)
         {
             NodeID = nodeID;
             Time = time;

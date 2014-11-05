@@ -12,7 +12,7 @@ namespace MySensors.Controllers.Core
         public string Name
         {
             get { return name; }
-            set
+            internal set
             {
                 if (name != value)
                 {
@@ -24,7 +24,7 @@ namespace MySensors.Controllers.Core
         public string Value
         {
             get { return value; }
-            set
+            internal set
             {
                 if (this.value != value)
                 {
@@ -36,7 +36,7 @@ namespace MySensors.Controllers.Core
         #endregion
 
         #region Constructors
-        public Setting(string name, string value)
+        internal Setting(string name, string value)
         {
             Name = name;
             Value = value;

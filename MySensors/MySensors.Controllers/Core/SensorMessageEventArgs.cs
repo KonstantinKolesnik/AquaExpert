@@ -2,7 +2,7 @@
 
 namespace MySensors.Controllers.Core
 {
-    public class SensorMessageEventArgs : EventArgs
+    class SensorMessageEventArgs : EventArgs
     {
         public SensorMessage Message { get; set; }
 

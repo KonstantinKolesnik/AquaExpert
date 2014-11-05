@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Core
 {
-    public enum SensorMessageType : byte
+    enum SensorMessageType : byte
     {
         Presentation = 0,       // Sent by nodes when they present attached sensors. This is usually done in setup() at startup.
         Set = 1,                // This message is sent from or to a sensor when a sensor value should be updated.

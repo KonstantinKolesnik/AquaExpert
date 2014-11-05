@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Core
 {
-    public enum InternalValueType : byte
+    enum InternalValueType : byte
     {
         BatteryLevel =              0,      // Use this to report the battery level (in percent 0-100).
         Time =                      1,      // Sensors can request the current time from the Controller using this message. The time will be reported as the seconds since 1970

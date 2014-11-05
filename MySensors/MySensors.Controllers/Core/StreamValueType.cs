@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Core
 {
-    public enum StreamValueType : byte
+    enum StreamValueType : byte
     {
         FirmwareConfigRequest = 0,
         FirmwareConfigResponse = 1,
