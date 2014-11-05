@@ -27,19 +27,16 @@ function MessageManager() {
     this.GetVersion = function () {
         send(new NetworkMessage(NetworkMessageID.Version));
     }
+
     this.GetNodes = function () {
         send(new NetworkMessage(NetworkMessageID.GetNodes));
     }
+
     this.GetModules = function () {
         send(new NetworkMessage(NetworkMessageID.GetModules));
     }
     this.AddModule = function () {
         send(new NetworkMessage(NetworkMessageID.AddModule));
-    }
-    this.DeleteModule = function (id) {
-        var msg = new NetworkMessage(NetworkMessageID.DeleteModule);
-        msg.SetParameter("ModuleID", id);
-        send(msg);
     }
     this.SetModule = function (module) {
         var obj = $.extend({}, module);
@@ -50,6 +47,12 @@ function MessageManager() {
         msg.SetParameter("Module", JSON.stringify(obj));
         send(msg);
     }
+    this.DeleteModule = function (id) {
+        var msg = new NetworkMessage(NetworkMessageID.DeleteModule);
+        msg.SetParameter("ModuleID", id);
+        send(msg);
+    }
+
     this.SendNodeMessage = function (nodeID, messageType, valueType, value) {
         me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
     }
@@ -82,6 +85,7 @@ function MessageManager() {
                 for (var i = 0; i < newItems.length; i++)
                     enrichItem(newItems[i]);
                 viewModel.set("Devices", newItems);
+                viewModel.PopulateSensors();
 
                 // approach #2:
                 //var oldItems = viewModel.get("Devices");
@@ -91,6 +95,7 @@ function MessageManager() {
                 //    enrichItem(item);
                 //    oldItems.push(item);
                 //}
+                //viewModel.PopulateSensors();
 
                 break;
             case NetworkMessageID.GetModules:
@@ -110,7 +115,6 @@ function MessageManager() {
             default: break;
         }
 
-        $("#gridSensors").data("kendoGrid").refresh();
         me.IsFromServer = false;
 
         return response;
@@ -172,7 +176,7 @@ function MessageManager() {
             var nodes = viewModel.Devices;
             for (var i = 0; i < nodes.length; i++) {
                 var nd = nodes[i];
-                if (nd.ID == node.ID) {
+                if (nd.ID == node.ID) { // update node
                     nd.set("Type", node.Type);
                     nd.set("ProtocolVersion", node.ProtocolVersion);
                     nd.set("SketchName", node.SketchName );
@@ -184,6 +188,8 @@ function MessageManager() {
             // node isn't in list; add it:
             enrichItem(node); // with sensors!!! not enrichNode (it doesn't enriches sensors)!!!
             nodes.push(node);
+
+            viewModel.PopulateSensors();
         }
         function addOrUpdateSensor(sensor) {
             var nodes = viewModel.Devices || [];
@@ -195,7 +201,7 @@ function MessageManager() {
 
                     for (var j = 0; j < nd.Sensors.length; j++) {
                         var snsr = nd.Sensors[j];
-                        if (snsr.NodeID == sensor.NodeID && snsr.ID == sensor.ID) {
+                        if (snsr.NodeID == sensor.NodeID && snsr.ID == sensor.ID) { // update sensor
                             snsr.set("Type", sensor.Type);
                             snsr.set("ProtocolVersion", sensor.ProtocolVersion);
                             return;
@@ -205,6 +211,8 @@ function MessageManager() {
                     // sensor isn't in list; add it:
                     enrichSensor(sensor);
                     nd.Sensors.push(sensor);
+
+                    viewModel.PopulateSensors();
                 }
             }
         }

@@ -145,7 +145,7 @@ function MainView() {
                 //case Direction:             10,     // Wind direction
                 //case UV:                    11,     // UV light level
                 //case Weight:                12,     // Weight (for scales etc)
-                //case Distance:              13,     // Distance
+            case SensorValueType.Distance: return viewModel.Settings.UnitSystem == "M" ? "cm" : "in";
                 //case Impedance:             14,     // Impedance value
                 //case Armed:                 15,     // Armed status of a security sensor. 1=Armed, 0=Bypassed
                 //case Tripped:               16,     // Tripped status of a security sensor. 1=Tripped, 0=Untripped
@@ -241,6 +241,8 @@ function MainView() {
                         pnlContentHeader.find("label").html(title);
 
                         adjustSizes();
+
+                        kendo.bind($(".viewHolder div"), viewModel);
                     }
                 }
             }
@@ -383,7 +385,7 @@ function MainView() {
                 //{ name: "save" },
                 //{ name: "cancel" }
                 //{ template: kendo.template($("#template").html()) }
-                { name: "aaa", template: '<a class="k-button" href="\\#" onclick="msgManager.AddModule();">Add new module</a>' }
+                { name: "aaa", template: '<a class="k-button" href="\\#" onclick="msgManager.AddModule();"><span class="k-icon k-i-plus"></span>Add new module</a>' }
             ],
             pageable: {
                 pageSizes: [10, 20, 50, 100, 500],
@@ -397,18 +399,21 @@ function MainView() {
                   { title: "&nbsp;", width: 150, reorderable: false, filterable: false, sortable: false,
                       command: [
                         {
-                            text: "Delete",
+                            template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>',
                             click: function (e) {
                                 var item = $("#gridModules").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                 msgManager.DeleteModule(item.ID);
                             }
                         }
                       ]
-                      //template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>'
                   }
                 ],
             detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
             detailInit: function (e) {
+                e.detailRow.find(".moduleDetailsTabStrip").kendoTabStrip({
+                    animation: { open: { effects: "fadeIn" } }
+                });
+
                 kendo.bind(e.detailRow, e.data);
             },
             detailExpand: function (e) {

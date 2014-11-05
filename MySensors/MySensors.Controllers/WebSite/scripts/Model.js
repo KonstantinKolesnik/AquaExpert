@@ -81,15 +81,15 @@ function Model() {
     this.Version = "";
 
     this.Devices = [];
-    this.Sensors = function () {
-        var res = [];
+    this.Sensors = [];
+    this.Modules = [];
+
+    this.PopulateSensors = function () {
+        this.set("Sensors", []);
 
         var nodes = this.get("Devices") || [];
         for (var i = 0; i < nodes.length; i++)
             for (var j = 0; j < nodes[i].Sensors.length; j++)
-                res.push(nodes[i].Sensors[j]);
-
-        return res;
+                this.Sensors.push(nodes[i].Sensors[j]);
     };
-    this.Modules = [];
 }

@@ -51,10 +51,10 @@
                     </div>
                 </td>
                 <td></td>
-                <td>
+                <!--<td>
                     <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,0);">button 0</button>
                     <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,1);">button 1</button>
-                </td>
+                </td>-->
                 <td width="10%" style="text-align:left;">
                     <div>
                         <span>Connection:</span>
@@ -771,14 +771,33 @@
         <span style="font-size:12px; font-style:italic;" data-bind="text: Description"></span>
     </script>
     <script id="moduleViewCellTemplate" type="text/x-kendo-tmpl">
-        <div class="k-block" data-bind="html: View"></div>
+        <div class="k-block viewHolder" data-bind="html: View"></div>
     </script>
     <script id="moduleDetailsTemplate" type="text/x-kendo-tmpl">
-        <table style="width:100%;">
-            <tr><td class="propName2" width="80px"><span>Name:</span></td><td><input class="k-textbox" id="tbModuleName" style="width:100%;" data-bind="value: Name" /></td></tr>
-            <tr><td class="propName2"><span>Description:</span></td><td><input class="k-textbox" id="tbModuleDescription" style="width:100%;" data-bind="value: Description" /></td></tr>
-            <tr><td class="propName2"><span>Script:</span></td><td><textarea class="k-textbox" id="tbModuleScript" style="width:100%; height:200px; font-size:12px;" data-bind="value: Script" /></td></tr>
-        </table>
+        <div>
+            <table style="width:100%;">
+                <tr>
+                    <td class="propName"><span>Name:</span></td>
+                    <td><input class="k-textbox" style="width:100%;" data-bind="value: Name" /></td>
+                </tr>
+                <tr>
+                    <td class="propName"><span>Description:</span></td>
+                    <td><input class="k-textbox" style="width:100%;" data-bind="value: Description" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="moduleDetailsTabStrip">
+                            <ul>
+                                <li class="k-state-active">Script</li>
+                                <li>View</li>
+                            </ul>
+                            <div><textarea class="k-textbox" style="width:100%; height:300px;" data-bind="value: Script" /></div>
+                            <div><textarea class="k-textbox" style="width:100%; height:300px;" data-bind="value: View" /></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </script>
 
     <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">

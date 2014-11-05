@@ -181,8 +181,8 @@ namespace MySensors.Controllers
                         if (node == null)
                         {
                             node = new Node(message.NodeID, (SensorType)message.SubType, message.Payload);
-                            nodes.Add(node);
                             dbService.Insert(node);
+                            nodes.Add(node);
                         }
                         else
                         {
@@ -197,8 +197,8 @@ namespace MySensors.Controllers
                         if (sensor == null)
                         {
                             sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
-                            node.Sensors.Add(sensor);
                             dbService.Insert(sensor);
+                            node.Sensors.Add(sensor);
                         }
                         else
                         {
@@ -216,8 +216,8 @@ namespace MySensors.Controllers
                     if (sensor != null)
                     {
                         SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
-                        sensor.Values.Add(sv);
                         dbService.Insert(sv);
+                        sensor.Values.Add(sv);
                         communicator.Broadcast(BuildSensorValueMessage(sv));
                     }
                     break;
@@ -236,8 +236,8 @@ namespace MySensors.Controllers
                             if (node != null)
                             {
                                 BatteryLevel bl = new BatteryLevel(node.ID, DateTime.Now, byte.Parse(message.Payload));
-                                node.BatteryLevels.Add(bl);
                                 dbService.Insert(bl);
+                                node.BatteryLevels.Add(bl);
                                 communicator.Broadcast(BuildNodeBatteryLevelMessage(bl));
                             }
                             break;
@@ -329,13 +329,13 @@ namespace MySensors.Controllers
                     #region Settings
                     case NetworkMessageID.Settings:
                         if (request.ParametersCount == 0) // client gets settings
-                            response = BuildSettingsMessage();
+                            response = BuildGetSettingsMessage();
                         else // client sets options
                         {
                             WebTheme = request["WebTheme"];
                             UnitSystem = request["UnitSystem"];
 
-                            communicator.Broadcast(BuildSettingsMessage());
+                            communicator.Broadcast(BuildGetSettingsMessage());
                         }
                         break;
                     #endregion
@@ -357,22 +357,10 @@ namespace MySensors.Controllers
 
                     #region AddModule
                     case NetworkMessageID.AddModule:
-                        AutomationModule module = new AutomationModule("Untitled", "", "", "");
-                        dbService.Insert(module);
-                        modules.Add(module);
+                        AutomationModule newModule = new AutomationModule("Untitled", "", "", "");
+                        dbService.Insert(newModule);
+                        modules.Add(newModule);
                         communicator.Broadcast(BuildGetModulesMessage());
-                        break;
-                    #endregion
-
-                    #region DeleteModule
-                    case NetworkMessageID.DeleteModule:
-                        if (request.ParametersCount == 1)
-                        {
-                            AutomationModule m = GetModule(Guid.Parse(request["ModuleID"]));
-                            dbService.Delete(m);
-                            modules.Remove(m);
-                            communicator.Broadcast(BuildGetModulesMessage());
-                        }
                         break;
                     #endregion
 
@@ -381,22 +369,34 @@ namespace MySensors.Controllers
                         if (request.ParametersCount == 1)
                         {
                             dynamic obj = JsonConvert.DeserializeObject(request["Module"]);
+                            string s;
 
-                            AutomationModule m = GetModule(Guid.Parse(obj.ID.ToString()));
-                            m.Name = obj.Name;
-                            m.Description = obj.Description;
-                            string s = obj.Script;
-                            m.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
-                            s = obj.View;
-                            m.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
+                            AutomationModule module = GetModule(Guid.Parse(obj.ID.ToString()));
+                            module.Name = obj.Name;
+                            module.Description = obj.Description;
+                            //s = obj.Script;
+                            module.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s = obj.Script)));
+                            //s = obj.View;
+                            module.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s = obj.View)));
 
-                            dbService.Update(m);
-
+                            dbService.Update(module);
                             communicator.Broadcast(BuildGetModulesMessage());
 
-                            string errors = RunAutomationService(m);
+                            string errors = RunAutomationService(module);
                             if (!string.IsNullOrEmpty(errors))
                                 response = BuildMsgMessage(errors, "Error");
+                        }
+                        break;
+                    #endregion
+
+                    #region DeleteModule
+                    case NetworkMessageID.DeleteModule:
+                        if (request.ParametersCount == 1)
+                        {
+                            AutomationModule module = GetModule(Guid.Parse(request["ModuleID"]));
+                            dbService.Delete(module);
+                            modules.Remove(module);
+                            communicator.Broadcast(BuildGetModulesMessage());
                         }
                         break;
                     #endregion
@@ -517,11 +517,11 @@ namespace MySensors.Controllers
 
         private void GetNextAvailableNodeID()
         {
-            var query = nodes.OrderBy(node => node.ID).ToList();
+            var nds = nodes.OrderBy(node => node.ID).ToList();
 
             byte id = 1;
-            for (byte i = 1; i <= query.Count; i++)
-                if (query[i].ID > i)
+            for (byte i = 1; i <= nds.Count; i++)
+                if (nds[i].ID > i)
                 {
                     id = i;
                     break;
@@ -530,8 +530,8 @@ namespace MySensors.Controllers
             if (id < 255)
             {
                 Node result = new Node(id);
-                nodes.Add(result);
                 dbService.Insert(result);
+                nodes.Add(result);
 
                 gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
             }
@@ -563,7 +563,7 @@ namespace MySensors.Controllers
             msg["Type"] = type;
             return msg;
         }
-        private NetworkMessage BuildSettingsMessage()
+        private NetworkMessage BuildGetSettingsMessage()
         {
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.Settings);
             msg["WebTheme"] = WebTheme;
@@ -614,8 +614,7 @@ namespace MySensors.Controllers
                 Name = module.Name,
                 Description = module.Description,
                 Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
-                //View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
-                View = Convert.ToBase64String(Encoding.ASCII.GetBytes("<div style=\"color:blue;\">Test</div>"))
+                View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
             });
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);

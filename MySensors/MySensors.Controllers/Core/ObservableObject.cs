@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MySensors.Controllers.Core
@@ -9,8 +10,12 @@ namespace MySensors.Controllers.Core
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(/*[CallerMemberName]*/string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception) { }
         }
         #endregion
     }
