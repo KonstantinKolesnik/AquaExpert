@@ -68,7 +68,7 @@ namespace MySensors.Controllers.Core
             get { return values; }
         }
 
-        public SensorValue Value
+        public SensorValue LastValue
         {
             get { return values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault(); }
         }
@@ -96,7 +96,7 @@ namespace MySensors.Controllers.Core
         #region Event handlers
         private void values_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyPropertyChanged("Value");
+            NotifyPropertyChanged("LastValue");
         }
         #endregion
     }

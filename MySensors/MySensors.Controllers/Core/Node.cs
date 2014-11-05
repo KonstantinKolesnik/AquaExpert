@@ -86,7 +86,7 @@ namespace MySensors.Controllers.Core
             get { return sensors; }
         }
 
-        public BatteryLevel BatteryLevel
+        public BatteryLevel LastBatteryLevel
         {
             get { return batteryLevels.Where(v => v.Time == batteryLevels.Select(vv => vv.Time).Max()).FirstOrDefault(); }
         }
@@ -123,7 +123,7 @@ namespace MySensors.Controllers.Core
         #region Event handlers
         private void batteryLevels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyPropertyChanged("BatteryLevel");
+            NotifyPropertyChanged("LastBatteryLevel");
         }
         #endregion
     }

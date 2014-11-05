@@ -368,6 +368,7 @@ function MainView() {
             sortable: true,
             reorderable: true,
             resizable: true,
+            edit: "inline",
             //toolbar: ["create", "save", "cancel"],
             //toolbar: "<p>My string template in a paragraph.</p>",
             //toolbar: kendo.template("<p>My function template.</p>"),
@@ -386,7 +387,22 @@ function MainView() {
                 [
                   { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: '<img src="resources/Operation.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "Name", title: "Name" },
-                  { field: "Description", title: "Description" }
+                  { field: "Description", title: "Description" },
+                  {
+                      title: "&nbsp;",
+                      width: 150,
+                      command: [
+                        //"edit",
+                        //"destroy",
+                        {
+                            //name: "destroy",
+                            text: "Delete",
+                            click: function (e) {
+                                debugger;
+                            }
+                        }
+                      ]
+                  }
                 ],
             detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
             detailInit: function (e) {

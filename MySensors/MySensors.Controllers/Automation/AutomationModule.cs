@@ -1,6 +1,8 @@
 ﻿using MySensors.Controllers.Core;
 using MySensors.Controllers.Scripting;
 using System;
+using System.CodeDom.Compiler;
+using System.Linq;
 
 namespace MySensors.Controllers.Automation
 {
@@ -30,7 +32,7 @@ namespace MySensors.Controllers.Automation
         public string Name
         {
             get { return name; }
-            set
+            internal set
             {
                 if (name != value)
                 {
@@ -42,7 +44,7 @@ namespace MySensors.Controllers.Automation
         public string Description
         {
             get { return description; }
-            set
+            internal set
             {
                 if (description != value)
                 {
@@ -54,7 +56,7 @@ namespace MySensors.Controllers.Automation
         public string Script
         {
             get { return script; }
-            set
+            internal set
             {
                 if (script != value)
                 {
@@ -79,8 +81,10 @@ namespace MySensors.Controllers.Automation
         }
         #endregion
 
-        public string RunService()
+        #region Public methods
+        public string StartService(Controller controller)
         {
+            #region Info
             //var asm = Assembly.LoadFile(@"C:\myDll.dll");
             //var type = asm.GetType("TestRunner");
             //var runnable = Activator.CreateInstance(type) as IRunnable;
@@ -93,8 +97,10 @@ namespace MySensors.Controllers.Automation
             //var runnable = domain.CreateInstanceFromAndUnwrap(pathToDll, t.FullName) as IRunnable;
             //if (runnable == null) throw new Exception("broke");
             //runnable.Run();
+            #endregion
 
-
+            if (service != null)
+                service.Stop();
 
             service = null;
 
@@ -104,25 +110,32 @@ namespace MySensors.Controllers.Automation
                 script.AddReference("System.dll");
                 script.AddReference("MySensors.Controllers.dll");
 
-                ScriptingEngine scriptEngine = new ScriptingEngine();
-                scriptEngine.Compile(script, null);
+                CompilerResults cr = script.Compile();
+                if (cr.Errors.HasErrors)
+                {
+                    string res = "Error compiling script of Automation module \"" + Name + "\"\n";
+                    for (int i = 0; i < cr.Errors.Count; i++)
+                        res += cr.Errors[i].ToString() + "\n";
+
+                    return res;
+                }
+
                 if (script.IsCompiled)
                 {
-                    service = scriptEngine.CreateObject(script, "AutomationService") as IAutomationService;
-                    if (service != null)
-                    {
-                        int a = service.Test();
+                    var serviceType = script.CompiledAssembly.ExportedTypes.FirstOrDefault();
+                    if (serviceType == null || !serviceType.IsClass || !serviceType.IsPublic)
+                        return "No service found in Automation module \"" + Name + "\"";
 
-                        return null;
-                    }
-                    else
-                        return "Error getting service of Automation module " + Name;
+                    service = script.CreateObject(serviceType.FullName) as IAutomationService;
+                    if (service == null)
+                        return "Error getting service of Automation module \"" + Name + "\"";
+
+                    service.Start(controller);
                 }
-                else
-                    return "Error compiling script of Automation module " + Name;
             }
-            else
-                return null;
+
+            return null;
         }
+        #endregion
     }
 }

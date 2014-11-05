@@ -45,30 +45,27 @@
             <tr>
                 <td width="30%">
                     <img src="./Resources/StationConnected.png" alt="" style="width:48px; vertical-align:middle;"/>
-                    <span style="font-size:32px; vertical-align:middle; display:inline-block;">Smart Network</span>
+                    <div style="display:inline-block; vertical-align:middle; margin-left:20px;">
+                        <span style="font-size:32px;">Smart Network</span><br />
+                        <span style="font-size:12px;">powered by MySensors.org</span>
+                    </div>
                 </td>
                 <td></td>
                 <td>
                     <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,0);">button 0</button>
                     <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,1);">button 1</button>
                 </td>
-                <td width="10%">
-                    <span>Connection:</span>
-                    <img src="./resources/LedRed_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected"/>
-                    <img src="./resources/LedGreen_16.ico" style="vertical-align:sub;" alt="" data-bind="visible: IsConnected"/>
+                <td width="10%" style="text-align:left;">
+                    <div>
+                        <span>Connection:</span>
+                        <img src="./resources/LedRed_16.ico" style="vertical-align:sub;" alt="" data-bind="invisible: IsConnected" />
+                        <img src="./resources/LedGreen_16.ico" style="vertical-align:sub;" alt="" data-bind="visible: IsConnected" />
+                    </div>
+                    <div><span class="k-icon k-i-calendar"></span><span id="lblDate" style="margin-left:5px; vertical-align:sub;"></span></div>
+                    <div><span class="k-icon k-i-clock"></span><span id="lblTime" style="margin-left:5px; vertical-align:sub;"></span></div>
                 </td>
-                <td width="8%"><span class="k-icon k-i-clock"></span><span id="lblTime" style="margin-left:5px; vertical-align:sub;"></span></td>
-                <td width="8%"><span class="k-icon k-i-calendar"></span><span id="lblDate" style="margin-left:5px; vertical-align:sub;"></span></td>
             </tr>
         </table>
-
-        <!--<div class="toolbar">
-            <ul>
-                <li><button class="k-button" onclick="model.MessageManager.BroadcastBrake();"><img src="./Resources/LocoBrake.ico" alt="" height="100%"/></button><span class="ButtonSpan">Brake</span></li>
-                <li><button class="k-button" onclick="model.MessageManager.BroadcastStop();"><img src="./Resources/LocoStop.ico" alt="" height="100%"/></button><span class="ButtonSpan">Stop</span></li>
-                <li><button class="k-button" onclick="model.SetPower();"><img data-bind="attr: { src: BtnPowerImage}" alt="" height="100%"/></button><span class="ButtonSpan">Power</span></li>
-            </ul>
-        </div>-->
     </div>
 
     <!-- Content  -->

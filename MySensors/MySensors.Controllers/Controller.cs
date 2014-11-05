@@ -136,8 +136,18 @@ namespace MySensors.Controllers
             }
         }
 
+        public Node GetNode(byte nodeID)
+        {
+            return nodes.Where(node => node.ID == nodeID).FirstOrDefault();
+        }
+        public Sensor GetSensor(byte nodeID, byte sensorID)
+        {
+            Node node = GetNode(nodeID);
+            if (node == null)
+                return null;
 
-
+            return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
+        }
         #endregion
 
         #region Event handlers
@@ -353,8 +363,6 @@ namespace MySensors.Controllers
                         if (request.ParametersCount == 1)
                         {
                             dynamic obj = JsonConvert.DeserializeObject(request["Module"]);
-                            //foreach (dynamic item in obj.Metadata)
-                            //    convertedObject.MetaData[i++].Id = Guid.Parse(item.Id.ToString());
 
                             AutomationModule m = GetModule(Guid.Parse(obj.ID.ToString()));
                             m.Name = obj.Name;
@@ -366,7 +374,9 @@ namespace MySensors.Controllers
 
                             communicator.Broadcast(BuildGetModulesMessage());
 
-                            RunAutomationService(m);
+                            string errors = RunAutomationService(m);
+                            if (!string.IsNullOrEmpty(errors))
+                                response = BuildMsgMessage(errors, "Error");
                         }
                         break;
                     #endregion
@@ -385,18 +395,6 @@ namespace MySensors.Controllers
         #endregion
 
         #region Private methods
-        private Node GetNode(byte nodeID)
-        {
-            return nodes.Where(node => node.ID == nodeID).FirstOrDefault();
-        }
-        private Sensor GetSensor(byte nodeID, byte sensorID)
-        {
-            Node node = GetNode(nodeID);
-            if (node == null)
-                return null;
-
-            return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
-        }
         private AutomationModule GetModule(Guid id)
         {
             return modules.Where(module => module.ID == id).FirstOrDefault();
@@ -527,11 +525,13 @@ namespace MySensors.Controllers
             return seconds;
         }
 
-        private void RunAutomationService(AutomationModule module)
+        private string RunAutomationService(AutomationModule module)
         {
-            string error = module.RunService();
-            if (!string.IsNullOrEmpty(error) && Log != null)
-                Log(this, error, true, LogLevel.Error);
+            string errors = module.StartService(this);
+            if (!string.IsNullOrEmpty(errors) && Log != null)
+                Log(this, errors, true, LogLevel.Error);
+
+            return errors;
         }
         #endregion
 
