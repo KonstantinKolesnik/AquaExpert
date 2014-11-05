@@ -93,7 +93,7 @@
     <Compile Include="Communication\WebServer.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Core\BatteryLevel.cs" />
-    <Compile Include="Core\IGatewayProxy.cs" />
+    <Compile Include="IGatewayProxy.cs" />
     <Compile Include="Core\InternalValueType.cs" />
     <Compile Include="Core\Node.cs" />
     <Compile Include="Core\ObservableObject.cs" />

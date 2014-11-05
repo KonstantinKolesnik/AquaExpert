@@ -81,5 +81,9 @@ namespace MySensors.Controllers.Communication
         // - Param "Module"
         public const string SetModule = "SetModule";
 
+        // Sender: CLIENT
+        // - Param "ModuleID"
+        public const string DeleteModule = "DeleteModule";
+
     }
 }

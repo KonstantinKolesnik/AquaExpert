@@ -12,7 +12,8 @@ namespace MySensors.Controllers.Automation
         private Guid id;
         private string name = "";
         private string description = "";
-        private string script = null;
+        private string script = "";
+        private string view = "";
         private IAutomationService service = null;
         #endregion
 
@@ -65,19 +66,32 @@ namespace MySensors.Controllers.Automation
                 }
             }
         }
+        public string View
+        {
+            get { return view; }
+            internal set
+            {
+                if (view != value)
+                {
+                    view = value;
+                    NotifyPropertyChanged("View");
+                }
+            }
+        }
         #endregion
 
         #region Constructors
-        public AutomationModule(string name, string description, string script)
-            : this(Guid.NewGuid(), name, description, script)
+        public AutomationModule(string name, string description, string script, string view)
+            : this(Guid.NewGuid(), name, description, script, view)
         {
         }
-        public AutomationModule(Guid id, string name, string description, string script)
+        public AutomationModule(Guid id, string name, string description, string script, string view)
         {
             ID = id;
             Name = name;
             Description = description;
             Script = script;
+            View = view;
         }
         #endregion
 
@@ -130,7 +144,16 @@ namespace MySensors.Controllers.Automation
                     if (service == null)
                         return "Error getting service of Automation module \"" + Name + "\"";
 
-                    service.Start(controller);
+                    try
+                    {
+                        service.Start(controller);
+                    }
+                    catch (Exception ex)
+                    {
+                        string res = "Error starting service of Automation module \"" + Name + "\"\n";
+                        res += ex.Message + "\n" + ex.StackTrace;
+                        return res;
+                    }
                 }
             }
 

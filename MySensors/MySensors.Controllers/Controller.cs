@@ -148,6 +148,12 @@ namespace MySensors.Controllers
 
             return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
         }
+
+        public void SetSensorValue(Sensor sensor, SensorValueType valueType, object value)
+        {
+            if (sensor != null && value != null)
+                gatewayProxy.Send(new SensorMessage(sensor.NodeID, sensor.ID, SensorMessageType.Set, false, (byte)valueType, value.ToString()));
+        }
         #endregion
 
         #region Event handlers
@@ -351,10 +357,22 @@ namespace MySensors.Controllers
 
                     #region AddModule
                     case NetworkMessageID.AddModule:
-                        AutomationModule module = new AutomationModule("Untitled", "", "");
+                        AutomationModule module = new AutomationModule("Untitled", "", "", "");
                         dbService.Insert(module);
                         modules.Add(module);
                         communicator.Broadcast(BuildGetModulesMessage());
+                        break;
+                    #endregion
+
+                    #region DeleteModule
+                    case NetworkMessageID.DeleteModule:
+                        if (request.ParametersCount == 1)
+                        {
+                            AutomationModule m = GetModule(Guid.Parse(request["ModuleID"]));
+                            dbService.Delete(m);
+                            modules.Remove(m);
+                            communicator.Broadcast(BuildGetModulesMessage());
+                        }
                         break;
                     #endregion
 
@@ -369,6 +387,8 @@ namespace MySensors.Controllers
                             m.Description = obj.Description;
                             string s = obj.Script;
                             m.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
+                            s = obj.View;
+                            m.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
 
                             dbService.Update(m);
 
@@ -593,7 +613,9 @@ namespace MySensors.Controllers
                 ID = module.ID,
                 Name = module.Name,
                 Description = module.Description,
-                Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script))
+                Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
+                //View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
+                View = Convert.ToBase64String(Encoding.ASCII.GetBytes("<div style=\"color:blue;\">Test</div>"))
             });
 
             NetworkMessage msg = new NetworkMessage(NetworkMessageID.GetModules);

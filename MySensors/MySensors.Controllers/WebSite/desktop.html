@@ -761,6 +761,21 @@
             <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>
         </div>
     </script>
+
+    <script id="moduleImageCellTemplate" type="text/x-kendo-tmpl">
+        <img src="resources/Operation.png" height="48px" style="vertical-align: middle;" alt="" />
+    </script>
+    <script id="moduleNameCellTemplate" type="text/x-kendo-tmpl">
+        <span data-bind="text: Name"></span>
+        <br />
+        <span style="font-size:12px; font-style:italic;" data-bind="text: Description"></span>
+    </script>
+    <script id="moduleViewCellTemplate" type="text/x-kendo-tmpl">
+        <div class="k-block" data-bind="html: View"></div>
+    </script>
+
+    
+
     <script id="moduleDetailsTemplate" type="text/x-kendo-tmpl">
         <table style="width:100%;">
             <tr><td class="propName"><span>Name:</span></td><td><input class="k-textbox" id="tbModuleName" style="width:100%;" data-bind="value: Name" /></td></tr>

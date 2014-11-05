@@ -80,8 +80,10 @@ NetworkMessageID = {
 
     // Sender: CLIENT
     // - Param "Module"
-    SetModule: "SetModule"
+    SetModule: "SetModule",
 
-
+    // Sender: CLIENT
+    // - Param "ModuleID"
+    DeleteModule: "DeleteModule"
 
 }

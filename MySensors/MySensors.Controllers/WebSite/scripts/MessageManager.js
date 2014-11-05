@@ -36,9 +36,15 @@ function MessageManager() {
     this.AddModule = function () {
         send(new NetworkMessage(NetworkMessageID.AddModule));
     }
+    this.DeleteModule = function (id) {
+        var msg = new NetworkMessage(NetworkMessageID.DeleteModule);
+        msg.SetParameter("ModuleID", id);
+        send(msg);
+    }
     this.SetModule = function (module) {
         var obj = $.extend({}, module);
         obj.Script = btoa(obj.Script);
+        obj.View = btoa(obj.View);
 
         var msg = new NetworkMessage(NetworkMessageID.SetModule);
         msg.SetParameter("Module", JSON.stringify(obj));
@@ -90,8 +96,10 @@ function MessageManager() {
             case NetworkMessageID.GetModules:
                 var newItems = JSON.parse(msg.GetParameter("Modules"));
 
-                for (var i = 0; i < newItems.length; i++)
+                for (var i = 0; i < newItems.length; i++) {
                     newItems[i].Script = atob(newItems[i].Script);
+                    newItems[i].View = atob(newItems[i].View);
+                }
 
                 viewModel.set("Modules", newItems);
                 break;

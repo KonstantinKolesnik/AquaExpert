@@ -368,7 +368,7 @@ function MainView() {
             sortable: true,
             reorderable: true,
             resizable: true,
-            edit: "inline",
+            //edit: "inline",
             //toolbar: ["create", "save", "cancel"],
             //toolbar: "<p>My string template in a paragraph.</p>",
             //toolbar: kendo.template("<p>My function template.</p>"),
@@ -385,29 +385,27 @@ function MainView() {
             },
             columns:
                 [
-                  { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: '<img src="resources/Operation.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "Name", title: "Name" },
-                  { field: "Description", title: "Description" },
+                  { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: kendo.template($("#moduleImageCellTemplate").html()) },
+                  { field: "Name", title: "Name", width: 400, template: kendo.template($("#moduleNameCellTemplate").html()) },
+                  { field: "View", title: "&nbsp;", reorderable: false, filterable: false, sortable: false, template: kendo.template($("#moduleViewCellTemplate").html()) },
                   {
                       title: "&nbsp;",
                       width: 150,
                       command: [
-                        //"edit",
-                        //"destroy",
                         {
-                            //name: "destroy",
                             text: "Delete",
                             click: function (e) {
-                                debugger;
+                                var item = $("#gridModules").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                msgManager.DeleteModule(item.ID);
                             }
                         }
                       ]
                   }
                 ],
-            detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
-            detailInit: function (e) {
-                kendo.bind(e.detailRow, e.data);
-            },
+            //detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
+            //detailInit: function (e) {
+            //    kendo.bind(e.detailRow, e.data);
+            //},
             dataBinding: function (e) {
                 if (e.action == "itemchange") {
                     e.preventDefault();
@@ -442,6 +440,11 @@ function MainView() {
 
                     }
                 }
+            },
+            dataBound: function (e) {
+                //var grid = $("#gridModules").data("kendoGrid");
+                //debugger;
+                //grid.dataSource.sort({ field: "Name", dir: "asc" });
             }
         });
     }

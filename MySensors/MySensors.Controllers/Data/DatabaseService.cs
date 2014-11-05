@@ -93,6 +93,11 @@ namespace MySensors.Controllers.Data
             return con.Update(AutomationModuleDto.FromModel(item));
         }
 
+        public int Delete(AutomationModule item)
+        {
+            return con.Delete(AutomationModuleDto.FromModel(item));
+        }
+
         public List<Node> GetAllNodes()
         {
             return con.Table<NodeDto>().ToList().Select(item => item.ToModel()).ToList();
