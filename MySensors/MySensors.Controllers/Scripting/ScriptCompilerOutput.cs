@@ -1,5 +1,5 @@
 ﻿
 namespace MySensors.Controllers.Scripting
 {
-    public delegate void ScriptCompilerOutput(string output);
+    delegate void ScriptCompilerOutput(string output);
 }

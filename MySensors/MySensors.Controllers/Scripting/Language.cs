@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Scripting
 {
-    public enum Language
+    enum Language
     {
         CSharp,
         VisualBasic

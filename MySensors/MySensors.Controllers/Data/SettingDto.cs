@@ -1,4 +1,4 @@
-﻿using MySensors.Core;
+﻿using MySensors.Controllers.Core;
 using SQLite;
 
 namespace MySensors.Controllers.Data

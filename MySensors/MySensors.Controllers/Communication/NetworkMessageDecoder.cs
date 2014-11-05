@@ -3,7 +3,7 @@ using System.Text;
 
 namespace MySensors.Controllers.Communication
 {
-    public class NetworkMessageDecoder
+    class NetworkMessageDecoder
     {
         #region Fields
         private string buffer = "";

@@ -1,11 +1,11 @@
-﻿using MySensors.Core;
+﻿using MySensors.Controllers.Core;
 using System;
 using System.IO;
 using System.IO.Ports;
 
 namespace MySensors.Controllers.GatewayProxies
 {
-    public class SerialGatewayProxy : IGatewayProxy
+    class SerialGatewayProxy : IGatewayProxy
     {
         #region Fields
         private SerialPort serialPort;

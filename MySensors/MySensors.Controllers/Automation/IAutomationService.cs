@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Automation
 {
-    public interface IAutomationService
+    interface IAutomationService
     {
         int Test();
     }

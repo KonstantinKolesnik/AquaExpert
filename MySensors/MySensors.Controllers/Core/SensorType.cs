@@ -1,5 +1,5 @@
 ﻿
-namespace MySensors.Core
+namespace MySensors.Controllers.Core
 {
     public enum SensorType : byte
     {

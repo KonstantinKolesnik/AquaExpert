@@ -1,4 +1,4 @@
-﻿using MySensors.Core;
+﻿using MySensors.Controllers.Core;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MySensors.Controllers.GatewayProxies
 {
-    public class EthernetGatewayProxy : IGatewayProxy
+    class EthernetGatewayProxy : IGatewayProxy
     {
         #region Fields
         private int port;

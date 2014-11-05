@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MySensors.Core
+namespace MySensors.Controllers.Core
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

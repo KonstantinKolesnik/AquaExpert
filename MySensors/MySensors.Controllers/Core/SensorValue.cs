@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MySensors.Core
+namespace MySensors.Controllers.Core
 {
     public class SensorValue : ObservableObject
     {

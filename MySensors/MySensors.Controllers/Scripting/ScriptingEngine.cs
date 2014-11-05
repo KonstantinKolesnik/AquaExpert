@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace MySensors.Controllers.Scripting
 {
-    public class ScriptingEngine
+    class ScriptingEngine
     {
         private IScriptCompiler compiler = null;
 

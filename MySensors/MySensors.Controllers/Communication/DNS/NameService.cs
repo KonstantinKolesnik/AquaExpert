@@ -12,7 +12,7 @@ namespace MySensors.Controllers.Communication.DNS
     //NameService nameService = new NameService(); // Declare as global, name service will stop once the object gets disposed
     //nameService.AddName("FEZCOBRA", NameService.NameType.Unique, NameService.MsSuffix.Default); // register your fez as FEZCOBRA on the local network 
 
-    public class NameService : IDisposable
+    class NameService : IDisposable
     {
         #region Consts
         private const ushort NAME_TRN_ID = 0x6703;  // unique transaction id

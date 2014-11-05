@@ -1,11 +1,11 @@
-﻿using MySensors.Controllers.Scripting;
+﻿using MySensors.Controllers.Core;
+using MySensors.Controllers.Scripting;
 using MySensors.Controllers.Scripting.Compilers;
-using MySensors.Core;
 using System;
 
 namespace MySensors.Controllers.Automation
 {
-    public class AutomationModule : ObservableObject
+    class AutomationModule : ObservableObject
     {
         #region Fields
         private Guid id;

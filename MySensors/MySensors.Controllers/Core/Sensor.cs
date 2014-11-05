@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace MySensors.Core
+namespace MySensors.Controllers.Core
 {
     public class Sensor : ObservableObject
     {

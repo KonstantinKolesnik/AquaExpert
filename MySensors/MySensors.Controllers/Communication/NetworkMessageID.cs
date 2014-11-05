@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Communication
 {
-    public class NetworkMessageID
+    class NetworkMessageID
     {
         // Sender: STATION
         // - Param "Msg": message

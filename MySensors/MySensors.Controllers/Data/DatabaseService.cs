@@ -1,5 +1,5 @@
 ﻿using MySensors.Controllers.Automation;
-using MySensors.Core;
+using MySensors.Controllers.Core;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace MySensors.Controllers.Data
 {
-    public class DatabaseService
+    class DatabaseService
     {
         private const string dbFileName = "MySensors.dat";
         private SQLiteConnection con = null;

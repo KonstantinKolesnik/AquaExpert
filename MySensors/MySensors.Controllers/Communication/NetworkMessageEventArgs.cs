@@ -2,7 +2,7 @@
 
 namespace MySensors.Controllers.Communication
 {
-    public class NetworkMessageEventArgs : EventArgs
+    class NetworkMessageEventArgs : EventArgs
     {
         public NetworkMessage Message { get; set; }
 

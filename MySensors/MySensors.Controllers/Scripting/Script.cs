@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace MySensors.Controllers.Scripting
 {
-    public class Script
+    class Script
     {
         #region Fields
         private Language language;

@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MySensors.Controllers.Communication.DNS
 {
-    public class UDPListener
+    class UDPListener
     {
         #region Fields
         private Socket socket;

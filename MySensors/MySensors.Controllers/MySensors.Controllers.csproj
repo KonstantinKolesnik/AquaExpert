@@ -92,6 +92,21 @@
     <Compile Include="Communication\RootModule.cs" />
     <Compile Include="Communication\WebServer.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Core\BatteryLevel.cs" />
+    <Compile Include="Core\IGatewayProxy.cs" />
+    <Compile Include="Core\InternalValueType.cs" />
+    <Compile Include="Core\Node.cs" />
+    <Compile Include="Core\ObservableObject.cs" />
+    <Compile Include="Core\Sensor.cs" />
+    <Compile Include="Core\SensorMessage.cs" />
+    <Compile Include="Core\SensorMessageEventArgs.cs" />
+    <Compile Include="Core\SensorMessageEventHandler.cs" />
+    <Compile Include="Core\SensorMessageType.cs" />
+    <Compile Include="Core\SensorType.cs" />
+    <Compile Include="Core\SensorValue.cs" />
+    <Compile Include="Core\SensorValueType.cs" />
+    <Compile Include="Core\Setting.cs" />
+    <Compile Include="Core\StreamValueType.cs" />
     <Compile Include="Data\BatteryLevelDto.cs" />
     <Compile Include="Data\DatabaseService.cs" />
     <Compile Include="Data\AutomationModuleDto.cs" />
@@ -113,12 +128,6 @@
     <Compile Include="Scripting\Script.cs" />
     <Compile Include="Scripting\ScriptCompilerOutput.cs" />
     <Compile Include="Scripting\ScriptingEngine.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MySensors.Core\MySensors.Core.csproj">
-      <Project>{15b7bc5d-ab01-42e4-acbf-59653d51c1c8}</Project>
-      <Name>MySensors.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

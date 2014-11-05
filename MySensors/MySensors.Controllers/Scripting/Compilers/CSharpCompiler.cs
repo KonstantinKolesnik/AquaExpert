@@ -3,7 +3,7 @@ using System.CodeDom.Compiler;
 
 namespace MySensors.Controllers.Scripting.Compilers
 {
-    public class CSharpCompiler : IScriptCompiler
+    class CSharpCompiler : IScriptCompiler
     {
         public Language Language
         {

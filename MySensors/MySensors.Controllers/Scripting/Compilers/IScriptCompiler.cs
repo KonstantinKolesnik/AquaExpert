@@ -1,7 +1,7 @@
 ﻿
 namespace MySensors.Controllers.Scripting.Compilers
 {
-    public interface IScriptCompiler
+    interface IScriptCompiler
     {
         Language Language { get; }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace MySensors.Core
+namespace MySensors.Controllers.Core
 {
     public class SensorMessage
     {

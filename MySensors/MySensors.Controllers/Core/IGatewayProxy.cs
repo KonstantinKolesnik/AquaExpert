@@ -1,6 +1,5 @@
-﻿using MySensors.Core;
-
-namespace MySensors.Core
+﻿
+namespace MySensors.Controllers.Core
 {
     public interface IGatewayProxy
     {
