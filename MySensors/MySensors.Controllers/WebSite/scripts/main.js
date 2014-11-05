@@ -42,6 +42,7 @@ function onViewModelAfterSet(e) {
         case "Modules":
             if (e.action == "itemchange")
                 msgManager.SetModule(e.items[0]);
+            $("#gridModules").data("kendoGrid").dataSource.sort({ field: "Name", dir: "asc" });
             break;
         default:
             break;
@@ -51,6 +52,10 @@ function onViewModelAfterSet(e) {
 function MainView() {
     var me = this;
     var lastContent = null;
+    var expandedModules = new WICollection();
+    var scrollPosition = null;
+    var scrollPositionGrid = null;
+    var saveScroll = true;
 
     createMenu();
     createDevicesGrid();
@@ -61,6 +66,8 @@ function MainView() {
 
     $(window).bind("resize", adjustSizes);
     $(window).resize(adjustSizes);
+    $(window).on("scroll", saveScrollState);
+    $("#gridModules").find(".k-grid-content").on("scroll", saveScrollState);
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -367,8 +374,7 @@ function MainView() {
             scrollable: true,
             sortable: true,
             reorderable: true,
-            resizable: true,
-            //edit: "inline",
+            //resizable: true,
             //toolbar: ["create", "save", "cancel"],
             //toolbar: "<p>My string template in a paragraph.</p>",
             //toolbar: kendo.template("<p>My function template.</p>"),
@@ -388,9 +394,7 @@ function MainView() {
                   { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: kendo.template($("#moduleImageCellTemplate").html()) },
                   { field: "Name", title: "Name", width: 400, template: kendo.template($("#moduleNameCellTemplate").html()) },
                   { field: "View", title: "&nbsp;", reorderable: false, filterable: false, sortable: false, template: kendo.template($("#moduleViewCellTemplate").html()) },
-                  {
-                      title: "&nbsp;",
-                      width: 150,
+                  { title: "&nbsp;", width: 150, reorderable: false, filterable: false, sortable: false,
                       command: [
                         {
                             text: "Delete",
@@ -400,51 +404,51 @@ function MainView() {
                             }
                         }
                       ]
+                      //template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>'
                   }
                 ],
-            //detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
-            //detailInit: function (e) {
-            //    kendo.bind(e.detailRow, e.data);
-            //},
+            detailTemplate: kendo.template($("#moduleDetailsTemplate").html()),
+            detailInit: function (e) {
+                kendo.bind(e.detailRow, e.data);
+            },
+            detailExpand: function (e) {
+                addToVisualState(e.masterRow);
+            },
+            detailCollapse: function (e) {
+                removeFromVisualState(e.masterRow);
+            },
             dataBinding: function (e) {
-                if (e.action == "itemchange") {
-                    e.preventDefault();
+                //if (e.action == "itemchange") {
+                //    e.preventDefault();
 
-                    var item = e.items[0];
+                //    var item = e.items[0];
 
-                    //get the current column names, in their current order
-                    var grid = $("#gridModules").data("kendoGrid");
-                    var columnNames = $.map(grid.columns, function (column) { return column.field ? column.field : ""; });
+                //    //get the current column names, in their current order
+                //    var grid = $("#gridModules").data("kendoGrid");
+                //    var columnNames = $.map(grid.columns, function (column) { return column.field ? column.field : ""; });
 
-                    //get the column tds for update
-                    var masterRow = $('#gridModules > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
-                    var tds = masterRow.find('td:not(.k-hierarchy-cell)');
+                //    //get the column tds for update
+                //    var masterRow = $('#gridModules > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
+                //    var tds = masterRow.find('td:not(.k-hierarchy-cell)');
 
-                    //collapse the detail row that was saved.
-                    //grid.collapseRow(masterRow);
-                    //grid.expandRow(masterRow);
+                //    //collapse the detail row that was saved.
+                //    //grid.collapseRow(masterRow);
+                //    //grid.expandRow(masterRow);
 
-                    //update the tds with the value from the current item stored in items
-                    for (var i = 0 ; i < tds.length ; i++)
-                        if (columnNames[i])
-                            $(tds[i]).html(item[columnNames[i]]);
-                }
-                else if (e.action == "rebind") {
-                    if (e.items.length) {
-                        //debugger;
-                        //e.preventDefault();
-
-
-
-
-
-                    }
-                }
+                //    //update the tds with the value from the current item stored in items
+                //    for (var i = 0 ; i < tds.length ; i++)
+                //        if (columnNames[i])
+                //            $(tds[i]).html(item[columnNames[i]]);
+                //}
+                //else if (e.action == "rebind") {
+                //    if (e.items.length) {
+                //        //debugger;
+                //        //e.preventDefault();
+                //    }
+                //}
             },
             dataBound: function (e) {
-                //var grid = $("#gridModules").data("kendoGrid");
-                //debugger;
-                //grid.dataSource.sort({ field: "Name", dir: "asc" });
+                restoreVisualState();
             }
         });
     }
@@ -626,6 +630,86 @@ function MainView() {
                 majorGridLines: { visible: true }
             }
         });
+    }
+
+    function saveScrollState() {
+        if (saveScroll) {
+            scrollPosition = $(window).scrollTop();
+            scrollPositionGrid = $("#gridModules").find(".k-grid-content").scrollTop();
+        }
+    }
+    function restoreScrollState() {
+        if (scrollPosition)
+            $(window).scrollTop(scrollPosition);
+        if (scrollPositionGrid)
+            $("#gridModules").find(".k-grid-content").scrollTop(scrollPositionGrid);
+    }
+    function addToVisualState(row) {
+        if (!expandedModules.restoring) {
+            var item = row.closest(".k-grid").data("kendoGrid").dataItem(row);
+            expandedModules.add(item);
+        }
+    }
+    function removeFromVisualState(row) {
+        var item = row.closest(".k-grid").data("kendoGrid").dataItem(row);
+        expandedModules.remove(item);
+    }
+    function restoreVisualState() {
+        var sp = scrollPosition;
+        var spGrid = scrollPositionGrid;
+
+        if (expandedModules.restoring)
+            return;
+        else
+            expandedModules.restoring = true;
+
+        var rows = null; //cache for performance
+        expandedModules.each(function (wiID) {
+            if (!rows)
+                rows = $("#gridModules tr.k-master-row");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var jRow = $(row);
+                var grid = jRow.closest("#gridModules").data("kendoGrid");
+                var data = grid.dataItem(jRow);
+                if (data.ID == wiID) {
+                    grid.expandRow(row);
+                    rows = null;
+                    break;
+                }
+            }
+        });
+        expandedModules.restoring = false;
+
+        // restore vertical scroll position;
+        scrollPosition = sp;
+        scrollPositionGrid = spGrid;
+        restoreScrollState();
+    }
+    function WICollection() {
+        var me = this;
+        var items = [];
+
+        me.add = function (wi) {
+            if (items.indexOf(wi.ID) == -1)
+                items.push(wi.ID);
+        }
+        me.remove = function (wi) {
+            var i = items.indexOf(wi.ID);
+
+            if (i != -1)
+                items.splice(i, 1);
+        }
+        me.has = function (wi) {
+            return items.indexOf(wi.ID) != -1;
+        }
+        me.empty = function () {
+            items.length = 0;
+        }
+        me.each = function (fn) {
+            items.forEach(function (id) { fn(id) });
+        }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
