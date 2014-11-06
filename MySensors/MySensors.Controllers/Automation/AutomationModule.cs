@@ -142,7 +142,7 @@ namespace MySensors.Controllers.Automation
 
                     service = script.CreateObject(serviceType.FullName) as IAutomationService;
                     if (service == null)
-                        return "Error getting service of Automation module \"" + Name + "\"";
+                        return "Error creating service of Automation module \"" + Name + "\"";
 
                     try
                     {

@@ -5,5 +5,7 @@ namespace MySensors.Controllers.Automation
     {
         void Start(Controller controller);
         void Stop();
+
+
     }
 }
