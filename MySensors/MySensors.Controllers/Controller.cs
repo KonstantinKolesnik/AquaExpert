@@ -335,8 +335,6 @@ namespace MySensors.Controllers
                                 new string[] { "WebTheme", WebTheme },
                                 new string[] { "UnitSystem", UnitSystem }
                             });
-
-
                         else // client sets options
                         {
                             WebTheme = request["WebTheme"];
@@ -576,8 +574,6 @@ namespace MySensors.Controllers
             return msg;
         }
 
-
-
         private NetworkMessage BuildGetNodesMessage()
         {
             List<Node> collection = new List<Node>();
@@ -610,14 +606,10 @@ namespace MySensors.Controllers
 
                 collection.Add(node);
             }
-            return BuildMessage(NetworkMessageID.GetNodes, new string[][] {
-                new string[] { "Nodes", JsonConvert.SerializeObject(collection, Formatting.Indented) }
-            });
+            return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(collection, Formatting.Indented) } });
 
 
-            //return BuildMessage(NetworkMessageID.GetNodes, new string[][] {
-            //    new string[] { "Nodes", JsonConvert.SerializeObject(nodes, Formatting.Indented) }
-            //});
+            //return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(nodes, Formatting.Indented) } });
         }
         private NetworkMessage BuildGetModulesMessage()
         {
