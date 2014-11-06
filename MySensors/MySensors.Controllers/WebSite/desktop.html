@@ -802,17 +802,15 @@
 
     <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
         #
-        var val = data.LastBatteryLevel();
-        var res = val == null ? "-" : val == 0 ? 0 : val;
+        var val = data.LastBatteryLevel ? data.LastBatteryLevel.Percent : null;
         #
-        <div>#: res #</div>
+        <div>#: val == null ? "-" : val #</div>
     </script>
     <script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
         #
-        var val = data.LastValue();
-        var res = val == null ? "-" : data.LastValue() + " " + mainView.getSensorValueUnit(data);
+        var val = data.LastValue ? data.LastValue.Value : null;
         #
-        <div>#: res #</div>
+        <div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>
     </script>
 
 

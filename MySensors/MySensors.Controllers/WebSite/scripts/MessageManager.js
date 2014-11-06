@@ -108,8 +108,8 @@ function MessageManager() {
 
                 viewModel.set("Modules", newItems);
                 break;
-            case NetworkMessageID.NodePresentation: addOrUpdateNode(JSON.parse(msg.GetParameter("Node"))); break;
-            case NetworkMessageID.SensorPresentation: addOrUpdateSensor(JSON.parse(msg.GetParameter("Sensor"))); break;
+            case NetworkMessageID.NodePresentation: presentNode(JSON.parse(msg.GetParameter("Node"))); break;
+            case NetworkMessageID.SensorPresentation: presentSensor(JSON.parse(msg.GetParameter("Sensor"))); break;
             case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter("Level"))); break;
             case NetworkMessageID.SensorValue: addSensorValue(JSON.parse(msg.GetParameter("Value"))); break;
             default: break;
@@ -132,16 +132,11 @@ function MessageManager() {
                 return getSensorTypeName(this.get("Type"));
             }
 
-            node.BatteryLevels = node.BatteryLevels || [];//new kendo.observableArray();
+            node.BatteryLevels = node.BatteryLevels || [];
             for (var i = 0; i < node.BatteryLevels.length; i++)
                 node.BatteryLevels[i].Time = new Date(node.BatteryLevels[i].Time); // convert battery level's date/time
 
-            node.LastBatteryLevel = function () {
-                var bls = this.get("BatteryLevels");
-                return bls.length ? bls[bls.length - 1].Percent : null;
-            };
-
-            node.Sensors = node.Sensors || [];//new kendo.observableArray();
+            node.Sensors = node.Sensors || [];
 
             node.isEnriched = true;
         }
@@ -153,66 +148,57 @@ function MessageManager() {
                 return getSensorTypeName(this.get("Type"));
             }
 
-            sensor.Values = sensor.Values || [];//new kendo.observableArray();
+            sensor.Values = sensor.Values || [];
             for (var j = 0; j < sensor.Values.length; j++)
                 sensor.Values[j].Time = new Date(sensor.Values[j].Time); // convert sensor value's date/time
-
-            sensor.LastValueType = function () {
-                var vs = this.get("Values");
-                return vs.length ? vs[vs.length - 1].Type : null;
-            };
-            sensor.LastValue = function () {
-                var vs = this.get("Values");
-                return vs.length ? vs[vs.length - 1].Value : null;
-            };
 
             sensor.isEnriched = true;
         }
 
-        function addOrUpdateNode(node) {
+        function presentNode(newNode) {
             if (!viewModel.Devices)
                 viewModel.Devices = new kendo.observableArray();
 
-            var nodes = viewModel.Devices;
-            for (var i = 0; i < nodes.length; i++) {
-                var nd = nodes[i];
-                if (nd.ID == node.ID) { // update node
-                    nd.set("Type", node.Type);
-                    nd.set("ProtocolVersion", node.ProtocolVersion);
-                    nd.set("SketchName", node.SketchName );
-                    nd.set("SketchVersion", node.SketchVersion);
+            for (var i = 0; i < viewModel.Devices.length; i++) {
+                var nd = viewModel.Devices[i];
+                if (nd.ID == newNode.ID) { // update node
+                    nd.set("Type", newNode.Type);
+                    nd.set("ProtocolVersion", newNode.ProtocolVersion);
+                    nd.set("SketchName", newNode.SketchName);
+                    nd.set("SketchVersion", newNode.SketchVersion);
                     return;
                 }
             }
 
             // node isn't in list; add it:
-            enrichItem(node); // with sensors!!! not enrichNode (it doesn't enriches sensors)!!!
-            nodes.push(node);
-
-            viewModel.PopulateSensors();
+            enrichItem(newNode); // with sensors!!! not enrichNode (it doesn't enriches sensors)!!!
+            viewModel.Devices.push(newNode);
         }
-        function addOrUpdateSensor(sensor) {
-            var nodes = viewModel.Devices || [];
-            for (var i = 0; i < nodes.length; i++) {
-                var nd = nodes[i];
-                if (nd.ID == sensor.NodeID) {
+        function presentSensor(newSensor) {
+            if (!viewModel.Devices)
+                viewModel.Devices = new kendo.observableArray();
+
+            for (var i = 0; i < viewModel.Devices.length; i++) {
+                var nd = viewModel.Devices[i];
+                if (nd.ID == newSensor.NodeID) {
                     if (!nd.Sensors)
                         nd.Sensors = new kendo.observableArray();
 
+
                     for (var j = 0; j < nd.Sensors.length; j++) {
                         var snsr = nd.Sensors[j];
-                        if (snsr.NodeID == sensor.NodeID && snsr.ID == sensor.ID) { // update sensor
-                            snsr.set("Type", sensor.Type);
-                            snsr.set("ProtocolVersion", sensor.ProtocolVersion);
+                        if (snsr.NodeID == newSensor.NodeID && snsr.ID == newSensor.ID) { // update sensor
+                            snsr.set("Type", newSensor.Type);
+                            snsr.set("ProtocolVersion", newSensor.ProtocolVersion);
+                            viewModel.PresentSensor(newSensor);
                             return;
                         }
                     }
 
                     // sensor isn't in list; add it:
-                    enrichSensor(sensor);
-                    nd.Sensors.push(sensor);
-
-                    viewModel.PopulateSensors();
+                    enrichSensor(newSensor);
+                    nd.Sensors.push(newSensor);
+                    viewModel.PresentSensor(newSensor);
                 }
             }
         }
@@ -221,8 +207,10 @@ function MessageManager() {
 
             var nodes = viewModel.Devices || [];
             for (var i = 0; i < nodes.length; i++)
-                if (nodes[i].ID == bl.NodeID)
+                if (nodes[i].ID == bl.NodeID) {
                     nodes[i].BatteryLevels.push(bl);
+                    nodes[i].set("LastBatteryLevel", bl);
+                }
         }
         function addSensorValue(sv) {
             sv.Time = new Date(sv.Time);
@@ -235,7 +223,9 @@ function MessageManager() {
                         if (sensors[j].NodeID == sv.NodeID && sensors[j].ID == sv.ID) {
                             if (!sensors[j].Values)
                                 sensors[j].Values = new kendo.observableArray();
+
                             sensors[j].Values.push(sv);
+                            sensors[j].set("LastValue", sv);
                         }
                 }
         }

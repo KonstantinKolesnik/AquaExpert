@@ -86,12 +86,29 @@ function Model() {
     this.Sensors = [];
     this.Modules = [];
 
-    this.PopulateSensors = function () {
-        this.set("Sensors", []);
+    this.PresentSensor = function (newSensor) {
+        if (!this.Sensors)
+            this.Sensors = [];
 
-        var nodes = this.get("Devices") || [];
+        for (var i = 0; i < this.Sensors.length; i++)
+            if (this.Sensors[i].NodeID = newSensor.NodeID && this.Sensors[i].ID == newSensor.ID)
+            {
+                this.Sensors[i].set("Type", newSensor.Type);
+                this.Sensors[i].set("ProtocolVersion", newSensor.ProtocolVersion);
+                return;
+            }
+
+        this.Sensors.push(newSensor);
+
+    }
+    this.PopulateSensors = function () {
+        var res = [];
+
+        var nodes = this.Devices || [];
         for (var i = 0; i < nodes.length; i++)
             for (var j = 0; j < nodes[i].Sensors.length; j++)
-                this.Sensors.push(nodes[i].Sensors[j]);
+                res.push(nodes[i].Sensors[j]);
+
+        this.set("Sensors", res);
     };
 }
