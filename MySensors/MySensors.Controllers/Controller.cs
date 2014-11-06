@@ -374,10 +374,10 @@ namespace MySensors.Controllers
                             AutomationModule module = GetModule(Guid.Parse(obj.ID.ToString()));
                             module.Name = obj.Name;
                             module.Description = obj.Description;
-                            //s = obj.Script;
-                            module.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s = obj.Script)));
-                            //s = obj.View;
-                            module.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s = obj.View)));
+                            s = obj.Script;
+                            module.Script = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
+                            s = obj.View;
+                            module.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
 
                             dbService.Update(module);
                             communicator.Broadcast(BuildGetModulesMessage());

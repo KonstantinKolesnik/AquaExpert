@@ -29,5 +29,7 @@ namespace MySensors.Controllers.Core
         Custom =                23,     // Use this for custom sensors where no other fits.
         Dust =                  24,     // Dust level sensor
         SceneController =       25,     // Scene controller device
+        Ph =                    26,     // Ph sensor
+        ORP =                   27,     // ORP sensor
     }
 }

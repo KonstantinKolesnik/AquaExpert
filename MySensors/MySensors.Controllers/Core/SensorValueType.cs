@@ -43,5 +43,8 @@ namespace MySensors.Controllers.Core
         DustLevel =	            37,     // Dust level
         Voltage =	            38,     // Voltage level
         Current =	            39,     // Current level
+        //Ph =                    40,     // Ph level
+        //ORP =                   41,     // ORP level, V/mV
+
     }
 }

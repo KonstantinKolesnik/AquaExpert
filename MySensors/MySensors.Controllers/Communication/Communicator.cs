@@ -110,8 +110,12 @@ namespace MySensors.Controllers.Communication
         }
         private void Send(WebSocketSession session, NetworkMessage msg)
         {
-            if (IsStarted && msg != null)
-                session.Send(msg.PackToString());
+            try
+            {
+                if (IsStarted && msg != null)
+                    session.Send(msg.PackToString());
+            }
+            catch (Exception) { }
         }
 
         private void wsServer_newConnection(WebSocketSession session)

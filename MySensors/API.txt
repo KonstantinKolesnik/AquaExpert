@@ -56,6 +56,7 @@ S_AIR_QUALITY			22		Air quality sensor e.g. MQ-2
 S_CUSTOM				23		Use this for custom sensors where no other fits.
 S_DUST					24		Dust level sensor
 S_SCENE_CONTROLLER		25		Scene controller device
+S_PH					26		Ph sensor
 
 set, req:
 When a set or request message is being sent, the sub-type has to be one of the following:
