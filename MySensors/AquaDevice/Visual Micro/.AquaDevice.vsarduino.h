@@ -44,6 +44,8 @@ extern "C" void __cxa_pure_virtual() {;}
 void onMessageReceived(const MyMessage &message);
 void onTimeReceived(unsigned long time);
 void printTime();
+float readTemperature();
+int readDistance();
 float readPh();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"

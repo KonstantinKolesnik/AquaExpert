@@ -6,6 +6,6 @@ namespace MySensors.Controllers.Automation
         void Start(Controller controller);
         void Stop();
 
-
+        object Parameters { get; set; }
     }
 }

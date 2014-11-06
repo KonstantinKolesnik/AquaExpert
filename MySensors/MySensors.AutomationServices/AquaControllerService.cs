@@ -9,20 +9,12 @@ namespace MySensors.AutomationServices
 {
     public class AquaControllerService : IAutomationService
     {
+        #region Fields
         private Controller controller;
+        #endregion
 
-        private Sensor heaterRelay;
-        private Sensor heaterTemperatureSensor;
-        private float minHeaterTemperature;
-
-        private Sensor lightRelay;
-        private Timer lightTimer;
-        private DateTime lightTimeOn;
-        private DateTime lightTimeOff;
-
-        private Sensor phRelay;
-        private Sensor phSensor;
-        private float phNormalValue;
+        #region Interface
+        public object Parameters { get; set; }
 
         public void Start(Controller controller)
         {
@@ -38,8 +30,13 @@ namespace MySensors.AutomationServices
             UninitLight();
             UninitPh();
         }
+        #endregion
 
         #region Heater
+        private Sensor heaterRelay;
+        private Sensor heaterTemperatureSensor;
+        private float minHeaterTemperature;
+
         private void InitHeater()
         {
             minHeaterTemperature = 24.0f;
@@ -71,6 +68,11 @@ namespace MySensors.AutomationServices
         #endregion
 
         #region Light
+        private Sensor lightRelay;
+        private Timer lightTimer;
+        private DateTime lightTimeOn;
+        private DateTime lightTimeOff;
+
         private void InitLight()
         {
             lightTimeOn = new DateTime(1970, 1, 1, 10, 0, 0);
@@ -105,6 +107,10 @@ namespace MySensors.AutomationServices
         #endregion
 
         #region Ph
+        private Sensor phRelay;
+        private Sensor phSensor;
+        private float phNormalValue;
+
         private void InitPh()
         {
             phNormalValue = 7.0f;
@@ -133,6 +139,15 @@ namespace MySensors.AutomationServices
             phSensor = null;
             phRelay = null;
         }
+        #endregion
+
+        #region Water level
+        private Sensor waterInputRelay;
+        private Sensor waterOutputRelay;
+        private Sensor waterSensor;
+        private float waterNormalDistance;
+
+
         #endregion
     }
 }

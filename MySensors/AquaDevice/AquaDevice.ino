@@ -13,20 +13,24 @@
 uint8_t relayPins[7] = { 2, 3, 4, 5, 6, 7, 8 };
 MyMessage msgRelay(0, V_LIGHT);
 //--------------------------------------------------------------------------------------------------------------------------------------------
+// Temperature section
+#define ONE_WIRE_BUS			A5
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+float lastTemperature;
+MyMessage msgTemperature(8, V_TEMP);
+unsigned long prevMsTemperature = 0;  // stores last time temperature was sent
+const long intervalTemperature = 3000;	// interval at which to send measurements (milliseconds)
+//--------------------------------------------------------------------------------------------------------------------------------------------
 // Sonar section
 #define TRIGGER_PIN  A1  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define ECHO_PIN     A0  // Arduino pin tied to echo pin on the ultrasonic sensor.
-#define MAX_DISTANCE 100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+#define MAX_DISTANCE 200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgSonar(9, V_DISTANCE);
 int lastDist;
 unsigned long prevMsSonar = 0;
 const long intervalSonar = 1000;
-//--------------------------------------------------------------------------------------------------------------------------------------------
-// Moisture section
-#define MOISTURE_PIN  A2
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // Ph section
 #define PH_PIN  A3
@@ -36,20 +40,14 @@ float lastPh;
 unsigned long prevMsPh = 0;
 const long intervalPh = 1000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
+// Moisture section
+#define MOISTURE_PIN  A2
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
 // ORP section
 #define ORP_PIN  A4
 
-//--------------------------------------------------------------------------------------------------------------------------------------------
-// Temperature section
-#define ONE_WIRE_BUS			A5 // pin where dallase sensor is connected 
-#define MAX_ATTACHED_DS18B20	1
-OneWire oneWire(ONE_WIRE_BUS);
-DallasTemperature sensors(&oneWire);
-float lastTemperature[MAX_ATTACHED_DS18B20];
-int numTemperatureSensors = 0;
-MyMessage msgTemperature(0, V_TEMP);
-unsigned long prevMsTemperature = 0;  // stores last time temperature was sent
-const long intervalTemperature = 3000;		   // interval at which to send measurements (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
@@ -66,111 +64,81 @@ void setup()
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("Aquarium Controller", "1.0");
 
-	// Fetch relay status (sensorID = 0...7)
+	isMetric = gw.getConfig().isMetric;
+
+	//(sensorID = 0...7)
 	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
 	{
-		// Register all sensors to gw (they will be created as child devices)
-		gw.present(sensorID, S_LIGHT);
-		// Then set relay pins in output mode
 		pinMode(relayPins[sensorID], OUTPUT);
-
 		uint8_t lastState = gw.loadState(sensorID);
-
-		// Set relay to last known state (using eeprom storage) 
 		digitalWrite(relayPins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
 
+		gw.present(sensorID, S_LIGHT);
 		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
 	}
 
-	// Fetch the number of attached temperature sensors  
-	numTemperatureSensors = sensors.getDeviceCount();
-	// Present all sensors to controller (sensorID = 8)
-	for (int sensorID = 0; sensorID < numTemperatureSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
-		gw.present(NUMBER_OF_RELAYS + sensorID, S_TEMP);
-
+	//(sensorID = 8)
+	gw.present(8, S_TEMP);
+	gw.send(msgTemperature.set(readTemperature(), 1));
 
 	//(sensorID = 9)
 	gw.present(9, S_DISTANCE);
+	gw.send(msgSonar.set(readDistance()));
 
 	//(sensorID = 10)
 	gw.present(10, S_PH);
+	gw.send(msgPh.set(readPh(), 1));
 
 
-	isMetric = gw.getConfig().isMetric;
+
 }
 void loop()
 {
 	gw.process();
 
-	unsigned long currentMs = millis();
+	unsigned long ms = millis();
 
-	if (currentMs - prevMsTemperature >= intervalTemperature)
+	// temperature
+	if (ms - prevMsTemperature >= intervalTemperature)
 	{
-		prevMsTemperature = currentMs;
+		prevMsTemperature = ms;
 
-		// Fetch temperatures from Dallas sensors
-		sensors.requestTemperatures();
-
-		// Read temperatures and send them to controller 
-		for (int sensorID = 0; sensorID < numTemperatureSensors && sensorID < MAX_ATTACHED_DS18B20; sensorID++)
+		float temperature = readTemperature();
+		if (lastTemperature != temperature && temperature != -127.00)
 		{
-			// Fetch and round temperature to one decimal
-			float temperature = static_cast<float>(static_cast<int>((isMetric ? sensors.getTempCByIndex(sensorID) : sensors.getTempFByIndex(sensorID)) * 10.)) / 10.;
-
-			// Only send data if temperature has changed and no error
-			if (lastTemperature[sensorID] != temperature && temperature != -127.00)
-			{
-				// Send in the new temperature
-				gw.send(msgTemperature.setSensor(NUMBER_OF_RELAYS + sensorID).set(temperature, 1));
-				lastTemperature[sensorID] = temperature;
-			}
+			lastTemperature = temperature;
+			gw.send(msgTemperature.set(temperature, 1));
 		}
 	}
 
-
-	if (currentMs - prevMsSonar >= intervalSonar)
+	// distance
+	if (ms - prevMsSonar >= intervalSonar)
 	{
-		prevMsSonar = currentMs;
+		prevMsSonar = ms;
 
-		//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+		int distance = readDistance();
+		if (distance != lastDist) {
+			lastDist = distance;
+			gw.send(msgSonar.set(distance));
+		}
+	}
 
-		//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
-		//Serial.print("Distance: ");
-		//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-		//Serial.println("cm");
+	// Ph:
+	if (ms - prevMsPh >= intervalPh)
+	{
+		prevMsPh = ms;
 
-		int dist = isMetric ? sonar.ping_cm() : sonar.ping_in();
-		Serial.print("Distance: ");
-		Serial.print(dist); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-		Serial.println(isMetric ? " cm" : " in");
-
-		if (dist != lastDist) {
-			gw.send(msgSonar.set(dist));
-			lastDist = dist;
+		float ph = readPh();
+		if (ph != lastPh)
+		{
+			lastPh = ph;
+			gw.send(msgPh.set(ph, 1));
 		}
 	}
 
 	// analogRead: moisture sensor:
 	// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
 	// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
-
-
-	// Ph:
-	if (currentMs - prevMsPh >= intervalPh)
-	{
-		prevMsPh = currentMs;
-
-		float ph = readPh();
-		Serial.print("Ph: ");
-		Serial.println(ph);
-
-		if (ph != lastPh)
-		{
-			gw.send(msgPh.set(ph, 1));
-			lastPh = ph;
-		}
-	}
-	
 
 
 
@@ -193,24 +161,50 @@ void onMessageReceived(const MyMessage &message)
 
 		gw.send(msgRelay.setSensor(message.sensor).set(value));
 
-		// Write some debug info
 		Serial.print("Incoming change for sensor:");
 		Serial.print(message.sensor);
-		Serial.print(", New status: ");
+		Serial.print(", new status: ");
 		Serial.println(value);
 	}
 }
 void onTimeReceived(unsigned long time) //Incoming argument is seconds since 1970.
 {
 	//setTime(time);
-	//Serial.print("Time: ");
-	//Serial.println(time);
+	Serial.print("Time: ");
+	Serial.println(time);
 }
 void printTime() {
 	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());
 	//myGLCD.print(timeBuf, 60, 7);
 }
 
+float readTemperature()
+{
+	sensors.requestTemperatures();
+	float temperature = static_cast<float>(static_cast<int>((isMetric ? sensors.getTempCByIndex(0) : sensors.getTempFByIndex(0)) * 10.)) / 10.;
+
+	Serial.print("Temperature: ");
+	Serial.print(temperature);
+	Serial.println(isMetric ? " C" : " F");
+
+	return temperature;
+}
+int readDistance()
+{
+	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+
+	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+	//Serial.print("Distance: ");
+	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+	//Serial.println("cm");
+
+	int distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
+	Serial.print("Distance: ");
+	Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+	Serial.println(isMetric ? " cm" : " in");
+
+	return distance;
+}
 float readPh()
 {
 	/*
@@ -256,12 +250,12 @@ float readPh()
 	unsigned long int avgValue = 0;
 	for (int i = 2; i < 8; i++) // take the average value of 6 center sample
 		avgValue += buf[i];
+
 	float phValue = (float)(avgValue * 5.0 / 1024 / 6); // convert the analog into millivolt
 	phValue = 3.5 * phValue + PH_OFFSET; // convert the millivolt into pH value
 
-	//Serial.print("    pH:");
-	//Serial.print(phValue,2);
-	//Serial.println("");
+	Serial.print("pH: ");
+	Serial.println(phValue, 2);
 
 	return phValue;
 }
