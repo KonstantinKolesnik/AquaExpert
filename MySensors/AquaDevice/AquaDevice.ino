@@ -200,6 +200,7 @@ void onTimeReceived(unsigned long time) //Incoming argument is seconds since 197
 	Serial.print("Time: ");
 	Serial.println(time);
 }
+
 void printTime() {
 	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());
 	//myGLCD.print(timeBuf, 60, 7);

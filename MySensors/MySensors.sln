@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Controllers", "My
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.AutomationServices", "MySensors.AutomationServices\MySensors.AutomationServices.csproj", "{CFA44D11-4ED8-4CCF-ABAE-11209260CC08}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PowerSwitchDevice", "PowerSwitchDevice\PowerSwitchDevice.vcxproj", "{A2932D04-85AF-4A93-8456-0DBFF8341F63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +253,24 @@ Global
 		{CFA44D11-4ED8-4CCF-ABAE-11209260CC08}.Release|Win32.ActiveCfg = Release|Any CPU
 		{CFA44D11-4ED8-4CCF-ABAE-11209260CC08}.Release|x64.ActiveCfg = Release|Any CPU
 		{CFA44D11-4ED8-4CCF-ABAE-11209260CC08}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|ARM.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|Win32.Build.0 = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|x64.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|x86.ActiveCfg = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Debug|x86.Build.0 = Debug|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|ARM.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|Win32.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|Win32.Build.0 = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|x64.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|x86.ActiveCfg = Release|Win32
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -271,5 +291,6 @@ Global
 		{C4460590-79DB-4E46-AC47-2A3C1912CF18} = {4CCD8064-A57C-476A-96A8-C001576F9DB0}
 		{A86171C5-EDF7-4342-8F4D-76D6A02B9CBB} = {97905330-C911-457A-81CB-84F6B1480FEA}
 		{CFA44D11-4ED8-4CCF-ABAE-11209260CC08} = {97905330-C911-457A-81CB-84F6B1480FEA}
+		{A2932D04-85AF-4A93-8456-0DBFF8341F63} = {4CCD8064-A57C-476A-96A8-C001576F9DB0}
 	EndGlobalSection
 EndGlobal
