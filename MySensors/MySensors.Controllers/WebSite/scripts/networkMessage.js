@@ -1,74 +1,34 @@
 
-function NetworkMessage(ID) {
+function NetworkMessage(ID, params) {
     var me = this;
     var id = ID;
-    var parameters = [];
+    var parameters = params || [];
 
     this.GetID = function () {
         return id;
     }
-    this.SetParameter = function (name, value) {
-        for (var i = 0; i < parameters.length; i++) {
-            var pair = parameters[i];
-            if (pair[0] == name) {
-                pair[1] = value;
-                return;
-            }
-        }
-
-        parameters.push([name, value]);
-    }
-    this.GetParameter = function (name) {
-        for (var i = 0; i < parameters.length; i++) {
-            var pair = parameters[i];
-            if (pair[0] == name)
-                return pair[1];
-        }
-        return null;
+    this.GetParameter = function (idx) {
+        return parameters[idx];
     }
 
     this.ToText = function () {
         var res = "";
 
-        res += "<BOM>";
-        
-        res += "ID=" + id + ";";
-        for (var i = 0; i < parameters.length; i++) {
-            var pair = parameters[i];
-            res += pair[0] + "=" + pair[1] + ";";
-        }
-
-        res += "<EOM>";
-
-        return res;
+        res += id;
+        for (var i = 0; i < parameters.length; i++)
+            res += ";" + parameters[i];
+        return res + "\n";
     }
     this.FromText = function (txt) {
-        txt = txt.substr(5, txt.length - 10); // remove delimiters
+        txt = txt.substr(0, txt.length - 1); // remove "\n"
+        var parts = txt.split(";");
 
-        parameters = [];
+        if (parts && parts.length) {
+            id = parts[0];
 
-        var pairs = txt.split(";");
-        if (pairs && pairs.length) {
-            for (var i = 0; i < pairs.length; i++) {
-                var entry = pairs[i];
-                if (entry && entry.length) {
-                    // 1) 'cause base64 containes "=":
-                    var idx = entry.indexOf("=");
-                    var pair = [];
-                    pair.push(entry.substr(0, idx));
-                    pair.push(entry.substr(idx + 1));
-
-                    // 2) use this if not using base64:
-                    //var pair = entry.split("=");
-
-                    if (pair && pair.length) {
-                        if (pair[0] == "ID")
-                            id = pair[1];
-                        else
-                            this.SetParameter(pair[0], pair[1]);
-                    } 
-                }
-            }
+            parameters = [];
+            for (var i = 1; i < parts.length; i++)
+                parameters.push(parts[i]);
         }
     }
 }

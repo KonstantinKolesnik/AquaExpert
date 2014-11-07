@@ -7,7 +7,7 @@ function MessageManager() {
     // Events:
     this.onSend = null;
     this.ProcessMessage = function (txt) {
-        console.log(txt);
+        //console.log(txt);
         var msg = new NetworkMessage(NetworkMessageID.Undefined);
         msg.FromText(txt);
 
@@ -20,10 +20,7 @@ function MessageManager() {
         send(new NetworkMessage(NetworkMessageID.Settings));
     }
     this.SetSettings = function (webTheme, unitSystem) {
-        var msg = new NetworkMessage(NetworkMessageID.Settings);
-        msg.SetParameter("WebTheme", webTheme);
-        msg.SetParameter("UnitSystem", unitSystem);
-        send(msg);
+        send(new NetworkMessage(NetworkMessageID.Settings, [webTheme, unitSystem]));
     }
     this.GetVersion = function () {
         send(new NetworkMessage(NetworkMessageID.Version));
@@ -44,23 +41,17 @@ function MessageManager() {
         obj.Script = btoa(obj.Script);
         obj.View = btoa(obj.View);
 
-        var msg = new NetworkMessage(NetworkMessageID.SetModule);
-        msg.SetParameter("Module", JSON.stringify(obj));
-        send(msg);
+        send(new NetworkMessage(NetworkMessageID.SetModule, [JSON.stringify(obj)]));
     }
     this.DeleteModule = function (id) {
-        var msg = new NetworkMessage(NetworkMessageID.DeleteModule);
-        msg.SetParameter("ModuleID", id);
-        send(msg);
+        send(new NetworkMessage(NetworkMessageID.DeleteModule, [id]));
     }
 
     this.SendNodeMessage = function (nodeID, messageType, valueType, value) {
         me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
     }
     this.SendSensorMessage = function (nodeID, sensorID, messageType, valueType, value) {
-        var msg = new NetworkMessage(NetworkMessageID.SensorMessage);
-        msg.SetParameter("Msg", nodeID + "-" + sensorID + "-" + messageType + "-" + "0" + "-" + valueType + "-" + value);
-        send(msg);
+        send(new NetworkMessage(NetworkMessageID.SensorMessage, [nodeID + "-" + sensorID + "-" + messageType + "-" + "0" + "-" + valueType + "-" + value]));
     }
     //----------------------------------------------------------------------------------------------------------------------
     function send(msg) {
@@ -73,14 +64,14 @@ function MessageManager() {
         var response = null;
 
         switch (msg.GetID()) {
-            case NetworkMessageID.Message: mainView.showDialog(msg.GetParameter("Msg"), msg.GetParameter("Type")); break;
+            case NetworkMessageID.Message: mainView.showDialog(msg.GetParameter(0), msg.GetParameter(1)); break;
             case NetworkMessageID.Settings:
-                viewModel.set("Settings.WebTheme", msg.GetParameter("WebTheme"));
-                viewModel.set("Settings.UnitSystem", msg.GetParameter("UnitSystem"));
+                viewModel.set("Settings.WebTheme", msg.GetParameter(0));
+                viewModel.set("Settings.UnitSystem", msg.GetParameter(1));
                 break;
-            case NetworkMessageID.Version: viewModel.set("Version", msg.GetParameter("Version")); break;
+            case NetworkMessageID.Version: viewModel.set("Version", msg.GetParameter(0)); break;
             case NetworkMessageID.GetNodes:
-                var newItems = JSON.parse(msg.GetParameter("Nodes"));
+                var newItems = JSON.parse(msg.GetParameter(0));
 
                 // approach #1:
                 for (var i = 0; i < newItems.length; i++)
@@ -100,7 +91,7 @@ function MessageManager() {
 
                 break;
             case NetworkMessageID.GetModules:
-                var newItems = JSON.parse(msg.GetParameter("Modules"));
+                var newItems = JSON.parse(msg.GetParameter(0));
 
                 for (var i = 0; i < newItems.length; i++) {
                     newItems[i].Script = atob(newItems[i].Script);
@@ -109,10 +100,10 @@ function MessageManager() {
 
                 viewModel.set("Modules", newItems);
                 break;
-            case NetworkMessageID.NodePresentation: presentNode(JSON.parse(msg.GetParameter("Node"))); break;
-            case NetworkMessageID.SensorPresentation: presentSensor(JSON.parse(msg.GetParameter("Sensor"))); break;
-            case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter("Level"))); break;
-            case NetworkMessageID.SensorValue: addSensorValue(JSON.parse(msg.GetParameter("Value"))); break;
+            case NetworkMessageID.NodePresentation: presentNode(JSON.parse(msg.GetParameter(0))); break;
+            case NetworkMessageID.SensorPresentation: presentSensor(JSON.parse(msg.GetParameter(0))); break;
+            case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter(0))); break;
+            case NetworkMessageID.SensorValue: addSensorValue(JSON.parse(msg.GetParameter(0))); break;
             default: break;
         }
 

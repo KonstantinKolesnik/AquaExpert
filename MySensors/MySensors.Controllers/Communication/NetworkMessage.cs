@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MySensors.Controllers.Communication
 {
@@ -8,7 +7,7 @@ namespace MySensors.Controllers.Communication
     {
         #region Fields
         private string id;
-        private Dictionary<string, string> parameters = new Dictionary<string, string>();
+        private List<string> parameters = new List<string>();
         #endregion
 
         #region Properties
@@ -16,94 +15,46 @@ namespace MySensors.Controllers.Communication
         {
             get { return id; }
         }
-        public string this[string parameterName]
+        public List<string> Parameters
+        {
+            get { return parameters; }
+        }
+        public string this[int idx]
         {
             get
             {
-                return parameters.ContainsKey(parameterName) ? parameters[parameterName] : null;
+                return idx < parameters.Count ? parameters[idx] : null;
             }
-            set
-            {
-                if (parameters.ContainsKey(parameterName))
-                    parameters[parameterName] = value;
-                else
-                    parameters.Add(parameterName, value);
-            }
-        }
-        public int ParametersCount
-        {
-            get { return parameters.Count; }
         }
         #endregion
 
         #region Constructor
-        public NetworkMessage(string id)
+        public NetworkMessage(string id, params string[] parameters)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentNullException("NetworkMessage ID not specified");
 
             this.id = id;
+            this.parameters.AddRange(parameters);
         }
         #endregion
 
         #region Public Methods
         public static NetworkMessage FromString(string str)
         {
-            return FromText(str);
-        }
-        public byte[] Pack()
-        {
-            return Encoding.UTF8.GetBytes(PackToString());
+            string[] parts = str.Split(new Char[] { ';' });
+            if (parts.Length < 1)
+                return null;
+
+            List<string> pp = new List<string>(parts);
+            pp.RemoveAt(0);
+
+            return new NetworkMessage(parts[0], pp.ToArray());
         }
         public string PackToString()
         {
-            return NetworkMessageDelimiters.BOM + ToText() + NetworkMessageDelimiters.EOM;
-        }
-        #endregion
-
-        #region Private methods
-        private string ToText()
-        {
-            string res = "ID=" + id + ";";
-            foreach (string key in parameters.Keys)
-                res += key + "=" + (string)parameters[key] + ";";
-
-            return res;
-        }
-        private static NetworkMessage FromText(string txt)
-        {
-            NetworkMessage msg = null;
-
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-
-            try
-            {
-                string[] pairs = txt.Split(new Char[] { ';' });
-                foreach (string pair in pairs)
-                {
-                    if (!string.IsNullOrEmpty(pair))
-                    {
-                        // 1) 'cause base64 string contains "=" chars:
-                        int idx = pair.IndexOf("=");
-                        parameters.Add(pair.Substring(0, idx), pair.Substring(idx + 1));
-
-                        // 2) use this if not using base64:
-                        //string[] s = pair.Split(new Char[] { '=' });
-                        //parameters.Add(s[0], s[1]);
-                    }
-                }
-
-                if (parameters.ContainsKey("ID"))
-                {
-                    msg = new NetworkMessage((string)parameters["ID"]);
-                    foreach (string key in parameters.Keys)
-                        if (key != "ID")
-                            msg[key] = (string)parameters[key];
-                }
-            }
-            catch { }
-
-            return msg;
+            string pp = string.Join(";", parameters.ToArray());
+            return string.Join(";", id, pp) + "\n";
         }
         #endregion
     }

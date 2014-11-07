@@ -48,18 +48,32 @@ namespace MySensors.Controllers.Communication
         #endregion
 
         #region Private methods
+        //private string FindPayload()
+        //{
+        //    int a = buffer.IndexOf(NetworkMessageDelimiters.BOM);
+        //    int b = buffer.IndexOf(NetworkMessageDelimiters.EOM);
+
+        //    if (a != -1 && b != -1) // there's a msg inside of s
+        //    {
+        //        // ccccc<BOM>ccccccccc<EOM>ccccc
+        //        //      a             b
+
+        //        string data = buffer.Substring(a + NetworkMessageDelimiters.BOM.Length, b - a - NetworkMessageDelimiters.BOM.Length);
+        //        buffer = buffer.Substring(b + NetworkMessageDelimiters.EOM.Length);
+
+        //        return data;
+        //    }
+
+        //    return null;
+        //}
         private string FindPayload()
         {
-            int a = buffer.IndexOf(NetworkMessageDelimiters.BOM);
-            int b = buffer.IndexOf(NetworkMessageDelimiters.EOM);
+            int a = buffer.IndexOf("\n");
 
-            if (a != -1 && b != -1) // there's a msg inside of s
+            if (a != -1) // there's a msg inside of s
             {
-                // ccccc<BOM>ccccccccc<EOM>ccccc
-                //      a             b
-
-                string data = buffer.Substring(a + NetworkMessageDelimiters.BOM.Length, b - a - NetworkMessageDelimiters.BOM.Length);
-                buffer = buffer.Substring(b + NetworkMessageDelimiters.EOM.Length);
+                string data = buffer.Substring(0, a);
+                buffer = buffer.Substring(a + 1);
 
                 return data;
             }

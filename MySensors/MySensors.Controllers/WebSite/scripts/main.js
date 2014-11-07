@@ -386,6 +386,7 @@ function MainView() {
                         {
                             template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>',
                             click: function (e) {
+                                debugger;
                                 var item = $("#gridModules").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                 msgManager.DeleteModule(item.ID);
                             }

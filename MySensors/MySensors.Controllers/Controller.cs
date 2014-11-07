@@ -5,7 +5,6 @@ using MySensors.Controllers.Data;
 using MySensors.Controllers.GatewayProxies;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -191,8 +190,7 @@ namespace MySensors.Controllers
                             node.ProtocolVersion = message.Payload;
                             dbService.Update(node);
                         }
-
-                        communicator.Broadcast(BuildMessage(NetworkMessageID.NodePresentation, new string[][] { new string[] { "Node", JsonConvert.SerializeObject(node) }}));
+                        communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                     }
                     else
                     {
@@ -208,7 +206,7 @@ namespace MySensors.Controllers
                             sensor.ProtocolVersion = message.Payload;
                             dbService.Update(sensor);
                         }
-                        communicator.Broadcast(BuildMessage(NetworkMessageID.SensorPresentation, new string[][] { new string[] { "Sensor", JsonConvert.SerializeObject(sensor) } }));
+                        communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                     }
                     break;
                 #endregion
@@ -220,7 +218,7 @@ namespace MySensors.Controllers
                         SensorValue sv = new SensorValue(message.NodeID, message.SensorID, DateTime.Now, (SensorValueType)message.SubType, float.Parse(message.Payload.Replace('.', ',')));
                         dbService.Insert(sv);
                         sensor.Values.Add(sv);
-                        communicator.Broadcast(BuildMessage(NetworkMessageID.SensorValue, new string[][] { new string[] { "Value", JsonConvert.SerializeObject(sv) } }));
+                        communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorValue, JsonConvert.SerializeObject(sv)));
                     }
                     break;
                 #endregion
@@ -240,7 +238,7 @@ namespace MySensors.Controllers
                                 BatteryLevel bl = new BatteryLevel(node.ID, DateTime.Now, byte.Parse(message.Payload));
                                 dbService.Insert(bl);
                                 node.BatteryLevels.Add(bl);
-                                communicator.Broadcast(BuildMessage(NetworkMessageID.BatteryLevel, new string[][] { new string[] { "Level", JsonConvert.SerializeObject(bl) } }));
+                                communicator.Broadcast(new NetworkMessage(NetworkMessageID.BatteryLevel, JsonConvert.SerializeObject(bl)));
                             }
                             break;
                         case InternalValueType.Time:
@@ -271,7 +269,7 @@ namespace MySensors.Controllers
                             {
                                 node.SketchName = message.Payload;
                                 dbService.Update(node);
-                                communicator.Broadcast(BuildMessage(NetworkMessageID.NodePresentation, new string[][] { new string[] { "Node", JsonConvert.SerializeObject(node) } }));
+                                communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                             }
                             break;
                         case InternalValueType.SketchVersion:
@@ -279,7 +277,7 @@ namespace MySensors.Controllers
                             {
                                 node.SketchVersion = message.Payload;
                                 dbService.Update(node);
-                                communicator.Broadcast(BuildMessage(NetworkMessageID.NodePresentation, new string[][] { new string[] { "Node", JsonConvert.SerializeObject(node) } }));
+                                communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -330,38 +328,64 @@ namespace MySensors.Controllers
                 {
                     #region Settings
                     case NetworkMessageID.Settings:
-                        if (request.ParametersCount == 0) // client gets settings
-                            response = BuildMessage(NetworkMessageID.Settings, new string[][] {
-                                new string[] { "WebTheme", WebTheme },
-                                new string[] { "UnitSystem", UnitSystem }
-                            });
-                        else // client sets options
+                        if (request.Parameters.Count == 0)
+                            response = new NetworkMessage(NetworkMessageID.Settings, WebTheme, UnitSystem);
+                        else
                         {
-                            WebTheme = request["WebTheme"];
-                            UnitSystem = request["UnitSystem"];
+                            WebTheme = request[0];
+                            UnitSystem = request[1];
 
-                            communicator.Broadcast(
-                                BuildMessage(NetworkMessageID.Settings, new string[][] {
-                                    new string[] { "WebTheme", WebTheme },
-                                    new string[] { "UnitSystem", UnitSystem }
-                                    }));
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.Settings, WebTheme, UnitSystem));
                         }
                         break;
                     #endregion
 
                     #region Version
-                    case NetworkMessageID.Version:
-                        response = new NetworkMessage(NetworkMessageID.Version);
-                        response["Version"] = Version;
-                        break;
+                    case NetworkMessageID.Version: response = new NetworkMessage(NetworkMessageID.Version, Version); break;
                     #endregion
 
                     #region GetNodes
-                    case NetworkMessageID.GetNodes: response = BuildGetNodesMessage(); break;
+                    case NetworkMessageID.GetNodes:
+                        // for test!!!
+                        //List<Node> collection = new List<Node>();
+                        //for (byte i = 20; i < 30; i++)
+                        //{
+                        //    Node node = new Node(i)
+                        //    {
+                        //        Type = SensorType.ArduinoNode,
+                        //        ProtocolVersion = "1.4.1",
+                        //        SketchName = "Sketch " + i,
+                        //        SketchVersion = "1.0"
+                        //    };
+
+                        //    for (byte p = 100; p >= 80; p--)
+                        //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
+                        //    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
+
+                        //    for (byte j = 0; j < 25; j++)
+                        //    {
+                        //        Sensor sensor = new Sensor(node.ID, j) {
+                        //            Type = (SensorType)j,
+                        //            ProtocolVersion = "1.4.1"
+                        //        };
+
+                        //        for (byte p = 0; p < 15; p++)
+                        //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
+
+                        //        node.Sensors.Add(sensor);
+                        //    }
+
+                        //    collection.Add(node);
+                        //}
+                        //response = new NetworkMessage(NetworkMessageID.GetNodes, JsonConvert.SerializeObject(collection, Formatting.Indented));
+
+
+                        response = new NetworkMessage(NetworkMessageID.GetNodes, JsonConvert.SerializeObject(nodes, Formatting.Indented));
+                        break;
                     #endregion
 
                     #region GetModules
-                    case NetworkMessageID.GetModules: response = BuildGetModulesMessage(); break;
+                    case NetworkMessageID.GetModules: response = new NetworkMessage(NetworkMessageID.GetModules, SerializeModules()); break;
                     #endregion
 
                     #region AddModule
@@ -369,15 +393,15 @@ namespace MySensors.Controllers
                         AutomationModule newModule = new AutomationModule("Untitled", "", "", "");
                         dbService.Insert(newModule);
                         modules.Add(newModule);
-                        communicator.Broadcast(BuildGetModulesMessage());
+                        response = new NetworkMessage(NetworkMessageID.GetModules, SerializeModules());
                         break;
                     #endregion
 
                     #region SetModule
                     case NetworkMessageID.SetModule:
-                        if (request.ParametersCount == 1)
+                        if (request.Parameters.Count == 1)
                         {
-                            dynamic obj = JsonConvert.DeserializeObject(request["Module"]);
+                            dynamic obj = JsonConvert.DeserializeObject(request[0]);
                             string s;
 
                             AutomationModule module = GetModule(Guid.Parse(obj.ID.ToString()));
@@ -389,30 +413,30 @@ namespace MySensors.Controllers
                             module.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
 
                             dbService.Update(module);
-                            communicator.Broadcast(BuildGetModulesMessage());
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.GetModules, SerializeModules()));
 
                             string errors = RunAutomationService(module);
                             if (!string.IsNullOrEmpty(errors))
-                                response = BuildMessage(NetworkMessageID.Message, new string[][] { new string[] { "Msg", errors }, new string[] { "Type", "Error" } });
+                                response = new NetworkMessage(NetworkMessageID.Message, errors, "Error");
                         }
                         break;
                     #endregion
 
                     #region DeleteModule
                     case NetworkMessageID.DeleteModule:
-                        if (request.ParametersCount == 1)
+                        if (request.Parameters.Count == 1)
                         {
-                            AutomationModule module = GetModule(Guid.Parse(request["ModuleID"]));
+                            AutomationModule module = GetModule(Guid.Parse(request[0]));
                             dbService.Delete(module);
                             modules.Remove(module);
-                            communicator.Broadcast(BuildGetModulesMessage());
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.GetModules, SerializeModules()));
                         }
                         break;
                     #endregion
 
                     #region Sensor message
                     case NetworkMessageID.SensorMessage: // client sets actuator value
-                        gatewayProxy.Send(SensorMessage.FromRawMessage(request["Msg"].Replace("-", ";")));
+                        gatewayProxy.Send(SensorMessage.FromRawMessage(request[0].Replace("-", ";")));
                         break;
                     #endregion
 
@@ -562,66 +586,18 @@ namespace MySensors.Controllers
 
             return errors;
         }
-        #endregion
 
-        #region Network message processing
-        private NetworkMessage BuildMessage(string id, params string[][] data)
+        private string SerializeModules()
         {
-            NetworkMessage msg = new NetworkMessage(id);
-            foreach (var pair in data)
-                msg[pair[0]] = pair[1];
-
-            return msg;
-        }
-
-        private NetworkMessage BuildGetNodesMessage()
-        {
-            //List<Node> collection = new List<Node>();
-            //for (byte i = 20; i < 30; i++)
-            //{
-            //    Node node = new Node(i)
-            //    {
-            //        Type = SensorType.ArduinoNode,
-            //        ProtocolVersion = "1.4.1",
-            //        SketchName = "Sketch " + i,
-            //        SketchVersion = "1.0"
-            //    };
-
-            //    for (byte p = 100; p >= 80; p--)
-            //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
-            //    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
-
-            //    for (byte j = 0; j < 25; j++)
-            //    {
-            //        Sensor sensor = new Sensor(node.ID, j) {
-            //            Type = (SensorType)j,
-            //            ProtocolVersion = "1.4"
-            //        };
-
-            //        for (byte p = 0; p < 15; p++)
-            //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
-
-            //        node.Sensors.Add(sensor);
-            //    }
-
-            //    collection.Add(node);
-            //}
-            //return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(collection, Formatting.Indented) } });
-
-
-            return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(nodes, Formatting.Indented) } });
-        }
-        private NetworkMessage BuildGetModulesMessage()
-        {
-            var obj = modules.Select(module => new {
+            var obj = modules.Select(module => new
+            {
                 ID = module.ID,
                 Name = module.Name,
                 Description = module.Description,
                 Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
                 View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
             });
-
-            return BuildMessage(NetworkMessageID.GetModules, new string[][] { new string[] { "Modules", JsonConvert.SerializeObject(obj) } });
+            return JsonConvert.SerializeObject(obj);
         }
         #endregion
     }
