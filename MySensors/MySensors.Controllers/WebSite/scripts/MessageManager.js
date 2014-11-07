@@ -7,6 +7,7 @@ function MessageManager() {
     // Events:
     this.onSend = null;
     this.ProcessMessage = function (txt) {
+        console.log(txt);
         var msg = new NetworkMessage(NetworkMessageID.Undefined);
         msg.FromText(txt);
 
@@ -183,7 +184,6 @@ function MessageManager() {
                 if (nd.ID == newSensor.NodeID) {
                     if (!nd.Sensors)
                         nd.Sensors = new kendo.observableArray();
-
 
                     for (var j = 0; j < nd.Sensors.length; j++) {
                         var snsr = nd.Sensors[j];

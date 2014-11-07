@@ -29,8 +29,8 @@
 #define INCLUSION_MODE_TIME 1	// Number of minutes inclusion mode is enabled
 #define INCLUSION_MODE_PIN	3	// Digital pin used for inclusion mode button
 
-//MyGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4);
-MyGateway gw(DEFAULT_CE_PIN, 8);
+MyGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // nano
+//MyGateway gw(DEFAULT_CE_PIN, 8); // UNO with ethernet shild
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;

@@ -296,9 +296,9 @@ function MainView() {
                         reorderable: true,
                         columns: [
                             //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                            { field: "ID", title: "ID", groupable: false, width: 100 },
-                            { field: "TypeName()", title: "Type" },
+                            { field: "ID", title: "Sensor ID", groupable: false, width: 100 },
                             { field: "ProtocolVersion", title: "Protocol Version" },
+                            { field: "TypeName()", title: "Type" },
                             { field: "LastValue.Value", title: "Value", groupable: false, template: kendo.template($("#sensorValueCellTemplate").html()) }
                         ]
                     });
@@ -319,9 +319,9 @@ function MainView() {
                 [
                   //{ title: "&nbsp;", reorderable: false, groupable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
                   { field: "NodeID", title: "Device ID", width: 100 },
-                  { field: "ID", title: "ID", groupable: false, width: 100 },
-                  { field: "TypeName()", title: "Type" },
+                  { field: "ID", title: "Sensor ID", groupable: false, width: 100 },
                   { field: "ProtocolVersion", title: "Protocol Version" },
+                  { field: "TypeName()", title: "Type" },
                   { field: "LastValue.Value", title: "Value", groupable: false, template: kendo.template($("#sensorValueCellTemplate").html()) }
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),

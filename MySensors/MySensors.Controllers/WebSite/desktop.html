@@ -51,10 +51,26 @@
                     </div>
                 </td>
                 <td></td>
-                <!--<td>
+                <td>
                     <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,0);">button 0</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,1);">button 1</button>
-                </td>-->
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,1,1,SensorValueType.Light,0);">button 1</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,2,1,SensorValueType.Light,0);">button 2</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,3,1,SensorValueType.Light,0);">button 3</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,4,1,SensorValueType.Light,0);">button 4</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,5,1,SensorValueType.Light,0);">button 5</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,6,1,SensorValueType.Light,0);">button 6</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,7,1,SensorValueType.Light,0);">button 7</button>
+                    <br/>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,0,1,SensorValueType.Light,1);">button 0</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,1,1,SensorValueType.Light,1);">button 1</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,2,1,SensorValueType.Light,1);">button 2</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,3,1,SensorValueType.Light,1);">button 3</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,4,1,SensorValueType.Light,1);">button 4</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,5,1,SensorValueType.Light,1);">button 5</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,6,1,SensorValueType.Light,1);">button 6</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(20,7,1,SensorValueType.Light,1);">button 7</button>
+
+                </td>
                 <td width="10%" style="text-align:left;">
                     <div>
                         <span>Connection:</span>
@@ -817,13 +833,13 @@
 
 
     <script type="text/javascript">
-        window.debugOutput = function (obj) {
-            if (!$('#debugOutput').size()) {
-                $('<div id="debugOutput" style="position:fixed;top:0;right:330px;width:300px;height:200px;white-space:nowrap;overflow:auto;border:1px solid black;background:white;color:black;font-size:11px;z-index:10000"/>')
-                    .appendTo(document.body).dblclick(function () { $('#debugOutput').empty() });
-            }
-            $('#debugOutput').append('<div>' + (obj ? obj.toString() : "") + '</div>').scrollTop(1000000);
-        };
+        //window.debugOutput = function (obj) {
+        //    if (!$('#debugOutput').size()) {
+        //        $('<div id="debugOutput" style="position:fixed;top:0;right:330px;width:300px;height:200px;white-space:nowrap;overflow:auto;border:1px solid black;background:white;color:black;font-size:11px;z-index:10000"/>')
+        //            .appendTo(document.body).dblclick(function () { $('#debugOutput').empty() });
+        //    }
+        //    $('#debugOutput').append('<div>' + (obj ? obj.toString() : "") + '</div>').scrollTop(1000000);
+        //};
 
         $(document).ready(function () {
             setInterval(showLocalDateTime, 500);

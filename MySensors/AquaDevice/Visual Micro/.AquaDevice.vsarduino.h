@@ -45,8 +45,9 @@ void onMessageReceived(const MyMessage &message);
 void onTimeReceived(unsigned long time);
 void printTime();
 float readTemperature();
-int readDistance();
 float readPh();
+int readDistance();
+bool readWater();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h" 

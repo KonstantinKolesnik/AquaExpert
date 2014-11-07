@@ -576,40 +576,40 @@ namespace MySensors.Controllers
 
         private NetworkMessage BuildGetNodesMessage()
         {
-            List<Node> collection = new List<Node>();
-            for (byte i = 20; i < 30; i++)
-            {
-                Node node = new Node(i)
-                {
-                    Type = SensorType.ArduinoNode,
-                    ProtocolVersion = "1.4.1",
-                    SketchName = "Sketch " + i,
-                    SketchVersion = "1.0"
-                };
+            //List<Node> collection = new List<Node>();
+            //for (byte i = 20; i < 30; i++)
+            //{
+            //    Node node = new Node(i)
+            //    {
+            //        Type = SensorType.ArduinoNode,
+            //        ProtocolVersion = "1.4.1",
+            //        SketchName = "Sketch " + i,
+            //        SketchVersion = "1.0"
+            //    };
 
-                for (byte p = 100; p >= 80; p--)
-                    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
-                node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
+            //    for (byte p = 100; p >= 80; p--)
+            //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
+            //    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
 
-                for (byte j = 0; j < 25; j++)
-                {
-                    Sensor sensor = new Sensor(node.ID, j) {
-                        Type = (SensorType)j,
-                        ProtocolVersion = "1.4"
-                    };
+            //    for (byte j = 0; j < 25; j++)
+            //    {
+            //        Sensor sensor = new Sensor(node.ID, j) {
+            //            Type = (SensorType)j,
+            //            ProtocolVersion = "1.4"
+            //        };
 
-                    for (byte p = 0; p < 15; p++)
-                        sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
+            //        for (byte p = 0; p < 15; p++)
+            //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
 
-                    node.Sensors.Add(sensor);
-                }
+            //        node.Sensors.Add(sensor);
+            //    }
 
-                collection.Add(node);
-            }
-            return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(collection, Formatting.Indented) } });
+            //    collection.Add(node);
+            //}
+            //return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(collection, Formatting.Indented) } });
 
 
-            //return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(nodes, Formatting.Indented) } });
+            return BuildMessage(NetworkMessageID.GetNodes, new string[][] { new string[] { "Nodes", JsonConvert.SerializeObject(nodes, Formatting.Indented) } });
         }
         private NetworkMessage BuildGetModulesMessage()
         {
