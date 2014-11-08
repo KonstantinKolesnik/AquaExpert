@@ -58,7 +58,7 @@ function MainView() {
     var saveScroll = true;
 
     createMenu();
-    createDevicesGrid();
+    createNodesGrid();
     createSensorsGrid();
     createModulesGrid();
     createThemeSelector();
@@ -251,7 +251,7 @@ function MainView() {
             }
         });
     }
-    function createDevicesGrid() {
+    function createNodesGrid() {
         $("#gridDevices").kendoGrid({
             groupable: true,
             sortable: true,
@@ -263,13 +263,13 @@ function MainView() {
             columns:
                 [
                   //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "ID", title: "ID", groupable: false, width: 100 },
-                  { field: "TypeName()", title: "Type" },
-                  { field: "ProtocolVersion", title: "Protocol Version" },
-                  { field: "SketchName", title: "Firmware Name" },
-                  { field: "SketchVersion", title: "Firmware Version" },
-                  { field: "Sensors.length", title: "Sensors Count"},//, attributes: { "class": cellCssClass() }, },
-                  { field: "LastBatteryLevel.Value", title: "Battery, %", template: kendo.template($("#batteryLevelCellTemplate").html()) }
+                  { field: "ID", title: "ID", width: 40, groupable: false, attributes: { "class": "cellRight" } },
+                  { field: "TypeName()", title: "Type", width: 80 },
+                  { field: "SketchName", title: "Firmware Name", width: 250 },
+                  { field: "SketchVersion", title: "Firmware Version", width: 120, attributes: { "class": "cellCenter" } },
+                  { field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "cellCenter" } },
+                  { field: "LastBatteryLevel.Value", title: "Battery, %", width: 90, attributes: { "class": "cellCenter" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                  { field: "ProtocolVersion", title: "Protocol Version", width: 100, attributes: { "class": "cellCenter" } }
                 ],
             detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
@@ -296,10 +296,10 @@ function MainView() {
                         reorderable: true,
                         columns: [
                             //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                            { field: "ID", title: "Sensor ID", groupable: false, width: 100 },
-                            { field: "ProtocolVersion", title: "Protocol Version" },
+                            { field: "ID", title: "ID", groupable: false, width: 40, attributes: { "class": "cellRight" } },
                             { field: "TypeName()", title: "Type" },
-                            { field: "LastValue.Value", title: "Value", groupable: false, template: kendo.template($("#sensorValueCellTemplate").html()) }
+                            { field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "cellRight" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                            { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "cellCenter" } }
                         ]
                     });
                 }
@@ -318,11 +318,11 @@ function MainView() {
             columns:
                 [
                   //{ title: "&nbsp;", reorderable: false, groupable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "NodeID", title: "Device ID", width: 100 },
-                  { field: "ID", title: "Sensor ID", groupable: false, width: 100 },
-                  { field: "ProtocolVersion", title: "Protocol Version" },
+                  { field: "NodeID", title: "Node ID", width: 70, attributes: { "class": "cellRight" } },
+                  { field: "ID", title: "ID", groupable: false, width: 40, attributes: { "class": "cellRight" } },
                   { field: "TypeName()", title: "Type" },
-                  { field: "LastValue.Value", title: "Value", groupable: false, template: kendo.template($("#sensorValueCellTemplate").html()) }
+                  { field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "cellRight" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                  { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "cellCenter" } }
                 ],
             detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
             detailInit: function (e) {
@@ -370,7 +370,7 @@ function MainView() {
                 //{ name: "save" },
                 //{ name: "cancel" }
                 //{ template: kendo.template($("#template").html()) }
-                { name: "aaa", template: '<a class="k-button" href="\\#" onclick="msgManager.AddModule();"><span class="k-icon k-i-plus"></span>Add new module</a>' }
+                { template: '<a class="k-button" href="\\#" onclick="msgManager.AddModule();"><span class="k-icon k-i-plus"></span>Add new module</a>' }
             ],
             pageable: {
                 pageSizes: [10, 20, 50, 100, 500],
@@ -384,9 +384,9 @@ function MainView() {
                   { title: "&nbsp;", width: 150, reorderable: false, filterable: false, sortable: false,
                       command: [
                         {
-                            template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>',
+                            text: "Delete",
+                            //template: '<a class="k-button"><span class="k-icon k-i-close"></span>Delete</a>',
                             click: function (e) {
-                                debugger;
                                 var item = $("#gridModules").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                 msgManager.DeleteModule(item.ID);
                             }
@@ -674,6 +674,7 @@ function MainView() {
                 }
             }
         });
+
         expandedModules.restoring = false;
 
         // restore vertical scroll position;

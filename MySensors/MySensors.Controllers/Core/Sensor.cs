@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
@@ -70,7 +71,14 @@ namespace MySensors.Controllers.Core
 
         public SensorValue LastValue
         {
-            get { return values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault(); }
+            get
+            {
+                try
+                {
+                    return values.Where(v => v.Time == values.Select(vv => vv.Time).Max()).FirstOrDefault();
+                }
+                catch (Exception) { return null; }
+            }
         }
         #endregion
 

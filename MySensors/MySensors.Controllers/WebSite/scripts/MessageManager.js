@@ -100,6 +100,8 @@ function MessageManager() {
 
                 viewModel.set("Modules", newItems);
                 break;
+
+
             case NetworkMessageID.NodePresentation: presentNode(JSON.parse(msg.GetParameter(0))); break;
             case NetworkMessageID.SensorPresentation: presentSensor(JSON.parse(msg.GetParameter(0))); break;
             case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter(0))); break;
