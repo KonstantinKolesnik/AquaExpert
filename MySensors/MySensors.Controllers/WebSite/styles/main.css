@@ -40,11 +40,11 @@ td.propName
     padding: 0px 10px !important;
 }
 
-.cellRight
-{
-    text-align:right;
-}
 .cellCenter
 {
     text-align:center;
+}
+.cellRight
+{
+    text-align:right;
 }

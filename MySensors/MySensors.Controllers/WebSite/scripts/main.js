@@ -790,7 +790,6 @@ function onDocumentReady() {
 //    });
 }
 //----------------------------------------------------------------------------------------------------------------------
-
 /*
 Следующие методы позволяют устанавливать компоненты даты и времени:
 
@@ -807,6 +806,9 @@ setTime(milliseconds) (устанавливает всю дату по милл�
 Как видно, некоторые методы могут устанавливать несколько компонентов даты одновременно, в частности, setHours. При этом если какая-то компонента не указана, она не меняется.
 */
 
+
+
+//----------------------------------------------------------------------------------------------------------------------
 function createMainMenu() {
     var mainMenuItems =
         [
@@ -1152,92 +1154,44 @@ function createOptions() {
     $("#pti").kendoNumericTextBox({ min: 500, max: 1000, step: 100, format: "d4" });
 }
 
-var speedGauge;
-var speedSlider;
-function createSpeedGauge() {
-    var gaugeConfig = {
-        theme: "black",
-        pointer: {
-            value: 0
-        },
-        scale: {
-            startAngle: 0,
-            endAngle: 180,
-            labels: {
-                //font: "10px Georgia, Helvetical, sans-serif",
-                //template: "#=value# km/h"
-                position: "outside"
-            },
-            ranges: [
-                { from: 0, to: 9, color: "#00ab00" }, //green
-                { from: 9, to: 18, color: "#d3ce37" }, //yellow
-                { from: 18, to: 28, color: "#ae130f" }, //red
+//var speedGauge;
+//var speedSlider;
+//function createSpeedGauge() {
+//    var gaugeConfig = {
+//        theme: "black",
+//        pointer: {
+//            value: 0
+//        },
+//        scale: {
+//            startAngle: 0,
+//            endAngle: 180,
+//            labels: {
+//                //font: "10px Georgia, Helvetical, sans-serif",
+//                //template: "#=value# km/h"
+//                position: "outside"
+//            },
+//            ranges: [
+//                { from: 0, to: 9, color: "#00ab00" }, //green
+//                { from: 9, to: 18, color: "#d3ce37" }, //yellow
+//                { from: 18, to: 28, color: "#ae130f" }, //red
 
-                {from: 0, to: -9, color: "#00ab00" }, //green
-                {from: -9, to: -18, color: "#d3ce37" }, //yellow
-                {from: -18, to: -28, color: "#ae130f" } //red
+//                {from: 0, to: -9, color: "#00ab00" }, //green
+//                {from: -9, to: -18, color: "#d3ce37" }, //yellow
+//                {from: -18, to: -28, color: "#ae130f" } //red
                 
-          ],
-          min: -28,
-          max: 28,
-          majorUnit: 2,
-          minorUnit: 1
-        }
-    };
+//          ],
+//          min: -28,
+//          max: 28,
+//          majorUnit: 2,
+//          minorUnit: 1
+//        }
+//    };
 
-    speedGauge = $('#speedGaugeF').kendoRadialGauge(gaugeConfig).data('kendoRadialGauge');
-    speedSlider = $('#speedSlider').kendoSlider().data('kendoSlider');
-    speedSlider.bind('change', function (e) {
-        speedGauge.value(e.value);
-    });
-    //speedGauge.value(speedSlider.value());
-}
-
-
-//var speed = 0;
-//var forward = true;
-//var address = new LocomotiveAddress(7, false);
-
-//function ff() {
-//    speed++;
-//    speed = Math.min(speed, 28);
-//    forward = speed > 0;
-//    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
-
-//    //speedGauge.value(Math.abs(speed));
-//    //speedGauge.value(speed);
+//    speedGauge = $('#speedGaugeF').kendoRadialGauge(gaugeConfig).data('kendoRadialGauge');
+//    speedSlider = $('#speedSlider').kendoSlider().data('kendoSlider');
+//    speedSlider.bind('change', function (e) {
+//        speedGauge.value(e.value);
+//    });
+//    //speedGauge.value(speedSlider.value());
 //}
-//function ss() {
-//    speed = 0;
-//    model.MessageManager.SetLocoSpeed28(address, speed, forward);
 
-//    //speedGauge.value(Math.abs(speed));
-//    //speedGauge.value(speed);
-//}
-//function rr() {
-//    speed--;
-//    speed = Math.max(speed, -28);
-//    forward = speed > 0;
-//    model.MessageManager.SetLocoSpeed28(address, Math.abs(speed), forward);
-
-//    //speedGauge.value(Math.abs(speed));
-//    //speedGauge.value(speed);
-//}
-//function lightOn() { model.MessageManager.SetLocoFunctionGroup1(address, true, false, false, false, false); }
-//function lightOff() { model.MessageManager.SetLocoFunctionGroup1(address, false, false, false, false, false); }
-
-
-
-//function aaa(item) {
-//    var a = 0;
-//    var b = a;
-
-//    //var a = $(item).kendoSlider().data('kendoSlider');
-//    kendo.init($(item));
-
-//    //var b = $(item).parents('.OperationItem:first').find('.SpeedSlider')[1];//.kendoSlider().data('kendoListView');
-//    //kendo.init($(b));
-    
-//    //($(b)).kendoSlider().data("kendoSlider").value(20);
-
-//}

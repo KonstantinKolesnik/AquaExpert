@@ -393,7 +393,7 @@ namespace MySensors.Controllers
                         AutomationModule newModule = new AutomationModule("Untitled", "", "", "");
                         dbService.Insert(newModule);
                         modules.Add(newModule);
-                        response = new NetworkMessage(NetworkMessageID.GetModules, SerializeModules());
+                        response = new NetworkMessage(NetworkMessageID.AddModule, SerializeModules(newModule.ID));
                         break;
                     #endregion
 
@@ -413,7 +413,7 @@ namespace MySensors.Controllers
                             module.View = new string(Encoding.ASCII.GetChars(Convert.FromBase64String(s)));
 
                             dbService.Update(module);
-                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.GetModules, SerializeModules()));
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.SetModule, SerializeModules(module.ID)));
 
                             string errors = RunAutomationService(module);
                             if (!string.IsNullOrEmpty(errors))
@@ -429,15 +429,13 @@ namespace MySensors.Controllers
                             AutomationModule module = GetModule(Guid.Parse(request[0]));
                             dbService.Delete(module);
                             modules.Remove(module);
-                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.GetModules, SerializeModules()));
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteModule, module.ID.ToString()));
                         }
                         break;
                     #endregion
 
-                    #region Sensor message
-                    case NetworkMessageID.SensorMessage: // client sets actuator value
-                        gatewayProxy.Send(SensorMessage.FromRawMessage(request[0].Replace("-", ";")));
-                        break;
+                    #region Sensor message (client sets actuator value)
+                    case NetworkMessageID.SensorMessage: gatewayProxy.Send(SensorMessage.FromRawMessage(request[0].Replace("-", ";"))); break;
                     #endregion
 
                     default: break;
@@ -587,16 +585,33 @@ namespace MySensors.Controllers
             return errors;
         }
 
-        private string SerializeModules()
+        private string SerializeModules(Guid? moduleID = null)
         {
-            var obj = modules.Select(module => new
+            object obj;
+
+            if (moduleID.HasValue)
             {
-                ID = module.ID,
-                Name = module.Name,
-                Description = module.Description,
-                Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
-                View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
-            });
+                obj = modules.Where(module => module.ID == moduleID.Value).Select(module => new
+                {
+                    ID = module.ID,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
+                    View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
+                });
+            }
+            else
+            {
+                obj = modules.Select(module => new
+                {
+                    ID = module.ID,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Script = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.Script)),
+                    View = Convert.ToBase64String(Encoding.ASCII.GetBytes(module.View))
+                });
+            }
+
             return JsonConvert.SerializeObject(obj);
         }
         #endregion

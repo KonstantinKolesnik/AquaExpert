@@ -81,7 +81,7 @@ function MessageManager() {
 
                 // approach #2:
                 //var oldItems = viewModel.get("Devices");
-                //oldItems.splice(0, oldItems.length); // remove all old nodes
+                //oldItems.length = 0; // remove all old nodes
                 //for (var i = 0; i < newItems.length; i++) {
                 //    var item = newItems[i];
                 //    enrichItem(item);
@@ -91,17 +91,57 @@ function MessageManager() {
 
                 break;
             case NetworkMessageID.GetModules:
-                var newItems = JSON.parse(msg.GetParameter(0));
+                var items = JSON.parse(msg.GetParameter(0));
 
-                for (var i = 0; i < newItems.length; i++) {
-                    newItems[i].Script = atob(newItems[i].Script);
-                    newItems[i].View = atob(newItems[i].View);
+                for (var i = 0; i < items.length; i++) {
+                    items[i].Script = atob(items[i].Script);
+                    items[i].View = atob(items[i].View);
                 }
 
-                viewModel.set("Modules", newItems);
+                viewModel.set("Modules", items);
                 break;
+            case NetworkMessageID.AddModule:
+                var items = JSON.parse(msg.GetParameter(0));
 
+                for (var i = 0; i < items.length; i++) {
+                    items[i].Script = atob(items[i].Script);
+                    items[i].View = atob(items[i].View);
 
+                    viewModel.Modules.push(items[i]);
+                }
+                break;
+            case NetworkMessageID.SetModule:
+                var items = JSON.parse(msg.GetParameter(0));
+
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    item.Script = atob(item.Script);
+                    item.View = atob(item.View);
+
+                    var exists = false;
+                    for (var j = 0; j < viewModel.Modules.length; j++)
+                        var module = viewModel.Modules[j];
+                        if (module.ID == item.ID) {
+                            exists = true;
+
+                            module.set("Name", item.Name);
+                            module.set("Description", item.Description);
+                            module.set("Script", item.Script);
+                            module.set("View", item.View);
+                            break;
+                        }
+
+                    if (!exists)
+                        viewModel.Modules.push(item);
+                }
+                break;
+            case NetworkMessageID.DeleteModule:
+                var id = msg.GetParameter(0);
+
+                for (var i = 0; i < viewModel.Modules.length; i++)
+                    if (viewModel.Modules[i].ID == id)
+                        viewModel.Modules.splice(i, 1);
+                break;
             case NetworkMessageID.NodePresentation: presentNode(JSON.parse(msg.GetParameter(0))); break;
             case NetworkMessageID.SensorPresentation: presentSensor(JSON.parse(msg.GetParameter(0))); break;
             case NetworkMessageID.BatteryLevel: addBatteryLevel(JSON.parse(msg.GetParameter(0))); break;
