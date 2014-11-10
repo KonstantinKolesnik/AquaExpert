@@ -516,8 +516,8 @@ namespace MySensors.Controllers
                     Log(this, dbService.IsStarted ? "Success." : "Failed.", true, dbService.IsStarted ? LogLevel.Success : LogLevel.Error);
 
 
-                foreach (var m in modules)
-                    RunAutomationService(m);
+                //foreach (var m in modules)
+                //    RunAutomationService(m);
             }
         }
         private void StartCommunicator()
@@ -560,10 +560,10 @@ namespace MySensors.Controllers
             var nds = nodes.OrderBy(node => node.ID).ToList();
 
             byte id = 1;
-            for (byte i = 1; i <= nds.Count; i++)
-                if (nds[i].ID > i)
+            for (byte i = 0; i < nds.Count; i++)
+                if (nds[i].ID > i + 1)
                 {
-                    id = i;
+                    id = (byte)(i + 1);
                     break;
                 }
 

@@ -16,10 +16,10 @@ MySensor gw(A0, DEFAULT_CS_PIN);
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-	Serial.begin(115200);
+	//Serial.begin(115200);
 
 	gw.begin(onMessageReceived);
-	gw.sendSketchInfo("Power switch", "1.0");
+	gw.sendSketchInfo("Power switch 8", "1.0");
 
 	//(sensorID = 0...7)
 	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
@@ -51,9 +51,9 @@ void onMessageReceived(const MyMessage &message)
 
 		gw.send(msgRelay.setSensor(message.sensor).set(value));
 
-		Serial.print("Incoming change for relay: ");
-		Serial.print(message.sensor);
-		Serial.print(", new status: ");
-		Serial.println(value);
+		//Serial.print("Incoming change for relay: ");
+		//Serial.print(message.sensor);
+		//Serial.print(", new status: ");
+		//Serial.println(value);
 	}
 }
