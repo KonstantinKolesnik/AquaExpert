@@ -93,6 +93,31 @@ namespace MySensors.Controllers.Data
             return con.Update(AutomationModuleDto.FromModel(item));
         }
 
+        public int Delete(Node item)
+        {
+            foreach (BatteryLevel bl in item.BatteryLevels)
+                Delete(bl);
+
+            foreach (Sensor s in item.Sensors)
+                Delete(s);
+
+            return con.Delete(NodeDto.FromModel(item));
+        }
+        public int Delete(Sensor item)
+        {
+            foreach (SensorValue sv in item.Values)
+                Delete(sv);
+
+            return con.Delete(SensorDto.FromModel(item));
+        }
+        public int Delete(BatteryLevel item)
+        {
+            return con.Delete(BatteryLevelDto.FromModel(item));
+        }
+        public int Delete(SensorValue item)
+        {
+            return con.Delete(SensorValueDto.FromModel(item));
+        }
         public int Delete(AutomationModule item)
         {
             return con.Delete(AutomationModuleDto.FromModel(item));

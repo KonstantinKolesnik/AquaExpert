@@ -29,6 +29,9 @@ function MessageManager() {
     this.GetNodes = function () {
         send(new NetworkMessage(NetworkMessageID.GetNodes));
     }
+    this.DeleteNode = function (id) {
+        send(new NetworkMessage(NetworkMessageID.DeleteNode, [id]));
+    }
 
     this.GetModules = function () {
         send(new NetworkMessage(NetworkMessageID.GetModules));
@@ -88,6 +91,18 @@ function MessageManager() {
                 //    oldItems.push(item);
                 //}
                 //viewModel.PopulateSensors();
+
+                break;
+            case NetworkMessageID.DeleteNode:
+                var id = msg.GetParameter(0);
+
+                for (var i = 0; i < viewModel.Sensors.length; i++)
+                    if (viewModel.Sensors[i].NodeID == id)
+                        viewModel.Sensors.splice(i, 1);
+
+                for (var i = 0; i < viewModel.Devices.length; i++)
+                    if (viewModel.Devices[i].ID == id)
+                        viewModel.Devices.splice(i, 1);
 
                 break;
             case NetworkMessageID.GetModules:

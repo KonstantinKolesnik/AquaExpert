@@ -5,6 +5,7 @@ using MySensors.Controllers.Data;
 using MySensors.Controllers.GatewayProxies;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -345,42 +346,18 @@ namespace MySensors.Controllers
                     #endregion
 
                     #region GetNodes
-                    case NetworkMessageID.GetNodes:
-                        // for test!!!
-                        //List<Node> collection = new List<Node>();
-                        //for (byte i = 20; i < 30; i++)
-                        //{
-                        //    Node node = new Node(i)
-                        //    {
-                        //        Type = SensorType.ArduinoNode,
-                        //        ProtocolVersion = "1.4.1",
-                        //        SketchName = "Sketch " + i,
-                        //        SketchVersion = "1.0"
-                        //    };
+                    case NetworkMessageID.GetNodes: response = new NetworkMessage(NetworkMessageID.GetNodes, JsonConvert.SerializeObject(nodes, Formatting.Indented)); break;
+                    #endregion
 
-                        //    for (byte p = 100; p >= 80; p--)
-                        //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
-                        //    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
-
-                        //    for (byte j = 0; j < 25; j++)
-                        //    {
-                        //        Sensor sensor = new Sensor(node.ID, j) {
-                        //            Type = (SensorType)j,
-                        //            ProtocolVersion = "1.4.1"
-                        //        };
-
-                        //        for (byte p = 0; p < 15; p++)
-                        //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
-
-                        //        node.Sensors.Add(sensor);
-                        //    }
-
-                        //    collection.Add(node);
-                        //}
-                        //response = new NetworkMessage(NetworkMessageID.GetNodes, JsonConvert.SerializeObject(collection, Formatting.Indented));
-
-
-                        response = new NetworkMessage(NetworkMessageID.GetNodes, JsonConvert.SerializeObject(nodes, Formatting.Indented));
+                    #region DeleteNode
+                    case NetworkMessageID.DeleteNode:
+                        if (request.Parameters.Count == 1)
+                        {
+                            Node node = GetNode(byte.Parse(request[0]));
+                            dbService.Delete(node);
+                            nodes.Remove(node);
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, node.ID.ToString()));
+                        }
                         break;
                     #endregion
 
@@ -493,6 +470,38 @@ namespace MySensors.Controllers
                                 sensor.Values.Add(sv);
                         }
                     }
+                    // for test!!!
+                    //for (byte i = 20; i < 30; i++)
+                    //{
+                    //    Node node = new Node(i)
+                    //    {
+                    //        Type = SensorType.ArduinoNode,
+                    //        ProtocolVersion = "1.4.1",
+                    //        SketchName = "Sketch " + i,
+                    //        SketchVersion = "1.0"
+                    //    };
+
+                    //    for (byte p = 100; p >= 80; p--)
+                    //        node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now.AddHours(-p), p));
+                    //    node.BatteryLevels.Add(new BatteryLevel(node.ID, DateTime.Now, 0));
+
+                    //    for (byte j = 0; j < 25; j++)
+                    //    {
+                    //        Sensor sensor = new Sensor(node.ID, j)
+                    //        {
+                    //            Type = (SensorType)j,
+                    //            ProtocolVersion = "1.4.1"
+                    //        };
+
+                    //        for (byte p = 0; p < 15; p++)
+                    //            sensor.Values.Add(new SensorValue(node.ID, j, DateTime.Now.AddHours(p), (SensorValueType)p, p));
+
+                    //        node.Sensors.Add(sensor);
+                    //    }
+
+                    //    nodes.Add(node);
+                    //}
+
 
                     settings.Clear();
                     foreach (var stng in stngs)

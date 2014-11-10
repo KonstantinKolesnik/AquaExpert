@@ -262,14 +262,26 @@ function MainView() {
             },
             columns:
                 [
-                  //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                  { field: "ID", title: "ID", width: 40, groupable: false, attributes: { "class": "cellRight" } },
-                  { field: "TypeName()", title: "Type", width: 80 },
-                  { field: "SketchName", title: "Firmware Name", width: 250 },
-                  { field: "SketchVersion", title: "Firmware Version", width: 120, attributes: { "class": "cellCenter" } },
-                  { field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "cellCenter" } },
-                  { field: "LastBatteryLevel.Value", title: "Battery, %", width: 90, attributes: { "class": "cellCenter" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                  { field: "ProtocolVersion", title: "Protocol Version", width: 100, attributes: { "class": "cellCenter" } }
+                    //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                    { field: "ID", title: "ID", width: 40, groupable: false, attributes: { "class": "cellRight" } },
+                    { field: "TypeName()", title: "Type", width: 80 },
+                    { field: "SketchName", title: "Firmware Name", width: 250 },
+                    { field: "SketchVersion", title: "Firmware Version", width: 130, attributes: { "class": "cellCenter" } },
+                    { field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "cellCenter" } },
+                    { field: "LastBatteryLevel.Value", title: "Battery, %", width: 90, attributes: { "class": "cellCenter" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                    { field: "ProtocolVersion", title: "Protocol Version", width: 120, attributes: { "class": "cellCenter" } },
+                    {
+                        title: "&nbsp;", width: 120, reorderable: false, filterable: false, sortable: false, attributes: { "class": "cellCenter" },
+                        command: [
+                            {
+                                text: "Delete",
+                                click: function (e) {
+                                    var item = $("#gridDevices").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                    msgManager.DeleteNode(item.ID);
+                                }
+                            }
+                        ]
+                    }
                 ],
             detailTemplate: kendo.template($("#deviceDetailsTemplate").html()),
             detailInit: function (e) {
@@ -381,7 +393,8 @@ function MainView() {
                   { title: "&nbsp;", reorderable: false, filterable: false, sortable: false, width: 80, template: kendo.template($("#moduleImageCellTemplate").html()) },
                   { field: "Name", title: "Name", width: 400, template: kendo.template($("#moduleNameCellTemplate").html()) },
                   { field: "View", title: "&nbsp;", reorderable: false, filterable: false, sortable: false, template: kendo.template($("#moduleViewCellTemplate").html()) },
-                  { title: "&nbsp;", width: 150, reorderable: false, filterable: false, sortable: false,
+                  {
+                      title: "&nbsp;", width: 120, reorderable: false, filterable: false, sortable: false, attributes: { "class": "cellCenter" },
                       command: [
                         {
                             text: "Delete",

@@ -45,6 +45,10 @@ namespace MySensors.Controllers.Communication
         // - No params: request for all nodes list
         public const string GetNodes = "GetNodes";
 
+        // Sender: CLIENT
+        // - Param "NodeID"
+        public const string DeleteNode = "DeleteNode";
+
         // Sender: STATION
         // - Param "Node"
         public const string NodePresentation = "NodePresentation";

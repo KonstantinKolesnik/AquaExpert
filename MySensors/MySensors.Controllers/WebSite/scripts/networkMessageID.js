@@ -46,6 +46,10 @@ NetworkMessageID = {
     // - No params: request for all nodes list
     GetNodes: "GetNodes",
 
+    // Sender: CLIENT
+    // - Param "NodeID"
+    DeleteNode: "DeleteNode",
+
     // Sender: STATION
     // - Param "Node"
     NodePresentation: "NodePresentation",
