@@ -9,7 +9,7 @@ function onWSClientOpen() {
     msgManager.GetSettings();
     msgManager.GetVersion();
     msgManager.GetNodes();
-    msgManager.GetModules();
+    //msgManager.GetModules();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -43,6 +43,9 @@ function onViewModelAfterSet(e) {
             if (e.action == "itemchange")
                 msgManager.SetModule(e.items[0]);
             $("#gridModules").data("kendoGrid").dataSource.sort({ field: "Name", dir: "asc" });
+            break;
+        case "Nodes":
+            //debugger;
             break;
         default:
             break;
@@ -308,6 +311,7 @@ function MainView() {
                         reorderable: true,
                         columns: [
                             //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
+                            //{ field: "NodeID", title: "Node ID", width: 70, attributes: { "class": "cellRight" } },
                             { field: "ID", title: "ID", groupable: false, width: 40, attributes: { "class": "cellRight" } },
                             { field: "TypeName()", title: "Type" },
                             { field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "cellRight" }, template: kendo.template($("#sensorValueCellTemplate").html()) },

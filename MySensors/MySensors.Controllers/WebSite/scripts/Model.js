@@ -82,13 +82,15 @@ function Model() {
     };
     this.Version = "";
 
-    this.Devices = [];
+    this.Nodes = [];
     this.Sensors = [];
     this.Modules = [];
 
     this.PresentSensor = function (newSensor) {
-        if (!this.Sensors)
-            this.Sensors = [];
+        //if (!this.Sensors)
+        //    this.Sensors = [];
+
+        //debugger;
 
         for (var i = 0; i < this.Sensors.length; i++)
             if (this.Sensors[i].NodeID = newSensor.NodeID && this.Sensors[i].ID == newSensor.ID)
@@ -99,15 +101,14 @@ function Model() {
             }
 
         this.Sensors.push(newSensor);
-
     }
     this.PopulateSensors = function () {
         var res = [];
 
-        var nodes = this.Devices || [];
-        for (var i = 0; i < nodes.length; i++)
-            for (var j = 0; j < nodes[i].Sensors.length; j++)
-                res.push(nodes[i].Sensors[j]);
+        //var nodes = this.Nodes || [];
+        for (var i = 0; i < this.Nodes.length; i++)
+            for (var j = 0; j < this.Nodes[i].Sensors.length; j++)
+                res.push(this.Nodes[i].Sensors[j]);
 
         this.set("Sensors", res);
     };

@@ -195,19 +195,22 @@ namespace MySensors.Controllers
                     }
                     else
                     {
-                        if (sensor == null)
+                        if (node != null)
                         {
-                            sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
-                            dbService.Insert(sensor);
-                            node.Sensors.Add(sensor);
+                            if (sensor == null)
+                            {
+                                sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
+                                dbService.Insert(sensor);
+                                node.Sensors.Add(sensor);
+                            }
+                            else
+                            {
+                                sensor.Type = (SensorType)message.SubType;
+                                sensor.ProtocolVersion = message.Payload;
+                                dbService.Update(sensor);
+                            }
+                            communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                         }
-                        else
-                        {
-                            sensor.Type = (SensorType)message.SubType;
-                            sensor.ProtocolVersion = message.Payload;
-                            dbService.Update(sensor);
-                        }
-                        communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                     }
                     break;
                 #endregion
@@ -231,7 +234,9 @@ namespace MySensors.Controllers
 
                 #region Internal
                 case SensorMessageType.Internal: // special internal message
-                    switch ((InternalValueType)message.SubType)
+                    InternalValueType ivt = (InternalValueType)message.SubType;
+
+                    switch (ivt)
                     {
                         case InternalValueType.BatteryLevel: // int, in %
                             if (node != null)
@@ -266,17 +271,14 @@ namespace MySensors.Controllers
                         case InternalValueType.Children:
                             break;
                         case InternalValueType.SketchName:
-                            if (node != null)
-                            {
-                                node.SketchName = message.Payload;
-                                dbService.Update(node);
-                                communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
-                            }
-                            break;
                         case InternalValueType.SketchVersion:
                             if (node != null)
                             {
-                                node.SketchVersion = message.Payload;
+                                if (ivt == InternalValueType.SketchName)
+                                    node.SketchName = message.Payload;
+                                else
+                                    node.SketchVersion = message.Payload;
+
                                 dbService.Update(node);
                                 communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                             }
@@ -412,7 +414,7 @@ namespace MySensors.Controllers
                     #endregion
 
                     #region Sensor message (client sets actuator value)
-                    case NetworkMessageID.SensorMessage: gatewayProxy.Send(SensorMessage.FromRawMessage(request[0].Replace("-", ";"))); break;
+                    case NetworkMessageID.SensorMessage: gatewayProxy.Send(SensorMessage.FromRawMessage(request[0].Replace("*", ";"))); break;
                     #endregion
 
                     default: break;

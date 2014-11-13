@@ -54,7 +54,7 @@ function MessageManager() {
         me.SendSensorMessage(nodeID, 255, messageType, valueType, value);
     }
     this.SendSensorMessage = function (nodeID, sensorID, messageType, valueType, value) {
-        send(new NetworkMessage(NetworkMessageID.SensorMessage, [nodeID + "-" + sensorID + "-" + messageType + "-" + "0" + "-" + valueType + "-" + value]));
+        send(new NetworkMessage(NetworkMessageID.SensorMessage, [nodeID + "*" + sensorID + "*" + messageType + "*" + "0" + "*" + valueType + "*" + value]));
     }
     //----------------------------------------------------------------------------------------------------------------------
     function send(msg) {
@@ -68,22 +68,22 @@ function MessageManager() {
 
         switch (msg.GetID()) {
             case NetworkMessageID.Message: mainView.showDialog(msg.GetParameter(0), msg.GetParameter(1)); break;
+            case NetworkMessageID.Version: viewModel.set("Version", msg.GetParameter(0)); break;
             case NetworkMessageID.Settings:
                 viewModel.set("Settings.WebTheme", msg.GetParameter(0));
                 viewModel.set("Settings.UnitSystem", msg.GetParameter(1));
                 break;
-            case NetworkMessageID.Version: viewModel.set("Version", msg.GetParameter(0)); break;
             case NetworkMessageID.GetNodes:
                 var newItems = JSON.parse(msg.GetParameter(0));
 
                 // approach #1:
                 for (var i = 0; i < newItems.length; i++)
                     enrichItem(newItems[i]);
-                viewModel.set("Devices", newItems);
-                viewModel.PopulateSensors();
+                viewModel.set("Nodes", newItems);
+                //viewModel.PopulateSensors();
 
                 // approach #2:
-                //var oldItems = viewModel.get("Devices");
+                //var oldItems = viewModel.get("Nodes");
                 //oldItems.length = 0; // remove all old nodes
                 //for (var i = 0; i < newItems.length; i++) {
                 //    var item = newItems[i];
@@ -100,9 +100,11 @@ function MessageManager() {
                     if (viewModel.Sensors[i].NodeID == id)
                         viewModel.Sensors.splice(i, 1);
 
-                for (var i = 0; i < viewModel.Devices.length; i++)
-                    if (viewModel.Devices[i].ID == id)
-                        viewModel.Devices.splice(i, 1);
+                for (var i = 0; i < viewModel.Nodes.length; i++)
+                    if (viewModel.Nodes[i].ID == id)
+                        viewModel.Nodes.splice(i, 1);
+
+                viewModel.PopulateSensors();
 
                 break;
             case NetworkMessageID.GetModules:
@@ -174,8 +176,8 @@ function MessageManager() {
                 enrichSensor(item.Sensors[i]);
         }
         function enrichNode(node) {
-            if (node.isEnriched)
-                return;
+            //if (node.isEnriched)
+            //    return;
 
             node.TypeName = function () {
                 return getSensorTypeName(this.get("Type"));
@@ -187,11 +189,11 @@ function MessageManager() {
 
             node.Sensors = node.Sensors || [];
 
-            node.isEnriched = true;
+            //node.isEnriched = true;
         }
         function enrichSensor(sensor) {
-            if (sensor.isEnriched)
-                return;
+            //if (sensor.isEnriched)
+            //    return;
 
             sensor.TypeName = function () {
                 return getSensorTypeName(this.get("Type"));
@@ -201,15 +203,15 @@ function MessageManager() {
             for (var j = 0; j < sensor.Values.length; j++)
                 sensor.Values[j].Time = new Date(sensor.Values[j].Time); // convert sensor value's date/time
 
-            sensor.isEnriched = true;
+            //sensor.isEnriched = true;
         }
 
         function presentNode(newNode) {
-            if (!viewModel.Devices)
-                viewModel.Devices = new kendo.observableArray();
+            //if (!viewModel.Nodes)
+            //    viewModel.Nodes = new kendo.observableArray();
 
-            for (var i = 0; i < viewModel.Devices.length; i++) {
-                var nd = viewModel.Devices[i];
+            for (var i = 0; i < viewModel.Nodes.length; i++) {
+                var nd = viewModel.Nodes[i];
                 if (nd.ID == newNode.ID) { // update node
                     nd.set("Type", newNode.Type);
                     nd.set("ProtocolVersion", newNode.ProtocolVersion);
@@ -220,25 +222,27 @@ function MessageManager() {
             }
 
             // node isn't in list; add it:
-            enrichItem(newNode); // with sensors!!! not enrichNode (it doesn't enriches sensors)!!!
-            viewModel.Devices.push(newNode);
+            //enrichItem(newNode); // with sensors!!! not enrichNode (it doesn't enriches sensors)!!!
+            enrichNode(newNode);
+            viewModel.Nodes.push(newNode);
         }
         function presentSensor(newSensor) {
-            if (!viewModel.Devices)
-                viewModel.Devices = new kendo.observableArray();
+            //if (!viewModel.Nodes)
+            //    viewModel.Nodes = new kendo.observableArray();
 
-            for (var i = 0; i < viewModel.Devices.length; i++) {
-                var nd = viewModel.Devices[i];
+            for (var i = 0; i < viewModel.Nodes.length; i++) {
+                var nd = viewModel.Nodes[i];
                 if (nd.ID == newSensor.NodeID) {
-                    if (!nd.Sensors)
-                        nd.Sensors = new kendo.observableArray();
+                    //if (!nd.Sensors)
+                    //    nd.Sensors = new kendo.observableArray();
 
                     for (var j = 0; j < nd.Sensors.length; j++) {
                         var snsr = nd.Sensors[j];
                         if (snsr.NodeID == newSensor.NodeID && snsr.ID == newSensor.ID) { // update sensor
+                            console.log("presentSensor: exists");
                             snsr.set("Type", newSensor.Type);
                             snsr.set("ProtocolVersion", newSensor.ProtocolVersion);
-                            viewModel.PresentSensor(newSensor);
+                            //viewModel.PresentSensor(snsr);
                             return;
                         }
                     }
@@ -246,14 +250,14 @@ function MessageManager() {
                     // sensor isn't in list; add it:
                     enrichSensor(newSensor);
                     nd.Sensors.push(newSensor);
-                    viewModel.PresentSensor(newSensor);
+                    //viewModel.PresentSensor(newSensor);
                 }
             }
         }
         function addBatteryLevel(bl) {
             bl.Time = new Date(bl.Time);
 
-            var nodes = viewModel.Devices || [];
+            var nodes = viewModel.Nodes || [];
             for (var i = 0; i < nodes.length; i++)
                 if (nodes[i].ID == bl.NodeID) {
                     nodes[i].BatteryLevels.push(bl);
@@ -263,14 +267,14 @@ function MessageManager() {
         function addSensorValue(sv) {
             sv.Time = new Date(sv.Time);
 
-            var nodes = viewModel.Devices || [];
+            var nodes = viewModel.Nodes || [];
             for (var i = 0; i < nodes.length; i++)
                 if (nodes[i].ID == sv.NodeID) {
                     var sensors = nodes[i].Sensors || [];
                     for (var j = 0; j < sensors.length; j++)
                         if (sensors[j].NodeID == sv.NodeID && sensors[j].ID == sv.ID) {
-                            if (!sensors[j].Values)
-                                sensors[j].Values = new kendo.observableArray();
+                            //if (!sensors[j].Values)
+                            //    sensors[j].Values = new kendo.observableArray();
 
                             sensors[j].Values.push(sv);
                             sensors[j].set("LastValue", sv);

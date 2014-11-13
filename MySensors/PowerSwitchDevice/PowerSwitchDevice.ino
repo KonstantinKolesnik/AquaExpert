@@ -16,8 +16,6 @@ MySensor gw(A0, DEFAULT_CS_PIN);
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-	//Serial.begin(115200);
-
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("Power switch 8", "1.0");
 
@@ -32,28 +30,23 @@ void setup()
 		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
 	}
 }
-
 void loop()
 {
 	gw.process();
 }
-
 void onMessageReceived(const MyMessage &message)
 {
-	//Serial.println("onMessageReceived");
-
 	if (message.type == V_LIGHT)
 	{
-		bool value = message.getBool();
+		uint8_t newState = message.getByte();
+		uint8_t lastState = gw.loadState(message.sensor);
 
-		digitalWrite(pins[message.sensor], value ? RELAY_ON : RELAY_OFF);
-		gw.saveState(message.sensor, value);
+		if (newState != lastState)
+		{
+			digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
+			gw.saveState(message.sensor, newState);
 
-		gw.send(msgRelay.setSensor(message.sensor).set(value));
-
-		//Serial.print("Incoming change for relay: ");
-		//Serial.print(message.sensor);
-		//Serial.print(", new status: ");
-		//Serial.println(value);
+			gw.send(msgRelay.setSensor(message.sensor).set(newState));
+		}
 	}
 }
