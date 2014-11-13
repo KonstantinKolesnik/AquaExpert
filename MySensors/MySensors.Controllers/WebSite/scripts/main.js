@@ -9,7 +9,7 @@ function onWSClientOpen() {
     msgManager.GetSettings();
     msgManager.GetVersion();
     msgManager.GetNodes();
-    //msgManager.GetModules();
+    msgManager.GetModules();
 }
 function onWSClientMessage(txt) {
     if (msgManager)
@@ -55,10 +55,10 @@ function onViewModelAfterSet(e) {
 function MainView() {
     var me = this;
     var lastContent = null;
-    var expandedModules = new WICollection();
-    var scrollPosition = null;
-    var scrollPositionGrid = null;
-    var saveScroll = true;
+
+    me.gridNodesStateManager = null;
+    me.gridSensorsStateManager = null;
+    me.gridModulesStateManager = null;
 
     createMenu();
     createNodesGrid();
@@ -69,8 +69,6 @@ function MainView() {
 
     $(window).bind("resize", adjustSizes);
     $(window).resize(adjustSizes);
-    $(window).on("scroll", saveScrollState);
-    $("#gridModules").find(".k-grid-content").on("scroll", saveScrollState);
 
     this.showDialog = function (txt, title) {
         var win = $("#dlg").kendoWindow({
@@ -186,7 +184,7 @@ function MainView() {
     function adjustSizes() {
         $("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight());
 
-        adjustGrid($("#gridDevices"));
+        adjustGrid($("#gridNodes"));
         adjustGrid($("#gridSensors"));
         adjustGrid($("#gridModules"));
 
@@ -255,7 +253,9 @@ function MainView() {
         });
     }
     function createNodesGrid() {
-        $("#gridDevices").kendoGrid({
+        me.gridNodesStateManager = new GridStateManager("gridNodes");
+
+        $("#gridNodes").kendoGrid({
             groupable: true,
             sortable: true,
             reorderable: true,
@@ -279,7 +279,7 @@ function MainView() {
                             {
                                 text: "Delete",
                                 click: function (e) {
-                                    var item = $("#gridDevices").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                    var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                     msgManager.DeleteNode(item.ID);
                                 }
                             }
@@ -319,10 +319,21 @@ function MainView() {
                         ]
                     });
                 }
+            },
+            detailExpand: function (e) {
+                me.gridNodesStateManager.onDetailExpand(e);
+            },
+            detailCollapse: function (e) {
+                me.gridNodesStateManager.onDetailCollapse(e);
+            },
+            dataBound: function (e) {
+                me.gridNodesStateManager.onDataBound();
             }
         });
     }
     function createSensorsGrid() {
+        me.gridSensorsStateManager = new GridStateManager("gridSensors");
+
         $("#gridSensors").kendoGrid({
             groupable: true,
             sortable: true,
@@ -344,6 +355,12 @@ function MainView() {
             detailInit: function (e) {
                 createSensorValuesChart(e.detailRow.find(".sensorDetailsValues"), e.data);
                 kendo.bind(e.detailRow, e.data);
+            },
+            detailExpand: function (e) {
+                me.gridSensorsStateManager.onDetailExpand(e);
+            },
+            detailCollapse: function (e) {
+                me.gridSensorsStateManager.onDetailCollapse(e);
             },
             dataBinding: function (e) {
                 //if (e.action == "itemchange") {
@@ -370,10 +387,15 @@ function MainView() {
                 //        $(tds[i]).html(item[columnNames[i]]);
                 //    }
                 //}
+            },
+            dataBound: function (e) {
+                me.gridSensorsStateManager.onDataBound();
             }
         });
     }
     function createModulesGrid() {
+        me.gridModulesStateManager = new GridStateManager("gridModules");
+
         $("#gridModules").kendoGrid({
             sortable: true,
             reorderable: true,
@@ -417,10 +439,10 @@ function MainView() {
                 kendo.bind(e.detailRow, e.data);
             },
             detailExpand: function (e) {
-                addToVisualState(e.masterRow);
+                me.gridModulesStateManager.onDetailExpand(e);
             },
             detailCollapse: function (e) {
-                removeFromVisualState(e.masterRow);
+                me.gridModulesStateManager.onDetailCollapse(e);
             },
             dataBinding: function (e) {
                 //if (e.action == "itemchange") {
@@ -453,7 +475,7 @@ function MainView() {
                 //}
             },
             dataBound: function (e) {
-                restoreVisualState();
+                me.gridModulesStateManager.onDataBound();
             }
         });
     }
@@ -641,87 +663,6 @@ function MainView() {
                 majorGridLines: { visible: true }
             }
         });
-    }
-
-    function saveScrollState() {
-        if (saveScroll) {
-            scrollPosition = $(window).scrollTop();
-            scrollPositionGrid = $("#gridModules").find(".k-grid-content").scrollTop();
-        }
-    }
-    function restoreScrollState() {
-        if (scrollPosition)
-            $(window).scrollTop(scrollPosition);
-        if (scrollPositionGrid)
-            $("#gridModules").find(".k-grid-content").scrollTop(scrollPositionGrid);
-    }
-    function addToVisualState(row) {
-        if (!expandedModules.restoring) {
-            var item = row.closest(".k-grid").data("kendoGrid").dataItem(row);
-            expandedModules.add(item);
-        }
-    }
-    function removeFromVisualState(row) {
-        var item = row.closest(".k-grid").data("kendoGrid").dataItem(row);
-        expandedModules.remove(item);
-    }
-    function restoreVisualState() {
-        var sp = scrollPosition;
-        var spGrid = scrollPositionGrid;
-
-        if (expandedModules.restoring)
-            return;
-        else
-            expandedModules.restoring = true;
-
-        var rows = null; //cache for performance
-        expandedModules.each(function (wiID) {
-            if (!rows)
-                rows = $("#gridModules tr.k-master-row");
-
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var jRow = $(row);
-                var grid = jRow.closest("#gridModules").data("kendoGrid");
-                var data = grid.dataItem(jRow);
-                if (data.ID == wiID) {
-                    grid.expandRow(row);
-                    rows = null;
-                    break;
-                }
-            }
-        });
-
-        expandedModules.restoring = false;
-
-        // restore vertical scroll position;
-        scrollPosition = sp;
-        scrollPositionGrid = spGrid;
-        restoreScrollState();
-    }
-    function WICollection() {
-        var me = this;
-        var items = [];
-
-        me.add = function (wi) {
-            if (items.indexOf(wi.ID) == -1)
-                items.push(wi.ID);
-        }
-        me.remove = function (wi) {
-            var i = items.indexOf(wi.ID);
-
-            if (i != -1)
-                items.splice(i, 1);
-        }
-        me.has = function (wi) {
-            return items.indexOf(wi.ID) != -1;
-        }
-        me.empty = function () {
-            items.length = 0;
-        }
-        me.each = function (fn) {
-            items.forEach(function (id) { fn(id) });
-        }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

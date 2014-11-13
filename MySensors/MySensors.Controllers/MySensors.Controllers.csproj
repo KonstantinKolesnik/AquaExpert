@@ -2569,6 +2569,7 @@
     <Content Include="WebSite\resources\Update.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\scripts\gridStateManager.js" />
     <Content Include="WebSite\styles\main.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

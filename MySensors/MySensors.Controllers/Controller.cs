@@ -121,8 +121,8 @@ namespace MySensors.Controllers
             if (!IsStarted)
             {
                 StartDatabase();
-                StartGatewayProxy();
                 StartCommunicator();
+                StartGatewayProxy();
             }
 
             return IsStarted;
@@ -131,8 +131,8 @@ namespace MySensors.Controllers
         {
             if (IsStarted)
             {
-                communicator.Stop();
                 gatewayProxy.Stop();
+                communicator.Stop();
                 dbService.Stop();
             }
         }
