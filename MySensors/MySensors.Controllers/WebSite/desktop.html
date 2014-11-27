@@ -53,23 +53,23 @@
                 </td>
                 <td></td>
                 <td>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,0,1,SensorValueType.Light,0);">button 0</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,1,1,SensorValueType.Light,0);">button 1</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,2,1,SensorValueType.Light,0);">button 2</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,3,1,SensorValueType.Light,0);">button 3</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,4,1,SensorValueType.Light,0);">button 4</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,5,1,SensorValueType.Light,0);">button 5</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,6,1,SensorValueType.Light,0);">button 6</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,7,1,SensorValueType.Light,0);">button 7</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,0,1,SensorValueType.Light,0);">button 0</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,1,1,SensorValueType.Light,0);">button 1</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,2,1,SensorValueType.Light,0);">button 2</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,3,1,SensorValueType.Light,0);">button 3</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,4,1,SensorValueType.Light,0);">button 4</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,5,1,SensorValueType.Light,0);">button 5</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,6,1,SensorValueType.Light,0);">button 6</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,7,1,SensorValueType.Light,0);">button 7</button>
                     <br/>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,0,1,SensorValueType.Light,1);">button 0</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,1,1,SensorValueType.Light,1);">button 1</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,2,1,SensorValueType.Light,1);">button 2</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,3,1,SensorValueType.Light,1);">button 3</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,4,1,SensorValueType.Light,1);">button 4</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,5,1,SensorValueType.Light,1);">button 5</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,6,1,SensorValueType.Light,1);">button 6</button>
-                    <button class="k-button" onclick="msgManager.SendSensorMessage(1,7,1,SensorValueType.Light,1);">button 7</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,0,1,SensorValueType.Light,1);">button 0</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,1,1,SensorValueType.Light,1);">button 1</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,2,1,SensorValueType.Light,1);">button 2</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,3,1,SensorValueType.Light,1);">button 3</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,4,1,SensorValueType.Light,1);">button 4</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,5,1,SensorValueType.Light,1);">button 5</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,6,1,SensorValueType.Light,1);">button 6</button>
+                    <button class="k-button" onclick="msgManager.SendSensorMessage(testID,7,1,SensorValueType.Light,1);">button 7</button>
 
                 </td>
                 <td width="10%" style="text-align:left;">
@@ -834,6 +834,7 @@
 
 
     <script type="text/javascript">
+        var testID = 1;
         //window.debugOutput = function (obj) {
         //    if (!$('#debugOutput').size()) {
         //        $('<div id="debugOutput" style="position:fixed;top:0;right:330px;width:300px;height:200px;white-space:nowrap;overflow:auto;border:1px solid black;background:white;color:black;font-size:11px;z-index:10000"/>')
