@@ -459,8 +459,8 @@ namespace MySensors.Controllers
                         nodes.Add(node);
 
                         node.BatteryLevels.Clear();
-                        foreach (var bl in bls.Where(bl => bl.NodeID == node.ID))
-                            node.BatteryLevels.Add(bl);
+                        //foreach (var bl in bls.Where(bl => bl.NodeID == node.ID))
+                        //    node.BatteryLevels.Add(bl);
 
                         node.Sensors.Clear();
                         foreach (var sensor in sensors.Where(sensor => sensor.NodeID == node.ID))
@@ -468,8 +468,8 @@ namespace MySensors.Controllers
                             node.Sensors.Add(sensor);
 
                             sensor.Values.Clear();
-                            foreach (var sv in svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID))
-                                sensor.Values.Add(sv);
+                            //foreach (var sv in svs.Where(sv => sv.NodeID == sensor.NodeID && sv.ID == sensor.ID))
+                            //    sensor.Values.Add(sv);
                         }
                     }
                     // for test!!!
