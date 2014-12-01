@@ -148,6 +148,7 @@
     <None Include="WebSite\kendo\js\kendo.calendar.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.color.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.colorpicker.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -178,9 +179,6 @@
     <None Include="WebSite\kendo\js\kendo.dataviz.barcode.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="WebSite\kendo\js\kendo.dataviz.canvas.min.js.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="WebSite\kendo\js\kendo.dataviz.chart.funnel.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -194,9 +192,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\kendo\js\kendo.dataviz.diagram.min.js.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="WebSite\kendo\js\kendo.dataviz.drawing.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\kendo\js\kendo.dataviz.gauge.min.js.map">
@@ -220,16 +215,10 @@
     <None Include="WebSite\kendo\js\kendo.dataviz.stock.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="WebSite\kendo\js\kendo.dataviz.svg.min.js.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="WebSite\kendo\js\kendo.dataviz.themes.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\kendo\js\kendo.dataviz.treemap.min.js.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="WebSite\kendo\js\kendo.dataviz.vml.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\kendo\js\kendo.datepicker.min.js.map">
@@ -244,6 +233,7 @@
     <None Include="WebSite\kendo\js\kendo.draganddrop.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.drawing.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.dropdownlist.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -253,6 +243,7 @@
     <None Include="WebSite\kendo\js\kendo.editor.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.excel.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.filebrowser.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -361,12 +352,14 @@
     <None Include="WebSite\kendo\js\kendo.numerictextbox.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.ooxml.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.pager.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebSite\kendo\js\kendo.panelbar.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.pdf.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.pivot.configurator.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -406,6 +399,7 @@
     <None Include="WebSite\kendo\js\kendo.scheduler.recurrence.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.scheduler.timelineview.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.scheduler.view.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -436,6 +430,7 @@
     <None Include="WebSite\kendo\js\kendo.touch.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="WebSite\kendo\js\kendo.treelist.min.js.map" />
     <None Include="WebSite\kendo\js\kendo.treeview.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1549,6 +1544,7 @@
     <Content Include="WebSite\kendo\js\jquery.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\jszip.min.js" />
     <Content Include="WebSite\kendo\js\kendo.all.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1567,6 +1563,7 @@
     <Content Include="WebSite\kendo\js\kendo.calendar.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.color.min.js" />
     <Content Include="WebSite\kendo\js\kendo.colorpicker.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1597,9 +1594,6 @@
     <Content Include="WebSite\kendo\js\kendo.dataviz.barcode.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebSite\kendo\js\kendo.dataviz.canvas.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="WebSite\kendo\js\kendo.dataviz.chart.funnel.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1613,9 +1607,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebSite\kendo\js\kendo.dataviz.diagram.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebSite\kendo\js\kendo.dataviz.drawing.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebSite\kendo\js\kendo.dataviz.gauge.min.js">
@@ -1639,16 +1630,10 @@
     <Content Include="WebSite\kendo\js\kendo.dataviz.stock.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebSite\kendo\js\kendo.dataviz.svg.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="WebSite\kendo\js\kendo.dataviz.themes.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebSite\kendo\js\kendo.dataviz.treemap.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebSite\kendo\js\kendo.dataviz.vml.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebSite\kendo\js\kendo.datepicker.min.js">
@@ -1663,6 +1648,7 @@
     <Content Include="WebSite\kendo\js\kendo.draganddrop.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.drawing.min.js" />
     <Content Include="WebSite\kendo\js\kendo.dropdownlist.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1672,6 +1658,7 @@
     <Content Include="WebSite\kendo\js\kendo.editor.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.excel.min.js" />
     <Content Include="WebSite\kendo\js\kendo.filebrowser.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1780,12 +1767,14 @@
     <Content Include="WebSite\kendo\js\kendo.numerictextbox.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.ooxml.min.js" />
     <Content Include="WebSite\kendo\js\kendo.pager.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebSite\kendo\js\kendo.panelbar.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.pdf.min.js" />
     <Content Include="WebSite\kendo\js\kendo.pivot.configurator.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1825,6 +1814,7 @@
     <Content Include="WebSite\kendo\js\kendo.scheduler.recurrence.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.scheduler.timelineview.min.js" />
     <Content Include="WebSite\kendo\js\kendo.scheduler.view.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1858,6 +1848,7 @@
     <Content Include="WebSite\kendo\js\kendo.touch.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\kendo.treelist.min.js" />
     <Content Include="WebSite\kendo\js\kendo.treeview.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1879,6 +1870,26 @@
     <Content Include="WebSite\kendo\js\kendo.window.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.bg-BG.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.cs-CZ.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.da-DK.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.de-DE.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.en-US.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.es-ES.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.fr-FR.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.it-IT.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.nl-NL.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.pl-PL.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.pt-BR.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.pt-PT.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.ro-RO.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.ru-RU.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.sv-SE.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.tr-TR.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.uk-UA.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.zh-CN.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.zh-HK.min.js" />
+    <Content Include="WebSite\kendo\js\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="WebSite\kendo\styles\Black\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1915,6 +1926,8 @@
     <Content Include="WebSite\kendo\styles\Black\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Black\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Black\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\BlueOpal\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1951,6 +1964,8 @@
     <Content Include="WebSite\kendo\styles\BlueOpal\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\BlueOpal\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\BlueOpal\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Bootstrap\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1987,6 +2002,8 @@
     <Content Include="WebSite\kendo\styles\Bootstrap\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Bootstrap\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Bootstrap\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Default\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2023,6 +2040,8 @@
     <Content Include="WebSite\kendo\styles\Default\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Default\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Default\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Flat\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2059,6 +2078,8 @@
     <Content Include="WebSite\kendo\styles\Flat\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Flat\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Flat\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\HighContrast\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2095,6 +2116,8 @@
     <Content Include="WebSite\kendo\styles\HighContrast\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\HighContrast\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\HighContrast\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\images\back.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2131,6 +2154,8 @@
     <Content Include="WebSite\kendo\styles\kendo.common-bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\kendo.common-material.core.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.common-material.min.css" />
     <Content Include="WebSite\kendo\styles\kendo.common.core.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2155,6 +2180,8 @@
     <Content Include="WebSite\kendo\styles\kendo.dataviz.highcontrast.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\kendo.dataviz.material.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.dataviz.materialblack.min.css" />
     <Content Include="WebSite\kendo\styles\kendo.dataviz.metro.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2194,6 +2221,10 @@
     <Content Include="WebSite\kendo\styles\kendo.highcontrast.mobile.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\kendo.material.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.material.mobile.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.materialblack.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.materialblack.mobile.min.css" />
     <Content Include="WebSite\kendo\styles\kendo.metro.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2227,6 +2258,8 @@
     <Content Include="WebSite\kendo\styles\kendo.mobile.ios.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\kendo.mobile.material.min.css" />
+    <Content Include="WebSite\kendo\styles\kendo.mobile.materialblack.min.css" />
     <Content Include="WebSite\kendo\styles\kendo.mobile.meego.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2254,6 +2287,30 @@
     <Content Include="WebSite\kendo\styles\kendo.uniform.mobile.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\MaterialBlack\editor.png" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\imagebrowser.png" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\indeterminate.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\loading-image.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\loading.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\loading_2x.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\slider-h.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\slider-v.gif" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\sprite.png" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\sprite_2x.png" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\MaterialBlack\sprite_kpi_2x.png" />
+    <Content Include="WebSite\kendo\styles\Material\editor.png" />
+    <Content Include="WebSite\kendo\styles\Material\imagebrowser.png" />
+    <Content Include="WebSite\kendo\styles\Material\indeterminate.gif" />
+    <Content Include="WebSite\kendo\styles\Material\loading-image.gif" />
+    <Content Include="WebSite\kendo\styles\Material\loading.gif" />
+    <Content Include="WebSite\kendo\styles\Material\loading_2x.gif" />
+    <Content Include="WebSite\kendo\styles\Material\slider-h.gif" />
+    <Content Include="WebSite\kendo\styles\Material\slider-v.gif" />
+    <Content Include="WebSite\kendo\styles\Material\sprite.png" />
+    <Content Include="WebSite\kendo\styles\Material\sprite_2x.png" />
+    <Content Include="WebSite\kendo\styles\Material\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Material\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\MetroBlack\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2290,6 +2347,8 @@
     <Content Include="WebSite\kendo\styles\MetroBlack\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\MetroBlack\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\MetroBlack\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Metro\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2326,6 +2385,8 @@
     <Content Include="WebSite\kendo\styles\Metro\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Metro\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Metro\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Moonlight\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2362,6 +2423,8 @@
     <Content Include="WebSite\kendo\styles\Moonlight\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Moonlight\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Moonlight\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\Silver\editor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2398,6 +2461,8 @@
     <Content Include="WebSite\kendo\styles\Silver\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Silver\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Silver\sprite_kpi_2x.png" />
     <Content Include="WebSite\kendo\styles\textures\brushed-metal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2524,6 +2589,8 @@
     <Content Include="WebSite\kendo\styles\Uniform\sprite_2x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebSite\kendo\styles\Uniform\sprite_kpi.png" />
+    <Content Include="WebSite\kendo\styles\Uniform\sprite_kpi_2x.png" />
     <Content Include="WebSite\mobile.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
