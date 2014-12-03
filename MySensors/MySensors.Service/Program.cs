@@ -6,7 +6,7 @@ namespace MySensors.Service
     {
         static void Main()
         {
-            ServiceBase.Run(new ControllerService());
+            ServiceBase.Run(new SmartNetworkService());
         }
     }
 }

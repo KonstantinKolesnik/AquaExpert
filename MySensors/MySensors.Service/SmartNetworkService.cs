@@ -2,9 +2,9 @@
 
 namespace MySensors.Service
 {
-    public partial class ControllerService : ServiceBase
+    public partial class SmartNetworkService : ServiceBase
     {
-        public ControllerService()
+        public SmartNetworkService()
         {
             InitializeComponent();
 

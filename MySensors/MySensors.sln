@@ -28,7 +28,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQTTGateway", "MQTTGateway\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGateway", "SerialGateway\SerialGateway.vcxproj", "{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Server", "MySensors.Server\MySensors.Server.csproj", "{4FF0C351-38B6-47EB-8127-24F32E585739}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Console", "MySensors.Server\MySensors.Console.csproj", "{4FF0C351-38B6-47EB-8127-24F32E585739}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CFF70962-DBEF-42E8-ACBD-AC240D964714}"
 	ProjectSection(SolutionItems) = preProject

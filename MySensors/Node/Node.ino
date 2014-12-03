@@ -5,20 +5,20 @@
 #define OPEN 1
 #define CLOSE 0
  
-//MySensor gw;
-//MyMessage msg(ID, V_TRIPPED);
+MySensor gw;
+MyMessage msg(ID, V_TRIPPED);
  
 void setup() 
 { 
-	//begin(msgCallback, AUTO, false, AUTO, RF24_PA_MAX, 76, RF24_250KBPS);
+	gw.begin(msgCallback, AUTO, false, AUTO, RF24_PA_MAX, 76, RF24_250KBPS);
 
-	//gw.sendSketchInfo("Node", "1.0");
-	//gw.present(ID, S_DOOR);
+	gw.sendSketchInfo("Sample Node", "1.0");
+	gw.present(ID, S_DOOR);
 
 	Serial.begin(115200);
 }
  
-void msgCallback (const MyMessage & msg)
+void msgCallback(const MyMessage & msg)
 {
 
 }

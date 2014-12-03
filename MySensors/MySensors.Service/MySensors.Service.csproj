@@ -43,11 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerService.cs">
+    <Compile Include="SmartNetworkService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControllerService.Designer.cs">
-      <DependentUpon>ControllerService.cs</DependentUpon>
+    <Compile Include="SmartNetworkService.Designer.cs">
+      <DependentUpon>SmartNetworkService.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

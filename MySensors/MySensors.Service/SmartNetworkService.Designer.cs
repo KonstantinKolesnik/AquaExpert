@@ -1,6 +1,6 @@
 ﻿namespace MySensors.Service
 {
-    partial class ControllerService
+    partial class SmartNetworkService
     {
         /// <summary> 
         /// Required designer variable.

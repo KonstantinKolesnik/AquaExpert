@@ -7,8 +7,8 @@
     <ProjectGuid>{4FF0C351-38B6-47EB-8127-24F32E585739}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MySensors.Server</RootNamespace>
-    <AssemblyName>MySensors.Server</AssemblyName>
+    <RootNamespace>MySensors.Console</RootNamespace>
+    <AssemblyName>MySensors.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
