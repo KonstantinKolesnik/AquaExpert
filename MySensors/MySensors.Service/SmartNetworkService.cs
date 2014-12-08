@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using MySensors.Core.Infrastructure;
+using System.ServiceProcess;
 
 namespace MySensors.Service
 {
@@ -10,7 +11,7 @@ namespace MySensors.Service
         {
             InitializeComponent();
 
-            //HomeEnvironment.Init();
+            ControllerEnvironment.Init();
 
             //app = new HomeApplication();
             //app.Init();

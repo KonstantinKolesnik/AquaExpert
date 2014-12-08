@@ -87,6 +87,10 @@
       <Project>{a86171c5-edf7-4342-8f4d-76d6a02b9cbb}</Project>
       <Name>MySensors.Controllers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MySensors.Core.Infrastructure\MySensors.Core.Infrastructure.csproj">
+      <Project>{47b49308-37b1-4114-956e-66d508f2bb93}</Project>
+      <Name>MySensors.Core.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

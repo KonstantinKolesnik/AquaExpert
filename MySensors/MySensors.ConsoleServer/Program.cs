@@ -1,4 +1,5 @@
 ﻿using MySensors.Controllers;
+using MySensors.Core.Infrastructure;
 using System;
 using System.Threading;
 
@@ -6,15 +7,34 @@ namespace MySensors.ConsoleServer
 {
     class Program
     {
-        private static Controller controller;
-
         static void Main(string[] args)
+        {
+            //OldStart();
+            NewStart();
+        }
+
+        private static void NewStart()
+        {
+            ControllerEnvironment.Init();
+
+            //var app = new HomeApplication();
+
+            //app.Init();
+            //app.StartServices();
+
+            Console.WriteLine("Service is available. Press ENTER to exit.");
+            Console.ReadLine();
+
+            //app.StopServices();
+        }
+
+        private static void OldStart()
         {
             Console.Title = "MySensors Windows Controller";
             Console.WriteLine("Starting MySensors Controller.");
             Console.WriteLine("*******************************************************");
 
-            controller = new Controller(true);
+            Controller controller = new Controller(true);
             controller.Log += controller_Log;
 
             while (!controller.Start())
