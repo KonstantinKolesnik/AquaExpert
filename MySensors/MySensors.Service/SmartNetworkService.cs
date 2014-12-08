@@ -4,6 +4,8 @@ namespace MySensors.Service
 {
     public partial class SmartNetworkService : ServiceBase
     {
+        //private readonly HomeApplication app;
+
         public SmartNetworkService()
         {
             InitializeComponent();
