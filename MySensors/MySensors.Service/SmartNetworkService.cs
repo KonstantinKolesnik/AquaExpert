@@ -5,7 +5,7 @@ namespace MySensors.Service
 {
     public partial class SmartNetworkService : ServiceBase
     {
-        //private readonly HomeApplication app;
+        private readonly Controller app;
 
         public SmartNetworkService()
         {
@@ -13,18 +13,18 @@ namespace MySensors.Service
 
             ControllerEnvironment.Init();
 
-            //app = new HomeApplication();
-            //app.Init();
+            app = new Controller();
+            app.Init();
         }
 
         protected override void OnStart(string[] args)
         {
-            //app.StartServices();
+            app.StartServices();
         }
 
         protected override void OnStop()
         {
-            //app.StopServices();
+            app.StopServices();
         }
     }
 }

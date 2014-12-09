@@ -17,15 +17,15 @@ namespace MySensors.ConsoleServer
         {
             ControllerEnvironment.Init();
 
-            //var app = new HomeApplication();
+            var app = new MySensors.Core.Infrastructure.Controller();
 
-            //app.Init();
-            //app.StartServices();
+            app.Init();
+            app.StartServices();
 
             Console.WriteLine("Service is available. Press ENTER to exit.");
             Console.ReadLine();
 
-            //app.StopServices();
+            app.StopServices();
         }
 
         private static void OldStart()
@@ -52,7 +52,7 @@ namespace MySensors.ConsoleServer
             controller.Stop();
         }
 
-        private static void controller_Log(Controller sender, string text, bool isLine, LogLevel logLevel)
+        private static void controller_Log(MySensors.Controllers.Controller sender, string text, bool isLine, LogLevel logLevel)
         {
             if (!string.IsNullOrEmpty(text))
             {

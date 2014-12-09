@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{B19DD1D2-F45E-433E-934E-888699F58C87}"
 EndProject
@@ -50,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.ConsoleServer", "MySensors.ConsoleServer\MySensors.ConsoleServer.csproj", "{4FF0C351-38B6-47EB-8127-24F32E585739}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Core.Infrastructure", "MySensors.Core.Infrastructure\MySensors.Core.Infrastructure.csproj", "{47B49308-37B1-4114-956E-66D508F2BB93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Core.Plugins", "MySensors.Core.Plugins\MySensors.Core.Plugins.csproj", "{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -309,6 +311,22 @@ Global
 		{47B49308-37B1-4114-956E-66D508F2BB93}.Release|Win32.ActiveCfg = Release|Any CPU
 		{47B49308-37B1-4114-956E-66D508F2BB93}.Release|x64.ActiveCfg = Release|Any CPU
 		{47B49308-37B1-4114-956E-66D508F2BB93}.Release|x86.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|Win32.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,5 +351,6 @@ Global
 		{31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4} = {97905330-C911-457A-81CB-84F6B1480FEA}
 		{4FF0C351-38B6-47EB-8127-24F32E585739} = {97905330-C911-457A-81CB-84F6B1480FEA}
 		{47B49308-37B1-4114-956E-66D508F2BB93} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
+		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
 	EndGlobalSection
 EndGlobal
