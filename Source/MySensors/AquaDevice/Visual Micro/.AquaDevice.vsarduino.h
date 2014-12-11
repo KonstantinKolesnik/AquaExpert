@@ -50,6 +50,6 @@ int readDistance();
 bool readWater();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
-#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
-#include "D:\Work\SmartNetwork\MySensors\AquaDevice\AquaDevice.ino"
+#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h" 
+#include "D:\Work\SmartNetwork\Source\MySensors\AquaDevice\AquaDevice.ino"
 #endif
