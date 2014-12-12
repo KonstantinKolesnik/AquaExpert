@@ -25,6 +25,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Plugins.Timer"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A04F4475-C957-4AA8-AB17-D28C2A505AD6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0AF41DF9-654F-498D-AF5E-E569462DB588}"
+	ProjectSection(SolutionItems) = preProject
+		SmartNetwork.sdf = SmartNetwork.sdf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

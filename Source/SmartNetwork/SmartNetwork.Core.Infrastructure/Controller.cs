@@ -36,12 +36,12 @@ namespace SmartNetwork.Core.Infrastructure
                 ShadowCopyPlugins();
                 LoadPlugins();
 
-                //InitSessionFactory(context);
+                InitSessionFactory(context);
 
                 // обновляем структуру БД
-                //using (var session = context.OpenSession())
-                //    foreach (var plugin in context.GetAllPlugins())
-                //        UpdateDatabase(session.Connection, plugin);
+                using (var session = context.OpenSession())
+                    foreach (var plugin in context.GetAllPlugins())
+                        UpdateDatabase(session.Connection, plugin);
 
                 // инициализируем плагины
                 foreach (var plugin in context.GetAllPlugins())
