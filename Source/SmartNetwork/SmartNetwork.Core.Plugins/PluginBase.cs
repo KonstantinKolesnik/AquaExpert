@@ -22,7 +22,6 @@ namespace SmartNetwork.Core.Plugins
 
         public virtual void InitPlugin()
         {
-
         }
         public virtual void InitDbModel(ModelMapper mapper)
         {
@@ -49,7 +48,6 @@ namespace SmartNetwork.Core.Plugins
         public void Run<T>(T[] actions, Action<T> task)
         {
             if (actions != null && actions.Any())
-            {
                 foreach (var action in actions)
                 {
                     try
@@ -61,7 +59,6 @@ namespace SmartNetwork.Core.Plugins
                         Logger.Error(ex.Message, ex);
                     }
                 }
-            }
         }
         #endregion
     }

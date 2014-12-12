@@ -91,30 +91,6 @@ namespace SmartNetwork.Core.Infrastructure
         #endregion
 
         #region Private methods
-        private void LoadPlugins()
-        {
-            logger.Info("Load plugins");
-
-            var folders = new HashSet<string>();
-
-            var catalog = new AggregateCatalog(new ApplicationCatalog());
-
-            var spDir = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
-
-            foreach (var dir in spDir.GetDirectories())
-            {
-                var subCatalog = new DirectoryCatalog(dir.FullName);
-                catalog.Catalogs.Add(subCatalog);
-
-                folders.Add(dir.FullName);
-            }
-
-            AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = string.Join(";", folders);
-
-            var container = new CompositionContainer(catalog);
-            container.SatisfyImportsOnce(this);
-        }
-
         private static void InitSessionFactory(ServiceContext context)
         {
             var cfg = new Configuration();
@@ -180,13 +156,12 @@ namespace SmartNetwork.Core.Infrastructure
             logger.Info("shadow copy plugins");
 
             var shadowedPlugins = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
-
             if (shadowedPlugins.Exists)
                 shadowedPlugins.Delete(true);
 
             shadowedPlugins.Create();
 
-            // Shadow copy plugins (avoid the CLR locking DLLs)
+            // Shadow copy plugins to avoid the CLR blocking DLLs
             var plugins = new DirectoryInfo(AppSettings.PluginsFullPath);
 
             if (!plugins.Exists)
@@ -207,6 +182,29 @@ namespace SmartNetwork.Core.Infrastructure
                 var subdir = to.CreateSubdirectory(dir.Name);
                 CopyTo(dir, subdir);
             }
+        }
+        private void LoadPlugins()
+        {
+            logger.Info("Load plugins");
+
+            var folders = new HashSet<string>();
+
+            var catalog = new AggregateCatalog(new ApplicationCatalog());
+
+            var spDir = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
+
+            foreach (var dir in spDir.GetDirectories())
+            {
+                var subCatalog = new DirectoryCatalog(dir.FullName);
+                catalog.Catalogs.Add(subCatalog);
+
+                folders.Add(dir.FullName);
+            }
+
+            AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = string.Join(";", folders);
+
+            var container = new CompositionContainer(catalog);
+            container.SatisfyImportsOnce(this);
         }
         #endregion
     }

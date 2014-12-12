@@ -1,7 +1,5 @@
-﻿using MySensors.Controllers;
-using SmartNetwork.Core.Infrastructure;
+﻿using SmartNetwork.Core.Infrastructure;
 using System;
-using System.Threading;
 
 namespace SmartNetwork.ApplicationConsole
 {
@@ -9,7 +7,7 @@ namespace SmartNetwork.ApplicationConsole
     {
         static void Main(string[] args)
         {
-            Console.Title = "Smart Network controller";
+            Console.Title = "Smart Network";
             Console.Write("Starting controller... ");
 
             //OldStart();
@@ -20,7 +18,7 @@ namespace SmartNetwork.ApplicationConsole
         {
             ControllerEnvironment.Init();
 
-            var controller = new SmartNetwork.Core.Infrastructure.Controller();
+            var controller = new Controller();
 
             controller.Init();
             controller.StartServices();
@@ -34,42 +32,42 @@ namespace SmartNetwork.ApplicationConsole
         }
         private static void OldStart()
         {
-            MySensors.Controllers.Controller controller = new MySensors.Controllers.Controller(true);
-            controller.Log += (sender, text, isLine, logLevel) => {
-                if (!string.IsNullOrEmpty(text))
-                {
-                    switch (logLevel)
-                    {
-                        case LogLevel.Success: Console.ForegroundColor = ConsoleColor.Green; break;
-                        case LogLevel.Error: Console.ForegroundColor = ConsoleColor.Red; break;
-                        case LogLevel.Warning: Console.ForegroundColor = ConsoleColor.Yellow; break;
-                        case LogLevel.Normal:
-                        default:
-                            Console.ResetColor(); break;
-                    }
+            //MySensors.Controllers.Controller controller = new MySensors.Controllers.Controller(true);
+            //controller.Log += (sender, text, isLine, logLevel) => {
+            //    if (!string.IsNullOrEmpty(text))
+            //    {
+            //        switch (logLevel)
+            //        {
+            //            case LogLevel.Success: Console.ForegroundColor = ConsoleColor.Green; break;
+            //            case LogLevel.Error: Console.ForegroundColor = ConsoleColor.Red; break;
+            //            case LogLevel.Warning: Console.ForegroundColor = ConsoleColor.Yellow; break;
+            //            case LogLevel.Normal:
+            //            default:
+            //                Console.ResetColor(); break;
+            //        }
 
-                    if (isLine)
-                        Console.WriteLine(text);
-                    else
-                        Console.Write(text);
-                }
+            //        if (isLine)
+            //            Console.WriteLine(text);
+            //        else
+            //            Console.Write(text);
+            //    }
 
-                Console.ResetColor();
-            };
+            //    Console.ResetColor();
+            //};
             
 
-            while (!controller.Start())
-            {
-                Console.WriteLine("*******************************************************");
-                Thread.Sleep(1000);
-            }
+            //while (!controller.Start())
+            //{
+            //    Console.WriteLine("*******************************************************");
+            //    Thread.Sleep(1000);
+            //}
 
-            Console.WriteLine("Controller started successfuly! Press ENTER to exit.");
-            //while (!Console.ReadLine().ToLower().Equals("q")) ;
-            Console.WriteLine();
-            Console.ReadLine();
+            //Console.WriteLine("Controller started successfuly! Press ENTER to exit.");
+            ////while (!Console.ReadLine().ToLower().Equals("q")) ;
+            //Console.WriteLine();
+            //Console.ReadLine();
 
-            controller.Stop();
+            //controller.Stop();
         }
     }
 }

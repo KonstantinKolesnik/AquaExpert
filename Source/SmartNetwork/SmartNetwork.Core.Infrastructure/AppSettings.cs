@@ -29,10 +29,7 @@ namespace SmartNetwork.Core.Infrastructure
         }
         public static string PluginsFullPath
         {
-            get
-            {
-                return Path.IsPathRooted(PluginsFolder) ? PluginsFolder : Path.Combine(ExecutablePath, PluginsFolder);
-            }
+            get { return Path.IsPathRooted(PluginsFolder) ? PluginsFolder : Path.Combine(ExecutablePath, PluginsFolder); }
         }
         public static string ExecutablePath
         {
