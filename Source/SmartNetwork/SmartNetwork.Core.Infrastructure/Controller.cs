@@ -97,28 +97,17 @@ namespace SmartNetwork.Core.Infrastructure
         #region Private methods
         private static void InitSessionFactory(ServiceContext context)
         {
-            var cfg = new Configuration();
-
             var mapper = new ConventionModelMapper();
-
-            mapper.BeforeMapClass += (inspector, type, map) =>
-                {
-                    var idProperty = type.GetProperty("Id");
-                    map.Id(idProperty, idMapper => { });
-                };
-
+            mapper.BeforeMapClass += (inspector, type, map) => { var idProperty = type.GetProperty("Id"); map.Id(idProperty, idMapper => { }); };
             mapper.BeforeMapProperty += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName());
             mapper.BeforeMapManyToOne += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName() + "Id");
 
+            var cfg = new Configuration();
             foreach (var plugin in context.GetAllPlugins())
             {
                 plugin.InitDbModel(mapper);
                 cfg.AddAssembly(plugin.GetType().Assembly);
             }
-
-            var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-
-
             cfg.DataBaseIntegration(dbConfig =>
             {
                 dbConfig.Dialect<MsSqlCe40Dialect>();
@@ -126,6 +115,7 @@ namespace SmartNetwork.Core.Infrastructure
                 dbConfig.ConnectionStringName = "common";
             });
 
+            var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
             cfg.AddDeserializedMapping(mapping, null);	//Loads nhibernate mappings
 
             var sessionFactory = cfg.BuildSessionFactory();
