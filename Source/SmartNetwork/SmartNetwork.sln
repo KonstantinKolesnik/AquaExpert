@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SmartNetwork.sdf = SmartNetwork.sdf
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Plugins.MySensors", "SmartNetwork.Plugins.MySensors\SmartNetwork.Plugins.MySensors.csproj", "{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +156,22 @@ Global
 		{AB1E5CF0-A30E-4046-A468-0F8AA8D0BE5D}.Release|Win32.ActiveCfg = Release|Any CPU
 		{AB1E5CF0-A30E-4046-A468-0F8AA8D0BE5D}.Release|x64.ActiveCfg = Release|Any CPU
 		{AB1E5CF0-A30E-4046-A468-0F8AA8D0BE5D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -167,5 +185,6 @@ Global
 		{3BE84D3D-7B5B-4C90-803D-A112D8AB40C7} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
 		{47B49308-37B1-4114-956E-66D508F2BB93} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
 		{AB1E5CF0-A30E-4046-A468-0F8AA8D0BE5D} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
+		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 	EndGlobalSection
 EndGlobal

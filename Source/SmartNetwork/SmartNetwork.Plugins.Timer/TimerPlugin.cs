@@ -9,7 +9,7 @@ namespace SmartNetwork.Plugins.Timer
     [Plugin]
     public class TimerPlugin : PluginBase
     {
-        private const int TIMER_INTERVAL = 3000;
+        private const int TIMER_INTERVAL = 1000;
         private System.Timers.Timer timer;
 
         [ImportMany("E62C804C-B96B-4CA8-822E-B1725B363534")]
