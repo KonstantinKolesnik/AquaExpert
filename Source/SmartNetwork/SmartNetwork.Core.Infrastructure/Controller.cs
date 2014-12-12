@@ -1,4 +1,7 @@
-﻿using ECM7.Migrator.Framework;
+﻿using ECM7.Migrator;
+using ECM7.Migrator.Framework;
+using ECM7.Migrator.Providers;
+using ECM7.Migrator.Providers.SqlServer;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
 using NHibernate.Driver;
@@ -11,6 +14,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace SmartNetwork.Core.Infrastructure
@@ -133,22 +137,22 @@ namespace SmartNetwork.Core.Infrastructure
 
             logger.Info("Update database: {0}", assembly.FullName);
 
-            //// todo: sql
-            //var provider = ProviderFactory.Create<SqlServerCeTransformationProvider>(connection, null);
-            ////var provider = ProviderFactory.Create<SqlServerTransformationProvider>(connection, null);
+            // todo: sql
+            var provider = ProviderFactory.Create<SqlServerCeTransformationProvider>(connection, null);
+            //var provider = ProviderFactory.Create<SqlServerTransformationProvider>(connection, null);
 
-            //using (var migrator = new Migrator(provider, assembly))
-            //{
-            //    // запрещаем выполнять миграции, для которых не указано "пространство имен"
-            //    if (migrator.AvailableMigrations.Any())
-            //    {
-            //        var migrationsInfo = assembly.GetCustomAttribute<MigrationAssemblyAttribute>();
-            //        if (migrationsInfo == null || string.IsNullOrWhiteSpace(migrationsInfo.Key))
-            //            logger.Error("Assembly {0} contains invalid migration info", assembly.FullName);
-            //    }
+            using (var migrator = new Migrator(provider, assembly))
+            {
+                // запрещаем выполнять миграции, для которых не указано "пространство имен"
+                if (migrator.AvailableMigrations.Any())
+                {
+                    var migrationsInfo = assembly.GetCustomAttribute<MigrationAssemblyAttribute>();
+                    if (migrationsInfo == null || string.IsNullOrWhiteSpace(migrationsInfo.Key))
+                        logger.Error("Assembly {0} contains invalid migration info", assembly.FullName);
+                }
 
-            //    migrator.Migrate();
-            //}
+                migrator.Migrate();
+            }
         }
 
         private void ShadowCopyPlugins()
