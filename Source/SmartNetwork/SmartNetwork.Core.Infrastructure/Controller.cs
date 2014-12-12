@@ -17,60 +17,27 @@ namespace SmartNetwork.Core.Infrastructure
 {
     public class Controller
     {
+        #region Fields
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Import(typeof(IServiceContext))]
         private ServiceContext context;
+        #endregion
 
-        private static void InitSessionFactory(ServiceContext context)
-        {
-            var cfg = new Configuration();
-
-            var mapper = new ConventionModelMapper();
-
-            mapper.BeforeMapClass += (inspector, type, map) =>
-                {
-                    var idProperty = type.GetProperty("Id");
-                    map.Id(idProperty, idMapper => { });
-                };
-
-            mapper.BeforeMapProperty += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName());
-            mapper.BeforeMapManyToOne += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName() + "Id");
-
-            foreach (var plugin in context.GetAllPlugins())
-            {
-                plugin.InitDbModel(mapper);
-                cfg.AddAssembly(plugin.GetType().Assembly);
-            }
-
-            var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-
-
-            cfg.DataBaseIntegration(dbConfig =>
-            {
-                dbConfig.Dialect<MsSqlCe40Dialect>();
-                dbConfig.Driver<SqlServerCeDriver>();
-                dbConfig.ConnectionStringName = "common";
-            });
-
-            cfg.AddDeserializedMapping(mapping, null);	//Loads nhibernate mappings
-
-            var sessionFactory = cfg.BuildSessionFactory();
-            context.InitSessionFactory(sessionFactory);
-        }
-
+        #region Public methods
         public void Init()
         {
             try
             {
                 ShadowCopyPlugins();
                 LoadPlugins();
-                InitSessionFactory(context);
+
+                //InitSessionFactory(context);
 
                 // обновляем структуру БД
-                using (var session = context.OpenSession())
-                    foreach (var plugin in context.GetAllPlugins())
-                        UpdateDatabase(session.Connection, plugin);
+                //using (var session = context.OpenSession())
+                //    foreach (var plugin in context.GetAllPlugins())
+                //        UpdateDatabase(session.Connection, plugin);
 
                 // инициализируем плагины
                 foreach (var plugin in context.GetAllPlugins())
@@ -121,8 +88,9 @@ namespace SmartNetwork.Core.Infrastructure
                 logger.Error("Error on stop plugins", ex);
             }
         }
+        #endregion
 
-        #region Private
+        #region Private methods
         private void LoadPlugins()
         {
             logger.Info("Load plugins");
@@ -147,11 +115,47 @@ namespace SmartNetwork.Core.Infrastructure
             container.SatisfyImportsOnce(this);
         }
 
+        private static void InitSessionFactory(ServiceContext context)
+        {
+            var cfg = new Configuration();
+
+            var mapper = new ConventionModelMapper();
+
+            mapper.BeforeMapClass += (inspector, type, map) =>
+                {
+                    var idProperty = type.GetProperty("Id");
+                    map.Id(idProperty, idMapper => { });
+                };
+
+            mapper.BeforeMapProperty += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName());
+            mapper.BeforeMapManyToOne += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName() + "Id");
+
+            foreach (var plugin in context.GetAllPlugins())
+            {
+                plugin.InitDbModel(mapper);
+                cfg.AddAssembly(plugin.GetType().Assembly);
+            }
+
+            var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
+
+
+            cfg.DataBaseIntegration(dbConfig =>
+            {
+                dbConfig.Dialect<MsSqlCe40Dialect>();
+                dbConfig.Driver<SqlServerCeDriver>();
+                dbConfig.ConnectionStringName = "common";
+            });
+
+            cfg.AddDeserializedMapping(mapping, null);	//Loads nhibernate mappings
+
+            var sessionFactory = cfg.BuildSessionFactory();
+            context.InitSessionFactory(sessionFactory);
+        }
         private void UpdateDatabase(IDbConnection connection, PluginBase plugin)
         {
-            //var assembly = plugin.GetType().Assembly;
+            var assembly = plugin.GetType().Assembly;
 
-            //logger.Info("Update database: {0}", assembly.FullName);
+            logger.Info("Update database: {0}", assembly.FullName);
 
             //// todo: sql
             //var provider = ProviderFactory.Create<SqlServerCeTransformationProvider>(connection, null);
@@ -170,7 +174,8 @@ namespace SmartNetwork.Core.Infrastructure
             //    migrator.Migrate();
             //}
         }
-        public void ShadowCopyPlugins()
+
+        private void ShadowCopyPlugins()
         {
             logger.Info("shadow copy plugins");
 

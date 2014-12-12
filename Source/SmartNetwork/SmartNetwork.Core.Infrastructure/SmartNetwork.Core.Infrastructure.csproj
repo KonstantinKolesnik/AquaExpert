@@ -7,8 +7,8 @@
     <ProjectGuid>{47B49308-37B1-4114-956E-66D508F2BB93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartNetworkController.Core.Infrastructure</RootNamespace>
-    <AssemblyName>SmartNetworkController.Core.Infrastructure</AssemblyName>
+    <RootNamespace>SmartNetwork.Core.Infrastructure</RootNamespace>
+    <AssemblyName>SmartNetwork.Core.Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
