@@ -32,12 +32,11 @@ namespace SmartNetwork.Plugins.Timer
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             timer.Enabled = false;
+
             var now = DateTime.Now;
             Run(OnEvent, x => x(now));
 
             //Debugger.Launch();
-            //Logger.Info("Hello, world!");
-            //Logger.Error("Error message");
             timer.Enabled = true;
         }
     }
