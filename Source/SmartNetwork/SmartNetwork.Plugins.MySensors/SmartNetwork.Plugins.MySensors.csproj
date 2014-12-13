@@ -59,7 +59,11 @@
     <Compile Include="Core\SensorType.cs" />
     <Compile Include="Core\SensorValueType.cs" />
     <Compile Include="Core\StreamValueType.cs" />
+    <Compile Include="Data\BatteryLevel.cs" />
     <Compile Include="Data\Migrations.cs" />
+    <Compile Include="Data\Node.cs" />
+    <Compile Include="Data\Sensor.cs" />
+    <Compile Include="Data\SensorValue.cs" />
     <Compile Include="GatewayProxies\EthernetGatewayProxy.cs" />
     <Compile Include="GatewayProxies\SerialGatewayProxy.cs" />
     <Compile Include="IGatewayProxy.cs" />

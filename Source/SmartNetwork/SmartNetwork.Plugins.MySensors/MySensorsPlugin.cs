@@ -1,12 +1,15 @@
 ﻿using NHibernate.Mapping.ByCode;
 using SmartNetwork.Core.Plugins;
 using SmartNetwork.Plugins.MySensors.Core;
+using SmartNetwork.Plugins.MySensors.Data;
 using SmartNetwork.Plugins.MySensors.GatewayProxies;
 using SmartNetwork.Plugins.Timer;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 //using System.Linq;
+using NHibernate.Linq;
 
 namespace SmartNetwork.Plugins.MySensors
 {
@@ -16,6 +19,7 @@ namespace SmartNetwork.Plugins.MySensors
         #region Fields
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
+        private List<Node> nodes;
         #endregion
 
         [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
@@ -24,15 +28,58 @@ namespace SmartNetwork.Plugins.MySensors
 
         public override void InitDbModel(ModelMapper mapper)
         {
-            //mapper.Class<AlarmTime>(cfg => cfg.Table("AlarmClock_AlarmTime"));
+            mapper.Class<Node>(cfg => cfg.Table("MySensors_Node"));
+            mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensor"));
+            mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevel"));
+            mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValue"));
 
 
 
 
+
+            //using (var session = Context.OpenSession())
+            //{
+
+            //    var list = session.Query<UserScript>().ToArray();
+
+
+            //    // создаем новй объект UserScript
+            //    var newScript = new UserScript
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        Name = "script name",
+            //        Body = "script body"
+            //    };
+
+            //    // сохраняем его в БД
+            //    session.Save(newScript);
+
+            //    // ищем в БД объект с именем "test"
+            //    var scriptForDelete = session
+            //        .Query<UserScript>()
+            //        .FirstOrDefault(s => s.Name == "test");
+
+            //    // удаляем его из БД
+            //    session.Delete(scriptForDelete);
+            //    session.Flush();
+            //}
 
         }
         public override void InitPlugin()
         {
+            using (var session = Context.OpenSession())
+            {
+                //var nds = new ObservableCollection<Node>(dbService.GetAllNodes());
+                //var bls = dbService.GetAllBatteryLevels();
+                //var sensors = dbService.GetAllSensors();
+                //var svs = dbService.GetAllSensorValues();
+                //var stngs = dbService.GetAllSettings();
+                //var mdls = dbService.GetAllModules();
+
+                nodes = session.Query<Node>().ToArray();
+
+            }
+
 
             gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
@@ -51,7 +98,6 @@ namespace SmartNetwork.Plugins.MySensors
 
                 Logger.Info(gatewayProxy.IsStarted ? "Success." : "Failed.");
             }
-
         }
         public override void StopPlugin()
         {

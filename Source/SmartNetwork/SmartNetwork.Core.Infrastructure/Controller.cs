@@ -147,7 +147,7 @@ namespace SmartNetwork.Core.Infrastructure
 
         private void ShadowCopyPlugins()
         {
-            logger.Info("shadow copy plugins");
+            logger.Info("Shadow copy plugins");
 
             var shadowedPlugins = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
             if (shadowedPlugins.Exists)
