@@ -10,9 +10,9 @@ namespace SmartNetwork.Plugins.MySensors.Data
     {
         public override void Apply()
         {
-            Database.AddTable("MySensors_Node",
+            Database.AddTable("MySensors_Nodes",
                 new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
-                new Column("NodeID", DbType.Byte, ColumnProperty.NotNull),
+                new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("Type", DbType.Byte, ColumnProperty.NotNull),
                 new Column("ProtocolVersion", DbType.String, ColumnProperty.NotNull),
                 new Column("SketchName", DbType.String),
@@ -22,7 +22,7 @@ namespace SmartNetwork.Plugins.MySensors.Data
 
         public override void Revert()
         {
-            Database.RemoveTable("MySensors_Node");
+            Database.RemoveTable("MySensors_Nodes");
         }
     }
 

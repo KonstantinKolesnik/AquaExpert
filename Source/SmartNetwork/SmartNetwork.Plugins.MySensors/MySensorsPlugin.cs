@@ -28,13 +28,10 @@ namespace SmartNetwork.Plugins.MySensors
 
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<Node>(cfg => cfg.Table("MySensors_Node"));
+            mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
             //mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensor"));
             //mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevel"));
             //mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValue"));
-
-
-
 
 
             //using (var session = Context.OpenSession())
@@ -76,7 +73,7 @@ namespace SmartNetwork.Plugins.MySensors
                 //var stngs = dbService.GetAllSettings();
                 //var mdls = dbService.GetAllModules();
 
-                //nodes = session.Query<Node>().ToArray();
+                nodes = session.Query<Node>().ToList();
             }
 
 
@@ -103,14 +100,23 @@ namespace SmartNetwork.Plugins.MySensors
             gatewayProxy.Stop();
         }
 
+
+
         public Node GetNode(byte nodeID)
         {
             //return nodes.FirstOrDefault(node => node.NodeID == nodeID);
 
             using (var session = Context.OpenSession())
-                return session.Query<Node>().FirstOrDefault(node => (byte)node.NodeID == nodeID);
+                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeID);
         }
-
+        public void SaveNode(Node node)
+        {
+            using (var session = Context.OpenSession())
+            {
+                session.SaveOrUpdate(node);
+                session.Flush();
+            }
+        }
 
 
         #region Event handlers
@@ -138,18 +144,26 @@ namespace SmartNetwork.Plugins.MySensors
                     {
                         if (node == null)
                         {
-                        //    node = new Node(message.NodeID, (SensorType)message.SubType, message.Payload);
-                        //    dbService.Insert(node);
-                        //    nodes.Add(node);
+                            node = new Node
+                            {
+                                Id = Guid.NewGuid(),
+                                NodeNo = message.NodeID,
+                                Type = (SensorType)message.SubType,
+                                ProtocolVersion = message.Payload
+                                //SketchName = "",
+                                //SketchVersion = ""
+                            };
+                            SaveNode(node);
+                            //nodes.Add(node);
                         }
                         else
                         {
-                        //    node.Type = (SensorType)message.SubType;
-                        //    node.ProtocolVersion = message.Payload;
-                        //    dbService.Update(node);
+                            node.Type = (SensorType)message.SubType;
+                            node.ProtocolVersion = message.Payload;
+                            SaveNode(node);
                         }
                         //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
-                        //Run(OnSensorMessage, x => x(message));
+                        Run(OnSensorMessage, x => x(message));
                     }
                     else
                     {
@@ -234,18 +248,18 @@ namespace SmartNetwork.Plugins.MySensors
                             break;
                         case InternalValueType.SketchName:
                         case InternalValueType.SketchVersion:
-                            //if (node != null)
-                            //{
-                            //    if (ivt == InternalValueType.SketchName)
-                            //        node.SketchName = message.Payload;
-                            //    else
-                            //        node.SketchVersion = message.Payload;
+                            if (node != null)
+                            {
+                                if (ivt == InternalValueType.SketchName)
+                                    node.SketchName = message.Payload;
+                                else
+                                    node.SketchVersion = message.Payload;
 
-                            //    dbService.Update(node);
-                            //    communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
-                            //}
+                                SaveNode(node);
+                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
+                            }
 
-                            Run(OnSensorMessage, x => x(message));
+                            //Run(OnSensorMessage, x => x(message));
                             break;
                         case InternalValueType.Reboot:
                             break;
