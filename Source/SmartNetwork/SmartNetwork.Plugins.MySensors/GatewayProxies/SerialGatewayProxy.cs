@@ -54,10 +54,8 @@ namespace SmartNetwork.Plugins.MySensors.GatewayProxies
 
                     if (serialPort.IsOpen)
                     {
+                        serialPort.DiscardInBuffer();
                         return;
-
-
-
 
                         //try
                         //{
@@ -103,11 +101,14 @@ namespace SmartNetwork.Plugins.MySensors.GatewayProxies
                 //if (nbrDataRead == 0)
                 //    return;
 
-                string str = serialPort.ReadLine();
-                SensorMessage msg = SensorMessage.FromRawMessage(str);
+                string str = null;
+                while (!string.IsNullOrEmpty(str = serialPort.ReadLine()))
+                {
+                    SensorMessage msg = SensorMessage.FromRawMessage(str);
 
-                if (msg != null && MessageReceived != null)
-                    MessageReceived(this, new SensorMessageEventArgs(msg));
+                    if (msg != null && MessageReceived != null)
+                        MessageReceived(this, new SensorMessageEventArgs(msg));
+                }
             }
             catch (TimeoutException) { }
             catch (IOException) { }

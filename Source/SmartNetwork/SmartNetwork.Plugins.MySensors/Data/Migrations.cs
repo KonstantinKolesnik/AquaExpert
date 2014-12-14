@@ -5,6 +5,30 @@ using System.Data;
 
 namespace SmartNetwork.Plugins.MySensors.Data
 {
+    [Migration(1)]
+    public class Migration01 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddTable("MySensors_Node",
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("NodeID", DbType.Byte, ColumnProperty.NotNull),
+                new Column("Type", DbType.Byte, ColumnProperty.NotNull),
+                new Column("ProtocolVersion", DbType.String, ColumnProperty.NotNull),
+                new Column("SketchName", DbType.String),
+                new Column("SketchVersion", DbType.String)
+            );
+        }
+
+        public override void Revert()
+        {
+            Database.RemoveTable("MySensors_Node");
+        }
+    }
+
+
+
+
     //[Migration(1)]
     //public class Migration01UserScriptTable : Migration
     //{

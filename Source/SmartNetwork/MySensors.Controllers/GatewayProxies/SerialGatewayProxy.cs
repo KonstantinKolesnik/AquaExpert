@@ -92,11 +92,14 @@ namespace MySensors.Controllers.GatewayProxies
         {
             try
             {
-                string str = serialPort.ReadLine();
-                SensorMessage msg = SensorMessage.FromRawMessage(str);
+                string str = null;
+                while (!string.IsNullOrEmpty(str = serialPort.ReadLine()))
+                {
+                    SensorMessage msg = SensorMessage.FromRawMessage(str);
 
-                if (msg != null && MessageReceived != null)
-                    MessageReceived(this, new SensorMessageEventArgs(msg));
+                    if (msg != null && MessageReceived != null)
+                        MessageReceived(this, new SensorMessageEventArgs(msg));
+                }
             }
             catch (TimeoutException) { }
             catch (IOException) { }

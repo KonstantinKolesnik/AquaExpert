@@ -139,7 +139,7 @@ namespace MySensors.Controllers
 
         public Node GetNode(byte nodeID)
         {
-            return nodes.Where(node => node.ID == nodeID).FirstOrDefault();
+            return nodes.FirstOrDefault(node => node.ID == nodeID);
         }
         public Sensor GetSensor(byte nodeID, byte sensorID)
         {
@@ -147,7 +147,7 @@ namespace MySensors.Controllers
             if (node == null)
                 return null;
 
-            return node.Sensors.Where(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID).FirstOrDefault();
+            return node.Sensors.FirstOrDefault(sensor => sensor.NodeID == nodeID && sensor.ID == sensorID);
         }
 
         public void SetSensorValue(Sensor sensor, SensorValueType valueType, object value)

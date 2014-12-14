@@ -94,40 +94,71 @@ namespace SmartNetwork.Plugins.MySensors.Core
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(string.Format("Node ID: \t\t{0:d3}", NodeID));
-            sb.AppendLine(string.Format("Sensor ID: \t\t{0:d3}", SensorID));
-            sb.AppendLine(string.Format("Type: \t\t\t{0}", Type));
-            //sb.AppendLine(string.Format("Is ack needed: \t\t{0}", IsAckNeeded));
+            //sb.AppendLine(string.Format("Node ID: \t\t{0:d3}", NodeID));
+            //sb.AppendLine(string.Format("Sensor ID: \t\t{0:d3}", SensorID));
+            //sb.AppendLine(string.Format("Type: \t\t\t{0}", Type));
+            ////sb.AppendLine(string.Format("Is ack needed: \t\t{0}", IsAckNeeded));
 
-            string propertyName = "Sub-type";
-            object propertyValue = SubType;
+            //string propertyName = "Sub-type";
+            //object propertyValue = SubType;
+            //switch (Type)
+            //{
+            //    case SensorMessageType.Presentation:
+            //        propertyName = "Sensor type";
+            //        propertyValue = (SensorType)SubType;
+            //        break;
+            //    case SensorMessageType.Set:
+            //    case SensorMessageType.Request:
+            //        propertyName = "Value type";
+            //        propertyValue = (SensorValueType)SubType;
+            //        break;
+            //    case SensorMessageType.Internal:
+            //        propertyName = "Data type";
+            //        propertyValue = (InternalValueType)SubType;
+            //        break;
+            //    case SensorMessageType.Stream:
+            //        propertyName = "Stream data type";
+            //        propertyValue = (StreamValueType)SubType;
+            //        break;
+            //    default:
+            //        propertyName = "Sub-type";
+            //        propertyValue = SubType;
+            //        break;
+            //}
+            //sb.AppendLine(string.Format("{0}: \t\t{1}", propertyName, propertyValue));
+
+            //sb.AppendLine(string.Format("Value: \t\t\t{0}", Payload));
+
+
+
+
+
+            sb.Append(string.Format("[{0:d3}]", NodeID));
+            sb.Append(string.Format("[{0:d3}]", SensorID));
+            sb.Append(string.Format("[{0}]", Type));
+            //sb.Append(string.Format("[Ack: {0}]", IsAckNeeded));
             switch (Type)
             {
                 case SensorMessageType.Presentation:
-                    propertyName = "Sensor type";
-                    propertyValue = (SensorType)SubType;
+                    sb.Append(string.Format("[{0}]", (SensorType)SubType));
                     break;
                 case SensorMessageType.Set:
                 case SensorMessageType.Request:
-                    propertyName = "Value type";
-                    propertyValue = (SensorValueType)SubType;
+                    sb.Append(string.Format("[{0}]", (SensorValueType)SubType));
                     break;
                 case SensorMessageType.Internal:
-                    propertyName = "Data type";
-                    propertyValue = (InternalValueType)SubType;
+                    sb.Append(string.Format("[{0}]", (InternalValueType)SubType));
                     break;
                 case SensorMessageType.Stream:
-                    propertyName = "Stream data type";
-                    propertyValue = (StreamValueType)SubType;
+                    sb.Append(string.Format("[{0}]", (StreamValueType)SubType));
                     break;
                 default:
-                    propertyName = "Sub-type";
-                    propertyValue = SubType;
+                    sb.Append(string.Format("[{0}]", SubType));
                     break;
             }
-            sb.AppendLine(string.Format("{0}: \t\t{1}", propertyName, propertyValue));
+            sb.Append(string.Format("[{0}]", Payload));
 
-            sb.AppendLine(string.Format("Value: \t\t\t{0}", Payload));
+
 
             return sb.ToString();
         }

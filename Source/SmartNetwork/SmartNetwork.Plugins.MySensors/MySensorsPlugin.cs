@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Linq;
+using NHibernate.Mapping.ByCode;
 using SmartNetwork.Core.Plugins;
 using SmartNetwork.Plugins.MySensors.Core;
 using SmartNetwork.Plugins.MySensors.Data;
@@ -8,8 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
-//using System.Linq;
-using NHibernate.Linq;
+using System.Linq;
 
 namespace SmartNetwork.Plugins.MySensors
 {
@@ -29,9 +29,9 @@ namespace SmartNetwork.Plugins.MySensors
         public override void InitDbModel(ModelMapper mapper)
         {
             mapper.Class<Node>(cfg => cfg.Table("MySensors_Node"));
-            mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensor"));
-            mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevel"));
-            mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValue"));
+            //mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensor"));
+            //mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevel"));
+            //mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValue"));
 
 
 
@@ -76,8 +76,7 @@ namespace SmartNetwork.Plugins.MySensors
                 //var stngs = dbService.GetAllSettings();
                 //var mdls = dbService.GetAllModules();
 
-                nodes = session.Query<Node>().ToArray();
-
+                //nodes = session.Query<Node>().ToArray();
             }
 
 
@@ -104,6 +103,15 @@ namespace SmartNetwork.Plugins.MySensors
             gatewayProxy.Stop();
         }
 
+        public Node GetNode(byte nodeID)
+        {
+            //return nodes.FirstOrDefault(node => node.NodeID == nodeID);
+
+            using (var session = Context.OpenSession())
+                return session.Query<Node>().FirstOrDefault(node => (byte)node.NodeID == nodeID);
+        }
+
+
 
         #region Event handlers
         [OnTimerElapsed]
@@ -119,50 +127,49 @@ namespace SmartNetwork.Plugins.MySensors
             Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeID == 0 || message.SensorID == 255;
-            //Node node = GetNode(message.NodeID);
+            Node node = GetNode(message.NodeID);
             //Sensor sensor = GetSensor(message.NodeID, message.SensorID); // if message.SensorID == 255 it returns null
 
             switch (message.Type)
             {
                 #region Presentation
                 case SensorMessageType.Presentation: // sent by a nodes when they present attached sensors.
-                    //if (isNodeMessage)
-                    //{
-                    //    if (node == null)
-                    //    {
-                    //        node = new Node(message.NodeID, (SensorType)message.SubType, message.Payload);
-                    //        dbService.Insert(node);
-                    //        nodes.Add(node);
-                    //    }
-                    //    else
-                    //    {
-                    //        node.Type = (SensorType)message.SubType;
-                    //        node.ProtocolVersion = message.Payload;
-                    //        dbService.Update(node);
-                    //    }
-                    //    communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
-                    //}
-                    //else
-                    //{
-                    //    if (node != null)
-                    //    {
-                    //        if (sensor == null)
-                    //        {
-                    //            sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
-                    //            dbService.Insert(sensor);
-                    //            node.Sensors.Add(sensor);
-                    //        }
-                    //        else
-                    //        {
-                    //            sensor.Type = (SensorType)message.SubType;
-                    //            sensor.ProtocolVersion = message.Payload;
-                    //            dbService.Update(sensor);
-                    //        }
-                    //        communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
-                    //    }
-                    //}
-
-                    Run(OnSensorMessage, x => x(message));
+                    if (isNodeMessage)
+                    {
+                        if (node == null)
+                        {
+                        //    node = new Node(message.NodeID, (SensorType)message.SubType, message.Payload);
+                        //    dbService.Insert(node);
+                        //    nodes.Add(node);
+                        }
+                        else
+                        {
+                        //    node.Type = (SensorType)message.SubType;
+                        //    node.ProtocolVersion = message.Payload;
+                        //    dbService.Update(node);
+                        }
+                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
+                        //Run(OnSensorMessage, x => x(message));
+                    }
+                    else
+                    {
+                        //if (node != null)
+                        //{
+                        //    if (sensor == null)
+                        //    {
+                        //        sensor = new Sensor(message.NodeID, message.SensorID, (SensorType)message.SubType, message.Payload);
+                        //        dbService.Insert(sensor);
+                        //        node.Sensors.Add(sensor);
+                        //    }
+                        //    else
+                        //    {
+                        //        sensor.Type = (SensorType)message.SubType;
+                        //        sensor.ProtocolVersion = message.Payload;
+                        //        dbService.Update(sensor);
+                        //    }
+                        //    communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
+                        //}
+                    }
                     break;
                 #endregion
 
