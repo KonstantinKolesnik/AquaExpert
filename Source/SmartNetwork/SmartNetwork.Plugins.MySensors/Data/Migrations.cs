@@ -10,93 +10,83 @@ namespace SmartNetwork.Plugins.MySensors.Data
     {
         public override void Apply()
         {
+            // settings
+            Database.AddTable("MySensors_Settings",
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("Name", DbType.String, ColumnProperty.NotNull),
+                new Column("Value", DbType.String, ColumnProperty.NotNull)
+            );
+            Database.AddUniqueConstraint("UK_MySensors_Settings_Name", "MySensors_Settings", "Name");
+
+            // nodes
             Database.AddTable("MySensors_Nodes",
-                //new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
-                new Column("Id", DbType.Byte, ColumnProperty.PrimaryKey),
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("Type", DbType.Byte),
                 new Column("ProtocolVersion", DbType.String),
                 new Column("SketchName", DbType.String),
                 new Column("SketchVersion", DbType.String)
             );
+            Database.AddUniqueConstraint("UK_MySensors_Nodes_NodeNo", "MySensors_Nodes", "NodeNo");
 
-
+            // sensors
             Database.AddTable("MySensors_Sensors",
-                new Column("Id", DbType.Byte, ColumnProperty.NotNull),
-                new Column("NodeId", DbType.Byte, ColumnProperty.NotNull),
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
+                new Column("SensorNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("Type", DbType.Byte, ColumnProperty.NotNull),
                 new Column("ProtocolVersion", DbType.String)
             );
-            Database.AddForeignKey("FK_MySensors_Sensors_NodeId", "MySensors_Sensors", "NodeId", "MySensors_Nodes", "Id", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
-            Database.AddPrimaryKey("PK_MySensors_Sensors", "MySensors_Sensors", new string[] { "NodeId", "Id" });
+            Database.AddUniqueConstraint("UK_MySensors_Sensors_NodeNo_SensorNo", "MySensors_Sensors", "NodeNo", "SensorNo");
+            Database.AddForeignKey("FK_MySensors_Sensors_NodeId", "MySensors_Sensors", "NodeNo", "MySensors_Nodes", "NodeNo", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
 
-
+            // battery levels
             Database.AddTable("MySensors_BatteryLevels",
-                new Column("Id", DbType.Guid, ColumnProperty.NotNull, "newid()"),
-                new Column("NodeId", DbType.Byte, ColumnProperty.NotNull),
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("TimeStamp", DbType.DateTime, ColumnProperty.NotNull),
                 new Column("Level", DbType.Byte)
             );
-            Database.AddForeignKey("FK_MySensors_BatteryLevels_NodeId", "MySensors_BatteryLevels", "NodeId", "MySensors_Nodes", "Id", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
-            //Database.AddPrimaryKey("PK_MySensors_BatteryLevels", "MySensors_BatteryLevels", new string[] { "NodeId", "TimeStamp" });
-            Database.AddUniqueConstraint("UK_MySensors_BatteryLevels_TimeStamp", "MySensors_BatteryLevels", "NodeId", "Id", "TimeStamp");
+            Database.AddUniqueConstraint("UK_MySensors_BatteryLevels_NodeNo_TimeStamp", "MySensors_BatteryLevels", "NodeNo", "TimeStamp");
+            Database.AddForeignKey("FK_MySensors_BatteryLevels_NodeNo", "MySensors_BatteryLevels", "NodeNo", "MySensors_Nodes", "NodeNo", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
 
-
+            // sensor values
             Database.AddTable("MySensors_SensorValues",
-                new Column("NodeId", DbType.Byte, ColumnProperty.NotNull),
-                new Column("SensorId", DbType.Byte, ColumnProperty.NotNull),
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
+                new Column("SensorNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("TimeStamp", DbType.DateTime, ColumnProperty.NotNull),
                 new Column("Type", DbType.Byte, ColumnProperty.NotNull),
-                new Column("Value", DbType.Double)
+                new Column("Value", DbType.Double.WithSize(10, 2))
             );
-            Database.AddForeignKey("FK_MySensors_SensorValues_NodeId", "MySensors_SensorValues", new string[] { "NodeId", "SensorId" }, "MySensors_Sensors", new string[] { "NodeId", "Id" }, ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
-            Database.AddPrimaryKey("PK_MySensors_SensorValues", "MySensors_SensorValues", new string[] { "NodeId", "SensorId", "TimeStamp" });
+            Database.AddUniqueConstraint("UK_MySensors_SensorValues_NodeNo_SensorNo_TimeStamp", "MySensors_SensorValues", "NodeNo", "SensorNo", "TimeStamp");
+            Database.AddForeignKey("FK_MySensors_SensorValues_NodeNo_SensorNo", "MySensors_SensorValues", new string[] { "NodeNo", "SensorNo" }, "MySensors_Sensors", new string[] { "NodeNo", "SensorNo" }, ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
         }
 
         public override void Revert()
         {
+            // sensor values
+            Database.RemoveConstraint("MySensors_SensorValues", "UK_MySensors_SensorValues_NodeNo_SensorNo_TimeStamp");
+            Database.RemoveConstraint("MySensors_SensorValues", "FK_MySensors_SensorValues_NodeNo_SensorNo");
             Database.RemoveTable("MySensors_SensorValues");
+
+            // battery levels
+            Database.RemoveConstraint("MySensors_BatteryLevels", "UK_MySensors_BatteryLevels_NodeNo_TimeStamp");
+            Database.RemoveConstraint("MySensors_BatteryLevels", "FK_MySensors_BatteryLevels_NodeNo");
             Database.RemoveTable("MySensors_BatteryLevels");
+
+            // sensors
+            Database.RemoveConstraint("MySensors_Sensors", "UK_MySensors_Sensors_NodeNo_SensorNo");
+            Database.RemoveConstraint("MySensors_Sensors", "FK_MySensors_Sensors_NodeId");
             Database.RemoveTable("MySensors_Sensors");
+
+            // nodes
+            Database.RemoveConstraint("MySensors_Nodes", "UK_MySensors_Nodes_NodeNo");
             Database.RemoveTable("MySensors_Nodes");
+
+            // configuration
+            Database.RemoveConstraint("MySensors_Settings", "UK_MySensors_Settings_Name");
+            Database.RemoveTable("MySensors_Settings");
         }
     }
-
-
-    //[Migration(1)]
-    //public class Migration01UserScriptTable : Migration
-    //{
-    //    public override void Apply()
-    //    {
-    //        Database.AddTable("AlarmClock_AlarmTime",
-    //            new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
-    //            new Column("Name", DbType.String.WithSize(200), ColumnProperty.NotNull),
-    //            new Column("Hours", DbType.Int32, ColumnProperty.NotNull),
-    //            new Column("Minutes", DbType.Int32, ColumnProperty.NotNull),
-    //            new Column("Enabled", DbType.Boolean, ColumnProperty.NotNull, false)
-    //        );
-    //    }
-    //    public override void Revert()
-    //    {
-    //        Database.RemoveTable("AlarmClock_AlarmTime");
-    //    }
-    //}
-
-    //[Migration(2)]
-    //public class Migration02PlaySoundAndScriptId : Migration
-    //{
-    //    public override void Apply()
-    //    {
-    //        Database.AddColumn("AlarmClock_AlarmTime",
-    //            new Column("UserScriptId", DbType.Guid, ColumnProperty.Null)
-    //        );
-
-    //        Database.AddForeignKey("AlarmClock_AlarmTime_UserScriptId",
-    //            "AlarmClock_AlarmTime", "UserScriptId", "Scripts_UserScript", "Id", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
-    //    }
-    //    public override void Revert()
-    //    {
-    //        Database.RemoveConstraint("AlarmClock_AlarmTime", "AlarmClock_AlarmTime_UserScriptId");
-    //        Database.RemoveColumn("AlarmClock_AlarmTime", "UserScriptId");
-    //    }
-    //}
 }

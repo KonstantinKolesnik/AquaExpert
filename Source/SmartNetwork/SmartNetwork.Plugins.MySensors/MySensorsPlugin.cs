@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace SmartNetwork.Plugins.MySensors
 {
@@ -20,16 +19,21 @@ namespace SmartNetwork.Plugins.MySensors
         #region Fields
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
+        // for cashing:
+        private List<Setting> settings;
         private List<Node> nodes;
         private List<Sensor> sensors;
         #endregion
 
+        #region Properties
         [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
         public Action<SensorMessage>[] OnSensorMessage { get; set; }
+        #endregion
 
-
+        #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
+            mapper.Class<Setting>(cfg => cfg.Table("MySensors_Settings"));
             mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
             mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensors"));
             mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevels"));
@@ -37,40 +41,45 @@ namespace SmartNetwork.Plugins.MySensors
         }
         public override void InitPlugin()
         {
-            //using (var session = Context.OpenSession())
-            //{
-                //var list = session.Query<UserScript>().ToArray();
-
-                //// создаем новй объект UserScript
-                //var newScript = new UserScript
-                //{
-                //    Id = Guid.NewGuid(),
-                //    Name = "script name",
-                //    Body = "script body"
-                //};
-
-                //// сохраняем его в БД
-                //session.Save(newScript);
-
-                //// ищем в БД объект с именем "test"
-                //var scriptForDelete = session.Query<UserScript>().FirstOrDefault(s => s.Name == "test");
-
-                //// удаляем его из БД
-                //session.Delete(scriptForDelete);
-                //session.Flush();
-            //}
-
-
             gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
         }
         public override void StartPlugin()
         {
+            /*
+            //using (var session = Context.OpenSession())
+            //{
+            //var list = session.Query<UserScript>().ToArray();
+
+            //// создаем новй объект UserScript
+            //var newScript = new UserScript
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Name = "script name",
+            //    Body = "script body"
+            //};
+
+            //// сохраняем его в БД
+            //session.Save(newScript);
+
+            //// ищем в БД объект с именем "test"
+            //var scriptForDelete = session.Query<UserScript>().FirstOrDefault(s => s.Name == "test");
+
+            //// удаляем его из БД
+            //session.Delete(scriptForDelete);
+            //session.Flush();
+            //}
+            */
+
             using (var session = Context.OpenSession())
             {
+                settings = session.Query<Setting>().ToList();
                 nodes = session.Query<Node>().ToList();
                 sensors = session.Query<Sensor>().ToList();
             }
+
+            if (GetSetting("UnitSystem") == null)
+                Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
 
             if (!gatewayProxy.IsStarted)
             {
@@ -92,48 +101,40 @@ namespace SmartNetwork.Plugins.MySensors
             nodes = null;
             sensors = null;
         }
+        #endregion
 
-
+        #region DB actions
+        public Setting GetSetting(string name)
+        {
+            return settings.FirstOrDefault(setting => setting.Name == name);
+        }
         public Node GetNode(byte nodeID)
         {
-            return nodes.FirstOrDefault(node => node.Id == nodeID);
-        }
-        public void SaveNode(Node node)
-        {
-            using (var session = Context.OpenSession())
-            {
-                session.SaveOrUpdate(node);
-                session.Flush();
-            }
+            return nodes.FirstOrDefault(node => node.NodeNo == nodeID);
         }
         public Sensor GetSensor(byte nodeID, byte sensorID)
         {
-            return sensors.FirstOrDefault(sensor => sensor.NodeId == nodeID && sensor.Id == sensorID);
+            return sensors.FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
         }
-        public void SaveSensor(Sensor sensor)
+
+        public void Save(object item)
         {
             using (var session = Context.OpenSession())
             {
-                session.SaveOrUpdate(sensor);
+                session.Save(item);
                 session.Flush();
             }
         }
-        public void SaveBatteryLevel(BatteryLevel bl)
+        public void SaveOrUpdate(object item)
         {
             using (var session = Context.OpenSession())
             {
-                session.Save(bl);
+                session.SaveOrUpdate(item);
                 session.Flush();
             }
         }
-        public void SaveSensorValue(SensorValue sv)
-        {
-            using (var session = Context.OpenSession())
-            {
-                session.Save(sv);
-                session.Flush();
-            }
-        }
+        #endregion
+
 
         #region Event handlers
         [OnTimerElapsed]
@@ -162,21 +163,24 @@ namespace SmartNetwork.Plugins.MySensors
                         {
                             node = new Node
                             {
-                                Id = message.NodeID,
+                                Id = Guid.NewGuid(),
+                                NodeNo = message.NodeID,
                                 Type = (SensorType)message.SubType,
                                 ProtocolVersion = message.Payload
                             };
-                            SaveNode(node);
+
+                            Save(node);
                             nodes.Add(node);
                         }
                         else
                         {
                             node.Type = (SensorType)message.SubType;
                             node.ProtocolVersion = message.Payload;
-                            SaveNode(node);
+
+                            SaveOrUpdate(node);
                         }
-                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                         Run(OnSensorMessage, x => x(message));
+                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                     }
                     else
                     {
@@ -186,22 +190,25 @@ namespace SmartNetwork.Plugins.MySensors
                             {
                                 sensor = new Sensor()
                                 {
-                                    NodeId = node.Id,
-                                    Id = message.SensorID,
+                                    Id = Guid.NewGuid(),
+                                    NodeNo = node.NodeNo,
+                                    SensorNo = message.SensorID,
                                     Type = (SensorType)message.SubType,
                                     ProtocolVersion = message.Payload
                                 };
-                                SaveSensor(sensor);
+
+                                Save(sensor);
                                 sensors.Add(sensor);
                             }
                             else
                             {
                                 sensor.Type = (SensorType)message.SubType;
                                 sensor.ProtocolVersion = message.Payload;
-                                SaveSensor(sensor);
+
+                                SaveOrUpdate(sensor);
                             }
-                            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                             Run(OnSensorMessage, x => x(message));
+                            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                         }
                     }
                     break;
@@ -213,16 +220,17 @@ namespace SmartNetwork.Plugins.MySensors
                     {
                         SensorValue sv = new SensorValue()
                         {
-                            NodeId = message.NodeID,
-                            SensorId = message.SensorID,
+                            Id = Guid.NewGuid(),
+                            NodeNo = message.NodeID,
+                            SensorNo = message.SensorID,
                             TimeStamp = DateTime.Now,
                             Type = (SensorValueType)message.SubType,
                             Value = float.Parse(message.Payload.Replace('.', ','))
                         };
-                        SaveSensorValue(sv);
-                        //sensor.Values.Add(sv);
-                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorValue, JsonConvert.SerializeObject(sv)));
+
+                        Save(sv);
                         Run(OnSensorMessage, x => x(message));
+                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorValue, JsonConvert.SerializeObject(sv)));
                     }
                     break;
                 #endregion
@@ -243,14 +251,15 @@ namespace SmartNetwork.Plugins.MySensors
                             {
                                 BatteryLevel bl = new BatteryLevel()
                                 {
-                                    NodeId = node.Id,
+                                    Id = Guid.NewGuid(),
+                                    NodeNo = message.NodeID,
                                     TimeStamp = DateTime.Now,
                                     Level = byte.Parse(message.Payload)
                                 };
-                                SaveBatteryLevel(bl);
-                                //node.BatteryLevels.Add(bl);
-                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.BatteryLevel, JsonConvert.SerializeObject(bl)));
+
+                                Save(bl);
                                 Run(OnSensorMessage, x => x(message));
+                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.BatteryLevel, JsonConvert.SerializeObject(bl)));
                             }
                             break;
                         case InternalValueType.Time:
@@ -266,7 +275,7 @@ namespace SmartNetwork.Plugins.MySensors
                         case InternalValueType.InclusionMode:
                             break;
                         case InternalValueType.Config:
-                            gatewayProxy.Send(new SensorMessage(message.NodeID, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Config, "M"/*UnitSystem*/));
+                            gatewayProxy.Send(new SensorMessage(message.NodeID, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Config, GetSetting("UnitSystem").Value));
                             break;
                         case InternalValueType.FindParent:
                             break;
@@ -285,9 +294,9 @@ namespace SmartNetwork.Plugins.MySensors
                                 else
                                     node.SketchVersion = message.Payload;
 
-                                SaveNode(node);
-                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
+                                SaveOrUpdate(node);
                                 Run(OnSensorMessage, x => x(message));
+                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -338,7 +347,7 @@ namespace SmartNetwork.Plugins.MySensors
 
             byte id = 1;
             for (byte i = 0; i < nds.Count; i++)
-                if (nds[i].Id > i + 1)
+                if (nds[i].NodeNo > i + 1)
                 {
                     id = (byte)(i + 1);
                     break;
@@ -346,8 +355,8 @@ namespace SmartNetwork.Plugins.MySensors
 
             if (id < 255)
             {
-                Node result = new Node { Id = id };
-                SaveNode(result);
+                Node result = new Node { Id = Guid.NewGuid(), NodeNo = id };
+                Save(result);
                 nodes.Add(result);
 
                 gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
