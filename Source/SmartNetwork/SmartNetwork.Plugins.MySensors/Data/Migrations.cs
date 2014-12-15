@@ -38,6 +38,7 @@ namespace SmartNetwork.Plugins.MySensors.Data
             );
             Database.AddForeignKey("FK_MySensors_BatteryLevels_NodeId", "MySensors_BatteryLevels", "NodeId", "MySensors_Nodes", "Id", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
             //Database.AddPrimaryKey("PK_MySensors_BatteryLevels", "MySensors_BatteryLevels", new string[] { "NodeId", "TimeStamp" });
+            Database.AddUniqueConstraint("UK_MySensors_BatteryLevels_TimeStamp", "MySensors_BatteryLevels", "NodeId", "Id", "TimeStamp");
 
 
             Database.AddTable("MySensors_SensorValues",

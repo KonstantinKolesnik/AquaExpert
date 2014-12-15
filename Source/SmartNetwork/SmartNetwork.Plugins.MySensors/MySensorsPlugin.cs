@@ -37,19 +37,9 @@ namespace SmartNetwork.Plugins.MySensors
         }
         public override void InitPlugin()
         {
-            //nodes = GetNodes();
-
             //using (var session = Context.OpenSession())
             //{
-                //var nds = new ObservableCollection<Node>(dbService.GetAllNodes());
-                //var bls = dbService.GetAllBatteryLevels();
-                //var sensors = dbService.GetAllSensors();
-                //var svs = dbService.GetAllSensorValues();
-                //var stngs = dbService.GetAllSettings();
-                //var mdls = dbService.GetAllModules();
-
                 //var list = session.Query<UserScript>().ToArray();
-
 
                 //// создаем новй объект UserScript
                 //var newScript = new UserScript
@@ -68,7 +58,6 @@ namespace SmartNetwork.Plugins.MySensors
                 //// удаляем его из БД
                 //session.Delete(scriptForDelete);
                 //session.Flush();
-
             //}
 
 
