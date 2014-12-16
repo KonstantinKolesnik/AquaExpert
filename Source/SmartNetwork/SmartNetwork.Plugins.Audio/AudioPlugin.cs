@@ -8,9 +8,12 @@ namespace SmartNetwork.Plugins.Audio
     [Plugin]
     public class AudioPlugin : PluginBase
     {
+        #region Fields
         private WaveOut waveOut;
         private readonly object lockObject = new object();
+        #endregion
 
+        #region Plugin overrides
         public override void InitPlugin()
         {
             waveOut = new WaveOut();
@@ -20,7 +23,9 @@ namespace SmartNetwork.Plugins.Audio
             waveOut.Dispose();
             waveOut = null;
         }
+        #endregion
 
+        #region Public methods
         public IPlayback Play(Stream stream, int loop = 0)
         {
             lock (lockObject)
@@ -34,5 +39,6 @@ namespace SmartNetwork.Plugins.Audio
                 return loopStream;
             }
         }
+        #endregion
     }
 }

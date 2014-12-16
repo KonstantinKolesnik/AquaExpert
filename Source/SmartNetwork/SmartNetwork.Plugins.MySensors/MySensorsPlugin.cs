@@ -25,7 +25,7 @@ namespace SmartNetwork.Plugins.MySensors
         private List<Sensor> sensors;
         #endregion
 
-        #region Properties
+        #region Import
         [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
         public Action<SensorMessage>[] OnSensorMessage { get; set; }
         #endregion
