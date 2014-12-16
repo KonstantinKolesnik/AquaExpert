@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0AF41DF9-654F-498D-AF5E-E569462DB588}"
 	ProjectSection(SolutionItems) = preProject
-		SmartNetwork.sdf = SmartNetwork.sdf
+		SmartHub.sdf = SmartHub.sdf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.ApplicationConsole", "SmartHub.ApplicationConsole\SmartHub.ApplicationConsole.csproj", "{4FF0C351-38B6-47EB-8127-24F32E585739}"

@@ -54,8 +54,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\SmartNetwork.sdf">
-      <Link>SmartNetwork.sdf</Link>
+    <Content Include="..\bin\SmartHub.sdf">
+      <Link>SmartHub.sdf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
