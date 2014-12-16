@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
+using SmartHub.Plugins.HttpListener.Api;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
@@ -15,9 +13,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
         public ApiListenerHandler(Func<HttpRequestParams, object> action)
         {
             if (action == null)
-            {
                 throw new NullReferenceException();
-            }
 
             this.action = action;
         }

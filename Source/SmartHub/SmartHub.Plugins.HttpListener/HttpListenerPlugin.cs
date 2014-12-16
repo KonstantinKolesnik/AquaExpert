@@ -1,12 +1,12 @@
 ﻿using SmartHub.Core.Plugins;
 using SmartHub.Core.Plugins.Utils;
+using SmartHub.Plugins.HttpListener.Api;
+using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.HttpListener.Handlers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Web.Http;
 using System.Web.Http.SelfHost;
 
 namespace SmartHub.Plugins.HttpListener
@@ -19,10 +19,10 @@ namespace SmartHub.Plugins.HttpListener
         private HttpSelfHostServer server;
         #endregion
 
-
+        #region Import
         [ImportMany("5D358D8E-2310-49FE-A660-FB3ED7003B4C")]
         public Lazy<Func<HttpRequestParams, object>, IHttpCommandAttribute>[] RequestReceived { get; set; }
-
+        #endregion
 
         #region Plugin overrides
         public override void InitPlugin()
@@ -68,16 +68,26 @@ namespace SmartHub.Plugins.HttpListener
                 {
                     Logger.Info("Register HTTP handler (resource): '{0}'", attribute.Url);
 
-                    var resHandler = new ResourceListenerHandler(
-                        type.Assembly, attribute.ResourcePath, attribute.ContentType);
-
+                    var resHandler = new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType);
                     handlers.Register(attribute.Url, resHandler);
                 }
             }
 
             return handlers;
         }
+        private HttpSelfHostConfiguration BuildConfiguration(DependencyResolver dependencyResolver)
+        {
+            var config = new HttpSelfHostConfiguration(BASE_URL_HTTP)
+            {
+                DependencyResolver = dependencyResolver
+            };
 
+            var defaults = new { controller = "Common", action = "Index" };
+
+            config.Routes.MapHttpRoute("Global", "{*url}", defaults);
+
+            return config;
+        }
         #endregion
     }
 }
