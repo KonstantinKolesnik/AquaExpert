@@ -1,7 +1,6 @@
 ﻿using SmartNetwork.Core.Plugins;
 using System;
 using System.ComponentModel.Composition;
-//using System.Diagnostics;
 using System.Timers;
 
 namespace SmartNetwork.Plugins.Timer
@@ -9,16 +8,21 @@ namespace SmartNetwork.Plugins.Timer
     [Plugin]
     public class TimerPlugin : PluginBase
     {
-        private const int TIMER_INTERVAL = 1000;
+        #region Fields
+        private const int TIMER_INTERVAL = 5000;
         private System.Timers.Timer timer;
+        #endregion
 
+        #region Import
         [ImportMany("E62C804C-B96B-4CA8-822E-B1725B363534")]
         public Action<DateTime>[] OnEvent { get; set; }
+        #endregion
 
+        #region Plugin ovverrides
         public override void InitPlugin()
         {
             timer = new System.Timers.Timer(TIMER_INTERVAL);
-            timer.Elapsed += OnTimedEvent;
+            timer.Elapsed += timer_Elapsed;
         }
         public override void StartPlugin()
         {
@@ -28,16 +32,15 @@ namespace SmartNetwork.Plugins.Timer
         {
             timer.Enabled = false;
         }
+        #endregion
 
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        #region Event handlers
+        private void timer_Elapsed(object source, ElapsedEventArgs e)
         {
-            timer.Enabled = false;
-
-            var now = DateTime.Now;
-            Run(OnEvent, x => x(now));
-
-            //Debugger.Launch();
-            timer.Enabled = true;
+            //timer.Enabled = false;
+            Run(OnEvent, x => x(DateTime.Now));
+            //timer.Enabled = true;
         }
+        #endregion
     }
 }

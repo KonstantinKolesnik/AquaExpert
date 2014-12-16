@@ -26,7 +26,8 @@ namespace SmartNetwork.Plugins.MySensors.Data
                 new Column("Type", DbType.Byte),
                 new Column("ProtocolVersion", DbType.String),
                 new Column("SketchName", DbType.String),
-                new Column("SketchVersion", DbType.String)
+                new Column("SketchVersion", DbType.String),
+                new Column("Name", DbType.String)
             );
             Database.AddUniqueConstraint("UK_MySensors_Nodes_NodeNo", "MySensors_Nodes", "NodeNo");
 
@@ -36,7 +37,8 @@ namespace SmartNetwork.Plugins.MySensors.Data
                 new Column("NodeNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("SensorNo", DbType.Byte, ColumnProperty.NotNull),
                 new Column("Type", DbType.Byte, ColumnProperty.NotNull),
-                new Column("ProtocolVersion", DbType.String)
+                new Column("ProtocolVersion", DbType.String),
+                new Column("Name", DbType.String)
             );
             Database.AddUniqueConstraint("UK_MySensors_Sensors_NodeNo_SensorNo", "MySensors_Sensors", "NodeNo", "SensorNo");
             Database.AddForeignKey("FK_MySensors_Sensors_NodeId", "MySensors_Sensors", "NodeNo", "MySensors_Nodes", "NodeNo", ForeignKeyConstraint.Cascade);

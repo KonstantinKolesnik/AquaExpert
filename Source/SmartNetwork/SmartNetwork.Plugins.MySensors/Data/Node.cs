@@ -11,5 +11,6 @@ namespace SmartNetwork.Plugins.MySensors.Data
         public virtual string ProtocolVersion { get; set; }
         public virtual string SketchName { get; set; }
         public virtual string SketchVersion { get; set; }
+        public virtual string Name { get; set; }
     }
 }

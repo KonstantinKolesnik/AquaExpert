@@ -7,8 +7,8 @@ namespace SmartNetwork.ApplicationConsole
     {
         static void Main(string[] args)
         {
-            Console.Title = "Smart Network";
-            Console.Write("Starting controller... ");
+            Console.Title = "Smart Hub";
+            Console.Write("Starting hub... ");
 
             //OldStart();
             NewStart();

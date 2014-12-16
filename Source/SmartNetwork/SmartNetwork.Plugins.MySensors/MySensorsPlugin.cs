@@ -107,20 +107,19 @@ namespace SmartNetwork.Plugins.MySensors
         #endregion
 
         #region DB actions
-        public Setting GetSetting(string name)
+        private Setting GetSetting(string name)
         {
             return settings.FirstOrDefault(setting => setting.Name == name);
         }
-        public Node GetNode(byte nodeID)
+        private Node GetNode(byte nodeID)
         {
             return nodes.FirstOrDefault(node => node.NodeNo == nodeID);
         }
-        public Sensor GetSensor(byte nodeID, byte sensorID)
+        private Sensor GetSensor(byte nodeID, byte sensorID)
         {
             return sensors.FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
         }
-
-        public void Save(object item)
+        private void Save(object item)
         {
             using (var session = Context.OpenSession())
             {
@@ -128,7 +127,7 @@ namespace SmartNetwork.Plugins.MySensors
                 session.Flush();
             }
         }
-        public void SaveOrUpdate(object item)
+        private void SaveOrUpdate(object item)
         {
             using (var session = Context.OpenSession())
             {

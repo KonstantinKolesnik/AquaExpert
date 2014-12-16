@@ -10,5 +10,6 @@ namespace SmartNetwork.Plugins.MySensors.Data
         public virtual byte SensorNo { get; set; }
         public virtual SensorType Type { get; set; }
         public virtual string ProtocolVersion { get; set; }
+        public virtual string Name { get; set; }
     }
 }

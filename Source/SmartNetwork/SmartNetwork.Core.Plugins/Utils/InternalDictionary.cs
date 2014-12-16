@@ -19,13 +19,18 @@ namespace SmartNetwork.Core.Plugins.Utils
 
             lock (lockObject)
             {
-                if (ContainsKey(key))
-                {
-                    var msg = string.Format("duplicated key {0} ({1})", key, obj);
-                    throw new Exception(msg);
-                }
+                //if (ContainsKey(key))
+                //{
+                //    var msg = string.Format("duplicated key {0} ({1})", key, obj);
+                //    throw new Exception(msg);
+                //}
+                //Add(key, obj);
 
-                Add(key, obj);
+
+                if (ContainsKey(key))
+                    this[key] = obj;
+                else
+                    Add(key, obj);
             }
         }
     }
