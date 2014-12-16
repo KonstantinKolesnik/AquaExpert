@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Plugins.MySensors", "SmartNetwork.Plugins.MySensors\SmartNetwork.Plugins.MySensors.csproj", "{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartNetwork.Plugins.Audio", "SmartNetwork.Plugins.Audio\SmartNetwork.Plugins.Audio.csproj", "{8C872F7B-131E-45C6-97AA-BBBF9128C025}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +174,22 @@ Global
 		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|Win32.ActiveCfg = Release|Any CPU
 		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|x64.ActiveCfg = Release|Any CPU
 		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,5 +204,6 @@ Global
 		{47B49308-37B1-4114-956E-66D508F2BB93} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
 		{AB1E5CF0-A30E-4046-A468-0F8AA8D0BE5D} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{2BB4C561-2D7E-4D19-82BE-519FA659E4BE} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
+		{8C872F7B-131E-45C6-97AA-BBBF9128C025} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 	EndGlobalSection
 EndGlobal

@@ -91,7 +91,10 @@ namespace SmartNetwork.Plugins.MySensors
                 }
                 catch (Exception) { }
 
-                Logger.Info(gatewayProxy.IsStarted ? "Success." : "Failed.");
+                if (gatewayProxy.IsStarted)
+                    Logger.Info("Success.");
+                else
+                    Logger.Error("Failed.");
             }
         }
         public override void StopPlugin()
@@ -134,7 +137,6 @@ namespace SmartNetwork.Plugins.MySensors
             }
         }
         #endregion
-
 
         #region Event handlers
         [OnTimerElapsed]
@@ -371,23 +373,5 @@ namespace SmartNetwork.Plugins.MySensors
             return seconds;
         }
         #endregion
-
-        //private List<AlarmTime> times;
-
-        //private void LoadTimes()
-        //{
-        //    if (times == null)
-        //    {
-        //        using (var session = Context.OpenSession())
-        //        {
-        //            times = session.Query<AlarmTime>()
-        //                .Fetch(a => a.UserScript)
-        //                .Where(t => t.Enabled)
-        //                .ToList();
-
-        //            Logger.Info("loaded {0} alarm times", times.Count);
-        //        }
-        //    }
-        //}
     }
 }

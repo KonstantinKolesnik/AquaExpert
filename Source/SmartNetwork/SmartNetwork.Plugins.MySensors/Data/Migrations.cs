@@ -1,5 +1,6 @@
 ﻿using ECM7.Migrator.Framework;
 using System.Data;
+using ForeignKeyConstraint = ECM7.Migrator.Framework.ForeignKeyConstraint;
 
 [assembly: MigrationAssembly("SmartNetwork.Plugins.MySensors")]
 
@@ -38,7 +39,7 @@ namespace SmartNetwork.Plugins.MySensors.Data
                 new Column("ProtocolVersion", DbType.String)
             );
             Database.AddUniqueConstraint("UK_MySensors_Sensors_NodeNo_SensorNo", "MySensors_Sensors", "NodeNo", "SensorNo");
-            Database.AddForeignKey("FK_MySensors_Sensors_NodeId", "MySensors_Sensors", "NodeNo", "MySensors_Nodes", "NodeNo", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
+            Database.AddForeignKey("FK_MySensors_Sensors_NodeId", "MySensors_Sensors", "NodeNo", "MySensors_Nodes", "NodeNo", ForeignKeyConstraint.Cascade);
 
             // battery levels
             Database.AddTable("MySensors_BatteryLevels",
@@ -48,7 +49,7 @@ namespace SmartNetwork.Plugins.MySensors.Data
                 new Column("Level", DbType.Byte)
             );
             Database.AddUniqueConstraint("UK_MySensors_BatteryLevels_NodeNo_TimeStamp", "MySensors_BatteryLevels", "NodeNo", "TimeStamp");
-            Database.AddForeignKey("FK_MySensors_BatteryLevels_NodeNo", "MySensors_BatteryLevels", "NodeNo", "MySensors_Nodes", "NodeNo", ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
+            Database.AddForeignKey("FK_MySensors_BatteryLevels_NodeNo", "MySensors_BatteryLevels", "NodeNo", "MySensors_Nodes", "NodeNo", ForeignKeyConstraint.Cascade);
 
             // sensor values
             Database.AddTable("MySensors_SensorValues",
@@ -60,7 +61,7 @@ namespace SmartNetwork.Plugins.MySensors.Data
                 new Column("Value", DbType.Double.WithSize(10, 2))
             );
             Database.AddUniqueConstraint("UK_MySensors_SensorValues_NodeNo_SensorNo_TimeStamp", "MySensors_SensorValues", "NodeNo", "SensorNo", "TimeStamp");
-            Database.AddForeignKey("FK_MySensors_SensorValues_NodeNo_SensorNo", "MySensors_SensorValues", new string[] { "NodeNo", "SensorNo" }, "MySensors_Sensors", new string[] { "NodeNo", "SensorNo" }, ECM7.Migrator.Framework.ForeignKeyConstraint.Cascade);
+            Database.AddForeignKey("FK_MySensors_SensorValues_NodeNo_SensorNo", "MySensors_SensorValues", new string[] { "NodeNo", "SensorNo" }, "MySensors_Sensors", new string[] { "NodeNo", "SensorNo" }, ForeignKeyConstraint.Cascade);
         }
 
         public override void Revert()
