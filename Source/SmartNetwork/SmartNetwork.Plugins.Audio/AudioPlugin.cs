@@ -1,5 +1,5 @@
 ﻿using NAudio.Wave;
-using SmartNetwork.Core.Plugins;
+using SmartHub.Core.Plugins;
 using SmartNetwork.Plugins.Audio.Core;
 using System.IO;
 

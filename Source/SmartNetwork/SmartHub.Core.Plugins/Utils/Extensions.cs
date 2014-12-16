@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace SmartNetwork.Core.Plugins.Utils
+namespace SmartHub.Core.Plugins.Utils
 {
     public static class Extensions
     {

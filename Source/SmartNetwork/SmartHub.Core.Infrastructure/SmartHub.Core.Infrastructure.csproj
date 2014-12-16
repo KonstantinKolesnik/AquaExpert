@@ -7,8 +7,8 @@
     <ProjectGuid>{47B49308-37B1-4114-956E-66D508F2BB93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartNetwork.Core.Infrastructure</RootNamespace>
-    <AssemblyName>SmartNetwork.Core.Infrastructure</AssemblyName>
+    <RootNamespace>SmartHub.Core.Infrastructure</RootNamespace>
+    <AssemblyName>SmartHub.Core.Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -78,9 +78,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartNetwork.Core.Plugins\SmartNetwork.Core.Plugins.csproj">
+    <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
       <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
-      <Name>SmartNetwork.Core.Plugins</Name>
+      <Name>SmartHub.Core.Plugins</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

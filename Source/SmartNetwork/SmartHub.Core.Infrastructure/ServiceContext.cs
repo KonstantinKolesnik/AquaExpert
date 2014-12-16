@@ -1,12 +1,12 @@
 ﻿using NHibernate;
-using SmartNetwork.Core.Plugins;
-using SmartNetwork.Core.Plugins.Packages;
+using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Packages;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace SmartNetwork.Core.Infrastructure
+namespace SmartHub.Core.Infrastructure
 {
     [Export(typeof(IServiceContext))]
     public class ServiceContext : IServiceContext

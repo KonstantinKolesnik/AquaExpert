@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SmartNetwork.Core.Plugins.Utils
+namespace SmartHub.Core.Plugins.Utils
 {
     public class InternalDictionary<T> : Dictionary<string, T> where T : class
     {

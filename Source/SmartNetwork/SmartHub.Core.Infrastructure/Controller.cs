@@ -7,7 +7,7 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 using NHibernate.Mapping.ByCode;
 using NLog;
-using SmartNetwork.Core.Plugins;
+using SmartHub.Core.Plugins;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -17,7 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace SmartNetwork.Core.Infrastructure
+namespace SmartHub.Core.Infrastructure
 {
     public class Controller
     {

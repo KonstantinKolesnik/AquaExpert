@@ -1,6 +1,6 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
-using SmartNetwork.Core.Plugins;
+using SmartHub.Core.Plugins;
 using SmartNetwork.Plugins.MySensors.Core;
 using SmartNetwork.Plugins.MySensors.Data;
 using SmartNetwork.Plugins.MySensors.GatewayProxies;

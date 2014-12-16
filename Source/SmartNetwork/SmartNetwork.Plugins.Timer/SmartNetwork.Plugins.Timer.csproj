@@ -44,13 +44,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartNetwork.Core.Plugins\SmartNetwork.Core.Plugins.csproj">
-      <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
-      <Name>SmartNetwork.Core.Plugins</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
+      <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
+      <Name>SmartHub.Core.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

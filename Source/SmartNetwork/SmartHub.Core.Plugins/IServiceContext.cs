@@ -1,8 +1,8 @@
 ﻿using NHibernate;
-using SmartNetwork.Core.Plugins.Packages;
+using SmartHub.Core.Plugins.Packages;
 using System.Collections.Generic;
 
-namespace SmartNetwork.Core.Plugins
+namespace SmartHub.Core.Plugins
 {
     public interface IServiceContext
     {

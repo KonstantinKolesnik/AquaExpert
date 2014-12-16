@@ -54,17 +54,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartNetwork.Core.Infrastructure\SmartNetwork.Core.Infrastructure.csproj">
-      <Project>{47b49308-37b1-4114-956e-66d508f2bb93}</Project>
-      <Name>SmartNetwork.Core.Infrastructure</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\SmartNetwork.sdf">
       <Link>SmartNetwork.sdf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartHub.Core.Infrastructure\SmartHub.Core.Infrastructure.csproj">
+      <Project>{47b49308-37b1-4114-956e-66d508f2bb93}</Project>
+      <Name>SmartHub.Core.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

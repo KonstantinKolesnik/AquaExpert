@@ -1,10 +1,10 @@
 ﻿using NuGet;
-using SmartNetwork.Core.Plugins.Packages;
+using SmartHub.Core.Plugins.Packages;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace SmartNetwork.Core.Infrastructure
+namespace SmartHub.Core.Infrastructure
 {
     [Export(typeof(IControllerPackageManager))]
     public class ControllerPackageManager : IControllerPackageManager

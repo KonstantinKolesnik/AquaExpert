@@ -73,9 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartNetwork.Core.Plugins\SmartNetwork.Core.Plugins.csproj">
+    <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
       <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
-      <Name>SmartNetwork.Core.Plugins</Name>
+      <Name>SmartHub.Core.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\SmartNetwork.Plugins.Timer\SmartNetwork.Plugins.Timer.csproj">
       <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>

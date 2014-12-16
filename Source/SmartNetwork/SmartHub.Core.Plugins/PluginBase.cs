@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace SmartNetwork.Core.Plugins
+namespace SmartHub.Core.Plugins
 {
     public abstract class PluginBase
     {

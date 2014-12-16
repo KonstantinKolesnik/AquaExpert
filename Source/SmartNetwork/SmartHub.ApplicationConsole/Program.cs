@@ -1,4 +1,4 @@
-﻿using SmartNetwork.Core.Infrastructure;
+﻿using SmartHub.Core.Infrastructure;
 using System;
 
 namespace SmartHub.ApplicationConsole

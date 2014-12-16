@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-namespace SmartNetwork.Core.Infrastructure
+namespace SmartHub.Core.Infrastructure
 {
     public static class ControllerEnvironment
     {

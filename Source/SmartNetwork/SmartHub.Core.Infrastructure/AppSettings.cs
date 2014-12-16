@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace SmartNetwork.Core.Infrastructure
+namespace SmartHub.Core.Infrastructure
 {
     public static class AppSettings
     {
