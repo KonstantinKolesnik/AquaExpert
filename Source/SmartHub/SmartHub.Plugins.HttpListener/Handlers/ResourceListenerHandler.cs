@@ -51,7 +51,6 @@ namespace SmartHub.Plugins.HttpListener.Handlers
 
             return result;
         }
-
         private byte[] LoadResource()
         {
             byte[] result;

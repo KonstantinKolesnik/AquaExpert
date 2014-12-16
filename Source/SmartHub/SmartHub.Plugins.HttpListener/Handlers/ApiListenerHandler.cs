@@ -28,9 +28,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             object result = action(parameters);
             string json = JsonConvert.SerializeObject(result);
 
-            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            return content;
+            return new StringContent(json, Encoding.UTF8, "application/json");
         }
     }
 }
