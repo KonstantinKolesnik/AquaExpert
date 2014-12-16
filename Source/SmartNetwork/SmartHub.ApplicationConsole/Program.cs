@@ -1,7 +1,7 @@
 ﻿using SmartNetwork.Core.Infrastructure;
 using System;
 
-namespace SmartNetwork.ApplicationConsole
+namespace SmartHub.ApplicationConsole
 {
     class Program
     {

@@ -1,13 +1,13 @@
 ﻿using SmartNetwork.Core.Infrastructure;
 using System.ServiceProcess;
 
-namespace SmartNetwork.ApplicationService
+namespace SmartHub.ApplicationService
 {
-    public partial class SmartNetworkService : ServiceBase
+    public partial class SmartHubService : ServiceBase
     {
         private readonly Controller app;
 
-        public SmartNetworkService()
+        public SmartHubService()
         {
             InitializeComponent();
 

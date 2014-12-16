@@ -7,8 +7,8 @@
     <ProjectGuid>{4FF0C351-38B6-47EB-8127-24F32E585739}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartNetwork.ApplicationConsole</RootNamespace>
-    <AssemblyName>SmartNetwork.ApplicationConsole</AssemblyName>
+    <RootNamespace>SmartHub.ApplicationConsole</RootNamespace>
+    <AssemblyName>SmartHub.ApplicationConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

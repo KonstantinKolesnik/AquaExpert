@@ -1,12 +1,12 @@
 ﻿using System.ServiceProcess;
 
-namespace SmartNetwork.ApplicationService
+namespace SmartHub.ApplicationService
 {
     static class Program
     {
         static void Main()
         {
-            ServiceBase.Run(new SmartNetworkService());
+            ServiceBase.Run(new SmartHubService());
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace SmartNetwork.ApplicationService
+﻿namespace SmartHub.ApplicationService
 {
-    partial class SmartNetworkService
+    partial class SmartHubService
     {
         /// <summary> 
         /// Required designer variable.
