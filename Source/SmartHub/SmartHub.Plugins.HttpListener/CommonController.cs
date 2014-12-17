@@ -33,12 +33,12 @@ namespace SmartHub.Plugins.HttpListener
             {
                 string localPath = Request.RequestUri.LocalPath;
 
-                logger.Info("execute action: {0};", localPath);
+                logger.Info("Execute action: {0};", localPath);
 
                 ListenerHandler handler;
                 if (!handlers.TryGetValue(localPath, out handler))
                 {
-                    var message = string.Format("handler for url '{0}' is not found", localPath);
+                    var message = string.Format("Handler for url '{0}' was not found", localPath);
                     throw new Exception(message);
                 }
 

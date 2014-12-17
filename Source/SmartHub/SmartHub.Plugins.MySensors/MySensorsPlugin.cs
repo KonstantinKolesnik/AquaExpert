@@ -375,12 +375,12 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        [HttpCommand("/api/my-plugin/my-method")]
+        [HttpCommand("/api/mysensors/test")]
         public object MyMethod(HttpRequestParams request)
         {
-            object result = null;
+            //object result = null;
 
-            return result;
+            return "Hello world!";
         }
     }
 }
