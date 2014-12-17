@@ -51,8 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IServiceContext.cs" />
-    <Compile Include="Packages\IHubPackageManager.cs" />
-    <Compile Include="Packages\HubPackageInfo.cs" />
+    <Compile Include="HubPackages\IHubPackageManager.cs" />
+    <Compile Include="HubPackages\HubPackageInfo.cs" />
     <Compile Include="PluginAttribute.cs" />
     <Compile Include="PluginBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

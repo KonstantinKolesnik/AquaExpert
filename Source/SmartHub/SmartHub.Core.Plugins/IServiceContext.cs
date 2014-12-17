@@ -1,5 +1,5 @@
 ﻿using NHibernate;
-using SmartHub.Core.Plugins.Packages;
+using SmartHub.Core.Plugins.HubPackages;
 using System.Collections.Generic;
 
 namespace SmartHub.Core.Plugins

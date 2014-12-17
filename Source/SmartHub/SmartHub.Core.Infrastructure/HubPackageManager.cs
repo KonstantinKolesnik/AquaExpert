@@ -1,5 +1,5 @@
 ﻿using NuGet;
-using SmartHub.Core.Plugins.Packages;
+using SmartHub.Core.Plugins.HubPackages;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;

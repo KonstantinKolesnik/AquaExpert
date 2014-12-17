@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 using SmartHub.Core.Plugins;
-using SmartHub.Core.Plugins.Packages;
+using SmartHub.Core.Plugins.HubPackages;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
