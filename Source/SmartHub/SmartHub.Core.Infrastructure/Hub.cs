@@ -49,6 +49,8 @@ namespace SmartHub.Core.Infrastructure
                     logger.Info("Init plugin: {0}", plugin.GetType().FullName);
                     plugin.InitPlugin();
                 }
+
+                WatchPlugins();
             }
             catch (Exception ex)
             {
@@ -182,9 +184,7 @@ namespace SmartHub.Core.Infrastructure
             logger.Info("Load plugins");
 
             var folders = new HashSet<string>();
-
             var catalog = new AggregateCatalog(new ApplicationCatalog());
-
             var spDir = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
 
             foreach (var dir in spDir.GetDirectories())
@@ -197,8 +197,21 @@ namespace SmartHub.Core.Infrastructure
 
             AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = string.Join(";", folders);
 
-            var container = new CompositionContainer(catalog);
-            container.SatisfyImportsOnce(this);
+            new CompositionContainer(catalog).SatisfyImportsOnce(this);
+        }
+        private void WatchPlugins()
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = AppSettings.PluginsFullPath;
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Filter = "*.*";
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.EnableRaisingEvents = true;
+        }
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            int a = 0;
+            int b = a;
         }
         #endregion
     }
