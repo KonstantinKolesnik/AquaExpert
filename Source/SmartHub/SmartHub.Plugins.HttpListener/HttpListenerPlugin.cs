@@ -31,8 +31,9 @@ namespace SmartHub.Plugins.HttpListener
             
             var config = new HttpSelfHostConfiguration(BASE_URL_HTTP)
             {
-                //DependencyResolver = new DependencyResolver(handlers, Logger)
+                DependencyResolver = new DependencyResolver(handlers, Logger)
             };
+
             //config.Routes.MapHttpRoute("Global", "{*url}", new { controller = "Common", action = "Index" });
             config.Routes.MapHttpRoute("Default", "", new { controller = "Common", action = "Index" });
 

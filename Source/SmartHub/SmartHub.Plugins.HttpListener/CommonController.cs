@@ -12,21 +12,25 @@ namespace SmartHub.Plugins.HttpListener
 {
     public class CommonController : ApiController
     {
+        #region Fields
         private readonly InternalDictionary<ListenerHandler> handlers;
         private readonly Logger logger;
+        #endregion
 
-        public CommonController()//InternalDictionary<ListenerHandler> handlers, Logger logger)
+        #region Constructor
+        public CommonController(InternalDictionary<ListenerHandler> handlers, Logger logger)
         {
-            //this.handlers = handlers;
-            //this.logger = logger;
+            this.handlers = handlers;
+            this.logger = logger;
         }
+        #endregion
 
+        #region Public methods
         [HttpGet, HttpPost, HttpPut, HttpDelete]
         public HttpResponseMessage Index()
         {
             try
             {
-                // Debugger.Launch();
                 string localPath = Request.RequestUri.LocalPath;
 
                 logger.Info("execute action: {0};", localPath);
@@ -64,5 +68,6 @@ namespace SmartHub.Plugins.HttpListener
 
             return new HttpRequestParams(urlData, formData);
         }
+        #endregion
     }
 }
