@@ -142,7 +142,7 @@ namespace SmartHub.Plugins.MySensors
         #region Event handlers
         [OnTimerElapsed]
         private void OnTimerElapsed(DateTime now)
-	    {
+        {
             //int a = 0;
             //int b = a;
         }
@@ -376,11 +376,11 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         [HttpCommand("/api/my-plugin/my-method")]
-	    public object MyMethod(HttpRequestParams request)
-	    {
+        public object MyMethod(HttpRequestParams request)
+        {
             object result = null;
 
-		    return result;
-	    }
+            return result;
+        }
     }
 }

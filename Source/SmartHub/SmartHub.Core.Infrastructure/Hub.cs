@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace SmartHub.Core.Infrastructure
 {
-    public class Controller
+    public class Hub
     {
         #region Fields
         private readonly Logger logger = LogManager.GetCurrentClassLogger();

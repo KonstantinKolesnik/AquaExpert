@@ -16,9 +16,9 @@ namespace SmartHub.ApplicationConsole
 
         private static void NewStart()
         {
-            ControllerEnvironment.Init();
+            HubEnvironment.Init();
 
-            var controller = new Controller();
+            var controller = new Hub();
             controller.Init();
             controller.StartServices();
 

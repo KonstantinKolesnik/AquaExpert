@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace SmartHub.Core.Infrastructure
 {
-    [Export(typeof(IControllerPackageManager))]
-    public class ControllerPackageManager : IControllerPackageManager
+    [Export(typeof(IHubPackageManager))]
+    public class HubPackageManager : IHubPackageManager
     {
         private readonly PackageManager pManager;
 
-        public ControllerPackageManager()
+        public HubPackageManager()
         {
             IPackageRepository repository = PackageRepositoryFactory.Default.CreateRepository(AppSettings.PluginsRepository);
 
@@ -19,13 +19,13 @@ namespace SmartHub.Core.Infrastructure
         }
 
         #region Private
-        private ControllerPackageInfo MapPackageInfo(IPackage p)
+        private HubPackageInfo MapPackageInfo(IPackage p)
         {
             IPackage dummy = pManager.LocalRepository.FindPackage(p.Id);
 
             var installedVersion = dummy == null ? null : dummy.Version.ToString();
 
-            return new ControllerPackageInfo
+            return new HubPackageInfo
             {
                 PackageId = p.Id,
                 PackageVersion = p.Version.ToString(),
@@ -35,7 +35,7 @@ namespace SmartHub.Core.Infrastructure
         }
         #endregion
 
-        public List<ControllerPackageInfo> GetPackages(string name)
+        public List<HubPackageInfo> GetPackages(string name)
         {
             var query = pManager.SourceRepository.GetPackages();
 
@@ -48,7 +48,7 @@ namespace SmartHub.Core.Infrastructure
 
             return model;
         }
-        public List<ControllerPackageInfo> GetInstalledPackages()
+        public List<HubPackageInfo> GetInstalledPackages()
         {
             var packages = pManager.LocalRepository
                 .GetPackages()

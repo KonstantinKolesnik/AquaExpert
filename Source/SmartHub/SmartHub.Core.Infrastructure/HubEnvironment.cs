@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace SmartHub.Core.Infrastructure
 {
-    public static class ControllerEnvironment
+    public static class HubEnvironment
     {
         public static void Init()
         {

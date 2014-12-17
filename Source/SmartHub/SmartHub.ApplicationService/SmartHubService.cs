@@ -5,15 +5,15 @@ namespace SmartHub.ApplicationService
 {
     public partial class SmartHubService : ServiceBase
     {
-        private readonly Controller app;
+        private readonly Hub app;
 
         public SmartHubService()
         {
             InitializeComponent();
 
-            ControllerEnvironment.Init();
+            HubEnvironment.Init();
 
-            app = new Controller();
+            app = new Hub();
             app.Init();
         }
 

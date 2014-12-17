@@ -6,7 +6,7 @@ namespace SmartHub.Core.Plugins
 {
     public interface IServiceContext
     {
-        IControllerPackageManager PackageManager { get; }
+        IHubPackageManager PackageManager { get; }
 
         IReadOnlyCollection<PluginBase> GetAllPlugins();
 
