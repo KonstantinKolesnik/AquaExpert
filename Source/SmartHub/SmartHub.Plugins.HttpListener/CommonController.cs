@@ -15,10 +15,10 @@ namespace SmartHub.Plugins.HttpListener
         private readonly InternalDictionary<ListenerHandler> handlers;
         private readonly Logger logger;
 
-        public CommonController(InternalDictionary<ListenerHandler> handlers, Logger logger)
+        public CommonController()//InternalDictionary<ListenerHandler> handlers, Logger logger)
         {
-            this.handlers = handlers;
-            this.logger = logger;
+            //this.handlers = handlers;
+            //this.logger = logger;
         }
 
         [HttpGet, HttpPost, HttpPut, HttpDelete]
@@ -32,7 +32,6 @@ namespace SmartHub.Plugins.HttpListener
                 logger.Info("execute action: {0};", localPath);
 
                 ListenerHandler handler;
-
                 if (!handlers.TryGetValue(localPath, out handler))
                 {
                     var message = string.Format("handler for url '{0}' is not found", localPath);
@@ -53,16 +52,15 @@ namespace SmartHub.Plugins.HttpListener
 
         private static HttpRequestParams GetRequestParams(HttpRequestMessage request)
         {
-            var urlData = HttpUtility.ParseQueryString(request.RequestUri.Query);
-
             var formData = new NameValueCollection();
-
             if (request.Content.IsFormData())
             {
                 var task = request.Content.ReadAsFormDataAsync();
                 task.Wait();
                 formData = task.Result;
             }
+
+            var urlData = HttpUtility.ParseQueryString(request.RequestUri.Query);
 
             return new HttpRequestParams(urlData, formData);
         }

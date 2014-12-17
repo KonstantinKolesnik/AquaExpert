@@ -18,7 +18,6 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             var content = GetContent(parameters);
 
             var response = new HttpResponseMessage { Content = content };
-
             if (!CacheResponse)
             {
                 response.Headers.CacheControl = new CacheControlHeaderValue { NoStore = true, NoCache = true };

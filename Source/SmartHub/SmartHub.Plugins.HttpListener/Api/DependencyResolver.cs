@@ -25,12 +25,11 @@ namespace SmartHub.Plugins.HttpListener.Api
 
         public object GetService(Type serviceType)
         {
-            if (serviceType == typeof(CommonController))
-                return new CommonController(handlers, logger);
+            //if (serviceType == typeof(CommonController))
+            //    return new CommonController(handlers, logger);
 
             return null;
         }
-
         public IEnumerable<object> GetServices(Type serviceType)
         {
             return new List<object>();

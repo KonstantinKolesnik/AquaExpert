@@ -1,6 +1,8 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Plugins.HttpListener.Api;
+using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.MySensors.GatewayProxies;
@@ -27,7 +29,7 @@ namespace SmartHub.Plugins.MySensors
 
         #region Import
         [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
-        public Action<SensorMessage>[] OnSensorMessage { get; set; }
+        public Action<SensorMessage>[] SensorMessageHandlers { get; set; }
         #endregion
 
         #region Plugin overrides
@@ -180,7 +182,7 @@ namespace SmartHub.Plugins.MySensors
 
                             SaveOrUpdate(node);
                         }
-                        Run(OnSensorMessage, x => x(message));
+                        Run(SensorMessageHandlers, x => x(message));
                         //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                     }
                     else
@@ -208,7 +210,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 SaveOrUpdate(sensor);
                             }
-                            Run(OnSensorMessage, x => x(message));
+                            Run(SensorMessageHandlers, x => x(message));
                             //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
                         }
                     }
@@ -230,7 +232,7 @@ namespace SmartHub.Plugins.MySensors
                         };
 
                         Save(sv);
-                        Run(OnSensorMessage, x => x(message));
+                        Run(SensorMessageHandlers, x => x(message));
                         //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorValue, JsonConvert.SerializeObject(sv)));
                     }
                     break;
@@ -259,7 +261,7 @@ namespace SmartHub.Plugins.MySensors
                                 };
 
                                 Save(bl);
-                                Run(OnSensorMessage, x => x(message));
+                                Run(SensorMessageHandlers, x => x(message));
                                 //communicator.Broadcast(new NetworkMessage(NetworkMessageID.BatteryLevel, JsonConvert.SerializeObject(bl)));
                             }
                             break;
@@ -296,7 +298,7 @@ namespace SmartHub.Plugins.MySensors
                                     node.SketchVersion = message.Payload;
 
                                 SaveOrUpdate(node);
-                                Run(OnSensorMessage, x => x(message));
+                                Run(SensorMessageHandlers, x => x(message));
                                 //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                             }
                             break;
@@ -372,5 +374,13 @@ namespace SmartHub.Plugins.MySensors
             return seconds;
         }
         #endregion
+
+        [HttpCommand("/api/my-plugin/my-method")]
+	    public object MyMethod(HttpRequestParams request)
+	    {
+            object result = null;
+
+		    return result;
+	    }
     }
 }

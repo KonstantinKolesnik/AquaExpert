@@ -15,10 +15,15 @@ namespace SmartHub.Core.Infrastructure
         // todo: переопределить равенство - сравнивать по типу
         [ImportMany(typeof(PluginBase))]
         protected HashSet<PluginBase> Plugins { get; set; }
+        //protected List<PluginBase> Plugins { get; set; }
 
         public IReadOnlyCollection<PluginBase> GetAllPlugins()
         {
-            return new ReadOnlyCollection<PluginBase>(Plugins.ToList());
+            HashSet<int> a = new HashSet<int>();
+            a.Add(2);
+            a.Add(2);
+
+            return null;// new ReadOnlyCollection<PluginBase>(Plugins.ToList());
         }
 
         public T GetPlugin<T>() where T : PluginBase

@@ -19,13 +19,11 @@ namespace SmartHub.ApplicationConsole
             ControllerEnvironment.Init();
 
             var controller = new Controller();
-
             controller.Init();
             controller.StartServices();
 
             Console.WriteLine("Success!");
             Console.WriteLine("Press ENTER to exit.");
-            Console.WriteLine();
             Console.ReadLine();
 
             controller.StopServices();

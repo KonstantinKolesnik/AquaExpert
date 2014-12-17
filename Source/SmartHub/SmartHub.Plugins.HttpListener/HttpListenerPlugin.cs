@@ -15,30 +15,36 @@ namespace SmartHub.Plugins.HttpListener
     public class HttpListenerPlugin : PluginBase
     {
         #region Fields
-        private const string BASE_URL_HTTP = "http://localhost:41831";
+        private const string BASE_URL_HTTP = "http://localhost:8888";
         private HttpSelfHostServer server;
         #endregion
 
         #region Import
         [ImportMany("5D358D8E-2310-49FE-A660-FB3ED7003B4C")]
-        public Lazy<Func<HttpRequestParams, object>, IHttpCommandAttribute>[] RequestReceived { get; set; }
+        public Lazy<Func<HttpRequestParams, object>, IHttpCommandAttribute>[] HttpCommandHandlers { get; set; }
         #endregion
 
         #region Plugin overrides
         public override void InitPlugin()
         {
             var handlers = RegisterHandlers();
-            var dependencyResolver = new DependencyResolver(handlers, Logger);
-            var config = BuildConfiguration(dependencyResolver);
+            
+            var config = new HttpSelfHostConfiguration(BASE_URL_HTTP)
+            {
+                //DependencyResolver = new DependencyResolver(handlers, Logger)
+            };
+            //config.Routes.MapHttpRoute("Global", "{*url}", new { controller = "Common", action = "Index" });
+            config.Routes.MapHttpRoute("Default", "", new { controller = "Common", action = "Index" });
 
             server = new HttpSelfHostServer(config);
         }
         public override void StartPlugin()
         {
-            server.OpenAsync();
+            server.OpenAsync().Wait();
         }
         public override void StopPlugin()
         {
+            server.CloseAsync().Wait();
             server.Dispose();
             server = null;
         }
@@ -50,7 +56,7 @@ namespace SmartHub.Plugins.HttpListener
             var handlers = new InternalDictionary<ListenerHandler>();
 
             // регистрируем обработчики для методов плагинов
-            foreach (var action in RequestReceived)
+            foreach (var action in HttpCommandHandlers)
             {
                 Logger.Info("Register HTTP handler (API): '{0}'", action.Metadata.Url);
 
@@ -74,19 +80,6 @@ namespace SmartHub.Plugins.HttpListener
             }
 
             return handlers;
-        }
-        private HttpSelfHostConfiguration BuildConfiguration(DependencyResolver dependencyResolver)
-        {
-            var config = new HttpSelfHostConfiguration(BASE_URL_HTTP)
-            {
-                DependencyResolver = dependencyResolver
-            };
-
-            var defaults = new { controller = "Common", action = "Index" };
-
-            config.Routes.MapHttpRoute("Global", "{*url}", defaults);
-
-            return config;
         }
         #endregion
     }

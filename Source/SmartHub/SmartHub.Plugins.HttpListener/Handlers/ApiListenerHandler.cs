@@ -13,7 +13,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
         public ApiListenerHandler(Func<HttpRequestParams, object> action)
         {
             if (action == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException("api handler");
 
             this.action = action;
         }

@@ -79,6 +79,10 @@
       <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
       <Name>SmartHub.Core.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.HttpListener\SmartHub.Plugins.HttpListener.csproj">
+      <Project>{b2826828-29a4-4e27-9452-22e5c167ec25}</Project>
+      <Name>SmartHub.Plugins.HttpListener</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
       <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
       <Name>SmartHub.Plugins.Timer</Name>

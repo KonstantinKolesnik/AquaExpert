@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SmartHub.Core.Plugins
 {
-    public abstract class PluginBase
+    public abstract class PluginBase : IEquatable<PluginBase>, IComparable<PluginBase>
     {
         #region Fields
         [Import(typeof(IServiceContext))]
@@ -61,5 +61,18 @@ namespace SmartHub.Core.Plugins
                 }
         }
         #endregion
+
+        public bool Equals(PluginBase other)
+        {
+            if (other == null)
+                return false;
+
+            return this.GetType().Equals(other.GetType());
+        }
+
+        public int CompareTo(PluginBase other)
+        {
+            return this.GetType().Equals(other.GetType()) ? 0 : 1;
+        }
     }
 }
