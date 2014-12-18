@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace SmartHub.Plugins.WebUI.Model
+namespace SmartHub.Plugins.WebUI.Tiles
 {
-    public class TileModel
+    public class TileWeb
     {
-        public TileModel(Guid tileIid)
+        public TileWeb(Guid tileIid)
         {
             id = tileIid;
         }

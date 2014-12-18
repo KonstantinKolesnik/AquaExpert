@@ -7,7 +7,6 @@ using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.WebUI.Data;
-using SmartHub.Plugins.WebUI.Model;
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
 using System.Collections.Generic;
@@ -33,55 +32,50 @@ namespace SmartHub.Plugins.WebUI
     [Plugin]
     public class WebUiTilesPlugin : PluginBase
     {
-        private InternalDictionary<TileDefinition> availableTiles;
+        #region Fields
+        private InternalDictionary<TileBase> tiles;
+        #endregion
 
+        #region Import
         [ImportMany("FA4F97A0-41A0-4A72-BEF3-6DB579D909F4")]
-        public TileDefinition[] TileDefinitions { get; set; }
+        public TileBase[] Tiles { get; set; }
+        #endregion
 
-        public override void InitPlugin()
-        {
-            availableTiles = RegisterTiles(TileDefinitions, Logger);
-        }
-
-        private static InternalDictionary<TileDefinition> RegisterTiles(TileDefinition[] definitions, Logger logger)
-        {
-            var tiles = new InternalDictionary<TileDefinition>();
-
-            // регистрируем типы плитки
-            foreach (var definition in definitions)
-            {
-                var key = definition.GetType().FullName;
-
-                logger.Info("Register TILE DEFINITION: '{0}'", key);
-                tiles.Register(key, definition);
-            }
-
-            return tiles;
-        }
-
+        #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
             mapper.Class<Tile>(cfg => cfg.Table("WebUI_Tile"));
         }
+        public override void InitPlugin()
+        {
+            tiles = new InternalDictionary<TileBase>();
+
+            // регистрируем типы плитки
+            foreach (var tile in Tiles)
+            {
+                var key = tile.GetType().FullName;
+                tiles.Register(key, tile);
+                Logger.Info("Register tile: '{0}'", key);
+            }
+        }
+        #endregion
 
         #region http api
         [HttpCommand("/api/webui/tiles")]
         public object GetTiles(HttpRequestParams request)
         {
-
             using (var session = Context.OpenSession())
             {
-                var result = new List<TileModel>();
+                var result = new List<TileWeb>();
 
-                var tiles = session.Query<Tile>().OrderBy(t => t.SortOrder).ToList();
+                var dbTiles = session.Query<Tile>().OrderBy(t => t.SortOrder).ToList();
 
-                foreach (var obj in tiles)
+                foreach (var obj in dbTiles)
                 {
-                    TileDefinition def;
-
-                    if (availableTiles.TryGetValue(obj.HandlerKey, out def))
+                    TileBase def;
+                    if (tiles.TryGetValue(obj.HandlerKey, out def))
                     {
-                        var model = new TileModel(obj.Id);
+                        var model = new TileWeb(obj.Id);
 
                         try
                         {
@@ -124,9 +118,9 @@ namespace SmartHub.Plugins.WebUI
             using (var session = Context.OpenSession())
             {
                 var tile = session.Get<Tile>(id);
-                TileDefinition def;
+                TileBase def;
 
-                if (availableTiles.TryGetValue(tile.HandlerKey, out def))
+                if (tiles.TryGetValue(tile.HandlerKey, out def))
                 {
                     var options = tile.GetParameters();
                     return def.ExecuteAction(options);
@@ -179,19 +173,17 @@ namespace SmartHub.Plugins.WebUI
         {
             AddTile(typeof(TDef), options);
         }
-
         public void AddTile(Type defType, object options)
         {
             var key = defType.FullName;
             var strOptions = options.ToJson();
             AddTile(key, strOptions);
         }
-
         internal void AddTile(string key, string strOptions)
         {
-            TileDefinition def;
+            TileBase def;
 
-            if (!availableTiles.TryGetValue(key, out def))
+            if (!tiles.TryGetValue(key, out def))
                 throw new Exception(string.Format("Invalid tile definition: {0}", key));
 
             using (var session = Context.OpenSession())

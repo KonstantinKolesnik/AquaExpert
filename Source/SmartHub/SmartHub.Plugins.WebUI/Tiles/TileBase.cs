@@ -1,45 +1,41 @@
 ﻿using NLog;
 using SmartHub.Core.Plugins;
-using SmartHub.Plugins.WebUI.Model;
 using System.ComponentModel.Composition;
 
 namespace SmartHub.Plugins.WebUI.Tiles
 {
-    public abstract class TileDefinition
+    public abstract class TileBase
     {
-        #region fields
-
+        #region Fields
         [Import(typeof(IServiceContext))]
         private IServiceContext context;
-
         private readonly Logger logger;
-
         #endregion
 
-        protected TileDefinition()
-        {
-            logger = LogManager.GetLogger(typeof(WebUiTilesPlugin).FullName);
-        }
-
-        protected Logger Logger
-        {
-            get { return logger; }
-        }
-
+        #region Properties
         protected IServiceContext Context
         {
             get { return context; }
         }
+        protected Logger Logger
+        {
+            get { return logger; }
+        }
+        #endregion
 
-        #region public
+        #region Constructor
+        protected TileBase()
+        {
+            logger = LogManager.GetLogger(typeof(WebUiTilesPlugin).FullName);
+        }
+        #endregion
 
-        public abstract void FillModel(TileModel model, dynamic options);
-
+        #region Public methods
+        public abstract void FillModel(TileWeb model, dynamic options);
         public virtual string ExecuteAction(object options)
         {
             return null;
         }
-
         #endregion
     }
 }

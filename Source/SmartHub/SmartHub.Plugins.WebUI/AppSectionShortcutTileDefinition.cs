@@ -1,12 +1,11 @@
-﻿using SmartHub.Plugins.WebUI.Model;
-using SmartHub.Plugins.WebUI.Tiles;
+﻿using SmartHub.Plugins.WebUI.Tiles;
 
 namespace SmartHub.Plugins.WebUI
 {
     [Tile]
-    public class AppSectionShortcutTileDefinition : TileDefinition
+    public class AppSectionShortcutTileDefinition : TileBase
     {
-        public override void FillModel(TileModel model, dynamic options)
+        public override void FillModel(TileWeb model, dynamic options)
         {
             model.url = options.url;
             model.title = options.title;

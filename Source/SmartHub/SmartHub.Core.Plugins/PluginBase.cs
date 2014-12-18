@@ -14,19 +14,31 @@ namespace SmartHub.Core.Plugins
         private readonly Logger logger;
         #endregion
 
-        #region Life cycle
+        #region Properties
+        protected IServiceContext Context
+        {
+            get { return context; }
+        }
+        protected Logger Logger
+        {
+            get { return logger; }
+        }
+        #endregion
+
+        #region Constructor
         protected PluginBase()
         {
             logger = LogManager.GetLogger(GetType().FullName);
         }
+        #endregion
 
-        public virtual void InitPlugin()
-        {
-        }
+        #region Plugin virtuals
         public virtual void InitDbModel(ModelMapper mapper)
         {
         }
-
+        public virtual void InitPlugin()
+        {
+        }
         public virtual void StartPlugin()
         {
         }
@@ -35,16 +47,7 @@ namespace SmartHub.Core.Plugins
         }
         #endregion
 
-        #region Utils
-        protected Logger Logger
-        {
-            get { return logger; }
-        }
-        protected IServiceContext Context
-        {
-            get { return context; }
-        }
-
+        #region Public methods
         public void Run<T>(T[] actions, Action<T> task)
         {
             if (actions != null && actions.Any())

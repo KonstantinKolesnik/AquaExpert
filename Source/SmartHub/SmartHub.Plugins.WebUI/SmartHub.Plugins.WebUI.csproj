@@ -63,9 +63,9 @@
     <Compile Include="Attributes\SectionType.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\Tile.cs" />
-    <Compile Include="Model\TileModel.cs" />
+    <Compile Include="Tiles\TileWeb.cs" />
     <Compile Include="Tiles\TileAttribute.cs" />
-    <Compile Include="Tiles\TileDefinition.cs" />
+    <Compile Include="Tiles\TileBase.cs" />
     <Compile Include="WebUIPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebUiTilesPlugin.cs" />

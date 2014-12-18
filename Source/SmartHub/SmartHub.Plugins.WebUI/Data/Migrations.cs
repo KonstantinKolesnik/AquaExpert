@@ -13,28 +13,14 @@ namespace SmartHub.Plugins.WebUI.Data
             Database.AddTable("WebUI_Tile",
                 new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
                 new Column("HandlerKey", DbType.String.WithSize(200), ColumnProperty.NotNull),
-                new Column("SortOrder", DbType.Int32, ColumnProperty.NotNull, 0)
+                new Column("SortOrder", DbType.Int32, ColumnProperty.NotNull, 0),
+                new Column("SerializedParameters", DbType.String.WithSize(int.MaxValue))
             );
         }
 
         public override void Revert()
         {
             Database.RemoveTable("WebUI_Tile");
-        }
-    }
-
-    [Migration(2)]
-    public class Migration02 : Migration
-    {
-        public override void Apply()
-        {
-            Database.AddColumn("WebUI_Tile",
-                new Column("SerializedParameters", DbType.String.WithSize(int.MaxValue)));
-        }
-
-        public override void Revert()
-        {
-            Database.RemoveColumn("WebUI_Tile", "SerializedParameters");
         }
     }
 }
