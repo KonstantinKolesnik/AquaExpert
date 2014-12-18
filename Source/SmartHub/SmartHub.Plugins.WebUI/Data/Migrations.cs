@@ -1,6 +1,8 @@
 ﻿using ECM7.Migrator.Framework;
 using System.Data;
 
+[assembly: MigrationAssembly("SmartNetwork.Plugins.WebUI")]
+
 namespace SmartHub.Plugins.WebUI.Data
 {
     [Migration(1)]

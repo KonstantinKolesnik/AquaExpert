@@ -7,6 +7,7 @@ using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.Timer;
+using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -15,6 +16,8 @@ using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
 {
+    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/network.js", "SmartHub.Plugins.MySensors.Resources.js.settings.network.js")]
+
     [Plugin]
     public class MySensorsPlugin : PluginBase
     {

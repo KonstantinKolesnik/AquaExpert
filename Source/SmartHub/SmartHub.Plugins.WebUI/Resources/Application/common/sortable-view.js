@@ -78,8 +78,8 @@ define(
 			module.SortableCollectionView = marionette.CompositeView.extend({
 			
 				onRender: function () {
-					
-					this.$childViewContainer.addClass('sortable-view');
+				    if (this.$childViewContainer)
+                        this.$childViewContainer.addClass('sortable-view');
 				},
 
 				childView: module.SortableItemView,

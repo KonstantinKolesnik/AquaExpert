@@ -1,12 +1,9 @@
 define(
 	['app', 'moment'],
 	function(application) {
-
 		application.module('Common', function (module, app, backbone, marionette, $, _) {
-			
 			module.utils = {
 				formatString: function () {
-
 					var s = arguments[0];
 					for (var i = 0; i < arguments.length - 1; i++) {
 						var reg = new RegExp("\\{" + i + "\\}", "gm");
@@ -24,24 +21,20 @@ define(
 					return window.confirm(msg);
 				},
 				loadCss: function () {
-
 					for (var i = 0; i < arguments.length; i++) {
-
 						$('<link type="text/css" rel="stylesheet" />')
 							.attr('href', arguments[i])
 							.appendTo("head");
 					}
 				},
 				displayCurrentTime: function(selector) {
-
 					var $el = $(selector);
-					var fn = function() {
-
-						$el.text(moment().format('LT, ll'));
+					var fn = function () {
+					    //moment().locale("ru");
+						$el.text(moment().format('LT, LL'));
 					};
 					
 					if ($el.length) {
-
 						fn();
 						return window.setInterval(fn, 2000);
 					}

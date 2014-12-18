@@ -54,6 +54,7 @@ namespace SmartHub.Plugins.WebUI
     #region Application resources
     // html
     [HttpResource("/", "SmartHub.Plugins.WebUI.Resources.Application.index.html", "text/html")]
+    [HttpResource("/favicon.ico", "SmartHub.Plugins.WebUI.Resources.Application.favicon.ico", "image/svg+xml")]
 
     // webapp: main
     [JavaScriptResource("/application/index.js", "SmartHub.Plugins.WebUI.Resources.Application.index.js")]

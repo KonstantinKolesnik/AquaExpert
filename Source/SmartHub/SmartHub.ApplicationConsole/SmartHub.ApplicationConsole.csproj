@@ -35,7 +35,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>MB_0023_home2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -59,6 +59,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
+    <Content Include="MB_0023_home2.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartHub.Core.Infrastructure\SmartHub.Core.Infrastructure.csproj">
