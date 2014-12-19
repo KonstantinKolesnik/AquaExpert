@@ -17,6 +17,9 @@ using System.Linq;
 namespace SmartHub.Plugins.MySensors
 {
     [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/network.js", "SmartHub.Plugins.MySensors.Resources.js.settings.network.js")]
+    //[HttpResource(
+    //"/webapp/weather/forecast.tpl",						// URL для загрузки файла
+    //"ThinkingHome.Plugins.Weather.Resources.js.forecast.forecast.tpl")]	// путь к файлу в ресурсах плагина
 
     [Plugin]
     public class MySensorsPlugin : PluginBase
