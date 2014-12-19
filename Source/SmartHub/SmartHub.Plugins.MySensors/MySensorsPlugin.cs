@@ -16,10 +16,13 @@ using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
 {
-    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/network.js", "SmartHub.Plugins.MySensors.Resources.js.settings.network.js")]
-    //[HttpResource(
-    //"/webapp/weather/forecast.tpl",						// URL для загрузки файла
-    //"ThinkingHome.Plugins.Weather.Resources.js.forecast.forecast.tpl")]	// путь к файлу в ресурсах плагина
+    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/network.js", "SmartHub.Plugins.MySensors.Resources.js.network.js")]
+    [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
+    [HttpResource("/webapp/mysensors/templates.tpl", "SmartHub.Plugins.MySensors.Resources.js.templates.tpl")]
+
+
+
+
 
     [Plugin]
     public class MySensorsPlugin : PluginBase
@@ -381,9 +384,9 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        #region Web API
+        #region API
         [HttpCommand("/api/mysensors/nodes")]
-        public object GetAllNodes(HttpRequestParams request)
+        private object GetAllNodes(HttpRequestParams request)
         {
             //Guid scriptId = request.GetRequiredGuid("scriptId");
             return nodes;
