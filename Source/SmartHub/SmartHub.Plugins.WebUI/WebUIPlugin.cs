@@ -91,33 +91,32 @@ namespace SmartHub.Plugins.WebUI
                 var type = plugin.GetType();
 
                 // разделы
-                var sectionAttributes = type.GetCustomAttributes<AppSectionAttribute>();
-                sections.AddRange(sectionAttributes);
-
+                sections.AddRange(type.GetCustomAttributes<AppSectionAttribute>());
                 // стили
-                var cssResourceAttributes = type.GetCustomAttributes<CssResourceAttribute>()
-                    .Where(attr => attr.AutoLoad)
-                    .ToArray();
-
-                var urls = cssResourceAttributes.Select(attr => attr.Url).ToArray();
-                cssFiles.UnionWith(urls);
+                cssFiles.UnionWith(type.GetCustomAttributes<CssResourceAttribute>().Where(attr => attr.AutoLoad).Select(attr => attr.Url));
             }
         }
         #endregion
 
         #region Http commands
         [HttpCommand("/api/webui/sections/common")]
-        public object GetSections(HttpRequestParams request)
+        public object GetCommonSections(HttpRequestParams request)
         {
             return GetSections(SectionType.Common);
         }
-
         [HttpCommand("/api/webui/sections/system")]
         public object GetSystemSections(HttpRequestParams request)
         {
             return GetSections(SectionType.System);
         }
+        [HttpCommand("/api/webui/styles.json")]
+        public object LoadStylesBundle(HttpRequestParams request)
+        {
+            return cssFiles;
+        }
+        #endregion
 
+        #region Private methods
         private object GetSections(SectionType sectionType)
         {
             return sections.Where(section => section.Type == sectionType).Select(x => new
@@ -128,12 +127,6 @@ namespace SmartHub.Plugins.WebUI
                     sortOrder = x.SortOrder,
                     tileDefKey = x.TileDefinitionKey
                 }).ToArray();
-        }
-
-        [HttpCommand("/api/webui/styles.json")]
-        public object LoadStylesBundle(HttpRequestParams request)
-        {
-            return cssFiles;
         }
         #endregion
     }

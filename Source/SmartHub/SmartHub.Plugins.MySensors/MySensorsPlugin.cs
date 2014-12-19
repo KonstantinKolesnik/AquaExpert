@@ -378,12 +378,18 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        [HttpCommand("/api/mysensors/test")]
-        public object MyMethod(HttpRequestParams request)
+        #region Web API
+        [HttpCommand("/api/mysensors/nodes")]
+        public object GetAllNodes(HttpRequestParams request)
         {
-            //object result = null;
-
-            return "Hello world!";
+            //Guid scriptId = request.GetRequiredGuid("scriptId");
+            return nodes;
         }
+        [HttpCommand("/api/mysensors/sensors")]
+        public object GetAllSensors(HttpRequestParams request)
+        {
+            return sensors;
+        }
+        #endregion
     }
 }

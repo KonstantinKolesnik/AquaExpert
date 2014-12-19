@@ -16,9 +16,7 @@
 
 		// api
 		var api = {
-
 			loadCommonSections: function () {
-
 				var defer = $.Deferred();
 
 				$.getJSON('/api/webui/sections/common')
@@ -27,15 +25,12 @@
 						defer.resolve(collection);
 					})
 					.fail(function () {
-
 						defer.resolve(undefined);
 					});
 
 				return defer.promise();
 			},
-
 			loadSystemSections: function () {
-
 				var defer = $.Deferred();
 
 				$.getJSON('/api/webui/sections/system')
@@ -44,7 +39,6 @@
 						defer.resolve(collection);
 					})
 					.fail(function () {
-
 						defer.resolve(undefined);
 					});
 

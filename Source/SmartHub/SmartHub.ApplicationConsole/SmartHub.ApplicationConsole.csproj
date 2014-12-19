@@ -58,7 +58,6 @@
       <Link>SmartHub.sdf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="favicon.ico" />
     <Content Include="MB_0023_home2.ico" />
   </ItemGroup>
   <ItemGroup>

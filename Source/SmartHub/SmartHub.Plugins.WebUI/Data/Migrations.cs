@@ -10,7 +10,7 @@ namespace SmartHub.Plugins.WebUI.Data
     {
         public override void Apply()
         {
-            Database.AddTable("WebUI_Tile",
+            Database.AddTable("WebUI_Tiles",
                 new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
                 new Column("HandlerKey", DbType.String.WithSize(200), ColumnProperty.NotNull),
                 new Column("SortOrder", DbType.Int32, ColumnProperty.NotNull, 0),
@@ -20,7 +20,7 @@ namespace SmartHub.Plugins.WebUI.Data
 
         public override void Revert()
         {
-            Database.RemoveTable("WebUI_Tile");
+            Database.RemoveTable("WebUI_Tiles");
         }
     }
 }
