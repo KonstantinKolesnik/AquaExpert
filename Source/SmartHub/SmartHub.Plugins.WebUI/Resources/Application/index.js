@@ -17,6 +17,8 @@
 		moment: 'vendor/js/moment.min',
 		codemirror: 'vendor/js/codemirror-all',
 		highcharts: 'vendor/js/highcharts.min',
+
+		kendo: 'vendor/js/kendo.all.min',
 		
 		tiles:				'application/tiles/tiles',
 		'tiles-edit-mode':	'application/tiles/tiles-edit-mode',
@@ -39,6 +41,11 @@
 		},
 		highcharts: {
 			exports: 'Highcharts'
+		},
+
+		kendo: {
+		    deps: ['jquery'],
+		    exports: 'kendo'
 		}
 	}
 });

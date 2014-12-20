@@ -18,9 +18,12 @@ namespace SmartHub.Plugins.MySensors
 {
     [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/network.js", "SmartHub.Plugins.MySensors.Resources.js.network.js")]
     [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
-    [HttpResource("/webapp/mysensors/templates.tpl", "SmartHub.Plugins.MySensors.Resources.js.templates.tpl")]
+    [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
 
-
+    [AppSection("Сеть MySensors 2", SectionType.System, "/webapp/mysensors/module2.js", "SmartHub.Plugins.MySensors.Resources.js.module2.js")]
+    [JavaScriptResource("/webapp/mysensors/views2.js", "SmartHub.Plugins.MySensors.Resources.js.views2.js")]
+    [HttpResource("/webapp/mysensors/templates2.html", "SmartHub.Plugins.MySensors.Resources.js.templates2.html")]
+    //[CssResource("/webapp/mysensors/css/style2.css", "SmartHub.Plugins.MySensors.Resources.css.style2.css", AutoLoad = true)]
 
 
 

@@ -1,18 +1,23 @@
 ﻿
 define(
-	//['app', 'marionette', 'backbone', 'underscore', 
-	// 'text!myplugin/layout-template.tpl',	// общий шаблон страницы
-	// 'text!myplugin/list-template.tpl',	// шаблон для списка объектов
-	// 'text!myplugin/item-template.tpl'	// шаблон для элемента списка
-	//],
-	['app', 'marionette', 'backbone', 'underscore', 'text!webapp/mysensors/templates.tpl'],
+	['app', 'marionette', 'backbone', 'underscore', 'kendo', 'text!webapp/mysensors/templates.html'],
+    function (application, marionette, backbone, _, kendo, templates) {
+	    var mLayout = marionette.LayoutView.extend({
+	        //template: _.template(tmplLayout),
+	        template: _.template('<h1>MySensors network</h1><div id="region-list"></div>' +
+                '<select id="size">' + //data-role="kendodropdownlist"
+                '<option>S - 6 3/4"</option>'+
+                '<option>M - 7 1/4"</option>'+
+                '<option>L - 7 1/8"</option>'+
+                '<option>XL - 7 5/8"</option>' +
+            '</select>'
 
-	//function (application, marionette, backbone, _, tmplLayout, tmplList, tmplListItem) {
-    function (application, marionette, backbone, _, templates) {
-	    //var myLayout = marionette.LayoutView.extend({
-	    //    template: _.template(tmplLayout),
-				
-        //});
+                ),
+	        regions: {
+	            filter: '#region-filter',
+	            list: '#region-list'
+	        }
+        });
 
         //Id: "31249bdb-1649-45b3-ac9c-89db4b88ef63"
         //Name: null
@@ -29,13 +34,21 @@ define(
 
 	    var mNodesView = marionette.CompositeView.extend({
 	        //template: _.template(tmplList),
-	        template: _.template('<h1>Узлы</h1><div id="lstNodes"></div>'),
+	        template: _.template('<h3>Узлы</h3><div id="lstNodes"></div>'),
 	        childView: mNodeView,
-	        childViewContainer: '#lstNodes'
+	        childViewContainer: '#lstNodes',
+	        onShow: function () {
+	            //debugger;
+	            //this.$el.kendoPanelBar({
+	            //    expandMode: "single"
+	            //});
+
+	            $("#size").kendoDropDownList();
+	        }
 	    });
 
 	    return {
-	        //layout: myLayout,
+	        layoutView: mLayout,
 	        nodesView: mNodesView
 	    };
 	});

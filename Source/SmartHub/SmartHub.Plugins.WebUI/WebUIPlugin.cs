@@ -31,6 +31,8 @@ namespace SmartHub.Plugins.WebUI
 
     [JavaScriptResource("/vendor/js/highcharts.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.highcharts.min.js")]
 
+    [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
+
 
     // css
     [CssResource("/vendor/css/bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.bootstrap.min.css")]
@@ -38,6 +40,12 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/site.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.site.css")]
 
     [CssResource("/vendor/css/codemirror.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.codemirror.css", AutoLoad = true)]
+
+    [CssResource("/vendor/css/kendo.common.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common.min.css")]
+    [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
+    [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
+    [CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.default.min.css")]
+
 
     // fonts
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.eot", "application/vnd.ms-fontobject")]

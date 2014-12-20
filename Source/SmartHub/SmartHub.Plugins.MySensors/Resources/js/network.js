@@ -35,8 +35,23 @@ define(
                     nodes.sort();
 	                //nodes.each(function (obj) { console.log(obj.get('Name')); });
 
-	                var view = new views.nodesView({ collection: nodes });
-	                application.setContentView(view);
+
+	                //var view = new views.nodesView({ collection: nodes });
+	                //application.setContentView(view);
+
+
+
+	                //// создаем экземпляр layout view и добавляем его на страницу
+	                var layoutView = new views.layoutView();
+	                application.setContentView(layoutView);
+
+	                //// создаем экземпляры дочерних представлений
+                    //var filterView = new myFilterView( ... );
+	                var listView = new views.nodesView({ collection: nodes });
+
+	                //// отображаем дочерние представления на странице
+                    //layoutView.filter.show(filterView);
+                    layoutView.list.show(listView);
 	            }, null);
 	        }
 	    };
