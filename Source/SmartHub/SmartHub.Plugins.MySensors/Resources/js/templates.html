@@ -1,16 +1,19 @@
 ﻿
 <div id="content" class="k-content">
     <h4>Сеть MySensors</h4>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-4">
+            <h5>Настройки</h5>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="col-md-12">
             <h5>Узлы</h5>
             <div id="gridNodes" data-bind="source: Nodes"></div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <h5>Сенсоры</h5>
-        </div>
-        <div class="col-md-4">
-            <h5>Настройки</h5>
+            <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
     </div>
 </div>
@@ -20,21 +23,34 @@
 
 <!-- Templates  -->
 <script id="nodeDetailsTemplate" type="text/x-kendo-tmpl">
-    <div class="nodeDetailsTabStrip">
+    <div class="nodeDetailsTabStrip" data-role="tabstrip">
         <ul>
             <li class="k-state-active">Сенсоры</li>
             <li>Батарея питания</li>
         </ul>
-        <div><div class="nodeDetailsSensors k-grid" style="height:250px;" data-bind="source: Sensors"></div></div>
+        <div><div class="nodeDetailsSensors" style="height:250px;" data-bind="source: Sensors"></div></div>
         <div>
-            <div>filter</div>
-            <div class="nodeDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>
+            <!--<div>filter</div>
+            <div class="nodeDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>-->
         </div>
     </div>
 </script>
 <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
     <div>
-        <div>filter</div>
-        <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>
+        <!--<div>filter</div>
+        <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>-->
     </div>
+</script>
+
+<script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
+    #
+    var val = data.LastBatteryLevel ? data.LastBatteryLevel.Level : null;
+    #
+    <div>#: val == null ? "-" : val #</div>
+</script>
+<script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
+    #
+    var val = data.LastValue ? data.LastValue.Value : null;
+    #
+    <div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>
 </script>

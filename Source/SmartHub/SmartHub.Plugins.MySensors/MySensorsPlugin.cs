@@ -89,6 +89,8 @@ namespace SmartHub.Plugins.MySensors
             {
                 settings = session.Query<Setting>().ToList();
                 nodes = session.Query<Node>().ToList();
+                foreach (var node in nodes)
+                    node.Name = "Node " + node.NodeNo;
                 sensors = session.Query<Sensor>().ToList();
             }
 
@@ -149,6 +151,15 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
         }
+        private void Delete(object item)
+        {
+            using (var session = Context.OpenSession())
+            {
+                session.Delete(item);
+                session.Flush();
+            }
+        }
+
         #endregion
 
         #region Event handlers
@@ -391,7 +402,6 @@ namespace SmartHub.Plugins.MySensors
         [HttpCommand("/api/mysensors/nodes")]
         private object GetAllNodes(HttpRequestParams request)
         {
-            //Guid scriptId = request.GetRequiredGuid("scriptId");
             return nodes;
         }
         [HttpCommand("/api/mysensors/sensors")]
@@ -399,6 +409,33 @@ namespace SmartHub.Plugins.MySensors
         {
             return sensors;
         }
+        [HttpCommand("/api/mysensors/lastbatterylevel")]
+        private object GetLastBatteryLevel(HttpRequestParams request)
+        {
+            byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
+            using (var session = Context.OpenSession())
+            {
+                var bls = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == nodeNo);
+                return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
+            }
+        }
+        [HttpCommand("/api/mysensors/deletenode")]
+        private object DeleteNode(HttpRequestParams request)
+        {
+            byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
+            Node node = null;
+
+            using (var session = Context.OpenSession())
+            {
+                node = session.Query<Node>().FirstOrDefault(s => s.NodeNo == nodeNo);
+            }
+
+            if (node != null)
+                Delete(node);
+
+            return null;
+        }
+
         #endregion
     }
 }

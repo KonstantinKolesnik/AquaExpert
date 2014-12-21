@@ -1,12 +1,7 @@
 ﻿
 define(
-	['app', 'marionette', 'backbone', 'underscore', 'webapp/mysensors/views'],
-	function (application, marionette, backbone, _, views) {
-	    var viewModel = kendo.observable({
-	        Nodes: [],
-            Sensors: []
-	    });
-
+	['app', 'marionette', 'backbone', 'underscore', 'jquery', 'webapp/mysensors/views'],
+	function (application, marionette, backbone, _, $, views) {
 	    var api = {
 	        getNodes: function (onComplete, onError) {
 	            $.getJSON('/api/mysensors/nodes')
@@ -14,10 +9,10 @@ define(
 					    if (onComplete)
 					        onComplete(data);
 					})
-	            .fail(function () {
-	                if (onError)
-	                    onError("Error");
-	            });
+	                .fail(function () {
+	                    if (onError)
+	                        onError("Error");
+	                });
 	        },
 	        getSensors: function (onComplete, onError) {
 	            $.getJSON('/api/mysensors/sensors')
@@ -25,47 +20,142 @@ define(
 					    if (onComplete)
 					        onComplete(data);
 					})
-	            .fail(function () {
-	                if (onError)
-	                    onError("Error");
-	            });
-	        }
+	                .fail(function () {
+	                    if (onError)
+	                        onError("Error");
+	                });
+	        },
+	        getLastBatteryLevel: function (nodeNo, onComplete, onError) {
+	            $.getJSON('/api/mysensors/lastbatterylevel', { nodeNo: nodeNo })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function () {
+	                    if (onError)
+	                        onError("Error");
+	                });
+	        },
+	        deleteNode: function (nodeNo, onComplete, onError) {
+	            $.getJSON('/api/mysensors/deletenode', { nodeNo: nodeNo })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function () {
+	                    if (onError)
+	                        onError("Error");
+	                });
+	        },
 	    }
+
+	    var viewModel = kendo.observable({
+	        Nodes: [],
+	        Sensors: [],
+
+	        update: function() {
+	            api.getNodes(
+                    function (data) {
+                        $.each(data, function (idx, item) {
+                            item.LastBatteryLevel = null;
+                        })
+                        viewModel.set("Nodes", data);
+
+                        $.each(viewModel.Nodes, function (idx, item) {
+                            api.getLastBatteryLevel(item.NodeNo, function (bl) {
+                                //item.set("LastBatteryLevel", bl);
+                            });
+                        })
+
+
+
+
+
+                        api.getSensors(function (data) {
+                            viewModel.set("Sensors", data);
+                        });
+                    },
+                    function () {
+                        showDialog("Ошибка загрузки узлов.");
+                    });
+	        }
+	    });
 
 	    function createNodesGrid() {
 	        //me.gridNodesStateManager = new GridStateManager("gridNodes");
 
 	        $("#gridNodes").kendoGrid({
+	            //height: 400,
 	            groupable: true,
 	            sortable: true,
 	            reorderable: true,
+	            resizable: true,
+	            scrollable: true,
 	            pageable: {
 	                pageSizes: [10, 20, 50, 100, 300],
-	                pageSize: 50
+	                pageSize: 20
 	            },
 	            columns:
                     [
-                        //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/Device1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                        { field: "NodeNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                        { field: "Name", title: "Name", width: 150, groupable: false },
-                        //{ field: "TypeName()", title: "Type", width: 80 },
-                        { field: "SketchName", title: "Firmware Name", width: 120 },
-                        { field: "SketchVersion", title: "Firmware Version", width: 100, attributes: { "class": "text-center" } },
-                        //{ field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "text-center" } },
-                        //{ field: "LastBatteryLevel.Value", title: "Battery, %", width: 90, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                        { field: "ProtocolVersion", title: "Protocol Version", width: 100, attributes: { "class": "text-center" } },
+                        //{ field: "NodeNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
+                        //{ field: "Name", title: "Name", groupable: false },
+                        //{ field: "TypeName", title: "Type", width: 100 },
+                        //{
+                        //    title: "Firmware",
+                        //    columns:
+                        //        [
+                        //            { field: "SketchName", title: "Name", width: 120 },
+                        //            { field: "SketchVersion", title: "Version", width: 70, attributes: { "class": "text-center" } }
+                        //        ]
+                        //},
+                        ////{ field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "text-center" } },
+                        //{ field: "LastBatteryLevel.Level", title: "Battery, %", width: 90, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                        //{ field: "ProtocolVersion", title: "Protocol Version", width: 110, attributes: { "class": "text-center" } },
+                        //{
+                        //    title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
+                        //    command: [
+                        //        {
+                        //            text: "Delete",
+                        //            click: function (e) {
+                        //                var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                        //                api.deleteNode(item.NodeNo);
+                        //                //msgManager.DeleteNode(item.ID);
+                        //            }
+                        //        }
+                        //    ]
+                        //}
+
+
+                        { field: "NodeNo", title: "ID", groupable: false, attributes: { "class": "text-right" } },
+                        { field: "Name", title: "Name", groupable: false },
+                        { field: "TypeName", title: "Type" },
                         {
-                            title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
+                            title: "Firmware",
+                            columns:
+                                [
+                                    { field: "SketchName", title: "Name" },
+                                    { field: "SketchVersion", title: "Version", attributes: { "class": "text-center" } }
+                                ]
+                        },
+                        { field: "LastBatteryLevel.Level", title: "Battery, %", attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                        { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } },
+                        {
+                            title: "&nbsp;", reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
                             command: [
                                 {
                                     text: "Delete",
                                     click: function (e) {
                                         var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                        api.deleteNode(item.NodeNo);
                                         //msgManager.DeleteNode(item.ID);
                                     }
                                 }
                             ]
                         }
+
+
+
+
                     ],
 	            detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
 	            detailInit: function (e) {
@@ -85,16 +175,19 @@ define(
 	                ////    }
 	                ////});
 
+
 	                function createSensorsGrid() {
 	                    e.detailRow.find(".nodeDetailsSensors").kendoGrid({
+	                        dataSource: {
+	                            filter: { field: "NodeNo", operator: "eq", value: e.data.NodeNo	}
+	                        },
 	                        groupable: true,
 	                        sortable: true,
 	                        reorderable: true,
 	                        columns: [
-                                //{ title: "&nbsp;", reorderable: false, groupable: false, filterable: false, sortable: false, width: 80, template: '<img src="Resources/UltrasonicSonarSensor1.png" height="48px" style="vertical-align: middle;" alt=""/>' },
-                                //{ field: "NodeID", title: "Node ID", width: 70, attributes: { "class": "text-right" } },
-                                { field: "ID", title: "ID", groupable: false, width: 40, attributes: { "class": "text-right" } },
-                                //{ field: "TypeName()", title: "Type" },
+                                { field: "SensorNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
+                                { field: "Name", title: "Name", groupable: false },
+                                { field: "TypeName", title: "Type" },
                                 //{ field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
                                 { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } }
 	                        ]
@@ -109,6 +202,74 @@ define(
 	            },
 	            dataBound: function (e) {
 	                //me.gridNodesStateManager.onDataBound();
+	                //localStorage["kendo-grid-options"] = kendo.stringify(grid.getOptions());
+	                //var options = localStorage["kendo-grid-options"];
+	                //if (options) {
+	                //    grid.setOptions(JSON.parse(options));
+	                //}
+	            }
+	        });
+	    }
+	    function createSensorsGrid() {
+	        //me.gridSensorsStateManager = new GridStateManager("gridSensors");
+
+	        $("#gridSensors").kendoGrid({
+                //height: 400,
+	            groupable: true,
+	            sortable: true,
+	            reorderable: true,
+	            pageable: {
+	                pageSizes: [50, 100, 500, 1000],
+	                pageSize: 50
+	            },
+	            columns:
+                    [
+                      { field: "NodeNo", title: "Node ID", width: 70, attributes: { "class": "text-right" } },
+                      { field: "SensorNo", title: "ID", groupable: false, width: 40, attributes: { "class": "text-right" } },
+                      { field: "Name", title: "Name", width: 80, groupable: false },
+                      { field: "TypeName", title: "Type" },
+                      //{ field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                      { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } }
+                    ],
+	            detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
+	            detailInit: function (e) {
+	                //createSensorValuesChart(e.detailRow.find(".sensorDetailsValues"), e.data);
+	                //kendo.bind(e.detailRow, e.data);
+	            },
+	            detailExpand: function (e) {
+	                //me.gridSensorsStateManager.onDetailExpand(e);
+	            },
+	            detailCollapse: function (e) {
+	                //me.gridSensorsStateManager.onDetailCollapse(e);
+	            },
+	            dataBinding: function (e) {
+	                //if (e.action == "itemchange") {
+	                //    e.preventDefault();
+
+	                //    var item = e.items[0];
+
+	                //    //get the current column names, in their current order
+	                //    var grid = $("#gridSensors").data('kendoGrid');
+	                //    var columns = grid.columns;
+	                //    var columnNames = $.map(columns, function (column) {
+	                //        return column.field;
+	                //    });
+
+	                //    //get the column tds for update
+	                //    var masterRow = $('#gridSensors > div.k-grid-content > table > tbody > tr[data-uid="' + item.uid + '"]');
+	                //    var tds = masterRow.find('td:not(.k-hierarchy-cell)');
+
+	                //    //collapse the detail row that was saved.
+	                //    grid.collapseRow(masterRow);
+
+	                //    //update the tds with the value from the current item stored in items
+	                //    for (var i = 0 ; i < tds.length ; i++) {
+	                //        $(tds[i]).html(item[columnNames[i]]);
+	                //    }
+	                //}
+	            },
+	            dataBound: function (e) {
+	                //me.gridSensorsStateManager.onDataBound();
 	            }
 	        });
 	    }
@@ -138,18 +299,12 @@ define(
 	            }
 	        });
 	    }
+
 	    function onShowLayout() {
-            createNodesGrid();
+	        createNodesGrid();
+	        createSensorsGrid();
 
             kendo.bind($("#content"), viewModel);
-
-            api.getNodes(
-                function (data) {
-                    viewModel.set("Nodes", data);
-                },
-                function () {
-                    showDialog("Ошибка загрузки узлов.");
-                });
 	    }
 
 	    return {
@@ -157,6 +312,8 @@ define(
                 var layout = new views.layoutView();
                 layout.onShow = onShowLayout;
                 application.setContentView(layout);
+
+	            viewModel.update();
 
                 //var view = new views.nodesView({ collection: nodes });
                 //application.setContentView(view);

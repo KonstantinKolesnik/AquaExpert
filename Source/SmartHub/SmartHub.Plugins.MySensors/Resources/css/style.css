@@ -1,20 +1,4 @@
-﻿/*.book {
-    margin: 10px 0px;
-    padding: 0px 0px 5px 5px;
-    border-bottom: 1px solid #ccc;
-}
-
-strong {
-    font-weight: bold;
-}*/
-
-
-body 
-{
-    font-size:12px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Consolas
-}
-
+﻿
 .k-grid td {
     border-left:none !important;
     border-right:none !important;

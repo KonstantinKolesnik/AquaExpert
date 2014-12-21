@@ -45,8 +45,20 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.default.min.css")]
-    //[CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.dataviz.default.min.css")]
-    //vendor/css/Default/sprite.png
+    [HttpResource("/vendor/css/Default/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.editor.png")]
+    [HttpResource("/vendor/css/Default/imagebrowser.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.imagebrowser.png")]
+    [HttpResource("/vendor/css/Default/indeterminate.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.indeterminate.gif")]
+    [HttpResource("/vendor/css/Default/loading-image.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.loading-image.gif")]
+    [HttpResource("/vendor/css/Default/loading.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.loading.gif")]
+    [HttpResource("/vendor/css/Default/loading_2x.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.loading_2x.gif")]
+    [HttpResource("/vendor/css/Default/markers.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.markers.png")]
+    [HttpResource("/vendor/css/Default/markers_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.markers_2x.png")]
+    [HttpResource("/vendor/css/Default/slider-h.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.slider-h.gif")]
+    [HttpResource("/vendor/css/Default/slider-v.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.slider-v.gif")]
+    [HttpResource("/vendor/css/Default/sprite.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite.png")]
+    [HttpResource("/vendor/css/Default/sprite_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_2x.png")]
+    [HttpResource("/vendor/css/Default/sprite_kpi.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi.png")]
+    [HttpResource("/vendor/css/Default/sprite_kpi_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi_2x.png")]
 
 
     // fonts

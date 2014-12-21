@@ -15,7 +15,7 @@ namespace SmartHub.Plugins.HttpListener
     public class HttpListenerPlugin : PluginBase
     {
         #region Fields
-        private const string BASE_URL_HTTP = "http://localhost:8888";
+        private const string BASE_URL_HTTP = "http://localhost:55555";
         private HttpSelfHostServer server;
         #endregion
 

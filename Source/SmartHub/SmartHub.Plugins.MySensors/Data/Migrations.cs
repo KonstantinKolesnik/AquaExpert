@@ -28,8 +28,10 @@ namespace SmartHub.Plugins.MySensors.Data
                 new Column("SketchName", DbType.String),
                 new Column("SketchVersion", DbType.String),
                 new Column("Name", DbType.String)
+                //new Column("LastBatteryLevelId", DbType.Guid)
             );
             Database.AddUniqueConstraint("UK_MySensors_Nodes_NodeNo", "MySensors_Nodes", "NodeNo");
+            //Database.AddForeignKey("FK_MySensors_Nodes_NodeId", "MySensors_Nodes", "LastBatteryLevelId", "MySensors_BatteryLevels", "Id", ForeignKeyConstraint.Cascade);
 
             // sensors
             Database.AddTable("MySensors_Sensors",

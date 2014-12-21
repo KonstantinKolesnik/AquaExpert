@@ -158,6 +158,22 @@
     <EmbeddedResource Include="Resources\Vendor\css\kendo.dataviz.min.css" />
     <EmbeddedResource Include="Resources\Vendor\css\kendo.default.min.css" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Vendor\css\Default\editor.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\imagebrowser.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\indeterminate.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\loading-image.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\loading.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\loading_2x.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\markers.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\markers_2x.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\slider-h.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\slider-v.gif" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\sprite.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\sprite_2x.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\sprite_kpi.png" />
+    <EmbeddedResource Include="Resources\Vendor\css\Default\sprite_kpi_2x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
