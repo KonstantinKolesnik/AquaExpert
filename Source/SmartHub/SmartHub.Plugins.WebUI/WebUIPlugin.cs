@@ -45,6 +45,8 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.default.min.css")]
+    //[CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.dataviz.default.min.css")]
+    //vendor/css/Default/sprite.png
 
 
     // fonts
