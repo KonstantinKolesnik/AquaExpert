@@ -1,15 +1,9 @@
-﻿//using Microsoft.AspNet.SignalR;
-//using Microsoft.Owin.Cors;
-//using Microsoft.Owin.Hosting;
-//using Owin;
-
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Hosting;
+using Owin;
 using SmartHub.Core.Plugins;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.SignalR
 {
@@ -35,7 +29,7 @@ namespace SmartHub.Plugins.SignalR
         }
         public override void StartPlugin()
         {
-            //wsServer = WebApp.Start<WSStartup>(url);
+            wsServer = WebApp.Start<WSStartup>(url);
         }
         public override void StopPlugin()
         {
@@ -82,20 +76,20 @@ namespace SmartHub.Plugins.SignalR
 
         class WSStartup
         {
-            //public void Configuration(IAppBuilder app)
-            //{
-            //    app.UseCors(CorsOptions.AllowAll);
-            //    app.MapSignalR();
-            //}
+            public void Configuration(IAppBuilder app)
+            {
+                //app.UseCors(CorsOptions.AllowAll);
+                app.MapSignalR();
+            }
         }
     }
 
-    //public class MyHub : Hub
-    //{
-    //    public void Send(string name, string message)
-    //    {
-    //        Clients.All.addMessage(name, message);
-    //        //Run(OnClientSignal, x => x(name, message));
-    //    }
-    //}
+    public class MyHub : Hub
+    {
+        public void Send(string name, string message)
+        {
+            Clients.All.addMessage(name, message);
+            //Run(OnClientSignal, x => x(name, message));
+        }
+    }
 }
