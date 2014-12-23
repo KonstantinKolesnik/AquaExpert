@@ -23,7 +23,7 @@
 
 <!-- Templates  -->
 <script id="nodeDetailsTemplate" type="text/x-kendo-tmpl">
-    <div class="nodeDetailsTabStrip" data-role="tabstrip">
+    <div class="nodeDetailsTabStrip">
         <ul>
             <li class="k-state-active">Сенсоры</li>
             <li>Батарея питания</li>
@@ -43,14 +43,10 @@
 </script>
 
 <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
-    #
-    var val = data.LastBatteryLevel ? data.LastBatteryLevel.Level : null;
-    #
+    # var val = data.LastBatteryLevel ? data.LastBatteryLevel.Level : null; #
     <div>#: val == null ? "-" : val #</div>
 </script>
 <script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
-    #
-    var val = data.LastValue ? data.LastValue.Value : null;
-    #
+    # var val = data.LastValue ? data.LastValue.Value : null; #
     <div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>
 </script>
