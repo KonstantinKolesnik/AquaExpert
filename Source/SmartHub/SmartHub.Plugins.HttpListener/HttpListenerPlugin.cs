@@ -13,7 +13,6 @@ using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.SelfHost;
 
-
 namespace SmartHub.Plugins.HttpListener
 {
     [Plugin]
@@ -24,6 +23,8 @@ namespace SmartHub.Plugins.HttpListener
         private HttpSelfHostConfiguration httpConfig;
         private HttpSelfHostServer httpServer;
 
+        // This will *ONLY* bind to localhost, if you want to bind to all addresses use http://*:8080 to bind to all addresses. 
+        // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx for more information.
         private const string url = "http://localhost:55556";
         private IDisposable wsServer;
         #endregion
@@ -101,16 +102,18 @@ namespace SmartHub.Plugins.HttpListener
             return handlers;
         }
         #endregion
-    }
 
-    class WSStartup
-    {
-        public void Configuration(IAppBuilder app)
+
+        class WSStartup
         {
-            app.UseCors(CorsOptions.AllowAll);
-            app.MapSignalR();
+            public void Configuration(IAppBuilder app)
+            {
+                app.UseCors(CorsOptions.AllowAll);
+                app.MapSignalR();
+            }
         }
     }
+
     public class MyHub : Hub
     {
         public void Send(string name, string message)

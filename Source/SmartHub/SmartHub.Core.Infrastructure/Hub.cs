@@ -183,9 +183,9 @@ namespace SmartHub.Core.Infrastructure
         {
             logger.Info("Load plugins");
 
-            var folders = new HashSet<string>();
             var catalog = new AggregateCatalog(new ApplicationCatalog());
             var spDir = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
+            var folders = new HashSet<string>();
 
             foreach (var dir in spDir.GetDirectories())
             {

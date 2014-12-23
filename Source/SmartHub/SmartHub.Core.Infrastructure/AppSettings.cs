@@ -19,18 +19,21 @@ namespace SmartHub.Core.Infrastructure
         {
             get { return Path.Combine(ExecutablePath, ShadowedPluginsFolder); }
         }
+
         public static string PluginsFolder
         {
             get { return GetStringValue("pluginsFolder", "Plugins"); }
-        }
-        public static string PluginsRepository
-        {
-            get { return GetStringValue("pluginsRepository", @"D:\nuget"); }
         }
         public static string PluginsFullPath
         {
             get { return Path.IsPathRooted(PluginsFolder) ? PluginsFolder : Path.Combine(ExecutablePath, PluginsFolder); }
         }
+
+        public static string PluginsRepository
+        {
+            get { return GetStringValue("pluginsRepository", @"C:\nuget"); }
+        }
+        
         public static string ExecutablePath
         {
             get
