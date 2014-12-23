@@ -1,4 +1,8 @@
-﻿using SmartHub.Core.Plugins;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
+using Microsoft.Owin.Hosting;
+using Owin;
+using SmartHub.Core.Plugins;
 using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
@@ -9,6 +13,7 @@ using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.SelfHost;
 
+
 namespace SmartHub.Plugins.HttpListener
 {
     [Plugin]
@@ -16,48 +21,63 @@ namespace SmartHub.Plugins.HttpListener
     {
         #region Fields
         private const string BASE_URL_HTTP = "http://localhost:55555";
-        private HttpSelfHostServer server;
+        private HttpSelfHostConfiguration httpConfig;
+        private HttpSelfHostServer httpServer;
+
+        private const string url = "http://localhost:55556";
+        private IDisposable wsServer;
         #endregion
 
         #region Import
         [ImportMany("5D358D8E-2310-49FE-A660-FB3ED7003B4C")]
         public Lazy<Func<HttpRequestParams, object>, IHttpCommandAttribute>[] HttpCommandHandlers { get; set; }
+
+        [ImportMany("ADD7FADD-D706-4D5A-9103-09B26FD2FD9C")]
+        public Action<string, string>[] OnClientSignal { get; set; }
         #endregion
 
         #region Plugin overrides
         public override void InitPlugin()
         {
             var handlers = RegisterHandlers();
-            
-            var config = new HttpSelfHostConfiguration(BASE_URL_HTTP)
-            {
-                DependencyResolver = new DependencyResolver(handlers, Logger)
-            };
-            config.Routes.MapHttpRoute("Global", "{*url}", new { controller = "Common", action = "Index" });
 
-            server = new HttpSelfHostServer(config);
+            httpConfig = new HttpSelfHostConfiguration(BASE_URL_HTTP);
+            httpConfig.DependencyResolver = new DependencyResolver(handlers, Logger);
+            httpConfig.Routes.MapHttpRoute("Global", "{*url}", new { controller = "Common", action = "Index" });
         }
         public override void StartPlugin()
         {
-            server.OpenAsync().Wait();
+            httpServer = new HttpSelfHostServer(httpConfig);
+            httpServer.OpenAsync().Wait();
+
+            wsServer = WebApp.Start<WSStartup>(url);
         }
         public override void StopPlugin()
         {
-            server.CloseAsync().Wait();
-            server.Dispose();
-            server = null;
+            if (httpServer != null)
+            {
+                httpServer.CloseAsync().Wait();
+                httpServer.Dispose();
+                httpServer = null;
+            }
+
+            if (wsServer != null)
+            {
+                wsServer.Dispose();
+                wsServer = null;
+            }
         }
         #endregion
 
         #region Private methods
-        private InternalDictionary<ListenerHandler> RegisterHandlers()
+        private InternalDictionary<ListenerHandlerBase> RegisterHandlers()
         {
-            var handlers = new InternalDictionary<ListenerHandler>();
+            var handlers = new InternalDictionary<ListenerHandlerBase>();
 
             // регистрируем обработчики для методов плагинов
             foreach (var action in HttpCommandHandlers)
             {
-                Logger.Info("Register HTTP handler (API): '{0}'", action.Metadata.Url);
+                Logger.Info("Register WebApi command handler '{0}'", action.Metadata.Url);
 
                 var handler = new ApiListenerHandler(action.Value);
                 handlers.Register(action.Metadata.Url, handler);
@@ -71,7 +91,7 @@ namespace SmartHub.Plugins.HttpListener
 
                 foreach (var attribute in attributes)
                 {
-                    Logger.Info("Register HTTP handler (resource): '{0}'", attribute.Url);
+                    Logger.Info("Register HTTP resource handler: '{0}'", attribute.Url);
 
                     var resHandler = new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType);
                     handlers.Register(attribute.Url, resHandler);
@@ -81,5 +101,22 @@ namespace SmartHub.Plugins.HttpListener
             return handlers;
         }
         #endregion
+    }
+
+    class WSStartup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            app.UseCors(CorsOptions.AllowAll);
+            app.MapSignalR();
+        }
+    }
+    public class MyHub : Hub
+    {
+        public void Send(string name, string message)
+        {
+            Clients.All.addMessage(name, message);
+            //Run(OnClientSignal, x => x(name, message));
+        }
     }
 }

@@ -8,12 +8,16 @@ namespace SmartHub.Plugins.HttpListener.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class HttpCommandAttribute : ExportAttribute, IHttpCommandAttribute
     {
+        public string Url
+        {
+            get;
+            private set;
+        }
+
         public HttpCommandAttribute(string url)
             : base("5D358D8E-2310-49FE-A660-FB3ED7003B4C", typeof(Func<HttpRequestParams, object>))
         {
             Url = url;
         }
-
-        public string Url { get; private set; }
     }
 }

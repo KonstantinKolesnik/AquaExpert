@@ -9,10 +9,10 @@ namespace SmartHub.Plugins.HttpListener.Api
 {
     public class DependencyResolver : IDependencyResolver
     {
-        private readonly InternalDictionary<ListenerHandler> handlers;
+        private readonly InternalDictionary<ListenerHandlerBase> handlers;
         private readonly Logger logger;
 
-        public DependencyResolver(InternalDictionary<ListenerHandler> handlers, Logger logger)
+        public DependencyResolver(InternalDictionary<ListenerHandlerBase> handlers, Logger logger)
         {
             this.handlers = handlers;
             this.logger = logger;

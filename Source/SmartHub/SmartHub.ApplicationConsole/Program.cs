@@ -18,16 +18,16 @@ namespace SmartHub.ApplicationConsole
         {
             HubEnvironment.Init();
 
-            var controller = new Hub();
-            controller.Init();
-            controller.StartServices();
+            var hub = new Hub();
+            hub.Init();
+            hub.StartServices();
 
             Console.WriteLine("Success!");
             Console.WriteLine("Press ENTER to exit");
             
             Console.ReadLine();
 
-            controller.StopServices();
+            hub.StopServices();
         }
         private static void OldStart()
         {

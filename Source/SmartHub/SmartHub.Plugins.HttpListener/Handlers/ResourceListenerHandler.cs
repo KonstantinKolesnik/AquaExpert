@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public class ResourceListenerHandler : ListenerHandler
+    public class ResourceListenerHandler : ListenerHandlerBase
     {
         private readonly object lockObject = new object();
         private WeakReference<byte[]> resourceReference;
@@ -23,7 +23,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             this.contentType = contentType;
         }
 
-        public override HttpContent GetContent(HttpRequestParams parameters)
+        public override HttpContent GetResponseContent(HttpRequestParams parameters)
         {
             var resource = PrepareResource();
 
@@ -64,7 +64,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
                 }
                 else
                 {
-                    var message = string.Format("resource {0} is not found", path);
+                    var message = string.Format("Resource {0} is not found", path);
                     throw new FileNotFoundException(message);
                 }
             }

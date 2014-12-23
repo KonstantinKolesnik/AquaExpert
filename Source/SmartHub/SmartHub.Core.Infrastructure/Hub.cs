@@ -189,10 +189,9 @@ namespace SmartHub.Core.Infrastructure
 
             foreach (var dir in spDir.GetDirectories())
             {
+                folders.Add(dir.FullName);
                 var subCatalog = new DirectoryCatalog(dir.FullName);
                 catalog.Catalogs.Add(subCatalog);
-
-                folders.Add(dir.FullName);
             }
 
             AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = string.Join(";", folders);

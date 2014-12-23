@@ -13,12 +13,12 @@ namespace SmartHub.Plugins.HttpListener
     public class CommonController : ApiController
     {
         #region Fields
-        private readonly InternalDictionary<ListenerHandler> handlers;
+        private readonly InternalDictionary<ListenerHandlerBase> handlers;
         private readonly Logger logger;
         #endregion
 
         #region Constructor
-        public CommonController(InternalDictionary<ListenerHandler> handlers, Logger logger)
+        public CommonController(InternalDictionary<ListenerHandlerBase> handlers, Logger logger)
         {
             this.handlers = handlers;
             this.logger = logger;
@@ -35,7 +35,7 @@ namespace SmartHub.Plugins.HttpListener
 
                 logger.Info("Execute action: {0};", localPath);
 
-                ListenerHandler handler;
+                ListenerHandlerBase handler;
                 if (!handlers.TryGetValue(localPath, out handler))
                 {
                     var message = string.Format("Handler for url '{0}' was not found", localPath);

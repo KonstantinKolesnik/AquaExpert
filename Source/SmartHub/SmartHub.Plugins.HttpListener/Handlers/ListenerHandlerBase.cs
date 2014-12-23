@@ -4,18 +4,18 @@ using System.Net.Http.Headers;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public abstract class ListenerHandler
+    public abstract class ListenerHandlerBase
     {
         public virtual bool CacheResponse
         {
             get { return true; }
         }
 
-        public abstract HttpContent GetContent(HttpRequestParams parameters);
+        public abstract HttpContent GetResponseContent(HttpRequestParams parameters);
 
         public HttpResponseMessage ProcessRequest(HttpRequestParams parameters)
         {
-            var content = GetContent(parameters);
+            var content = GetResponseContent(parameters);
 
             var response = new HttpResponseMessage { Content = content };
             if (!CacheResponse)

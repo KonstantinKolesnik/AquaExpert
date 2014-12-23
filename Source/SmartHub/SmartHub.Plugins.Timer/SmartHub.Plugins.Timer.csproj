@@ -42,7 +42,7 @@
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OnTimerElapsedAttribute.cs" />
+    <Compile Include="TimerElapsedAttribute.cs" />
     <Compile Include="TimerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

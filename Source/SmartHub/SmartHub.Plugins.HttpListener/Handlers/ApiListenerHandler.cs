@@ -6,14 +6,14 @@ using System.Text;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public class ApiListenerHandler : ListenerHandler
+    public class ApiListenerHandler : ListenerHandlerBase
     {
         private readonly Func<HttpRequestParams, object> action;
 
         public ApiListenerHandler(Func<HttpRequestParams, object> action)
         {
             if (action == null)
-                throw new NullReferenceException("API handler");
+                throw new NullReferenceException("API handler action");
 
             this.action = action;
         }
@@ -23,7 +23,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             get { return false; }
         }
 
-        public override HttpContent GetContent(HttpRequestParams parameters)
+        public override HttpContent GetResponseContent(HttpRequestParams parameters)
         {
             object result = action(parameters);
             string json = JsonConvert.SerializeObject(result);
