@@ -75,6 +75,7 @@
     <Compile Include="IGatewayProxy.cs" />
     <Compile Include="MySensorsPlugin.cs" />
     <Compile Include="MySensorsMessageAttribute.cs" />
+    <Compile Include="MySensorsTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

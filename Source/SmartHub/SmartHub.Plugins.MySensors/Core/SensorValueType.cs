@@ -5,7 +5,8 @@ namespace SmartHub.Plugins.MySensors.Core
     {
         Temperature = 0,      // Temperature
         Humidity = 1,      // Humidity
-        Light = 2,      // Light status. 0=off 1=on
+        //Light = 2,      // Light status. 0=off 1=on
+        Switch = 2,      // Switch status. 0=off 1=on
         Dimmer = 3,      // Dimmer value. 0-100%
         Pressure = 4,      // Atmospheric Pressure
         Forecast = 5,      // Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
@@ -43,8 +44,7 @@ namespace SmartHub.Plugins.MySensors.Core
         DustLevel = 37,     // Dust level
         Voltage = 38,     // Voltage level
         Current = 39,     // Current level
-        //Ph =                    40,     // Ph level
+        Ph = 40,     // Ph level
         //ORP =                   41,     // ORP level, V/mV
-
     }
 }

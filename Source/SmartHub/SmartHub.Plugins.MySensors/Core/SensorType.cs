@@ -6,7 +6,8 @@ namespace SmartHub.Plugins.MySensors.Core
         Door = 0,      // Door and window sensors
         Motion = 1,      // Motion sensors
         Smoke = 2,      // Smoke sensor
-        Light = 3,      // Light Actuator (on/off)
+        //Light = 3,      // Light Actuator (on/off)
+        Switch = 3,      // Light Actuator (on/off)
         Dimmer = 4,      // Dimmable device of some kind
         Cover = 5,      // Window covers or shades
         Temperature = 6,      // Temperature sensor

@@ -9,9 +9,9 @@ define(
 					    if (onComplete)
 					        onComplete(data);
 					})
-	                .fail(function () {
-	                    if (onError)
-	                        onError("Error");
+	                .fail(function (data) {
+	                    onError = onError || onDefaultError;
+	                    onError(data);
 	                });
 	        },
 	        getSensors: function (onComplete, onError) {
@@ -20,31 +20,20 @@ define(
 					    if (onComplete)
 					        onComplete(data);
 					})
-	                .fail(function () {
-	                    if (onError)
-	                        onError("Error");
+	                .fail(function (data) {
+	                    onError = onError || onDefaultError;
+	                    onError(data);
 	                });
 	        },
-	        getLastBatteryLevel: function (nodeNo, onComplete, onError) {
-	            $.getJSON('/api/mysensors/lastbatterylevel', { nodeNo: nodeNo })
+	        deleteNode: function (id, onComplete, onError) {
+	            $.getJSON('/api/mysensors/nodes/delete', { Id: id })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
 					})
-	                .fail(function () {
-	                    if (onError)
-	                        onError("Error");
-	                });
-	        },
-	        deleteNode: function (nodeNo, onComplete, onError) {
-	            $.getJSON('/api/mysensors/deletenode', { nodeNo: nodeNo })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function () {
-	                    if (onError)
-	                        onError("Error");
+	                .fail(function (data) {
+	                    onError = onError || onDefaultError;
+	                    onError(data);
 	                });
 	        },
 	    }
@@ -54,30 +43,12 @@ define(
 	        Sensors: [],
 
 	        update: function() {
-	            api.getNodes(
-                    function (data) {
-                        $.each(data, function (idx, item) {
-                            item.LastBatteryLevel = null;
-                        })
-                        viewModel.set("Nodes", data);
-
-                        $.each(viewModel.Nodes, function (idx, item) {
-                            api.getLastBatteryLevel(item.NodeNo, function (bl) {
-                                //item.set("LastBatteryLevel", bl);
-                            });
-                        })
-
-
-
-
-
-                        api.getSensors(function (data) {
-                            viewModel.set("Sensors", data);
-                        });
-                    },
-                    function () {
-                        showDialog("Ошибка загрузки узлов.");
+	            api.getNodes(function (data) {
+                    viewModel.set("Nodes", data);
+                    api.getSensors(function (data) {
+                        viewModel.set("Sensors", data);
                     });
+                });
 	        }
 	    });
 
@@ -98,13 +69,13 @@ define(
 	            columns:
                     [
                         //{ field: "NodeNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                        //{ field: "Name", title: "Name", groupable: false },
-                        //{ field: "TypeName", title: "Type", width: 100 },
+                        //{ field: "Name", title: "Имя", groupable: false },
+                        //{ field: "TypeName", title: "Тип", width: 100 },
                         //{
                         //    title: "Firmware",
                         //    columns:
                         //        [
-                        //            { field: "SketchName", title: "Name", width: 120 },
+                        //            { field: "SketchName", title: "Имя", width: 120 },
                         //            { field: "SketchVersion", title: "Version", width: 70, attributes: { "class": "text-center" } }
                         //        ]
                         //},
@@ -127,27 +98,39 @@ define(
 
 
                         { field: "NodeNo", title: "ID", groupable: false, attributes: { "class": "text-right" } },
-                        { field: "Name", title: "Name", groupable: false },
-                        { field: "TypeName", title: "Type" },
+                        { field: "Name", title: "Имя", groupable: false },
+                        { field: "TypeName", title: "Тип" },
                         {
-                            title: "Firmware",
+                            title: "Прошивка",
                             columns:
                                 [
-                                    { field: "SketchName", title: "Name" },
-                                    { field: "SketchVersion", title: "Version", attributes: { "class": "text-center" } }
+                                    { field: "SketchName", title: "Имя" },
+                                    { field: "SketchVersion", title: "Версия", attributes: { "class": "text-center" } }
                                 ]
                         },
-                        { field: "LastBatteryLevel.Level", title: "Battery, %", attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                        { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } },
+                        { field: "BatteryLevel.Level", title: "Батарея, %", attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                        { field: "ProtocolVersion", title: "Версия протокола", attributes: { "class": "text-center" } },
                         {
                             title: "&nbsp;", reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
                             command: [
                                 {
-                                    text: "Delete",
+                                    text: "Удалить",
                                     click: function (e) {
                                         var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                        api.deleteNode(item.NodeNo);
-                                        //msgManager.DeleteNode(item.ID);
+                                        api.deleteNode(item.Id, function () {
+                                            for (var i = 0; i < viewModel.Nodes.length; i++) {
+                                                if (viewModel.Nodes[i].NodeNo == item.NodeNo) {
+                                                    viewModel.Nodes.splice(i, 1);
+                                                    break;
+                                                }
+                                            }
+                                            for (var i = 0; i < viewModel.Sensors.length; ) {
+                                                if (viewModel.Sensors[i].NodeNo == item.NodeNo)
+                                                    viewModel.Sensors.splice(i, 1);
+                                                else
+                                                    i++;
+                                            }
+                                        });
                                     }
                                 }
                             ]
@@ -161,7 +144,7 @@ define(
 	                kendo.bind(e.detailRow, e.data);
 
 	                //$(document).bind("kendo:skinChange", createChart);
-	                //e.detailRow.find(".deviceDetailsBatteryLevels").data("kendoChart").setOptions({
+	                //e.detailRow.find(".nodeDetailsBatteryLevels").data("kendoChart").setOptions({
 	                //    categoryAxis: {
 	                //        baseUnit: "hours"
 	                //        //baseUnit: "days",
@@ -182,10 +165,10 @@ define(
 	                        reorderable: true,
 	                        columns: [
                                 { field: "SensorNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                                { field: "Name", title: "Name", groupable: false },
-                                { field: "TypeName", title: "Type" },
-                                //{ field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                                { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } }
+                                { field: "Name", title: "Имя", width: 80, groupable: false },
+                                { field: "TypeName", title: "Тип", width: 80 },
+                                { field: "SensorValue.Value", title: "Значение", width: 120, groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                                { field: "ProtocolVersion", title: "Версия протокола", width: 120, attributes: { "class": "text-center" } }
 	                        ]
 	                    });
 	                }
@@ -214,6 +197,7 @@ define(
 	            groupable: true,
 	            sortable: true,
 	            reorderable: true,
+	            scrollable: true,
 	            pageable: {
 	                pageSizes: [50, 100, 500, 1000],
 	                pageSize: 50
@@ -221,11 +205,11 @@ define(
 	            columns:
                     [
                       { field: "NodeNo", title: "Node ID", width: 70, attributes: { "class": "text-right" } },
-                      { field: "SensorNo", title: "ID", groupable: false, width: 40, attributes: { "class": "text-right" } },
+                      { field: "SensorNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
                       { field: "Name", title: "Name", width: 80, groupable: false },
-                      { field: "TypeName", title: "Type" },
-                      //{ field: "LastValue.Value", title: "Value", groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                      { field: "ProtocolVersion", title: "Protocol Version", attributes: { "class": "text-center" } }
+                      { field: "TypeName", title: "Type", width: 80 },
+                      { field: "SensorValue.Value", title: "Value", width: 120, groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                      { field: "ProtocolVersion", title: "Protocol Version", width: 110, attributes: { "class": "text-center" } }
                     ],
 	            detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
 	            detailInit: function (e) {
@@ -301,6 +285,10 @@ define(
 	        createSensorsGrid();
 
             kendo.bind($("#content"), viewModel);
+	    }
+
+	    function onDefaultError(data) {
+	        showDialog(data || "Ошибка");
 	    }
 
 	    return {

@@ -32,6 +32,7 @@ namespace SmartHub.Plugins.WebUI
     [JavaScriptResource("/vendor/js/highcharts.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.highcharts.min.js")]
 
     [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
+    
     [JavaScriptResource("/vendor/js/jquery.signalR-2.1.2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.signalR-2.1.2.min.js")]
 
     // css
@@ -59,7 +60,6 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/vendor/css/Default/sprite_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_2x.png")]
     [HttpResource("/vendor/css/Default/sprite_kpi.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi.png")]
     [HttpResource("/vendor/css/Default/sprite_kpi_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi_2x.png")]
-
 
     // fonts
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.eot", "application/vnd.ms-fontobject")]
@@ -132,7 +132,7 @@ namespace SmartHub.Plugins.WebUI
             return GetSectionItems(SectionType.System);
         }
         [HttpCommand("/api/webui/styles.json")]
-        public object LoadStylesBundle(HttpRequestParams request)
+        public object GetStylesBundle(HttpRequestParams request)
         {
             return cssFiles;
         }
@@ -147,7 +147,7 @@ namespace SmartHub.Plugins.WebUI
                     name = sectionItem.Title,
                     path = sectionItem.GetModulePath(),
                     sortOrder = sectionItem.SortOrder,
-                    typeFullName = sectionItem.TileTypeFullName
+                    tileTypeFullName = sectionItem.TileTypeFullName
                 }).ToArray();
         }
         #endregion

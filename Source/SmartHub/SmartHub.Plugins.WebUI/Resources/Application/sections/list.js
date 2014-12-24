@@ -4,8 +4,8 @@
 		application.module('WebUI.Sections', function (module, app, backbone, marionette, $, _) {
 			var api = {
 				addTile: function (childView) {
-				    var typeFullName = childView.model.get('typeFullName');
-				    var parameters = {};
+				    var typeFullName = childView.model.get('tileTypeFullName');
+				    var parameters = { };
 
 					if (!typeFullName) {
 					    typeFullName = 'SmartHub.Plugins.WebUI.DefaultTile';

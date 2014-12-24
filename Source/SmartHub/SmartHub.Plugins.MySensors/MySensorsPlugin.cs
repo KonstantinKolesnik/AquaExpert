@@ -9,9 +9,7 @@ using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer;
 using SmartHub.Plugins.WebUI.Attributes;
-using SmartHub.Plugins.WebUI.Tiles;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
@@ -34,12 +32,6 @@ namespace SmartHub.Plugins.MySensors
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
         private SignalRPlugin signal;
-        // for cashing:
-        private List<Setting> settings;
-        private List<Node> nodes;
-        private List<Sensor> sensors;
-        private List<BatteryLevel> batteryLevels;
-        private List<SensorValue> sensorValues;
         #endregion
 
         #region Import
@@ -65,42 +57,6 @@ namespace SmartHub.Plugins.MySensors
         }
         public override void StartPlugin()
         {
-            /*
-            //using (var session = Context.OpenSession())
-            //{
-            //var list = session.Query<UserScript>().ToArray();
-
-            //// создаем новй объект UserScript
-            //var newScript = new UserScript
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Name = "script name",
-            //    Body = "script body"
-            //};
-
-            //// сохраняем его в БД
-            //session.Save(newScript);
-
-            //// ищем в БД объект с именем "test"
-            //var scriptForDelete = session.Query<UserScript>().FirstOrDefault(s => s.Name == "test");
-
-            //// удаляем его из БД
-            //session.Delete(scriptForDelete);
-            //session.Flush();
-            //}
-            */
-
-            using (var session = Context.OpenSession())
-            {
-                settings = session.Query<Setting>().ToList();
-                nodes = session.Query<Node>().ToList();
-                foreach (var node in nodes)
-                    node.Name = "Node " + node.NodeNo;
-                sensors = session.Query<Sensor>().ToList();
-                batteryLevels = session.Query<BatteryLevel>().ToList();
-                sensorValues = session.Query<SensorValue>().ToList();
-            }
-
             if (GetSetting("UnitSystem") == null)
                 Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
 
@@ -123,24 +79,24 @@ namespace SmartHub.Plugins.MySensors
         public override void StopPlugin()
         {
             gatewayProxy.Stop();
-
-            nodes = null;
-            sensors = null;
         }
         #endregion
 
-        #region DB cash actions
+        #region DB actions
         private Setting GetSetting(string name)
         {
-            return settings.FirstOrDefault(setting => setting.Name == name);
+            using (var session = Context.OpenSession())
+                return session.Query<Setting>().FirstOrDefault(setting => setting.Name == name);
         }
         private Node GetNode(byte nodeID)
         {
-            return nodes.FirstOrDefault(node => node.NodeNo == nodeID);
+            using (var session = Context.OpenSession())
+                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeID);
         }
         private Sensor GetSensor(byte nodeID, byte sensorID)
         {
-            return sensors.FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
         }
         private void Save(object item)
         {
@@ -202,7 +158,6 @@ namespace SmartHub.Plugins.MySensors
                             };
 
                             Save(node);
-                            nodes.Add(node);
                         }
                         else
                         {
@@ -230,7 +185,6 @@ namespace SmartHub.Plugins.MySensors
                                 };
 
                                 Save(sensor);
-                                sensors.Add(sensor);
                             }
                             else
                             {
@@ -375,23 +329,25 @@ namespace SmartHub.Plugins.MySensors
         #region Private methods
         private void GetNextAvailableNodeID()
         {
-            var nds = nodes.OrderBy(node => node.Id).ToList();
-
-            byte id = 1;
-            for (byte i = 0; i < nds.Count; i++)
-                if (nds[i].NodeNo > i + 1)
-                {
-                    id = (byte)(i + 1);
-                    break;
-                }
-
-            if (id < 255)
+            using (var session = Context.OpenSession())
             {
-                Node result = new Node { Id = Guid.NewGuid(), NodeNo = id };
-                Save(result);
-                nodes.Add(result);
+                var nds = session.Query<Node>().OrderBy(node => node.NodeNo).ToList();
 
-                gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
+                byte id = 1;
+                for (byte i = 0; i < nds.Count; i++)
+                    if (nds[i].NodeNo > i + 1)
+                    {
+                        id = (byte)(i + 1);
+                        break;
+                    }
+
+                if (id < 255)
+                {
+                    Node result = new Node { Id = Guid.NewGuid(), NodeNo = id };
+                    Save(result);
+
+                    gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
+                }
             }
         }
         private int GetTimeForSensors() // seconds since 1970
@@ -402,81 +358,135 @@ namespace SmartHub.Plugins.MySensors
             int seconds = Convert.ToInt32(result.TotalSeconds);
             return seconds;
         }
+        private object BuildNodeModel(Node node)
+        {
+            if (node == null)
+                return null;
+
+            using (var session = Context.OpenSession())
+                return new
+                {
+                    Id = node.Id,
+                    NodeNo = node.NodeNo,
+                    TypeName = node.TypeName,
+                    ProtocolVersion = node.ProtocolVersion,
+                    SketchName = node.SketchName,
+                    SketchVersion = node.SketchVersion,
+                    Name = node.Name,
+                    BatteryLevel = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault()
+                };
+        }
+        private object BuildSensorModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            //SensorValue lastSv = null;
+            //using (var session = Context.OpenSession())
+            //{
+            //    var svs = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo);
+            //    var lastTimeStamp = svs.Select(vv => vv.TimeStamp).Max();
+            //    lastSv = svs.Any() ? svs.FirstOrDefault(v => v.TimeStamp == lastTimeStamp) : null;
+            //}
+            //return new
+            //{
+            //    Id = sensor.Id,
+            //    NodeNo = sensor.NodeNo,
+            //    SensorNo = sensor.SensorNo,
+            //    TypeName = sensor.TypeName,
+            //    ProtocolVersion = sensor.ProtocolVersion,
+            //    Name = sensor.Name,
+            //    SensorValue = lastSv
+            //};
+
+            using (var session = Context.OpenSession())
+                return new
+                {
+                    Id = sensor.Id,
+                    NodeNo = sensor.NodeNo,
+                    SensorNo = sensor.SensorNo,
+                    TypeName = sensor.TypeName,
+                    ProtocolVersion = sensor.ProtocolVersion,
+                    Name = sensor.Name,
+                    SensorValue = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault()
+                };
+        }
         #endregion
 
         #region Web API
         [HttpCommand("/api/mysensors/nodes")]
-        private object GetAllNodes(HttpRequestParams request)
+        private object GetNodes(HttpRequestParams request)
         {
-            return nodes;
+            using (var session = Context.OpenSession())
+                return session.Query<Node>().Select(BuildNodeModel).Where(x => x != null).ToArray();
         }
+
         [HttpCommand("/api/mysensors/sensors")]
-        public object GetAllSensors(HttpRequestParams request)
+        public object GetSensors(HttpRequestParams request)
         {
-            return sensors;
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().Select(BuildSensorModel).Where(x => x != null).ToArray();
         }
-        [HttpCommand("/api/mysensors/lastbatterylevel")]
-        // parameter nodeNo
-        private object GetLastBatteryLevel(HttpRequestParams request)
-        {
-            byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
-            //using (var session = Context.OpenSession())
-            //{
-            //    var bls = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == nodeNo);
-            //    return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
-            //}
-
-
-            var bls = batteryLevels.Where(bl => bl.NodeNo == nodeNo);
-            return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
-        }
+        
         [HttpCommand("/api/mysensors/nodes/delete")]
-        // parameter nodeNo
         private object DeleteNode(HttpRequestParams request)
         {
-            byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
-            
-            Node node = GetNode(nodeNo);
-            if (node != null)
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
             {
-                Delete(node);
-                nodes.Remove(node);
-                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(nodeNo)));
+                var node = session.Load<Node>(id);
+                session.Delete(node);
+                session.Flush();
             }
 
-            //using (var session = Context.OpenSession())
-            //{
-            //    var tile = session.Load<Node>(id);
-            //    session.Delete(tile);
-            //    session.Flush();
-            //}
+            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+
+            return null;
+        }
+
+        [HttpCommand("/api/mysensors/sensors/delete")]
+        private object DeleteSensor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Load<Sensor>(id);
+                session.Delete(sensor);
+                session.Flush();
+            }
+
+            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteSensor, JsonConvert.SerializeObject(id)));
 
             return null;
         }
         #endregion
     }
-
-    [Tile]
-    public class MySensorsTile : TileBase
-    {
-        public override void FillModel(TileWeb model, dynamic options)
-	    {
-            try
-            {
-                //Context.GetPlugin<MySensorsPlugin>();
-
-                //UserScript script = GetScript(options.id);
-                
-                model.title = "Сеть MySensors";
-                model.url = "/webapp/mysensors/module.js";// options.url;
-                model.className = "btn-primary th-tile-icon th-tile-icon-fa fa-arrow-circle-right";
-                model.content = "Узлов: 1\nСенсоров: 8";
-                model.wide = true;
-            }
-            catch (Exception ex)
-            {
-                model.content = ex.Message;
-            }
-	    }
-    }
 }
+
+
+/*
+//using (var session = Context.OpenSession())
+//{
+//var list = session.Query<UserScript>().ToArray();
+
+//// создаем новй объект UserScript
+//var newScript = new UserScript
+//{
+//    Id = Guid.NewGuid(),
+//    Name = "script name",
+//    Body = "script body"
+//};
+
+//// сохраняем его в БД
+//session.Save(newScript);
+
+//// ищем в БД объект с именем "test"
+//var scriptForDelete = session.Query<UserScript>().FirstOrDefault(s => s.Name == "test");
+
+//// удаляем его из БД
+//session.Delete(scriptForDelete);
+//session.Flush();
+//}
+*/

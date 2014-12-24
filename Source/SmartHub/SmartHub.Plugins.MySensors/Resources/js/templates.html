@@ -7,11 +7,11 @@
         </div>
     </div>-->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12 col-sm-8 col-md-6">
             <h5>Узлы</h5>
             <div id="gridNodes" data-bind="source: Nodes"></div>
         </div>
-        <div class="col-md-12">
+        <div class="col-xs-12 col-sm-4 col-md-6">
             <h5>Сенсоры</h5>
             <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
@@ -43,10 +43,11 @@
 </script>
 
 <script id="batteryLevelCellTemplate" type="text/x-kendo-tmpl">
-    # var val = data.LastBatteryLevel ? data.LastBatteryLevel.Level : null; #
+    # var val = data.BatteryLevel ? data.BatteryLevel.Level : null; #
     <div>#: val == null ? "-" : val #</div>
 </script>
 <script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
-    # var val = data.LastValue ? data.LastValue.Value : null; #
-    <div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>
+    # var val = data.SensorValue ? data.SensorValue.Value : null; #
+    <div>#: val == null ? "-" : val #</div>
 </script>
+    <!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->

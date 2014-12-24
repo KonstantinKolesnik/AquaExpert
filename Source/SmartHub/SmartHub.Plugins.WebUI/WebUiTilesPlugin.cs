@@ -50,7 +50,7 @@ namespace SmartHub.Plugins.WebUI
         {
             registeredTiles = new InternalDictionary<TileBase>();
 
-            // регистрируем типы плитки
+            // регистрируем типы плиток
             foreach (var tile in Tiles)
             {
                 var typeFullName = tile.GetType().FullName;
@@ -79,8 +79,8 @@ namespace SmartHub.Plugins.WebUI
 
                         try
                         {
-                            var options = dbTile.GetParameters();
-                            tile.FillModel(webTile, options);
+                            var parameters = dbTile.GetParameters();
+                            tile.FillModel(webTile, parameters);
                         }
                         catch (Exception ex)
                         {

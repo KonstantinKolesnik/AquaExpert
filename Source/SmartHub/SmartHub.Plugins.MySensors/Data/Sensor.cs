@@ -11,6 +11,7 @@ namespace SmartHub.Plugins.MySensors.Data
         public virtual SensorType Type { get; set; }
         public virtual string ProtocolVersion { get; set; }
         public virtual string Name { get; set; }
+        
         public virtual string TypeName
         {
             get { return Type.ToString(); }
