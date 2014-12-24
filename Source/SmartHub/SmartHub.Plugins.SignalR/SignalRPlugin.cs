@@ -75,7 +75,7 @@ namespace SmartHub.Plugins.SignalR
         //}
         #endregion
 
-        public class WSStartup
+        class WSStartup
         {
             public void Configuration(IAppBuilder app)
             {

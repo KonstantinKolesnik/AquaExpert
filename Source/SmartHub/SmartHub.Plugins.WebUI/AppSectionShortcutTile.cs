@@ -3,7 +3,7 @@
 namespace SmartHub.Plugins.WebUI
 {
     [Tile]
-    public class AppSectionShortcutTileDefinition : TileBase
+    public class AppSectionShortcutTile : TileBase
     {
         public override void FillModel(TileWeb model, dynamic options)
         {

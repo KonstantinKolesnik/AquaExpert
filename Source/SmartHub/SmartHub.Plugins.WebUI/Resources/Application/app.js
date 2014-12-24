@@ -73,7 +73,8 @@ define(
 		    }
 	    });
 
-	    var chat;
+	    app.wsClient = null;
+	    app.wsServer = null;
 
 	    app.initSignalR = function (onComplete) {
 	        var hostName = document.location.hostname;
@@ -82,19 +83,14 @@ define(
 	            //Set the hubs URL for the connection
 	            $.connection.hub.url = "http://" + hostName + ":55556/signalr";
 
-	            // Declare a proxy to reference the hub.
-	            chat = $.connection.myHub;
-
 	            // Create a function that the hub can call to broadcast messages.
-	            chat.client.onServerMessage = app.onServerMessage;
+	            $.connection.myHub.client.onServerMessage = app.onServerMessage;
 
 	            // Start the connection.
 	            $.connection.hub.start().done(function () {
-	                //$('#sendmessage').click(function () {
-	                //    // Call the onClientMessage method on the hub.
-	                //    chat.server.onClientMessage($('#displayname').val(), $('#message').val());
-	                //});
-	                app.sendSignalRMessage("client 1", "test");
+	                app.wsClient = $.connection.myHub.client;
+	                app.wsServer = $.connection.myHub.server;
+
 	                onComplete();
 	            });
 	        });
@@ -103,7 +99,7 @@ define(
 	        debugger;
 	    }
 	    app.sendSignalRMessage = function (name, message) {
-            chat.server.onClientMessage(name, message);
+	        app.wsServer.onClientMessage(name, message);
 	    }
 
 	    app.on('start', function () {

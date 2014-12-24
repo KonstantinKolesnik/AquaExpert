@@ -8,8 +8,7 @@
 					var data = {};
 
 					if (!def) {
-
-					    def = 'SmartHub.Plugins.WebUI.AppSectionShortcutTileDefinition';
+					    def = 'SmartHub.Plugins.WebUI.AppSectionShortcutTile';
 						data.title = childView.model.get('name');
 						data.url = childView.model.get('path');
 					}

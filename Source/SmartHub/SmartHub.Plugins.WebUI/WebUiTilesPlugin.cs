@@ -44,7 +44,7 @@ namespace SmartHub.Plugins.WebUI
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<Tile>(cfg => cfg.Table("WebUI_Tile"));
+            mapper.Class<TileDB>(cfg => cfg.Table("WebUI_Tiles"));
         }
         public override void InitPlugin()
         {
@@ -53,41 +53,40 @@ namespace SmartHub.Plugins.WebUI
             // регистрируем типы плитки
             foreach (var tile in Tiles)
             {
-                var key = tile.GetType().FullName;
-                tiles.Register(key, tile);
-                Logger.Info("Register tile: '{0}'", key);
+                var typeFullName = tile.GetType().FullName;
+                tiles.Register(typeFullName, tile);
+                Logger.Info("Register tile: '{0}'", typeFullName);
             }
         }
         #endregion
 
         #region http api
         [HttpCommand("/api/webui/tiles")]
-        public object GetTiles(HttpRequestParams request)
+        public object GetWebTiles(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
             {
                 var result = new List<TileWeb>();
 
-                var dbTiles = session.Query<Tile>().OrderBy(t => t.SortOrder).ToList();
-
-                foreach (var obj in dbTiles)
+                var dbTiles = session.Query<TileDB>().OrderBy(t => t.SortOrder).ToList();
+                foreach (var dbTile in dbTiles)
                 {
-                    TileBase def;
-                    if (tiles.TryGetValue(obj.HandlerKey, out def))
+                    TileBase tile;
+                    if (tiles.TryGetValue(dbTile.HandlerKey, out tile))
                     {
-                        var model = new TileWeb(obj.Id);
+                        var webTile = new TileWeb(dbTile.Id);
 
                         try
                         {
-                            var options = obj.GetParameters();
-                            def.FillModel(model, options);
+                            var options = dbTile.GetParameters();
+                            tile.FillModel(webTile, options);
                         }
                         catch (Exception ex)
                         {
-                            model.content = ex.Message;
+                            webTile.content = ex.Message;
                         }
 
-                        result.Add(model);
+                        result.Add(webTile);
                     }
                 }
 
@@ -102,7 +101,7 @@ namespace SmartHub.Plugins.WebUI
 
             using (var session = Context.OpenSession())
             {
-                var tile = session.Load<Tile>(id);
+                var tile = session.Load<TileDB>(id);
                 session.Delete(tile);
                 session.Flush();
             }
@@ -117,7 +116,7 @@ namespace SmartHub.Plugins.WebUI
 
             using (var session = Context.OpenSession())
             {
-                var tile = session.Get<Tile>(id);
+                var tile = session.Get<TileDB>(id);
                 TileBase def;
 
                 if (tiles.TryGetValue(tile.HandlerKey, out def))
@@ -133,10 +132,10 @@ namespace SmartHub.Plugins.WebUI
         [HttpCommand("/api/webui/tiles/add")]
         public object AddTile(HttpRequestParams request)
         {
-            var strDef = request.GetRequiredString("def");
+            var strKey = request.GetRequiredString("def");
             var strOptions = request.GetString("options");
 
-            AddTile(strDef, strOptions);
+            AddTile(strKey, strOptions);
 
             return null;
         }
@@ -149,16 +148,13 @@ namespace SmartHub.Plugins.WebUI
 
             using (var session = Context.OpenSession())
             {
-                var tiles = session.Query<Tile>().ToList();
+                var dbTiles = session.Query<TileDB>().ToList();
 
                 for (int i = 0; i < ids.Length; i++)
                 {
-                    var tile = tiles.FirstOrDefault(t => t.Id == ids[i]);
-
-                    if (tile != null)
-                    {
-                        tile.SortOrder = i;
-                    }
+                    var dbTile = dbTiles.FirstOrDefault(t => t.Id == ids[i]);
+                    if (dbTile != null)
+                        dbTile.SortOrder = i;
                 }
 
                 session.Flush();
@@ -168,41 +164,35 @@ namespace SmartHub.Plugins.WebUI
         }
         #endregion
 
-        #region api
-        public void AddTile<TDef>(object options)
+        #region DB API
+        public void AddTile<TDef>(object parameters)
         {
-            AddTile(typeof(TDef), options);
+            AddTile(typeof(TDef), parameters);
         }
-        public void AddTile(Type defType, object options)
+        public void AddTile(Type type, object parameters)
         {
-            var key = defType.FullName;
-            var strOptions = options.ToJson();
-            AddTile(key, strOptions);
+            AddTile(type.FullName, parameters.ToJson());
         }
-        internal void AddTile(string key, string strOptions)
+        internal void AddTile(string typeFullName, string parameters)
         {
-            TileBase def;
-
-            if (!tiles.TryGetValue(key, out def))
-                throw new Exception(string.Format("Invalid tile definition: {0}", key));
+            TileBase tile;
+            if (!tiles.TryGetValue(typeFullName, out tile))
+                throw new Exception(string.Format("Invalid tile type: {0}", typeFullName));
 
             using (var session = Context.OpenSession())
             {
-                var lastTile = session.Query<Tile>()
-                    .OrderByDescending(t => t.SortOrder)
-                    .FirstOrDefault();
+                var lastDbTile = session.Query<TileDB>().OrderByDescending(t => t.SortOrder).FirstOrDefault();
+                int sortOrder = lastDbTile == null ? 0 : lastDbTile.SortOrder + 1;
 
-                int sortOrder = lastTile == null ? 0 : lastTile.SortOrder + 1;
-
-                var tile = new Tile
+                var dbTile = new TileDB
                 {
                     Id = Guid.NewGuid(),
-                    HandlerKey = key,
+                    HandlerKey = typeFullName,
                     SortOrder = sortOrder,
-                    SerializedParameters = strOptions
+                    SerializedParameters = parameters
                 };
 
-                session.Save(tile);
+                session.Save(dbTile);
                 session.Flush();
             }
         }

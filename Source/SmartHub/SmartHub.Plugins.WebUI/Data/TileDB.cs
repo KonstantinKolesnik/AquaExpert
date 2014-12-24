@@ -3,7 +3,7 @@ using System;
 
 namespace SmartHub.Plugins.WebUI.Data
 {
-    public class Tile
+    public class TileDB
     {
         public virtual Guid Id { get; set; }
         public virtual string HandlerKey { get; set; }

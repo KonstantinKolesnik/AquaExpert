@@ -152,10 +152,6 @@ define(
                                 }
                             ]
                         }
-
-
-
-
                     ],
 	            detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
 	            detailInit: function (e) {
@@ -164,16 +160,16 @@ define(
 	                //createBatteryLevelsChart(e.detailRow.find(".deviceDetailsBatteryLevels"));
 	                kendo.bind(e.detailRow, e.data);
 
-	                ////$(document).bind("kendo:skinChange", createChart);
-	                ////e.detailRow.find(".deviceDetailsBatteryLevels").data("kendoChart").setOptions({
-	                ////    categoryAxis: {
-	                ////        baseUnit: "hours"
-	                ////        //baseUnit: "days",
-	                ////        //baseUnit: "months",
-	                ////        //baseUnit: "weeks",
-	                ////        //baseUnit: "years",
-	                ////    }
-	                ////});
+	                //$(document).bind("kendo:skinChange", createChart);
+	                //e.detailRow.find(".deviceDetailsBatteryLevels").data("kendoChart").setOptions({
+	                //    categoryAxis: {
+	                //        baseUnit: "hours"
+	                //        //baseUnit: "days",
+	                //        //baseUnit: "months",
+	                //        //baseUnit: "weeks",
+	                //        //baseUnit: "years",
+	                //    }
+	                //});
 
 
 	                function createSensorsGrid() {

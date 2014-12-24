@@ -73,7 +73,7 @@
     <Compile Include="GatewayProxies\SerialGatewayProxy.cs" />
     <Compile Include="IGatewayProxy.cs" />
     <Compile Include="MySensorsPlugin.cs" />
-    <Compile Include="OnMySensorsMessageAttribute.cs" />
+    <Compile Include="MySensorsMessageAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +85,11 @@
     <ProjectReference Include="..\SmartHub.Plugins.HttpListener\SmartHub.Plugins.HttpListener.csproj">
       <Project>{b2826828-29a4-4e27-9452-22e5c167ec25}</Project>
       <Name>SmartHub.Plugins.HttpListener</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.SignalR\SmartHub.Plugins.SignalR.csproj">
+      <Project>{46e58075-b4a0-4779-9f24-79d4b6f26a7b}</Project>
+      <Name>SmartHub.Plugins.SignalR</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">

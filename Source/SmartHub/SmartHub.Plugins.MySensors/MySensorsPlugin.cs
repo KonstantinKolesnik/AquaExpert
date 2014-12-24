@@ -6,6 +6,7 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.MySensors.GatewayProxies;
+using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
@@ -20,23 +21,19 @@ namespace SmartHub.Plugins.MySensors
     [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
-
-    //[AppSection("Сеть MySensors 2", SectionType.System, "/webapp/mysensors/module2.js", "SmartHub.Plugins.MySensors.Resources.js.module2.js")]
-    //[JavaScriptResource("/webapp/mysensors/views2.js", "SmartHub.Plugins.MySensors.Resources.js.views2.js")]
-    //[HttpResource("/webapp/mysensors/templates2.html", "SmartHub.Plugins.MySensors.Resources.js.templates2.html")]
-
-
-
     [Plugin]
     public class MySensorsPlugin : PluginBase
     {
         #region Fields
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
+        private SignalRPlugin signal;
         // for cashing:
         private List<Setting> settings;
         private List<Node> nodes;
         private List<Sensor> sensors;
+        private List<BatteryLevel> batteryLevels;
+        private List<SensorValue> sensorValues;
         #endregion
 
         #region Import
@@ -57,6 +54,8 @@ namespace SmartHub.Plugins.MySensors
         {
             gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
+
+            signal = Context.GetPlugin<SignalRPlugin>();
         }
         public override void StartPlugin()
         {
@@ -92,6 +91,8 @@ namespace SmartHub.Plugins.MySensors
                 foreach (var node in nodes)
                     node.Name = "Node " + node.NodeNo;
                 sensors = session.Query<Sensor>().ToList();
+                batteryLevels = session.Query<BatteryLevel>().ToList();
+                sensorValues = session.Query<SensorValue>().ToList();
             }
 
             if (GetSetting("UnitSystem") == null)
@@ -122,7 +123,7 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        #region DB actions
+        #region DB cash actions
         private Setting GetSetting(string name)
         {
             return settings.FirstOrDefault(setting => setting.Name == name);
@@ -159,7 +160,6 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
         }
-
         #endregion
 
         #region Event handlers
@@ -208,7 +208,7 @@ namespace SmartHub.Plugins.MySensors
                         Run(SensorMessageHandlers, x => x(message));
                         //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
                     }
-                    else
+                    else // sensor message
                     {
                         if (node != null)
                         {
@@ -398,7 +398,7 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        #region API
+        #region Web API
         [HttpCommand("/api/mysensors/nodes")]
         private object GetAllNodes(HttpRequestParams request)
         {
@@ -410,32 +410,43 @@ namespace SmartHub.Plugins.MySensors
             return sensors;
         }
         [HttpCommand("/api/mysensors/lastbatterylevel")]
+        // parameter nodeNo
         private object GetLastBatteryLevel(HttpRequestParams request)
         {
             byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
-            using (var session = Context.OpenSession())
-            {
-                var bls = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == nodeNo);
-                return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
-            }
+            //using (var session = Context.OpenSession())
+            //{
+            //    var bls = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == nodeNo);
+            //    return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
+            //}
+
+
+            var bls = batteryLevels.Where(bl => bl.NodeNo == nodeNo);
+            return bls.Any() ? bls.Where(v => v.TimeStamp == bls.Select(vv => vv.TimeStamp).Max()).FirstOrDefault() : new BatteryLevel() { Level = 70 };
         }
-        [HttpCommand("/api/mysensors/deletenode")]
+        [HttpCommand("/api/mysensors/nodes/delete")]
+        // parameter nodeNo
         private object DeleteNode(HttpRequestParams request)
         {
             byte nodeNo = (byte)request.GetRequiredInt32("nodeNo");
-            Node node = null;
-
-            using (var session = Context.OpenSession())
+            
+            Node node = GetNode(nodeNo);
+            if (node != null)
             {
-                node = session.Query<Node>().FirstOrDefault(s => s.NodeNo == nodeNo);
+                Delete(node);
+                nodes.Remove(node);
+                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(nodeNo)));
             }
 
-            if (node != null)
-                Delete(node);
+            //using (var session = Context.OpenSession())
+            //{
+            //    var tile = session.Load<Node>(id);
+            //    session.Delete(tile);
+            //    session.Flush();
+            //}
 
             return null;
         }
-
         #endregion
     }
 }
