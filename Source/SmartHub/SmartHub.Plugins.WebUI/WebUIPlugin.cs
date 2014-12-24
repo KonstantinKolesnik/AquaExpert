@@ -101,7 +101,7 @@ namespace SmartHub.Plugins.WebUI
     public class WebUIPlugin : PluginBase
     {
         #region Fields
-        private readonly List<AppSectionAttribute> sections = new List<AppSectionAttribute>();
+        private readonly List<AppSectionAttribute> sectionItems = new List<AppSectionAttribute>();
         private readonly HashSet<string> cssFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
         #endregion
 
@@ -112,8 +112,8 @@ namespace SmartHub.Plugins.WebUI
             {
                 var type = plugin.GetType();
 
-                // разделы
-                sections.AddRange(type.GetCustomAttributes<AppSectionAttribute>());
+                // элементы разделов
+                sectionItems.AddRange(type.GetCustomAttributes<AppSectionAttribute>());
                 // стили
                 cssFiles.UnionWith(type.GetCustomAttributes<CssResourceAttribute>().Where(attr => attr.AutoLoad).Select(attr => attr.Url));
             }
@@ -122,14 +122,14 @@ namespace SmartHub.Plugins.WebUI
 
         #region Http commands
         [HttpCommand("/api/webui/sections/common")]
-        public object GetCommonSections(HttpRequestParams request)
+        public object GetCommonSectionItems(HttpRequestParams request)
         {
-            return GetSections(SectionType.Common);
+            return GetSectionItems(SectionType.Common);
         }
         [HttpCommand("/api/webui/sections/system")]
-        public object GetSystemSections(HttpRequestParams request)
+        public object GetSystemSectionItems(HttpRequestParams request)
         {
-            return GetSections(SectionType.System);
+            return GetSectionItems(SectionType.System);
         }
         [HttpCommand("/api/webui/styles.json")]
         public object LoadStylesBundle(HttpRequestParams request)
@@ -139,15 +139,15 @@ namespace SmartHub.Plugins.WebUI
         #endregion
 
         #region Private methods
-        private object GetSections(SectionType sectionType)
+        private object GetSectionItems(SectionType sectionType)
         {
-            return sections.Where(section => section.Type == sectionType).Select(x => new
+            return sectionItems.Where(section => section.Type == sectionType).Select(sectionItem => new
                 {
                     id = Guid.NewGuid(),
-                    name = x.Title,
-                    path = x.GetModulePath(),
-                    sortOrder = x.SortOrder,
-                    tileDefKey = x.TileDefinitionKey
+                    name = sectionItem.Title,
+                    path = sectionItem.GetModulePath(),
+                    sortOrder = sectionItem.SortOrder,
+                    typeFullName = sectionItem.TileTypeFullName
                 }).ToArray();
         }
         #endregion

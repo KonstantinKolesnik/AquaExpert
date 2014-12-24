@@ -6,7 +6,7 @@ namespace SmartHub.Plugins.WebUI.Attributes
         public string Title { get; set; }
         public SectionType Type { get; set; }
         public int SortOrder { get; set; }
-        public string TileDefinitionKey { get; set; }
+        public string TileTypeFullName { get; set; }
 
         public AppSectionAttribute(string title, SectionType sectionType, string url, string resourcePath)
             : base(url, resourcePath)

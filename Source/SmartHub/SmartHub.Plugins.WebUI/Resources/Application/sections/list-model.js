@@ -1,5 +1,5 @@
-﻿define(['app'], function (application) {
-
+﻿
+define(['app'], function (application) {
 	application.module('WebUI.Sections', function (module, app, backbone, marionette, $, _) {
 
 		// entities

@@ -9,6 +9,7 @@ using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer;
 using SmartHub.Plugins.WebUI.Attributes;
+using SmartHub.Plugins.WebUI.Tiles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -17,7 +18,12 @@ using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
 {
-    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js")]
+    [AppSection(
+        "Сеть MySensors",
+        SectionType.System,
+        "/webapp/mysensors/module.js",
+        "SmartHub.Plugins.MySensors.Resources.js.module.js",
+        TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
     [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
@@ -448,5 +454,25 @@ namespace SmartHub.Plugins.MySensors
             return null;
         }
         #endregion
+    }
+
+    [Tile]
+    public class MySensorsTile : TileBase
+    {
+        public override void FillModel(TileWeb model, dynamic options)
+	    {
+            try
+            {
+                //UserScript script = GetScript(options.id);
+                model.title = "Сеть MySensors";
+                model.className = "";
+                //model.content = script.Name;
+                model.wide = true;
+            }
+            catch (Exception ex)
+            {
+                model.content = ex.Message;
+            }
+	    }
     }
 }

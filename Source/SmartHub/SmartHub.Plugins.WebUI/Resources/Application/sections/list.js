@@ -4,16 +4,16 @@
 		application.module('WebUI.Sections', function (module, app, backbone, marionette, $, _) {
 			var api = {
 				addTile: function (childView) {
-					var def = childView.model.get('tileDefKey');
-					var data = {};
+				    var typeFullName = childView.model.get('typeFullName');
+				    var parameters = {};
 
-					if (!def) {
-					    def = 'SmartHub.Plugins.WebUI.AppSectionShortcutTile';
-						data.title = childView.model.get('name');
-						data.url = childView.model.get('path');
+					if (!typeFullName) {
+					    typeFullName = 'SmartHub.Plugins.WebUI.DefaultTile';
+					    parameters.title = childView.model.get('name');
+						parameters.url = childView.model.get('path');
 					}
 
-					app.addTile(def, data);
+					app.addTile(typeFullName, parameters);
 				},
 				reload: function (requestName, pageTitle) {
 					app.request(requestName).done(function (items) {

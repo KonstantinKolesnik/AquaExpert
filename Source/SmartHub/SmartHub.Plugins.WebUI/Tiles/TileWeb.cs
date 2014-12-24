@@ -10,9 +10,9 @@ namespace SmartHub.Plugins.WebUI.Tiles
         }
 
         public Guid id = Guid.NewGuid();
+        public string url;
         public string title;
         public bool wide;
-        public string url;
         public object[] parameters;
         public string content;
         public string className;

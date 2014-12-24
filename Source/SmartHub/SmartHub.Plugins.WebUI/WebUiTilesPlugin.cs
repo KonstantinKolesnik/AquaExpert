@@ -33,7 +33,7 @@ namespace SmartHub.Plugins.WebUI
     public class WebUiTilesPlugin : PluginBase
     {
         #region Fields
-        private InternalDictionary<TileBase> tiles;
+        private InternalDictionary<TileBase> registeredTiles;
         #endregion
 
         #region Import
@@ -48,19 +48,20 @@ namespace SmartHub.Plugins.WebUI
         }
         public override void InitPlugin()
         {
-            tiles = new InternalDictionary<TileBase>();
+            registeredTiles = new InternalDictionary<TileBase>();
 
             // регистрируем типы плитки
             foreach (var tile in Tiles)
             {
                 var typeFullName = tile.GetType().FullName;
-                tiles.Register(typeFullName, tile);
+                registeredTiles.Register(typeFullName, tile);
+                
                 Logger.Info("Register tile: '{0}'", typeFullName);
             }
         }
         #endregion
 
-        #region http api
+        #region Web API
         [HttpCommand("/api/webui/tiles")]
         public object GetWebTiles(HttpRequestParams request)
         {
@@ -72,7 +73,7 @@ namespace SmartHub.Plugins.WebUI
                 foreach (var dbTile in dbTiles)
                 {
                     TileBase tile;
-                    if (tiles.TryGetValue(dbTile.HandlerKey, out tile))
+                    if (registeredTiles.TryGetValue(dbTile.HandlerKey, out tile))
                     {
                         var webTile = new TileWeb(dbTile.Id);
 
@@ -119,7 +120,7 @@ namespace SmartHub.Plugins.WebUI
                 var tile = session.Get<TileDB>(id);
                 TileBase def;
 
-                if (tiles.TryGetValue(tile.HandlerKey, out def))
+                if (registeredTiles.TryGetValue(tile.HandlerKey, out def))
                 {
                     var options = tile.GetParameters();
                     return def.ExecuteAction(options);
@@ -132,10 +133,10 @@ namespace SmartHub.Plugins.WebUI
         [HttpCommand("/api/webui/tiles/add")]
         public object AddTile(HttpRequestParams request)
         {
-            var strKey = request.GetRequiredString("def");
-            var strOptions = request.GetString("options");
+            var typeFullName = request.GetRequiredString("typeFullName");
+            var parameters = request.GetString("parameters");
 
-            AddTile(strKey, strOptions);
+            AddTile(typeFullName, parameters);
 
             return null;
         }
@@ -176,8 +177,8 @@ namespace SmartHub.Plugins.WebUI
         internal void AddTile(string typeFullName, string parameters)
         {
             TileBase tile;
-            if (!tiles.TryGetValue(typeFullName, out tile))
-                throw new Exception(string.Format("Invalid tile type: {0}", typeFullName));
+            if (!registeredTiles.TryGetValue(typeFullName, out tile))
+                throw new Exception(string.Format("Invalid tile type name: {0}", typeFullName));
 
             using (var session = Context.OpenSession())
             {

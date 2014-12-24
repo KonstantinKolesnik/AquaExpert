@@ -40,26 +40,27 @@ define(
 	    var app = new marionette.Application();
 
 	    app.addRegions({ regionContent: "#region-page-content" });
-
 	    app.setContentView = function (view) {
 		    app.regionContent.show(view);
 	    };
-	    app.addTile = function (def, options) {
-		    var optionsJson = JSON.stringify(options);
 
-		    $.post('/api/webui/tiles/add', { def: def, options: optionsJson })
+	    app.addTile = function (typeFullName, parameters) {
+	        $.post(
+                '/api/webui/tiles/add',
+                {
+                    typeFullName: typeFullName,
+                    parameters: JSON.stringify(parameters)
+                })
 			    .done(function () {
 				    app.navigate('tiles');
 			    });
 	    };
 
 	    app.navigate = function (route) {
-
 		    var args = Array.prototype.slice.call(arguments, 1);
 		    api.loadRoute.call(this, route, args);
 	    };
 	    app.loadPath = function (route, args) {
-
 		    api.loadRoute.call(this, route, args);
 	    };
 

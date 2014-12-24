@@ -29,10 +29,8 @@
 				childViewContainer: '.js-list',
 				
 				onRender: function() {
-
-					if (this.options.title) {
+					if (this.options.title)
 						this.$('.js-title').text(this.options.title);
-					}
 				}
 			});
 		});
