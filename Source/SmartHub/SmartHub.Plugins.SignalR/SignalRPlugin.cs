@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
 using Owin;
 using SmartHub.Core.Plugins;
@@ -78,7 +79,7 @@ namespace SmartHub.Plugins.SignalR
         {
             public void Configuration(IAppBuilder app)
             {
-                //app.UseCors(CorsOptions.AllowAll);
+                app.UseCors(CorsOptions.AllowAll);
                 app.MapSignalR();
             }
         }
@@ -88,7 +89,7 @@ namespace SmartHub.Plugins.SignalR
     {
         public void onClientMessage(string name, string message)
         {
-            Clients.All.onSignalRMessage(name, message);
+            Clients.All.onServerMessage("server 1", "success");
             //Run(OnClientSignal, x => x(name, message));
         }
     }

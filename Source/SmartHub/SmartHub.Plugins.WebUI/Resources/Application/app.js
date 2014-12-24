@@ -94,13 +94,13 @@ define(
 	                //    // Call the onClientMessage method on the hub.
 	                //    chat.server.onClientMessage($('#displayname').val(), $('#message').val());
 	                //});
-
+	                app.sendSignalRMessage("client 1", "test");
 	                onComplete();
 	            });
 	        });
 	    }
 	    app.onServerMessage = function (name, message) {
-
+	        debugger;
 	    }
 	    app.sendSignalRMessage = function (name, message) {
             chat.server.onClientMessage(name, message);
