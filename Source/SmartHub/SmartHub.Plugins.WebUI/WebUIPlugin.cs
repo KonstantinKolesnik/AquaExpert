@@ -32,7 +32,7 @@ namespace SmartHub.Plugins.WebUI
     [JavaScriptResource("/vendor/js/highcharts.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.highcharts.min.js")]
 
     [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
-
+    [JavaScriptResource("/vendor/js/jquery.signalR-2.1.2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.signalR-2.1.2.min.js")]
 
     // css
     [CssResource("/vendor/css/bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.bootstrap.min.css")]

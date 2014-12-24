@@ -19,6 +19,8 @@
 		highcharts: 'vendor/js/highcharts.min',
 
 		kendo: 'vendor/js/kendo.all.min',
+
+		signalR: 'vendor/js/jquery.signalR-2.1.2.min',
 		
 		tiles:				'application/tiles/tiles',
 		'tiles-edit-mode':	'application/tiles/tiles-edit-mode',
@@ -46,10 +48,15 @@
 		kendo: {
 		    deps: ['jquery'],
 		    exports: 'kendo'
+		},
+
+		signalR: {
+		    deps: ['jquery'],
+		    exports: 'signalR'
 		}
 	}
 });
 
 require(['app', 'common', 'bootstrap'], function (app) {
-	app.start();
+    app.start();
 });

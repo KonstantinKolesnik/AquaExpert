@@ -1,86 +1,126 @@
-﻿define(
-    ['marionette', 'backbone'],
-    function (marionette, backbone) {
+﻿
+define(
+    ['marionette', 'backbone', 'jquery', 'signalR'],
+    function (marionette, backbone, $, signalR) {
+	    var api = {
+		    parseParameters: function (queryString) {
+			    var result = [];
 
-	var app = new marionette.Application();
+			    if (queryString !== null && queryString !== undefined) {
+				    var params = (queryString + '').split('/');
 
-	app.addRegions({ regionContent: "#region-page-content" });
+				    for (var i = 0; i < params.length; i++) {
+					    var decodedValue = decodeURIComponent(params[i]);
+					    result.push(decodedValue);
+				    }
+			    }
 
-	app.setContentView = function (view) {
-		app.regionContent.show(view);
-	};
-	app.addTile = function (def, options) {
-		var optionsJson = JSON.stringify(options);
+			    return result;
+		    },
+		    loadRoute: function (route, args) {
+			    if (route) {
+				    require([route], function (obj) {
+					    obj.start.apply(obj, args);
 
-		$.post('/api/webui/tiles/add', { def: def, options: optionsJson })
-			.done(function () {
-				app.navigate('tiles');
-			});
-	};
+					    if (args && args.length) {
+						    var encoded = [];
 
-	var api = {
-		parseParameters: function (queryString) {
-			var result = [];
+						    for (var i = 0; i < args.length; i++)
+							    encoded.push(encodeURIComponent(args[i]));
 
-			if (queryString !== null && queryString !== undefined) {
-				var params = (queryString + '').split('/');
+						    route += '?' + encoded.join('/');
+					    }
 
-				for (var i = 0; i < params.length; i++) {
-					var decodedValue = decodeURIComponent(params[i]);
-					result.push(decodedValue);
-				}
-			}
+					    backbone.history.navigate(route);
+				    });
+			    }
+		    }
+	    };
 
-			return result;
-		},
-		loadRoute: function (route, args) {
-			if (route) {
-				require([route], function (obj) {
-					obj.start.apply(obj, args);
+	    var app = new marionette.Application();
 
-					if (args && args.length) {
-						var encoded = [];
+	    app.addRegions({ regionContent: "#region-page-content" });
 
-						for (var i = 0; i < args.length; i++)
-							encoded.push(encodeURIComponent(args[i]));
+	    app.setContentView = function (view) {
+		    app.regionContent.show(view);
+	    };
+	    app.addTile = function (def, options) {
+		    var optionsJson = JSON.stringify(options);
 
-						route += '?' + encoded.join('/');
-					}
+		    $.post('/api/webui/tiles/add', { def: def, options: optionsJson })
+			    .done(function () {
+				    app.navigate('tiles');
+			    });
+	    };
 
-					backbone.history.navigate(route);
-				});
-			}
-		}
-	};
+	    app.navigate = function (route) {
 
-	app.navigate = function (route) {
+		    var args = Array.prototype.slice.call(arguments, 1);
+		    api.loadRoute.call(this, route, args);
+	    };
+	    app.loadPath = function (route, args) {
 
-		var args = Array.prototype.slice.call(arguments, 1);
-		api.loadRoute.call(this, route, args);
-	};
-	app.loadPath = function (route, args) {
+		    api.loadRoute.call(this, route, args);
+	    };
 
-		api.loadRoute.call(this, route, args);
-	};
+	    app.router = new marionette.AppRouter({
+		    appRoutes: { '*path': 'loadPage' },
+		    controller: {
+			    loadPage: function (route, queryString) {
+				    var args = api.parseParameters(queryString);
+				    api.loadRoute.call(this, route, args);
+			    }
+		    }
+	    });
 
-	app.router = new marionette.AppRouter({
-		appRoutes: { '*path': 'loadPage' },
-		controller: {
-			loadPage: function (route, queryString) {
-				var args = api.parseParameters(queryString);
-				api.loadRoute.call(this, route, args);
-			}
-		}
-	});
+	    var chat;
 
-	app.on('start', function () {
-		if (backbone.history) {
-			backbone.history.start();
+	    app.initSignalR = function () {
+	        var hostName = document.location.hostname;
 
-			if (Backbone.history.fragment === '')
-				app.navigate('tiles');
-		}
-	});
+	        $.getScript('http://' + hostName + ':55556/signalr/hubs', function () {
+	            //Set the hubs URL for the connection
+	            $.connection.hub.url = "http://" + hostName + ":55556/signalr";
 
-	return app;
-});
+	            // Declare a proxy to reference the hub.
+	            chat = $.connection.myHub;
+
+	            // Create a function that the hub can call to broadcast messages.
+	            chat.client.addMessage = app.onSignalRMessage;
+
+	            // Start the connection.
+	            $.connection.hub.start().done(function () {
+	                //debugger;
+
+	                //$('#sendmessage').click(function () {
+	                //    // Call the Send method on the hub.
+	                //    chat.server.send($('#displayname').val(), $('#message').val());
+	                //    // Clear text box and reset focus for next comment.
+	                //    $('#message').val('').focus();
+	                //});
+
+
+	                chat.server.send("client 1", "test");
+	            });
+	        });
+	    }
+	    app.onSignalRMessage = function (name, message) {
+
+	    }
+	    app.sendSignalRMessage = function (name, message) {
+	        chat.server.send(name, message);
+	    }
+
+	    app.on('start', function () {
+	        app.initSignalR();
+
+	        if (backbone.history) {
+			    backbone.history.start();
+
+			    if (Backbone.history.fragment === '')
+				    app.navigate('tiles');
+		    }
+	    });
+
+	    return app;
+    });
