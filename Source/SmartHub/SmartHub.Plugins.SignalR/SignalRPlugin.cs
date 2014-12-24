@@ -86,9 +86,9 @@ namespace SmartHub.Plugins.SignalR
 
     public class MyHub : Hub
     {
-        public void Send(string name, string message)
+        public void onClientMessage(string name, string message)
         {
-            Clients.All.addMessage(name, message);
+            Clients.All.onSignalRMessage(name, message);
             //Run(OnClientSignal, x => x(name, message));
         }
     }

@@ -75,7 +75,7 @@ define(
 
 	    var chat;
 
-	    app.initSignalR = function () {
+	    app.initSignalR = function (onComplete) {
 	        var hostName = document.location.hostname;
 
 	        $.getScript('http://' + hostName + ':55556/signalr/hubs', function () {
@@ -86,33 +86,28 @@ define(
 	            chat = $.connection.myHub;
 
 	            // Create a function that the hub can call to broadcast messages.
-	            chat.client.addMessage = app.onSignalRMessage;
+	            chat.client.onServerMessage = app.onServerMessage;
 
 	            // Start the connection.
 	            $.connection.hub.start().done(function () {
-	                //debugger;
-
 	                //$('#sendmessage').click(function () {
-	                //    // Call the Send method on the hub.
-	                //    chat.server.send($('#displayname').val(), $('#message').val());
-	                //    // Clear text box and reset focus for next comment.
-	                //    $('#message').val('').focus();
+	                //    // Call the onClientMessage method on the hub.
+	                //    chat.server.onClientMessage($('#displayname').val(), $('#message').val());
 	                //});
 
-
-	                chat.server.send("client 1", "test");
+	                onComplete();
 	            });
 	        });
 	    }
-	    app.onSignalRMessage = function (name, message) {
+	    app.onServerMessage = function (name, message) {
 
 	    }
 	    app.sendSignalRMessage = function (name, message) {
-	        chat.server.send(name, message);
+            chat.server.onClientMessage(name, message);
 	    }
 
 	    app.on('start', function () {
-	        app.initSignalR();
+	        app.initSignalR(function () { });
 
 	        if (backbone.history) {
 			    backbone.history.start();
