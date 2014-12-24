@@ -1,7 +1,7 @@
-﻿define(['app'], function (application) {
+﻿
+define(['app'], function (application) {
 
 	application.module('WebUI.Tiles', function (module, app, backbone, marionette, $, _) {
-
 		module.Tile = backbone.Model.extend({
 			defaults: {
 				id: null,
@@ -10,14 +10,12 @@
 				content: []
 			}
 		});
-
 		module.TileCollection = backbone.Collection.extend({
 			model: module.Tile
 		});
 
 		var api = {
 			load: function () {
-
 				var defer = $.Deferred();
 
 				$.getJSON('/api/webui/tiles')
@@ -26,15 +24,12 @@
 						defer.resolve(collection);
 					})
 					.fail(function () {
-
 						defer.resolve(undefined);
 					});
 
 				return defer.promise();
 			},
-
 			action: function (id) {
-
 				return $.post('/api/webui/tiles/action', { id: id }).promise();
 			}
 		};

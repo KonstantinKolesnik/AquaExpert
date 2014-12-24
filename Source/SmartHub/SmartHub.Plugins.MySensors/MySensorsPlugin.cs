@@ -463,10 +463,14 @@ namespace SmartHub.Plugins.MySensors
 	    {
             try
             {
+                //Context.GetPlugin<MySensorsPlugin>();
+
                 //UserScript script = GetScript(options.id);
+                
                 model.title = "Сеть MySensors";
-                model.className = "";
-                //model.content = script.Name;
+                model.url = "/webapp/mysensors/module.js";// options.url;
+                model.className = "btn-primary th-tile-icon th-tile-icon-fa fa-arrow-circle-right";
+                model.content = "Узлов: 1\nСенсоров: 8";
                 model.wide = true;
             }
             catch (Exception ex)

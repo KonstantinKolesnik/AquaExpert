@@ -117,13 +117,13 @@ namespace SmartHub.Plugins.WebUI
 
             using (var session = Context.OpenSession())
             {
-                var tile = session.Get<TileDB>(id);
-                TileBase def;
-
-                if (registeredTiles.TryGetValue(tile.HandlerKey, out def))
+                var dbTile = session.Get<TileDB>(id);
+                
+                TileBase tile;
+                if (registeredTiles.TryGetValue(dbTile.HandlerKey, out tile))
                 {
-                    var options = tile.GetParameters();
-                    return def.ExecuteAction(options);
+                    var options = dbTile.GetParameters();
+                    return tile.ExecuteAction(options);
                 }
             }
 
