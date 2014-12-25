@@ -1,17 +1,19 @@
 ﻿
-<div id="content" class="k-content">
+<div id="content" class="k-content container-fluid">
     <h4>Сеть MySensors</h4>
-    <!--<div class="row">
-        <div class="col-md-4">
-            <h5>Настройки</h5>
-        </div>
-    </div>-->
     <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-6">
+        <div class="col-md-12">
+            <h5>Настройки</h5>
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
             <h5>Узлы</h5>
             <div id="gridNodes" data-bind="source: Nodes"></div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-6">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
             <h5>Сенсоры</h5>
             <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
@@ -26,7 +28,7 @@
     <div class="nodeDetailsTabStrip">
         <ul>
             <li class="k-state-active">Сенсоры</li>
-            <li>Батарея питания</li>
+            <li>Батарея</li>
         </ul>
         <div><div class="nodeDetailsSensors" style="height:250px;" data-bind="source: Sensors"></div></div>
         <div>

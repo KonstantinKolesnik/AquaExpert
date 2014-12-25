@@ -3,36 +3,53 @@ define(
 	['app', 'marionette', 'backbone', 'underscore', 'jquery', 'webapp/mysensors/views'],
 	function (application, marionette, backbone, _, $, views) {
 	    var api = {
-	        getNodes: function (onComplete, onError) {
+	        getNodes: function (onComplete) {
 	            $.getJSON('/api/mysensors/nodes')
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
 					})
 	                .fail(function (data) {
-	                    onError = onError || onDefaultError;
 	                    onError(data);
 	                });
 	        },
-	        getSensors: function (onComplete, onError) {
+	        getSensors: function (onComplete) {
 	            $.getJSON('/api/mysensors/sensors')
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
 					})
 	                .fail(function (data) {
-	                    onError = onError || onDefaultError;
 	                    onError(data);
 	                });
 	        },
-	        deleteNode: function (id, onComplete, onError) {
+	        setNodeName: function (id, name, onComplete) {
+	            $.getJSON('/api/mysensors/nodes/setname', { Id: id, Name: name })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
+	        setSensorName: function (id, name, onComplete) {
+	            $.getJSON('/api/mysensors/sensors/setname', { Id: id, Name: name })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
+	        deleteNode: function (id, onComplete) {
 	            $.getJSON('/api/mysensors/nodes/delete', { Id: id })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
 					})
 	                .fail(function (data) {
-	                    onError = onError || onDefaultError;
 	                    onError(data);
 	                });
 	        },
@@ -51,67 +68,72 @@ define(
                 });
 	        }
 	    });
+	    //viewModel.bind("change", onViewModelAfterSet);
 
+	    var ctrlNodesGrid;
+	    function initKendoCustomGrid() {
+	        // add "beforeEdit" event:
+	        kendo.ui.Grid.fn.editCell = (function (editCell) {
+	            return function (cell) {
+	                cell = $(cell);
+
+	                var that = this,
+                        column = that.columns[that.cellIndex(cell)],
+                        model = that._modelForContainer(cell),
+                        event = {
+                            container: cell,
+                            model: model,
+                            preventDefault: function () {
+                                this.isDefaultPrevented = true;
+                            }
+                        };
+
+	                if (model && typeof this.options.beforeEdit === "function") {
+	                    this.options.beforeEdit.call(this, event);
+
+	                    // don't edit if prevented in beforeEdit
+	                    if (event.isDefaultPrevented)
+	                        return;
+	                }
+
+	                editCell.call(this, cell);
+	            };
+	        })(kendo.ui.Grid.fn.editCell);
+	    }
 	    function createNodesGrid() {
 	        //me.gridNodesStateManager = new GridStateManager("gridNodes");
 
-	        $("#gridNodes").kendoGrid({
+	        ctrlNodesGrid = $("#gridNodes").kendoGrid({
 	            //height: 400,
 	            groupable: true,
 	            sortable: true,
 	            reorderable: true,
 	            resizable: true,
 	            scrollable: true,
+	            selectable: false,
+	            navigatable: false,
+	            editable: true,
 	            pageable: {
 	                pageSizes: [10, 20, 50, 100, 300],
 	                pageSize: 20
 	            },
 	            columns:
                     [
-                        //{ field: "NodeNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                        //{ field: "Name", title: "Имя", groupable: false },
-                        //{ field: "TypeName", title: "Тип", width: 100 },
-                        //{
-                        //    title: "Firmware",
-                        //    columns:
-                        //        [
-                        //            { field: "SketchName", title: "Имя", width: 120 },
-                        //            { field: "SketchVersion", title: "Version", width: 70, attributes: { "class": "text-center" } }
-                        //        ]
-                        //},
-                        ////{ field: "Sensors.length", title: "Sensors Count", width: 110, attributes: { "class": "text-center" } },
-                        //{ field: "LastBatteryLevel.Level", title: "Battery, %", width: 90, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                        //{ field: "ProtocolVersion", title: "Protocol Version", width: 110, attributes: { "class": "text-center" } },
-                        //{
-                        //    title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
-                        //    command: [
-                        //        {
-                        //            text: "Delete",
-                        //            click: function (e) {
-                        //                var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                        //                api.deleteNode(item.NodeNo);
-                        //                //msgManager.DeleteNode(item.ID);
-                        //            }
-                        //        }
-                        //    ]
-                        //}
-
-
-                        { field: "NodeNo", title: "ID", groupable: false, attributes: { "class": "text-right" } },
-                        { field: "Name", title: "Имя", groupable: false },
-                        { field: "TypeName", title: "Тип" },
+                        { field: "NodeNo", title: "ID", width: 35, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" } },
+                        { field: "Name", title: "Имя", groupable: false, editor: getNodeEditor },
+                        { field: "TypeName", title: "Тип", width: 95, editor: getNodeEditor },
                         {
                             title: "Прошивка",
                             columns:
                                 [
-                                    { field: "SketchName", title: "Имя" },
-                                    { field: "SketchVersion", title: "Версия", attributes: { "class": "text-center" } }
+                                    { field: "SketchName", title: "Имя", width: 120, editor: getNodeEditor },
+                                    { field: "SketchVersion", title: "Версия", width: 60, editor: getNodeEditor, attributes: { "class": "text-center" } }
                                 ]
                         },
-                        { field: "BatteryLevel.Level", title: "Батарея, %", attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                        { field: "ProtocolVersion", title: "Версия протокола", attributes: { "class": "text-center" } },
+                        { field: "BatteryLevel.Level", title: "Батарея, %", width: 80, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                        { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
                         {
-                            title: "&nbsp;", reorderable: false, filterable: false, sortable: false, attributes: { "class": "text-center" },
+                            title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" },
                             command: [
                                 {
                                     text: "Удалить",
@@ -154,7 +176,6 @@ define(
 	                //    }
 	                //});
 
-
 	                function createSensorsGrid() {
 	                    e.detailRow.find(".nodeDetailsSensors").kendoGrid({
 	                        dataSource: {
@@ -163,12 +184,17 @@ define(
 	                        groupable: true,
 	                        sortable: true,
 	                        reorderable: true,
+	                        resizable: true,
+	                        scrollable: true,
+	                        selectable: false,
+	                        navigatable: false,
+	                        editable: true,
 	                        columns: [
-                                { field: "SensorNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                                { field: "Name", title: "Имя", width: 80, groupable: false },
-                                { field: "TypeName", title: "Тип", width: 80 },
-                                { field: "SensorValue.Value", title: "Значение", width: 120, groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                                { field: "ProtocolVersion", title: "Версия протокола", width: 120, attributes: { "class": "text-center" } }
+                                { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                                { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
+                                { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
+                                { field: "SensorValue.Value", title: "Состояние", width: 70, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                                { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
 	                        ]
 	                    });
 	                }
@@ -187,7 +213,7 @@ define(
 	                //    grid.setOptions(JSON.parse(options));
 	                //}
 	            }
-	        });
+	        }).data("kendoGrid");
 	    }
 	    function createSensorsGrid() {
 	        //me.gridSensorsStateManager = new GridStateManager("gridSensors");
@@ -197,19 +223,23 @@ define(
 	            groupable: true,
 	            sortable: true,
 	            reorderable: true,
+	            resizable: true,
 	            scrollable: true,
+	            selectable: false,
+	            navigatable: false,
+	            editable: true,
 	            pageable: {
 	                pageSizes: [50, 100, 500, 1000],
 	                pageSize: 50
 	            },
 	            columns:
                     [
-                      { field: "NodeNo", title: "Node ID", width: 70, attributes: { "class": "text-right" } },
-                      { field: "SensorNo", title: "ID", width: 40, groupable: false, attributes: { "class": "text-right" } },
-                      { field: "Name", title: "Name", width: 80, groupable: false },
-                      { field: "TypeName", title: "Type", width: 80 },
-                      { field: "SensorValue.Value", title: "Value", width: 120, groupable: false, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                      { field: "ProtocolVersion", title: "Protocol Version", width: 110, attributes: { "class": "text-center" } }
+                      { field: "NodeNo", title: "ID узла", width: 55, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                      { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                      { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
+                      { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
+                      { field: "SensorValue.Value", title: "Состояние", width: 70, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                      { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
                     ],
 	            detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
 	            detailInit: function (e) {
@@ -279,16 +309,91 @@ define(
 	            }
 	        });
 	    }
+	    function getNodeEditor(container, options) {
+	        return getEditor(container, options, true);
+	    }
+	    function getSensorEditor(container, options) {
+	        return getEditor(container, options, false);
+	    }
+	    function getEditor(container, options, isNodes) {
+	        var grid = container.closest(".k-grid").data("kendoGrid");
+
+	        if (options.field == "Name") {
+	            var editor = $("<input type='text' class='k-textbox' style='width:100%;'/>");
+	            //editor.attr("name", options.field); // bind to model
+
+	            var oldValue = options.model[options.field];
+
+	            editor.appendTo(container)
+                    .show().focus()
+                    .unbind("keydown").keydown(preventEnter)
+                    .val(oldValue)
+                    .blur(save);
+	        }
+	        else
+	            grid.closeCell();
+
+	        function save(e) {
+	            var newValue = editor.val();
+	            if (newValue != oldValue) {
+	                if (isNodes)
+	                    api.setNodeName(options.model.Id, newValue, onComplete);
+	                else
+	                    api.setSensorName(options.model.Id, newValue, onComplete);
+                }
+
+	            function onComplete() {
+	                options.model[options.field] = newValue;
+	                grid.refresh();
+	            }
+	        }
+	        function preventEnter(e) {
+	            if (e.keyCode == 13 /*$.ui.keyCode.ENTER*/) {
+	                e.preventDefault();
+	                e.stopPropagation();
+	                $(e.target).blur(); //run saving
+	            }
+	        }
+	    }
 
 	    function onShowLayout() {
+	        initKendoCustomGrid();
 	        createNodesGrid();
 	        createSensorsGrid();
 
             kendo.bind($("#content"), viewModel);
 	    }
+	    function onError(data) {
+	        alert(data.responseJSON.ExceptionMessage);
+	    }
+	    function onViewModelAfterSet(e) {
+	        switch (e.field) {
+	            //case "Settings.WebTheme":
+	            //    mainView.applyTheme();
+	            //    if (!msgManager.IsFromServer)
+	            //        msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
+	            //    break;
+	            //case "Settings.UnitSystem":
+	            //    if (!msgManager.IsFromServer)
+	            //        msgManager.SetSettings(viewModel.Settings.WebTheme, viewModel.Settings.UnitSystem);
+	            //    break;
+	            //case "Modules":
+	            //    if (e.action == "itemchange")
+	            //        msgManager.SetModule(e.items[0]);
+	            //    $("#gridModules").data("kendoGrid").dataSource.sort({ field: "Name", dir: "asc" });
+	            //    break;
+	            case "Nodes":
+	                if (e.action == "itemchange") {
+	                    var model = e.items[0];
+	                    api.setNodeName(model.Id, model.Name, function () {
+	                        debugger;
 
-	    function onDefaultError(data) {
-	        showDialog(data || "Ошибка");
+	                    })
+	                }
+	                break;
+	            default:
+	                break;
+	        }
 	    }
 
 	    return {

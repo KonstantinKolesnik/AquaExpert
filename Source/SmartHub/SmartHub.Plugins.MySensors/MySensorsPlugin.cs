@@ -427,7 +427,45 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().Select(BuildSensorModel).Where(x => x != null).ToArray();
         }
-        
+
+        [HttpCommand("/api/mysensors/nodes/setname")]
+        private object SetNodeName(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+            //var name = request.GetRequiredString("Name");
+            var name = request.GetString("Name");
+
+            using (var session = Context.OpenSession())
+            {
+                var node = session.Get<Node>(id);
+                node.Name = name;
+                session.Flush();
+            }
+
+            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+
+            return null;
+        }
+
+        [HttpCommand("/api/mysensors/sensors/setname")]
+        private object SetSensorName(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+            //var name = request.GetRequiredString("Name");
+            var name = request.GetString("Name");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Get<Sensor>(id);
+                sensor.Name = name;
+                session.Flush();
+            }
+
+            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+
+            return null;
+        }
+
         [HttpCommand("/api/mysensors/nodes/delete")]
         private object DeleteNode(HttpRequestParams request)
         {
