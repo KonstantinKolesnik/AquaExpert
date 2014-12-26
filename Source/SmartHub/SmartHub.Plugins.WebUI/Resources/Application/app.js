@@ -74,37 +74,60 @@ define(
 		    }
 	    });
 
-	    app.wsClient = null;
-	    app.wsServer = null;
 
-	    app.initSignalR = function (onComplete) {
+	    function initSignalRPersistent(onComplete) {
 	        var hostName = document.location.hostname;
 
-	        $.getScript('http://' + hostName + ':55556/signalr/hubs', function () {
-	            //Set the hubs URL for the connection
-	            $.connection.hub.url = "http://" + hostName + ":55556/signalr";
+	        var connection = $.connection("http://" + hostName + ":55556/chat");
+	        connection.received(function (data) {
+	            debugger;
+	            $.each(app.SignalRReceiveHandlers, function (idx, handler) {
+	                if (handler)
+	                    handler(data);
+	            })
+	        });
 
-	            // Create a function that the hub can call to broadcast messages.
-	            $.connection.myHub.client.onServerMessage = app.onServerMessage;
+	        connection.start().done(function () {
+	            app.SignalRSend = function (data) {
+	                if (data)
+	                    connection.send(JSON.stringify(data));
+	            }
 
-	            // Start the connection.
-	            $.connection.hub.start().done(function () {
-	                app.wsClient = $.connection.myHub.client;
-	                app.wsServer = $.connection.myHub.server;
-
-	                onComplete();
-	            });
+	            if (onComplete)
+                    onComplete();
 	        });
 	    }
-	    app.onServerMessage = function (name, message) {
-	        debugger;
-	    }
-	    app.sendSignalRMessage = function (name, message) {
-	        app.wsServer.onClientMessage(name, message);
-	    }
+	    app.SignalRReceiveHandlers = [];
+	    app.SignalRSend = function (data) { };
+
+
+	    //function initSignalRHubs(onComplete) {
+	    //    var hostName = document.location.hostname;
+
+	    //    $.getScript('http://' + hostName + ':55556/signalr/hubs', function () {
+	    //        //Set the hubs URL for the connection
+	    //        $.connection.hub.url = "http://" + hostName + ":55556/signalr";
+
+	    //        // Create a function that the hub can call to broadcast messages.
+	    //        $.connection.myHub.client.onServerMessage = app.onServerMessage;
+
+	    //        // Start the connection.
+	    //        $.connection.hub.start().done(function () {
+	    //            app.wsClient = $.connection.myHub.client;
+	    //            app.wsServer = $.connection.myHub.server;
+
+	    //            if (onComplete)
+	    //                onComplete();
+	    //        });
+	    //    });
+	    //}
+	    //app.wsClient = null;
+	    //app.wsServer = null;
+	    //app.onServerMessage = function (name, message) {}
+	    //app.sendSignalRMessage = function (name, message) { app.wsServer.onClientMessage(name, message); }
 
 	    app.on('start', function () {
-	        app.initSignalR(function () { });
+	        initSignalRPersistent(function () { });
 
 	        if (backbone.history) {
 			    backbone.history.start();

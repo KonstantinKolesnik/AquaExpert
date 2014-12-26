@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
+using Newtonsoft.Json;
 using Owin;
 using SmartHub.Core.Plugins;
 using System;
 using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.SignalR
 {
@@ -16,6 +18,7 @@ namespace SmartHub.Plugins.SignalR
         // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx for more information.
         private const string url = "http://localhost:55556";
         private IDisposable wsServer;
+        //private MyHub wsHub;
         #endregion
 
         #region Import
@@ -36,6 +39,7 @@ namespace SmartHub.Plugins.SignalR
         {
             if (wsServer != null)
             {
+                ChatConnection.CurrentConnection.Broadcast(new Data() { Name = "Сообщение сервера", Message = "Test" });
                 wsServer.Dispose();
                 wsServer = null;
             }
@@ -80,17 +84,61 @@ namespace SmartHub.Plugins.SignalR
             public void Configuration(IAppBuilder app)
             {
                 app.UseCors(CorsOptions.AllowAll);
-                app.MapSignalR();
+
+                //app.MapSignalR(); // for hubs
+                app.MapSignalR<ChatConnection>("/chat"); // for persistent connection
             }
+        }
+
+        class ChatConnection : PersistentConnection
+        {
+            public static IConnection CurrentConnection;
+
+            public ChatConnection()
+            {
+                CurrentConnection = this.Connection;
+            }
+
+            protected override Task OnConnected(IRequest request, string connectionId)
+            {
+                //Data chatData = new Data() { Name = "Сообщение сервера", Message = "Пользователь " + connectionId + " присоединился к чату" };
+                //return Connection.Broadcast(chatData);
+
+                return null;
+            }
+
+            protected override Task OnReceived(IRequest request, string connectionId, string data)
+            {
+                //Data chatData = JsonConvert.DeserializeObject<Data>(data);
+                //return Connection.Broadcast(chatData);
+
+                return null;
+            }
+
+            //protected override Task OnDisconnected(IRequest request, string connectionId, bool stopCalled)
+            //{
+            //    Data chatData = new Data() { Name = "Сообщение сервера", Message = "Пользователь " + connectionId + " покинул чат" };
+            //    return Connection.Broadcast(chatData);
+            //}
         }
     }
 
-    public class MyHub : Hub
+    #region Hubs
+    //public class MyHub : Hub
+    //{
+    //    public static MyHub Instance;
+    //    public void onClientMessage(string name, string message)
+    //    {
+    //        Clients.All.onServerMessage("server 1", "success");
+    //        //Run(OnClientSignal, x => x(name, message));
+    //    }
+    //}
+    #endregion
+
+
+    public class Data
     {
-        public void onClientMessage(string name, string message)
-        {
-            Clients.All.onServerMessage("server 1", "success");
-            //Run(OnClientSignal, x => x(name, message));
-        }
+        public string Name { get; set; } // Имя пользователя
+        public string Message { get; set; } // Сообщение пользователя
     }
 }
