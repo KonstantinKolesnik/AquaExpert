@@ -31,7 +31,7 @@ namespace SmartHub.Plugins.MySensors
         #region Fields
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
-        private SignalRPlugin signal;
+        private SignalRPlugin signalServer;
         #endregion
 
         #region Import
@@ -53,7 +53,7 @@ namespace SmartHub.Plugins.MySensors
             gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
 
-            signal = Context.GetPlugin<SignalRPlugin>();
+            signalServer = Context.GetPlugin<SignalRPlugin>();
         }
         public override void StartPlugin()
         {
@@ -478,7 +478,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+            signalServer.Broadcast(new { MsgId = "NodeDeleted", Id = id });
 
             return null;
         }
@@ -495,7 +495,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteSensor, JsonConvert.SerializeObject(id)));
+            signalServer.Broadcast(new { MsgId = "SensorDeleted", Id = id });
 
             return null;
         }

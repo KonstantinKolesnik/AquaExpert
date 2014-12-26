@@ -39,10 +39,16 @@ namespace SmartHub.Plugins.SignalR
         {
             if (wsServer != null)
             {
-                ChatConnection.CurrentConnection.Broadcast(new Data() { Name = "Сообщение сервера", Message = "Test" });
                 wsServer.Dispose();
                 wsServer = null;
             }
+        }
+        #endregion
+
+        #region Public methods
+        public void Broadcast(object data)
+        {
+            ChatConnection.CurrentChatConnection.Connection.Broadcast(data);
         }
         #endregion
 
@@ -92,11 +98,11 @@ namespace SmartHub.Plugins.SignalR
 
         class ChatConnection : PersistentConnection
         {
-            public static IConnection CurrentConnection;
+            public static ChatConnection CurrentChatConnection;
 
             public ChatConnection()
             {
-                CurrentConnection = this.Connection;
+                CurrentChatConnection = this;
             }
 
             protected override Task OnConnected(IRequest request, string connectionId)
@@ -136,9 +142,9 @@ namespace SmartHub.Plugins.SignalR
     #endregion
 
 
-    public class Data
-    {
-        public string Name { get; set; } // Имя пользователя
-        public string Message { get; set; } // Сообщение пользователя
-    }
+    //public class Data
+    //{
+    //    public string Name { get; set; } // Имя пользователя
+    //    public string Message { get; set; } // Сообщение пользователя
+    //}
 }

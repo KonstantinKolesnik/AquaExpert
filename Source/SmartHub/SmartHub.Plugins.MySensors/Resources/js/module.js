@@ -53,6 +53,16 @@ define(
 	                    onError(data);
 	                });
 	        },
+	        deleteSensor: function (id, onComplete) {
+	            $.getJSON('/api/mysensors/sensors/delete', { Id: id })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
 	    }
 
 	    var viewModel = kendo.observable({
@@ -139,20 +149,7 @@ define(
                                     text: "Удалить",
                                     click: function (e) {
                                         var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                        api.deleteNode(item.Id, function () {
-                                            for (var i = 0; i < viewModel.Nodes.length; i++) {
-                                                if (viewModel.Nodes[i].NodeNo == item.NodeNo) {
-                                                    viewModel.Nodes.splice(i, 1);
-                                                    break;
-                                                }
-                                            }
-                                            for (var i = 0; i < viewModel.Sensors.length; ) {
-                                                if (viewModel.Sensors[i].NodeNo == item.NodeNo)
-                                                    viewModel.Sensors.splice(i, 1);
-                                                else
-                                                    i++;
-                                            }
-                                        });
+                                        api.deleteNode(item.Id);
                                     }
                                 }
                             ]
@@ -193,8 +190,8 @@ define(
                                 { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                 { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                                 { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
-                                { field: "SensorValue.Value", title: "Состояние", width: 70, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                                { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
+                                { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) }
+                                //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
 	                        ]
 	                    });
 	                }
@@ -234,12 +231,24 @@ define(
 	            },
 	            columns:
                     [
-                      { field: "NodeNo", title: "ID узла", width: 55, editor: getSensorEditor, attributes: { "class": "text-right" } },
-                      { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
-                      { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
-                      { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
-                      { field: "SensorValue.Value", title: "Состояние", width: 70, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
-                      { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
+                        { field: "NodeNo", title: "ID узла", width: 55, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                        { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                        { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
+                        { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
+                        { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                        { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
+                        {
+                            title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
+                            command: [
+                                {
+                                    text: "Удалить",
+                                    click: function (e) {
+                                        var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                        api.deleteSensor(item.Id);
+                                    }
+                                }
+                            ]
+                        }
                     ],
 	            detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
 	            detailInit: function (e) {
@@ -395,9 +404,54 @@ define(
 	                break;
 	        }
 	    }
+	    function onSignal(data) {
+	        switch (data.MsgId)
+	        {
+	            case "NodeDeleted": onNodeDeleted(data); break;
+	            case "SensorDeleted": onSensorDeleted(data); break;
+	                
+	            default:
+	                break;
+	        }
+	    }
+	    function onNodeDeleted(data) {
+	        var nodeId = data.Id;
+	        var nodeNo = null;
+	        for (var i = 0; i < viewModel.Nodes.length; i++) {
+	            if (viewModel.Nodes[i].Id == nodeId) {
+	                nodeNo = viewModel.Nodes[i].NodeNo;
+	                viewModel.Nodes.splice(i, 1);
+	                break;
+	            }
+	        }
+
+	        if (nodeNo) {
+	            for (var i = 0; i < viewModel.Sensors.length;) {
+	                if (viewModel.Sensors[i].NodeNo == nodeNo)
+	                    viewModel.Sensors.splice(i, 1);
+	                else
+	                    i++;
+	            }
+	        }
+	    }
+	    function onSensorDeleted(data) {
+	        var sensorId = data.Id;
+
+	        for (var i = 0; i < viewModel.Sensors.length; i++) {
+	            if (viewModel.Sensors[i].Id == sensorId) {
+	                viewModel.Sensors.splice(i, 1);
+	                break;
+	            }
+	        }
+	    }
+
+
+
 
 	    return {
 	        start: function () {
+                application.SignalRReceiveHandlers.push(onSignal);
+
                 var layout = new views.layoutView();
                 layout.onShow = onShowLayout;
                 application.setContentView(layout);

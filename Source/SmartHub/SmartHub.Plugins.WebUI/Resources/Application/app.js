@@ -80,7 +80,6 @@ define(
 
 	        var connection = $.connection("http://" + hostName + ":55556/chat");
 	        connection.received(function (data) {
-	            debugger;
 	            $.each(app.SignalRReceiveHandlers, function (idx, handler) {
 	                if (handler)
 	                    handler(data);
