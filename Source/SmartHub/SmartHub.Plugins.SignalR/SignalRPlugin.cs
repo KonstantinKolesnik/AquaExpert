@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
-using Newtonsoft.Json;
 using Owin;
 using SmartHub.Core.Plugins;
 using System;
@@ -48,7 +47,10 @@ namespace SmartHub.Plugins.SignalR
         #region Public methods
         public void Broadcast(object data)
         {
-            ChatConnection.CurrentChatConnection.Connection.Broadcast(data);
+            if (ChatConnection.CurrentChatConnection != null &&
+                ChatConnection.CurrentChatConnection.Connection != null &&
+                data != null)
+                ChatConnection.CurrentChatConnection.Connection.Broadcast(data);
         }
         #endregion
 

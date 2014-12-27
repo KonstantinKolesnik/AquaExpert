@@ -64,22 +64,15 @@ void setup()
 	isMetric = gw.getConfig().isMetric;
 
 	//(sensorID = 0...7)
-	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
-	{
-		pinMode(relayPins[sensorID], OUTPUT);
-		uint8_t lastState = gw.loadState(sensorID);
-		digitalWrite(relayPins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
-
-		gw.present(sensorID, S_LIGHT);
-		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
-	}
-
 	//for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
-	//	digitalWrite(relayPins[sensorID], RELAY_OFF);
-	//for (int sensorID = 0; sensorID < 3; sensorID++)
-	//	digitalWrite(relayPins[sensorID], RELAY_ON);
+	//{
+	//	pinMode(relayPins[sensorID], OUTPUT);
+	//	uint8_t lastState = gw.loadState(sensorID);
+	//	digitalWrite(relayPins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
 
-
+	//	gw.present(sensorID, S_LIGHT);
+	//	gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
+	//}
 
 	//(sensorID = 8)
 	gw.present(8, S_TEMP);
@@ -159,7 +152,7 @@ void loop()
 		prevMsSonar = ms;
 
 		int distance = readDistance();
-		if (distance != lastDist)
+		if (distance != 0 && distance != lastDist)
 		{
 			Serial.print("Distance: ");
 			Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
@@ -179,20 +172,20 @@ void onMessageReceived(const MyMessage &message)
 {
 	//Serial.println("onMessageReceived");
 
-	if (message.type == V_LIGHT)
-	{
-		bool value = message.getBool();
+	//if (message.type == V_LIGHT)
+	//{
+	//	bool value = message.getBool();
 
-		digitalWrite(relayPins[message.sensor], value ? RELAY_ON : RELAY_OFF);
-		gw.saveState(message.sensor, value);
+	//	digitalWrite(relayPins[message.sensor], value ? RELAY_ON : RELAY_OFF);
+	//	gw.saveState(message.sensor, value);
 
-		gw.send(msgRelay.setSensor(message.sensor).set(value));
+	//	gw.send(msgRelay.setSensor(message.sensor).set(value));
 
-		Serial.print("Incoming change for sensor:");
-		Serial.print(message.sensor);
-		Serial.print(", new status: ");
-		Serial.println(value);
-	}
+	//	Serial.print("Incoming change for sensor:");
+	//	Serial.print(message.sensor);
+	//	Serial.print(", new status: ");
+	//	Serial.println(value);
+	//}
 }
 void onTimeReceived(unsigned long time) //Incoming argument is seconds since 1970.
 {

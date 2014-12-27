@@ -480,7 +480,12 @@ define(
 	        }
 	    }
 	    function onBatteryLevel(data) {
-
+	        for (var i = 0; i < viewModel.Nodes.length; i++) {
+	            if (viewModel.Nodes[i].NodeNo == data.Value.NodeNo) {
+	                viewModel.Nodes[i].set("BatteryLevel", data.Value);
+	                break;
+	            }
+	        }
 	    }
 	    function onSensorPresentation(data) {
 	        for (var i = 0; i < viewModel.Sensors.length; i++) {
@@ -514,8 +519,14 @@ define(
 	        }
 	    }
 	    function onSensorValue(data) {
-
-	    }
+	        console.log(data.Value.Type + ": " + data.Value.Value);
+	        for (var i = 0; i < viewModel.Sensors.length; i++) {
+	            if (viewModel.Sensors[i].NodeNo == data.Value.NodeNo && viewModel.Sensors[i].SensorNo == data.Value.SensorNo) {
+	                viewModel.Sensors[i].set("SensorValue", data.Value);
+	                break;
+	            }
+	        }
+        }
 
 
 	    return {

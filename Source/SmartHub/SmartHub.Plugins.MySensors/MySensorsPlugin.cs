@@ -12,6 +12,7 @@ using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
@@ -32,6 +33,7 @@ namespace SmartHub.Plugins.MySensors
         private bool isSerial = true;
         private IGatewayProxy gatewayProxy;
         private SignalRPlugin signalServer;
+        private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
         #endregion
 
         #region Import
@@ -102,8 +104,12 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
             {
-                session.Save(item);
-                session.Flush();
+                try
+                {
+                    session.Save(item);
+                    session.Flush();
+                }
+                catch (Exception) {}
             }
         }
         private void SaveOrUpdate(object item)
@@ -211,7 +217,7 @@ namespace SmartHub.Plugins.MySensors
                             SensorNo = message.SensorID,
                             TimeStamp = DateTime.Now,
                             Type = (SensorValueType)message.SubType,
-                            Value = float.Parse(message.Payload.Replace('.', ','))
+                            Value = float.Parse(message.Payload.Replace(",", decimalSeparator).Replace(".", decimalSeparator))
                         };
 
                         Save(sv);
