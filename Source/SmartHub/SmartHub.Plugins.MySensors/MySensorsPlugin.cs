@@ -167,7 +167,7 @@ namespace SmartHub.Plugins.MySensors
                             SaveOrUpdate(node);
                         }
                         Run(SensorMessageHandlers, x => x(message));
-                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
+                        signalServer.Broadcast(new { MsgId = "NodePresentation", Value = BuildNodeModel(node) });
                     }
                     else // sensor message
                     {
@@ -194,7 +194,7 @@ namespace SmartHub.Plugins.MySensors
                                 SaveOrUpdate(sensor);
                             }
                             Run(SensorMessageHandlers, x => x(message));
-                            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorPresentation, JsonConvert.SerializeObject(sensor)));
+                            signalServer.Broadcast(new { MsgId = "SensorPresentation", Value = BuildSensorModel(sensor) });
                         }
                     }
                     break;
@@ -216,7 +216,7 @@ namespace SmartHub.Plugins.MySensors
 
                         Save(sv);
                         Run(SensorMessageHandlers, x => x(message));
-                        //communicator.Broadcast(new NetworkMessage(NetworkMessageID.SensorValue, JsonConvert.SerializeObject(sv)));
+                        signalServer.Broadcast(new { MsgId = "SensorValue", Value = sv });
                     }
                     break;
                 #endregion
@@ -245,7 +245,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 Save(bl);
                                 Run(SensorMessageHandlers, x => x(message));
-                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.BatteryLevel, JsonConvert.SerializeObject(bl)));
+                                signalServer.Broadcast(new { MsgId = "BatteryLevel", Value = bl });
                             }
                             break;
                         case InternalValueType.Time:
@@ -282,7 +282,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 SaveOrUpdate(node);
                                 Run(SensorMessageHandlers, x => x(message));
-                                //communicator.Broadcast(new NetworkMessage(NetworkMessageID.NodePresentation, JsonConvert.SerializeObject(node)));
+                                signalServer.Broadcast(new { MsgId = "NodePresentation", Value = BuildNodeModel(node) });
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -442,7 +442,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+            signalServer.Broadcast(new { MsgId = "NodeNameChanged", Id = id, Name = name });
 
             return null;
         }
@@ -461,7 +461,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            //communicator.Broadcast(new NetworkMessage(NetworkMessageID.DeleteNode, JsonConvert.SerializeObject(id)));
+            signalServer.Broadcast(new { MsgId = "SensorNameChanged", Id = id, Name = name });
 
             return null;
         }

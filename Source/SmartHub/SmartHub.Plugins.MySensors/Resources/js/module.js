@@ -44,7 +44,7 @@ define(
 	                });
 	        },
 	        deleteNode: function (id, onComplete) {
-	            $.getJSON('/api/mysensors/nodes/delete', { Id: id })
+	            $.post('/api/mysensors/nodes/delete', { Id: id })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
@@ -54,7 +54,7 @@ define(
 	                });
 	        },
 	        deleteSensor: function (id, onComplete) {
-	            $.getJSON('/api/mysensors/sensors/delete', { Id: id })
+	            $.post('/api/mysensors/sensors/delete', { Id: id })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
@@ -148,7 +148,10 @@ define(
                                 {
                                     text: "Удалить",
                                     click: function (e) {
-                                        var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                        //var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                         api.deleteNode(item.Id);
                                     }
                                 }
@@ -190,8 +193,23 @@ define(
                                 { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                 { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                                 { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
-                                { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) }
-                                //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } }
+                                { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                                //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
+                                {
+                                    title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
+                                    command: [
+                                        {
+                                            text: "Удалить",
+                                            click: function (e) {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                                //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                                api.deleteSensor(item.Id);
+                                            }
+                                        }
+                                    ]
+                                }
 	                        ]
 	                    });
 	                }
@@ -243,7 +261,10 @@ define(
                                 {
                                     text: "Удалить",
                                     click: function (e) {
-                                        var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                        //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
                                         api.deleteSensor(item.Id);
                                     }
                                 }
@@ -329,7 +350,6 @@ define(
 
 	        if (options.field == "Name") {
 	            var editor = $("<input type='text' class='k-textbox' style='width:100%;'/>");
-	            //editor.attr("name", options.field); // bind to model
 
 	            var oldValue = options.model[options.field];
 
@@ -346,15 +366,10 @@ define(
 	            var newValue = editor.val();
 	            if (newValue != oldValue) {
 	                if (isNodes)
-	                    api.setNodeName(options.model.Id, newValue, onComplete);
+	                    api.setNodeName(options.model.Id, newValue);
 	                else
-	                    api.setSensorName(options.model.Id, newValue, onComplete);
+	                    api.setSensorName(options.model.Id, newValue);
                 }
-
-	            function onComplete() {
-	                options.model[options.field] = newValue;
-	                grid.refresh();
-	            }
 	        }
 	        function preventEnter(e) {
 	            if (e.keyCode == 13 /*$.ui.keyCode.ENTER*/) {
@@ -404,21 +419,51 @@ define(
 	                break;
 	        }
 	    }
+
 	    function onSignal(data) {
 	        switch (data.MsgId)
 	        {
+	            case "NodePresentation": onNodePresentation(data); break;
+	            case "NodeNameChanged": onNodeNameChanged(data); break;
 	            case "NodeDeleted": onNodeDeleted(data); break;
+	            case "BatteryLevel": onBatteryLevel(data); break;
+	            case "SensorPresentation": onSensorPresentation(data); break;
+	            case "SensorNameChanged": onSensorNameChanged(data); break;
 	            case "SensorDeleted": onSensorDeleted(data); break;
-	                
+	            case "SensorValue": onSensorValue(data); break;
+
 	            default:
 	                break;
 	        }
 	    }
+	    function onNodePresentation(data) {
+	        for (var i = 0; i < viewModel.Nodes.length; i++) {
+	            if (viewModel.Nodes[i].Id == data.Value.Id) {
+	                viewModel.Nodes[i].set("NodeNo", data.Value.NodeNo);
+	                viewModel.Nodes[i].set("TypeName", data.Value.TypeName);
+	                viewModel.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                viewModel.Nodes[i].set("SketchName", data.Value.SketchName);
+	                viewModel.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
+	                viewModel.Nodes[i].set("Name", data.Value.Name);
+	                viewModel.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
+	                return;
+	            }
+	        }
+
+	        viewModel.Nodes.push(data.Value);
+	    }
+	    function onNodeNameChanged(data) {
+	        for (var i = 0; i < viewModel.Nodes.length; i++) {
+	            if (viewModel.Nodes[i].Id == data.Id) {
+	                viewModel.Nodes[i].set("Name", data.Name);
+	                break;
+	            }
+	        }
+	    }
 	    function onNodeDeleted(data) {
-	        var nodeId = data.Id;
 	        var nodeNo = null;
 	        for (var i = 0; i < viewModel.Nodes.length; i++) {
-	            if (viewModel.Nodes[i].Id == nodeId) {
+	            if (viewModel.Nodes[i].Id == data.Id) {
 	                nodeNo = viewModel.Nodes[i].NodeNo;
 	                viewModel.Nodes.splice(i, 1);
 	                break;
@@ -434,18 +479,43 @@ define(
 	            }
 	        }
 	    }
-	    function onSensorDeleted(data) {
-	        var sensorId = data.Id;
+	    function onBatteryLevel(data) {
 
+	    }
+	    function onSensorPresentation(data) {
 	        for (var i = 0; i < viewModel.Sensors.length; i++) {
-	            if (viewModel.Sensors[i].Id == sensorId) {
+	            if (viewModel.Sensors[i].Id == data.Value.Id) {
+	                viewModel.Sensors[i].set("NodeNo", data.Value.NodeNo);
+	                viewModel.Sensors[i].set("SensorNo", data.Value.SensorNo);
+	                viewModel.Sensors[i].set("TypeName", data.Value.TypeName);
+	                viewModel.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                viewModel.Sensors[i].set("Name", data.Value.Name);
+	                viewModel.Sensors[i].set("SensorValue", data.Value.SensorValue);
+	                return;
+	            }
+	        }
+
+	        viewModel.Sensors.push(data.Value);
+	    }
+	    function onSensorNameChanged(data) {
+	        for (var i = 0; i < viewModel.Sensors.length; i++) {
+	            if (viewModel.Sensors[i].Id == data.Id) {
+	                viewModel.Sensors[i].set("Name", data.Name);
+	                break;
+	            }
+	        }
+	    }
+	    function onSensorDeleted(data) {
+	        for (var i = 0; i < viewModel.Sensors.length; i++) {
+	            if (viewModel.Sensors[i].Id == data.Id) {
 	                viewModel.Sensors.splice(i, 1);
 	                break;
 	            }
 	        }
 	    }
+	    function onSensorValue(data) {
 
-
+	    }
 
 
 	    return {
