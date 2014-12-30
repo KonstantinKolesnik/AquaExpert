@@ -85,6 +85,20 @@ define(
 	                    handler(data);
 	            })
 	        });
+	        connection.error(function (error) {
+	            console.warn(error);
+	        });
+	        connection.stateChanged(function (change) {
+	            if (change.newState === $.signalR.connectionState.reconnecting) {
+	                console.log('Re-connecting');
+	            }
+	            else if (change.newState === $.signalR.connectionState.connected) {
+	                console.log('The server is online');
+	            }
+	        });
+	        connection.reconnected(function () {
+	            console.log('Reconnected');
+	        });
 
 	        connection.start().done(function () {
 	            app.SignalRSend = function (data) {

@@ -5,6 +5,7 @@ using Owin;
 using SmartHub.Core.Plugins;
 using System;
 using System.ComponentModel.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.SignalR
@@ -47,10 +48,9 @@ namespace SmartHub.Plugins.SignalR
         #region Public methods
         public void Broadcast(object data)
         {
-            if (ChatConnection.CurrentChatConnection != null &&
-                ChatConnection.CurrentChatConnection.Connection != null &&
-                data != null)
-                ChatConnection.CurrentChatConnection.Connection.Broadcast(data);
+            var context = GlobalHost.ConnectionManager.GetConnectionContext<ChatConnection>();
+            context.Connection.Broadcast(data);
+            //Thread.Sleep(10);
         }
         #endregion
 
@@ -91,6 +91,10 @@ namespace SmartHub.Plugins.SignalR
         {
             public void Configuration(IAppBuilder app)
             {
+                //GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(60);
+                GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(5);
+                //GlobalHost.Configuration.DefaultMessageBufferSize = 1;
+
                 app.UseCors(CorsOptions.AllowAll);
 
                 //app.MapSignalR(); // for hubs
@@ -100,13 +104,6 @@ namespace SmartHub.Plugins.SignalR
 
         class ChatConnection : PersistentConnection
         {
-            public static ChatConnection CurrentChatConnection;
-
-            public ChatConnection()
-            {
-                CurrentChatConnection = this;
-            }
-
             protected override Task OnConnected(IRequest request, string connectionId)
             {
                 //Data chatData = new Data() { Name = "Сообщение сервера", Message = "Пользователь " + connectionId + " присоединился к чату" };
@@ -120,14 +117,18 @@ namespace SmartHub.Plugins.SignalR
                 //Data chatData = JsonConvert.DeserializeObject<Data>(data);
                 //return Connection.Broadcast(chatData);
 
+                //Run(OnClientSignal, x => x(connectionId, data));
+
                 return null;
             }
 
-            //protected override Task OnDisconnected(IRequest request, string connectionId, bool stopCalled)
-            //{
-            //    Data chatData = new Data() { Name = "Сообщение сервера", Message = "Пользователь " + connectionId + " покинул чат" };
-            //    return Connection.Broadcast(chatData);
-            //}
+            protected override Task OnDisconnected(IRequest request, string connectionId, bool stopCalled)
+            {
+                //Data chatData = new Data() { Name = "Сообщение сервера", Message = "Пользователь " + connectionId + " покинул чат" };
+                //return Connection.Broadcast(chatData);
+
+                return null;
+            }
         }
     }
 

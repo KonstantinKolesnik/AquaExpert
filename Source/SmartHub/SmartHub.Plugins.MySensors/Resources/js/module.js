@@ -379,11 +379,52 @@ define(
 	            }
 	        }
 	    }
+	    function adjustSizes() {
+	        $("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight());
+
+	        adjustGrid($("#gridNodes"));
+	        adjustGrid($("#gridSensors"));
+	        //adjustGrid($("#gridModules"));
+
+	        $("#tabstrip").height($(window).height() - getY($("#tabstrip")) - 5);
+
+	        function adjustGrid(grid) {
+	            //grid.height($(window).height() - getY(grid) /*- $("#footer").outerHeight()*/ - 8/*don't change!*/);
+	            grid.height($(window).height() - getY(grid) /*- $("#footer").outerHeight()*/ - 15/*don't change!*/);
+	            arrangeGridContent(grid);
+
+	            function arrangeGridContent() {
+	                var newHeight = grid.innerHeight(),
+                        otherElements = grid.children().not(".k-grid-content"),
+                        otherElementsHeight = 0;
+
+	                otherElements.each(function () { otherElementsHeight += $(this).outerHeight(); });
+	                grid.children(".k-grid-content").height(newHeight - otherElementsHeight);
+	            }
+	        }
+	        function getY(selector) {
+	            var el = selector[0];
+	            var yPosition = el.offsetTop;
+	            while (el = el.offsetParent)
+	                yPosition += el.offsetTop;
+	            return yPosition;
+	        }
+	    }
 
 	    function onShowLayout() {
 	        initKendoCustomGrid();
+
+	        $('.nav-tabs').button();
+
+	        createTabStrip($("#tabstrip"));
+	        $("#tabstrip").data("")
+	        activate: onActivate
+
 	        createNodesGrid();
 	        createSensorsGrid();
+
+	        $(window).bind("resize", adjustSizes);
+	        $(window).resize(adjustSizes);
 
             kendo.bind($("#content"), viewModel);
 	    }
@@ -527,7 +568,6 @@ define(
 	            }
 	        }
         }
-
 
 	    return {
 	        start: function () {

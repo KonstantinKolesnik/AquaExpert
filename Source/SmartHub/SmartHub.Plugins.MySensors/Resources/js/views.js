@@ -25,7 +25,6 @@ define(
             //    //this.$el.kendoPanelBar({
             //    //    expandMode: "single"
             //    //});
-            //    $("#size").kendoDropDownList();
             //}
         });
 
