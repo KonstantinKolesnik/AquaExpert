@@ -417,8 +417,8 @@ define(
 	        $('.nav-tabs').button();
 
 	        createTabStrip($("#tabstrip"));
-	        $("#tabstrip").data("")
-	        activate: onActivate
+	        //$("#tabstrip").data("")
+	        //activate: onActivate
 
 	        createNodesGrid();
 	        createSensorsGrid();
@@ -426,7 +426,9 @@ define(
 	        $(window).bind("resize", adjustSizes);
 	        $(window).resize(adjustSizes);
 
-            kendo.bind($("#content"), viewModel);
+	        kendo.bind($("#content"), viewModel);
+
+	        adjustSizes();
 	    }
 	    function onError(data) {
 	        alert(data.responseJSON.ExceptionMessage);
