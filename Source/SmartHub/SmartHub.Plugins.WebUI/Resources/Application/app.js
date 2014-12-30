@@ -99,6 +99,9 @@ define(
 	        connection.reconnected(function () {
 	            console.log('Reconnected');
 	        });
+	        connection.connectionSlow(function () {
+	            console.log('ConnectionSlow');
+	        });
 
 	        connection.start().done(function () {
 	            app.SignalRSend = function (data) {
