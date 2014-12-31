@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.WebUI", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.SignalR", "SmartHub.Plugins.SignalR\SmartHub.Plugins.SignalR.csproj", "{46E58075-B4A0-4779-9F24-79D4B6F26A7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Packages", "SmartHub.Plugins.Packages\SmartHub.Plugins.Packages.csproj", "{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -236,6 +238,22 @@ Global
 		{46E58075-B4A0-4779-9F24-79D4B6F26A7B}.Release|Win32.ActiveCfg = Release|Any CPU
 		{46E58075-B4A0-4779-9F24-79D4B6F26A7B}.Release|x64.ActiveCfg = Release|Any CPU
 		{46E58075-B4A0-4779-9F24-79D4B6F26A7B}.Release|x86.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|x64.ActiveCfg = Release|Any CPU
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -254,5 +272,6 @@ Global
 		{B2826828-29A4-4E27-9452-22E5C167EC25} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{52E99C27-8034-4516-9AC8-9F00C4A2C5A6} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{46E58075-B4A0-4779-9F24-79D4B6F26A7B} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
+		{E70F64A0-FD12-4C74-BC48-52BA1DFB528D} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 	EndGlobalSection
 EndGlobal
