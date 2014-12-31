@@ -55,13 +55,13 @@ namespace SmartHub.Plugins.MySensors
             gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
 
+            if (GetSetting("UnitSystem") == null)
+                Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
+
             signalServer = Context.GetPlugin<SignalRPlugin>();
         }
         public override void StartPlugin()
         {
-            if (GetSetting("UnitSystem") == null)
-                Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
-
             if (!gatewayProxy.IsStarted)
             {
                 Logger.Info("Connecting to gateway...");
@@ -504,6 +504,12 @@ namespace SmartHub.Plugins.MySensors
             signalServer.Broadcast(new { MsgId = "SensorDeleted", Id = id });
 
             return null;
+        }
+
+        [HttpCommand("/api/mysensors/unitsystem")]
+        private object GetUnitSystem(HttpRequestParams request)
+        {
+            return GetSetting("UnitSystem");
         }
         #endregion
     }
