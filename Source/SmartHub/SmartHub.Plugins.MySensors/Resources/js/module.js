@@ -72,14 +72,23 @@ define(
 	                .fail(function (data) {
 	                    onError(data);
 	                });
-	        }
+	        },
+	        setUnitSystem: function (value, onComplete) {
+	            $.post('/api/mysensors/setunitsystem', { Value: value })
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
 	    }
 
 	    var viewModel = kendo.observable({
 	        Nodes: [],
 	        Sensors: [],
-	        UnitSystem: null,
-
+	        UnitSystem: "M",
 	        update: function () {
 	            api.getUnitSystem(function (data) {
 	                viewModel.set("UnitSystem", data.Value);
@@ -106,9 +115,7 @@ define(
 	    function onViewModelAfterSet(e) {
 	        switch (e.field) {
 	            case "UnitSystem":
-	                if (e.action == "itemchange") {
-	                    debugger;
-	                }
+	                api.setUnitSystem(viewModel[e.field], function () { });
 	                break;
 	            case "Nodes":
 	                if (e.action == "itemchange") {
@@ -135,117 +142,122 @@ define(
 	        }
 	    }
 
-	    function onSignal(data) {
-	        switch (data.MsgId)
-	        {
-	            case "NodePresentation": onNodePresentation(data); break;
-	            case "NodeNameChanged": onNodeNameChanged(data); break;
-	            case "NodeDeleted": onNodeDeleted(data); break;
-	            case "BatteryLevel": onBatteryLevel(data); break;
-	            case "SensorPresentation": onSensorPresentation(data); break;
-	            case "SensorNameChanged": onSensorNameChanged(data); break;
-	            case "SensorDeleted": onSensorDeleted(data); break;
-	            case "SensorValue": onSensorValue(data); break;
+	    var signalRReceiveHandler = {
+	        handler: function (data) {
+	            switch (data.MsgId)
+	            {
+	                case "NodePresentation": onNodePresentation(data); break;
+	                case "NodeNameChanged": onNodeNameChanged(data); break;
+	                case "NodeDeleted": onNodeDeleted(data); break;
+	                case "BatteryLevel": onBatteryLevel(data); break;
+	                case "SensorPresentation": onSensorPresentation(data); break;
+	                case "SensorNameChanged": onSensorNameChanged(data); break;
+	                case "SensorDeleted": onSensorDeleted(data); break;
+	                case "SensorValue": onSensorValue(data); break;
+	                case "UnitSystemChanged": onUnitSystemChanged(data); break;
+	                default: break;
+	            }
 
-	            default:
-	                break;
-	        }
-	    }
-	    function onNodePresentation(data) {
-	        for (var i = 0; i < viewModel.Nodes.length; i++) {
-	            if (viewModel.Nodes[i].Id == data.Value.Id) {
-	                viewModel.Nodes[i].set("NodeNo", data.Value.NodeNo);
-	                viewModel.Nodes[i].set("TypeName", data.Value.TypeName);
-	                viewModel.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                viewModel.Nodes[i].set("SketchName", data.Value.SketchName);
-	                viewModel.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
-	                viewModel.Nodes[i].set("Name", data.Value.Name);
-	                viewModel.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
-	                return;
-	            }
-	        }
+	            function onNodePresentation(data) {
+	                for (var i = 0; i < viewModel.Nodes.length; i++) {
+	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
+	                        viewModel.Nodes[i].set("NodeNo", data.Value.NodeNo);
+	                        viewModel.Nodes[i].set("TypeName", data.Value.TypeName);
+	                        viewModel.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                        viewModel.Nodes[i].set("SketchName", data.Value.SketchName);
+	                        viewModel.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
+	                        viewModel.Nodes[i].set("Name", data.Value.Name);
+	                        viewModel.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
+	                        return;
+	                    }
+	                }
 
-	        viewModel.Nodes.push(data.Value);
-	    }
-	    function onNodeNameChanged(data) {
-	        for (var i = 0; i < viewModel.Nodes.length; i++) {
-	            if (viewModel.Nodes[i].Id == data.Id) {
-	                viewModel.Nodes[i].set("Name", data.Name);
-	                break;
+	                viewModel.Nodes.push(data.Value);
 	            }
-	        }
-	    }
-	    function onNodeDeleted(data) {
-	        var nodeNo = null;
-	        for (var i = 0; i < viewModel.Nodes.length; i++) {
-	            if (viewModel.Nodes[i].Id == data.Id) {
-	                nodeNo = viewModel.Nodes[i].NodeNo;
-	                viewModel.Nodes.splice(i, 1);
-	                break;
+	            function onNodeNameChanged(data) {
+	                for (var i = 0; i < viewModel.Nodes.length; i++) {
+	                    if (viewModel.Nodes[i].Id == data.Id) {
+	                        viewModel.Nodes[i].set("Name", data.Name);
+	                        break;
+	                    }
+	                }
 	            }
-	        }
+	            function onNodeDeleted(data) {
+	                var nodeNo = null;
+	                for (var i = 0; i < viewModel.Nodes.length; i++) {
+	                    if (viewModel.Nodes[i].Id == data.Id) {
+	                        nodeNo = viewModel.Nodes[i].NodeNo;
+	                        viewModel.Nodes.splice(i, 1);
+	                        break;
+	                    }
+	                }
 
-	        if (nodeNo) {
-	            for (var i = 0; i < viewModel.Sensors.length;) {
-	                if (viewModel.Sensors[i].NodeNo == nodeNo)
-	                    viewModel.Sensors.splice(i, 1);
-	                else
-	                    i++;
+	                if (nodeNo) {
+	                    for (var i = 0; i < viewModel.Sensors.length;) {
+	                        if (viewModel.Sensors[i].NodeNo == nodeNo)
+	                            viewModel.Sensors.splice(i, 1);
+	                        else
+	                            i++;
+	                    }
+	                }
 	            }
-	        }
-	    }
-	    function onBatteryLevel(data) {
-	        for (var i = 0; i < viewModel.Nodes.length; i++) {
-	            if (viewModel.Nodes[i].NodeNo == data.Value.NodeNo) {
-	                viewModel.Nodes[i].set("BatteryLevel", data.Value);
-	                break;
+	            function onBatteryLevel(data) {
+	                for (var i = 0; i < viewModel.Nodes.length; i++) {
+	                    if (viewModel.Nodes[i].NodeNo == data.Value.NodeNo) {
+	                        viewModel.Nodes[i].set("BatteryLevel", data.Value);
+	                        break;
+	                    }
+	                }
 	            }
-	        }
-	    }
-	    function onSensorPresentation(data) {
-	        for (var i = 0; i < viewModel.Sensors.length; i++) {
-	            if (viewModel.Sensors[i].Id == data.Value.Id) {
-	                viewModel.Sensors[i].set("NodeNo", data.Value.NodeNo);
-	                viewModel.Sensors[i].set("SensorNo", data.Value.SensorNo);
-	                viewModel.Sensors[i].set("TypeName", data.Value.TypeName);
-	                viewModel.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                viewModel.Sensors[i].set("Name", data.Value.Name);
-	                viewModel.Sensors[i].set("SensorValue", data.Value.SensorValue);
-	                return;
-	            }
-	        }
+	            function onSensorPresentation(data) {
+	                for (var i = 0; i < viewModel.Sensors.length; i++) {
+	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
+	                        viewModel.Sensors[i].set("NodeNo", data.Value.NodeNo);
+	                        viewModel.Sensors[i].set("SensorNo", data.Value.SensorNo);
+	                        viewModel.Sensors[i].set("TypeName", data.Value.TypeName);
+	                        viewModel.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                        viewModel.Sensors[i].set("Name", data.Value.Name);
+	                        viewModel.Sensors[i].set("SensorValue", data.Value.SensorValue);
+	                        return;
+	                    }
+	                }
 
-	        viewModel.Sensors.push(data.Value);
-	    }
-	    function onSensorNameChanged(data) {
-	        for (var i = 0; i < viewModel.Sensors.length; i++) {
-	            if (viewModel.Sensors[i].Id == data.Id) {
-	                viewModel.Sensors[i].set("Name", data.Name);
-	                break;
+	                viewModel.Sensors.push(data.Value);
+	            }
+	            function onSensorNameChanged(data) {
+	                for (var i = 0; i < viewModel.Sensors.length; i++) {
+	                    if (viewModel.Sensors[i].Id == data.Id) {
+	                        viewModel.Sensors[i].set("Name", data.Name);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onSensorDeleted(data) {
+	                for (var i = 0; i < viewModel.Sensors.length; i++) {
+	                    if (viewModel.Sensors[i].Id == data.Id) {
+	                        viewModel.Sensors.splice(i, 1);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onSensorValue(data) {
+	                console.log(data.Value.Type + ": " + data.Value.Value);
+	                for (var i = 0; i < viewModel.Sensors.length; i++) {
+	                    if (viewModel.Sensors[i].NodeNo == data.Value.NodeNo && viewModel.Sensors[i].SensorNo == data.Value.SensorNo) {
+	                        viewModel.Sensors[i].set("SensorValue", data.Value);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onUnitSystemChanged(data) {
+	                viewModel.set("UnitSystem", data.Value);
 	            }
 	        }
 	    }
-	    function onSensorDeleted(data) {
-	        for (var i = 0; i < viewModel.Sensors.length; i++) {
-	            if (viewModel.Sensors[i].Id == data.Id) {
-	                viewModel.Sensors.splice(i, 1);
-	                break;
-	            }
-	        }
-	    }
-	    function onSensorValue(data) {
-	        console.log(data.Value.Type + ": " + data.Value.Value);
-	        for (var i = 0; i < viewModel.Sensors.length; i++) {
-	            if (viewModel.Sensors[i].NodeNo == data.Value.NodeNo && viewModel.Sensors[i].SensorNo == data.Value.SensorNo) {
-	                viewModel.Sensors[i].set("SensorValue", data.Value);
-	                break;
-	            }
-	        }
-        }
 
 	    return {
 	        start: function () {
-                application.SignalRReceiveHandlers.push(onSignal);
+	            application.SignalRReceiveHandlers.push(signalRReceiveHandler.handler);
 
                 var layoutView = new views.layoutView();
                 application.setContentView(layoutView);

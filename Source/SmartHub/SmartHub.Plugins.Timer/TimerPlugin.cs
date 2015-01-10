@@ -15,7 +15,7 @@ namespace SmartHub.Plugins.Timer
 
         #region Import
         [ImportMany("E62C804C-B96B-4CA8-822E-B1725B363534")]
-        public Action<DateTime>[] OnEvent { get; set; }
+        public Action<DateTime>[] TimerElapsedEventHandlers { get; set; }
         #endregion
 
         #region Plugin ovverrides
@@ -38,7 +38,7 @@ namespace SmartHub.Plugins.Timer
         private void timer_Elapsed(object source, ElapsedEventArgs e)
         {
             //timer.Enabled = false;
-            Run(OnEvent, x => x(DateTime.Now));
+            Run(TimerElapsedEventHandlers, handler => handler(DateTime.Now));
             //timer.Enabled = true;
         }
         #endregion

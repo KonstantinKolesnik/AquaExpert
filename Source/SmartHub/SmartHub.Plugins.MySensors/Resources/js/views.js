@@ -278,8 +278,8 @@ define(
         function createUnitSystemSelector() {
             $("#ddlUnitSystem").kendoDropDownList({
                 dataSource: [
-                    { text: "Метрическая", value: "M" },
-                    { text: "Эмпирическая.", value: "I" }
+                    { value: "M", text: "Метрическая" },
+                    { value: "I", text: "Эмпирическая" }
                 ],
                 dataTextField: "text",
                 dataValueField: "value"

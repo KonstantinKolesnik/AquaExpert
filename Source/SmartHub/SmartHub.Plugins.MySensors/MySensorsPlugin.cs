@@ -438,7 +438,6 @@ namespace SmartHub.Plugins.MySensors
         private object SetNodeName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
-            //var name = request.GetRequiredString("Name");
             var name = request.GetString("Name");
 
             using (var session = Context.OpenSession())
@@ -457,7 +456,6 @@ namespace SmartHub.Plugins.MySensors
         private object SetSensorName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
-            //var name = request.GetRequiredString("Name");
             var name = request.GetString("Name");
 
             using (var session = Context.OpenSession())
@@ -510,6 +508,27 @@ namespace SmartHub.Plugins.MySensors
         private object GetUnitSystem(HttpRequestParams request)
         {
             return GetSetting("UnitSystem");
+        }
+        [HttpCommand("/api/mysensors/setunitsystem")]
+        private object SetUnitSystem(HttpRequestParams request)
+        {
+            var value = request.GetRequiredString("Value");
+
+            using (var session = Context.OpenSession())
+            {
+                var setting = session.Query<Setting>().FirstOrDefault(s => s.Name == "UnitSystem");
+                setting.Value = value;
+                session.Flush();
+            }
+
+            //var setting = GetSetting("UnitSystem");
+            //setting.Value = value;
+            //SaveOrUpdate(setting);
+
+
+            signalServer.Broadcast(new { MsgId = "UnitSystemChanged", Value = value });
+
+            return null;
         }
         #endregion
     }
