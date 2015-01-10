@@ -6,44 +6,37 @@
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
 //#include <Time.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// Relays section (id=0...7)
-#define RELAY_ON				0  // GPIO value to write to turn on attached relay
-#define RELAY_OFF				1  // GPIO value to write to turn off attached relay
-#define NUMBER_OF_RELAYS		8  // Total number of attached relays
-uint8_t relayPins[NUMBER_OF_RELAYS] = { 2, 3, 4, 5, 6, 7, 8, 9 };
-MyMessage msgRelay(0, V_LIGHT);
-//--------------------------------------------------------------------------------------------------------------------------------------------
-// Temperature section (id=8)
+// Temperature section (id=0)
 #define ONE_WIRE_BUS			A5
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 float lastTemperature;
-MyMessage msgTemperature(8, V_TEMP);
+MyMessage msgTemperature(0, V_TEMP);
 unsigned long prevMsTemperature = 0;
 const long intervalTemperature = 3000;	// interval at which to send measurements (milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// Ph section (id=9)
+// Ph section (id=1)
 #define PH_PIN  A4
 #define PH_OFFSET 0.3f//-0.12
-MyMessage msgPh(9, V_VAR1);
+MyMessage msgPh(1, V_VAR1);
 float lastPh;
 unsigned long prevMsPh = 0;
 const long intervalPh = 5000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// Moisture section (id=10)
+// Moisture section (id=2)
 #define WATER_PIN  A3
-MyMessage msgWater(10, V_TRIPPED);
+MyMessage msgWater(2, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = 0;
 const long intervalWater = 5000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// Sonar section (id=11)
+// Sonar section (id=3)
 #define TRIGGER_PIN  A2  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define ECHO_PIN     A1  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 100 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
-MyMessage msgSonar(11, V_DISTANCE);
-int lastDist;
+MyMessage msgSonar(3, V_DISTANCE);
+uint16_t lastDist;
 unsigned long prevMsSonar = 0;
 const long intervalSonar = 1000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -63,32 +56,21 @@ void setup()
 
 	isMetric = gw.getConfig().isMetric;
 
-	//(sensorID = 0...7)
-	//for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
-	//{
-	//	pinMode(relayPins[sensorID], OUTPUT);
-	//	uint8_t lastState = gw.loadState(sensorID);
-	//	digitalWrite(relayPins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
-
-	//	gw.present(sensorID, S_LIGHT);
-	//	gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
-	//}
-
-	//(sensorID = 8)
-	gw.present(8, S_TEMP);
+	//(sensorID = 0)
+	gw.present(0, S_TEMP);
 	gw.send(msgTemperature.set(readTemperature(), 1));
 
-	//(sensorID = 9)
-	gw.present(9, S_PH);
+	//(sensorID = 1)
+	gw.present(1, S_PH);
 	gw.send(msgPh.set(readPh(), 1));
 
-	//(sensorID = 10)
+	//(sensorID = 2)
 	pinMode(WATER_PIN, INPUT);
-	gw.present(10, S_WATER);
+	gw.present(2, S_WATER);
 	gw.send(msgWater.set(readWater() ? 1 : 0));
 
-	//(sensorID = 11)
-	gw.present(11, S_DISTANCE);
+	//(sensorID = 3)
+	gw.present(3, S_DISTANCE);
 	gw.send(msgSonar.set(readDistance()));
 }
 void loop()
@@ -103,10 +85,10 @@ void loop()
 		prevMsTemperature = ms;
 
 		float temperature = readTemperature();
-		if (lastTemperature != temperature && temperature != -127.00)
+		if (temperature != -127.00 && abs(lastTemperature - temperature) >= 0.1f)
 		{
 			Serial.print("Temperature: ");
-			Serial.print(temperature);
+			Serial.print(temperature, 1);
 			Serial.println(isMetric ? " C" : " F");
 
 			lastTemperature = temperature;
@@ -120,13 +102,13 @@ void loop()
 		prevMsPh = ms;
 
 		float phValue = readPh();
-		if (phValue != lastPh)
+		if (abs(phValue - lastPh) >= 0.1f)
 		{
 			Serial.print("pH: ");
-			Serial.println(phValue, 2);
+			Serial.println(phValue, 1);
 
 			lastPh = phValue;
-			gw.send(msgPh.set(phValue, 2));
+			gw.send(msgPh.set(phValue, 1));
 		}
 	}
 
@@ -151,7 +133,7 @@ void loop()
 	{
 		prevMsSonar = ms;
 
-		int distance = readDistance();
+		uint16_t distance = readDistance();
 		if (distance != 0 && distance != lastDist)
 		{
 			Serial.print("Distance: ");
@@ -171,21 +153,6 @@ void loop()
 void onMessageReceived(const MyMessage &message)
 {
 	//Serial.println("onMessageReceived");
-
-	//if (message.type == V_LIGHT)
-	//{
-	//	bool value = message.getBool();
-
-	//	digitalWrite(relayPins[message.sensor], value ? RELAY_ON : RELAY_OFF);
-	//	gw.saveState(message.sensor, value);
-
-	//	gw.send(msgRelay.setSensor(message.sensor).set(value));
-
-	//	Serial.print("Incoming change for sensor:");
-	//	Serial.print(message.sensor);
-	//	Serial.print(", new status: ");
-	//	Serial.println(value);
-	//}
 }
 void onTimeReceived(unsigned long time) //Incoming argument is seconds since 1970.
 {
@@ -256,7 +223,7 @@ float readPh()
 
 	return phValue;
 }
-int readDistance()
+uint16_t readDistance()
 {
 	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
 
@@ -265,8 +232,7 @@ int readDistance()
 	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
 	//Serial.println("cm");
 
-	int distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
-
+	uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
 	return distance;
 }
 bool readWater()

@@ -46,7 +46,7 @@ void onTimeReceived(unsigned long time);
 void printTime();
 float readTemperature();
 float readPh();
-int readDistance();
+uint16_t readDistance();
 bool readWater();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
