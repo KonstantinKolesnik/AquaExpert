@@ -480,9 +480,10 @@ namespace SmartHub.Plugins.MySensors
                 var node = session.Load<Node>(id);
                 session.Delete(node);
                 session.Flush();
+
+                signalServer.Broadcast(new { MsgId = "NodeDeleted", Id = id, NodeNo = node.NodeNo });
             }
 
-            signalServer.Broadcast(new { MsgId = "NodeDeleted", Id = id });
 
             return null;
         }
