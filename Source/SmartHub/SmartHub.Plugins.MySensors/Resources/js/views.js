@@ -66,6 +66,23 @@ define(
                 };
             })(kendo.ui.Grid.fn.editCell);
         }
+        function createTabStrip(selector) {
+            selector.kendoTabStrip({
+                animation: {
+                    open: { effects: "fadeIn" }
+                }
+            });
+        }
+        function createUnitSystemSelector() {
+            $("#ddlUnitSystem").kendoDropDownList({
+                dataSource: [
+                    { value: "M", text: "Метрическая" },
+                    { value: "I", text: "Эмпирическая" }
+                ],
+                dataTextField: "text",
+                dataValueField: "value"
+            });
+        }
         function createNodesGrid() {
             //me.gridNodesStateManager = new GridStateManager("gridNodes");
 
@@ -275,16 +292,6 @@ define(
                 }
             });
         }
-        function createUnitSystemSelector() {
-            $("#ddlUnitSystem").kendoDropDownList({
-                dataSource: [
-                    { value: "M", text: "Метрическая" },
-                    { value: "I", text: "Эмпирическая" }
-                ],
-                dataTextField: "text",
-                dataValueField: "value"
-            });
-        }
         function showDialog(txt, title) {
             var win = $("#dlg").kendoWindow({
                 actions: ["Close"],
@@ -303,13 +310,6 @@ define(
                 win.title(title);
 
             win.center().open();
-        }
-        function createTabStrip(selector) {
-            selector.kendoTabStrip({
-                animation: {
-                    open: { effects: "fadeIn" }
-                }
-            });
         }
         function getNodeEditor(container, options) {
             return getEditor(container, options, true);

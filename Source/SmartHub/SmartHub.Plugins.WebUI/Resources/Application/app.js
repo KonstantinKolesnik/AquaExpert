@@ -75,6 +75,8 @@ define(
 	    });
 
 
+	    app.SignalRReceiveHandlers = [];
+	    app.SignalRSend = function (data) { };
 	    function initSignalRPersistent(onComplete) {
 	        var hostName = document.location.hostname;
 
@@ -113,10 +115,12 @@ define(
                     onComplete();
 	        });
 	    }
-	    app.SignalRReceiveHandlers = [];
-	    app.SignalRSend = function (data) { };
 
 
+	    //app.wsClient = null;
+	    //app.wsServer = null;
+	    //app.onServerMessage = function (name, message) {}
+	    //app.sendSignalRMessage = function (name, message) { app.wsServer.onClientMessage(name, message); }
 	    //function initSignalRHubs(onComplete) {
 	    //    var hostName = document.location.hostname;
 
@@ -137,10 +141,6 @@ define(
 	    //        });
 	    //    });
 	    //}
-	    //app.wsClient = null;
-	    //app.wsServer = null;
-	    //app.onServerMessage = function (name, message) {}
-	    //app.sendSignalRMessage = function (name, message) { app.wsServer.onClientMessage(name, message); }
 
 	    app.on('start', function () {
 	        initSignalRPersistent(function () { });
