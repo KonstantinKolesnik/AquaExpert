@@ -1,20 +1,10 @@
 ﻿
 define(
-	['app', 'marionette', 'backbone', 'underscore', 'jquery', 'webapp/mysensors/views', 'kendo', 'text!webapp/mysensors/templates.html'],
-	function (application, marionette, backbone, _, $, views, kendo, templates) {
+	['app', 'marionette', 'backbone', 'underscore', 'jquery', /*'webapp/mysensors/views',*/ 'kendo', 'text!webapp/mysensors/templates.html'],
+	function (application, marionette, backbone, _, $, /*views,*/ kendo, templates) {
 	    var api = {
 	        getNodes: function (onComplete) {
 	            $.getJSON('/api/mysensors/nodes')
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-	        getSensors: function (onComplete) {
-	            $.getJSON('/api/mysensors/sensors')
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
@@ -33,8 +23,8 @@ define(
 	                    onError(data);
 	                });
 	        },
-	        setSensorName: function (id, name, onComplete) {
-	            $.post('/api/mysensors/sensors/setname', { Id: id, Name: name })
+	        deleteNode: function (id, onComplete) {
+	            $.post('/api/mysensors/nodes/delete', { Id: id })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
@@ -43,8 +33,19 @@ define(
 	                    onError(data);
 	                });
 	        },
-	        deleteNode: function (id, onComplete) {
-	            $.post('/api/mysensors/nodes/delete', { Id: id })
+
+	        getSensors: function (onComplete) {
+	            $.getJSON('/api/mysensors/sensors')
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
+	        setSensorName: function (id, name, onComplete) {
+	            $.post('/api/mysensors/sensors/setname', { Id: id, Name: name })
 					.done(function (data) {
 					    if (onComplete)
 					        onComplete(data);
@@ -63,6 +64,7 @@ define(
 	                    onError(data);
 	                });
 	        },
+
 	        getUnitSystem: function (onComplete) {
 	            $.getJSON('/api/mysensors/unitsystem')
 					.done(function (data) {
@@ -83,149 +85,59 @@ define(
 	                    onError(data);
 	                });
 	        },
+
+	        getBatteryLevels: function (onComplete) {
+	            $.getJSON('/api/mysensors/batterylevels')
+					.done(function (data) {
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
 	    }
 
 	    var viewModel = kendo.observable({
 	        UnitSystem: "M",
 	        Nodes: [],
 	        Sensors: [],
+            BatteryLevels: [],
 	        update: function () {
 	            api.getUnitSystem(function (data) {
 	                viewModel.set("UnitSystem", data.Value);
-
 	                api.getNodes(function (data) {
 	                    viewModel.set("Nodes", data);
-	                    for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                        var node = viewModel.Nodes[i];
-	                        node.bind("set", onNodeBeforeSet);
-	                        node.bind("change", onNodeAfterSet);
-                        }
-
                         api.getSensors(function (data) {
                             viewModel.set("Sensors", data);
-                            for (var i = 0; i < viewModel.Sensors.length; i++) {
-                                var sensor = viewModel.Sensors[i];
-                                sensor.bind("set", onSensorBeforeSet);
-                                sensor.bind("change", onSensorAfterSet);
-                            }
                         });
                     });
 	            });
 	        }
 	    });
-	    viewModel.bind("set", onViewModelBeforeSet);
-	    viewModel.bind("change", onViewModelAfterSet);
 
-	    function onViewModelBeforeSet(e) {
-	    }
-	    function onViewModelAfterSet(e) {
-	        switch (e.field) {
-	            case "UnitSystem":
-	                api.setUnitSystem(viewModel[e.field], function () { });
-	                break;
-	            case "Nodes":
-	                if (e.action == "itemchange") {
-	                    //debugger;
-	                    var item = e.items[0];
-	                }
-	                else if (e.action == "remove") {
-	                    var item = e.items[0];
-	                    api.deleteNode(item.Id);
-	                }
-	                break;
-	            case "Sensors":
-	                if (e.action == "itemchange") {
-	                    //debugger;
-	                    var item = e.items[0];
-	                }
-	                else if (e.action == "remove") {
-	                    var item = e.items[0];
-	                    api.deleteSensor(item.Id);
-	                }
-                    break;
-	            default:
-	                break;
-	        }
-	    }
-	    function onNodeBeforeSet(e) {
-	        //debugger;
-	    }
-	    function onNodeAfterSet(e) {
-	        if (e.field == "Name") {
-	            var item = e.sender;
-	            api.setNodeName(item.Id, item.Name);
-	        }
-	    }
-	    function onSensorBeforeSet(e) {
-	        //debugger;
-	    }
-	    function onSensorAfterSet(e) {
-	        if (e.field == "Name") {
-	            var item = e.sender;
-	            api.setSensorName(item.Id, item.Name);
-	        }
-	    }
-	    function onError(data) {
-	        //debugger;
-	        //alert(data.responseJSON.ExceptionMessage);
-	        //alert(data.statusText);
-	        alert(data.responseText);
-	    }
-
-	    var view = marionette.LayoutView.extend({
+	    var layoutView = marionette.LayoutView.extend({
 	        template: _.template(templates),
 	        onShow: function () {
-	            initKendoCustomGrid();
-
 	            createTabStrip($("#tabstrip"));
-
+	            createUnitSystemSelector();
 	            createNodesGrid();
 	            createSensorsGrid();
-	            createUnitSystemSelector();
 
-	            //$(window).bind("resize", adjustSizes);
-	            //$(window).resize(adjustSizes);
-
-	            //kendo.bind($("#content"), viewModel);
-
-	            //adjustSizes();
-
+	            $(window).bind("resize", adjustSizes);
+	            $(window).resize(adjustSizes);
+	            adjustSizes();
 
 	            var ctrlNodesGrid;
 
-	            function initKendoCustomGrid() {
-	                // add "beforeEdit" event:
-	                kendo.ui.Grid.fn.editCell = (function (editCell) {
-	                    return function (cell) {
-	                        cell = $(cell);
-
-	                        var that = this,
-                                column = that.columns[that.cellIndex(cell)],
-                                model = that._modelForContainer(cell),
-                                event = {
-                                    container: cell,
-                                    model: model,
-                                    preventDefault: function () {
-                                        this.isDefaultPrevented = true;
-                                    }
-                                };
-
-	                        if (model && typeof this.options.beforeEdit === "function") {
-	                            this.options.beforeEdit.call(this, event);
-
-	                            // don't edit if prevented in beforeEdit
-	                            if (event.isDefaultPrevented)
-	                                return;
-	                        }
-
-	                        editCell.call(this, cell);
-	                    };
-	                })(kendo.ui.Grid.fn.editCell);
-	            }
 	            function createTabStrip(selector) {
 	                selector.kendoTabStrip({
 	                    animation: {
 	                        open: { effects: "fadeIn" }
+	                    },
+	                    activate: function () {
+	                        if (selector = $("#tabstrip"))
+                                adjustSizes();
 	                    }
 	                });
 	            }
@@ -236,64 +148,66 @@ define(
                             { value: "I", text: "Эмпирическая" }
 	                    ],
 	                    dataTextField: "text",
-	                    dataValueField: "value"
+	                    dataValueField: "value",
+	                    change: function (e) {
+	                        api.setUnitSystem(e.sender.value());
+	                    }
 	                });
 	            }
 	            function createNodesGrid() {
 	                //me.gridNodesStateManager = new GridStateManager("gridNodes");
 
 	                ctrlNodesGrid = $("#gridNodes").kendoGrid({
-	                    //height: 400,
 	                    groupable: true,
 	                    sortable: true,
 	                    reorderable: true,
 	                    resizable: true,
-	                    scrollable: true,
-	                    selectable: false,
-	                    navigatable: false,
 	                    editable: true,
 	                    pageable: {
 	                        pageSizes: [10, 20, 50, 100, 300],
 	                        pageSize: 20
 	                    },
-	                    columns:
-                            [
-                                { field: "NodeNo", title: "ID", width: 35, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" } },
-                                { field: "Name", title: "Имя", groupable: false, editor: getNodeEditor },
-                                { field: "TypeName", title: "Тип", width: 95, editor: getNodeEditor },
-                                {
-                                    title: "Прошивка",
-                                    columns:
-                                        [
-                                            { field: "SketchName", title: "Имя", width: 120, editor: getNodeEditor },
-                                            { field: "SketchVersion", title: "Версия", width: 60, editor: getNodeEditor, attributes: { "class": "text-center" } }
-                                        ]
-                                },
-                                { field: "BatteryLevel.Level", title: "Батарея, %", width: 80, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                                { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
-                                {
-                                    title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" },
-                                    command: ["delete"]
-                                    //command: [
-                                    //    {
-                                    //        text: "Удалить",
-                                    //        click: function (e) {
-                                    //            e.preventDefault();
-                                    //            e.stopPropagation();
-                                    //            var item = this.dataItem($(e.currentTarget).closest("tr"));
-                                    //            //var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                    //            api.deleteNode(item.Id);
-                                    //        }
-                                    //    }
-                                    //]
-                                }
-                            ],
+	                    columns: [
+                            { field: "NodeNo", title: "ID", width: 35, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" } },
+                            { field: "Name", title: "Имя", groupable: false, editor: getNodeEditor },
+                            { field: "TypeName", title: "Тип", width: 95, editor: getNodeEditor },
+                            {
+                                title: "Прошивка",
+                                columns:
+                                    [
+                                        { field: "SketchName", title: "Имя", width: 140, editor: getNodeEditor },
+                                        { field: "SketchVersion", title: "Версия", width: 60, editor: getNodeEditor, attributes: { "class": "text-center" } }
+                                    ]
+                            },
+                            { field: "BatteryLevel.Level", title: "Батарея, %", width: 80, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                            { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
+                            {
+                                title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" },
+                                command: [
+                                    {
+                                        text: "Удалить",
+                                        click: function (e) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                            //var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                            api.deleteNode(item.Id);
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
 	                    detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
 	                    detailInit: function (e) {
 	                        createTabStrip(e.detailRow.find(".nodeDetailsTabStrip"));
 	                        createSensorsGrid();
-	                        //createBatteryLevelsChart(e.detailRow.find(".deviceDetailsBatteryLevels"));
+	                        createBatteryLevelsChart(e.detailRow.find(".nodeDetailsBatteryLevels"));
 	                        kendo.bind(e.detailRow, e.data);
+
+	                        api.getBatteryLevels(function (data) {
+	                            viewModel.set("BatteryLevels", data);
+	                        });
+
 
 	                        //$(document).bind("kendo:skinChange", createChart);
 	                        //e.detailRow.find(".nodeDetailsBatteryLevels").data("kendoChart").setOptions({
@@ -315,9 +229,6 @@ define(
 	                                sortable: true,
 	                                reorderable: true,
 	                                resizable: true,
-	                                scrollable: true,
-	                                selectable: false,
-	                                navigatable: false,
 	                                editable: true,
 	                                pageable: {
 	                                    pageSizes: [5, 10, 20, 50, 100, 300],
@@ -331,19 +242,18 @@ define(
                                         //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
                                         {
                                             title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
-                                            command: ["delete"]
-                                            //command: [
-                                            //    {
-                                            //        text: "Удалить",
-                                            //        click: function (e) {
-                                            //            e.preventDefault();
-                                            //            e.stopPropagation();
-                                            //            var item = this.dataItem($(e.currentTarget).closest("tr"));
-                                            //            //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                            //            api.deleteSensor(item.Id);
-                                            //        }
-                                            //    }
-                                            //]
+                                            command: [
+                                                {
+                                                    text: "Удалить",
+                                                    click: function (e) {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                                        //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
+                                                        api.deleteSensor(item.Id);
+                                                    }
+                                                }
+                                            ]
                                         }
 	                                ]
 	                            });
@@ -355,12 +265,15 @@ define(
 	                    detailCollapse: function (e) {
 	                        //me.gridNodesStateManager.onDetailCollapse(e);
 	                    },
+	                    dataBinding: function (e) {
+	                        //if (ctrlNodesGrid)
+	                        //    localStorage["kendo-grid-options"] = kendo.stringify(ctrlNodesGrid.getOptions());
+	                    },
 	                    dataBound: function (e) {
 	                        //me.gridNodesStateManager.onDataBound();
-	                        //localStorage["kendo-grid-options"] = kendo.stringify(grid.getOptions());
 	                        //var options = localStorage["kendo-grid-options"];
-	                        //if (options) {
-	                        //    grid.setOptions(JSON.parse(options));
+	                        //if (options && ctrlNodesGrid) {
+	                        //    ctrlNodesGrid.setOptions(JSON.parse(options));
 	                        //}
 	                    }
 	                }).data("kendoGrid");
@@ -452,7 +365,7 @@ define(
 	                var win = $("#dlg").kendoWindow({
 	                    actions: ["Close"],
 	                    width: "400px",
-	                    height: "200px",
+	                    //height: "200px",
 	                    title: "Smart Hub",
 	                    visible: false,
 	                    draggable: true,
@@ -477,31 +390,29 @@ define(
 	                var grid = container.closest(".k-grid").data("kendoGrid");
 
 	                if (options.field == "Name") {
+	                    var oldValue = options.model[options.field];
+
 	                    var editor = $("<input type='text' class='k-textbox' style='width:100%;'/>");
-	                    editor.attr("name", options.field);
-
-	                    //var oldValue = options.model[options.field];
-
 	                    editor.appendTo(container)
                             .show().focus()
-                            .unbind("keydown").keydown(preventEnter);
-	                    //.val(oldValue)
-	                    //.blur(save);
+                            .unbind("keydown").keydown(preventEnter)
+	                    .val(oldValue)
+	                    .blur(save);
 	                }
 	                else
 	                    grid.closeCell();
 
 	                function save(e) {
-	                    //var newValue = editor.val();
-	                    //if (newValue != oldValue) {
-	                    //    if (isNodes)
-	                    //        api.setNodeName(options.model.Id, newValue);
-	                    //    else
-	                    //        api.setSensorName(options.model.Id, newValue);
-	                    //}
+	                    var newValue = editor.val();
+	                    if (newValue != oldValue) {
+	                        if (isNodes)
+	                            api.setNodeName(options.model.Id, newValue);
+	                        else
+	                            api.setSensorName(options.model.Id, newValue);
+	                    }
 	                }
 	                function preventEnter(e) {
-	                    if (e.keyCode == 13 /*$.ui.keyCode.ENTER*/) {
+	                    if (e.keyCode == 13) {
 	                        e.preventDefault();
 	                        e.stopPropagation();
 	                        $(e.target).blur(); //run saving
@@ -509,17 +420,14 @@ define(
 	                }
 	            }
 	            function adjustSizes() {
-	                $("#content").height($(window).height() - $("#header").outerHeight() - $("#footer").outerHeight());
+	                var bottomOffset = 15;
 
 	                adjustGrid($("#gridNodes"));
 	                adjustGrid($("#gridSensors"));
-	                //adjustGrid($("#gridModules"));
-
-	                $("#tabstrip").height($(window).height() - getY($("#tabstrip")) - 5);
+	                $("#pnlSettings").height($(window).height() - getY($("#pnlSettings")) - bottomOffset);
 
 	                function adjustGrid(grid) {
-	                    //grid.height($(window).height() - getY(grid) /*- $("#footer").outerHeight()*/ - 8/*don't change!*/);
-	                    grid.height($(window).height() - getY(grid) /*- $("#footer").outerHeight()*/ - 15/*don't change!*/);
+	                    grid.height($(window).height() - getY(grid) - bottomOffset);
 	                    arrangeGridContent(grid);
 
 	                    function arrangeGridContent() {
@@ -539,6 +447,80 @@ define(
 	                    return yPosition;
 	                }
 	            }
+	            function createBatteryLevelsChart(selector) {
+	                selector.kendoChart({
+	                    //theme: "blueOpal",
+	                    transitions: true,
+	                    style: "smooth",
+	                    //title: { text: "Internet Users in United States" },
+	                    legend: { visible: true, position: "bottom" },
+	                    //seriesDefaults: {
+	                    //    type: "line",
+	                    //    labels: {
+	                    //        visible: true,
+	                    //        format: "{0}%",
+	                    //        background: "transparent"
+	                    //    }
+	                    //},
+	                    series: [
+                            {
+                                //name: "Levels",
+                                categoryField: "Time",
+                                field: "Percent",
+                                //axis: "levels",
+                                type: "area",//"line",
+                                labels: {
+                                    visible: true,
+                                    format: "{0}%",
+                                    background: "transparent"
+                                }
+                            }
+	                    ],
+	                    valueAxis: {
+	                        //name: "levels",
+	                        labels: { format: "{0}%", visible: true },
+	                        line: { visible: true },
+	                        majorGridLines: { visible: true },
+	                        min: 0,
+	                        max: 120,
+	                        color: "#000000"
+	                    },
+	                    categoryAxis: {
+	                        //field: "Time",
+	                        // or
+	                        //categories: [2005, 2006, 2007, 2008, 2009],
+
+	                        //name: "levels",
+
+	                        //axisCrossingValue: [0, 3],
+
+	                        type: "date",
+
+	                        baseUnit: "hours",
+	                        //baseUnit: "days",
+	                        //baseUnit: "months",
+	                        //baseUnit: "weeks",
+	                        //baseUnit: "years",
+
+	                        labels: {
+	                            dateFormats: {
+	                                hours: "HH:mm",
+	                                days: "MMM, d",
+	                                months: "MMM-yy",
+	                                weeks: "M-d",
+	                                years: "yyyy"
+	                            },
+	                            //format: "{0} aa}",
+	                            visible: true
+	                        },
+
+	                        line: { visible: true },
+	                        majorGridLines: { visible: true },
+	                        color: "#000000"
+	                    }
+	                });
+	            }
+
 	        }
 	    });
 
@@ -573,37 +555,33 @@ define(
 	                }
 
 	                viewModel.Nodes.push(data.Value);
-	                viewModel.Nodes[viewModel.Nodes.length - 1].bind("set", onNodeBeforeSet);
-	                viewModel.Nodes[viewModel.Nodes.length - 1].bind("change", onNodeAfterSet);
 	            }
 	            function onNodeNameChanged(data) {
 	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].Id == data.Id) {
-	                        viewModel.Nodes[i].set("Name", data.Name);
+	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
+	                        viewModel.Nodes[i].set("Name", data.Value.Name);
 	                        break;
 	                    }
 	                }
 	            }
 	            function onNodeDeleted(data) {
-	                //var nodeNo = null;
+	                var nodeNo = null;
 	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].Id == data.Id) {
-	                        //nodeNo = viewModel.Nodes[i].NodeNo;
+	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
+	                        nodeNo = viewModel.Nodes[i].NodeNo;
 	                        viewModel.Nodes.splice(i, 1);
 	                        break;
 	                    }
 	                }
 
-	                //if (nodeNo) {
+	                if (nodeNo) {
 	                    for (var i = 0; i < viewModel.Sensors.length;) {
-	                        if (viewModel.Sensors[i].NodeNo == data.NodeNo) {
+	                        if (viewModel.Sensors[i].NodeNo == nodeNo)
 	                            viewModel.Sensors.splice(i, 1);
-	                            break;
-	                        }
 	                        else
 	                            i++;
 	                    }
-	                //}
+	                }
 	            }
 	            function onBatteryLevel(data) {
 	                for (var i = 0; i < viewModel.Nodes.length; i++) {
@@ -627,20 +605,18 @@ define(
 	                }
 
 	                viewModel.Sensors.push(data.Value);
-	                viewModel.Sensors[viewModel.Sensors.length - 1].bind("set", onSensorBeforeSet);
-	                viewModel.Sensors[viewModel.Sensors.length - 1].bind("change", onSensorAfterSet);
 	            }
 	            function onSensorNameChanged(data) {
 	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].Id == data.Id) {
-	                        viewModel.Sensors[i].set("Name", data.Name);
+	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
+	                        viewModel.Sensors[i].set("Name", data.Value.Name);
 	                        break;
 	                    }
 	                }
 	            }
 	            function onSensorDeleted(data) {
 	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].Id == data.Id) {
+	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
 	                        viewModel.Sensors.splice(i, 1);
 	                        break;
 	                    }
@@ -661,6 +637,12 @@ define(
 	        }
 	    }
 
+	    function onError(data) {
+	        //alert(data.responseJSON.ExceptionMessage);
+	        //alert(data.statusText);
+	        alert(data.responseText);
+	    }
+
 	    return {
 	        start: function () {
 	            application.SignalRReceiveHandlers.push(signalRReceiveHandler.handler);
@@ -668,10 +650,10 @@ define(
                 //var layoutView = new views.layoutView();
 	            //application.setContentView(layoutView);
 
-	            application.setContentView(new view());
+	            application.setContentView(new layoutView());
 
-                kendo.bind($("#content"), viewModel);
 	            viewModel.update();
+                kendo.bind($("#content"), viewModel);
 
                 //var view = new views.nodesView({ collection: nodes });
                 //application.setContentView(view);

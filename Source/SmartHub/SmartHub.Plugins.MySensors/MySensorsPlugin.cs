@@ -20,10 +20,9 @@ namespace SmartHub.Plugins.MySensors
     [AppSection(
         "Сеть MySensors",
         SectionType.System,
-        "/webapp/mysensors/module.js",
-        "SmartHub.Plugins.MySensors.Resources.js.module.js",
+        "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js",
         TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
-    [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
+    //[JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
     [Plugin]
@@ -426,14 +425,6 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Node>().Select(BuildNodeModel).Where(x => x != null).ToArray();
         }
-
-        [HttpCommand("/api/mysensors/sensors")]
-        public object GetSensors(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>().Select(BuildSensorModel).Where(x => x != null).ToArray();
-        }
-
         [HttpCommand("/api/mysensors/nodes/setname")]
         private object SetNodeName(HttpRequestParams request)
         {
@@ -447,11 +438,42 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new { MsgId = "NodeNameChanged", Id = id, Name = name });
+            signalServer.Broadcast(new {
+                MsgId = "NodeNameChanged",
+                Value = new {
+                    Id = id,
+                    Name = name
+                }
+            });
+
+            return null;
+        }
+        [HttpCommand("/api/mysensors/nodes/delete")]
+        private object DeleteNode(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
+            {
+                var node = session.Load<Node>(id);
+                session.Delete(node);
+                session.Flush();
+            }
+
+            signalServer.Broadcast(new {
+                MsgId = "NodeDeleted",
+                Value = new { Id = id }
+            });
 
             return null;
         }
 
+        [HttpCommand("/api/mysensors/sensors")]
+        public object GetSensors(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().Select(BuildSensorModel).Where(x => x != null).ToArray();
+        }
         [HttpCommand("/api/mysensors/sensors/setname")]
         private object SetSensorName(HttpRequestParams request)
         {
@@ -465,29 +487,16 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new { MsgId = "SensorNameChanged", Id = id, Name = name });
+            signalServer.Broadcast(new {
+                MsgId = "SensorNameChanged",
+                Value = new {
+                    Id = id,
+                    Name = name
+                }
+            });
 
             return null;
         }
-
-        [HttpCommand("/api/mysensors/nodes/delete")]
-        private object DeleteNode(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("Id");
-
-            using (var session = Context.OpenSession())
-            {
-                var node = session.Load<Node>(id);
-                session.Delete(node);
-                session.Flush();
-
-                signalServer.Broadcast(new { MsgId = "NodeDeleted", Id = id, NodeNo = node.NodeNo });
-            }
-
-
-            return null;
-        }
-
         [HttpCommand("/api/mysensors/sensors/delete")]
         private object DeleteSensor(HttpRequestParams request)
         {
@@ -500,7 +509,10 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new { MsgId = "SensorDeleted", Id = id });
+            signalServer.Broadcast(new {
+                MsgId = "SensorDeleted",
+                Value = new { Id = id }
+            });
 
             return null;
         }
@@ -526,11 +538,26 @@ namespace SmartHub.Plugins.MySensors
             //setting.Value = value;
             //SaveOrUpdate(setting);
 
-
-            signalServer.Broadcast(new { MsgId = "UnitSystemChanged", Value = value });
+            signalServer.Broadcast(new {
+                MsgId = "UnitSystemChanged",
+                Value = value
+            });
 
             return null;
         }
+
+        [HttpCommand("/api/mysensors/batterylevels")]
+        private object GetBatteryLevels(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<BatteryLevel>().ToArray();
+        }
+
+
+
+
+
+
         #endregion
     }
 }

@@ -15,8 +15,10 @@
             <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
         <div>
-            <label class="control-label" for="ddlUnitSystem">Система единиц измерения</label>
-            <select id="ddlUnitSystem" data-bind="value: UnitSystem" data-value-primitive="true"></select>
+            <div id="pnlSettings">
+                <label class="control-label" for="ddlUnitSystem">Система единиц измерения</label>
+                <select id="ddlUnitSystem" data-bind="value: UnitSystem" data-value-primitive="true"></select>
+            </div>
         </div>
     </div>
 
@@ -47,8 +49,8 @@
         </ul>
         <div><div class="nodeDetailsSensors" style="height:250px;" data-bind="source: Sensors"></div></div>
         <div>
-            <!--<div>filter</div>
-            <div class="nodeDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>-->
+            <!--<div>filter</div>-->
+            <div class="nodeDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>
         </div>
     </div>
 </script>
@@ -67,4 +69,4 @@
     # var val = data.SensorValue ? data.SensorValue.Value : null; #
     <div>#: val == null ? "-" : val #</div>
 </script>
-    <!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->
+<!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->
