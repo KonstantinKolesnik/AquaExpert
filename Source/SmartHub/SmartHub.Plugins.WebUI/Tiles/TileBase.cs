@@ -26,7 +26,7 @@ namespace SmartHub.Plugins.WebUI.Tiles
         #region Constructor
         protected TileBase()
         {
-            logger = LogManager.GetLogger(typeof(WebUiTilesPlugin).FullName);
+            logger = LogManager.GetLogger(typeof(WebUITilesPlugin).FullName);
         }
         #endregion
 

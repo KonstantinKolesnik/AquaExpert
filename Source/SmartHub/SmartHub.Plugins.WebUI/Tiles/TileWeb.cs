@@ -4,11 +4,6 @@ namespace SmartHub.Plugins.WebUI.Tiles
 {
     public class TileWeb
     {
-        public TileWeb(Guid tileIid)
-        {
-            id = tileIid;
-        }
-
         public Guid id = Guid.NewGuid();
         public string url;
         public string title;
@@ -16,5 +11,10 @@ namespace SmartHub.Plugins.WebUI.Tiles
         public object[] parameters;
         public string content;
         public string className;
+
+        public TileWeb(Guid tileIid)
+        {
+            id = tileIid;
+        }
     }
 }

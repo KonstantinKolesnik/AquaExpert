@@ -67,7 +67,7 @@
     <Compile Include="Tiles\TileBase.cs" />
     <Compile Include="WebUIPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebUiTilesPlugin.cs" />
+    <Compile Include="WebUITilesPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">

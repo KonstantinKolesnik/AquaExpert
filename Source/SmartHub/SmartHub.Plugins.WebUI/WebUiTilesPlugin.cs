@@ -30,7 +30,7 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/application/tiles/tiles-edit-mode.tpl", "SmartHub.Plugins.WebUI.Resources.Application.tiles.tiles-edit-mode.tpl")]
 
     [Plugin]
-    public class WebUiTilesPlugin : PluginBase
+    public class WebUITilesPlugin : PluginBase
     {
         #region Fields
         private InternalDictionary<TileBase> registeredTiles;
