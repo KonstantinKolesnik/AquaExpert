@@ -100,6 +100,7 @@ define(
 
 	    var viewModel = kendo.observable({
 	        UnitSystem: "M",
+	        SerialPortName: "",
 	        Nodes: [],
 	        Sensors: [],
             BatteryLevels: [],
@@ -449,6 +450,10 @@ define(
 	            }
 	            function createBatteryLevelsChart(selector) {
 	                selector.kendoChart({
+	                    //dataSource: {
+	                    //    filter: { field: "NodeNo", operator: "eq", value: e.data.NodeNo }
+	                    //},
+
 	                    //theme: "blueOpal",
 	                    transitions: true,
 	                    style: "smooth",
@@ -520,7 +525,81 @@ define(
 	                    }
 	                });
 	            }
+	            function createSensorValuesChart(selector, sensor) {
+	                selector.kendoChart({
+	                    //theme: "blueOpal",
+	                    transitions: true,
+	                    //style: "step",//"smooth",
+	                    title: { text: sensor.TypeName() + " statistics" },
+	                    legend: { visible: true, position: "bottom" },
+	                    series: [
+                            {
+                                categoryField: "Time",
+                                field: "Value",
+                                type: "area",
+                                labels: {
+                                    format: "{0}" + me.getSensorValueUnit(sensor),
+                                    visible: true
+                                    //background: "transparent"
+                                },
+                                line: {
+                                    color: "cornflowerblue",
+                                    //opacity: 0.5,
+                                    width: 0.5,
+                                    style: "smooth" // "step", ""
+                                }
+                            }
+	                    ],
+	                    valueAxis: {
+	                        labels: {
+	                            format: "{0}" + me.getSensorValueUnit(sensor),
+	                            visible: true
+	                        },
+	                        line: { visible: true },
+	                        majorGridLines: { visible: true },
+	                        //title: {
+	                        //    text: "wwwww",
+	                        //    background: "green",
+	                        //    border: {
+	                        //        width: 1,
+	                        //    }
+	                        //}
+	                        //min: 0,
+	                        //max: 120
+	                    },
+	                    categoryAxis: {
+	                        type: "date",
 
+	                        baseUnit: "fit",
+	                        //baseUnit: "seconds",
+	                        //baseUnit: "minutes",
+	                        //baseUnit: "hours",
+	                        //baseUnit: "days",
+	                        //baseUnit: "weeks",
+	                        //baseUnit: "months",
+	                        //baseUnit: "years",
+
+	                        labels: {
+	                            dateFormats: {
+	                                hours: "MMM d HH:mm",
+	                                //hours: "HH:mm",
+
+	                                days: "MMM d",
+	                                weeks: "MMM d",
+	                                months: "yyyy MMM",
+	                                years: "yyyy"
+	                            },
+	                            visible: true,
+	                            rotation: 270,
+	                            step: 3
+	                            //min: 5//new Date()
+	                        },
+
+	                        line: { visible: true },
+	                        majorGridLines: { visible: true }
+	                    }
+	                });
+	            }
 	        }
 	    });
 

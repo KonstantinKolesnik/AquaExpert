@@ -56,6 +56,8 @@ namespace SmartHub.Plugins.MySensors
 
             if (GetSetting("UnitSystem") == null)
                 Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
+            //if (GetSetting("SerialPortName") == null)
+            //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
 
             signalServer = Context.GetPlugin<SignalRPlugin>();
         }
@@ -67,6 +69,7 @@ namespace SmartHub.Plugins.MySensors
 
                 try
                 {
+                    //gatewayProxy.PortName = GetSetting("SerialPortName").Value;
                     gatewayProxy.Start();
                 }
                 catch (Exception) { }
@@ -130,8 +133,8 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        [TimerElapsed]
-        private void OnTimerElapsed(DateTime now)
+        [Timer_1_sec_Elapsed]
+        private void Timer_1_sec_Elapsed(DateTime now)
         {
             //int a = 0;
             //int b = a;
