@@ -8,7 +8,7 @@
 				    var parameters = { };
 
 					if (!typeFullName) {
-					    typeFullName = 'SmartHub.Plugins.WebUI.DefaultTile';
+					    typeFullName = 'SmartHub.Plugins.WebUI.Tiles.DefaultTile';
 					    parameters.title = childView.model.get('name');
 						parameters.url = childView.model.get('path');
 					}

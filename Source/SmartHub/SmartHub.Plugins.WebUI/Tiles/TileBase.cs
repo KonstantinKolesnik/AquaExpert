@@ -31,7 +31,8 @@ namespace SmartHub.Plugins.WebUI.Tiles
         #endregion
 
         #region Public methods
-        public abstract void FillModel(TileWeb model, dynamic options);
+        public abstract void FillModel(TileWeb webTile, dynamic options);
+
         public virtual string ExecuteAction(object options)
         {
             return null;

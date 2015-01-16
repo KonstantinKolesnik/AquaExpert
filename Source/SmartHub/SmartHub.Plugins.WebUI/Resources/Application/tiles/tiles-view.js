@@ -3,9 +3,7 @@
 		'text!application/tiles/tile.tpl',
 		'text!application/tiles/tiles.tpl'],
 		function (application, commonModule, itemTemplate, listTemplate) {
-
 			application.module('WebUI.Tiles', function (module, app, backbone, marionette, $, _) {
-
 				module.TileView = marionette.ItemView.extend({
 					template: _.template(itemTemplate),
 					tagName: 'a',

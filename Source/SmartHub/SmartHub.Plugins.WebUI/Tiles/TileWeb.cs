@@ -7,14 +7,14 @@ namespace SmartHub.Plugins.WebUI.Tiles
         public Guid id = Guid.NewGuid();
         public string url;
         public string title;
-        public bool wide;
+        public string className;
+        public bool wide = false;
         public object[] parameters;
         public string content;
-        public string className;
 
-        public TileWeb(Guid tileIid)
+        public TileWeb(Guid tileId)
         {
-            id = tileIid;
+            id = tileId;
         }
     }
 }

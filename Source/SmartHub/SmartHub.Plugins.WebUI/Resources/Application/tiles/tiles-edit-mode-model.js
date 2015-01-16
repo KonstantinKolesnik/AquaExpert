@@ -1,7 +1,6 @@
-﻿define(['app'], function (application) {
-
+﻿
+define(['app'], function (application) {
 	application.module('WebUI.TilesEditMode', function (module, app, backbone, marionette, $, _) {
-
 		module.Tile = backbone.Model.extend({
 			defaults: {
 				id: null,
@@ -17,7 +16,6 @@
 
 		var api = {
 			load: function () {
-
 				var defer = $.Deferred();
 
 				$.getJSON('/api/webui/tiles')
@@ -32,23 +30,17 @@
 
 				return defer.promise();
 			},
-			
 			del: function (id) {
-
 				return $.post('/api/webui/tiles/delete', { id: id }).promise();
 			},
-			
 			sort: function (collection) {
-
 				var ids = [];
-
 				collection.each(function(el) {
 					var id = el.get('id');
 					ids.push(id);
 				});
 
 				var json = JSON.stringify(ids);
-
 				return $.post('/api/webui/tiles/sort', { data: json }).promise();
 			}
 		};

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using SmartHub.Plugins.WebUI.Tiles;
+using System;
 using System.ComponentModel.Composition;
 
-namespace SmartHub.Plugins.WebUI.Tiles
+namespace SmartHub.Plugins.WebUI.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class TileAttribute : ExportAttribute

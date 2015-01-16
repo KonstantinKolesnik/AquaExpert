@@ -1,7 +1,7 @@
 ﻿
 define(
-	['app', 'marionette', 'backbone', 'underscore', 'jquery', /*'webapp/mysensors/views',*/ 'kendo', 'text!webapp/mysensors/templates.html'],
-	function (application, marionette, backbone, _, $, /*views,*/ kendo, templates) {
+	['app', 'common', 'marionette', 'backbone', 'underscore', 'jquery', /*'webapp/mysensors/views',*/ 'kendo', 'text!webapp/mysensors/templates.html'],
+	function (application, commonModule, marionette, backbone, _, $, /*views,*/ kendo, templates) {
 	    var api = {
 	        getNodes: function (onComplete) {
 	            $.getJSON('/api/mysensors/nodes')
@@ -190,9 +190,12 @@ define(
                                         click: function (e) {
                                             e.preventDefault();
                                             e.stopPropagation();
+
                                             var item = this.dataItem($(e.currentTarget).closest("tr"));
                                             //var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                            api.deleteNode(item.Id);
+
+                                            if (commonModule.utils.confirm('Удалить элемент "{0}"?', item.Name))
+                                                api.deleteNode(item.Id);
                                         }
                                     }
                                 ]
@@ -283,7 +286,6 @@ define(
 	                //me.gridSensorsStateManager = new GridStateManager("gridSensors");
 
 	                $("#gridSensors").kendoGrid({
-	                    //height: 400,
 	                    groupable: true,
 	                    sortable: true,
 	                    reorderable: true,
@@ -312,9 +314,12 @@ define(
                                             click: function (e) {
                                                 e.preventDefault();
                                                 e.stopPropagation();
+
                                                 var item = this.dataItem($(e.currentTarget).closest("tr"));
                                                 //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                                api.deleteSensor(item.Id);
+
+                                                if (commonModule.utils.confirm('Удалить элемент "{0}"?', item.Name))
+                                                    api.deleteSensor(item.Id);
                                             }
                                         }
                                     ]

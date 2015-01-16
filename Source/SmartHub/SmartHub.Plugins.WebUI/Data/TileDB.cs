@@ -6,7 +6,7 @@ namespace SmartHub.Plugins.WebUI.Data
     public class TileDB
     {
         public virtual Guid Id { get; set; }
-        public virtual string HandlerKey { get; set; }
+        public virtual string HandlerKey { get; set; } // typeFullName
         public virtual int SortOrder { get; set; }
         public virtual string SerializedParameters { get; set; }
         

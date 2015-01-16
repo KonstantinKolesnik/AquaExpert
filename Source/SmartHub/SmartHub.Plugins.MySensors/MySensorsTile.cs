@@ -1,4 +1,5 @@
-﻿using SmartHub.Plugins.WebUI.Tiles;
+﻿using SmartHub.Plugins.WebUI.Attributes;
+using SmartHub.Plugins.WebUI.Tiles;
 using System;
 
 namespace SmartHub.Plugins.MySensors
@@ -6,7 +7,7 @@ namespace SmartHub.Plugins.MySensors
     [Tile]
     public class MySensorsTile : TileBase
     {
-        public override void FillModel(TileWeb model, dynamic options)
+        public override void FillModel(TileWeb webTile, dynamic options)
         {
             try
             {
@@ -17,15 +18,15 @@ namespace SmartHub.Plugins.MySensors
                 //var data = Context.GetPlugin<MySensorsPlugin>();
 
 
-                model.title = "Сеть MySensors";
-                model.url = "/webapp/mysensors/module.js";// options.url;
-                model.className = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
-                //model.content = "Узлов: 1\nСенсоров: 8";
-                model.wide = true;
+                webTile.title = "Сеть MySensors";
+                webTile.url = "/webapp/mysensors/module.js";// options.url;
+                webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
+                //webTile.content = "Узлов: 1\nСенсоров: 8";
+                webTile.wide = true;
             }
             catch (Exception ex)
             {
-                model.content = ex.Message;
+                webTile.content = ex.Message;
             }
         }
     }

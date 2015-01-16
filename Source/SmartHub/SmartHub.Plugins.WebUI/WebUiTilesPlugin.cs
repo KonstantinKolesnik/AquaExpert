@@ -33,7 +33,7 @@ namespace SmartHub.Plugins.WebUI
     public class WebUITilesPlugin : PluginBase
     {
         #region Fields
-        private InternalDictionary<TileBase> registeredTiles;
+        private InternalDictionary<TileBase> registeredTiles = new InternalDictionary<TileBase>();
         #endregion
 
         #region Import
@@ -48,8 +48,6 @@ namespace SmartHub.Plugins.WebUI
         }
         public override void InitPlugin()
         {
-            registeredTiles = new InternalDictionary<TileBase>();
-
             // регистрируем типы плиток
             foreach (var tile in Tiles)
             {
@@ -94,22 +92,38 @@ namespace SmartHub.Plugins.WebUI
                 return result.ToArray();
             }
         }
-
-        [HttpCommand("/api/webui/tiles/delete")]
-        public object DeleteTile(HttpRequestParams request)
+        [HttpCommand("/api/webui/tiles/add")]
+        public object AddTile(HttpRequestParams request)
         {
-            var id = request.GetRequiredGuid("id");
+            var typeFullName = request.GetRequiredString("typeFullName");
+            var parameters = request.GetString("parameters");
+
+            AddTile(typeFullName, parameters);
+
+            return null;
+        }
+        [HttpCommand("/api/webui/tiles/sort")]
+        public object UpdateSortOrder(HttpRequestParams request)
+        {
+            var json = request.GetRequiredString("data");
+            var ids = Extensions.FromJson<Guid[]>(json);
 
             using (var session = Context.OpenSession())
             {
-                var tile = session.Load<TileDB>(id);
-                session.Delete(tile);
+                var dbTiles = session.Query<TileDB>().ToList();
+
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    var dbTile = dbTiles.FirstOrDefault(t => t.Id == ids[i]);
+                    if (dbTile != null)
+                        dbTile.SortOrder = i;
+                }
+
                 session.Flush();
             }
 
             return null;
         }
-
         [HttpCommand("/api/webui/tiles/action")]
         public object RunTileAction(HttpRequestParams request)
         {
@@ -129,35 +143,15 @@ namespace SmartHub.Plugins.WebUI
 
             return null;
         }
-
-        [HttpCommand("/api/webui/tiles/add")]
-        public object AddTile(HttpRequestParams request)
+        [HttpCommand("/api/webui/tiles/delete")]
+        public object DeleteTile(HttpRequestParams request)
         {
-            var typeFullName = request.GetRequiredString("typeFullName");
-            var parameters = request.GetString("parameters");
-
-            AddTile(typeFullName, parameters);
-
-            return null;
-        }
-
-        [HttpCommand("/api/webui/tiles/sort")]
-        public object UpdateSortOrder(HttpRequestParams request)
-        {
-            var json = request.GetRequiredString("data");
-            var ids = Extensions.FromJson<Guid[]>(json);
+            var id = request.GetRequiredGuid("id");
 
             using (var session = Context.OpenSession())
             {
-                var dbTiles = session.Query<TileDB>().ToList();
-
-                for (int i = 0; i < ids.Length; i++)
-                {
-                    var dbTile = dbTiles.FirstOrDefault(t => t.Id == ids[i]);
-                    if (dbTile != null)
-                        dbTile.SortOrder = i;
-                }
-
+                var tile = session.Load<TileDB>(id);
+                session.Delete(tile);
                 session.Flush();
             }
 

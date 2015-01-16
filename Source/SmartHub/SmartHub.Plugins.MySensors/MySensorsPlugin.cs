@@ -17,11 +17,7 @@ using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
 {
-    [AppSection(
-        "Сеть MySensors",
-        SectionType.System,
-        "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js",
-        TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
+    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
     //[JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
@@ -138,6 +134,12 @@ namespace SmartHub.Plugins.MySensors
         {
             //int a = 0;
             //int b = a;
+        }
+
+        [Timer_5_sec_Elapsed]
+        private void Timer_5_sec_Elapsed(DateTime now)
+        {
+            signalServer.Broadcast(new { MsgId = "Test", Value = now });
         }
 
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)

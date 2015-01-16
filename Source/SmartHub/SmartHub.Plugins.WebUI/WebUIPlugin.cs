@@ -120,7 +120,7 @@ namespace SmartHub.Plugins.WebUI
         }
         #endregion
 
-        #region Http commands
+        #region Web API
         [HttpCommand("/api/webui/sections/common")]
         public object GetCommonSectionItems(HttpRequestParams request)
         {
@@ -141,14 +141,18 @@ namespace SmartHub.Plugins.WebUI
         #region Private methods
         private object GetSectionItems(SectionType sectionType)
         {
-            return sectionItems.Where(section => section.Type == sectionType).Select(sectionItem => new
-                {
-                    id = Guid.NewGuid(),
-                    name = sectionItem.Title,
-                    path = sectionItem.GetModulePath(),
-                    sortOrder = sectionItem.SortOrder,
-                    tileTypeFullName = sectionItem.TileTypeFullName
-                }).ToArray();
+            return sectionItems
+                .Where(sectionItem => sectionItem.Type == sectionType)
+                .Select(sectionItem => new
+                    {
+                        id = Guid.NewGuid(),
+                        name = sectionItem.Title,
+                        path = sectionItem.GetModulePath(),
+                        sortOrder = sectionItem.SortOrder,
+                        tileTypeFullName = sectionItem.TileTypeFullName
+                    }
+                )
+                .ToArray();
         }
         #endregion
     }

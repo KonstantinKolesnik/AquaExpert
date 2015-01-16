@@ -24,7 +24,6 @@ define(
 
 					    if (args && args.length) {
 						    var encoded = [];
-
 						    for (var i = 0; i < args.length; i++)
 							    encoded.push(encodeURIComponent(args[i]));
 
