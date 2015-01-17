@@ -4,36 +4,34 @@ define(
 	function (application, commonModule) {
 		application.module('WebUI.Tiles', function (module, app, backbone, marionette, $, _) {
 			var api = {
-				open: function (childView) {
-					var id = childView.model.get('id');
+				getTiles: function () {
+				    app.request('query:tiles:all')
+                        .done(function (collection) {
+                            var view = new module.TileCollectionView({ collection: collection });
+						    view.on('childview:webui:tile:click', api.onTileClick);
+						    app.setContentView(view);
+					    });
+				},
+				onTileClick: function (childView) {
 					var url = childView.model.get('url');
 
 					if (url) {
 						var args = childView.model.get('parameters');
 						app.loadPath(url, args);
 					}
-					else
-						app.request('cmd:tiles:action', id).done(api.done);
-				},
-				done: function (message) {
-					if (message)
-						alert(message);
-				},
-				reload: function () {
-					app.request('query:tiles:all').done(function (collection) {
-						var view = new module.TileCollectionView({
-							collection: collection
-						});
-
-						view.on('childview:webui:tile:click', api.open);
-
-						app.setContentView(view);
-					});
+					else {
+					    var id = childView.model.get('id');
+					    app.request('cmd:tiles:action', id)
+                            .done(function (result) {
+                                if (result)
+                                    alert(result);
+                            });
+					}
 				}
 			};
 
 			module.start = function () {
-				api.reload();
+			    api.getTiles();
 			};
 		});
 

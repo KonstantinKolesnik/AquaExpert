@@ -1,6 +1,5 @@
 ﻿
 define(['app'], function (application) {
-
 	application.module('WebUI.Tiles', function (module, app, backbone, marionette, $, _) {
 		module.Tile = backbone.Model.extend({
 			defaults: {
@@ -20,7 +19,21 @@ define(['app'], function (application) {
 
 				$.getJSON('/api/webui/tiles')
 					.done(function (tiles) {
-						var collection = new module.TileCollection(tiles);
+					    var collection = new module.TileCollection(tiles);
+
+					    $.each(collection.models, function (idx, item) {
+					        $.extend(item.attributes, {
+					            SignalRReceiveHandler: function (data) {
+					                var me = item;
+					                if (data.MsgId == "Test") {
+					                    me.set({ "content": new Date(data.Value) });
+					                    //me.set({ "content": me.get("id") });
+					                }
+					            }
+					        });
+					        app.SignalRReceiveHandlers.push(item.attributes.SignalRReceiveHandler);
+					    })
+
 						defer.resolve(collection);
 					})
 					.fail(function () {

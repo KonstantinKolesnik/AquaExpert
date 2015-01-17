@@ -19,7 +19,7 @@ namespace SmartHub.Plugins.MySensors
 
 
                 webTile.title = "Сеть MySensors";
-                webTile.url = "/webapp/mysensors/module.js";// options.url;
+                webTile.url = "/webapp/mysensors/module"; //options.url;
                 webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
                 //webTile.content = "Узлов: 1\nСенсоров: 8";
                 webTile.wide = true;

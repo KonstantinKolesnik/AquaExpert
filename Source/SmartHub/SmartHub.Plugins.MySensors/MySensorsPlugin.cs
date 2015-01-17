@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
 {
-    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
+    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module", "SmartHub.Plugins.MySensors.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
     //[JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
@@ -29,6 +29,7 @@ namespace SmartHub.Plugins.MySensors
         private IGatewayProxy gatewayProxy;
         private SignalRPlugin signalServer;
         private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         #endregion
 
         #region Import
@@ -362,11 +363,9 @@ namespace SmartHub.Plugins.MySensors
         }
         private int GetTimeForSensors() // seconds since 1970
         {
-            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local); // from 1970/1/1 00:00:00 to now
             DateTime dtNow = DateTime.Now;
-            TimeSpan result = dtNow.Subtract(dt);
-            int seconds = Convert.ToInt32(result.TotalSeconds);
-            return seconds;
+            TimeSpan result = dtNow.Subtract(unixEpoch);
+            return Convert.ToInt32(result.TotalSeconds);
         }
         private object BuildNodeModel(Node node)
         {

@@ -5,12 +5,12 @@ namespace SmartHub.Plugins.WebUI.Tiles
     public class TileWeb
     {
         public Guid id = Guid.NewGuid();
-        public string url;
-        public string title;
+        public string title; // bootom line text
+        public string content; // body text
+        public string url; // navigate url
+        public object[] parameters; // if (url) -> navigate url parameters; 
         public string className;
         public bool wide = false;
-        public object[] parameters;
-        public string content;
 
         public TileWeb(Guid tileId)
         {
