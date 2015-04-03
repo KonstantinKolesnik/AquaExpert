@@ -1,15 +1,15 @@
 From: =?windows-1251?B?0e718ODt5e3uIEludGVybmV0IEV4cGxvcmVyIDEx?=
 Subject: =?windows-1251?B?0e7n5ODt6OUg7+vg4+jt7uI=?=
-Date: Mon, 24 Nov 2014 16:02:02 +0200
+Date: Fri, 3 Apr 2015 12:50:15 +0300
 MIME-Version: 1.0
 Content-Type: multipart/related;
 	type="text/html";
-	boundary="----=_NextPart_000_0055_01D007FF.FC067180"
-X-MimeOLE: Produced By Microsoft MimeOLE V6.3.9600.17416
+	boundary="----=_NextPart_000_0040_01D06E0C.BB6362A0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.3.9600.17689
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: text/html;
 	charset="utf-8"
 Content-Transfer-Encoding: base64
@@ -38,7 +38,7 @@ PSAxOyBhLnNyYyA9IGc7IG0ucGFyZW50Tm9kZS5pbnNlcnRCZWZvcmUoYSwgbSkKCQl9KSh3aW5k
 b3csIGRvY3VtZW50LCAnc2NyaXB0JywgJy8vd3d3Lmdvb2dsZS1hbmFseXRpY3MuY29tL2FuYWx5
 dGljcy5qcycsICdnYScpOwoKCQlnYSgnY3JlYXRlJywgJ1VBLTEyNTEyNzA5LTUnLCAnYXV0bycp
 OwoJCWdhKCdzZW5kJywgJ3BhZ2V2aWV3Jyk7Cgk8L1NDUklQVD4NCiANCjxNRVRBIG5hbWU9IkdF
-TkVSQVRPUiIgY29udGVudD0iTVNIVE1MIDExLjAwLjk2MDAuMTc0MTYiPjwvSEVBRD4gDQo8Qk9E
+TkVSQVRPUiIgY29udGVudD0iTVNIVE1MIDExLjAwLjk2MDAuMTc2OTAiPjwvSEVBRD4gDQo8Qk9E
 WT4NCjxESVYgY2xhc3M9ImNvbnRhaW5lciI+DQo8RElWIGNsYXNzPSJyb3cgdGhzLXNpdGUtaGVh
 ZGVyIj4NCjxESVYgY2xhc3M9ImNvbC1tZC00Ij48QSBjbGFzcz0idGhzLWJyYW5kLW5hbWUiIGhy
 ZWY9Imh0dHA6Ly90aGlua2luZy1ob21lLnJ1L3N5c3RlbS8iPlRoaW5raW5nLUhvbWUuPFNQQU4+
@@ -955,7 +955,7 @@ aW9uICgpIHsgJCgnLmpzLWJ0bi1tZW51JykuY2xpY2soZnVuY3Rpb24gKCkgeyAkKCcuanMtbWVu
 dScpLnRvZ2dsZUNsYXNzKCdvcGVuZWQtbmF2LW1lbnUnKTsgfSk7IH0pOwoJPC9TQ1JJUFQ+DQog
 PC9CT0RZPjwvSFRNTD4NCg==
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: text/css;
 	charset="koi8-r"
 Content-Transfer-Encoding: quoted-printable
@@ -8663,7 +8663,7 @@ td.visible-print {
 }
 }
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: text/css;
 	charset="koi8-r"
 Content-Transfer-Encoding: quoted-printable
@@ -10286,7 +10286,7 @@ display: inline-block; position: relative;
 	content: "\f1e2";
 }
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: text/css;
 	charset="koi8-r"
 Content-Transfer-Encoding: quoted-printable
@@ -10385,7 +10385,7 @@ none;
 }
 }
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: application/javascript
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://thinking-home.ru/system/Scripts/jquery-2.1.1.min.js
@@ -11905,7 +11905,7 @@ Lc=3Da.jQuery,Mc=3Da.$;return n.noConflict=3Dfunction(b){return =
 a.$=3D=3D=3Dn&&(a.$=3DMc),b&&a.jQuery=3D=3D=3Dn&&(a.jQuery=3DLc),n},typeo=
 f b=3D=3D=3DU&&(a.jQuery=3Da.$=3Dn),n});=0A=
 
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: application/javascript
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://thinking-home.ru/system/Scripts/jquery.validate.min.js
@@ -12275,7 +12275,7 @@ d?d:a.ajaxSettings).port;return"abort"=3D=3D=3De?(c[f]&&c[f].abort(),c[f]=
 =3Db.apply(this,arguments),c[f]):b.apply(this,arguments)}),a.extend(a.fn,=
 {validateDelegate:function(b,c,d){return this.bind(c,function(c){var =
 e=3Da(c.target);return e.is(b)?d.apply(e,arguments):void 0})}})});
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: application/javascript
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://thinking-home.ru/system/Scripts/jquery.validate.unobtrusive.min.js
@@ -12386,7 +12386,7 @@ te",d)});b.add("password",["min","nonalphamin","regex"],function(a){a.par=
 ams.min&&c(a,"minlength",a.params.min);a.params.nonalphamin&&c(a,"nonalph=
 amin",a.params.nonalphamin);a.params.regex&&c(a,"regex",a.params.regex)})=
 ;a(function(){d.unobtrusive.parse(document)})})(jQuery);
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: application/javascript
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://thinking-home.ru/system/Scripts/bootstrap.min.js
@@ -12944,7 +12944,7 @@ a.fn.affix=3Dd,this},a(window).on("load",function(){a('[data-spy=3D"affix=
 c=3Da(this),d=3Dc.data();d.offset=3Dd.offset||{},d.offsetBottom&&(d.offse=
 t.bottom=3Dd.offsetBottom),d.offsetTop&&(d.offset.top=3Dd.offsetTop),b.ca=
 ll(c,d)})})}(jQuery);
-------=_NextPart_000_0055_01D007FF.FC067180
+------=_NextPart_000_0040_01D06E0C.BB6362A0
 Content-Type: application/javascript
 Content-Transfer-Encoding: quoted-printable
 Content-Location: http://thinking-home.ru/system/Scripts/share.min.js
@@ -13948,4 +13948,4 @@ shareImage"),link:e.getAttribute("data-yashareLink"),title:e.getAttribute=
 },r&&"string"=3D=3Dtypeof =
 r&&(r=3Dr.split(","),a.popupStyle=3D{blocks:r}),new =
 Ya.share(a)})}(window,document);
-------=_NextPart_000_0055_01D007FF.FC067180--
+------=_NextPart_000_0040_01D06E0C.BB6362A0--
