@@ -2,19 +2,19 @@
 // Connect button or door/window reed switch between 
 // digitial I/O pin 3 (BUTTON_PIN below) and GND.
 
-#include <MySensor.h>
+#include <DTCSensor.h>
 #include <SPI.h>
 #include <Bounce2.h>
 
 #define CHILD_ID 3
 #define BUTTON_PIN  3  // Arduino Digital I/O pin for button/reed switch
 
-MySensor gw;
+DTCSensor gw;
 Bounce debouncer = Bounce(); 
 int oldValue = -1;
 
 // Change to V_LIGHT if you use S_LIGHT in presentation below
-MyMessage msg(CHILD_ID, V_TRIPPED);
+DTCMessage msg(CHILD_ID, V_TRIPPED);
 
 void setup()  
 {  

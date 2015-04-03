@@ -1,5 +1,5 @@
 /*
-The MySensors library adds a new layer on top of the RF24 library.
+The DTC library adds a new layer on top of the RF24 library.
 It handles radio network routing, relaying and ids.
 
 Created by Henrik Ekblad <henrik.ekblad@gmail.com>
@@ -9,10 +9,10 @@ modify it under the terms of the GNU General Public License
 version 2 as published by the Free Software Foundation.
 */
 
-#ifndef MyMQTT_h
-#define MyMQTT_h
+#ifndef DTCMQTT_h
+#define DTCMQTT_h
 
-#include "MySensor.h"
+#include "DTCSensor.h"
 
 
 //////////////////////////////////////////////////////////////////
@@ -54,18 +54,17 @@ version 2 as published by the Free Software Foundation.
 #define MQTTQOS1        (1 << 1)
 #define MQTTQOS2        (2 << 1)
 
-class MyMQTT :
-public MySensor {
+class DTCMQTT : public DTCSensor {
 
 public:
-	MyMQTT(uint8_t _cepin=5, uint8_t _cspin=6);
+	DTCMQTT(uint8_t _cepin=5, uint8_t _cspin=6);
 	void begin(rf24_pa_dbm_e paLevel=RF24_PA_LEVEL_GW, uint8_t channel=RF24_CHANNEL, rf24_datarate_e dataRate=RF24_DATARATE, void (*dataCallback)
 			(const char *, uint8_t *)=NULL, uint8_t _rx=6, uint8_t _tx=5, uint8_t _er=4 );
 	void processRadioMessage();
 	void processMQTTMessage(char *inputString, uint8_t inputPos);
 private:
 	void (*dataCallback)(const char *, uint8_t *);
-	void SendMQTT(MyMessage &msg);
+	void SendMQTT(DTCMessage &msg);
 	void ledTimers();
 	void rxBlink(uint8_t cnt);
 	void txBlink(uint8_t cnt);

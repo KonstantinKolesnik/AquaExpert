@@ -48,8 +48,8 @@
 */
 
 #include <SPI.h>  
-#include <MySensor.h>
-#include <MyGateway.h>  
+#include <DTCSensor.h>
+#include <DTCGateway.h>  
 #include <stdarg.h>
 
 // Use this if you have attached a Ethernet ENC28J60 shields  
@@ -88,7 +88,7 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  // DEAD BEEF FEED
 EthernetServer server = EthernetServer(IP_PORT);
 
 // No blink or button functionality. Use the vanilla constructor.
-MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
+DTCGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
 
 // Uncomment this constructor if you have leds and include button attached to your gateway 
 //MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);

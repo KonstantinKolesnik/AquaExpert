@@ -9,10 +9,9 @@
  version 2 as published by the Free Software Foundation.
 */
 
-#include "MyGateway.h"
+#include "DTCGateway.h"
 #include "utility/MsTimer2.h"
 #include "utility/PinChangeInt.h"
-
 
 uint8_t pinRx;
 uint8_t pinTx;
@@ -24,7 +23,7 @@ volatile uint8_t countErr;
 boolean inclusionMode; // Keeps track on inclusion mode
 
 
-MyGateway::MyGateway(uint8_t _cepin, uint8_t _cspin, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : MySensor(_cepin, _cspin) {
+DTCGateway::DTCGateway(uint8_t _cepin, uint8_t _cspin, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCSensor(_cepin, _cspin) {
 	pinInclusion = _inclusion_pin;
 	inclusionTime = _inclusion_time;
 	pinRx = _rx;
@@ -33,7 +32,7 @@ MyGateway::MyGateway(uint8_t _cepin, uint8_t _cspin, uint8_t _inclusion_time, ui
 }
 
 
-void MyGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate, void (*inDataCallback)(char *)) {
+void DTCGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate, void (*inDataCallback)(char *)) {
 	Serial.begin(BAUD_RATE);
 	repeaterMode = true;
 	isGateway = true;
@@ -98,7 +97,7 @@ void startInclusionInterrupt() {
 
 
 
-void MyGateway::checkButtonTriggeredInclusion() {
+void DTCGateway::checkButtonTriggeredInclusion() {
    if (buttonTriggeredInclusion) {
     // Ok, someone pressed the inclusion button on the gateway
     // start inclusion mode for 1 munute.
@@ -108,14 +107,14 @@ void MyGateway::checkButtonTriggeredInclusion() {
   }
 }
 
-void MyGateway::checkInclusionFinished() {
+void DTCGateway::checkInclusionFinished() {
 	if (inclusionMode && millis()-inclusionStartTime>60000UL*inclusionTime) {
 	     // inclusionTimeInMinutes minute(s) has passed.. stop inclusion mode
 	    setInclusionMode(false);
 	 }
 }
 
-uint8_t MyGateway::h2i(char c) {
+uint8_t DTCGateway::h2i(char c) {
 	uint8_t i = 0;
 	if (c <= '9')
 		i += c - '0';
@@ -126,7 +125,7 @@ uint8_t MyGateway::h2i(char c) {
 	return i;
 }
 
-void MyGateway::parseAndSend(char *commandBuffer) {
+void DTCGateway::parseAndSend(char *commandBuffer) {
   boolean ok = false;
   char *str, *p, *value=NULL;
   uint8_t bvalue[MAX_PAYLOAD];
@@ -211,7 +210,7 @@ void MyGateway::parseAndSend(char *commandBuffer) {
 }
 
 
-void MyGateway::setInclusionMode(boolean newMode) {
+void DTCGateway::setInclusionMode(boolean newMode) {
   if (newMode != inclusionMode)
     inclusionMode = newMode;
     // Send back mode change on serial line to ack command
@@ -222,10 +221,10 @@ void MyGateway::setInclusionMode(boolean newMode) {
     }
 }
 
-void MyGateway::processRadioMessage() {
+void DTCGateway::processRadioMessage() {
 	if (process()) {
 	  // A new message was received from one of the sensors
-	  MyMessage message = getLastMessage();
+	  DTCMessage message = getLastMessage();
 	  if (mGetCommand(message) == C_PRESENTATION && inclusionMode) {
 		rxBlink(3);
 	  } else {
@@ -239,7 +238,7 @@ void MyGateway::processRadioMessage() {
 	checkInclusionFinished();
 }
 
-void MyGateway::serial(const char *fmt, ... ) {
+void DTCGateway::serial(const char *fmt, ... ) {
    va_list args;
    va_start (args, fmt );
    vsnprintf_P(serialBuffer, MAX_SEND_LENGTH, fmt, args);
@@ -251,7 +250,7 @@ void MyGateway::serial(const char *fmt, ... ) {
    }
 }
 
-void MyGateway::serial(MyMessage &msg) {
+void DTCGateway::serial(DTCMessage &msg) {
   serial(PSTR("%d;%d;%d;%d;%d;%s\n"),msg.sender, msg.sensor, mGetCommand(msg), mGetAck(msg), msg.type, msg.getString(convBuf));
 }
 
@@ -287,13 +286,13 @@ void ledTimersInterrupt() {
 
 }
 
-void MyGateway::rxBlink(uint8_t cnt) {
+void DTCGateway::rxBlink(uint8_t cnt) {
   if(countRx == 255) { countRx = cnt; }
 }
-void MyGateway::txBlink(uint8_t cnt) {
+void DTCGateway::txBlink(uint8_t cnt) {
   if(countTx == 255 && !inclusionMode) { countTx = cnt; }
 }
-void MyGateway::errBlink(uint8_t cnt) {
+void DTCGateway::errBlink(uint8_t cnt) {
   if(countErr == 255) { countErr = cnt; }
 }
 

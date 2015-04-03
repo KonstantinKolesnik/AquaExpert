@@ -1,5 +1,5 @@
 /*
-The MySensors library adds a new layer on top of the RF24 library.
+The DTC library adds a new layer on top of the RF24 library.
 It handles radio network routing, relaying and ids.
 
 Created by Henrik Ekblad <henrik.ekblad@gmail.com>
@@ -9,7 +9,7 @@ modify it under the terms of the GNU General Public License
 version 2 as published by the Free Software Foundation.
 */
 
-#include "MyMQTT.h"
+#include "DTCMQTT.h"
 #include "utility/MsTimer2.h"
 
 char V_0[] PROGMEM = "TEMP";		//V_TEMP
@@ -102,12 +102,11 @@ extern uint8_t pinRx;
 extern uint8_t pinTx;
 extern uint8_t pinEr;
 
-MyMQTT::MyMQTT(uint8_t _cepin, uint8_t _cspin) :
-MySensor(_cepin, _cspin) {
+DTCMQTT::DTCMQTT(uint8_t _cepin, uint8_t _cspin) : DTCSensor(_cepin, _cspin) {
 
 }
 
-inline MyMessage& build (MyMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck) {
+inline DTCMessage& build (DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck) {
 	msg.destination = destination;
 	msg.sender = sender;
 	msg.sensor = sensor;
@@ -118,7 +117,7 @@ inline MyMessage& build (MyMessage &msg, uint8_t sender, uint8_t destination, ui
 	return msg;
 }
 
-char *MyMQTT::getType(char *b, const char **index) {
+char *DTCMQTT::getType(char *b, const char **index) {
 	char *q = b;
 	char *p = (char *)pgm_read_word(index);
 	while (*q++ = pgm_read_byte(p++));
@@ -126,7 +125,7 @@ char *MyMQTT::getType(char *b, const char **index) {
 	return b;
 }
 
-void MyMQTT::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate, void (*inDataCallback)
+void DTCMQTT::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate, void (*inDataCallback)
 			(const char *, uint8_t *), uint8_t _rx, uint8_t _tx, uint8_t _er) {
 	Serial.begin(BAUD_RATE);
 	repeaterMode = true;
@@ -158,10 +157,10 @@ void MyMQTT::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataR
 	Serial.print(getType(convBuf, &vType[S_FIRSTCUSTOM]));
 }
 
-void MyMQTT::processRadioMessage() {
+void DTCMQTT::processRadioMessage() {
 	if (process()) {
 		// A new message was received from one of the sensors
-		MyMessage message = getLastMessage();
+		DTCMessage message = getLastMessage();
 		rxBlink(1);
 
 		if (msg.isAck()) {
@@ -209,7 +208,7 @@ void MyMQTT::processRadioMessage() {
 	}
 }
 
-void MyMQTT::processMQTTMessage(char *inputString, uint8_t inputPos) {
+void DTCMQTT::processMQTTMessage(char *inputString, uint8_t inputPos) {
 	char *str, *p, *payload=NULL;
 	uint8_t i = 0;
 	buffer[0]= 0;
@@ -306,7 +305,7 @@ void MyMQTT::processMQTTMessage(char *inputString, uint8_t inputPos) {
 	}
 }
 
-void MyMQTT::SendMQTT(MyMessage &msg) {
+void DTCMQTT::SendMQTT(DTCMessage &msg) {
 	buffsize = 0;
 	if (!MQTTClients) {
 		//We have no clients connected - return
@@ -341,14 +340,14 @@ void MyMQTT::SendMQTT(MyMessage &msg) {
 	dataCallback(buffer, &buffsize);
 }
 
-void MyMQTT::rxBlink(uint8_t cnt) {
+void DTCMQTT::rxBlink(uint8_t cnt) {
 	if(countRx == 255) { countRx = cnt; }
 }
 
-void MyMQTT::txBlink(uint8_t cnt) {
+void DTCMQTT::txBlink(uint8_t cnt) {
 	if(countTx == 255) { countTx = cnt; }
 }
 
-void MyMQTT::errBlink(uint8_t cnt) {
+void DTCMQTT::errBlink(uint8_t cnt) {
 	if(countErr == 255) { countErr = cnt; }
 }

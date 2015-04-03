@@ -57,8 +57,8 @@ http://forum.mysensors.org/topic/303/mqtt-broker-gateway
 */
 
 #include <SPI.h>
-#include <MySensor.h>
-#include <MyMQTT.h>
+#include <DTCSensor.h>
+#include <DTCMQTT.h>
 #include <Ethernet.h>
 
 
@@ -96,7 +96,7 @@ uint8_t TCP_MAC[] = { 0xF2, 0xDE, 0xAD, 0x00, 0x00, 0x42 }; //x2, x6, xA or xE (
 //////////////////////////////////////////////////////////////////
 
 EthernetServer server = EthernetServer(TCP_PORT);
-MyMQTT gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN);
+DTCMQTT gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN);
 
 void onEthernetMessage()
 {

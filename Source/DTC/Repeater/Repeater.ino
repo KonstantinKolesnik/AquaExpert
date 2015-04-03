@@ -2,7 +2,7 @@
 // It is important that nodes that has enabled repeater mode calls  gw.process() frequently.
 // This node should never sleep.
 
-#include <MySensor.h>
+#include <DTCSensor.h>
 #include <SPI.h>
 
 MySensor gw;

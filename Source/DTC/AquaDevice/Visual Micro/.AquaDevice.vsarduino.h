@@ -41,7 +41,7 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
-void onMessageReceived(const MyMessage &message);
+void onMessageReceived(const DTCMessage &message);
 void onTimeReceived(unsigned long time);
 void printTime();
 float readTemperature();

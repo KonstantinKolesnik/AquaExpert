@@ -1,4 +1,4 @@
-#include <MySensor.h>  
+#include <DTCSensor.h>  
 #include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -15,8 +15,8 @@ DallasTemperature sensors(&oneWire);
 float lastTemperature[MAX_ATTACHED_DS18B20];
 int numSensors = 0;
 
-MyMessage msg(0, V_TEMP); // Initialize temperature message (sensorID is temporary 0)
-MySensor gw(9, 10);
+DTCMessage msg(0, V_TEMP); // Initialize temperature message (sensorID is temporary 0)
+DTCSensor gw(9, 10);
 
 void setup()
 {

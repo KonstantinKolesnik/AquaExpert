@@ -1,5 +1,5 @@
  /*
- The MySensors library adds a new layer on top of the RF24 library.
+ The DTC library adds a new layer on top of the RF24 library.
  It handles radio network routing, relaying and ids.
 
  Created by Henrik Ekblad <henrik.ekblad@gmail.com>
@@ -9,14 +9,14 @@
  version 2 as published by the Free Software Foundation.
  */
 
-#include "MySensor.h"
+#include "DTCSensor.h"
 #include "utility/LowPower.h"
 #include "utility/RF24.h"
 #include "utility/RF24_config.h"
 
 
 // Inline function and macros
-inline MyMessage& build (MyMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck) {
+inline DTCMessage& build (DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck) {
 	msg.sender = sender;
 	msg.destination = destination;
 	msg.sensor = sensor;
@@ -27,10 +27,10 @@ inline MyMessage& build (MyMessage &msg, uint8_t sender, uint8_t destination, ui
 	return msg;
 }
 
-MySensor::MySensor(uint8_t _cepin, uint8_t _cspin) : RF24(_cepin, _cspin) {
+DTCSensor::DTCSensor(uint8_t _cepin, uint8_t _cspin) : RF24(_cepin, _cspin) {
 }
 
-void MySensor::begin(void (*_msgCallback)(const MyMessage &), uint8_t _nodeId, boolean _repeaterMode, uint8_t _parentNodeId, rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate) {
+void DTCSensor::begin(void (*_msgCallback)(const DTCMessage &), uint8_t _nodeId, boolean _repeaterMode, uint8_t _parentNodeId, rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate) {
 	Serial.begin(BAUD_RATE);
 	isGateway = false;
 	repeaterMode = _repeaterMode;
@@ -88,7 +88,7 @@ void MySensor::begin(void (*_msgCallback)(const MyMessage &), uint8_t _nodeId, b
 	}
 }
 
-void MySensor::setupRadio(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate) {
+void DTCSensor::setupRadio(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate) {
 	failedTransmissions = 0;
 
 	// Start up the radio library
@@ -112,27 +112,27 @@ void MySensor::setupRadio(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_
 	RF24::openReadingPipe(BROADCAST_PIPE, TO_ADDR(BROADCAST_ADDRESS));
 }
 
-void MySensor::setupRepeaterMode(){
+void DTCSensor::setupRepeaterMode(){
 	childNodeTable = new uint8_t[256];
 	eeprom_read_block((void*)childNodeTable, (void*)EEPROM_ROUTES_ADDRESS, 256);
 }
 
-uint8_t MySensor::getNodeId() {
+uint8_t DTCSensor::getNodeId() {
 	return nc.nodeId;
 }
 
-ControllerConfig MySensor::getConfig() {
+ControllerConfig DTCSensor::getConfig() {
 	return cc;
 }
 
-void MySensor::requestNodeId() {
+void DTCSensor::requestNodeId() {
 	debug(PSTR("req node id\n"));
 	RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_ID_REQUEST, false).set(""));
 	wait(2000);
 }
 
-void MySensor::setupNode() {
+void DTCSensor::setupNode() {
 	// Open reading pipe for messages directed to this node (set write pipe to same)
 	RF24::openReadingPipe(WRITE_PIPE, TO_ADDR(nc.nodeId));
 	RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
@@ -146,7 +146,7 @@ void MySensor::setupNode() {
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CONFIG, false).set(nc.parentNodeId));
 }
 
-void MySensor::findParentNode() {
+void DTCSensor::findParentNode() {
 	failedTransmissions = 0;
 
 	// Set distance to max
@@ -160,7 +160,7 @@ void MySensor::findParentNode() {
 	wait(2000);
 }
 
-boolean MySensor::sendRoute(MyMessage &message) {
+boolean DTCSensor::sendRoute(DTCMessage &message) {
 	// Make sure to process any incoming messages before sending (could this end up in recursive loop?)
 	// process();
 	bool isInternal = mGetCommand(message) == C_INTERNAL;
@@ -207,7 +207,7 @@ boolean MySensor::sendRoute(MyMessage &message) {
 	return false;
 }
 
-boolean MySensor::sendWrite(uint8_t next, MyMessage &message, bool broadcast) {
+boolean DTCSensor::sendWrite(uint8_t next, DTCMessage &message, bool broadcast) {
 	uint8_t length = mGetLength(message);
 	message.last = nc.nodeId;
 	mSetVersion(message, PROTOCOL_VERSION);
@@ -224,22 +224,22 @@ boolean MySensor::sendWrite(uint8_t next, MyMessage &message, bool broadcast) {
 	return ok;
 }
 
-bool MySensor::send(MyMessage &message, bool enableAck) {
+bool DTCSensor::send(DTCMessage &message, bool enableAck) {
 	message.sender = nc.nodeId;
 	mSetCommand(message,C_SET);
     mSetRequestAck(message,enableAck);
 	return sendRoute(message);
 }
 
-void MySensor::sendBatteryLevel(uint8_t value, bool enableAck) {
+void DTCSensor::sendBatteryLevel(uint8_t value, bool enableAck) {
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_BATTERY_LEVEL, enableAck).set(value));
 }
 
-void MySensor::present(uint8_t childSensorId, uint8_t sensorType, bool enableAck) {
+void DTCSensor::present(uint8_t childSensorId, uint8_t sensorType, bool enableAck) {
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, childSensorId, C_PRESENTATION, sensorType, enableAck).set(LIBRARY_VERSION));
 }
 
-void MySensor::sendSketchInfo(const char *name, const char *version, bool enableAck) {
+void DTCSensor::sendSketchInfo(const char *name, const char *version, bool enableAck) {
 	if (name != NULL) {
 		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_NAME, enableAck).set(name));
 	}
@@ -248,16 +248,16 @@ void MySensor::sendSketchInfo(const char *name, const char *version, bool enable
     }
 }
 
-void MySensor::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination) {
+void DTCSensor::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination) {
 	sendRoute(build(msg, nc.nodeId, destination, childSensorId, C_REQ, variableType, false).set(""));
 }
 
-void MySensor::requestTime(void (* _timeCallback)(unsigned long)) {
+void DTCSensor::requestTime(void (* _timeCallback)(unsigned long)) {
 	timeCallback = _timeCallback;
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_TIME, false).set(""));
 }
 
-boolean MySensor::process() {
+boolean DTCSensor::process() {
 	uint8_t pipe;
 	boolean available = RF24::available(&pipe);
 
@@ -432,34 +432,34 @@ boolean MySensor::process() {
 	return false;
 }
 
-MyMessage& MySensor::getLastMessage() {
+DTCMessage& DTCSensor::getLastMessage() {
 	return msg;
 }
 
-void MySensor::saveState(uint8_t pos, uint8_t value) {
+void DTCSensor::saveState(uint8_t pos, uint8_t value) {
 	if (loadState(pos) != value) {
 		eeprom_write_byte((uint8_t*)(EEPROM_LOCAL_CONFIG_ADDRESS+pos), value);
 	}
 }
-uint8_t MySensor::loadState(uint8_t pos) {
+uint8_t DTCSensor::loadState(uint8_t pos) {
 	return eeprom_read_byte((uint8_t*)(EEPROM_LOCAL_CONFIG_ADDRESS+pos));
 }
 
-void MySensor::addChildRoute(uint8_t childId, uint8_t route) {
+void DTCSensor::addChildRoute(uint8_t childId, uint8_t route) {
 	if (childNodeTable[childId] != route) {
 		childNodeTable[childId] = route;
 		eeprom_write_byte((uint8_t*)EEPROM_ROUTES_ADDRESS+childId, route);
 	}
 }
 
-void MySensor::removeChildRoute(uint8_t childId) {
+void DTCSensor::removeChildRoute(uint8_t childId) {
 	if (childNodeTable[childId] != 0xff) {
 		childNodeTable[childId] = 0xff;
 		eeprom_write_byte((uint8_t*)EEPROM_ROUTES_ADDRESS+childId, 0xff);
 	}
 }
 
-uint8_t MySensor::getChildRoute(uint8_t childId) {
+uint8_t DTCSensor::getChildRoute(uint8_t childId) {
 	return childNodeTable[childId];
 }
 
@@ -473,7 +473,7 @@ void wakeUp2()	 //place to send the second interrupts
 	pinIntTrigger = 2;
 }
 
-void MySensor::internalSleep(unsigned long ms) {
+void DTCSensor::internalSleep(unsigned long ms) {
 	while (!pinIntTrigger && ms >= 8000) { LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); ms -= 8000; }
 	if (!pinIntTrigger && ms >= 4000)    { LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF); ms -= 4000; }
 	if (!pinIntTrigger && ms >= 2000)    { LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF); ms -= 2000; }
@@ -486,7 +486,7 @@ void MySensor::internalSleep(unsigned long ms) {
 	if (!pinIntTrigger && ms >= 16)      { LowPower.powerDown(SLEEP_15Ms, ADC_OFF, BOD_OFF); ms -= 15; }
 }
 
-void MySensor::sleep(unsigned long ms) {
+void DTCSensor::sleep(unsigned long ms) {
 	// Let serial prints finish (debug, log etc)
 	Serial.flush();
 	RF24::powerDown();
@@ -494,7 +494,7 @@ void MySensor::sleep(unsigned long ms) {
 	internalSleep(ms);
 }
 
-void MySensor::wait(unsigned long ms) {
+void DTCSensor::wait(unsigned long ms) {
 	// Let serial prints finish (debug, log etc)
 	Serial.flush();
 	unsigned long enter = millis();
@@ -505,7 +505,7 @@ void MySensor::wait(unsigned long ms) {
 	}
 }
 
-bool MySensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms) {
+bool DTCSensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms) {
 	// Let serial prints finish (debug, log etc)
 	bool pinTriggeredWakeup = true;
 	Serial.flush();
@@ -525,7 +525,7 @@ bool MySensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms) {
 	return pinTriggeredWakeup;
 }
 
-int8_t MySensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms) {
+int8_t DTCSensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms) {
 	int8_t retVal = 1;
 	Serial.flush(); // Let serial prints finish (debug, log etc)
 	RF24::powerDown();
@@ -553,7 +553,7 @@ int8_t MySensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, ui
 }
 
 #ifdef DEBUG
-void MySensor::debugPrint(const char *fmt, ... ) {
+void DTCSensor::debugPrint(const char *fmt, ... ) {
 	char fmtBuffer[300];
 	if (isGateway) {
 		// prepend debug message to be handled correctly by gw (C_INTERNAL, I_LOG_MESSAGE)
@@ -580,7 +580,7 @@ void MySensor::debugPrint(const char *fmt, ... ) {
 #endif
 
 #ifdef DEBUG
-int MySensor::freeRam (void) {
+int DTCSensor::freeRam (void) {
   extern int __heap_start, *__brkval;
   int v;
   return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);

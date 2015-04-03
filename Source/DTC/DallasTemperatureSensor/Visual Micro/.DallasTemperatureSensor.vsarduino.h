@@ -46,5 +46,5 @@ void printTime();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h" 
-#include "D:\Work\SmartNetwork\MySensors\DallasTemperatureSensor\DallasTemperatureSensor.ino"
+#include "D:\Work\SmartHub\Source\DTC\DallasTemperatureSensor\DallasTemperatureSensor.ino"
 #endif

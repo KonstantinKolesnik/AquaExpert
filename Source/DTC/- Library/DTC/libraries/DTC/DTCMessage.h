@@ -1,5 +1,5 @@
 /*
- The MySensors library adds a new layer on top of the RF24 library.
+ The DTC library adds a new layer on top of the RF24 library.
  It handles radio network routing, relaying and ids.
 
  Created by Henrik Ekblad <henrik.ekblad@gmail.com>
@@ -9,8 +9,8 @@
  version 2 as published by the Free Software Foundation.
  */
 
-#ifndef MyMessage_h
-#define MyMessage_h
+#ifndef DTCMessage_h
+#define DTCMessage_h
 
 #ifdef __cplusplus
 #include <Arduino.h>
@@ -120,16 +120,15 @@ typedef enum {
 
 
 #ifdef __cplusplus
-class MyMessage
+class DTCMessage
 {
 private:
 	char* getCustomString(char *buffer) const;
 
 public:
 	// Constructors
-	MyMessage();
-
-	MyMessage(uint8_t sensor, uint8_t type);
+	DTCMessage();
+	DTCMessage(uint8_t sensor, uint8_t type);
 
 	char i2h(uint8_t i) const;
 
@@ -154,19 +153,19 @@ public:
 	bool isAck() const;
 
 	// Setters for building message "on the fly"
-	MyMessage& setType(uint8_t type);
-	MyMessage& setSensor(uint8_t sensor);
-	MyMessage& setDestination(uint8_t destination);
+	DTCMessage& setType(uint8_t type);
+	DTCMessage& setSensor(uint8_t sensor);
+	DTCMessage& setDestination(uint8_t destination);
 
 	// Setters for payload
-	MyMessage& set(void* payload, uint8_t length);
-	MyMessage& set(const char* value);
-	MyMessage& set(uint8_t value);
-	MyMessage& set(float value, uint8_t decimals);
-	MyMessage& set(unsigned long value);
-	MyMessage& set(long value);
-	MyMessage& set(unsigned int value);
-	MyMessage& set(int value);
+	DTCMessage& set(void* payload, uint8_t length);
+	DTCMessage& set(const char* value);
+	DTCMessage& set(uint8_t value);
+	DTCMessage& set(float value, uint8_t decimals);
+	DTCMessage& set(unsigned long value);
+	DTCMessage& set(long value);
+	DTCMessage& set(unsigned int value);
+	DTCMessage& set(int value);
 
 #else
 

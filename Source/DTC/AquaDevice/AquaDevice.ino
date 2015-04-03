@@ -1,4 +1,4 @@
-#include <MySensor.h>
+#include <DTCSensor.h>
 #include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -11,21 +11,21 @@
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 float lastTemperature;
-MyMessage msgTemperature(0, V_TEMP);
+DTCMessage msgTemperature(0, V_TEMP);
 unsigned long prevMsTemperature = 0;
 const long intervalTemperature = 3000;	// interval at which to send measurements (milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // Ph section (id=1)
 #define PH_PIN  A4
 #define PH_OFFSET 0.3f//-0.12
-MyMessage msgPh(1, V_VAR1);
+DTCMessage msgPh(1, V_VAR1);
 float lastPh;
 unsigned long prevMsPh = 0;
 const long intervalPh = 5000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // Moisture section (id=2)
 #define WATER_PIN  A3
-MyMessage msgWater(2, V_TRIPPED);
+DTCMessage msgWater(2, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = 0;
 const long intervalWater = 5000;
@@ -35,13 +35,13 @@ const long intervalWater = 5000;
 #define ECHO_PIN     A1  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 100 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
-MyMessage msgSonar(3, V_DISTANCE);
+DTCMessage msgSonar(3, V_DISTANCE);
 uint16_t lastDist;
 unsigned long prevMsSonar = 0;
 const long intervalSonar = 1000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
-MySensor gw(A0/*DEFAULT_CE_PIN*/, DEFAULT_CS_PIN);
+DTCSensor gw(A0/*DEFAULT_CE_PIN*/, DEFAULT_CS_PIN);
 bool isMetric = true;
 //unsigned long SLEEP_TIME = 3000;	// Sleep time between reads (in milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ void loop()
 	//gw.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-void onMessageReceived(const MyMessage &message)
+void onMessageReceived(const DTCMessage &message)
 {
 	//Serial.println("onMessageReceived");
 }

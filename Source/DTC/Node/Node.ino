@@ -1,12 +1,12 @@
-#include <MySensor.h>
+#include <DTCSensor.h>
 #include <SPI.h>
  
 #define ID 0
 #define OPEN 1
 #define CLOSE 0
  
-MySensor gw;
-MyMessage msg(ID, V_TRIPPED);
+DTCSensor gw;
+DTCMessage msg(ID, V_TRIPPED);
  
 void setup() 
 { 
@@ -18,7 +18,7 @@ void setup()
 	Serial.begin(115200);
 }
  
-void msgCallback(const MyMessage & msg)
+void msgCallback(const DTCMessage & msg)
 {
 
 }
