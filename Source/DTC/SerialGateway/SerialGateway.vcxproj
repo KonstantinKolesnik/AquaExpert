@@ -74,7 +74,73 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Arduino.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\binary.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Client.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Printable.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Server.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Udp.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBAPI.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBDesc.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WCharacter.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_private.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\SPI.h" />
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCConfig.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCGateway.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCMessage.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCMQTT.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCSensor.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\LowPower.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\MsTimer2.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\nRF24L01.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\PinChangeInt.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\RF24.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\RF24_config.h" />
+    <ClInclude Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\Version.h" />
     <ClInclude Include="Visual Micro\.SerialGateway.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\abi.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\CDC.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial0.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial1.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial2.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial3.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HID.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\hooks.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\main.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Tone.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WInterrupts.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_analog.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_digital.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_pulse.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_shift.c" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WMath.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.cpp" />
+    <ClCompile Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\SPI.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCGateway.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCMessage.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCMQTT.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\DTCSensor.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\LowPower.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\MsTimer2.cpp" />
+    <ClCompile Include="C:\Users\Konstantin\Documents\Arduino\libraries\DTC\utility\RF24.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
