@@ -45,16 +45,16 @@
 // EEPROM location of node id
 #define EEPROM_NODE_ID_ADDRESS EEPROM_START
 // EEPROM location of parent id
-#define EEPROM_PARENT_NODE_ID_ADDRESS (EEPROM_START+1)
+#define EEPROM_PARENT_NODE_ID_ADDRESS (EEPROM_START + 1)
 // EEPROM location of distance to gateway
-#define EEPROM_DISTANCE_ADDRESS (EEPROM_PARENT_NODE_ID_ADDRESS+1)
-#define EEPROM_ROUTES_ADDRESS (EEPROM_DISTANCE_ADDRESS+1) // Where to start storing routing information in EEPROM. Will allocate 256 bytes.
-#define EEPROM_CONTROLLER_CONFIG_ADDRESS (EEPROM_ROUTES_ADDRESS+256) // Location of controller sent configuration (we allow one payload of config data from controller)
-#define EEPROM_FIRMWARE_TYPE_ADDRESS (EEPROM_CONTROLLER_CONFIG_ADDRESS+24)
-#define EEPROM_FIRMWARE_VERSION_ADDRESS (EEPROM_FIRMWARE_TYPE_ADDRESS+2)
-#define EEPROM_FIRMWARE_BLOCKS_ADDRESS (EEPROM_FIRMWARE_VERSION_ADDRESS+2)
-#define EEPROM_FIRMWARE_CRC_ADDRESS (EEPROM_FIRMWARE_BLOCKS_ADDRESS+2)
-#define EEPROM_LOCAL_CONFIG_ADDRESS (EEPROM_FIRMWARE_CRC_ADDRESS+2) // First free address for sketch static configuration
+#define EEPROM_DISTANCE_ADDRESS (EEPROM_PARENT_NODE_ID_ADDRESS + 1)
+#define EEPROM_ROUTES_ADDRESS (EEPROM_DISTANCE_ADDRESS + 1) // Where to start storing routing information in EEPROM. Will allocate 256 bytes.
+#define EEPROM_CONTROLLER_CONFIG_ADDRESS (EEPROM_ROUTES_ADDRESS + 256) // Location of controller sent configuration (we allow one payload of config data from controller)
+#define EEPROM_FIRMWARE_TYPE_ADDRESS (EEPROM_CONTROLLER_CONFIG_ADDRESS + 24)
+#define EEPROM_FIRMWARE_VERSION_ADDRESS (EEPROM_FIRMWARE_TYPE_ADDRESS + 2)
+#define EEPROM_FIRMWARE_BLOCKS_ADDRESS (EEPROM_FIRMWARE_VERSION_ADDRESS + 2)
+#define EEPROM_FIRMWARE_CRC_ADDRESS (EEPROM_FIRMWARE_BLOCKS_ADDRESS + 2)
+#define EEPROM_LOCAL_CONFIG_ADDRESS (EEPROM_FIRMWARE_CRC_ADDRESS + 2) // First free address for sketch static configuration
 
 // This is the nodeId for sensor net gateway receiver sketch (where all sensors should send their data).
 #define GATEWAY_ADDRESS ((uint8_t)0)
@@ -91,7 +91,7 @@ class DTCSensor : public RF24
 	* @param _cepin The pin attached to RF24 Chip Enable on the RF module (default 9)
 	* @param _cspin The pin attached to RF24 Chip Select (default 10)
 	*/
-	DTCSensor(uint8_t _cepin=DEFAULT_CE_PIN, uint8_t _cspin=DEFAULT_CS_PIN);
+	DTCSensor(uint8_t _cepin = DEFAULT_CE_PIN, uint8_t _cspin = DEFAULT_CS_PIN);
 
 	/**
 	* Begin operation of the DTC library
@@ -153,7 +153,7 @@ class DTCSensor : public RF24
 	* Requests a value from gateway or some other sensor in the radio network.
 	* Make sure to add callback-method in begin-method to handle request responses.
 	*
-	* @param childSensorId  The unique child id for the different sensors connected to this Arduino. 0-254.
+	* @param childSensorId The unique child id for the different sensors connected to this Arduino. 0-254.
 	* @param variableType The variableType to fetch
 	* @param destination The nodeId of other node in radio network. Default is gateway
 	*/
@@ -202,7 +202,7 @@ class DTCSensor : public RF24
 	/**
 	* Returns the last received message
 	*/
-	DTCMessage& getLastMessage(void);
+	DTCMessage& getLastMessage();
 
 	/**
 	 * Sleep (PowerDownMode) the Arduino and radio. Wake up on timer.

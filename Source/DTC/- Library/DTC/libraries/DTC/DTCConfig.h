@@ -14,7 +14,6 @@
 #define DEFAULT_CE_PIN 9
 #define DEFAULT_CS_PIN 10
 
-
 /***
  * Enable/Disable debug logging
  */

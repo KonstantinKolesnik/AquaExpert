@@ -1,18 +1,18 @@
 // Example sketch showing how to create a node thay repeates messages from nodes far from gateway back to gateway. 
-// It is important that nodes that has enabled repeater mode calls  gw.process() frequently.
+// It is important that nodes that has enabled repeater mode calls gw.process() frequently.
 // This node should never sleep.
 
 #include <DTCSensor.h>
 #include <SPI.h>
 
-MySensor gw;
+DTCSensor gw;
 
 void setup()  
 {  
   // The third argument enables repeater mode.
   gw.begin(NULL, AUTO, true);
 
-  //Send the sensor node sketch version information to the gateway
+  //Send the node sketch version information to the gateway
   gw.sendSketchInfo("Repeater", "1.0");
 }
 
