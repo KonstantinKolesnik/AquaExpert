@@ -15,14 +15,15 @@
 #include "utility/RF24_config.h"
 
 // Inline function and macros
-inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck) {
+inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type, bool enableAck)
+{
 	msg.sender = sender;
 	msg.destination = destination;
 	msg.sensor = sensor;
 	msg.type = type;
-	mSetCommand(msg,command);
-	mSetRequestAck(msg,enableAck);
-	mSetAck(msg,false);
+	mSetCommand(msg, command);
+	mSetRequestAck(msg, enableAck);
+	mSetAck(msg, false);
 	return msg;
 }
 
@@ -47,7 +48,8 @@ void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, 
 	eeprom_read_block((void*)&nc, (void*)EEPROM_NODE_ID_ADDRESS, sizeof(NodeConfig));
 	// Read latest received controller configuration from EEPROM
 	eeprom_read_block((void*)&cc, (void*)EEPROM_CONTROLLER_CONFIG_ADDRESS, sizeof(ControllerConfig));
-	if (cc.isMetric == 0xff) {
+	if (cc.isMetric == 0xff)
+	{
 		// Eeprom empty, set default to metric
 		cc.isMetric = 0x01;
 	}

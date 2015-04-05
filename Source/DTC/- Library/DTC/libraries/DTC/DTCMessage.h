@@ -24,7 +24,8 @@
 #define MAX_PAYLOAD (MAX_MESSAGE_LENGTH - HEADER_SIZE)
 
 // Message types
-typedef enum {
+typedef enum
+{
 	C_PRESENTATION = 0,
 	C_SET = 1,
 	C_REQ = 2,
@@ -33,8 +34,9 @@ typedef enum {
 } mysensor_command;
 
 // Type of sensor data (for set/req/ack messages)
-typedef enum {
-	V_TEMP,V_HUM, V_LIGHT, V_DIMMER, V_PRESSURE, V_FORECAST, V_RAIN,
+typedef enum
+{
+	V_TEMP, V_HUM, V_LIGHT, V_DIMMER, V_PRESSURE, V_FORECAST, V_RAIN,
 	V_RAINRATE, V_WIND, V_GUST, V_DIRECTION, V_UV, V_WEIGHT, V_DISTANCE,
 	V_IMPEDANCE, V_ARMED, V_TRIPPED, V_WATT, V_KWH, V_SCENE_ON, V_SCENE_OFF,
 	V_HEATER, V_HEATER_SW, V_LIGHT_LEVEL, V_VAR1, V_VAR2, V_VAR3, V_VAR4, V_VAR5,
@@ -43,15 +45,17 @@ typedef enum {
 } mysensor_data;
 
 // Type of internal messages (for internal messages)
-typedef enum {
+typedef enum
+{
 	I_BATTERY_LEVEL, I_TIME, I_VERSION, I_ID_REQUEST, I_ID_RESPONSE,
 	I_INCLUSION_MODE, I_CONFIG, I_FIND_PARENT, I_FIND_PARENT_RESPONSE,
 	I_LOG_MESSAGE, I_CHILDREN, I_SKETCH_NAME, I_SKETCH_VERSION,
 	I_REBOOT, I_GATEWAY_READY
 } mysensor_internal;
 
-// Type of sensor  (for presentation message)
-typedef enum {
+// Type of sensor (for presentation message)
+typedef enum
+{
 	S_DOOR, S_MOTION, S_SMOKE, S_LIGHT, S_DIMMER, S_COVER, S_TEMP, S_HUM, S_BARO, S_WIND,
 	S_RAIN, S_UV, S_WEIGHT, S_POWER, S_HEATER, S_DISTANCE, S_LIGHT_LEVEL, S_ARDUINO_NODE,
 	S_ARDUINO_REPEATER_NODE, S_LOCK, S_IR, S_WATER, S_AIR_QUALITY, S_CUSTOM, S_DUST,
@@ -59,13 +63,26 @@ typedef enum {
 } mysensor_sensor;
 
 // Type of data stream  (for streamed message)
-typedef enum {
-	ST_FIRMWARE_CONFIG_REQUEST, ST_FIRMWARE_CONFIG_RESPONSE, ST_FIRMWARE_REQUEST, ST_FIRMWARE_RESPONSE,
-	ST_SOUND, ST_IMAGE
+typedef enum
+{
+	ST_FIRMWARE_CONFIG_REQUEST,
+	ST_FIRMWARE_CONFIG_RESPONSE,
+	ST_FIRMWARE_REQUEST,
+	ST_FIRMWARE_RESPONSE,
+	ST_SOUND,
+	ST_IMAGE
 } mysensor_stream;
 
-typedef enum {
-	P_STRING, P_BYTE, P_INT16, P_UINT16, P_LONG32, P_ULONG32, P_CUSTOM, P_FLOAT32
+typedef enum
+{
+	P_STRING,
+	P_BYTE,
+	P_INT16,
+	P_UINT16,
+	P_LONG32,
+	P_ULONG32,
+	P_CUSTOM,
+	P_FLOAT32
 } mysensor_payload;
 
 
@@ -190,17 +207,20 @@ struct
 	// Each message can transfer a payload. We add one extra byte for string
 	// terminator \0 to be "printable" this is not transferred OTA
 	// This union is used to simplify the construction of the binary data types transferred.
-	union {
+	union
+	{
 		uint8_t bValue;
 		unsigned long ulValue;
 		long lValue;
 		unsigned int uiValue;
 		int iValue;
-		struct { // Float messages
+		struct // Float messages
+		{
 			float fValue;
 			uint8_t fPrecision;   // Number of decimals when serializing
 		};
-		struct {  // Presentation messages
+		struct // Presentation messages
+		{
 			uint8_t version; 	  // Library version
    		    uint8_t sensorType;   // Sensor type hint for controller, see table above
 		};

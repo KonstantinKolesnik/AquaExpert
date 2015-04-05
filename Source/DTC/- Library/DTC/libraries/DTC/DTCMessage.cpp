@@ -2,36 +2,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-DTCMessage::DTCMessage() {
+DTCMessage::DTCMessage()
+{
 	destination = 0; // Gateway is default destination
 }
-
-DTCMessage::DTCMessage(uint8_t _sensor, uint8_t _type) {
+DTCMessage::DTCMessage(uint8_t _sensor, uint8_t _type)
+{
 	destination = 0; // Gateway is default destination
 	sensor = _sensor;
 	type = _type;
 }
 
-bool DTCMessage::isAck() const {
+bool DTCMessage::isAck() const
+{
 	return miGetAck();
 }
 
 /* Getters for payload converted to desired form */
-void* DTCMessage::getCustom() const {
-	return (void *)data;
+void* DTCMessage::getCustom() const
+{
+	return (void*)data;
 }
-
-const char* DTCMessage::getString() const {
+const char* DTCMessage::getString() const
+{
 	uint8_t payloadType = miGetPayloadType();
-	if (payloadType == P_STRING) {
-		return data;
-	} else {
-		return NULL;
-	}
+	return (payloadType == P_STRING) ? data : NULL;
 }
 
 // handles single character hex (0 - 15)
-char DTCMessage::i2h(uint8_t i) const {
+char DTCMessage::i2h(uint8_t i) const
+{
 	uint8_t k = i & 0x0F;
 	if (k <= 9)
 		return '0' + k;
@@ -39,7 +39,8 @@ char DTCMessage::i2h(uint8_t i) const {
 		return 'A' + k - 10;
 }
 
-char* DTCMessage::getCustomString(char *buffer) const {
+char* DTCMessage::getCustomString(char *buffer) const
+{
 	for (uint8_t i = 0; i < miGetLength(); i++)
 	{
 		buffer[i * 2] = i2h(data[i] >> 4);
@@ -48,8 +49,8 @@ char* DTCMessage::getCustomString(char *buffer) const {
 	buffer[miGetLength() * 2] = '\0';
 	return buffer;
 }
-
-char* DTCMessage::getStream(char *buffer) const {
+char* DTCMessage::getStream(char *buffer) const
+{
 	uint8_t cmd = miGetCommand();
 	if ((cmd == C_STREAM) && (buffer != NULL)) {
 		return getCustomString(buffer);
@@ -57,8 +58,8 @@ char* DTCMessage::getStream(char *buffer) const {
 		return NULL;
 	}
 }
-
-char* DTCMessage::getString(char *buffer) const {
+char* DTCMessage::getString(char *buffer) const
+{
 	uint8_t payloadType = miGetPayloadType();
 	if (payloadType == P_STRING) {
 		strncpy(buffer, data, miGetLength());
@@ -85,8 +86,8 @@ char* DTCMessage::getString(char *buffer) const {
 		return NULL;
 	}
 }
-
-uint8_t DTCMessage::getByte() const {
+uint8_t DTCMessage::getByte() const
+{
 	if (miGetPayloadType() == P_BYTE) {
 		return data[0];
 	} else if (miGetPayloadType() == P_STRING) {
@@ -95,11 +96,10 @@ uint8_t DTCMessage::getByte() const {
 		return 0;
 	}
 }
-
-bool DTCMessage::getBool() const {
+bool DTCMessage::getBool() const
+{
 	return getInt();
 }
-
 float DTCMessage::getFloat() const {
 	if (miGetPayloadType() == P_FLOAT32) {
 		return fValue;
@@ -109,7 +109,6 @@ float DTCMessage::getFloat() const {
 		return 0;
 	}
 }
-
 long DTCMessage::getLong() const {
 	if (miGetPayloadType() == P_LONG32) {
 		return lValue;
@@ -119,7 +118,6 @@ long DTCMessage::getLong() const {
 		return 0;
 	}
 }
-
 unsigned long DTCMessage::getULong() const {
 	if (miGetPayloadType() == P_ULONG32) {
 		return ulValue;
@@ -129,7 +127,6 @@ unsigned long DTCMessage::getULong() const {
 		return 0;
 	}
 }
-
 int DTCMessage::getInt() const {
 	if (miGetPayloadType() == P_INT16) { 
 		return iValue;
@@ -139,7 +136,6 @@ int DTCMessage::getInt() const {
 		return 0;
 	}
 }
-
 unsigned int DTCMessage::getUInt() const {
 	if (miGetPayloadType() == P_UINT16) { 
 		return uiValue;
@@ -151,17 +147,18 @@ unsigned int DTCMessage::getUInt() const {
 
 }
 
-DTCMessage& DTCMessage::setType(uint8_t _type) {
+DTCMessage& DTCMessage::setType(uint8_t _type)
+{
 	type = _type;
 	return *this;
 }
-
-DTCMessage& DTCMessage::setSensor(uint8_t _sensor) {
+DTCMessage& DTCMessage::setSensor(uint8_t _sensor)
+{
 	sensor = _sensor;
 	return *this;
 }
-
-DTCMessage& DTCMessage::setDestination(uint8_t _destination) {
+DTCMessage& DTCMessage::setDestination(uint8_t _destination)
+{
 	destination = _destination;
 	return *this;
 }
@@ -173,52 +170,52 @@ DTCMessage& DTCMessage::set(void* value, uint8_t length) {
 	memcpy(data, value, min(length, MAX_PAYLOAD));
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(const char* value) {
+DTCMessage& DTCMessage::set(const char* value)
+{
 	uint8_t length = min(strlen(value), MAX_PAYLOAD);
 	miSetLength(length);
 	miSetPayloadType(P_STRING);
 	strncpy(data, value, length);
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(uint8_t value) {
+DTCMessage& DTCMessage::set(uint8_t value)
+{
 	miSetLength(1);
 	miSetPayloadType(P_BYTE);
 	data[0] = value;
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(float value, uint8_t decimals) {
+DTCMessage& DTCMessage::set(float value, uint8_t decimals)
+{
 	miSetLength(5); // 32 bit float + persi
 	miSetPayloadType(P_FLOAT32);
 	fValue=value;
 	fPrecision = decimals;
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(unsigned long value) {
+DTCMessage& DTCMessage::set(unsigned long value)
+{
 	miSetPayloadType(P_ULONG32);
 	miSetLength(4);
 	ulValue = value;
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(long value) {
+DTCMessage& DTCMessage::set(long value)
+{
 	miSetPayloadType(P_LONG32);
 	miSetLength(4);
 	lValue = value;
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(unsigned int value) {
+DTCMessage& DTCMessage::set(unsigned int value)
+{
 	miSetPayloadType(P_UINT16);
 	miSetLength(2);
 	uiValue = value;
 	return *this;
 }
-
-DTCMessage& DTCMessage::set(int value) {
+DTCMessage& DTCMessage::set(int value)
+{
 	miSetPayloadType(P_INT16);
 	miSetLength(2);
 	iValue = value;

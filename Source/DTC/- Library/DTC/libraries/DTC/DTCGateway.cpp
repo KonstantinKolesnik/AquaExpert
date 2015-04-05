@@ -22,7 +22,6 @@ volatile uint8_t countTx;
 volatile uint8_t countErr;
 boolean inclusionMode; // Keeps track on inclusion mode
 
-
 DTCGateway::DTCGateway(uint8_t _cepin, uint8_t _cspin, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCSensor(_cepin, _cspin) {
 	pinInclusion = _inclusion_pin;
 	inclusionTime = _inclusion_time;
@@ -31,7 +30,6 @@ DTCGateway::DTCGateway(uint8_t _cepin, uint8_t _cspin, uint8_t _inclusion_time, 
 	pinEr = _er;
 }
 
-
 void DTCGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate, void (*inDataCallback)(char *)) {
 	Serial.begin(BAUD_RATE);
 	repeaterMode = true;
@@ -39,12 +37,13 @@ void DTCGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e d
 	autoFindParent = false;
 	setupRepeaterMode();
 
-	if (inDataCallback != NULL) {
+	if (inDataCallback != NULL)
+	{
 		useWriteCallback = true;
 		dataCallback = inDataCallback;
-	} else {
-		useWriteCallback = false;
 	}
+	else
+		useWriteCallback = false;
 
 	nc.nodeId = 0;
 	nc.parentNodeId = 0;
@@ -72,7 +71,6 @@ void DTCGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e d
 	digitalWrite(pinTx, HIGH);
 	digitalWrite(pinEr, HIGH);
 
-
 	// Start up the radio library
 	setupRadio(paLevel, channel, dataRate);
 	RF24::openReadingPipe(WRITE_PIPE, BASE_RADIO_ID);
@@ -87,34 +85,35 @@ void DTCGateway::begin(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e d
 	PCintPort::attachInterrupt(pinInclusion, startInclusionInterrupt, RISING);
 
 	// Send startup log message on serial
-	serial(PSTR("0;0;%d;0;%d;Gateway startup complete.\n"),  C_INTERNAL, I_GATEWAY_READY);
+	serial(PSTR("0;0;%d;0;%d;Gateway startup complete.\n"), C_INTERNAL, I_GATEWAY_READY);
 }
 
-
-void startInclusionInterrupt() {
-	  buttonTriggeredInclusion = true;
+void startInclusionInterrupt()
+{
+	buttonTriggeredInclusion = true;
 }
-
-
-
-void DTCGateway::checkButtonTriggeredInclusion() {
-   if (buttonTriggeredInclusion) {
-    // Ok, someone pressed the inclusion button on the gateway
-    // start inclusion mode for 1 munute.
-    serial(PSTR("0;0;%d;0;%d;Inclusion started by button.\n"),  C_INTERNAL, I_LOG_MESSAGE);
-    buttonTriggeredInclusion = false;
-    setInclusionMode(true);
-  }
+void DTCGateway::checkButtonTriggeredInclusion()
+{
+	if (buttonTriggeredInclusion)
+	{
+		// Ok, someone pressed the inclusion button on the gateway
+		// start inclusion mode for 1 munute.
+		serial(PSTR("0;0;%d;0;%d;Inclusion started by button.\n"), C_INTERNAL, I_LOG_MESSAGE);
+		buttonTriggeredInclusion = false;
+		setInclusionMode(true);
+	}
 }
-
-void DTCGateway::checkInclusionFinished() {
-	if (inclusionMode && millis()-inclusionStartTime>60000UL*inclusionTime) {
+void DTCGateway::checkInclusionFinished()
+{
+	if (inclusionMode && millis()-inclusionStartTime>60000UL*inclusionTime)
+	{
 	     // inclusionTimeInMinutes minute(s) has passed.. stop inclusion mode
 	    setInclusionMode(false);
-	 }
+	}
 }
 
-uint8_t DTCGateway::h2i(char c) {
+uint8_t DTCGateway::h2i(char c)
+{
 	uint8_t i = 0;
 	if (c <= '9')
 		i += c - '0';
@@ -125,7 +124,8 @@ uint8_t DTCGateway::h2i(char c) {
 	return i;
 }
 
-void DTCGateway::parseAndSend(char *commandBuffer) {
+void DTCGateway::parseAndSend(char *commandBuffer)
+{
   boolean ok = false;
   char *str, *p, *value=NULL;
   uint8_t bvalue[MAX_PAYLOAD];
@@ -221,37 +221,42 @@ void DTCGateway::setInclusionMode(boolean newMode) {
     }
 }
 
-void DTCGateway::processRadioMessage() {
-	if (process()) {
-	  // A new message was received from one of the sensors
-	  DTCMessage message = getLastMessage();
-	  if (mGetCommand(message) == C_PRESENTATION && inclusionMode) {
-		rxBlink(3);
-	  } else {
-		rxBlink(1);
-	  }
-	  // Pass along the message from sensors to serial line
-	  serial(message);
+void DTCGateway::processRadioMessage()
+{
+	if (process())
+	{
+		// A new message was received from one of the sensors
+		DTCMessage message = getLastMessage();
+		if (mGetCommand(message) == C_PRESENTATION && inclusionMode)
+			rxBlink(3);
+		else
+			rxBlink(1);
+
+		// Pass along the message from sensors to serial line
+		serial(message);
 	}
 
 	checkButtonTriggeredInclusion();
 	checkInclusionFinished();
 }
 
-void DTCGateway::serial(const char *fmt, ... ) {
-   va_list args;
-   va_start (args, fmt );
-   vsnprintf_P(serialBuffer, MAX_SEND_LENGTH, fmt, args);
-   va_end (args);
-   Serial.print(serialBuffer);
-   if (useWriteCallback) {
-	   // We have a registered write callback (probably Ethernet)
-	   dataCallback(serialBuffer);
-   }
+void DTCGateway::serial(const char *fmt, ... )
+{
+	va_list args;
+	va_start (args, fmt );
+	vsnprintf_P(serialBuffer, MAX_SEND_LENGTH, fmt, args);
+	va_end (args);
+   
+	Serial.print(serialBuffer);
+	if (useWriteCallback)
+	{
+		// We have a registered write callback (probably Ethernet)
+		dataCallback(serialBuffer);
+	}
 }
-
-void DTCGateway::serial(DTCMessage &msg) {
-  serial(PSTR("%d;%d;%d;%d;%d;%s\n"),msg.sender, msg.sensor, mGetCommand(msg), mGetAck(msg), msg.type, msg.getString(convBuf));
+void DTCGateway::serial(DTCMessage &msg)
+{
+	serial(PSTR("%d;%d;%d;%d;%d;%s\n"), msg.sender, msg.sensor, mGetCommand(msg), mGetAck(msg), msg.type, msg.getString(convBuf));
 }
 
 
@@ -283,16 +288,21 @@ void ledTimersInterrupt() {
      digitalWrite(pinEr, HIGH);
    }
    if(countErr != 255) { countErr--; }
-
 }
 
-void DTCGateway::rxBlink(uint8_t cnt) {
-  if(countRx == 255) { countRx = cnt; }
+void DTCGateway::rxBlink(uint8_t cnt)
+{
+	if (countRx == 255)
+		countRx = cnt;
 }
-void DTCGateway::txBlink(uint8_t cnt) {
-  if(countTx == 255 && !inclusionMode) { countTx = cnt; }
+void DTCGateway::txBlink(uint8_t cnt)
+{
+	if (countTx == 255 && !inclusionMode)
+		countTx = cnt;
 }
-void DTCGateway::errBlink(uint8_t cnt) {
-  if(countErr == 255) { countErr = cnt; }
+void DTCGateway::errBlink(uint8_t cnt)
+{
+	if (countErr == 255)
+		countErr = cnt;
 }
 
