@@ -1,11 +1,10 @@
-#include <DTCSensor.h>
-#include <SPI.h>
+#include <DTCNode.h>
  
 #define ID 0
 #define OPEN 1
 #define CLOSE 0
  
-DTCSensor node;
+DTCNode node;
 DTCMessage msg(ID, V_TRIPPED);
  
 void setup() 

@@ -1,5 +1,4 @@
-#include <SPI.h>
-#include <DTCSensor.h>
+#include <DTCNode.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define NUMBER_OF_RELAYS		8  // Total number of attached relays
 uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 };
@@ -9,9 +8,9 @@ uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 };
 DTCMessage msgRelay(0, V_LIGHT);
 
 //#if NUMBER_OF_RELAYS < 8
-DTCSensor node(DEFAULT_RX_PIN, DEFAULT_TX_PIN);
+DTCNode node(DEFAULT_RX_PIN, DEFAULT_TX_PIN);
 //#else
-//DTCSensor node(A0, DEFAULT_TX_PIN);
+//DTCNode node(A0, DEFAULT_TX_PIN);
 //#endif
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()

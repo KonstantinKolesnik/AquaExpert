@@ -47,8 +47,8 @@
 * Powering: both NRF24l01 radio and Ethernet(ENC28J60) uses 3.3V
 */
 
-#include <SPI.h>  
-#include <DTCSensor.h>
+#include <SPI.h>
+#include <DTCNode.h>
 #include <DTCGateway.h>  
 #include <stdarg.h>
 

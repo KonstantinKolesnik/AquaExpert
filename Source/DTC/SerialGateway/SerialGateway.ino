@@ -1,12 +1,6 @@
 /*
-* Copyright (C) 2013 Henrik Ekblad <henrik.ekblad@gmail.com>
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* version 2 as published by the Free Software Foundation.
-*
 * DESCRIPTION
-* The ArduinoGateway prints data received from sensors on the serial link.
+* The Gateway prints data received from nodes on the serial link.
 * The gateway accepts input on seral which will be sent out on radio network.
 *
 * The GW code is designed for Arduino Nano 328p / 16MHz
@@ -21,16 +15,23 @@
 * - ERR (red) - fast blink on error during transmission error or recieve crc error
 */
 
-#include <SPI.h>  
-#include <DTCSensor.h>  
-#include <DTCGateway.h>  
+
+#include <DTCGateway.h>
+#include <DTCNode.h>
+#include <ESP8266.h>
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+#include <SoftwareSerial.h>
+#endif
 
 #define INCLUSION_MODE_TIME 1	// Number of minutes inclusion mode is enabled
-#define INCLUSION_MODE_PIN	3	// Digital pin used for inclusion mode button
+#define INCLUSION_MODE_PIN	4	// Digital pin used for inclusion mode button
 
-DTCGateway node(DEFAULT_RX_PIN, DEFAULT_TX_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // NANO
-//DTCGateway node(DEFAULT_RX_PIN, DEFAULT_TX_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // UNO w/o ethernet shild
-//DTCGateway node(DEFAULT_RX_PIN, 8, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // UNO with ethernet shild
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN);
+DTCGateway gw(mySerial, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
+#else
+DTCGateway gw(Serial1, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
+#endif
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
@@ -38,17 +39,17 @@ bool isCommandComplete = false;
 
 void setup()
 {
-	node.begin();
+	gw.begin();
 }
 void loop()
 {
-	node.processRadioMessage();
+	gw.processRadioMessage();
 
 	receiveFromController();
 	if (isCommandComplete)
 	{
 		// A command was issued from serial interface; send it to the node
-		node.parseAndSend(inputCommand);
+		gw.processSerialMessage(inputCommand);
 		
 		isCommandComplete = false;
 		inputPos = 0;

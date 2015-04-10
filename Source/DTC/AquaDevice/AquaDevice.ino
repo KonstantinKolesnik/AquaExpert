@@ -1,10 +1,9 @@
-#include <DTCSensor.h>
-#include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
 #include <NewPing.h>
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
 //#include <Time.h>
+#include <DTCNode.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // Temperature section (id=0)
 #define ONE_WIRE_BUS			A5
@@ -41,7 +40,7 @@ unsigned long prevMsSonar = 0;
 const long intervalSonar = 1000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
-DTCSensor node(A0/*DEFAULT_RX_PIN*/, DEFAULT_TX_PIN);
+DTCNode node(A0/*DEFAULT_RX_PIN*/, DEFAULT_TX_PIN);
 bool isMetric = true;
 //unsigned long SLEEP_TIME = 3000;	// Sleep time between reads (in milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
