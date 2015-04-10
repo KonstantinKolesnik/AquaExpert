@@ -23,10 +23,8 @@ DTCGateway::DTCGateway(uint8_t _rxpin, uint8_t _txpin, uint8_t _inclusion_time, 
 void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 {
 	Serial.begin(BAUD_RATE);
-	repeaterMode = true;
+
 	isGateway = true;
-	autoFindParent = false;
-	setupRepeaterMode();
 
 	if (inDataCallback != NULL)
 	{
@@ -37,8 +35,6 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 		useWriteCallback = false;
 
 	nc.nodeId = 0;
-	nc.parentNodeId = 0;
-	nc.distance = 0;
 	inclusionMode = 0;
 	buttonTriggeredInclusion = false;
 	countRx = 0;
@@ -91,8 +87,7 @@ void DTCGateway::checkButtonTriggeredInclusion()
 }
 void DTCGateway::checkInclusionFinished()
 {
-	if (inclusionMode && millis() - inclusionStartTime > 60000UL * inclusionTime)
-		// inclusionTimeInMinutes minute(s) has passed, stop inclusion mode
+	if (inclusionMode && millis() - inclusionStartTime > 60000UL * inclusionTime) // inclusionTimeInMinutes minute(s) has passed, stop inclusion mode
 		setInclusionMode(false);
 }
 void DTCGateway::setInclusionMode(boolean newMode)
@@ -142,85 +137,81 @@ void DTCGateway::parseAndSend(char *commandBuffer)
 	uint8_t bvalue[MAX_PAYLOAD];
 	uint8_t blen = 0;
 	int i = 0;
+
 	uint16_t destination = 0;
 	uint8_t sensor = 0;
 	uint8_t command = 0;
 	uint8_t type = 0;
-	uint8_t ack = 0;
 
 	// Extract command data coming on serial line
-	for (str = strtok_r(commandBuffer, ";", &p);       // split using semicolon
-		str && i < 6;         // loop while str is not null an max 5 times
-		str = strtok_r(NULL, ";", &p)               // get subsequent tokens
-		) {
-		switch (i) {
-		case 0: // Radioid (destination)
-			destination = atoi(str);
-			break;
-		case 1: // Childid
-			sensor = atoi(str);
-			break;
-		case 2: // Message type
-			command = atoi(str);
-			break;
-		case 3: // Should we request ack from destination?
-			ack = atoi(str);
-			break;
-		case 4: // Data type
-			type = atoi(str);
-			break;
-		case 5: // Variable value
-			if (command == C_STREAM) {
-				blen = 0;
-				uint8_t val;
-				while (*str) {
-					val = h2i(*str++) << 4;
-					val += h2i(*str++);
-					bvalue[blen] = val;
-					blen++;
+	for (str = strtok_r(commandBuffer, ";", &p);		// split using semicolon
+		str && i < 6;									// loop while str is not null an max 5 times
+		str = strtok_r(NULL, ";", &p)					// get subsequent tokens
+		)
+	{
+		switch (i)
+		{
+			case 0: // Radioid (destination)
+				destination = atoi(str);
+				break;
+			case 1: // Childid
+				sensor = atoi(str);
+				break;
+			case 2: // Message type
+				command = atoi(str);
+				break;
+			case 3: // Data type
+				type = atoi(str);
+				break;
+			case 4: // Variable value
+				if (command == C_STREAM)
+				{
+					blen = 0;
+					uint8_t val;
+					while (*str)
+					{
+						val = h2i(*str++) << 4;
+						val += h2i(*str++);
+						bvalue[blen] = val;
+						blen++;
+					}
 				}
-			}
-			else {
-				value = str;
-				// Remove ending carriage return character (if it exists)
-				uint8_t lastCharacter = strlen(value) - 1;
-				if (value[lastCharacter] == '\r')
-					value[lastCharacter] = 0;
-			}
-			break;
+				else
+				{
+					value = str;
+					// Remove ending carriage return character (if it exists)
+					uint8_t lastCharacter = strlen(value) - 1;
+					if (value[lastCharacter] == '\r')
+						value[lastCharacter] = 0;
+				}
+				break;
 		}
 		i++;
 	}
 
-	if (destination == GATEWAY_ADDRESS && command == C_INTERNAL)
+	if (destination == GATEWAY_ADDRESS && command == C_INTERNAL) // Handle messages directed to gateway
 	{
-		// Handle messages directed to gateway
-		if (type == I_VERSION) {
-			// Request for version
-			serial(PSTR("0;0;%d;0;%d;%s\n"), C_INTERNAL, I_VERSION, LIBRARY_VERSION);
-		}
-		else if (type == I_INCLUSION_MODE) {
-			// Request to change inclusion mode
+		if (type == I_VERSION) // Request for version
+			serial(PSTR("0;0;%d;%d;%s\n"), C_INTERNAL, I_VERSION, LIBRARY_VERSION);
+		else if (type == I_INCLUSION_MODE) // Request to change inclusion mode
 			setInclusionMode(atoi(value) == 1);
-		}
 	}
-	else {
+	else
+	{
 		txBlink(1);
+
 		msg.sender = GATEWAY_ADDRESS;
 		msg.destination = destination;
 		msg.sensor = sensor;
 		msg.type = type;
 		mSetCommand(msg, command);
-		mSetRequestAck(msg, ack ? 1 : 0);
-		mSetAck(msg, false);
 		if (command == C_STREAM)
 			msg.set(bvalue, blen);
 		else
 			msg.set(value);
 		ok = sendRoute(msg);
-		if (!ok) {
+		if (!ok)
 			errBlink(1);
-		}
 	}
 }
 
@@ -287,5 +278,3 @@ void startInclusionInterrupt()
 {
 	buttonTriggeredInclusion = true;
 }
-
-

@@ -89,10 +89,10 @@ public:
 	*
 	* Creates a new instance of Sensor class.
 	*
-	* @param _cepin The pin attached to RF24 Chip Enable on the RF module (default 9)
-	* @param _cspin The pin attached to RF24 Chip Select (default 10)
+	* @param _rxpin The pin attached to ESP8266 TX (default 9)
+	* @param _txpin The pin attached to ESP8266 RX (default 10)
 	*/
-	DTCSensor(uint8_t _cepin = DEFAULT_RX_PIN, uint8_t _cspin = DEFAULT_TX_PIN);
+	DTCSensor(uint8_t _rxpin = DEFAULT_RX_PIN, uint8_t _txpin = DEFAULT_TX_PIN);
 
 	/**
 	* Begin operation of the DTC library
@@ -100,14 +100,10 @@ public:
 	* Call this in setup(), before calling any other sensor net library methods.
 	* @param incomingMessageCallback Callback function for incoming messages from other nodes or controller and request responses. Default is NULL.
 	* @param nodeId The unique id (1-254) for this sensor. Default is AUTO(255) which means sensor tries to fetch an id from controller.
-	* @param repeaterMode Activate repeater mode. This node will forward messages to other nodes in the radio network. Make sure to call process() regularly. Default in false
-	* @param parentNodeId Use this to force node to always communicate with a certain parent node. Default is AUTO which means node automatically tries to find a parent.
-	* @param paLevel Radio PA Level for this sensor. Default RF24_PA_MAX
-	* @param channel Radio channel. Default is channel 76
-	* @param dataRate Radio transmission speed. Default RF24_1MBPS
+	* @param channel Radio channel. Default is channel 6
 	*/
 
-	void begin(void(*msgCallback)(const DTCMessage &) = NULL, uint8_t nodeId = AUTO, boolean repeaterMode = false, uint8_t parentNodeId = AUTO, uint8_t channel = WIFI_CHANNEL);
+	void begin(void(*msgCallback)(const DTCMessage &) = NULL, uint8_t nodeId = AUTO, uint8_t channel = WIFI_CHANNEL);
 
 	/**
 	 * Return the nodes nodeId.
@@ -122,7 +118,7 @@ public:
 	* @param sensorType The sensor type. See sensor typedef in DTCMessage.h.
 	* @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	*/
-	void present(uint8_t sensorId, uint8_t sensorType, bool ack = false);
+	void present(uint8_t sensorId, uint8_t sensorType);
 
 	/**
 	 * Sends sketch meta information to the gateway. Not mandatory but a nice thing to do.
@@ -131,7 +127,7 @@ public:
 	 * @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	 *
 	 */
-	void sendSketchInfo(const char *name, const char *version, bool ack = false);
+	void sendSketchInfo(const char *name, const char *version);
 
 	/**
 	* Sends a message to gateway or one of the other nodes in the radio network
@@ -140,7 +136,7 @@ public:
 	* @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	* @return true Returns true if message reached the first stop on its way to destination.
 	*/
-	bool send(DTCMessage &msg, bool ack = false);
+	bool send(DTCMessage &msg);
 
 	/**
 	 * Send this nodes battery level to gateway.
@@ -148,7 +144,7 @@ public:
 	 * @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	 *
 	 */
-	void sendBatteryLevel(uint8_t level, bool ack = false);
+	void sendBatteryLevel(uint8_t level);
 
 	/**
 	* Requests a value from gateway or some other sensor in the radio network.
@@ -253,13 +249,9 @@ public:
 protected:
 	NodeConfig nc; // Essential settings for node to work
 	ControllerConfig cc; // Configuration coming from controller
-	bool repeaterMode;
-	bool autoFindParent;
 	bool isGateway;
 	DTCMessage msg;  // Buffer for incoming messages.
-	DTCMessage ack;  // Buffer for ack messages.
 
-	void setupRepeaterMode();
 	void setupRadio(uint8_t channel);
 	boolean sendRoute(DTCMessage &message);
 	boolean sendWrite(uint8_t dest, DTCMessage &message, bool broadcast = false);
@@ -269,17 +261,12 @@ private:
 	char convBuf[MAX_PAYLOAD * 2 + 1];
 #endif
 	uint8_t failedTransmissions;
-	uint8_t *childNodeTable; // In memory buffer for routing information to other nodes. also stored in EEPROM
 	void(*timeCallback)(unsigned long); // Callback for requested time messages
 	void(*msgCallback)(const DTCMessage &); // Callback for incoming messages from other nodes and gateway.
 
 	void requestNodeId();
 	void setupNode();
-	void findParentNode();
 	uint8_t crc8Message(DTCMessage &message);
-	uint8_t getChildRoute(uint8_t childId);
-	void addChildRoute(uint8_t childId, uint8_t route);
-	void removeChildRoute(uint8_t childId);
 	void internalSleep(unsigned long ms);
 };
 #endif

@@ -9,44 +9,44 @@ uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 };
 DTCMessage msgRelay(0, V_LIGHT);
 
 //#if NUMBER_OF_RELAYS < 8
-DTCSensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
+DTCSensor node(DEFAULT_RX_PIN, DEFAULT_TX_PIN);
 //#else
-//DTCSensor gw(A0, DEFAULT_CS_PIN);
+//DTCSensor node(A0, DEFAULT_TX_PIN);
 //#endif
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-	gw.begin(onMessageReceived);
-	gw.sendSketchInfo("Power switch 8", "1.0");
+	node.begin(onMessageReceived);
+	node.sendSketchInfo("Power switch 8", "1.0");
 
 	//(sensorID = 0...7)
 	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
 	{
 		pinMode(pins[sensorID], OUTPUT);
-		uint8_t lastState = gw.loadState(sensorID);
+		uint8_t lastState = node.loadState(sensorID);
 		digitalWrite(pins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
 
-		gw.present(sensorID, S_LIGHT);
-		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
+		node.present(sensorID, S_LIGHT);
+		node.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));
 	}
 }
 void loop()
 {
-	gw.process();
+	node.process();
 }
 void onMessageReceived(const DTCMessage &message)
 {
 	if (message.type == V_LIGHT)
 	{
 		uint8_t newState = message.getByte();
-		uint8_t lastState = gw.loadState(message.sensor);
+		uint8_t lastState = node.loadState(message.sensor);
 
 		if (newState != lastState)
 		{
 			digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
-			gw.saveState(message.sensor, newState);
+			node.saveState(message.sensor, newState);
 
-			gw.send(msgRelay.setSensor(message.sensor).set(newState));
+			node.send(msgRelay.setSensor(message.sensor).set(newState));
 		}
 	}
 }

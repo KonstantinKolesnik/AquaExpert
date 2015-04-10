@@ -5,15 +5,15 @@
 #define OPEN 1
 #define CLOSE 0
  
-DTCSensor gw;
+DTCSensor node;
 DTCMessage msg(ID, V_TRIPPED);
  
 void setup() 
 { 
-	gw.begin(msgCallback, AUTO, false, AUTO, RF24_PA_MAX, 76, RF24_250KBPS);
+	node.begin(msgCallback, AUTO, 6);
 
-	gw.sendSketchInfo("Sample Node", "1.0");
-	gw.present(ID, S_DOOR);
+	node.sendSketchInfo("Sample Node", "1.0");
+	node.present(ID, S_DOOR);
 
 	Serial.begin(115200);
 }
@@ -28,7 +28,7 @@ void loop()
 	//process(); // call if this is repeater or actuator
 
 	//sendBatteryLevel(67); // in %
-	//gw.send(msg.set(OPEN));
+	//node.send(msg.set(OPEN));
 
 	//delay(10000); // Wait 10 seconds
 

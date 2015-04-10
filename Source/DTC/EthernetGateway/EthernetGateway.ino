@@ -88,7 +88,7 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  // DEAD BEEF FEED
 EthernetServer server = EthernetServer(IP_PORT);
 
 // No blink or button functionality. Use the vanilla constructor.
-DTCGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
+DTCGateway node(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
 
 // Uncomment this constructor if you have leds and include button attached to your gateway 
 //MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
@@ -99,9 +99,7 @@ int inputPos = 0;
 
 void setup()
 {
-	// Initialize gateway at maximum PA level, channel 70 and callback for write operations 
-	gw.begin(RF24_PA_LEVEL_GW, RF24_CHANNEL, RF24_DATARATE, writeEthernet);
-
+	node.begin(WIFI_CHANNEL, writeEthernet);
 	Ethernet.begin(mac, myIp);
 
 	// give the Ethernet interface a second to initialize
@@ -143,7 +141,7 @@ void loop()
 					// echo the string to the serial port
 					Serial.print(inputCommand);
 
-					gw.parseAndSend(inputCommand);
+					node.parseAndSend(inputCommand);
 
 					// clear the string:
 					inputPos = 0;
@@ -163,5 +161,5 @@ void loop()
 		}
 	}
 
-	gw.processRadioMessage();
+	node.processRadioMessage();
 }

@@ -41,7 +41,7 @@ unsigned long prevMsSonar = 0;
 const long intervalSonar = 1000;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
-DTCSensor gw(A0/*DEFAULT_CE_PIN*/, DEFAULT_CS_PIN);
+DTCSensor node(A0/*DEFAULT_RX_PIN*/, DEFAULT_TX_PIN);
 bool isMetric = true;
 //unsigned long SLEEP_TIME = 3000;	// Sleep time between reads (in milliseconds)
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,31 +51,31 @@ void setup()
 
 	sensors.begin();
 
-	gw.begin(onMessageReceived);
-	gw.sendSketchInfo("Aquarium Controller", "1.0");
+	node.begin(onMessageReceived);
+	node.sendSketchInfo("Aquarium Controller", "1.0");
 
-	isMetric = gw.getConfig().isMetric;
+	isMetric = node.getConfig().isMetric;
 
 	//(sensorID = 0)
-	gw.present(0, S_TEMP);
-	gw.send(msgTemperature.set(readTemperature(), 1));
+	node.present(0, S_TEMP);
+	node.send(msgTemperature.set(readTemperature(), 1));
 
 	//(sensorID = 1)
-	gw.present(1, S_PH);
-	gw.send(msgPh.set(readPh(), 1));
+	node.present(1, S_PH);
+	node.send(msgPh.set(readPh(), 1));
 
 	//(sensorID = 2)
 	pinMode(WATER_PIN, INPUT);
-	gw.present(2, S_WATER);
-	gw.send(msgWater.set(readWater() ? 1 : 0));
+	node.present(2, S_WATER);
+	node.send(msgWater.set(readWater() ? 1 : 0));
 
 	//(sensorID = 3)
-	gw.present(3, S_DISTANCE);
-	gw.send(msgSonar.set(readDistance()));
+	node.present(3, S_DISTANCE);
+	node.send(msgSonar.set(readDistance()));
 }
 void loop()
 {
-	gw.process();
+	node.process();
 
 	unsigned long ms = millis();
 
@@ -92,7 +92,7 @@ void loop()
 			Serial.println(isMetric ? " C" : " F");
 
 			lastTemperature = temperature;
-			gw.send(msgTemperature.set(temperature, 1));
+			node.send(msgTemperature.set(temperature, 1));
 		}
 	}
 
@@ -108,7 +108,7 @@ void loop()
 			Serial.println(phValue, 1);
 
 			lastPh = phValue;
-			gw.send(msgPh.set(phValue, 1));
+			node.send(msgPh.set(phValue, 1));
 		}
 	}
 
@@ -124,7 +124,7 @@ void loop()
 			Serial.println(water);
 
 			lastWater = water;
-			gw.send(msgWater.set(water ? 1 : 0));
+			node.send(msgWater.set(water ? 1 : 0));
 		}
 	}
 
@@ -141,13 +141,13 @@ void loop()
 			Serial.println(isMetric ? " cm" : " in");
 
 			lastDist = distance;
-			gw.send(msgSonar.set(distance));
+			node.send(msgSonar.set(distance));
 		}
 	}
 
-	//gw.requestTime(onTimeReceived);
+	//node.requestTime(onTimeReceived);
 
-	//gw.sleep(SLEEP_TIME);
+	//node.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const DTCMessage &message)
