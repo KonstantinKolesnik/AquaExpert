@@ -3,11 +3,11 @@
  It handles radio network routing, relaying and ids.
 
  Created by Henrik Ekblad <henrik.ekblad@gmail.com>
-	
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  version 2 as published by the Free Software Foundation.
-*/
+ */
 
 #ifndef DTCSensor_h
 #define DTCSensor_h
@@ -75,14 +75,15 @@ struct NodeConfig
 	uint8_t distance; // This nodes distance to sensor net gateway (number of hops)
 };
 
-struct ControllerConfig {
+struct ControllerConfig
+{
 	uint8_t isMetric;
 };
 
 #ifdef __cplusplus
 class DTCSensor : public RF24
 {
-  public:
+public:
 	/**
 	* Constructor
 	*
@@ -91,7 +92,7 @@ class DTCSensor : public RF24
 	* @param _cepin The pin attached to RF24 Chip Enable on the RF module (default 9)
 	* @param _cspin The pin attached to RF24 Chip Select (default 10)
 	*/
-	DTCSensor(uint8_t _cepin = DEFAULT_CE_PIN, uint8_t _cspin = DEFAULT_CS_PIN);
+	DTCSensor(uint8_t _cepin = DEFAULT_RX_PIN, uint8_t _cspin = DEFAULT_TX_PIN);
 
 	/**
 	* Begin operation of the DTC library
@@ -106,7 +107,7 @@ class DTCSensor : public RF24
 	* @param dataRate Radio transmission speed. Default RF24_1MBPS
 	*/
 
-	void begin(void (* msgCallback)(const DTCMessage &)=NULL, uint8_t nodeId=AUTO, boolean repeaterMode=false, uint8_t parentNodeId=AUTO, rf24_pa_dbm_e paLevel=RF24_PA_LEVEL, uint8_t channel=RF24_CHANNEL, rf24_datarate_e dataRate=RF24_DATARATE);
+	void begin(void(*msgCallback)(const DTCMessage &) = NULL, uint8_t nodeId = AUTO, boolean repeaterMode = false, uint8_t parentNodeId = AUTO, uint8_t channel = WIFI_CHANNEL);
 
 	/**
 	 * Return the nodes nodeId.
@@ -115,13 +116,13 @@ class DTCSensor : public RF24
 
 	/**
 	* Each node must present all attached sensors before any values can be handled correctly by the controller.
-    * It is usually good to present all attached sensors after power-up in setup().
+	* It is usually good to present all attached sensors after power-up in setup().
 	*
 	* @param sensorId Select a unique sensor id for this sensor. Choose a number between 0-254.
 	* @param sensorType The sensor type. See sensor typedef in DTCMessage.h.
 	* @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	*/
-	void present(uint8_t sensorId, uint8_t sensorType, bool ack=false);
+	void present(uint8_t sensorId, uint8_t sensorType, bool ack = false);
 
 	/**
 	 * Sends sketch meta information to the gateway. Not mandatory but a nice thing to do.
@@ -130,7 +131,7 @@ class DTCSensor : public RF24
 	 * @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	 *
 	 */
-	void sendSketchInfo(const char *name, const char *version, bool ack=false);
+	void sendSketchInfo(const char *name, const char *version, bool ack = false);
 
 	/**
 	* Sends a message to gateway or one of the other nodes in the radio network
@@ -139,7 +140,7 @@ class DTCSensor : public RF24
 	* @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	* @return true Returns true if message reached the first stop on its way to destination.
 	*/
-	bool send(DTCMessage &msg, bool ack=false);
+	bool send(DTCMessage &msg, bool ack = false);
 
 	/**
 	 * Send this nodes battery level to gateway.
@@ -147,7 +148,7 @@ class DTCSensor : public RF24
 	 * @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 	 *
 	 */
-	void sendBatteryLevel(uint8_t level, bool ack=false);
+	void sendBatteryLevel(uint8_t level, bool ack = false);
 
 	/**
 	* Requests a value from gateway or some other sensor in the radio network.
@@ -157,21 +158,21 @@ class DTCSensor : public RF24
 	* @param variableType The variableType to fetch
 	* @param destination The nodeId of other node in radio network. Default is gateway
 	*/
-	void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination=GATEWAY_ADDRESS);
+	void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination = GATEWAY_ADDRESS);
 
 	/**
 	 * Requests time from controller. Answer will be delivered to callback.
 	 *
 	 * @param callback for time request. Incoming argument is seconds since 1970.
 	 */
-	void requestTime(void (* timeCallback)(unsigned long));
+	void requestTime(void(*timeCallback)(unsigned long));
 
 
 	/**
 	 * Processes incoming messages to this node. If this is a relaying node it will
-	* Returns true if there is a message addressed for this node just was received.
-	* Use callback to handle incoming messages.
-	*/
+	 * Returns true if there is a message addressed for this node just was received.
+	 * Use callback to handle incoming messages.
+	 */
 	boolean process();
 
 	/**
@@ -228,7 +229,7 @@ class DTCSensor : public RF24
 	 * @param ms Number of milliseconds to sleep or 0 to sleep forever
 	 * @return true if wake up was triggered by pin change and false means timer woke it up.
 	 */
-	bool sleep(uint8_t interrupt, uint8_t mode, unsigned long ms=0);
+	bool sleep(uint8_t interrupt, uint8_t mode, unsigned long ms = 0);
 
 	/**
 	 * Sleep (PowerDownMode) the Arduino and radio. Wake up on timer or pin change for two separate interrupts.
@@ -241,15 +242,15 @@ class DTCSensor : public RF24
 	 * @param ms Number of milliseconds to sleep or 0 to sleep forever
 	 * @return Interrupt number wake up was triggered by pin change and negative if timer woke it up.
 	 */
-	int8_t sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms=0);
+	int8_t sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms = 0);
 
 
 #ifdef DEBUG
-	void debugPrint(const char *fmt, ... );
+	void debugPrint(const char *fmt, ...);
 	int freeRam();
 #endif
 
-  protected:
+protected:
 	NodeConfig nc; // Essential settings for node to work
 	ControllerConfig cc; // Configuration coming from controller
 	bool repeaterMode;
@@ -259,20 +260,20 @@ class DTCSensor : public RF24
 	DTCMessage ack;  // Buffer for ack messages.
 
 	void setupRepeaterMode();
-	void setupRadio(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate);
+	void setupRadio(uint8_t channel);
 	boolean sendRoute(DTCMessage &message);
-	boolean sendWrite(uint8_t dest, DTCMessage &message, bool broadcast=false);
+	boolean sendWrite(uint8_t dest, DTCMessage &message, bool broadcast = false);
 
-  private:
+private:
 #ifdef DEBUG
-	char convBuf[MAX_PAYLOAD*2+1];
+	char convBuf[MAX_PAYLOAD * 2 + 1];
 #endif
 	uint8_t failedTransmissions;
 	uint8_t *childNodeTable; // In memory buffer for routing information to other nodes. also stored in EEPROM
-    void (*timeCallback)(unsigned long); // Callback for requested time messages
-    void (*msgCallback)(const DTCMessage &); // Callback for incoming messages from other nodes and gateway.
+	void(*timeCallback)(unsigned long); // Callback for requested time messages
+	void(*msgCallback)(const DTCMessage &); // Callback for incoming messages from other nodes and gateway.
 
-    void requestNodeId();
+	void requestNodeId();
 	void setupNode();
 	void findParentNode();
 	uint8_t crc8Message(DTCMessage &message);

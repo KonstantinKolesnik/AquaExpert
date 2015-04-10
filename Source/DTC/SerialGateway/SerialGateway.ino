@@ -24,33 +24,33 @@
 #include <SPI.h>  
 #include <DTCSensor.h>  
 #include <DTCGateway.h>  
-#include <stdarg.h>
 
 #define INCLUSION_MODE_TIME 1	// Number of minutes inclusion mode is enabled
 #define INCLUSION_MODE_PIN	3	// Digital pin used for inclusion mode button
 
-DTCGateway gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // nano
-//DTCGateway gw(DEFAULT_CE_PIN, 8); // UNO with ethernet shild
+DTCGateway node(DEFAULT_RX_PIN, DEFAULT_TX_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // NANO
+//DTCGateway node(DEFAULT_RX_PIN, DEFAULT_TX_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // UNO w/o ethernet shild
+//DTCGateway node(DEFAULT_RX_PIN, 8, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 6, 5, 4); // UNO with ethernet shild
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
-boolean commandComplete = false;
+bool isCommandComplete = false;
 
 void setup()
 {
-	gw.begin();
+	node.begin();
 }
-
 void loop()
 {
-	gw.processRadioMessage();
+	node.processRadioMessage();
 
-	readSerialEvent();
-	if (commandComplete)
+	receiveFromController();
+	if (isCommandComplete)
 	{
-		// A command was issued from serial interface; send it to the actuator
-		gw.parseAndSend(inputCommand);
-		commandComplete = false;
+		// A command was issued from serial interface; send it to the node
+		node.parseAndSend(inputCommand);
+		
+		isCommandComplete = false;
 		inputPos = 0;
 	}
 }
@@ -61,7 +61,7 @@ hardware serial RX. This routine is run between each
 time loop() runs, so using delay inside loop can delay
 response. Multiple bytes of data may be available.
 */
-void readSerialEvent()
+void receiveFromController()
 {
 	while (Serial.available())
 	{
@@ -70,13 +70,13 @@ void readSerialEvent()
 
 		// if the incoming character is a newline, set a flag
 		// so the main loop can do something about it:
-		if (inputPos < MAX_RECEIVE_LENGTH - 1 && !commandComplete)
+		if (inputPos < MAX_RECEIVE_LENGTH - 1 && !isCommandComplete)
 		{
 			if (inChar == '\n')
 			{
 				inputCommand[inputPos] = 0;
 				inputPos = 0;
-				commandComplete = true;
+				isCommandComplete = true;
 			}
 			else
 			{

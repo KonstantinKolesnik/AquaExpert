@@ -1,13 +1,13 @@
- /*
- The DTC library adds a new layer on top of the RF24 library.
- It handles radio network routing, relaying and ids.
+/*
+The DTC library adds a new layer on top of the RF24 library.
+It handles radio network routing, relaying and ids.
 
- Created by Henrik Ekblad <henrik.ekblad@gmail.com>
+Created by Henrik Ekblad <henrik.ekblad@gmail.com>
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
- */
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
+*/
 
 #include "DTCSensor.h"
 #include "utility/LowPower.h"
@@ -31,10 +31,10 @@ DTCSensor::DTCSensor(uint8_t _cepin, uint8_t _cspin) : RF24(_cepin, _cspin)
 {
 }
 
-void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, bool _repeaterMode, uint8_t _parentNodeId, rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate)
+void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, bool _repeaterMode, uint8_t _parentNodeId, uint8_t channel)
 {
 	Serial.begin(BAUD_RATE);
-	
+
 	isGateway = false;
 	repeaterMode = _repeaterMode;
 	msgCallback = _msgCallback;
@@ -42,10 +42,11 @@ void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, 
 	if (repeaterMode)
 		setupRepeaterMode();
 
-	setupRadio(paLevel, channel, dataRate);
+	setupRadio(channel);
 
 	// Read settings from eeprom
 	eeprom_read_block((void*)&nc, (void*)EEPROM_NODE_ID_ADDRESS, sizeof(NodeConfig));
+
 	// Read latest received controller configuration from EEPROM
 	eeprom_read_block((void*)&cc, (void*)EEPROM_CONTROLLER_CONFIG_ADDRESS, sizeof(ControllerConfig));
 	if (cc.isMetric == 0xff)
@@ -69,10 +70,10 @@ void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, 
 
 	if ((_nodeId != AUTO) && (nc.nodeId != _nodeId))
 	{
-	    // Set static id
-	    nc.nodeId = _nodeId;
-	    // Save static id in eeprom
-	    eeprom_write_byte((uint8_t*)EEPROM_NODE_ID_ADDRESS, _nodeId);
+		// Set static id
+		nc.nodeId = _nodeId;
+		// Save static id in eeprom
+		eeprom_write_byte((uint8_t*)EEPROM_NODE_ID_ADDRESS, _nodeId);
 	}
 
 	// If no parent was found in eeprom. Try to find one.
@@ -83,41 +84,42 @@ void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, 
 	if (nc.nodeId == AUTO)
 		requestNodeId();
 
-	debug(PSTR("%s started, id %d\n"), repeaterMode?"repeater":"sensor", nc.nodeId);
+	debug(PSTR("%s started, id %d\n"), repeaterMode ? "repeater" : "node", nc.nodeId);
 
 	// If we got an id, set this node to use it
 	if (nc.nodeId != AUTO)
-	{ 
+	{
 		setupNode();
-		// Wait configuration reply.
-		wait(2000);
+		wait(2000); // wait configuration reply.
 	}
 }
 
-void DTCSensor::setupRadio(rf24_pa_dbm_e paLevel, uint8_t channel, rf24_datarate_e dataRate) {
+void DTCSensor::setupRadio(uint8_t channel)
+{
 	failedTransmissions = 0;
 
-	// Start up the radio library
-	RF24::begin();
+	//// Start up the radio library
+	//RF24::begin();
 
-	if (!RF24::isPVariant()) {
-		debug(PSTR("check wires\n"));
-		while(1);
-	}
+	//if (!RF24::isPVariant()) {
+	//	debug(PSTR("check wires\n"));
+	//	while (1);
+	//}
 
-	RF24::setAutoAck(1);
-	RF24::setAutoAck(BROADCAST_PIPE, false); // Turn off auto ack for broadcast
-	RF24::enableAckPayload();
-	RF24::setChannel(channel);
-	RF24::setPALevel(paLevel);
-	RF24::setDataRate(dataRate);
-	RF24::setRetries(5, 15);
-	RF24::setCRCLength(RF24_CRC_16);
-	RF24::enableDynamicPayloads();
+	//RF24::setAutoAck(1);
+	//RF24::setAutoAck(BROADCAST_PIPE, false); // Turn off auto ack for broadcast
+	//RF24::enableAckPayload();
+	//RF24::setChannel(channel);
+	//RF24::setPALevel(paLevel);
+	//RF24::setDataRate(dataRate);
+	//RF24::setRetries(5, 15);
+	//RF24::setCRCLength(RF24_CRC_16);
+	//RF24::enableDynamicPayloads();
 
-	// All nodes listen to broadcast pipe (for FIND_PARENT_RESPONSE messages)
-	RF24::openReadingPipe(BROADCAST_PIPE, TO_ADDR(BROADCAST_ADDRESS));
+	//// All nodes listen to broadcast pipe (for FIND_PARENT_RESPONSE messages)
+	//RF24::openReadingPipe(BROADCAST_PIPE, TO_ADDR(BROADCAST_ADDRESS));
 }
+
 void DTCSensor::setupRepeaterMode()
 {
 	childNodeTable = new uint8_t[256];
@@ -130,7 +132,7 @@ void DTCSensor::setupNode()
 	RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
 
 	// Send presentation for this radio node (attach
-	present(NODE_SENSOR_ID, repeaterMode? S_ARDUINO_REPEATER_NODE : S_ARDUINO_NODE);
+	present(NODE_SENSOR_ID, repeaterMode ? S_ARDUINO_REPEATER_NODE : S_ARDUINO_NODE);
 
 	// Send a configuration exchange request to controller
 	// Node sends parent node. Controller answers with latest node configuration
@@ -179,7 +181,7 @@ bool DTCSensor::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
 	RF24::startListening();
 
 	debug(PSTR("send: %d-%d-%d-%d s=%d,c=%d,t=%d,pt=%d,l=%d,st=%s:%s\n"),
-		message.sender, message.last, next, message.destination, message.sensor, mGetCommand(message), message.type, mGetPayloadType(message), mGetLength(message), ok?"ok":"fail", message.getString(convBuf));
+		message.sender, message.last, next, message.destination, message.sensor, mGetCommand(message), message.type, mGetPayloadType(message), mGetLength(message), ok ? "ok" : "fail", message.getString(convBuf));
 
 	return ok;
 }
@@ -240,7 +242,7 @@ bool DTCSensor::send(DTCMessage &message, bool enableAck)
 {
 	message.sender = nc.nodeId;
 	mSetCommand(message, C_SET);
-    mSetRequestAck(message, enableAck);
+	mSetRequestAck(message, enableAck);
 	return sendRoute(message);
 }
 
@@ -256,15 +258,15 @@ void DTCSensor::sendSketchInfo(const char *name, const char *version, bool enabl
 {
 	if (name != NULL)
 		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_NAME, enableAck).set(name));
-    if (version != NULL)
-    	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_VERSION, enableAck).set(version));
+	if (version != NULL)
+		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_VERSION, enableAck).set(version));
 }
 
 void DTCSensor::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination)
 {
 	sendRoute(build(msg, nc.nodeId, destination, childSensorId, C_REQ, variableType, false).set(""));
 }
-void DTCSensor::requestTime(void (* _timeCallback)(unsigned long))
+void DTCSensor::requestTime(void(*_timeCallback)(unsigned long))
 {
 	timeCallback = _timeCallback;
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_TIME, false).set(""));
@@ -291,9 +293,9 @@ bool DTCSensor::process()
 	// Add string termination, good if we later would want to print it.
 	msg.data[mGetLength(msg)] = '\0';
 	debug(PSTR("read: %d-%d-%d s=%d,c=%d,t=%d,pt=%d,l=%d:%s\n"),
-				msg.sender, msg.last, msg.destination,  msg.sensor, mGetCommand(msg), msg.type, mGetPayloadType(msg), mGetLength(msg), msg.getString(convBuf));
+		msg.sender, msg.last, msg.destination, msg.sensor, mGetCommand(msg), msg.type, mGetPayloadType(msg), mGetLength(msg), msg.getString(convBuf));
 
-	if(!(mGetVersion(msg) == PROTOCOL_VERSION))
+	if (!(mGetVersion(msg) == PROTOCOL_VERSION))
 	{
 		debug(PSTR("version mismatch\n"));
 		return false;
@@ -406,7 +408,7 @@ bool DTCSensor::process()
 
 						// Find parent node
 						findParentNode();
-						sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CHILDREN,false).set(""));
+						sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CHILDREN, false).set(""));
 					}
 				}
 				else if (type == I_TIME)
@@ -577,13 +579,14 @@ bool DTCSensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms)
 	Serial.flush();
 	RF24::powerDown();
 	attachInterrupt(interrupt, wakeUp, mode);
-	if (ms>0) {
+	if (ms > 0) {
 		pinIntTrigger = 0;
 		sleep(ms);
 		if (0 == pinIntTrigger) {
 			pinTriggeredWakeup = false;
 		}
-	} else {
+	}
+	else {
 		Serial.flush();
 		LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 	}
@@ -597,13 +600,14 @@ int8_t DTCSensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, u
 	RF24::powerDown();
 	attachInterrupt(interrupt1, wakeUp, mode1);
 	attachInterrupt(interrupt2, wakeUp2, mode2);
-	if (ms>0) {
+	if (ms > 0) {
 		pinIntTrigger = 0;
 		sleep(ms);
 		if (0 == pinIntTrigger) {
 			retVal = -1;
 		}
-	} else {
+	}
+	else {
 		Serial.flush();
 		LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 	}
@@ -612,14 +616,15 @@ int8_t DTCSensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, u
 
 	if (1 == pinIntTrigger) {
 		retVal = (int8_t)interrupt1;
-	} else if (2 == pinIntTrigger) {
+	}
+	else if (2 == pinIntTrigger) {
 		retVal = (int8_t)interrupt2;
 	}
 	return retVal;
 }
 
 #ifdef DEBUG
-void DTCSensor::debugPrint(const char *fmt, ... )
+void DTCSensor::debugPrint(const char *fmt, ...)
 {
 	char fmtBuffer[300];
 
@@ -630,18 +635,19 @@ void DTCSensor::debugPrint(const char *fmt, ... )
 		Serial.print(fmtBuffer);
 	}
 	va_list args;
-	va_start (args, fmt );
-	va_end (args);
+	va_start(args, fmt);
+	va_end(args);
 	if (isGateway)
 	{
 		// Truncate message if this is gateway node
 		vsnprintf_P(fmtBuffer, 60, fmt, args);
 		fmtBuffer[59] = '\n';
 		fmtBuffer[60] = '\0';
-	} else {
+	}
+	else {
 		vsnprintf_P(fmtBuffer, 299, fmt, args);
 	}
-	va_end (args);
+	va_end(args);
 	Serial.print(fmtBuffer);
 	Serial.flush();
 
@@ -649,8 +655,8 @@ void DTCSensor::debugPrint(const char *fmt, ... )
 }
 int DTCSensor::freeRam()
 {
-  extern int __heap_start, *__brkval;
-  int v;
-  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 #endif

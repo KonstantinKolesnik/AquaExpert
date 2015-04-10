@@ -14,19 +14,19 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="_core">
-      <UniqueIdentifier>{60080950-fa18-49b6-baff-c6b553db1daf}</UniqueIdentifier>
+      <UniqueIdentifier>{6b29871d-cdf7-437c-93d2-685ad9423a30}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries">
-      <UniqueIdentifier>{7ba90a6c-2f9d-424c-abca-d799c53d0f91}</UniqueIdentifier>
+      <UniqueIdentifier>{305d0bbf-55e2-458c-acc2-a7f2158ae9af}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\SPI">
-      <UniqueIdentifier>{b875bc1d-0952-4944-9668-f63a4a1b920f}</UniqueIdentifier>
+      <UniqueIdentifier>{658f864c-4682-41bc-b684-b90118f6db2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\DTC">
-      <UniqueIdentifier>{1ff80e7e-2363-4471-9bb0-cb244fa2e2b4}</UniqueIdentifier>
+      <UniqueIdentifier>{aa4ac20f-26fa-4f6f-927e-5efb1ba70382}</UniqueIdentifier>
     </Filter>
     <Filter Include="_libraries\DTC\utility">
-      <UniqueIdentifier>{a7e854e9-2cac-46d8-a788-e42f7b7b0002}</UniqueIdentifier>
+      <UniqueIdentifier>{7887e1c9-1514-4878-a042-6a35f7d16eb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,7 +90,7 @@
     <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.h">
       <Filter>_core</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h">
+    <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h">
       <Filter>_core</Filter>
     </ClInclude>
     <ClInclude Include="C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\SPI.h">
