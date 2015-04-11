@@ -1,7 +1,5 @@
 /***
- *  This file defines the Sensor library version number 
- *  Normally, contributors should not modify this directly
- *  as it is managed by the DTC Bot.
+ *  This file defines the DTC library version number 
  */
 #ifndef Version_h
 #define Version_h

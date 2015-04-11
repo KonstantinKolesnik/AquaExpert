@@ -1,17 +1,21 @@
 #include "DTCGateway.h"
 #include "utility/MsTimer2.h"
 #include "utility/PinChangeInt.h"
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+#include <SoftwareSerial.h>
+#endif
 
 uint8_t pinRx;
 uint8_t pinTx;
 uint8_t pinEr;
-boolean buttonTriggeredInclusion;
+bool buttonTriggeredInclusion;
 volatile uint8_t countRx;
 volatile uint8_t countTx;
 volatile uint8_t countErr;
-boolean inclusionMode; // keeps track on inclusion mode
+bool inclusionMode; // keeps track on inclusion mode
 
-DTCGateway::DTCGateway(uint8_t _rxpin, uint8_t _txpin, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCSensor(_rxpin, _txpin)
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+DTCGateway::DTCGateway(SoftwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCNode(_uart)
 {
 	pinInclusion = _inclusion_pin;
 	inclusionTime = _inclusion_time;
@@ -19,6 +23,16 @@ DTCGateway::DTCGateway(uint8_t _rxpin, uint8_t _txpin, uint8_t _inclusion_time, 
 	pinTx = _tx;
 	pinEr = _er;
 }
+#else
+DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCNode(_uart)
+{
+	pinInclusion = _inclusion_pin;
+	inclusionTime = _inclusion_time;
+	pinRx = _rx;
+	pinTx = _tx;
+	pinEr = _er;
+}
+#endif
 
 void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 {
@@ -87,7 +101,7 @@ void DTCGateway::checkButtonTriggeredInclusion()
 }
 void DTCGateway::checkInclusionFinished()
 {
-	if (inclusionMode && millis() - inclusionStartTime > 60000UL * inclusionTime) // inclusionTimeInMinutes minute(s) has passed, stop inclusion mode
+	if (inclusionMode && (millis() - inclusionStartTime > 60000UL * inclusionTime)) // inclusionTimeInMinutes minute(s) has passed, stop inclusion mode
 		setInclusionMode(false);
 }
 void DTCGateway::setInclusionMode(boolean newMode)
@@ -117,22 +131,9 @@ void DTCGateway::processRadioMessage()
 	checkButtonTriggeredInclusion();
 	checkInclusionFinished();
 }
-
-uint8_t DTCGateway::h2i(char c)
+void DTCGateway::processSerialMessage(char *commandBuffer)
 {
-	uint8_t i = 0;
-	if (c <= '9')
-		i += c - '0';
-	else if (c >= 'a')
-		i += c - 'a' + 10;
-	else
-		i += c - 'A' + 10;
-	return i;
-}
-
-void DTCGateway::parseAndSend(char *commandBuffer)
-{
-	boolean ok = false;
+	bool ok = false;
 	char *str, *p, *value = NULL;
 	uint8_t bvalue[MAX_PAYLOAD];
 	uint8_t blen = 0;
@@ -209,10 +210,23 @@ void DTCGateway::parseAndSend(char *commandBuffer)
 			msg.set(bvalue, blen);
 		else
 			msg.set(value);
+
 		ok = sendRoute(msg);
 		if (!ok)
 			errBlink(1);
 	}
+}
+
+uint8_t DTCGateway::h2i(char c)
+{
+	uint8_t i = 0;
+	if (c <= '9')
+		i += c - '0';
+	else if (c >= 'a')
+		i += c - 'a' + 10;
+	else
+		i += c - 'A' + 10;
+	return i;
 }
 
 void DTCGateway::rxBlink(uint8_t cnt)

@@ -1,18 +1,9 @@
-/*
-The DTC library adds a new layer on top of the RF24 library.
-It handles radio network routing, relaying and ids.
-
-Created by Henrik Ekblad <henrik.ekblad@gmail.com>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-version 2 as published by the Free Software Foundation.
-*/
-
-#include "DTCSensor.h"
+#include "DTCNode.h"
 #include "utility/LowPower.h"
-#include "utility/RF24.h"
-#include "utility/RF24_config.h"
+#include "ESP8266.h"
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+#include <SoftwareSerial.h>
+#endif
 
 // Inline function and macros
 inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type)
@@ -25,11 +16,16 @@ inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, u
 	return msg;
 }
 
-DTCSensor::DTCSensor(uint8_t _rxpin, uint8_t _txpin) : RF24(_rxpin, _txpin)
+#ifdef ESP8266_USE_SOFTWARE_SERIAL
+DTCNode::DTCNode(SoftwareSerial &uart)
+#else
+DTCNode::DTCNode(HardwareSerial &uart)
+#endif
+	: ESP8266(uart)
 {
 }
 
-void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, uint8_t channel)
+void DTCNode::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, uint8_t channel)
 {
 	Serial.begin(BAUD_RATE);
 
@@ -68,10 +64,8 @@ void DTCSensor::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, 
 	}
 }
 
-void DTCSensor::setupRadio(uint8_t channel)
+void DTCNode::setupRadio(uint8_t channel)
 {
-	failedTransmissions = 0;
-
 	//// Start up the radio library
 	//RF24::begin();
 
@@ -94,7 +88,7 @@ void DTCSensor::setupRadio(uint8_t channel)
 	//RF24::openReadingPipe(BROADCAST_PIPE, TO_ADDR(BROADCAST_ADDRESS));
 }
 
-void DTCSensor::setupNode()
+void DTCNode::setupNode()
 {
 	// Open reading pipe for messages directed to this node (set write pipe to same)
 	//RF24::openReadingPipe(WRITE_PIPE, TO_ADDR(nc.nodeId));
@@ -105,25 +99,25 @@ void DTCSensor::setupNode()
 
 	// Send a configuration exchange request to controller
 	// Node sends parent node. Controller answers with latest node configuration which is picked up in process()
-	//sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CONFIG, false).set(nc.parentNodeId));
+	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CONFIG).set(""/*nc.parentNodeId*/));
 }
 
-uint8_t DTCSensor::getNodeId()
+uint8_t DTCNode::getNodeId()
 {
 	return nc.nodeId;
 }
-ControllerConfig DTCSensor::getConfig()
+ControllerConfig DTCNode::getConfig()
 {
 	return cc;
 }
-DTCMessage& DTCSensor::getLastMessage()
+DTCMessage& DTCNode::getLastMessage()
 {
 	return msg;
 }
 
-bool DTCSensor::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
+bool DTCNode::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
 {
-	uint8_t length = mGetLength(message);
+	//uint8_t length = mGetLength(message);
 	message.last = nc.nodeId;
 	mSetVersion(message, PROTOCOL_VERSION);
 	
@@ -131,7 +125,7 @@ bool DTCSensor::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
 	//RF24::powerUp();
 	//RF24::stopListening();
 	//RF24::openWritingPipe(TO_ADDR(next));
-	bool ok = RF24::write(&message, min(MAX_MESSAGE_LENGTH, HEADER_SIZE + length), broadcast);
+	bool ok = true;// RF24::write(&message, min(MAX_MESSAGE_LENGTH, HEADER_SIZE + length), broadcast);
 	//RF24::startListening();
 
 	debug(PSTR("send: %d-%d-%d-%d s=%d,c=%d,t=%d,pt=%d,l=%d,st=%s:%s\n"),
@@ -139,47 +133,35 @@ bool DTCSensor::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
 
 	return ok;
 }
-bool DTCSensor::sendRoute(DTCMessage &message)
+bool DTCNode::sendRoute(DTCMessage &message)
 {
 	// Make sure to process any incoming messages before sending (could this end up in recursive loop?)
 	// process();
-	bool isInternal = mGetCommand(message) == C_INTERNAL;
 
 	// If we still don't have any node id, re-request and skip this message.
-	if (nc.nodeId == AUTO && !(isInternal && message.type == I_ID_REQUEST))
-	{
+	if (nc.nodeId == AUTO && !(mGetCommand(message) == C_INTERNAL && message.type == I_ID_REQUEST))
 		requestNodeId();
-		return false;
-	}
-
-
-	if (!isGateway)
-	{
-		// --- debug(PSTR("route parent\n"));
-		// Should be routed back to gateway.
-		bool ok = sendWrite(nc.parentNodeId, message);
-
-		return ok;
-	}
+	else if (!isGateway)
+		return sendWrite(GATEWAY_ADDRESS, message);
 
 	return false;
 }
-bool DTCSensor::send(DTCMessage &message)
+bool DTCNode::send(DTCMessage &message)
 {
 	message.sender = nc.nodeId;
 	mSetCommand(message, C_SET);
 	return sendRoute(message);
 }
 
-void DTCSensor::sendBatteryLevel(uint8_t value)
+void DTCNode::sendBatteryLevel(uint8_t value)
 {
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_BATTERY_LEVEL).set(value));
 }
-void DTCSensor::present(uint8_t childSensorId, uint8_t sensorType)
+void DTCNode::present(uint8_t childSensorId, uint8_t sensorType)
 {
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, childSensorId, C_PRESENTATION, sensorType).set(LIBRARY_VERSION));
 }
-void DTCSensor::sendSketchInfo(const char *name, const char *version)
+void DTCNode::sendSketchInfo(const char *name, const char *version)
 {
 	if (name != NULL)
 		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_NAME).set(name));
@@ -187,33 +169,37 @@ void DTCSensor::sendSketchInfo(const char *name, const char *version)
 		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_VERSION).set(version));
 }
 
-void DTCSensor::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination)
+void DTCNode::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination)
 {
 	sendRoute(build(msg, nc.nodeId, destination, childSensorId, C_REQ, variableType).set(""));
 }
-void DTCSensor::requestTime(void(*_timeCallback)(unsigned long))
+void DTCNode::requestTime(void(*_timeCallback)(unsigned long))
 {
 	timeCallback = _timeCallback;
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_TIME).set(""));
 }
-void DTCSensor::requestNodeId()
+void DTCNode::requestNodeId()
 {
 	debug(PSTR("req node id\n"));
-	RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
+	//RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_ID_REQUEST).set(""));
 	wait(2000);
 }
 
-bool DTCSensor::process()
+bool DTCNode::process()
 {
+	return false;
+
+
+
 	uint8_t pipe;
-	boolean available = RF24::available(&pipe);
+	boolean available = true;// RF24::available(&pipe);
 
 	if (!available || pipe > 6)
 		return false;
 
-	uint8_t len = RF24::getDynamicPayloadSize();
-	RF24::read(&msg, len);
+	//uint8_t len = RF24::getDynamicPayloadSize();
+	//RF24::read(&msg, len);
 
 	// Add string termination, good if we later would want to print it.
 	msg.data[mGetLength(msg)] = '\0';
@@ -229,7 +215,7 @@ bool DTCSensor::process()
 	uint8_t command = mGetCommand(msg);
 	uint8_t type = msg.type;
 	uint8_t sender = msg.sender;
-	uint8_t last = msg.last;
+	//uint8_t last = msg.last;
 	uint8_t destination = msg.destination;
 
 	if (destination == nc.nodeId)
@@ -301,12 +287,12 @@ bool DTCSensor::process()
 	return false;
 }
 
-void DTCSensor::saveState(uint8_t pos, uint8_t value)
+void DTCNode::saveState(uint8_t pos, uint8_t value)
 {
 	if (loadState(pos) != value)
 		eeprom_write_byte((uint8_t*)(EEPROM_LOCAL_CONFIG_ADDRESS + pos), value);
 }
-uint8_t DTCSensor::loadState(uint8_t pos)
+uint8_t DTCNode::loadState(uint8_t pos)
 {
 	return eeprom_read_byte((uint8_t*)(EEPROM_LOCAL_CONFIG_ADDRESS + pos));
 }
@@ -321,7 +307,7 @@ void wakeUp2()	 //place to send the second interrupts
 	pinIntTrigger = 2;
 }
 
-void DTCSensor::internalSleep(unsigned long ms)
+void DTCNode::internalSleep(unsigned long ms)
 {
 	while (!pinIntTrigger && ms >= 8000) { LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF); ms -= 8000; }
 	if (!pinIntTrigger && ms >= 4000)    { LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF); ms -= 4000; }
@@ -335,7 +321,7 @@ void DTCSensor::internalSleep(unsigned long ms)
 	if (!pinIntTrigger && ms >= 16)      { LowPower.powerDown(SLEEP_15Ms, ADC_OFF, BOD_OFF); ms -= 15; }
 }
 
-void DTCSensor::wait(unsigned long ms)
+void DTCNode::wait(unsigned long ms)
 {
 	// Let serial prints finish (debug, log etc)
 	Serial.flush();
@@ -348,20 +334,20 @@ void DTCSensor::wait(unsigned long ms)
 	}
 }
 
-void DTCSensor::sleep(unsigned long ms)
+void DTCNode::sleep(unsigned long ms)
 {
 	// Let serial prints finish (debug, log etc)
 	Serial.flush();
-	RF24::powerDown();
+	//RF24::powerDown();
 	pinIntTrigger = 0;
 	internalSleep(ms);
 }
-bool DTCSensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms)
+bool DTCNode::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms)
 {
 	// Let serial prints finish (debug, log etc)
 	bool pinTriggeredWakeup = true;
 	Serial.flush();
-	RF24::powerDown();
+	//RF24::powerDown();
 	attachInterrupt(interrupt, wakeUp, mode);
 	if (ms > 0) {
 		pinIntTrigger = 0;
@@ -377,11 +363,11 @@ bool DTCSensor::sleep(uint8_t interrupt, uint8_t mode, unsigned long ms)
 	detachInterrupt(interrupt);
 	return pinTriggeredWakeup;
 }
-int8_t DTCSensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms)
+int8_t DTCNode::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, uint8_t mode2, unsigned long ms)
 {
 	int8_t retVal = 1;
 	Serial.flush(); // Let serial prints finish (debug, log etc)
-	RF24::powerDown();
+	//RF24::powerDown();
 	attachInterrupt(interrupt1, wakeUp, mode1);
 	attachInterrupt(interrupt2, wakeUp2, mode2);
 	if (ms > 0) {
@@ -408,7 +394,7 @@ int8_t DTCSensor::sleep(uint8_t interrupt1, uint8_t mode1, uint8_t interrupt2, u
 }
 
 #ifdef DEBUG
-void DTCSensor::debugPrint(const char *fmt, ...)
+void DTCNode::debugPrint(const char *fmt, ...)
 {
 	char fmtBuffer[300];
 
@@ -437,7 +423,7 @@ void DTCSensor::debugPrint(const char *fmt, ...)
 
 	//Serial.write(freeRam());
 }
-int DTCSensor::freeRam()
+int DTCNode::freeRam()
 {
 	extern int __heap_start, *__brkval;
 	int v;
