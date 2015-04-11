@@ -1,6 +1,6 @@
 #include "DTCGateway.h"
-#include "utility/MsTimer2.h"
-#include "utility/PinChangeInt.h"
+//#include "utility/MsTimer2.h"
+//#include "utility/PinChangeInt.h"
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
 #include <SoftwareSerial.h>
 #endif
@@ -15,16 +15,11 @@ volatile uint8_t countErr;
 bool inclusionMode; // keeps track on inclusion mode
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
-DTCGateway::DTCGateway(SoftwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCNode(_uart)
-{
-	pinInclusion = _inclusion_pin;
-	inclusionTime = _inclusion_time;
-	pinRx = _rx;
-	pinTx = _tx;
-	pinEr = _er;
-}
+DTCGateway::DTCGateway(SoftwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er)
 #else
-DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er) : DTCNode(_uart)
+DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er)
+#endif
+	: DTCNode(_uart)
 {
 	pinInclusion = _inclusion_pin;
 	inclusionTime = _inclusion_time;
@@ -32,7 +27,6 @@ DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _inclusion_time, uint8_t _
 	pinTx = _tx;
 	pinEr = _er;
 }
-#endif
 
 void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 {
@@ -78,15 +72,27 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	//RF24::openReadingPipe(CURRENT_NODE_PIPE, BASE_RADIO_ID);
 	//RF24::startListening();
 
+	Serial.println(getVersion().c_str());
+	if (!setOprToStation())
+		Serial.println("Failed to set Station");
+	Serial.println(getWifiModeList().c_str());
+
+
+
+
+
+
+
+
 	// Add led timer interrupt
 	MsTimer2::set(300, ledTimersInterrupt);
 	MsTimer2::start();
 
 	// Add interrupt for inclusion button to pin
-	PCintPort::attachInterrupt(pinInclusion, startInclusionInterrupt, RISING);
+	//PCintPort::attachInterrupt(pinInclusion, startInclusionInterrupt, RISING);
 
 	// Send startup log message on serial
-	serial(PSTR("0;0;%d;%d;Gateway startup complete.\n"), C_INTERNAL, I_GATEWAY_READY);
+	serial(PSTR("0;0;%d;%d;Gateway started.\n"), C_INTERNAL, I_GATEWAY_READY);
 }
 
 void DTCGateway::checkButtonTriggeredInclusion()
@@ -128,8 +134,8 @@ void DTCGateway::processRadioMessage()
 		serial(message);
 	}
 
-	checkButtonTriggeredInclusion();
-	checkInclusionFinished();
+	//checkButtonTriggeredInclusion();
+	//checkInclusionFinished();
 }
 void DTCGateway::processSerialMessage(char *commandBuffer)
 {

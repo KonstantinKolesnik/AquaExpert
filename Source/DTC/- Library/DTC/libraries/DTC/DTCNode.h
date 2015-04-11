@@ -25,13 +25,13 @@
 #define debug(x,...)
 #endif
 
-#define BAUD_RATE 115200
+#define BAUD_RATE 19200
 
 #define AUTO 0xFF // 0-254. Id 255 is reserved for auto initialization of nodeId.
 #define NODE_SENSOR_ID 0xFF // Node child id is always created for when a node
 
 // EEPROM start address for DTC library data
-#define EEPROM_START 0
+#define EEPROM_START						0
 
 #define EEPROM_NODE_ID_ADDRESS				EEPROM_START
 #define EEPROM_SSID_ID_ADDRESS				(EEPROM_NODE_ID_ADDRESS + 1)

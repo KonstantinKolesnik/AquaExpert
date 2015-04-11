@@ -1,6 +1,8 @@
 #ifndef DTCGateway_h
 #define DTCGateway_h
 
+#include "utility/MsTimer2.h"
+//#include "utility/PinChangeInt.h"
 #include "DTCNode.h"
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
 #include <SoftwareSerial.h>
@@ -27,7 +29,6 @@ public:
 	* @param _er Digital pin for error led
 	*
 	*/
-
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
 	DTCGateway(SoftwareSerial &_uart, uint8_t _inclusion_time = 1, uint8_t _inclusion_pin = 4, uint8_t _rx = 7, uint8_t _tx = 6, uint8_t _er = 5);
 #else

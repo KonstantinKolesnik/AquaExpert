@@ -27,7 +27,7 @@
 #define INCLUSION_MODE_PIN	4	// Digital pin used for inclusion mode button
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
-SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN);
+SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN); // works up to 38400 kbs
 DTCGateway gw(mySerial, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
 #else
 DTCGateway gw(Serial1, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
