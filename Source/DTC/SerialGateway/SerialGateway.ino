@@ -1,12 +1,11 @@
 /*
 * DESCRIPTION
-* The Gateway prints data received from nodes on the serial link.
-* The gateway accepts input on seral which will be sent out on radio network.
+* The Gateway prints data received from radio network to the serial link.
+* The Gateway accepts input from serial which will be sent out to radio network.
 *
 * The GW code is designed for Arduino Nano 328p / 16MHz
 *
 * Wire connections (OPTIONAL):
-* - Inclusion button should be connected between digital pin 3 and GND
 * - RX/TX/ERR leds need to be connected between +5V (anode) and digital ping 6/5/4 with resistor 270-330R in a series
 *
 * LEDs (OPTIONAL):
@@ -15,7 +14,6 @@
 * - ERR (red) - fast blink on error during transmission error or recieve crc error
 */
 
-
 #include <DTCGateway.h>
 #include <DTCNode.h>
 #include <ESP8266.h>
@@ -23,17 +21,14 @@
 #include <SoftwareSerial.h>
 #endif
 
-#define INCLUSION_MODE_TIME 1	// Number of minutes inclusion mode is enabled
-#define INCLUSION_MODE_PIN	4	// Digital pin used for inclusion mode button
-
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
-SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN); // works up to 38400 kbs
-DTCGateway gw(mySerial, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
+//SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN); // works up to 19200(38400?) kbs
+DTCGateway gw(Serial, 7, 6, 5);
 #else
-DTCGateway gw(Serial1, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, 7, 6, 5);
+DTCGateway gw(Serial1, 7, 6, 5);
 #endif
 
-char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial/ethernet interface
+char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial
 int inputPos = 0;
 bool isCommandComplete = false;
 

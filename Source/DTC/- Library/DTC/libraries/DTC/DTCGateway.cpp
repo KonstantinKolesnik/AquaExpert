@@ -1,6 +1,4 @@
 #include "DTCGateway.h"
-//#include "utility/MsTimer2.h"
-//#include "utility/PinChangeInt.h"
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
 #include <SoftwareSerial.h>
 #endif
@@ -8,21 +6,17 @@
 uint8_t pinRx;
 uint8_t pinTx;
 uint8_t pinEr;
-bool buttonTriggeredInclusion;
 volatile uint8_t countRx;
 volatile uint8_t countTx;
 volatile uint8_t countErr;
-bool inclusionMode; // keeps track on inclusion mode
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
-DTCGateway::DTCGateway(SoftwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er)
+DTCGateway::DTCGateway(SoftwareSerial &_uart, uint8_t _rx, uint8_t _tx, uint8_t _er)
 #else
-DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _inclusion_time, uint8_t _inclusion_pin, uint8_t _rx, uint8_t _tx, uint8_t _er)
+DTCGateway::DTCGateway(HardwareSerial &_uart, uint8_t _rx, uint8_t _tx, uint8_t _er)
 #endif
 	: DTCNode(_uart)
 {
-	pinInclusion = _inclusion_pin;
-	inclusionTime = _inclusion_time;
 	pinRx = _rx;
 	pinTx = _tx;
 	pinEr = _er;
@@ -43,8 +37,7 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 		useWriteCallback = false;
 
 	nc.nodeId = 0;
-	inclusionMode = 0;
-	buttonTriggeredInclusion = false;
+
 	countRx = 0;
 	countTx = 0;
 	countErr = 0;
@@ -56,12 +49,7 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	digitalWrite(pinRx, LOW);
 	digitalWrite(pinTx, LOW);
 	digitalWrite(pinEr, LOW);
-
-	// Setup digital in that triggers inclusion mode
-	pinMode(pinInclusion, INPUT);
-	digitalWrite(pinInclusion, HIGH);
-
-	// Set initial state of leds
+	delay(500);
 	digitalWrite(pinRx, HIGH);
 	digitalWrite(pinTx, HIGH);
 	digitalWrite(pinEr, HIGH);
@@ -88,54 +76,21 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	MsTimer2::set(300, ledTimersInterrupt);
 	MsTimer2::start();
 
-	// Add interrupt for inclusion button to pin
-	//PCintPort::attachInterrupt(pinInclusion, startInclusionInterrupt, RISING);
-
 	// Send startup log message on serial
 	serial(PSTR("0;0;%d;%d;Gateway started.\n"), C_INTERNAL, I_GATEWAY_READY);
-}
-
-void DTCGateway::checkButtonTriggeredInclusion()
-{
-	if (buttonTriggeredInclusion)
-	{
-		// Ok, someone pressed the inclusion button on the gateway, start inclusion mode for 1 munute.
-		serial(PSTR("0;0;%d;%d;Inclusion started by button.\n"), C_INTERNAL, I_LOG_MESSAGE);
-		buttonTriggeredInclusion = false;
-		setInclusionMode(true);
-	}
-}
-void DTCGateway::checkInclusionFinished()
-{
-	if (inclusionMode && (millis() - inclusionStartTime > 60000UL * inclusionTime)) // inclusionTimeInMinutes minute(s) has passed, stop inclusion mode
-		setInclusionMode(false);
-}
-void DTCGateway::setInclusionMode(boolean newMode)
-{
-	if (inclusionMode != newMode)
-		inclusionMode = newMode;
-
-	// Send back mode change on serial line to ack command
-	serial(PSTR("0;0;%d;%d;%d\n"), C_INTERNAL, I_INCLUSION_MODE, inclusionMode ? 1 : 0);
-
-	if (inclusionMode)
-		inclusionStartTime = millis();
 }
 
 void DTCGateway::processRadioMessage()
 {
 	if (process())
 	{
-		// A new message was received from one of the sensors
+		// A new message was received from one of the nodes
 		DTCMessage message = getLastMessage();
-		rxBlink((mGetCommand(message) == C_PRESENTATION && inclusionMode) ? 3 : 1);
+		rxBlink(mGetCommand(message) == C_PRESENTATION ? 3 : 1);
 
 		// pass the message to controller
 		serial(message);
 	}
-
-	//checkButtonTriggeredInclusion();
-	//checkInclusionFinished();
 }
 void DTCGateway::processSerialMessage(char *commandBuffer)
 {
@@ -158,10 +113,10 @@ void DTCGateway::processSerialMessage(char *commandBuffer)
 	{
 		switch (i)
 		{
-			case 0: // Radioid (destination)
+			case 0: // node id (destination)
 				destination = atoi(str);
 				break;
-			case 1: // Childid
+			case 1: // line id
 				sensor = atoi(str);
 				break;
 			case 2: // Message type
@@ -200,8 +155,6 @@ void DTCGateway::processSerialMessage(char *commandBuffer)
 	{
 		if (type == I_VERSION) // Request for version
 			serial(PSTR("0;0;%d;%d;%s\n"), C_INTERNAL, I_VERSION, LIBRARY_VERSION);
-		else if (type == I_INCLUSION_MODE) // Request to change inclusion mode
-			setInclusionMode(atoi(value) == 1);
 	}
 	else
 	{
@@ -242,7 +195,7 @@ void DTCGateway::rxBlink(uint8_t cnt)
 }
 void DTCGateway::txBlink(uint8_t cnt)
 {
-	if (countTx == 255 && !inclusionMode)
+	if (countTx == 255)
 		countTx = cnt;
 }
 void DTCGateway::errBlink(uint8_t cnt)
@@ -284,8 +237,6 @@ void ledTimersInterrupt()
 		digitalWrite(pinTx, HIGH); // switching off
 	if (countTx != 255)
 		countTx--;
-	else if (inclusionMode)
-		countTx = 8;
 
 	if (countErr && countErr != 255)
 		digitalWrite(pinEr, LOW); // switch led on
@@ -293,8 +244,4 @@ void ledTimersInterrupt()
 		digitalWrite(pinEr, HIGH); // switching off
 	if (countErr != 255)
 		countErr--;
-}
-void startInclusionInterrupt()
-{
-	buttonTriggeredInclusion = true;
 }
