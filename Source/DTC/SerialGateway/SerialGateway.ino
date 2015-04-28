@@ -3,7 +3,8 @@
 * The Gateway prints data received from radio network to the serial link.
 * The Gateway accepts input from serial which will be sent out to radio network.
 *
-* The GW code is designed for Arduino Nano 328p / 16MHz
+* The GW code is designed for Arduino Micro/Leonardo with 2 hardware serial ports.
+* Serial class refers to USB (CDC) communication; for TTL serial on pins 0 and 1, use the Serial1 class.
 *
 * Wire connections (OPTIONAL):
 * - RX/TX/ERR leds need to be connected between +5V (anode) and digital ping 6/5/4 with resistor 270-330R in a series
@@ -17,16 +18,8 @@
 #include <DTCGateway.h>
 #include <DTCNode.h>
 #include <ESP8266.h>
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-#include <SoftwareSerial.h>
-#endif
 
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-//SoftwareSerial mySerial(DEFAULT_TX_PIN, DEFAULT_RX_PIN); // works up to 19200(38400?) kbs
-DTCGateway gw(Serial, 7, 6, 5);
-#else
 DTCGateway gw(Serial1, 7, 6, 5);
-#endif
 
 char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial
 int inputPos = 0;
