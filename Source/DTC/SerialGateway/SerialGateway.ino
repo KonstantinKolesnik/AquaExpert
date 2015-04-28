@@ -18,12 +18,14 @@
 #include <DTCGateway.h>
 #include <DTCNode.h>
 #include <ESP8266.h>
+#include <aJSON.h>
 
 DTCGateway gw(Serial1, 7, 6, 5);
+aJsonStream serial_stream(&Serial);
 
-char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial
-int inputPos = 0;
-bool isCommandComplete = false;
+//char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial
+//int inputPos = 0;
+//bool isCommandComplete = false;
 
 void setup()
 {
@@ -34,14 +36,11 @@ void loop()
 	gw.processRadioMessage();
 
 	receiveFromController();
-	if (isCommandComplete)
-	{
-		// A command was issued from serial interface; send it to the node
-		gw.processSerialMessage(inputCommand);
-		
-		isCommandComplete = false;
-		inputPos = 0;
-	}
+	//if (isCommandComplete)
+	//{
+	//	gw.processSerialMessage(inputCommand);
+	//	isCommandComplete = false;
+	//}
 }
 
 /*
@@ -52,32 +51,49 @@ response. Multiple bytes of data may be available.
 */
 void receiveFromController()
 {
-	while (Serial.available())
-	{
-		// get the new byte:
-		char inChar = (char)Serial.read();
+	if (serial_stream.available())
+		serial_stream.skip(); // First, skip any accidental whitespace like newlines.
 
-		// if the incoming character is a newline, set a flag
-		// so the main loop can do something about it:
-		if (inputPos < MAX_RECEIVE_LENGTH - 1 && !isCommandComplete)
-		{
-			if (inChar == '\n')
-			{
-				inputCommand[inputPos] = 0;
-				inputPos = 0;
-				isCommandComplete = true;
-			}
-			else
-			{
-				// add it to the inputString:
-				inputCommand[inputPos] = inChar;
-				inputPos++;
-			}
-		}
+	if (serial_stream.available())
+	{
+		aJsonObject *msg = aJson.parse(&serial_stream);
+
+		if (!msg)
+			serial_stream.flush(); // We were not able to decode this, let's simply flush the buffer
 		else
 		{
-			// Incoming message too long. Throw away 
-			inputPos = 0;
+			gw.processSerialMessage(msg);
+			aJson.deleteItem(msg);
 		}
 	}
+
+
+	//----------------------------
+
+	//while (Serial.available())
+	//{
+	//	// get the new byte:
+	//	char inChar = (char)Serial.read();
+
+	//	// if the incoming character is a newline, set a flag so the main loop can do something about it:
+	//	if (inputPos < MAX_RECEIVE_LENGTH - 1 && !isCommandComplete)
+	//	{
+	//		if (inChar == '\n')
+	//		{
+	//			inputCommand[inputPos] = 0;
+	//			inputPos = 0;
+	//			isCommandComplete = true;
+	//		}
+	//		else
+	//		{
+	//			// add it to the inputString:
+	//			inputCommand[inputPos++] = inChar;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		// Incoming message too long. Throw away 
+	//		inputPos = 0;
+	//	}
+	//}
 }

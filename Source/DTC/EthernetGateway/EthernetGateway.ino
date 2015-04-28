@@ -8,7 +8,7 @@
 * version 2 as published by the Free Software Foundation.
 *
 * DESCRIPTION
-* The EthernetGateway sends data received from sensors to the ethernet link.
+* The EthernetGateway sends data received from radio network to the ethernet link.
 * The gateway also accepts input on ethernet interface, which is then sent out to the radio network.
 *
 * The GW code is designed for Arduino 328p / 16MHz.  ATmega168 does not have enough memory to run this program.
@@ -20,7 +20,7 @@
 * COMPILING WizNET (W5100)
 * > Remove UIPEthernet include below and include Ethernet.h.
 *
-* Note that I had to disable UDP and DHCP support in uipethernet-conf.h to reduce space. (which meas you ave to choose a static IP for that module)
+* Note that I had to disable UDP and DHCP support in uipethernet-conf.h to reduce space. (which means you have to choose a static IP for that module)
 
 * VERA CONFIGURATION:
 * Enter "ip-number:port" in the ip-field of the Arduino GW device. This will temporarily override any serial configuration for the Vera plugin.
@@ -32,45 +32,32 @@
 * - ERR (red) - fast blink on error during transmission error or recieve crc error
 *
 *  ----------- Connection guide ---------------------------------------------------------------------------
-*  13  Radio & Ethernet SPI SCK
-*  12  Radio & Ethernet SPI MISO (SO)
-*  11  Radio & Ethernet SPI MOSI (SI)
+*  13  Ethernet SPI SCK
+*  12  Ethernet SPI MISO (SO)
+*  11  Ethernet SPI MOSI (SI)
 *  10  Ethernet SPI Slave Select (CS)    Pin 10, the SS pin, must be an o/p to put SPI in master mode
 *  9   Radio TX LED using on board LED   (optional)  +5V -> LED -> 270-330 Ohm resistor -> pin 9.
 *  8   Radio RX LED                      (optional)  +5V -> LED -> 270-330 Ohm resistor -> pin 8.
 *  7   Radio error LED                   (optional)  +5V -> LED -> 270-330 Ohm resistor -> pin 7.
-*  6   Radio SPI Slave Select
-*  5   Radio Chip Enable
-*  3   Inclusion mode button             (optional), 10K pull down to GND, button to VCC)
-*  2   Radio IRQ pin                     (optional), W5100 Int, if linked to pin 2)
 * -----------------------------------------------------------------------------------------------------------
-* Powering: both NRF24l01 radio and Ethernet(ENC28J60) uses 3.3V
+* Powering: Ethernet(ENC28J60) uses 3.3V
 */
 
-#include <SPI.h>
 #include <DTCNode.h>
 #include <DTCGateway.h>  
 #include <stdarg.h>
 
 // Use this if you have attached a Ethernet ENC28J60 shields  
 //#include <UIPEthernet.h>  
-
 // Use this fo WizNET module and Arduino Ethernet Shield 
 #include <Ethernet.h>   
 
 
-#define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
-#define INCLUSION_MODE_PIN  3 // Digital pin used for inclusion mode button
-
-//#define RADIO_CE_PIN        5  // radio chip enable
-//#define RADIO_SPI_SS_PIN    6  // radio SPI serial select
 //#define RADIO_ERROR_LED_PIN 7  // Error led pin
 //#define RADIO_RX_LED_PIN    8  // Receive led pin
 //#define RADIO_TX_LED_PIN    9  // the PCB, on board LED
 
 // UNO :
-#define RADIO_CE_PIN        9		// radio chip enable
-#define RADIO_SPI_SS_PIN    8		// radio SPI serial select
 #define RADIO_ERROR_LED_PIN 2		// Error led pin
 #define RADIO_RX_LED_PIN    3		// Receive led pin
 #define RADIO_TX_LED_PIN    4		// the PCB, on board LED*/
@@ -81,25 +68,21 @@ IPAddress myIp(192, 168, 1, 177);	// Configure your static ip-address here    CO
 
 // The MAC address can be anything you want but should be unique on your network.
 // Newer boards have a MAC address printed on the underside of the PCB, which you can (optionally) use.
-// Note that most of the Ardunio examples use  "DEAD BEEF FEED" for the MAC address.
+// Note that most of the Ardunio examples use "DEAD BEEF FEED" for the MAC address.
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  // DEAD BEEF FEED
 
 // a R/W server on the port
 EthernetServer server = EthernetServer(IP_PORT);
 
-// No blink or button functionality. Use the vanilla constructor.
-DTCGateway node(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME);
-
-// Uncomment this constructor if you have leds and include button attached to your gateway 
-//MyGateway gw(RADIO_CE_PIN, RADIO_SPI_SS_PIN, INCLUSION_MODE_TIME, INCLUSION_MODE_PIN, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
-
+DTCGateway gw(Serial);
+//DTCGateway gw(Serial, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
 
 char inputCommand[MAX_RECEIVE_LENGTH] = "";    // A string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
 
 void setup()
 {
-	node.begin(WIFI_CHANNEL, writeEthernet);
+	gw.begin(WIFI_CHANNEL, writeEthernet);
 	Ethernet.begin(mac, myIp);
 
 	// give the Ethernet interface a second to initialize
@@ -108,13 +91,6 @@ void setup()
 	// start listening for clients
 	server.begin();
 }
-
-// This will be called when data should be written to ethernet 
-void writeEthernet(char *writeBuffer)
-{
-	server.write(writeBuffer);
-}
-
 void loop()
 {
 	// if an incoming client connects, there will be
@@ -141,7 +117,7 @@ void loop()
 					// echo the string to the serial port
 					Serial.print(inputCommand);
 
-					node.parseAndSend(inputCommand);
+					gw.processSerialMessage(inputCommand);
 
 					// clear the string:
 					inputPos = 0;
@@ -161,5 +137,11 @@ void loop()
 		}
 	}
 
-	node.processRadioMessage();
+	gw.processRadioMessage();
+}
+
+// This will be called when data should be written to ethernet 
+void writeEthernet(char *writeBuffer)
+{
+	server.write(writeBuffer);
 }

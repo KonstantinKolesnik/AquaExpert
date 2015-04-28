@@ -61,40 +61,42 @@ char* DTCMessage::getStream(char *buffer) const
 char* DTCMessage::getString(char *buffer) const
 {
 	uint8_t payloadType = miGetPayloadType();
-	if (payloadType == P_STRING) {
+	if (payloadType == P_STRING)
+	{
 		strncpy(buffer, data, miGetLength());
 		buffer[miGetLength()] = 0;
 		return buffer;
-	} else if (buffer != NULL) {
-		if (payloadType == P_BYTE) {
-			itoa(bValue, buffer, 10);
-		} else if (payloadType == P_INT16) {
-			itoa(iValue, buffer, 10);
-		} else if (payloadType == P_UINT16) {
-			utoa(uiValue, buffer, 10);
-		} else if (payloadType == P_LONG32) {
-			ltoa(lValue, buffer, 10);
-		} else if (payloadType == P_ULONG32) {
-			ultoa(ulValue, buffer, 10);
-		} else if (payloadType == P_FLOAT32) {
-			dtostrf(fValue,2,fPrecision,buffer);
-		} else if (payloadType == P_CUSTOM) {
-			return getCustomString(buffer);
-		}
-		return buffer;
-	} else {
-		return NULL;
 	}
+	else if (buffer != NULL)
+	{
+		if (payloadType == P_BYTE)
+			itoa(bValue, buffer, 10);
+		else if (payloadType == P_INT16)
+			itoa(iValue, buffer, 10);
+		else if (payloadType == P_UINT16)
+			utoa(uiValue, buffer, 10);
+		else if (payloadType == P_LONG32)
+			ltoa(lValue, buffer, 10);
+		else if (payloadType == P_ULONG32)
+			ultoa(ulValue, buffer, 10);
+		else if (payloadType == P_FLOAT32)
+			dtostrf(fValue,2,fPrecision,buffer);
+		else if (payloadType == P_CUSTOM)
+			return getCustomString(buffer);
+		
+		return buffer;
+	}
+	else
+		return NULL;
 }
 uint8_t DTCMessage::getByte() const
 {
-	if (miGetPayloadType() == P_BYTE) {
+	if (miGetPayloadType() == P_BYTE)
 		return data[0];
-	} else if (miGetPayloadType() == P_STRING) {
+	else if (miGetPayloadType() == P_STRING)
 		return atoi(data);
-	} else {
+	else
 		return 0;
-	}
 }
 bool DTCMessage::getBool() const
 {
@@ -164,7 +166,8 @@ DTCMessage& DTCMessage::setDestination(uint8_t _destination)
 }
 
 // Set payload
-DTCMessage& DTCMessage::set(void* value, uint8_t length) {
+DTCMessage& DTCMessage::set(void* value, uint8_t length)
+{
 	miSetPayloadType(P_CUSTOM);
 	miSetLength(length);
 	memcpy(data, value, min(length, MAX_PAYLOAD));

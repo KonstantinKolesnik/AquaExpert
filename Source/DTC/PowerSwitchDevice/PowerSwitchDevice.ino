@@ -7,11 +7,7 @@ uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 };
 #define RELAY_OFF				1  // GPIO value to write to turn off attached relay
 DTCMessage msgRelay(0, V_LIGHT);
 
-//#if NUMBER_OF_RELAYS < 8
-DTCNode node(DEFAULT_RX_PIN, DEFAULT_TX_PIN);
-//#else
-//DTCNode node(A0, DEFAULT_TX_PIN);
-//#endif
+DTCNode node(Serial);
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {

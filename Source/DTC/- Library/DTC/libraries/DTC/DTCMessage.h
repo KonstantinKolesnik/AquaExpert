@@ -87,8 +87,6 @@ typedef enum
 	I_ID_REQUEST,
 	I_ID_RESPONSE,
 	I_CONFIG,
-	I_FIND_PARENT,
-	I_FIND_PARENT_RESPONSE,
 	I_LOG_MESSAGE,
 	I_CHILDREN,
 	I_SKETCH_NAME,
@@ -154,53 +152,52 @@ typedef enum
 
 
 
-#define BIT(n)                  ( 1<<(n) )
+#define BIT(n)						(1<<(n))
 // Create a bitmask of length len.
-#define BIT_MASK(len)           ( BIT(len)-1 )
+#define BIT_MASK(len)				(BIT(len) - 1)
 // Create a bitfield mask of length starting at bit 'start'.
-#define BF_MASK(start, len)     ( BIT_MASK(len)<<(start) )
-
+#define BF_MASK(start, len)			(BIT_MASK(len) << (start))
 // Prepare a bitmask for insertion or combining.
-#define BF_PREP(x, start, len)  ( ((x)&BIT_MASK(len)) << (start) )
+#define BF_PREP(x, start, len)		(((x) & BIT_MASK(len)) << (start))
 // Extract a bitfield of length len starting at bit 'start' from y.
-#define BF_GET(y, start, len)   ( ((y)>>(start)) & BIT_MASK(len) )
+#define BF_GET(y, start, len)		(((y) >> (start)) & BIT_MASK(len))
 // Insert a new bitfield value x into y.
-#define BF_SET(y, x, start, len)    ( y= ((y) &~ BF_MASK(start, len)) | BF_PREP(x, start, len) )
+#define BF_SET(y, x, start, len)    (y = ((y) &~ BF_MASK(start, len)) | BF_PREP(x, start, len))
+
 
 // Getters/setters for special bit fields in header
-#define mSetVersion(_msg,_version) BF_SET(_msg.version_length, _version, 0, 3)
-#define mGetVersion(_msg) BF_GET(_msg.version_length, 0, 3)
+#define mSetVersion(msg, version)	BF_SET(msg.version_length, version, 0, 3)
+#define mGetVersion(msg)			BF_GET(msg.version_length, 0, 3)
 
-#define mSetLength(_msg,_length) BF_SET(_msg.version_length, _length, 3, 5)
-#define mGetLength(_msg) BF_GET(_msg.version_length, 3, 5)
+#define mSetLength(msg, length)		BF_SET(msg.version_length, length, 3, 5)
+#define mGetLength(msg)				BF_GET(msg.version_length, 3, 5)
 
-#define mSetCommand(_msg,_command) BF_SET(_msg.command_ack_payload, _command, 0, 3)
-#define mGetCommand(_msg) BF_GET(_msg.command_ack_payload, 0, 3)
+#define mSetCommand(msg, command)	BF_SET(msg.command_ack_payload, command, 0, 3)
+#define mGetCommand(msg)			BF_GET(msg.command_ack_payload, 0, 3)
 
-#define mSetRequestAck(_msg,_rack) BF_SET(_msg.command_ack_payload, _rack, 3, 1)
-#define mGetRequestAck(_msg) BF_GET(_msg.command_ack_payload, 3, 1)
+#define mSetRequestAck(msg, rack)	BF_SET(msg.command_ack_payload, rack, 3, 1)
+#define mGetRequestAck(msg)			BF_GET(msg.command_ack_payload, 3, 1)
 
-#define mSetAck(_msg,_ackMsg) BF_SET(_msg.command_ack_payload, _ackMsg, 4, 1)
-#define mGetAck(_msg) BF_GET(_msg.command_ack_payload, 4, 1)
+#define mSetAck(msg, ackMsg)		BF_SET(msg.command_ack_payload, ackMsg, 4, 1)
+#define mGetAck(msg)				BF_GET(msg.command_ack_payload, 4, 1)
 
-#define mSetPayloadType(_msg, _pt) BF_SET(_msg.command_ack_payload, _pt, 5, 3)
-#define mGetPayloadType(_msg) BF_GET(_msg.command_ack_payload, 5, 3)
-
+#define mSetPayloadType(msg, pt)	BF_SET(msg.command_ack_payload, pt, 5, 3)
+#define mGetPayloadType(msg)		BF_GET(msg.command_ack_payload, 5, 3)
 
 // internal access for special fields
-#define miGetCommand() BF_GET(command_ack_payload, 0, 3)
+#define miGetCommand()				BF_GET(command_ack_payload, 0, 3)
 
-#define miSetLength(_length) BF_SET(version_length, _length, 3, 5)
-#define miGetLength() BF_GET(version_length, 3, 5)
+#define miSetLength(length)			BF_SET(version_length, length, 3, 5)
+#define miGetLength()				BF_GET(version_length, 3, 5)
 
-#define miSetRequestAck(_rack) BF_SET(command_ack_payload, _rack, 3, 1)
-#define miGetRequestAck() BF_GET(command_ack_payload, 3, 1)
+#define miSetRequestAck(rack)		BF_SET(command_ack_payload, rack, 3, 1)
+#define miGetRequestAck()			BF_GET(command_ack_payload, 3, 1)
 
-#define miSetAck(_ack) BF_SET(command_ack_payload, _ack, 4, 1)
-#define miGetAck() BF_GET(command_ack_payload, 4, 1)
+#define miSetAck(ack)				BF_SET(command_ack_payload, ack, 4, 1)
+#define miGetAck()					BF_GET(command_ack_payload, 4, 1)
 
-#define miSetPayloadType(_pt) BF_SET(command_ack_payload, _pt, 5, 3)
-#define miGetPayloadType() BF_GET(command_ack_payload, 5, 3)
+#define miSetPayloadType(pt)		BF_SET(command_ack_payload, pt, 5, 3)
+#define miGetPayloadType()			BF_GET(command_ack_payload, 5, 3)
 
 
 #ifdef __cplusplus
@@ -252,11 +249,10 @@ public:
 	DTCMessage& set(int value);
 
 #else
-
-typedef union {
+typedef union
+{
 	struct
 	{
-
 #endif
 		uint8_t last;            	 // 8 bit - Id of last node this message passed
 		uint8_t sender;          	 // 8 bit - Id of sender node (origin)
@@ -297,8 +293,8 @@ typedef union {
 } __attribute__((packed));
 #else
 };
-	uint8_t array[HEADER_SIZE + MAX_PAYLOAD + 1];	
-} __attribute__((packed)) MyMessage;
+	uint8_t array[HEADER_SIZE + MAX_PAYLOAD + 1];
+} __attribute__((packed)) DTCMessage;
 #endif
 
 #endif

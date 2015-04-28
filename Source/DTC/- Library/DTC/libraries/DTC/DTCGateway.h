@@ -2,14 +2,11 @@
 #define DTCGateway_h
 
 #include "utility/MsTimer2.h"
-//#include "utility/PinChangeInt.h"
 #include "DTCNode.h"
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-#include <SoftwareSerial.h>
-#endif
+#include <aJSON.h>
 
-#define MAX_RECEIVE_LENGTH 100 // Max buffer size needed for messages coming from controller
-#define MAX_SEND_LENGTH 120 // Max buffer size needed for messages destined for controller
+#define MAX_RECEIVE_LENGTH	200 // Max buffer size needed for messages coming from controller
+#define MAX_SEND_LENGTH		200 // Max buffer size needed for messages destined for controller
 
 class DTCGateway : public DTCNode
 {
@@ -18,24 +15,21 @@ public:
 	* Constructor
 	*
 	* Creates a new instance of DTCGateway class.
-	* If you don't use status leds and/or inclusion mode button on your gateway
+	* If you don't use status leds on your gateway
 	* you can disable this functionality by calling the 1 argument constructor.
 	*
-	* @param _uart A reference of UART object.
+	* @param _uartESP A reference of UART object for link to ESP8266
 	* @param _rx Digital pin for receive led
 	* @param _tx Digital pin for transfer led
 	* @param _er Digital pin for error led
 	*
 	*/
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-	DTCGateway(SoftwareSerial &_uart, uint8_t _rx = 7, uint8_t _tx = 6, uint8_t _er = 5);
-#else
-	DTCGateway(HardwareSerial &_uart, uint8_t _rx = 7, uint8_t _tx = 6, uint8_t _er = 5);
-#endif
+	DTCGateway(HardwareSerial &_uartESP, uint8_t _rx = 7, uint8_t _tx = 6, uint8_t _er = 5);
 
 	void begin(uint8_t channel = WIFI_CHANNEL, void(*dataCallback)(char*) = NULL);
 	void processRadioMessage();
-	void processSerialMessage(char*);
+	//void processSerialMessage(char*);
+	void processSerialMessage(aJsonObject *msg);
 
 private:
 	char convBuf[MAX_PAYLOAD * 2 + 1];

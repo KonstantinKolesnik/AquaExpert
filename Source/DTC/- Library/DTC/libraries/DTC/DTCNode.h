@@ -14,9 +14,6 @@
 #include <Arduino.h>
 #include "ESP8266.h"
 #include "utility/LowPower.h"
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-#include <SoftwareSerial.h>
-#endif
 #endif
 
 #ifdef DEBUG
@@ -25,7 +22,7 @@
 #define debug(x,...)
 #endif
 
-#define BAUD_RATE 19200
+#define BAUD_RATE 115200
 
 #define AUTO 0xFF // 0-254. Id 255 is reserved for auto initialization of nodeId.
 #define NODE_SENSOR_ID 0xFF // Node child id is always created for when a node
@@ -71,13 +68,9 @@ public:
 	/*
 	* Constuctor.
 	*
-	* @param uart - a reference of UART object.
+	* @param uart - a reference of UART object for link to ESP8266
 	*/
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-	DTCNode(SoftwareSerial &uart);
-#else
 	DTCNode(HardwareSerial &uart);
-#endif
 
 	/**
 	* Begin operation of the DTC library

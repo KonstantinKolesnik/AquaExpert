@@ -1,9 +1,6 @@
 #include "DTCNode.h"
 #include "utility/LowPower.h"
 #include "ESP8266.h"
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-#include <SoftwareSerial.h>
-#endif
 
 // Inline function and macros
 inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type)
@@ -16,11 +13,7 @@ inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, u
 	return msg;
 }
 
-#ifdef ESP8266_USE_SOFTWARE_SERIAL
-DTCNode::DTCNode(SoftwareSerial &uart)
-#else
 DTCNode::DTCNode(HardwareSerial &uart)
-#endif
 	: ESP8266(uart)
 {
 }
@@ -42,11 +35,10 @@ void DTCNode::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, ui
 	if (cc.isMetric == 0xff) // Eeprom empty, set default to metric
 		cc.isMetric = 1;
 
+	// Set static id
 	if ((_nodeId != AUTO) && (nc.nodeId != _nodeId))
 	{
-		// Set static id
 		nc.nodeId = _nodeId;
-		// Save static id in eeprom
 		eeprom_write_byte((uint8_t*)EEPROM_NODE_ID_ADDRESS, _nodeId);
 	}
 
