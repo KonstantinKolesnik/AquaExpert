@@ -64,7 +64,7 @@
 
 
 #define IP_PORT 5003				// The port you want to open 
-IPAddress myIp(192, 168, 1, 177);	// Configure your static ip-address here    COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
+IPAddress myIp(192, 168, 1, 177);	// Configure your static ip-address here; COMPILE ERROR HERE? Use Arduino IDE 1.5.7 or later!
 
 // The MAC address can be anything you want but should be unique on your network.
 // Newer boards have a MAC address printed on the underside of the PCB, which you can (optionally) use.
@@ -74,24 +74,29 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  // DEAD BEEF FEED
 // a R/W server on the port
 EthernetServer server = EthernetServer(IP_PORT);
 
-DTCGateway gw(Serial);
-//DTCGateway gw(Serial, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
+//DTCGateway gw(Serial);
+DTCGateway gw(Serial, RADIO_RX_LED_PIN, RADIO_TX_LED_PIN, RADIO_ERROR_LED_PIN);
 
 char inputCommand[MAX_RECEIVE_LENGTH] = "";    // A string to hold incoming commands from serial/ethernet interface
 int inputPos = 0;
 
 void setup()
 {
-	gw.begin(WIFI_CHANNEL, writeEthernet);
+	gw.begin(WIFI_CHANNEL, onRadioMessage);
 	Ethernet.begin(mac, myIp);
 
 	// give the Ethernet interface a second to initialize
 	delay(1000);
 
-	// start listening for clients
 	server.begin();
 }
 void loop()
+{
+	gw.processRadioMessage();
+	receiveFromController();
+}
+
+void receiveFromController()
 {
 	// if an incoming client connects, there will be
 	// bytes available to read via the client object
@@ -117,7 +122,7 @@ void loop()
 					// echo the string to the serial port
 					Serial.print(inputCommand);
 
-					gw.processSerialMessage(inputCommand);
+					gw.processControllerMessage(inputCommand);
 
 					// clear the string:
 					inputPos = 0;
@@ -136,12 +141,8 @@ void loop()
 			}
 		}
 	}
-
-	gw.processRadioMessage();
 }
-
-// This will be called when data should be written to ethernet 
-void writeEthernet(char *writeBuffer)
+void onRadioMessage(char *writeBuffer)
 {
 	server.write(writeBuffer);
 }

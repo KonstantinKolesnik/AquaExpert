@@ -28,8 +28,8 @@ public:
 
 	void begin(uint8_t channel = WIFI_CHANNEL, void(*dataCallback)(char*) = NULL);
 	void processRadioMessage();
-	//void processSerialMessage(char*);
-	void processSerialMessage(aJsonObject *msg);
+	//void processControllerMessage(char*);
+	void processControllerMessage(aJsonObject *msg);
 
 private:
 	char convBuf[MAX_PAYLOAD * 2 + 1];

@@ -1,5 +1,5 @@
 #include "DTCGateway.h"
-//#include "aJSON.h"
+#include "aJSON.h"
 
 uint8_t pinRx;
 uint8_t pinTx;
@@ -7,8 +7,6 @@ uint8_t pinEr;
 volatile uint8_t countRx;
 volatile uint8_t countTx;
 volatile uint8_t countErr;
-
-//aJsonStream serial_stream(&Serial);
 
 DTCGateway::DTCGateway(HardwareSerial &_uartESP, uint8_t _rx, uint8_t _tx, uint8_t _er)
 	: DTCNode(_uartESP)
@@ -21,6 +19,8 @@ DTCGateway::DTCGateway(HardwareSerial &_uartESP, uint8_t _rx, uint8_t _tx, uint8
 void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 {
 	Serial.begin(BAUD_RATE);
+	//while (!Serial){};
+	delay(1000);
 
 	isGateway = true;
 
@@ -46,10 +46,11 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	digitalWrite(pinRx, LOW);
 	digitalWrite(pinTx, LOW);
 	digitalWrite(pinEr, LOW);
-	delay(300);
+	delay(500);
 	digitalWrite(pinRx, HIGH);
 	digitalWrite(pinTx, HIGH);
 	digitalWrite(pinEr, HIGH);
+
 
 	// Start up the radio library
 	setupRadio(channel);
@@ -57,7 +58,16 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	//RF24::openReadingPipe(CURRENT_NODE_PIPE, BASE_RADIO_ID);
 	//RF24::startListening();
 
-	Serial.println(getVersion().c_str());
+	//pinMode(13, OUTPUT);
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	digitalWrite(13, HIGH);
+	//	delay(500);
+	//	digitalWrite(13, LOW);
+	//	delay(500);
+	//}
+
+	//Serial.println(getVersion().c_str());
 	//if (!setOprToStation())
 	//	Serial.println("Failed to set Station");
 	//Serial.println(getWifiModeList().c_str());
@@ -89,14 +99,47 @@ void DTCGateway::processRadioMessage()
 		serial(message);
 	}
 }
-//void DTCGateway::processSerialMessage(char *commandBuffer)
-void DTCGateway::processSerialMessage(aJsonObject *msg)
+//void DTCGateway::processControllerMessage(char *commandBuffer)
+void DTCGateway::processControllerMessage(aJsonObject *msg)
 {
+	//Serial.println("Message received");
+
+	aJsonObject *jsptr = aJson.getObjectItem(msg, "id");
+	//if (jsptr && jsptr->type == aJson_Int)
+	if (jsptr && jsptr->type == aJson_String)
+	{
+		Serial.print("ID received: ");
+		Serial.println(jsptr->valuestring);
+
+		if (strcmp(jsptr->valuestring, "abc") == 0)
+		{
+			digitalWrite(13, HIGH);
+			delay(80);
+			digitalWrite(13, LOW);
+		}
+
+
+	//	myPID.SetMode(MANUAL);
+	//	int new_speed = map(constrain(jsptr->valueint, 0, 100), 0, 100, 0, MAX_PWM);
+	//	change_speed(new_speed, 8);
+	//	// Let the train settle at the new speed
+	//	// TODO: this should be long enough to make sure the
+	//	// rolling average reflects the new speed
+	//	delay(1000);
+	//	measured_rpm = moving_avg();
+	//	target_rpm = measured_rpm;
+	//	myPID.SetMode(AUTOMATIC); // Reset the PID to new RPM target
+	//	ack_cmd = "speed";
+	//	next_message = MSG_ACK;
+	//	return;
+	}
 
 
 
 
 	//-------------------------------------------------------
+
+
 
 	//bool ok = false;
 	//char *str, *p, *value = NULL;

@@ -34,13 +34,7 @@ void setup()
 void loop()
 {
 	gw.processRadioMessage();
-
 	receiveFromController();
-	//if (isCommandComplete)
-	//{
-	//	gw.processSerialMessage(inputCommand);
-	//	isCommandComplete = false;
-	//}
 }
 
 /*
@@ -62,7 +56,7 @@ void receiveFromController()
 			serial_stream.flush(); // We were not able to decode this, let's simply flush the buffer
 		else
 		{
-			gw.processSerialMessage(msg);
+			gw.processControllerMessage(msg);
 			aJson.deleteItem(msg);
 		}
 	}
@@ -95,5 +89,11 @@ void receiveFromController()
 	//		// Incoming message too long. Throw away 
 	//		inputPos = 0;
 	//	}
+	//}
+
+	//if (isCommandComplete)
+	//{
+	//	gw.processControllerMessage(inputCommand);
+	//	isCommandComplete = false;
 	//}
 }
