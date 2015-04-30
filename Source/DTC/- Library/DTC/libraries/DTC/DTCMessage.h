@@ -18,10 +18,7 @@
 #include <stdint.h>
 #endif
 
-#define PROTOCOL_VERSION 2
-#define MAX_MESSAGE_LENGTH 32
-#define HEADER_SIZE 7
-#define MAX_PAYLOAD (MAX_MESSAGE_LENGTH - HEADER_SIZE)
+#define PROTOCOL_VERSION	1
 
 // Message types
 typedef enum
@@ -93,38 +90,17 @@ typedef enum
 	I_SKETCH_VERSION,
 	I_REBOOT,
 	I_GATEWAY_READY
-} mysensor_internal;
+} dtc_internal;
 
-// Type of sensor (for presentation message)
+// Type of node (for presentation message)
 typedef enum
 {
-	S_DOOR,
-	S_MOTION,
-	S_SMOKE,
-	S_LIGHT,
-	S_DIMMER,
-	S_COVER,
-	S_TEMP,
-	S_HUM,
-	S_BARO,
-	S_WIND,
-	S_RAIN,
-	S_UV,
-	S_WEIGHT,
-	S_POWER,
-	S_HEATER,
-	S_DISTANCE,
-	S_LIGHT_LEVEL,
-	S_ARDUINO_NODE,
-	S_ARDUINO_REPEATER_NODE, // not needed
-	S_LOCK,
-	S_IR,
-	S_WATER,
-	S_AIR_QUALITY,
-	S_CUSTOM,
-	S_DUST,
-	S_SCENE_CONTROLLER, S_PH
-} mysensor_sensor;
+	S_GENERIC_DECODER,
+	S_LOCO_DECODER,
+	S_ACC_DECODER,
+	S_FUNC_DECODER,
+	S_TRACK_DECODER,
+} dtc_node;
 
 // Type of data stream (for streamed message)
 typedef enum
@@ -209,7 +185,7 @@ private:
 public:
 	// Constructors
 	DTCMessage();
-	DTCMessage(uint8_t sensor, uint8_t type);
+	DTCMessage(uint8_t type);
 
 	char i2h(uint8_t i) const;
 
@@ -230,13 +206,9 @@ public:
 	int getInt() const;
 	unsigned int getUInt() const;
 
-	// Getter for ack-flag. True if this is an ack message.
-	bool isAck() const;
-
 	// Setters for building message "on the fly"
 	DTCMessage& setType(uint8_t type);
-	DTCMessage& setSensor(uint8_t sensor);
-	DTCMessage& setDestination(uint8_t destination);
+	DTCMessage& setDestination(char* destination);
 
 	// Setters for payload
 	DTCMessage& set(void* payload, uint8_t length);
@@ -254,18 +226,11 @@ typedef union
 	struct
 	{
 #endif
-		uint8_t last;            	 // 8 bit - Id of last node this message passed
-		uint8_t sender;          	 // 8 bit - Id of sender node (origin)
-		uint8_t destination;     	 // 8 bit - Id of destination node
-
+		char* sender;          	 // Id of sender node (origin)
+		char* destination;     	 // Id of destination node
 		uint8_t version_length;      // 3 bit - Protocol version
-		// 5 bit - Length of payload
+		uint8_t type;
 		uint8_t command_ack_payload; // 3 bit - Command type
-		// 1 bit - Request an ack - Indicator that receiver should send an ack back.
-		// 1 bit - Is ack messsage - Indicator that this is the actual ack message.
-		// 3 bit - Payload data type
-		uint8_t type;            	 // 8 bit - Type varies depending on command
-		uint8_t sensor;          	 // 8 bit - Id of sensor that this message concerns.
 
 		// Each message can transfer a payload. We add one extra byte for string
 		// terminator \0 to be "printable" this is not transferred OTA
@@ -287,7 +252,7 @@ typedef union
 				uint8_t version; 	  // Library version
 				uint8_t sensorType;   // Sensor type hint for controller, see table above
 			};
-			char data[MAX_PAYLOAD + 1];
+			char data;
 		} __attribute__((packed));
 #ifdef __cplusplus
 } __attribute__((packed));

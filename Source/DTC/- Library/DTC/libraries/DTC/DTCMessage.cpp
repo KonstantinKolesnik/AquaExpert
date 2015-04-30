@@ -4,18 +4,12 @@
 
 DTCMessage::DTCMessage()
 {
-	destination = 0; // Gateway is default destination
+	destination = GATEWAY_ADDRESS; // Gateway is default destination
 }
-DTCMessage::DTCMessage(uint8_t _sensor, uint8_t _type)
+DTCMessage::DTCMessage(uint8_t _type)
 {
-	destination = 0; // Gateway is default destination
-	sensor = _sensor;
+	destination = GATEWAY_ADDRESS; // Gateway is default destination
 	type = _type;
-}
-
-bool DTCMessage::isAck() const
-{
-	return miGetAck();
 }
 
 /* Getters for payload converted to desired form */
@@ -154,12 +148,7 @@ DTCMessage& DTCMessage::setType(uint8_t _type)
 	type = _type;
 	return *this;
 }
-DTCMessage& DTCMessage::setSensor(uint8_t _sensor)
-{
-	sensor = _sensor;
-	return *this;
-}
-DTCMessage& DTCMessage::setDestination(uint8_t _destination)
+DTCMessage& DTCMessage::setDestination(char* _destination)
 {
 	destination = _destination;
 	return *this;

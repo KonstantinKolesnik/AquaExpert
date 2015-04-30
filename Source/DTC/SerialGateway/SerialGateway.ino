@@ -21,11 +21,7 @@
 #include <aJSON.h>
 
 DTCGateway gw(Serial1, 7, 6, 5);
-aJsonStream serial_stream(&Serial);
-
-//char inputCommand[MAX_RECEIVE_LENGTH] = ""; // a string to hold incoming commands from serial
-//int inputPos = 0;
-//bool isCommandComplete = false;
+aJsonStream serialStream(&Serial);
 
 void setup()
 {
@@ -45,55 +41,19 @@ response. Multiple bytes of data may be available.
 */
 void receiveFromController()
 {
-	if (serial_stream.available())
-		serial_stream.skip(); // First, skip any accidental whitespace like newlines.
+	if (serialStream.available())
+		serialStream.skip(); // First, skip any accidental whitespace like newlines.
 
-	if (serial_stream.available())
+	if (serialStream.available())
 	{
-		aJsonObject *msg = aJson.parse(&serial_stream);
+		aJsonObject *msg = aJson.parse(&serialStream);
 
 		if (!msg)
-			serial_stream.flush(); // We were not able to decode this, let's simply flush the buffer
+			serialStream.flush(); // we were not able to decode this, let's simply flush the buffer
 		else
 		{
 			gw.processControllerMessage(msg);
 			aJson.deleteItem(msg);
 		}
 	}
-
-
-	//----------------------------
-
-	//while (Serial.available())
-	//{
-	//	// get the new byte:
-	//	char inChar = (char)Serial.read();
-
-	//	// if the incoming character is a newline, set a flag so the main loop can do something about it:
-	//	if (inputPos < MAX_RECEIVE_LENGTH - 1 && !isCommandComplete)
-	//	{
-	//		if (inChar == '\n')
-	//		{
-	//			inputCommand[inputPos] = 0;
-	//			inputPos = 0;
-	//			isCommandComplete = true;
-	//		}
-	//		else
-	//		{
-	//			// add it to the inputString:
-	//			inputCommand[inputPos++] = inChar;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		// Incoming message too long. Throw away 
-	//		inputPos = 0;
-	//	}
-	//}
-
-	//if (isCommandComplete)
-	//{
-	//	gw.processControllerMessage(inputCommand);
-	//	isCommandComplete = false;
-	//}
 }

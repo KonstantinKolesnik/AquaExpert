@@ -2,8 +2,8 @@
 #define DTCGateway_h
 
 #include "utility/MsTimer2.h"
+#include "./aJson/aJSON.h"
 #include "DTCNode.h"
-#include <aJSON.h>
 
 #define MAX_RECEIVE_LENGTH	200 // Max buffer size needed for messages coming from controller
 #define MAX_SEND_LENGTH		200 // Max buffer size needed for messages destined for controller
@@ -28,18 +28,17 @@ public:
 
 	void begin(uint8_t channel = WIFI_CHANNEL, void(*dataCallback)(char*) = NULL);
 	void processRadioMessage();
-	//void processControllerMessage(char*);
 	void processControllerMessage(aJsonObject *msg);
 
 private:
-	char convBuf[MAX_PAYLOAD * 2 + 1];
+	//char convBuf[MAX_PAYLOAD * 2 + 1];
 	char serialBuffer[MAX_SEND_LENGTH]; // buffer for building string when sending data to controller
-	boolean useWriteCallback;
 	void(*dataCallback)(char*);
 
 	uint8_t h2i(char c);
 	void serial(const char *fmt, ...);
 	void serial(DTCMessage &msg);
+
 	void ledTimers();
 	void rxBlink(uint8_t cnt);
 	void txBlink(uint8_t cnt);

@@ -1,5 +1,5 @@
+#include "./aJson/aJSON.h"
 #include "DTCGateway.h"
-#include "aJSON.h"
 
 uint8_t pinRx;
 uint8_t pinTx;
@@ -24,15 +24,9 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 
 	isGateway = true;
 
-	if (inDataCallback != NULL)
-	{
-		useWriteCallback = true;
-		dataCallback = inDataCallback;
-	}
-	else
-		useWriteCallback = false;
+	dataCallback = inDataCallback;
 
-	nc.nodeId = 0;
+	nc.nodeId = GATEWAY_ADDRESS;
 
 	countRx = 0;
 	countTx = 0;
@@ -72,7 +66,7 @@ void DTCGateway::begin(uint8_t channel, void(*inDataCallback)(char*))
 	//	Serial.println("Failed to set Station");
 	//Serial.println(getWifiModeList().c_str());
 
-
+	//nc.gwMac = getMacAddress
 
 
 
@@ -96,26 +90,25 @@ void DTCGateway::processRadioMessage()
 		rxBlink(mGetCommand(message) == C_PRESENTATION ? 3 : 1);
 
 		// pass the message to controller
+		//char *json_String = aJson.print(jsonObject);
 		serial(message);
 	}
 }
-//void DTCGateway::processControllerMessage(char *commandBuffer)
 void DTCGateway::processControllerMessage(aJsonObject *msg)
 {
 	//Serial.println("Message received");
 
 	aJsonObject *jsptr = aJson.getObjectItem(msg, "id");
-	//if (jsptr && jsptr->type == aJson_Int)
 	if (jsptr && jsptr->type == aJson_String)
 	{
-		Serial.print("ID received: ");
-		Serial.println(jsptr->valuestring);
+		//Serial.print("ID received: ");
+		//Serial.println(jsptr->valuestring);
 
 		if (strcmp(jsptr->valuestring, "abc") == 0)
 		{
-			digitalWrite(13, HIGH);
-			delay(80);
-			digitalWrite(13, LOW);
+			//digitalWrite(13, HIGH);
+			//delay(80);
+			//digitalWrite(13, LOW);
 		}
 
 
@@ -148,7 +141,6 @@ void DTCGateway::processControllerMessage(aJsonObject *msg)
 	//int i = 0;
 
 	//uint16_t destination = 0;
-	//uint8_t sensor = 0;
 	//uint8_t command = 0;
 	//uint8_t type = 0;
 
@@ -209,7 +201,6 @@ void DTCGateway::processControllerMessage(aJsonObject *msg)
 
 	//	msg.sender = GATEWAY_ADDRESS;
 	//	msg.destination = destination;
-	//	msg.sensor = sensor;
 	//	msg.type = type;
 	//	mSetCommand(msg, command);
 	//	if (command == C_STREAM)
@@ -253,19 +244,19 @@ void DTCGateway::errBlink(uint8_t cnt)
 
 void DTCGateway::serial(const char *fmt, ...)
 {
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf_P(serialBuffer, MAX_SEND_LENGTH, fmt, args);
-	va_end(args);
+	//va_list args;
+	//va_start(args, fmt);
+	//vsnprintf_P(serialBuffer, MAX_SEND_LENGTH, fmt, args);
+	//va_end(args);
 
-	Serial.print(serialBuffer);
+	//Serial.print(serialBuffer);
 
-	if (useWriteCallback) // we have a registered write callback (probably Ethernet)
+	if (dataCallback != NULL) // we have a registered write callback (probably Ethernet)
 		dataCallback(serialBuffer);
 }
 void DTCGateway::serial(DTCMessage &msg)
 {
-	serial(PSTR("%d;%d;%d;%d;%s\n"), msg.sender, msg.sensor, mGetCommand(msg), msg.type, msg.getString(convBuf));
+	//serial(PSTR("%d;%d;%d;%s\n"), msg.sender, mGetCommand(msg), msg.type, msg.getString(convBuf));
 }
 
 

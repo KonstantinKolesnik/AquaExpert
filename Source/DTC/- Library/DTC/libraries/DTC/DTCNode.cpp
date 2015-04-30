@@ -3,11 +3,10 @@
 #include "ESP8266.h"
 
 // Inline function and macros
-inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t sensor, uint8_t command, uint8_t type)
+inline DTCMessage& build(DTCMessage &msg, uint8_t sender, uint8_t destination, uint8_t command, uint8_t type)
 {
 	msg.sender = sender;
 	msg.destination = destination;
-	msg.sensor = sensor;
 	msg.type = type;
 	mSetCommand(msg, command);
 	return msg;
@@ -18,7 +17,7 @@ DTCNode::DTCNode(HardwareSerial &uart)
 {
 }
 
-void DTCNode::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, uint8_t channel)
+void DTCNode::begin(void(*_msgCallback)(const DTCMessage &), uint8_t channel)
 {
 	Serial.begin(BAUD_RATE);
 
@@ -27,29 +26,27 @@ void DTCNode::begin(void(*_msgCallback)(const DTCMessage &), uint8_t _nodeId, ui
 
 	setupRadio(channel);
 
-	// Read settings from eeprom
+	// Read node config from EEPROM
 	eeprom_read_block((void*)&nc, (void*)EEPROM_NODE_ID_ADDRESS, sizeof(NodeConfig));
-
-	// Read latest received controller configuration from EEPROM
+	// Read controller config from EEPROM
 	eeprom_read_block((void*)&cc, (void*)EEPROM_CONTROLLER_CONFIG_ADDRESS, sizeof(ControllerConfig));
-	if (cc.isMetric == 0xff) // Eeprom empty, set default to metric
+	if (cc.isMetric == 0xff) // EEPROM empty, set default to metric
 		cc.isMetric = 1;
 
-	// Set static id
-	if ((_nodeId != AUTO) && (nc.nodeId != _nodeId))
-	{
-		nc.nodeId = _nodeId;
-		eeprom_write_byte((uint8_t*)EEPROM_NODE_ID_ADDRESS, _nodeId);
-	}
+	//if ((_nodeId != AUTO) && (nc.nodeId != _nodeId))
+	//{
+	//	nc.nodeId = _nodeId;
+	//	eeprom_write_byte((uint8_t*)EEPROM_NODE_ID_ADDRESS, _nodeId);
+	//}
 
 	// Try to fetch node-id from gateway
-	if (nc.nodeId == AUTO)
+	if (nc.nodeId == BROADCAST_ADDRESS)
 		requestNodeId();
 
 	debug(PSTR("started, id %d\n"), nc.nodeId);
 
 	// If we got an id, set this node to use it
-	if (nc.nodeId != AUTO)
+	if (nc.nodeId != BROADCAST_ADDRESS)
 	{
 		setupNode();
 		wait(2000); // wait configuration reply.
@@ -94,7 +91,7 @@ void DTCNode::setupNode()
 	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_CONFIG).set(""/*nc.parentNodeId*/));
 }
 
-uint8_t DTCNode::getNodeId()
+char* DTCNode::getNodeId()
 {
 	return nc.nodeId;
 }
@@ -107,10 +104,9 @@ DTCMessage& DTCNode::getLastMessage()
 	return msg;
 }
 
-bool DTCNode::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
+bool DTCNode::sendWrite(char* next, DTCMessage &message, bool broadcast)
 {
 	//uint8_t length = mGetLength(message);
-	message.last = nc.nodeId;
 	mSetVersion(message, PROTOCOL_VERSION);
 	
 	// Make sure radio has powered up
@@ -120,8 +116,8 @@ bool DTCNode::sendWrite(uint8_t next, DTCMessage &message, bool broadcast)
 	bool ok = true;// RF24::write(&message, min(MAX_MESSAGE_LENGTH, HEADER_SIZE + length), broadcast);
 	//RF24::startListening();
 
-	debug(PSTR("send: %d-%d-%d-%d s=%d,c=%d,t=%d,pt=%d,l=%d,st=%s:%s\n"),
-		message.sender, message.last, next, message.destination, message.sensor, mGetCommand(message), message.type, mGetPayloadType(message), mGetLength(message), ok ? "ok" : "fail", message.getString(convBuf));
+	//debug(PSTR("send: %s-%s-%d s=%d,c=%d,t=%d,pt=%d,l=%d,st=%s:%s\n"),
+	//	message.sender, message.destination, mGetCommand(message), message.type, mGetPayloadType(message), mGetLength(message), ok ? "ok" : "fail", message.getString(convBuf));
 
 	return ok;
 }
@@ -131,7 +127,7 @@ bool DTCNode::sendRoute(DTCMessage &message)
 	// process();
 
 	// If we still don't have any node id, re-request and skip this message.
-	if (nc.nodeId == AUTO && !(mGetCommand(message) == C_INTERNAL && message.type == I_ID_REQUEST))
+	if (nc.nodeId == BROADCAST_ADDRESS && !(mGetCommand(message) == C_INTERNAL && message.type == I_ID_REQUEST))
 		requestNodeId();
 	else if (!isGateway)
 		return sendWrite(GATEWAY_ADDRESS, message);
@@ -147,34 +143,33 @@ bool DTCNode::send(DTCMessage &message)
 
 void DTCNode::sendBatteryLevel(uint8_t value)
 {
-	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_BATTERY_LEVEL).set(value));
+	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_INTERNAL, I_BATTERY_LEVEL).set(value));
 }
-void DTCNode::present(uint8_t childSensorId, uint8_t sensorType)
+void DTCNode::present(uint8_t nodeType)
 {
-	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, childSensorId, C_PRESENTATION, sensorType).set(LIBRARY_VERSION));
+	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_PRESENTATION, nodeType).set(LIBRARY_VERSION));
 }
 void DTCNode::sendSketchInfo(const char *name, const char *version)
 {
 	if (name != NULL)
-		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_NAME).set(name));
+		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_INTERNAL, I_SKETCH_NAME).set(name));
 	if (version != NULL)
-		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_SKETCH_VERSION).set(version));
+		sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_INTERNAL, I_SKETCH_VERSION).set(version));
 }
 
-void DTCNode::request(uint8_t childSensorId, uint8_t variableType, uint8_t destination)
+void DTCNode::request(uint8_t variableType, char* destination)
 {
-	sendRoute(build(msg, nc.nodeId, destination, childSensorId, C_REQ, variableType).set(""));
+	sendRoute(build(msg, nc.nodeId, destination, C_REQ, variableType).set(""));
 }
 void DTCNode::requestTime(void(*_timeCallback)(unsigned long))
 {
 	timeCallback = _timeCallback;
-	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_TIME).set(""));
+	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_INTERNAL, I_TIME).set(""));
 }
 void DTCNode::requestNodeId()
 {
 	debug(PSTR("req node id\n"));
-	//RF24::openReadingPipe(CURRENT_NODE_PIPE, TO_ADDR(nc.nodeId));
-	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, NODE_SENSOR_ID, C_INTERNAL, I_ID_REQUEST).set(""));
+	sendRoute(build(msg, nc.nodeId, GATEWAY_ADDRESS, C_INTERNAL, I_ID_REQUEST).set(""));
 	wait(2000);
 }
 

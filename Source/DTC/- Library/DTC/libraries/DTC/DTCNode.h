@@ -12,7 +12,7 @@
 
 #ifdef __cplusplus
 #include <Arduino.h>
-#include "ESP8266.h"
+#include "./WeeESP8266/ESP8266.h"
 #include "utility/LowPower.h"
 #endif
 
@@ -24,16 +24,16 @@
 
 #define BAUD_RATE 115200
 
-#define AUTO 0xFF // 0-254. Id 255 is reserved for auto initialization of nodeId.
-#define NODE_SENSOR_ID 0xFF // Node child id is always created for when a node
+#define AUTO								0xFF // 0-254. Id 255 is reserved for auto initialization of nodeId.
+#define NODE_SENSOR_ID						0xFF // Node child id is always created for when a node
 
 // EEPROM start address for DTC library data
 #define EEPROM_START						0
 
-#define EEPROM_NODE_ID_ADDRESS				EEPROM_START
-#define EEPROM_SSID_ID_ADDRESS				(EEPROM_NODE_ID_ADDRESS + 1)
+#define EEPROM_NODE_ID_ADDRESS				EEPROM_START // 32 bytes of GUID: 64722B95-C208-49EF-9B4F-9DC25117E86E
+#define EEPROM_GATEWAY_MAC_ADDRESS			(EEPROM_NODE_ID_ADDRESS + 32) // 16 bytes of MAC address: DE-AD-BE-EF-FE-ED
 
-#define EEPROM_CONTROLLER_CONFIG_ADDRESS	(EEPROM_SSID_ID_ADDRESS + 1) // Location of controller sent configuration (we allow one payload of config data from controller)
+#define EEPROM_CONTROLLER_CONFIG_ADDRESS	(EEPROM_GATEWAY_MAC_ADDRESS + 16) // Location of controller sent configuration (24 bytes reserved)
 
 #define EEPROM_FIRMWARE_TYPE_ADDRESS		(EEPROM_CONTROLLER_CONFIG_ADDRESS + 24)
 #define EEPROM_FIRMWARE_VERSION_ADDRESS		(EEPROM_FIRMWARE_TYPE_ADDRESS + 2)
@@ -43,18 +43,13 @@
 #define EEPROM_LOCAL_CONFIG_ADDRESS			(EEPROM_FIRMWARE_CRC_ADDRESS + 2) // First free address for sketch static configuration
 
 // nodeId of net gateway receiver (where all nodes should send their data).
-#define GATEWAY_ADDRESS						((uint8_t)0)
-#define BROADCAST_ADDRESS					((uint8_t)0xFF)
-
-//#define WRITE_PIPE ((uint8_t)0)
-//#define CURRENT_NODE_PIPE ((uint8_t)1)
-//#define BROADCAST_PIPE ((uint8_t)2)
-
+#define GATEWAY_ADDRESS						("00000000-0000-0000-0000-000000000000")
+#define BROADCAST_ADDRESS					("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
 
 struct NodeConfig
 {
-	uint8_t nodeId; // current node id
-	//uint8_t ssidId;
+	char* nodeId; // current node id
+	char* gwMac; // current gateway mac-address
 };
 struct ControllerConfig
 {
@@ -80,7 +75,7 @@ public:
 	* @param nodeId The unique id (1-254) for this sensor. Default is AUTO(255) which means sensor tries to fetch an id from controller.
 	* @param channel Radio channel. Default is channel 6
 	*/
-	void begin(void(*msgCallback)(const DTCMessage &) = NULL, uint8_t nodeId = AUTO, uint8_t channel = WIFI_CHANNEL);
+	void begin(void(*msgCallback)(const DTCMessage &) = NULL, uint8_t channel = WIFI_CHANNEL);
 
 	/**
 	 * Return the nodes nodeId.
@@ -88,14 +83,12 @@ public:
 	uint8_t getNodeId();
 
 	/**
-	* Each node must present all attached sensors before any values can be handled correctly by the controller.
-	* It is usually good to present all attached sensors after power-up in setup().
+	* Each node must present itself before any values can be handled correctly by the controller.
+	* It is usually good to present after power-up in setup().
 	*
-	* @param sensorId Select a unique sensor id for this sensor. Choose a number between 0-254.
-	* @param sensorType The sensor type. See sensor typedef in DTCMessage.h.
-	* @param ack Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+	* @param nodeType The node type. See node typedef in DTCMessage.h.
 	*/
-	void present(uint8_t sensorId, uint8_t sensorType);
+	void present(uint8_t nodeType);
 
 	/**
 	 * Sends sketch meta information to the gateway. Not mandatory but a nice thing to do.
@@ -131,7 +124,7 @@ public:
 	* @param variableType The variableType to fetch
 	* @param destination The nodeId of other node in radio network. Default is gateway
 	*/
-	void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination = GATEWAY_ADDRESS);
+	void request(uint8_t variableType, char* destination = GATEWAY_ADDRESS);
 
 	/**
 	 * Requests time from controller. Answer will be delivered to callback.
@@ -231,12 +224,12 @@ protected:
 
 	void setupRadio(uint8_t channel);
 	boolean sendRoute(DTCMessage &message);
-	boolean sendWrite(uint8_t dest, DTCMessage &message, bool broadcast = false);
+	boolean sendWrite(char* dest, DTCMessage &message, bool broadcast = false);
 
 private:
-#ifdef DEBUG
-	char convBuf[MAX_PAYLOAD * 2 + 1];
-#endif
+//#ifdef DEBUG
+//	char convBuf[MAX_PAYLOAD * 2 + 1];
+//#endif
 	void(*timeCallback)(unsigned long); // Callback for requested time messages
 	void(*msgCallback)(const DTCMessage &); // Callback for incoming messages from other nodes and gateway.
 
