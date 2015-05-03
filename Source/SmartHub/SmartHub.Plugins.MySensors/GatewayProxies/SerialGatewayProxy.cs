@@ -41,40 +41,43 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #region Public methods
         public void Start()
         {
-            if (serialPort.IsOpen)
-                return;
-
-            foreach (string portName in SerialPort.GetPortNames())
+            if (!serialPort.IsOpen)
             {
-                serialPort.PortName = portName;
+                var names = SerialPort.GetPortNames();
 
-                try
+                foreach (string portName in names)
                 {
-                    serialPort.Open();
+                    serialPort.PortName = portName;
 
-                    if (serialPort.IsOpen)
+                    try
                     {
-                        serialPort.DiscardInBuffer();
-                        return;
+                        serialPort.Open();
+                        if (serialPort.IsOpen)
+                        {
+                            serialPort.DiscardInBuffer();
 
-                        //try
-                        //{
-                        //    string str = serialPort.ReadLine();
-                        //    SensorMessage msg = SensorMessage.FromRawMessage(str);
-                        //    if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
-                        //    {
-                        //        if (MessageReceived != null)
-                        //            MessageReceived(this, new SensorMessageEventArgs(msg));
+                            try
+                            {
+                                string str = serialPort.ReadLine();
+                                SensorMessage msg = SensorMessage.FromRawMessage(str);
+                                if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
+                                {
+                                    if (MessageReceived != null)
+                                        MessageReceived(this, new SensorMessageEventArgs(msg));
 
-                        //        return;
-                        //    }
-                        //}
-                        //catch (TimeoutException) { }
+                                    return;
+                                }
+                            }
+                            catch (TimeoutException) { }
 
-                        //Stop();
+                            Stop();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Stop();
                     }
                 }
-                catch (Exception) { }
             }
         }
         public void Stop()
@@ -95,23 +98,17 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         {
             try
             {
-                //int dataLength = serialPort.BytesToRead;
-                //byte[] data = new byte[dataLength];
-                //int nbrDataRead = serialPort.Read(data, 0, dataLength);
-                //if (nbrDataRead == 0)
-                //    return;
-
                 string str = null;
-                while (!string.IsNullOrEmpty(str = serialPort.ReadLine()))
+                while (serialPort.IsOpen && !string.IsNullOrEmpty(str = serialPort.ReadLine()))
                 {
                     SensorMessage msg = SensorMessage.FromRawMessage(str);
-
                     if (msg != null && MessageReceived != null)
                         MessageReceived(this, new SensorMessageEventArgs(msg));
                 }
             }
             catch (TimeoutException) { }
             catch (IOException) { }
+            //catch (Exception) { }
         }
         private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {

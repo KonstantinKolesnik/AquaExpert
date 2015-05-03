@@ -23,8 +23,8 @@ const long intervalTemperature = 3000;	// interval at which to measure (millisec
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PH_SENSOR_ID			1
 #define PH_PIN					A4
-#define PH_OFFSET				0.3f//-0.12
-MyMessage msgPh(PH_SENSOR_ID, V_VAR1);
+#define PH_OFFSET				0.2f//-0.12
+MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh;
 unsigned long prevMsPh = 0;
 const long intervalPh = 5000;

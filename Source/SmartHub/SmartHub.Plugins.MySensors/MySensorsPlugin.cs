@@ -25,7 +25,7 @@ namespace SmartHub.Plugins.MySensors
     public class MySensorsPlugin : PluginBase
     {
         #region Fields
-        private bool isSerial = true;
+        private bool isSerialGateway = true;
         private IGatewayProxy gatewayProxy;
         private SignalRPlugin signalServer;
         private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -48,13 +48,13 @@ namespace SmartHub.Plugins.MySensors
         }
         public override void InitPlugin()
         {
-            gatewayProxy = isSerial ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
-            gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
-
             if (GetSetting("UnitSystem") == null)
                 Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
             //if (GetSetting("SerialPortName") == null)
             //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
+
+            gatewayProxy = isSerialGateway ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
+            gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
 
             signalServer = Context.GetPlugin<SignalRPlugin>();
         }
@@ -66,7 +66,6 @@ namespace SmartHub.Plugins.MySensors
 
                 try
                 {
-                    //gatewayProxy.PortName = GetSetting("SerialPortName").Value;
                     gatewayProxy.Start();
                 }
                 catch (Exception) { }
@@ -354,8 +353,8 @@ namespace SmartHub.Plugins.MySensors
 
                 if (id < 255)
                 {
-                    Node result = new Node { Id = Guid.NewGuid(), NodeNo = id };
-                    Save(result);
+                    Node node = new Node { Id = Guid.NewGuid(), NodeNo = id };
+                    Save(node);
 
                     gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
                 }

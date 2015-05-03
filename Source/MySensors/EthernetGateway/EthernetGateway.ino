@@ -131,7 +131,7 @@ void loop()
 			// read the bytes incoming from the client
 			char inChar = client.read();
 
-			if (inputPos < MAX_RECEIVE_LENGTH - 1)
+			if (inputPos < MAX_RECEIVE_LENGTH - 1 )//&& !commandComplete
 			{
 				// if newline then command is complete
 				if (inChar == '\n')
@@ -139,14 +139,11 @@ void loop()
 					// a command was issued by the client
 					// we will now try to send it to the actuator
 					inputCommand[inputPos] = 0;
+					inputPos = 0;
 
 					// echo the string to the serial port
 					Serial.print(inputCommand);
-
 					gw.parseAndSend(inputCommand);
-
-					// clear the string:
-					inputPos = 0;
 				}
 				else
 				{

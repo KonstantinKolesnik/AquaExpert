@@ -133,31 +133,30 @@ namespace SmartHub.Plugins.MySensors.Core
 
 
 
-            sb.Append(string.Format("[{0:d3}]", NodeID));
-            sb.Append(string.Format("[{0:d3}]", SensorID));
-            sb.Append(string.Format("[{0}]", Type));
-            //sb.Append(string.Format("[Ack: {0}]", IsAckNeeded));
+            sb.Append(string.Format("[{0:d3}] ", NodeID));
+            sb.Append(string.Format("[{0:d3}] ", SensorID));
+            sb.Append(string.Format("[{0}] ", Type));
+            //sb.Append(string.Format("[Ack: {0}] ", IsAckNeeded));
             switch (Type)
             {
                 case SensorMessageType.Presentation:
-                    sb.Append(string.Format("[{0}]", (SensorType)SubType));
+                    sb.Append(string.Format("[{0}] ", (SensorType)SubType));
                     break;
                 case SensorMessageType.Set:
                 case SensorMessageType.Request:
-                    sb.Append(string.Format("[{0}]", (SensorValueType)SubType));
+                    sb.Append(string.Format("[{0}] ", (SensorValueType)SubType));
                     break;
                 case SensorMessageType.Internal:
-                    sb.Append(string.Format("[{0}]", (InternalValueType)SubType));
+                    sb.Append(string.Format("[{0}] ", (InternalValueType)SubType));
                     break;
                 case SensorMessageType.Stream:
-                    sb.Append(string.Format("[{0}]", (StreamValueType)SubType));
+                    sb.Append(string.Format("[{0}] ", (StreamValueType)SubType));
                     break;
                 default:
-                    sb.Append(string.Format("[{0}]", SubType));
+                    sb.Append(string.Format("[{0}] ", SubType));
                     break;
             }
             sb.Append(string.Format("[{0}]", Payload));
-
 
 
             return sb.ToString();
