@@ -15,22 +15,34 @@
 * - ERR (red) - fast blink on error during transmission error or recieve crc error
 */
 
-#include <DTCGateway.h>
-#include <DTCNode.h>
+//#include <DTCGateway.h>
+//#include <DTCNode.h>
 #include <ESP8266.h>
-#include <aJSON.h>
+//#include <aJSON.h>
 
-DTCGateway gw(Serial1, 7, 6, 5);
-aJsonStream serialStream(&Serial);
+//DTCGateway gw(Serial1, 7, 6, 5);
+//aJsonStream serialStream(&Serial);
 
 void setup()
 {
-	gw.begin();
+	//gw.begin();
+
+
+	Serial.begin(115200);
+	delay(1500);
+
+	Serial.println("Hello");
+
+	//Serial.println(getVersion().c_str());
+	//if (!setOprToStation())
+	//	Serial.println("Failed to set Station");
+	//Serial.println(getWifiModeList().c_str());
+
 }
 void loop()
 {
-	gw.processRadioMessage();
-	receiveFromController();
+	//gw.processRadioMessage();
+	//receiveFromController();
 }
 
 /*
@@ -41,19 +53,19 @@ response. Multiple bytes of data may be available.
 */
 void receiveFromController()
 {
-	if (serialStream.available())
-		serialStream.skip(); // First, skip any accidental whitespace like newlines.
+	//if (serialStream.available())
+	//	serialStream.skip(); // First, skip any accidental whitespace like newlines.
 
-	if (serialStream.available())
-	{
-		aJsonObject *msg = aJson.parse(&serialStream);
+	//if (serialStream.available())
+	//{
+	//	aJsonObject *msg = aJson.parse(&serialStream);
 
-		if (!msg)
-			serialStream.flush(); // we were not able to decode this, let's simply flush the buffer
-		else
-		{
-			gw.processControllerMessage(msg);
-			aJson.deleteItem(msg);
-		}
-	}
+	//	if (!msg)
+	//		serialStream.flush(); // we were not able to decode this, let's simply flush the buffer
+	//	else
+	//	{
+	//		gw.processControllerMessage(msg);
+	//		aJson.deleteItem(msg);
+	//	}
+	//}
 }

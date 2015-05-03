@@ -44,15 +44,7 @@ void setup()
 void loop()
 {
 	gw.processRadioMessage();
-
 	readSerialEvent();
-	if (commandComplete)
-	{
-		// A command was issued from serial interface; send it to the actuator
-		gw.parseAndSend(inputCommand);
-		commandComplete = false;
-		inputPos = 0;
-	}
 }
 
 /*
@@ -90,5 +82,13 @@ void readSerialEvent()
 			// Incoming message too long. Throw away 
 			inputPos = 0;
 		}
+	}
+
+	if (commandComplete)
+	{
+		// A command was issued from serial interface; send it to the actuator
+		gw.parseAndSend(inputCommand);
+		commandComplete = false;
+		inputPos = 0;
 	}
 }
