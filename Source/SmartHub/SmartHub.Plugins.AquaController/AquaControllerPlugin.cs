@@ -13,7 +13,6 @@ namespace SmartHub.Plugins.AquaController
     {
         #region Fields
         private MySensorsPlugin mySensors;
-
         #endregion
 
         #region Plugin overrides
@@ -23,7 +22,6 @@ namespace SmartHub.Plugins.AquaController
         public override void InitPlugin()
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
-
 
             InitHeater();
             //InitLight();
@@ -57,8 +55,8 @@ namespace SmartHub.Plugins.AquaController
                 throw new ArgumentNullException("heaterTemperatureSensor (2, 0)");
 
             SensorValue sv = mySensors.GetSensorValue(heaterTemperatureSensor);
-            //if (sv != null)
-            //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, sv.Value < minHeaterTemperature ? 1 : 0);
+            if (sv != null)
+                mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, sv.Value < minHeaterTemperature ? 1 : 0);
 
             //heaterTemperatureSensor.PropertyChanged += heaterTemperatureSensor_PropertyChanged;
         }
@@ -167,8 +165,8 @@ namespace SmartHub.Plugins.AquaController
         [Timer_5_sec_Elapsed]
         private void Timer_5_sec_Elapsed(DateTime now)
         {
-            mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
-            vvv = vvv == 0 ? 1 : 0;
+            //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
+            //vvv = vvv == 0 ? 1 : 0;
         }
 
     }
