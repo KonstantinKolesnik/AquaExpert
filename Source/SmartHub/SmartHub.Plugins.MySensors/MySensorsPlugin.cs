@@ -82,6 +82,11 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
+        public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
+        {
+            gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
+        }
+
         #region DB actions
         private Setting GetSetting(string name)
         {
@@ -93,10 +98,15 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeID);
         }
-        private Sensor GetSensor(byte nodeID, byte sensorID)
+        public Sensor GetSensor(byte nodeID, byte sensorID)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
+        }
+        public SensorValue GetSensorValue(Sensor sensor)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
         }
         private void Save(object item)
         {
