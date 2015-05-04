@@ -17,9 +17,10 @@ void setup()
 	// (sensorID = 0...7)
 	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)
 	{
-		pinMode(pins[sensorID], OUTPUT);
+		uint8_t pin = pins[sensorID];
+		pinMode(pin, OUTPUT);
 		uint8_t lastState = gw.loadState(sensorID);
-		digitalWrite(pins[sensorID], lastState ? RELAY_ON : RELAY_OFF);
+		digitalWrite(pin, lastState ? RELAY_ON : RELAY_OFF);
 
 		gw.present(sensorID, S_LIGHT);
 		gw.send(msgRelay.setSensor(sensorID).set(lastState ? 1 : 0));

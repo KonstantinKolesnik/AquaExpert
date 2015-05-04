@@ -33,8 +33,6 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             serialPort.WriteTimeout = 4000;
 
             serialPort.DataReceived += serialPort_DataReceived;
-            serialPort.ErrorReceived += serialPort_ErrorReceived;
-            serialPort.PinChanged += serialPort_PinChanged;
         }
         #endregion
 
@@ -109,16 +107,6 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             catch (TimeoutException) { }
             catch (IOException) { }
             //catch (Exception) { }
-        }
-        private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
-        {
-            int a = 0;
-            int b = a;
-        }
-        private void serialPort_PinChanged(object sender, SerialPinChangedEventArgs e)
-        {
-            int a = 0;
-            int b = a;
         }
         #endregion
     }

@@ -70,7 +70,9 @@ SensorValueType = {
     LockStatus: 	        36,     // Set or get lock status. 1=Locked, 0=Unlocked
     DustLevel:	            37,     // Dust level
     Voltage:	            38,     // Voltage level
-    Current:	            39,     // Current level
+    Current:                39,     // Current level
+    PH:                     40,     // Ph level
+    ORP:                    41,     // ORP level
 };
 //----------------------------------------------------------------------------------------------------------------------
 function Model() {
