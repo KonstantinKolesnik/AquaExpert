@@ -35,7 +35,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MB_0023_home2.ico</ApplicationIcon>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,7 +58,7 @@
       <Link>SmartHub.sdf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MB_0023_home2.ico" />
+    <Content Include="Logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartHub.Core.Infrastructure\SmartHub.Core.Infrastructure.csproj">

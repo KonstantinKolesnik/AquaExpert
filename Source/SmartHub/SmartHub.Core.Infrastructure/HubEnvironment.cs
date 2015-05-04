@@ -17,23 +17,6 @@ namespace SmartHub.Core.Infrastructure
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            var assembly = assemblies.FirstOrDefault(a => a.GetName().FullName == args.Name);
-
-            return assembly;
-        }
-
-        private static void InitApplicationCulture()
-        {
-            Thread.CurrentThread.CurrentCulture =
-            Thread.CurrentThread.CurrentUICulture =
-            CultureInfo.DefaultThreadCurrentCulture =
-            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-        }
-
         private static void InitCurrentDirectory()
         {
             var path = Assembly.GetEntryAssembly().Location;
@@ -43,6 +26,18 @@ namespace SmartHub.Core.Infrastructure
                 throw new Exception("Current directory is empty");
 
             Directory.SetCurrentDirectory(currentDirectory);
+        }
+        private static void InitApplicationCulture()
+        {
+            Thread.CurrentThread.CurrentCulture =
+            Thread.CurrentThread.CurrentUICulture =
+            CultureInfo.DefaultThreadCurrentCulture =
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().FullName == args.Name);
         }
     }
 }
