@@ -84,7 +84,8 @@ namespace SmartHub.Plugins.MySensors
 
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
         {
-            gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
+            if (gatewayProxy != null && sensor != null)
+                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
         }
 
         #region DB actions
@@ -139,7 +140,7 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        [Timer_1_sec_Elapsed]
+        [Timer_3_sec_Elapsed]
         private void Timer_1_sec_Elapsed(DateTime now)
         {
             //int a = 0;

@@ -4,9 +4,9 @@ using System.ComponentModel.Composition;
 namespace SmartHub.Plugins.Timer
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class Timer_1_sec_ElapsedAttribute : ExportAttribute
+    public class Timer_3_sec_ElapsedAttribute : ExportAttribute
     {
-        public Timer_1_sec_ElapsedAttribute()
+        public Timer_3_sec_ElapsedAttribute()
             : base("7A16BD3C-EBDB-48DC-9A0A-B0E4B9FB1A93", typeof(Action<DateTime>))
         {
         }

@@ -5,6 +5,7 @@ using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer;
 using System;
+using System.Diagnostics;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -22,13 +23,12 @@ namespace SmartHub.Plugins.AquaController
         public override void InitPlugin()
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
-
-            InitHeater();
-            //InitLight();
-            //InitPh();
         }
         public override void StartPlugin()
         {
+            InitHeater();
+            //InitLight();
+            //InitPh();
         }
         //public override void StopPlugin()
         //{
@@ -57,15 +57,13 @@ namespace SmartHub.Plugins.AquaController
             SensorValue sv = mySensors.GetSensorValue(heaterTemperatureSensor);
             if (sv != null)
                 mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, sv.Value < minHeaterTemperature ? 1 : 0);
-
-            //heaterTemperatureSensor.PropertyChanged += heaterTemperatureSensor_PropertyChanged;
         }
 
-        //private void heaterTemperatureSensor_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    if (e.PropertyName == "LastValue")
-        //        mySensors.SetSensorValue(heaterRelay, SensorValueType.Light, heaterTemperatureSensor.LastValue.Value < minHeaterTemperature ? 1 : 0);
-        //}
+        private void heaterTemperatureSensor_MessageReceived(SensorMessage msg)
+        {
+            //if (e.PropertyName == "LastValue")
+            //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Light, heaterTemperatureSensor.LastValue.Value < minHeaterTemperature ? 1 : 0);
+        }
         #endregion
 
         #region Light
@@ -155,15 +153,13 @@ namespace SmartHub.Plugins.AquaController
         [MySensorsMessage]
         private void SensorMessage_Received(SensorMessage msg)
         {
-            //int a = 0;
-            //int b = a;
-
-            
+            if (msg.NodeID == heaterRelay.NodeNo && msg.SensorID == heaterRelay.SensorNo)
+                heaterTemperatureSensor_MessageReceived(msg);
         }
 
         float vvv = 0;
-        [Timer_5_sec_Elapsed]
-        private void Timer_5_sec_Elapsed(DateTime now)
+        [Timer_3_sec_Elapsed]
+        private void timer_1_sec_Elapsed(DateTime now)
         {
             //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
             //vvv = vvv == 0 ? 1 : 0;

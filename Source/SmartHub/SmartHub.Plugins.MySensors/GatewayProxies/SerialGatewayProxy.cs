@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.IO.Ports;
+using System.Text;
 
 namespace SmartHub.Plugins.MySensors.GatewayProxies
 {
@@ -28,9 +29,11 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             serialPort = new SerialPort();
             serialPort.BaudRate = 115200;
             serialPort.DtrEnable = true;
+            //serialPort.RtsEnable = true;
+            serialPort.Encoding = Encoding.ASCII;
             serialPort.NewLine = "\n";
-            serialPort.ReadTimeout = 4000;
-            serialPort.WriteTimeout = 4000;
+            //serialPort.ReadTimeout = 4000;
+            //serialPort.WriteTimeout = 4000;
 
             serialPort.DataReceived += serialPort_DataReceived;
         }
@@ -87,7 +90,13 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         public void Send(SensorMessage message)
         {
             if (serialPort.IsOpen && message != null)
-                serialPort.WriteLine(message.ToRawMessage());
+            {
+                try
+                {
+                    serialPort.WriteLine(message.ToRawMessage());
+                }
+                catch (Exception) { }
+            }
         }
         #endregion
 
@@ -106,7 +115,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             }
             catch (TimeoutException) { }
             catch (IOException) { }
-            //catch (Exception) { }
+            catch (Exception) { }
         }
         #endregion
     }
