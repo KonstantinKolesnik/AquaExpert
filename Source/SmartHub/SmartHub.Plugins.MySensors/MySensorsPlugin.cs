@@ -70,10 +70,10 @@ namespace SmartHub.Plugins.MySensors
                 }
                 catch (Exception) { }
 
-                if (gatewayProxy.IsStarted)
-                    Logger.Info("Success.");
-                else
-                    Logger.Error("Failed.");
+                //if (gatewayProxy.IsStarted)
+                //    Logger.Info("Success.");
+                //else
+                //    Logger.Error("Failed.");
             }
         }
         public override void StopPlugin()

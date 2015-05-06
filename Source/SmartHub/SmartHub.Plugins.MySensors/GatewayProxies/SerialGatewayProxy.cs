@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
+using System.Threading;
 
 namespace SmartHub.Plugins.MySensors.GatewayProxies
 {
@@ -10,6 +11,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
     {
         #region Fields
         private SerialPort serialPort;
+        private bool isStopped = true;
         #endregion
 
         #region Properties
@@ -42,54 +44,24 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #region Public methods
         public void Start()
         {
-            if (!serialPort.IsOpen)
+            isStopped = false;
+
+            new Thread(() =>
             {
-                var names = SerialPort.GetPortNames();
-
-                foreach (string portName in names)
-                {
-                    serialPort.PortName = portName;
-
-                    try
-                    {
-                        serialPort.Open();
-                        if (serialPort.IsOpen)
-                        {
-                            serialPort.DiscardInBuffer();
-
-                            try
-                            {
-                                string str = serialPort.ReadLine();
-                                SensorMessage msg = SensorMessage.FromRawMessage(str);
-                                if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
-                                {
-                                    if (MessageReceived != null)
-                                        MessageReceived(this, new SensorMessageEventArgs(msg));
-
-                                    return;
-                                }
-                            }
-                            catch (TimeoutException) { }
-
-                            Stop();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Stop();
-                    }
-                }
-            }
+                while (!isStopped && !FindAndConnect()) ;
+            }).Start();
         }
         public void Stop()
         {
-            if (serialPort.IsOpen)
+            isStopped = true;
+
+            if (IsStarted)
                 serialPort.Close();
         }
 
         public void Send(SensorMessage message)
         {
-            if (serialPort.IsOpen && message != null)
+            if (IsStarted && message != null)
             {
                 try
                 {
@@ -106,7 +78,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             try
             {
                 string str = null;
-                while (serialPort.IsOpen && !string.IsNullOrEmpty(str = serialPort.ReadLine()))
+                while (IsStarted && !string.IsNullOrEmpty(str = serialPort.ReadLine()))
                 {
                     SensorMessage msg = SensorMessage.FromRawMessage(str);
                     if (msg != null && MessageReceived != null)
@@ -116,6 +88,54 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             catch (TimeoutException) { }
             catch (IOException) { }
             catch (Exception) { }
+        }
+        #endregion
+
+        #region Private methods
+        private bool FindAndConnect()
+        {
+            if (!IsStarted)
+            {
+                var names = SerialPort.GetPortNames();
+
+                foreach (string portName in names)
+                {
+                    serialPort.PortName = portName;
+
+                    try
+                    {
+                        serialPort.Open();
+                        if (IsStarted)
+                        {
+                            serialPort.DiscardInBuffer();
+
+                            try
+                            {
+                                string str = serialPort.ReadLine();
+                                SensorMessage msg = SensorMessage.FromRawMessage(str);
+                                if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
+                                {
+                                    if (MessageReceived != null)
+                                        MessageReceived(this, new SensorMessageEventArgs(msg));
+
+                                    return true;
+                                }
+                            }
+                            catch (TimeoutException) { }
+
+                            Stop();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Stop();
+                    }
+                }
+
+                return false;
+            }
+            else
+                return true;
         }
         #endregion
     }
