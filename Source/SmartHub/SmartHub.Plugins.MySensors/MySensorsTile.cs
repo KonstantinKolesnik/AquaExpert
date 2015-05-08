@@ -7,7 +7,7 @@ namespace SmartHub.Plugins.MySensors
     [Tile]
     public class MySensorsTile : TileBase
     {
-        public override void FillModel(TileWeb webTile, dynamic options)
+        public override void PopulateModel(TileWeb webTile, dynamic options)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace SmartHub.Plugins.MySensors
 
                 webTile.title = "Сеть MySensors";
                 webTile.url = "/webapp/mysensors/module.js"; //options.url;
-                webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
+                webTile.cssClassName = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
                 //webTile.content = "Узлов: 1\nСенсоров: 8";
                 webTile.wide = true;
             }

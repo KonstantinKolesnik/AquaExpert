@@ -22,7 +22,9 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #endregion
 
         #region Events
+        public event EventHandler Connected;
         public event SensorMessageEventHandler MessageReceived;
+        public event EventHandler Disconnected;
         #endregion
 
         #region Constructor
@@ -56,7 +58,12 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             isStopped = true;
 
             if (IsStarted)
+            {
                 serialPort.Close();
+
+                if (Disconnected != null)
+                    Disconnected(this, EventArgs.Empty);
+            }
         }
 
         public void Send(SensorMessage message)
@@ -115,6 +122,9 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                                 SensorMessage msg = SensorMessage.FromRawMessage(str);
                                 if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
                                 {
+                                    if (Connected != null)
+                                        Connected(this, EventArgs.Empty);
+
                                     if (MessageReceived != null)
                                         MessageReceived(this, new SensorMessageEventArgs(msg));
 

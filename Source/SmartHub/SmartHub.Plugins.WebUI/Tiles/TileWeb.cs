@@ -9,7 +9,7 @@ namespace SmartHub.Plugins.WebUI.Tiles
         public string content; // body text
         public string url; // navigate url
         public object[] parameters; // if (url) -> navigate url parameters; 
-        public string className;
+        public string cssClassName;
         public bool wide = false;
 
         public TileWeb(Guid tileId)

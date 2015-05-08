@@ -15,9 +15,9 @@ namespace SmartHub.Plugins.WebUI.Data
             var json = string.IsNullOrWhiteSpace(SerializedParameters) ? "{}" : SerializedParameters;
             return Extensions.FromJson(json);
         }
-        public virtual void SetParameters(object obj)
+        public virtual void SetParameters(object parameters)
         {
-            SerializedParameters = obj.ToJson();
+            SerializedParameters = parameters.ToJson();
         }
     }
 }

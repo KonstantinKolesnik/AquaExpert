@@ -37,12 +37,10 @@ define(
 	    };
 
 	    var app = new marionette.Application();
-
 	    app.addRegions({ regionContent: "#region-page-content" });
 	    app.setContentView = function (view) {
 		    app.regionContent.show(view);
 	    };
-
 	    app.addTile = function (typeFullName, parameters) {
 	        $.post(
                 '/api/webui/tiles/add',
@@ -54,7 +52,6 @@ define(
 				    app.navigate('tiles');
 			    });
 	    };
-
 	    app.navigate = function (route) {
 		    var args = Array.prototype.slice.call(arguments, 1);
 		    api.loadRoute.call(this, route, args);
@@ -62,7 +59,6 @@ define(
 	    app.loadPath = function (route, args) {
 		    api.loadRoute.call(this, route, args);
 	    };
-
 	    app.router = new marionette.AppRouter({
 		    appRoutes: { '*path': 'loadPage' },
 		    controller: {

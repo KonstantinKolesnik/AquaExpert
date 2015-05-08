@@ -54,26 +54,25 @@ namespace SmartHub.Plugins.MySensors
             //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
 
             gatewayProxy = isSerialGateway ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
+            gatewayProxy.Connected += gatewayProxy_Connected;
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
+            gatewayProxy.Disconnected += gatewayProxy_Disconnected;
 
             signalServer = Context.GetPlugin<SignalRPlugin>();
         }
+
         public override void StartPlugin()
         {
             if (!gatewayProxy.IsStarted)
             {
                 Logger.Info("Connecting to gateway...");
+                Debug.WriteLine("Connecting to gateway...");
 
                 try
                 {
                     gatewayProxy.Start();
                 }
                 catch (Exception) { }
-
-                //if (gatewayProxy.IsStarted)
-                //    Logger.Info("Success.");
-                //else
-                //    Logger.Error("Failed.");
             }
         }
         public override void StopPlugin()
@@ -153,6 +152,11 @@ namespace SmartHub.Plugins.MySensors
             signalServer.Broadcast(new { MsgId = "Test", Value = now });
         }
 
+        private void gatewayProxy_Connected(object sender, EventArgs e)
+        {
+            Logger.Info("Connected.");
+            Debug.WriteLine("Connected.");
+        }
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
         {
             SensorMessage message = args.Message;
@@ -345,6 +349,11 @@ namespace SmartHub.Plugins.MySensors
             //if (node != null && node.Reboot)
             //    gatewayProxy.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
+        private void gatewayProxy_Disconnected(object sender, EventArgs e)
+        {
+            Logger.Error("Disconnected.");
+            Debug.WriteLine("Disconnected.");
+        }
         #endregion
 
         #region Private methods
@@ -361,6 +370,8 @@ namespace SmartHub.Plugins.MySensors
                         id = (byte)(i + 1);
                         break;
                     }
+                    else
+                        id++;
 
                 if (id < 255)
                 {

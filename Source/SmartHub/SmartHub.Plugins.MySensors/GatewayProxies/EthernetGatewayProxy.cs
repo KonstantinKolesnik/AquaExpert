@@ -24,7 +24,9 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #endregion
 
         #region Events
+        public event EventHandler Connected;
         public event SensorMessageEventHandler MessageReceived;
+        public event EventHandler Disconnected;
         #endregion
 
         #region Constructor

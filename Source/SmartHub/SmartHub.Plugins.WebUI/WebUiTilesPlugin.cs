@@ -78,7 +78,7 @@ namespace SmartHub.Plugins.WebUI
                         try
                         {
                             var parameters = dbTile.GetParameters();
-                            tile.FillModel(webTile, parameters);
+                            tile.PopulateModel(webTile, parameters);
                         }
                         catch (Exception ex)
                         {

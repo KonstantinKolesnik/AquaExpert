@@ -85,76 +85,94 @@ void loop()
 
 	unsigned long ms = millis();
 
-	// temperature
-	if (ms - prevMsTemperature >= intervalTemperature)
-	{
-		prevMsTemperature = ms;
-
-		float temperature = readTemperature();
-		if (temperature != -127.00 && abs(lastTemperature - temperature) >= 0.1f)
-		{
-			Serial.print("Temperature: ");
-			Serial.print(temperature, 1);
-			Serial.println(isMetric ? " C" : " F");
-
-			lastTemperature = temperature;
-			gw.send(msgTemperature.set(temperature, 1));
-		}
-	}
-
-	// Ph:
-	if (ms - prevMsPh >= intervalPh)
-	{
-		prevMsPh = ms;
-
-		float phValue = readPh();
-		if (abs(phValue - lastPh) >= 0.1f)
-		{
-			Serial.print("pH: ");
-			Serial.println(phValue, 1);
-
-			lastPh = phValue;
-			gw.send(msgPh.set(phValue, 1));
-		}
-	}
-
-	// Water:
-	if (ms - prevMsWater >= intervalWater)
-	{
-		prevMsWater = ms;
-
-		bool water = readWater();
-		if (water != lastWater)
-		{
-			Serial.print("Water: ");
-			Serial.println(water);
-
-			lastWater = water;
-			gw.send(msgWater.set(water ? 1 : 0));
-		}
-	}
-
-	// Distance
-	if (ms - prevMsSonar >= intervalSonar)
-	{
-		prevMsSonar = ms;
-
-		uint16_t distance = readDistance();
-		if (distance != 0 && distance != lastSonar)
-		{
-			Serial.print("Distance: ");
-			Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-			Serial.println(isMetric ? " cm" : " in");
-
-			lastSonar = distance;
-			gw.send(msgSonar.set(distance));
-		}
-	}
+	processTemperature(ms);
+	processPH(ms);
+	processWater(ms);
+	processDistance(ms);
 
 	//gw.requestTime(onTimeReceived);
 
 	if (SLEEP_TIME)
 		gw.sleep(SLEEP_TIME);
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------
+void processTemperature(unsigned long ms)
+{
+	if (ms - prevMsTemperature >= intervalTemperature)
+	{
+		prevMsTemperature = ms;
+
+		float temperature = readTemperature();
+
+		if (temperature != -127.00 && abs(lastTemperature - temperature) >= 0.1f)
+		{
+			lastTemperature = temperature;
+
+			Serial.print("Temperature: ");
+			Serial.print(temperature, 1);
+			Serial.println(isMetric ? " C" : " F");
+
+			gw.send(msgTemperature.set(temperature, 1));
+		}
+	}
+}
+void processPH(unsigned long ms)
+{
+	if (ms - prevMsPh >= intervalPh)
+	{
+		prevMsPh = ms;
+
+		float phValue = readPh();
+
+		if (abs(phValue - lastPh) >= 0.1f)
+		{
+			lastPh = phValue;
+
+			Serial.print("pH: ");
+			Serial.println(phValue, 1);
+
+			gw.send(msgPh.set(phValue, 1));
+		}
+	}
+}
+void processWater(unsigned long ms)
+{
+	if (ms - prevMsWater >= intervalWater)
+	{
+		prevMsWater = ms;
+
+		bool water = readWater();
+
+		if (water != lastWater)
+		{
+			lastWater = water;
+
+			Serial.print("Water: ");
+			Serial.println(water);
+
+			gw.send(msgWater.set(water ? 1 : 0));
+		}
+	}
+}
+void processDistance(unsigned long ms)
+{
+	if (ms - prevMsSonar >= intervalSonar)
+	{
+		prevMsSonar = ms;
+
+		uint16_t distance = readDistance();
+
+		if (distance != 0 && distance != lastSonar)
+		{
+			lastSonar = distance;
+
+			Serial.print("Distance: ");
+			Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+			Serial.println(isMetric ? " cm" : " in");
+
+			gw.send(msgSonar.set(distance));
+		}
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
@@ -167,12 +185,12 @@ void onTimeReceived(unsigned long time) // incoming argument is seconds since 19
 	//Serial.print("Time: ");
 	//Serial.println(time);
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
 void printTime() {
 	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());
 	//myGLCD.print(timeBuf, 60, 7);
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
 float readTemperature()
 {
 	sensors.requestTemperatures();
@@ -222,7 +240,7 @@ float readPh()
 
 	// store the average value of the sensor feedback:
 	unsigned long int avgValue = 0;
-	for (int i = 2; i < 8; i++) // take the average value of 6 center sample
+	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
 		avgValue += buf[i];
 
 	float phValue = (float)(avgValue * 5.0 / 1024 / 6); // convert the analog into millivolt
@@ -232,22 +250,54 @@ float readPh()
 }
 uint16_t readDistance()
 {
+	// 1)
 	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
-
 	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
 	//Serial.print("Distance: ");
 	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
 	//Serial.println("cm");
 
-	uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
+	// 2)
+	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
+	//return distance;
+
+	// 3)
+	// get 10 sample value from the sensor for smooth the value:
+	uint16_t buf[10];
+	for (int i = 0; i < 10; i++)
+	{
+		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
+		delay(50);
+	}
+
+	// sort the analog from small to large:
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = i + 1; j < 10; j++)
+		{
+			if (buf[i] > buf[j])
+			{
+				uint16_t temp = buf[i];
+				buf[i] = buf[j];
+				buf[j] = temp;
+			}
+		}
+	}
+
+	// store the average value:
+	unsigned long int avgValue = 0;
+	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
+		avgValue += buf[i];
+
+	uint16_t distance = avgValue / 6;
 	return distance;
 }
 bool readWater()
 {
 	// analogRead: moisture sensor:
-	// transistor: 524 for water;  838 for short circuit; (100/100/KT3102)
-	// Yusupov:    ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
+	// transistor:			524 for water;  838 for short circuit; (100/100/KT3102)
+	// Yusupov (resistors): ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
 
-	int v = digitalRead(WATER_PIN);
+	int v = analogRead(WATER_PIN);
 	return v > 500;
 }
