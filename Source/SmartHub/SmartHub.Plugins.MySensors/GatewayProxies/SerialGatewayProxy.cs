@@ -1,11 +1,9 @@
 ﻿using SmartHub.Plugins.MySensors.Core;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
-using System.Timers;
 
 namespace SmartHub.Plugins.MySensors.GatewayProxies
 {

@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AquaControllerPlugin.cs" />
+    <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,6 +63,11 @@
     <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
       <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
       <Name>SmartHub.Core.Plugins</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.HttpListener\SmartHub.Plugins.HttpListener.csproj">
+      <Project>{b2826828-29a4-4e27-9452-22e5c167ec25}</Project>
+      <Name>SmartHub.Plugins.HttpListener</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.MySensors\SmartHub.Plugins.MySensors.csproj">
@@ -72,6 +78,11 @@
     <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
       <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
       <Name>SmartHub.Plugins.Timer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
+      <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
+      <Name>SmartHub.Plugins.WebUI</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

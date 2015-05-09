@@ -73,6 +73,6 @@
 </script>
 <script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
     # var val = data.SensorValue ? data.SensorValue.Value : null; #
-    <div>#: val == null ? "-" : val #</div>
+    <div>#: val == null ? "-" : kendo.toString(val, "n2") #</div>
 </script>
 <!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->

@@ -91,6 +91,11 @@ namespace SmartHub.Plugins.MySensors
             if (gatewayProxy != null && sensor != null)
                 gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
         }
+        public void RequestSensorValue(Sensor sensor, SensorValueType type)
+        {
+            if (gatewayProxy != null && sensor != null)
+                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Request, false, (byte)type, ""));
+        }
 
         #region DB actions
         private Setting GetSetting(string name)
@@ -144,12 +149,6 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        [Timer_3_sec_Elapsed]
-        private void Timer_1_sec_Elapsed(DateTime now)
-        {
-            //int a = 0;
-            //int b = a;
-        }
         [Timer_5_sec_Elapsed]
         private void Timer_5_sec_Elapsed(DateTime now)
         {
@@ -583,12 +582,6 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<BatteryLevel>().ToArray();
         }
-
-
-
-
-
-
         #endregion
     }
 }

@@ -56,6 +56,8 @@ void setup()
 	gw.present(HUMIDITY_OUTER_SENSOR_ID, S_HUM);
 	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
 	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
+
+
 }
 
 void loop()
@@ -73,19 +75,50 @@ void loop()
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
 {
-	if (message.type == V_LIGHT)
+	uint8_t cmd = mGetCommand(message);
+	if (cmd == C_REQ)
 	{
-		//uint8_t newState = message.getByte();
-		//uint8_t lastState = gw.loadState(message.sensor);
+		if (message.sensor == TEMPERATURE_OUTER_SENSOR_ID && message.type == V_TEMP)
+		{
 
-		//if (newState != lastState)
-		//{
-		//	digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
-		//	gw.saveState(message.sensor, newState);
+			delay(dhtOuter.getMinimumSamplingPeriod());
+			float temperature = dhtOuter.getTemperature();
+			if (!isnan(temperature))
+			{
+				if (!isMetric)
+					temperature = dhtOuter.toFahrenheit(temperature);
 
-		//	gw.send(msgRelay.setSensor(message.sensor).set(newState));
-		//}
+				Serial.print(temperature, 1);
+				Serial.println(isMetric ? " C" : " F");
+
+#ifdef DEBUG
+				Serial.print("Temperature Outer: ");
+				Serial.print(temperature, 1);
+				Serial.println(isMetric ? " C" : " F");
+#endif
+
+				gw.send(msgTemperatureOuter.set(temperature, 1));
+			}
+		}
+
 	}
+	//Serial.println(message.type);
+	//Serial.println();
+
+
+	//if (message.sensor == 0 && message.type == V_TEMP)
+	//{
+	//	//uint8_t newState = message.getByte();
+	//	//uint8_t lastState = gw.loadState(message.sensor);
+
+	//	//if (newState != lastState)
+	//	//{
+	//	//	digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
+	//	//	gw.saveState(message.sensor, newState);
+
+	//	//	gw.send(msgRelay.setSensor(message.sensor).set(newState));
+	//	//}
+	//}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void processTemperatureOuter(unsigned long ms)
@@ -99,22 +132,24 @@ void processTemperatureOuter(unsigned long ms)
 		float temperature = dhtOuter.getTemperature();
 		if (!isnan(temperature))
 		{
-			//if (lastTemperatureOuter != temperature)
+			if (lastTemperatureOuter != temperature)
 			{
 				lastTemperatureOuter = temperature;
 
 				if (!isMetric)
 					temperature = dhtOuter.toFahrenheit(temperature);
 
+#ifdef DEBUG
 				Serial.print("Temperature Outer: ");
 				Serial.print(temperature, 1);
 				Serial.println(isMetric ? " C" : " F");
+#endif
 
 				gw.send(msgTemperatureOuter.set(temperature, 1));
 			}
 		}
-		else
-			Serial.println("Failed reading Temperature Outer");
+		//else
+		//	Serial.println("Failed reading Temperature Outer");
 	}
 }
 void processHumidityOuter(unsigned long ms)
@@ -132,15 +167,15 @@ void processHumidityOuter(unsigned long ms)
 			{
 				lastHumidityOuter = humidity;
 
-				Serial.print("Humidity Outer: ");
-				Serial.print(humidity, 1);
-				Serial.println("%");
+				//Serial.print("Humidity Outer: ");
+				//Serial.print(humidity, 1);
+				//Serial.println("%");
 
 				gw.send(msgHumidityOuter.set(humidity, 1));
 			}
 		}
-		else
-			Serial.println("Failed reading Humidity Outer");
+		//else
+		//	Serial.println("Failed reading Humidity Outer");
 	}
 }
 void processTemperatureInner(unsigned long ms)
@@ -161,15 +196,15 @@ void processTemperatureInner(unsigned long ms)
 				if (!isMetric)
 					temperature = dhtInner.toFahrenheit(temperature);
 
-				Serial.print("Temperature Inner: ");
-				Serial.print(temperature, 1);
-				Serial.println(isMetric ? " C" : " F");
+				//Serial.print("Temperature Inner: ");
+				//Serial.print(temperature, 1);
+				//Serial.println(isMetric ? " C" : " F");
 
 				gw.send(msgTemperatureInner.set(temperature, 1));
 			}
 		}
-		else
-			Serial.println("Failed reading Temperature Inner");
+		//else
+		//	Serial.println("Failed reading Temperature Inner");
 	}
 }
 void processHumidityInner(unsigned long ms)
@@ -187,14 +222,14 @@ void processHumidityInner(unsigned long ms)
 			{
 				lastHumidityInner = humidity;
 
-				Serial.print("Humidity Inner: ");
-				Serial.print(humidity, 1);
-				Serial.println("%");
+				//Serial.print("Humidity Inner: ");
+				//Serial.print(humidity, 1);
+				//Serial.println("%");
 
 				gw.send(msgHumidityInner.set(humidity, 1));
 			}
 		}
-		else
-			Serial.println("Failed reading Humidity Inner");
+		//else
+		//	Serial.println("Failed reading Humidity Inner");
 	}
 }
