@@ -99,7 +99,7 @@ void processTemperatureOuter(unsigned long ms)
 		float temperature = dhtOuter.getTemperature();
 		if (!isnan(temperature))
 		{
-			if (lastTemperatureOuter != temperature)
+			//if (lastTemperatureOuter != temperature)
 			{
 				lastTemperatureOuter = temperature;
 

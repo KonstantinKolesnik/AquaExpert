@@ -88,7 +88,7 @@ namespace SmartHub.Plugins.MySensors.Data
             Database.RemoveConstraint("MySensors_Nodes", "UK_MySensors_Nodes_NodeNo");
             Database.RemoveTable("MySensors_Nodes");
 
-            // configuration
+            // settings
             Database.RemoveConstraint("MySensors_Settings", "UK_MySensors_Settings_Name");
             Database.RemoveTable("MySensors_Settings");
         }

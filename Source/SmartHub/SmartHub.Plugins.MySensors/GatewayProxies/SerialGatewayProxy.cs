@@ -1,9 +1,11 @@
 ﻿using SmartHub.Plugins.MySensors.Core;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
+using System.Timers;
 
 namespace SmartHub.Plugins.MySensors.GatewayProxies
 {
@@ -11,7 +13,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
     {
         #region Fields
         private SerialPort serialPort;
-        private bool isStopped = true;
+        private Thread thread;
+        //private System.Timers.Timer timer;
         #endregion
 
         #region Properties
@@ -33,32 +36,52 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             serialPort = new SerialPort();
             serialPort.BaudRate = 115200;
             serialPort.DtrEnable = true;
-            //serialPort.RtsEnable = true;
             serialPort.Encoding = Encoding.ASCII;
             serialPort.NewLine = "\n";
-            //serialPort.ReadTimeout = 4000;
-            //serialPort.WriteTimeout = 4000;
+            //serialPort.ReadTimeout = 10000; // !!! to let gateway initialize befero it sens a first message
 
-            serialPort.DataReceived += serialPort_DataReceived;
+            thread = new Thread(() =>
+            {
+                while (!IsStarted && !FindAndConnect()) ;
+            });
+            //thread.Priority = ThreadPriority.AboveNormal;
+
+            //timer = new System.Timers.Timer(2000);
+            //timer.AutoReset = false;
+            //timer.Elapsed += (object source, ElapsedEventArgs e) =>
+            //{
+            //    timer.Stop();
+            //    Debug.WriteLine("Timer elapsed");
+            //    Debug.WriteLine("Timer disabled");
+
+            //    if (!FindAndConnect())
+            //    {
+            //        Debug.WriteLine("Find failed");
+            //        timer.Start();
+            //        Debug.WriteLine("Timer enabled");
+            //    }
+            //    else
+            //        Debug.WriteLine("Find OK");
+            //};
         }
         #endregion
 
         #region Public methods
         public void Start()
         {
-            isStopped = false;
-
-            new Thread(() =>
-            {
-                while (!isStopped && !FindAndConnect()) ;
-            }).Start();
+            thread.Start();
+            //timer.Start();
         }
         public void Stop()
         {
-            isStopped = true;
+            if (thread.IsAlive)
+                thread.Join();
+            //if (timer.Enabled)
+            //    timer.Enabled = false;
 
             if (IsStarted)
             {
+                serialPort.DataReceived -= serialPort_DataReceived;
                 serialPort.Close();
 
                 if (Disconnected != null)
@@ -112,9 +135,10 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                     try
                     {
                         serialPort.Open();
+
                         if (IsStarted)
                         {
-                            serialPort.DiscardInBuffer();
+                            Thread.Sleep(2000); // let hardware gateway initialize
 
                             try
                             {
@@ -122,6 +146,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                                 SensorMessage msg = SensorMessage.FromRawMessage(str);
                                 if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
                                 {
+                                    serialPort.DataReceived += serialPort_DataReceived;
+
                                     if (Connected != null)
                                         Connected(this, EventArgs.Empty);
 
@@ -131,14 +157,16 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                                     return true;
                                 }
                             }
-                            catch (TimeoutException) { }
+                            catch (TimeoutException)
+                            {
+                            }
 
-                            Stop();
+                            serialPort.Close();
                         }
                     }
                     catch (Exception)
                     {
-                        Stop();
+                        serialPort.Close();
                     }
                 }
 

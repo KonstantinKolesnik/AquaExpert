@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.Composition;
 
-namespace SmartHub.Plugins.MySensors
+namespace SmartHub.Plugins.MySensors.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class MySensorsMessageAttribute : ExportAttribute

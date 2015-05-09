@@ -35,6 +35,12 @@ namespace SmartHub.Plugins.MySensors
         #region Import
         [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
         public Action<SensorMessage>[] SensorMessageHandlers { get; set; }
+
+        [ImportMany("46CD89C9-08A2-4E3C-84EE-826DA51127CF")]
+        public Action[] ConnectedHandlers { get; set; }
+
+        [ImportMany("8E26E0FB-657F-4DEA-BF9D-A9E93A5632DC")]
+        public Action[] DisconnectedHandlers { get; set; }
         #endregion
 
         #region Plugin overrides
@@ -60,7 +66,6 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer = Context.GetPlugin<SignalRPlugin>();
         }
-
         public override void StartPlugin()
         {
             if (!gatewayProxy.IsStarted)
@@ -145,7 +150,6 @@ namespace SmartHub.Plugins.MySensors
             //int a = 0;
             //int b = a;
         }
-
         [Timer_5_sec_Elapsed]
         private void Timer_5_sec_Elapsed(DateTime now)
         {
@@ -156,6 +160,7 @@ namespace SmartHub.Plugins.MySensors
         {
             Logger.Info("Connected.");
             Debug.WriteLine("Connected.");
+            Run(ConnectedHandlers, x => x());
         }
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
         {
@@ -353,6 +358,7 @@ namespace SmartHub.Plugins.MySensors
         {
             Logger.Error("Disconnected.");
             Debug.WriteLine("Disconnected.");
+            Run(DisconnectedHandlers, x => x());
         }
         #endregion
 

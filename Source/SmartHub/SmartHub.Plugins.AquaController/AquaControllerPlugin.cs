@@ -1,6 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.MySensors;
+using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer;
@@ -19,10 +20,15 @@ namespace SmartHub.Plugins.AquaController
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
+            //mapper.Class<Setting>(cfg => cfg.Table("AquaController_Settings"));
         }
         public override void InitPlugin()
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
+
+            //if (GetSetting("SerialPortName") == null)
+            //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
+
         }
         public override void StartPlugin()
         {
@@ -149,12 +155,22 @@ namespace SmartHub.Plugins.AquaController
 
         #endregion
 
-
+        #region Event handlers
         [MySensorsMessage]
-        private void SensorMessage_Received(SensorMessage msg)
+        private void MySensorMessage_Received(SensorMessage msg)
         {
             if (msg.NodeID == heaterRelay.NodeNo && msg.SensorID == heaterRelay.SensorNo)
                 heaterTemperatureSensor_MessageReceived(msg);
+        }
+        [MySensorsConnected]
+        private void MySensorsConnected()
+        {
+
+        }
+        [MySensorsDisconnected]
+        private void MySensorsDisconnected()
+        {
+
         }
 
         float vvv = 0;
@@ -164,6 +180,6 @@ namespace SmartHub.Plugins.AquaController
             //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
             //vvv = vvv == 0 ? 1 : 0;
         }
-
+        #endregion
     }
 }

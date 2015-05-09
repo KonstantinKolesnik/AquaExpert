@@ -11,7 +11,8 @@
 	SmartHub.Core.Plugins (Copy Local = False)
 	System.ComponentModel.Composition (Copy Local = False)
 	NLog (Copy Local = True)
-	NHibernate (Copy Local = True)
+	NHibernate (Copy Local = True) - если используется БД
+	ECM7.Migrator (Copy Local = False) - если используется БД
 
 Пометить класс плагина атрибутом [SmartHub.Core.Plugins.PluginAttribute]
 

@@ -54,6 +54,8 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\MySensorsConnectedAttribute.cs" />
+    <Compile Include="Attributes\MySensorsDisconnectedAttribute.cs" />
     <Compile Include="Core\InternalValueType.cs" />
     <Compile Include="Core\SensorMessage.cs" />
     <Compile Include="Core\SensorMessageEventArgs.cs" />
@@ -70,9 +72,9 @@
     <Compile Include="Data\Setting.cs" />
     <Compile Include="GatewayProxies\EthernetGatewayProxy.cs" />
     <Compile Include="GatewayProxies\SerialGatewayProxy.cs" />
-    <Compile Include="IGatewayProxy.cs" />
+    <Compile Include="GatewayProxies\IGatewayProxy.cs" />
     <Compile Include="MySensorsPlugin.cs" />
-    <Compile Include="MySensorsMessageAttribute.cs" />
+    <Compile Include="Attributes\MySensorsMessageAttribute.cs" />
     <Compile Include="MySensorsTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

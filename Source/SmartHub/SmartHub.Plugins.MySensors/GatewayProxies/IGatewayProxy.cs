@@ -1,7 +1,7 @@
 ﻿using SmartHub.Plugins.MySensors.Core;
 using System;
 
-namespace SmartHub.Plugins.MySensors
+namespace SmartHub.Plugins.MySensors.GatewayProxies
 {
     interface IGatewayProxy
     {
