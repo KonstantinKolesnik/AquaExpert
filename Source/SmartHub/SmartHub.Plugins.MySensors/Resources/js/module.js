@@ -119,7 +119,7 @@ define(
 	            });
 	        },
             onSignalRReceived: function (data) {
-                var me = this;
+                var me = viewModel; // not "this" because is called from another context!!!
 
 	            switch (data.MsgId) {
 	                case "NodePresentation": onNodePresentation(data); break;
