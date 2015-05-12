@@ -87,7 +87,7 @@ define(
 	        });
 	        connection.stateChanged(function (change) {
 	            if (change.newState === $.signalR.connectionState.reconnecting) {
-	                console.log('Re-connecting');
+	                console.log('Reconnecting');
 	            }
 	            else if (change.newState === $.signalR.connectionState.connected) {
 	                console.log('The server is online');
@@ -97,7 +97,7 @@ define(
 	            console.log('Reconnected');
 	        });
 	        connection.connectionSlow(function () {
-	            console.log('ConnectionSlow');
+	            console.log('Connection is slow');
 	        });
 
 	        connection.start().done(function () {

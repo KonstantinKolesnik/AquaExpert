@@ -13,9 +13,7 @@ namespace SmartHub.Plugins.WebUI.Attributes
         public string GetModulePath()
         {
             string url = (Url ?? string.Empty).Trim().Trim('/');
-            return url.EndsWith(".js", StringComparison.InvariantCultureIgnoreCase)
-                ? url.Substring(0, url.Length - 3)
-                : url;
+            return url.EndsWith(".js", StringComparison.InvariantCultureIgnoreCase) ? url.Substring(0, url.Length - 3) : url;
         }
     }
 }

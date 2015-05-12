@@ -51,7 +51,6 @@ namespace SmartHub.Plugins.AquaController
                 return session.Query<SmartHub.Plugins.AquaController.Data.Setting>().FirstOrDefault(setting => setting.Name == name);
         }
 
-
         #region Lines
         #region Heater
         private Sensor heaterRelay;

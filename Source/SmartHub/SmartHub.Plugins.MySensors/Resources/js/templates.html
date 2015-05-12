@@ -71,8 +71,34 @@
     # var val = data.BatteryLevel ? data.BatteryLevel.Level : null; #
     <div>#: val == null ? "-" : val #</div>
 </script>
-<script id="sensorValueCellTemplate" type="text/x-kendo-tmpl">
-    # var val = data.SensorValue ? data.SensorValue.Value : null; #
-    <div>#: val == null ? "-" : kendo.toString(val, "n2") #</div>
+<script id="batteryTimeStampCellTemplate" type="text/x-kendo-tmpl">
+    # var val = data.BatteryLevel ? data.BatteryLevel.TimeStamp : null;
+    if (val == null) { #
+        <div>-</div>
+    # } else { #
+        <div>
+            <span>#: kendo.toString(new Date(val), "dd.MM.yyyy") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(new Date(val), "hh:mm:ss") #</span>
+        </div>
+    # } #
 </script>
+<script id="sensorValueValueCellTemplate" type="text/x-kendo-tmpl">
+    # var val = data.SensorValue ? data.SensorValue.Value : null; #
+    <div>#: val == null ? "-" : val #</div>
+</script>
+<script id="sensorValueTimeStampCellTemplate" type="text/x-kendo-tmpl">
+    # var val = data.SensorValue ? data.SensorValue.TimeStamp : null;
+    if (val == null) { #
+        <div>-</div>
+    # } else { #
+        <div>
+            <span>#: kendo.toString(new Date(val), "dd.MM.yyyy") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(new Date(val), "hh:mm:ss") #</span>
+        </div>
+    # } #
+</script>
+
+
+
+<!--<div>#: val == null ? "-" : kendo.toString(val, "n1") #</div>-->
 <!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->

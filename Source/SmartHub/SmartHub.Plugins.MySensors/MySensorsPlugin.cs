@@ -393,6 +393,7 @@ namespace SmartHub.Plugins.MySensors
         private int GetTimeForSensors() // seconds since 1970
         {
             DateTime dtNow = DateTime.Now;
+
             TimeSpan result = dtNow.Subtract(unixEpoch);
             return Convert.ToInt32(result.TotalSeconds);
         }

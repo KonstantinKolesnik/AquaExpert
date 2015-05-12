@@ -100,20 +100,135 @@ define(
 
 	    var viewModel = kendo.observable({
 	        UnitSystem: "M",
-	        SerialPortName: "",
 	        Nodes: [],
 	        Sensors: [],
             BatteryLevels: [],
-	        update: function () {
+            update: function () {
+                var me = this;
+
 	            api.getUnitSystem(function (data) {
-	                viewModel.set("UnitSystem", data.Value);
+	                me.set("UnitSystem", data.Value);
+
 	                api.getNodes(function (data) {
-	                    viewModel.set("Nodes", data);
-                        api.getSensors(function (data) {
-                            viewModel.set("Sensors", data);
+	                    me.set("Nodes", data);
+
+	                    api.getSensors(function (data) {
+	                        me.set("Sensors", data);
                         });
                     });
 	            });
+	        },
+            onSignalRReceived: function (data) {
+                var me = this;
+
+	            switch (data.MsgId) {
+	                case "NodePresentation": onNodePresentation(data); break;
+	                case "NodeNameChanged": onNodeNameChanged(data); break;
+	                case "NodeDeleted": onNodeDeleted(data); break;
+	                case "BatteryLevel": onBatteryLevel(data); break;
+	                case "SensorPresentation": onSensorPresentation(data); break;
+	                case "SensorNameChanged": onSensorNameChanged(data); break;
+	                case "SensorDeleted": onSensorDeleted(data); break;
+	                case "SensorValue": onSensorValue(data); break;
+	                case "UnitSystemChanged": onUnitSystemChanged(data); break;
+	                default: break;
+	            }
+
+	            function onNodePresentation(data) {
+	                for (var i = 0; i < me.Nodes.length; i++) {
+	                    if (me.Nodes[i].Id == data.Value.Id) {
+	                        me.Nodes[i].set("NodeNo", data.Value.NodeNo);
+	                        me.Nodes[i].set("TypeName", data.Value.TypeName);
+	                        me.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                        me.Nodes[i].set("SketchName", data.Value.SketchName);
+	                        me.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
+	                        me.Nodes[i].set("Name", data.Value.Name);
+	                        me.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
+	                        return;
+	                    }
+	                }
+
+	                me.Nodes.push(data.Value);
+	            }
+	            function onNodeNameChanged(data) {
+	                for (var i = 0; i < me.Nodes.length; i++) {
+	                    if (me.Nodes[i].Id == data.Value.Id) {
+	                        me.Nodes[i].set("Name", data.Value.Name);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onNodeDeleted(data) {
+	                var nodeNo = null;
+	                for (var i = 0; i < me.Nodes.length; i++) {
+	                    if (me.Nodes[i].Id == data.Value.Id) {
+	                        nodeNo = me.Nodes[i].NodeNo;
+	                        me.Nodes.splice(i, 1);
+	                        break;
+	                    }
+	                }
+
+	                if (nodeNo) {
+	                    for (var i = 0; i < me.Sensors.length;) {
+	                        if (me.Sensors[i].NodeNo == nodeNo)
+	                            me.Sensors.splice(i, 1);
+	                        else
+	                            i++;
+	                    }
+	                }
+	            }
+	            function onBatteryLevel(data) {
+	                for (var i = 0; i < me.Nodes.length; i++) {
+	                    if (me.Nodes[i].NodeNo == data.Value.NodeNo) {
+	                        me.Nodes[i].set("BatteryLevel", data.Value);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onSensorPresentation(data) {
+	                for (var i = 0; i < me.Sensors.length; i++) {
+	                    if (me.Sensors[i].Id == data.Value.Id) {
+	                        me.Sensors[i].set("NodeNo", data.Value.NodeNo);
+	                        me.Sensors[i].set("SensorNo", data.Value.SensorNo);
+	                        me.Sensors[i].set("TypeName", data.Value.TypeName);
+	                        me.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
+	                        me.Sensors[i].set("Name", data.Value.Name);
+	                        me.Sensors[i].set("SensorValue", data.Value.SensorValue);
+	                        return;
+	                    }
+	                }
+
+	                me.Sensors.push(data.Value);
+	            }
+	            function onSensorNameChanged(data) {
+	                for (var i = 0; i < me.Sensors.length; i++) {
+	                    if (me.Sensors[i].Id == data.Value.Id) {
+	                        me.Sensors[i].set("Name", data.Value.Name);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onSensorDeleted(data) {
+	                for (var i = 0; i < me.Sensors.length; i++) {
+	                    if (me.Sensors[i].Id == data.Value.Id) {
+	                        me.Sensors.splice(i, 1);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onSensorValue(data) {
+	                console.log(data.Value.Type + ": " + data.Value.Value);
+
+	                for (var i = 0; i < me.Sensors.length; i++) {
+	                    if (me.Sensors[i].NodeNo == data.Value.NodeNo && me.Sensors[i].SensorNo == data.Value.SensorNo) {
+	                        me.Sensors[i].set("SensorValue", data.Value);
+	                        break;
+	                    }
+	                }
+	            }
+	            function onUnitSystemChanged(data) {
+	                me.set("UnitSystem", data.Value);
+	            }
 	        }
 	    });
 
@@ -159,6 +274,9 @@ define(
 	                //me.gridNodesStateManager = new GridStateManager("gridNodes");
 
 	                ctrlNodesGrid = $("#gridNodes").kendoGrid({
+	                    dataSource: {
+	                        sort: { field: "NodeNo", dir: "asc" }
+	                    },
 	                    groupable: true,
 	                    sortable: true,
 	                    reorderable: true,
@@ -180,10 +298,16 @@ define(
                                         { field: "SketchVersion", title: "Версия", width: 60, editor: getNodeEditor, attributes: { "class": "text-center" } }
                                     ]
                             },
-                            { field: "BatteryLevel.Level", title: "Батарея, %", width: 80, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                            {
+                                title: "Батарея",
+                                columns: [
+                                    { field: "BatteryLevel.Level", title: "Уровень, %", width: 80, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-right" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
+                                    { field: "BatteryLevel.TimeStamp", title: "Дата", width: 120, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryTimeStampCellTemplate").html()) }
+                                ]
+                            },
                             { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
                             {
-                                title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" },
+                                title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" },
                                 command: [
                                     {
                                         text: "Удалить",
@@ -204,8 +328,10 @@ define(
 	                    detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
 	                    detailInit: function (e) {
 	                        createTabStrip(e.detailRow.find(".nodeDetailsTabStrip"));
-	                        createSensorsGrid();
+
+	                        createChildSensorsGrid();
 	                        createBatteryLevelsChart(e.detailRow.find(".nodeDetailsBatteryLevels"));
+
 	                        kendo.bind(e.detailRow, e.data);
 
 	                        api.getBatteryLevels(function (data) {
@@ -224,7 +350,7 @@ define(
 	                        //    }
 	                        //});
 
-	                        function createSensorsGrid() {
+	                        function createChildSensorsGrid() {
 	                            e.detailRow.find(".nodeDetailsSensors").kendoGrid({
 	                                dataSource: {
 	                                    filter: { field: "NodeNo", operator: "eq", value: e.data.NodeNo }
@@ -235,17 +361,23 @@ define(
 	                                resizable: true,
 	                                editable: true,
 	                                pageable: {
-	                                    pageSizes: [5, 10, 20, 50, 100, 300],
+	                                    pageSizes: [10, 20, 50, 100, 300],
 	                                    pageSize: 20
 	                                },
 	                                columns: [
                                         { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                         { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                                         { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
-                                        { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                                        {
+                                            title: "Состояние",
+                                            columns: [
+                                                { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                                { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
+                                            ]
+                                        },
                                         //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
                                         {
-                                            title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
+                                            title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
                                             command: [
                                                 {
                                                     text: "Удалить",
@@ -304,10 +436,16 @@ define(
                                 { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                 { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                                 { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
-                                { field: "SensorValue.Value", title: "Состояние", width: 80, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueCellTemplate").html()) },
+                                {
+                                    title: "Состояние",
+                                    columns: [
+                                        { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                        { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
+                                    ]
+                                },
                                 { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
                                 {
-                                    title: "&nbsp;", width: 80, reorderable: false, filterable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
+                                    title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" },
                                     command: [
                                         {
                                             text: "Удалить",
@@ -608,119 +746,6 @@ define(
 	        }
 	    });
 
-	    var signalRReceiveHandler = {
-	        handler: function (data) {
-	            switch (data.MsgId)
-	            {
-	                case "NodePresentation": onNodePresentation(data); break;
-	                case "NodeNameChanged": onNodeNameChanged(data); break;
-	                case "NodeDeleted": onNodeDeleted(data); break;
-	                case "BatteryLevel": onBatteryLevel(data); break;
-	                case "SensorPresentation": onSensorPresentation(data); break;
-	                case "SensorNameChanged": onSensorNameChanged(data); break;
-	                case "SensorDeleted": onSensorDeleted(data); break;
-	                case "SensorValue": onSensorValue(data); break;
-	                case "UnitSystemChanged": onUnitSystemChanged(data); break;
-	                default: break;
-	            }
-
-	            function onNodePresentation(data) {
-	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
-	                        viewModel.Nodes[i].set("NodeNo", data.Value.NodeNo);
-	                        viewModel.Nodes[i].set("TypeName", data.Value.TypeName);
-	                        viewModel.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                        viewModel.Nodes[i].set("SketchName", data.Value.SketchName);
-	                        viewModel.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
-	                        viewModel.Nodes[i].set("Name", data.Value.Name);
-	                        viewModel.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
-	                        return;
-	                    }
-	                }
-
-	                viewModel.Nodes.push(data.Value);
-	            }
-	            function onNodeNameChanged(data) {
-	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
-	                        viewModel.Nodes[i].set("Name", data.Value.Name);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onNodeDeleted(data) {
-	                var nodeNo = null;
-	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].Id == data.Value.Id) {
-	                        nodeNo = viewModel.Nodes[i].NodeNo;
-	                        viewModel.Nodes.splice(i, 1);
-	                        break;
-	                    }
-	                }
-
-	                if (nodeNo) {
-	                    for (var i = 0; i < viewModel.Sensors.length;) {
-	                        if (viewModel.Sensors[i].NodeNo == nodeNo)
-	                            viewModel.Sensors.splice(i, 1);
-	                        else
-	                            i++;
-	                    }
-	                }
-	            }
-	            function onBatteryLevel(data) {
-	                for (var i = 0; i < viewModel.Nodes.length; i++) {
-	                    if (viewModel.Nodes[i].NodeNo == data.Value.NodeNo) {
-	                        viewModel.Nodes[i].set("BatteryLevel", data.Value);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onSensorPresentation(data) {
-	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
-	                        viewModel.Sensors[i].set("NodeNo", data.Value.NodeNo);
-	                        viewModel.Sensors[i].set("SensorNo", data.Value.SensorNo);
-	                        viewModel.Sensors[i].set("TypeName", data.Value.TypeName);
-	                        viewModel.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                        viewModel.Sensors[i].set("Name", data.Value.Name);
-	                        viewModel.Sensors[i].set("SensorValue", data.Value.SensorValue);
-	                        return;
-	                    }
-	                }
-
-	                viewModel.Sensors.push(data.Value);
-	            }
-	            function onSensorNameChanged(data) {
-	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
-	                        viewModel.Sensors[i].set("Name", data.Value.Name);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onSensorDeleted(data) {
-	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].Id == data.Value.Id) {
-	                        viewModel.Sensors.splice(i, 1);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onSensorValue(data) {
-	                console.log(data.Value.Type + ": " + data.Value.Value);
-	                for (var i = 0; i < viewModel.Sensors.length; i++) {
-	                    if (viewModel.Sensors[i].NodeNo == data.Value.NodeNo && viewModel.Sensors[i].SensorNo == data.Value.SensorNo) {
-	                        viewModel.Sensors[i].set("SensorValue", data.Value);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onUnitSystemChanged(data) {
-	                viewModel.set("UnitSystem", data.Value);
-	            }
-	        }
-	    }
-
 	    function onError(data) {
 	        //alert(data.responseJSON.ExceptionMessage);
 	        //alert(data.statusText);
@@ -729,7 +754,7 @@ define(
 
 	    return {
 	        start: function () {
-	            application.SignalRReceiveHandlers.push(signalRReceiveHandler.handler);
+	            application.SignalRReceiveHandlers.push(viewModel.onSignalRReceived);
 
                 //var layoutView = new views.layoutView();
 	            //application.setContentView(layoutView);

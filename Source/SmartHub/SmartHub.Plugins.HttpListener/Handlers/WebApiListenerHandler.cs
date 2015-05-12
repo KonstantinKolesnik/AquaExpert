@@ -6,11 +6,11 @@ using System.Text;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public class ApiListenerHandler : ListenerHandlerBase
+    public class WebApiListenerHandler : ListenerHandlerBase
     {
         private readonly Func<HttpRequestParams, object> action;
 
-        public ApiListenerHandler(Func<HttpRequestParams, object> action)
+        public WebApiListenerHandler(Func<HttpRequestParams, object> action)
         {
             if (action == null)
                 throw new NullReferenceException("API handler action");

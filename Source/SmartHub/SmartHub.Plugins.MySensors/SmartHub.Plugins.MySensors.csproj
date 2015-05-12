@@ -122,9 +122,6 @@
     <EmbeddedResource Include="Resources\js\module2.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\views2.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

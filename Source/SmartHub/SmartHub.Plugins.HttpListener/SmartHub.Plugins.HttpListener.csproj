@@ -70,7 +70,7 @@
     <Compile Include="Attributes\HttpResourceAttribute.cs" />
     <Compile Include="Attributes\IHttpCommandAttribute.cs" />
     <Compile Include="CommonController.cs" />
-    <Compile Include="Handlers\ApiListenerHandler.cs" />
+    <Compile Include="Handlers\WebApiListenerHandler.cs" />
     <Compile Include="Handlers\ListenerHandlerBase.cs" />
     <Compile Include="Handlers\ResourceListenerHandler.cs" />
     <Compile Include="HttpListenerPlugin.cs" />

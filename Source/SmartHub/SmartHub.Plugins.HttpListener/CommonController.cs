@@ -42,10 +42,7 @@ namespace SmartHub.Plugins.HttpListener
                     throw new Exception(message);
                 }
 
-                HttpRequestParams parameters = GetRequestParams(Request);
-                HttpResponseMessage response = handler.ProcessRequest(parameters);
-
-                return response;
+                return handler.ProcessRequest(GetRequestParams(Request));
             }
             catch (Exception ex)
             {

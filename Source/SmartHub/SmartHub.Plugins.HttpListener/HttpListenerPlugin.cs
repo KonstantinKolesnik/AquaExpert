@@ -28,7 +28,7 @@ namespace SmartHub.Plugins.HttpListener
         #region Plugin overrides
         public override void InitPlugin()
         {
-            var handlers = RegisterHandlers();
+            var handlers = RegisterAllHandlers();
 
             httpConfig = new HttpSelfHostConfiguration(BASE_URL_HTTP);
             httpConfig.DependencyResolver = new DependencyResolver(handlers, Logger);
@@ -51,17 +51,15 @@ namespace SmartHub.Plugins.HttpListener
         #endregion
 
         #region Private methods
-        private InternalDictionary<ListenerHandlerBase> RegisterHandlers()
+        private InternalDictionary<ListenerHandlerBase> RegisterAllHandlers()
         {
-            var handlers = new InternalDictionary<ListenerHandlerBase>();
+            var result = new InternalDictionary<ListenerHandlerBase>();
 
             // регистрируем обработчики для методов плагинов
             foreach (var action in HttpCommandHandlers)
             {
                 Logger.Info("Register WebApi command handler '{0}'", action.Metadata.Url);
-
-                var handler = new ApiListenerHandler(action.Value);
-                handlers.Register(action.Metadata.Url, handler);
+                result.Register(action.Metadata.Url, new WebApiListenerHandler(action.Value));
             }
 
             // регистрируем обработчики для ресурсов
@@ -73,13 +71,11 @@ namespace SmartHub.Plugins.HttpListener
                 foreach (var attribute in attributes)
                 {
                     Logger.Info("Register HTTP resource handler: '{0}'", attribute.Url);
-
-                    var resHandler = new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType);
-                    handlers.Register(attribute.Url, resHandler);
+                    result.Register(attribute.Url, new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType));
                 }
             }
 
-            return handlers;
+            return result;
         }
         #endregion
     }
