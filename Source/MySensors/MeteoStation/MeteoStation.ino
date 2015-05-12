@@ -54,20 +54,7 @@ MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 DHT dhtOuter, dhtInner;
 #define DHT_OUTER_PIN	2
 #define DHT_INNER_PIN	3
-#define NUMBER_OF_LINES		5
 
-typedef struct
-{
-	uint8_t id;
-	uint8_t sensorType;
-	uint8_t valueType;
-	float lastValue = 0;
-	unsigned long prevMs = 0;
-	long interval = 3000;
-	MyMessage msg;
-} line;
-
-line lines[NUMBER_OF_LINES];
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -83,28 +70,6 @@ void setup()
 
 	dhtOuter.setup(DHT_OUTER_PIN);
 	dhtInner.setup(DHT_INNER_PIN);
-
-	lines[0].sensorType = S_TEMP;
-	lines[1].sensorType = S_HUM;
-	lines[2].sensorType = S_TEMP;
-	lines[3].sensorType = S_HUM;
-	lines[4].sensorType = S_BARO;
-
-
-
-
-
-	for (int sensorID = 0; sensorID < NUMBER_OF_LINES; sensorID++)
-	{
-		lines[sensorID].id = sensorID;
-		lines[sensorID].msg.setSensor(sensorID).setType(lines[sensorID].valueType);
-		gw.present(sensorID, lines[sensorID].sensorType);
-	}
-
-
-
-
-
 
 	gw.present(TEMPERATURE_OUTER_SENSOR_ID, S_TEMP);
 	gw.present(HUMIDITY_OUTER_SENSOR_ID, S_HUM);
@@ -133,53 +98,27 @@ void onMessageReceived(const MyMessage &message)
 	{
 		if (message.sensor == TEMPERATURE_OUTER_SENSOR_ID && message.type == V_TEMP)
 		{
-			delay(dhtOuter.getMinimumSamplingPeriod());
-
-			float temperature = dhtOuter.getTemperature();
-			if (!isnan(temperature))
-			{
-				if (!isMetric)
-					temperature = dhtOuter.toFahrenheit(temperature);
-
-#ifdef DEBUG
-				Serial.print("Temperature Outer: ");
-				Serial.print(temperature, 1);
-				Serial.println(isMetric ? " C" : " F");
-#endif
-
-				gw.send(msgTemperatureOuter.set(temperature, 1));
-			}
+			float temperature = lastTemperatureOuter;
+			if (!isMetric)
+				temperature = dhtOuter.toFahrenheit(temperature);
+			gw.send(msgTemperatureOuter.set(temperature, 1));
 		}
-		else if (message.sensor == HUMIDITY_OUTER_SENSOR_ID && message.type == V_PRESSURE)
-		{
-
-
-		}
+		else if (message.sensor == HUMIDITY_OUTER_SENSOR_ID && message.type == V_HUM)
+			gw.send(msgHumidityOuter.set(lastHumidityOuter, 1));
 		else if (message.sensor == TEMPERATURE_INNER_SENSOR_ID && message.type == V_TEMP)
 		{
-			delay(dhtInner.getMinimumSamplingPeriod());
-
-			float temperature = dhtInner.getTemperature();
-			if (!isnan(temperature))
-			{
-				if (!isMetric)
-					temperature = dhtInner.toFahrenheit(temperature);
-
-#ifdef DEBUG
-				Serial.print("Temperature Inner: ");
-				Serial.print(temperature, 1);
-				Serial.println(isMetric ? " C" : " F");
-#endif
-
-				gw.send(msgTemperatureInner.set(temperature, 1));
-			}
+			float temperature = lastTemperatureInner;
+			if (!isMetric)
+				temperature = dhtInner.toFahrenheit(temperature);
+			gw.send(msgTemperatureInner.set(temperature, 1));
 		}
-		else if (message.sensor == HUMIDITY_INNER_SENSOR_ID && message.type == V_PRESSURE)
+		else if (message.sensor == HUMIDITY_INNER_SENSOR_ID && message.type == V_HUM)
+			gw.send(msgHumidityInner.set(lastHumidityInner, 1));
+		else if (message.sensor == PRESSURE_SENSOR_ID && message.type == V_PRESSURE)
 		{
 
 
 		}
-
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -200,14 +139,13 @@ void processTemperatureOuter(unsigned long ms)
 
 				if (!isMetric)
 					temperature = dhtOuter.toFahrenheit(temperature);
+				gw.send(msgTemperatureOuter.set(temperature, 1));
 
 #ifdef DEBUG
 				Serial.print("Temperature Outer: ");
 				Serial.print(temperature, 1);
 				Serial.println(isMetric ? " C" : " F");
 #endif
-
-				gw.send(msgTemperatureOuter.set(temperature, 1));
 			}
 		}
 #ifdef DEBUG
@@ -230,14 +168,13 @@ void processHumidityOuter(unsigned long ms)
 			if (lastHumidityOuter != humidity)
 			{
 				lastHumidityOuter = humidity;
+				gw.send(msgHumidityOuter.set(humidity, 1));
 
 #ifdef DEBUG
 				Serial.print("Humidity Outer: ");
 				Serial.print(humidity, 1);
 				Serial.println("%");
 #endif
-
-				gw.send(msgHumidityOuter.set(humidity, 1));
 			}
 		}
 #ifdef DEBUG
@@ -263,14 +200,13 @@ void processTemperatureInner(unsigned long ms)
 
 				if (!isMetric)
 					temperature = dhtInner.toFahrenheit(temperature);
+				gw.send(msgTemperatureInner.set(temperature, 1));
 
 #ifdef DEBUG
 				Serial.print("Temperature Inner: ");
 				Serial.print(temperature, 1);
 				Serial.println(isMetric ? " C" : " F");
 #endif
-
-				gw.send(msgTemperatureInner.set(temperature, 1));
 			}
 		}
 #ifdef DEBUG
@@ -294,14 +230,13 @@ void processHumidityInner(unsigned long ms)
 			if (lastHumidityInner != humidity)
 			{
 				lastHumidityInner = humidity;
+				gw.send(msgHumidityInner.set(humidity, 1));
 
 #ifdef DEBUG
 				Serial.print("Humidity Inner: ");
 				Serial.print(humidity, 1);
 				Serial.println("%");
 #endif
-
-				gw.send(msgHumidityInner.set(humidity, 1));
 			}
 		}
 #ifdef DEBUG
@@ -327,14 +262,13 @@ void processPressure(unsigned long ms)
 //
 //				if (!isMetric)
 //					temperature = dhtOuter.toFahrenheit(temperature);
+//				gw.send(msgTemperatureOuter.set(temperature, 1));
 //
 //#ifdef DEBUG
 //				Serial.print("Temperature Outer: ");
 //				Serial.print(temperature, 1);
 //				Serial.println(isMetric ? " C" : " F");
 //#endif
-//
-//				gw.send(msgTemperatureOuter.set(temperature, 1));
 //			}
 //		}
 //#ifdef DEBUG

@@ -14,7 +14,7 @@ It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 #define TEMPERATURE_SENSOR_ID	0
 #define ONE_WIRE_PIN			A5
 OneWire oneWire(ONE_WIRE_PIN);
-DallasTemperature sensors(&oneWire);
+DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
 float lastTemperature;
 unsigned long prevMsTemperature = 0;
@@ -38,15 +38,15 @@ unsigned long prevMsWater = 0;
 const long intervalWater = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define SONAR_SENSOR_ID			3
+#define DISTANCE_SENSOR_ID		3
 #define TRIGGER_PIN				A2  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
 #define ECHO_PIN				A1  // Arduino pin tied to Echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE			100 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
-MyMessage msgSonar(SONAR_SENSOR_ID, V_DISTANCE);
-uint16_t lastSonar;
-unsigned long prevMsSonar = 0;
-const long intervalSonar = 1000;
+MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
+uint16_t lastDistance;
+unsigned long prevMsDistance = 0;
+const long intervalDistance = 1000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
@@ -59,13 +59,12 @@ void setup()
 {
 	Serial.begin(115200);
 
-	sensors.begin();
-
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("Aquarium Controller", "1.0");
 
 	isMetric = gw.getConfig().isMetric;
 
+	dallas.begin();
 	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
 	gw.send(msgTemperature.set(readTemperature(), 1));
 
@@ -76,8 +75,8 @@ void setup()
 	gw.present(WATER_SENSOR_ID, S_WATER);
 	gw.send(msgWater.set(readWater() ? 1 : 0));
 
-	gw.present(SONAR_SENSOR_ID, S_DISTANCE);
-	gw.send(msgSonar.set(readDistance()));
+	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE);
+	gw.send(msgDistance.set(readDistance()));
 }
 void loop()
 {
@@ -107,12 +106,13 @@ void processTemperature(unsigned long ms)
 		if (temperature != -127.00 && abs(lastTemperature - temperature) >= 0.1f)
 		{
 			lastTemperature = temperature;
+			gw.send(msgTemperature.set(temperature, 1));
 
+#ifdef DEBUG
 			Serial.print("Temperature: ");
 			Serial.print(temperature, 1);
 			Serial.println(isMetric ? " C" : " F");
-
-			gw.send(msgTemperature.set(temperature, 1));
+#endif
 		}
 	}
 }
@@ -122,16 +122,17 @@ void processPH(unsigned long ms)
 	{
 		prevMsPh = ms;
 
-		float phValue = readPh();
+		float ph = readPh();
 
-		if (abs(phValue - lastPh) >= 0.1f)
+		if (abs(ph - lastPh) >= 0.1f)
 		{
-			lastPh = phValue;
+			lastPh = ph;
+			gw.send(msgPh.set(ph, 1));
 
+#ifdef DEBUG
 			Serial.print("pH: ");
-			Serial.println(phValue, 1);
-
-			gw.send(msgPh.set(phValue, 1));
+			Serial.println(ph, 1);
+#endif
 		}
 	}
 }
@@ -146,38 +147,50 @@ void processWater(unsigned long ms)
 		if (water != lastWater)
 		{
 			lastWater = water;
-
-			Serial.print("Water: ");
-			Serial.println(water);
-
 			gw.send(msgWater.set(water ? 1 : 0));
+
+#ifdef DEBUG
+			Serial.print("Water: ");
+			Serial.println(water ? "Yes" : "No");
+#endif
 		}
 	}
 }
 void processDistance(unsigned long ms)
 {
-	if (ms - prevMsSonar >= intervalSonar)
+	if (ms - prevMsDistance >= intervalDistance)
 	{
-		prevMsSonar = ms;
+		prevMsDistance = ms;
 
 		uint16_t distance = readDistance();
 
-		if (distance != 0 && distance != lastSonar)
+		if (distance != 0 && distance != lastDistance)
 		{
-			lastSonar = distance;
+			lastDistance = distance;
+			gw.send(msgDistance.set(distance));
 
+#ifdef DEBUG
 			Serial.print("Distance: ");
 			Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
 			Serial.println(isMetric ? " cm" : " in");
-
-			gw.send(msgSonar.set(distance));
+#endif
 		}
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
 {
-	//Serial.println("onMessageReceived");
+	if (mGetCommand(message) == C_REQ)
+	{
+		if (message.sensor == TEMPERATURE_SENSOR_ID && message.type == V_TEMP)
+			gw.send(msgTemperature.set(lastTemperature, 1));
+		else if (message.sensor == PH_SENSOR_ID && message.type == V_PH)
+			gw.send(msgPh.set(lastPh, 1));
+		else if (message.sensor == WATER_SENSOR_ID && message.type == V_TRIPPED)
+			gw.send(msgWater.set(lastWater ? 1 : 0));
+		else if (message.sensor == DISTANCE_SENSOR_ID && message.type == V_DISTANCE)
+			gw.send(msgDistance.set(lastDistance));
+	}
 }
 void onTimeReceived(unsigned long time) // incoming argument is seconds since 1970.
 {
@@ -193,8 +206,8 @@ void printTime() {
 //--------------------------------------------------------------------------------------------------------------------------------------------
 float readTemperature()
 {
-	sensors.requestTemperatures();
-	float temperature = static_cast<float>(static_cast<int>((isMetric ? sensors.getTempCByIndex(0) : sensors.getTempFByIndex(0)) * 10.)) / 10.;
+	dallas.requestTemperatures();
+	float temperature = static_cast<float>(static_cast<int>((isMetric ? dallas.getTempCByIndex(0) : dallas.getTempFByIndex(0)) * 10.)) / 10.;
 	return temperature;
 }
 float readPh()
