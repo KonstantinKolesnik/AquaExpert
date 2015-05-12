@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Linq;
+using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
@@ -7,6 +8,7 @@ using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
+using System.Linq;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -29,7 +31,6 @@ namespace SmartHub.Plugins.AquaController
 
             //if (GetSetting("SerialPortName") == null)
             //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
-
         }
         public override void StartPlugin()
         {
@@ -44,36 +45,38 @@ namespace SmartHub.Plugins.AquaController
         //}
         #endregion
 
+        private SmartHub.Plugins.AquaController.Data.Setting GetSetting(string name)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<SmartHub.Plugins.AquaController.Data.Setting>().FirstOrDefault(setting => setting.Name == name);
+        }
+
+
+        #region Lines
         #region Heater
         private Sensor heaterRelay;
-        private Sensor heaterTemperatureSensor;
+        private Sensor heaterSensor;
         private float minHeaterTemperature;
-        private float maxHeaterTemperature;
 
         private void InitHeater()
         {
             minHeaterTemperature = 24.0f;
-            maxHeaterTemperature = 25.0f;
 
             heaterRelay = mySensors.GetSensor(1, 0);
-            if (heaterRelay == null)
-                throw new ArgumentNullException("heaterRelay (1, 0)");
-
-            heaterTemperatureSensor = mySensors.GetSensor(2, 0);
-            if (heaterTemperatureSensor == null)
-                throw new ArgumentNullException("heaterTemperatureSensor (2, 0)");
-
-            //SensorValue sv = mySensors.GetSensorValue(heaterTemperatureSensor);
-            //if (sv != null)
-            //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, sv.Value < minHeaterTemperature ? 1 : 0);
+            heaterSensor = mySensors.GetSensor(2, 0);
         }
 
-        private void heaterTemperatureSensor_MessageReceived(SensorMessage msg)
+        private void heater_Connected()
         {
-            //msg.Payload
-
-            //if (e.PropertyName == "LastValue")
-            //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Light, heaterTemperatureSensor.LastValue.Value < minHeaterTemperature ? 1 : 0);
+            if (heaterRelay != null)
+                mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
+            if (heaterSensor != null)
+                mySensors.RequestSensorValue(heaterSensor, SensorValueType.Temperature);
+        }
+        private void heater_MessageReceived(SensorMessage msg)
+        {
+            if (heaterRelay != null && heaterSensor != null && msg.NodeID == heaterSensor.NodeNo && msg.SensorID == heaterSensor.SensorNo)
+                mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, msg.PayloadFloat < minHeaterTemperature ? 1 : 0);
         }
         #endregion
 
@@ -159,27 +162,28 @@ namespace SmartHub.Plugins.AquaController
 
 
         #endregion
+        #endregion
 
         #region Event handlers
         [MySensorsConnected]
-        private void MySensorsConnected()
+        private void MySensors_Connected()
         {
+            heater_Connected();
+
 
         }
         [MySensorsMessage]
-        private void MySensorMessage_Received(SensorMessage msg)
+        private void MySensors_MessageReceived(SensorMessage msg)
         {
-            if (msg.NodeID == heaterTemperatureSensor.NodeNo && msg.SensorID == heaterTemperatureSensor.SensorNo)
-                heaterTemperatureSensor_MessageReceived(msg);
+            heater_MessageReceived(msg);
 
 
 
         }
-        [MySensorsDisconnected]
-        private void MySensorsDisconnected()
-        {
-
-        }
+        //[MySensorsDisconnected]
+        //private void MySensors_Disconnected()
+        //{
+        //}
 
         float vvv = 0;
         [Timer_5_sec_Elapsed]

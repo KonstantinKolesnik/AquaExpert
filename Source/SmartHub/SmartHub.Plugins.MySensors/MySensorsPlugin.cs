@@ -28,7 +28,6 @@ namespace SmartHub.Plugins.MySensors
         private bool isSerialGateway = true;
         private IGatewayProxy gatewayProxy;
         private SignalRPlugin signalServer;
-        private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         #endregion
 
@@ -116,7 +115,10 @@ namespace SmartHub.Plugins.MySensors
         public SensorValue GetSensorValue(Sensor sensor)
         {
             using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+                return session.Query<SensorValue>().
+                    Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).
+                    OrderByDescending(sv => sv.TimeStamp).
+                    FirstOrDefault();
         }
         private void Save(object item)
         {
@@ -164,6 +166,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
         {
             SensorMessage message = args.Message;
+            
             Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeID == 0 || message.SensorID == 255;
@@ -240,7 +243,7 @@ namespace SmartHub.Plugins.MySensors
                             SensorNo = message.SensorID,
                             TimeStamp = DateTime.Now,
                             Type = (SensorValueType)message.SubType,
-                            Value = float.Parse(message.Payload.Replace(",", decimalSeparator).Replace(".", decimalSeparator))
+                            Value = message.PayloadFloat
                         };
 
                         Save(sv);

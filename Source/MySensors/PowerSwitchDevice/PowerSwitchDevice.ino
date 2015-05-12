@@ -33,17 +33,24 @@ void loop()
 
 void onMessageReceived(const MyMessage &message)
 {
+	uint8_t cmd = mGetCommand(message);
+
 	if (message.type == V_LIGHT)
 	{
-		uint8_t newState = message.getByte();
 		uint8_t lastState = gw.loadState(message.sensor);
 
-		if (newState != lastState)
+		if (cmd == C_SET)
 		{
-			digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
-			gw.saveState(message.sensor, newState);
+			uint8_t newState = message.getByte();
+			if (newState != lastState)
+			{
+				digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
+				gw.saveState(message.sensor, newState);
 
-			gw.send(msgRelay.setSensor(message.sensor).set(newState));
+				gw.send(msgRelay.setSensor(message.sensor).set(newState));
+			}
 		}
+		else if (cmd == C_REQ)
+			gw.send(msgRelay.setSensor(message.sensor).set(lastState));
 	}
 }

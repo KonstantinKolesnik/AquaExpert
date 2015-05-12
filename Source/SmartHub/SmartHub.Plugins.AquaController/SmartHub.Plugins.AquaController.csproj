@@ -57,6 +57,7 @@
     <Compile Include="AquaControllerPlugin.cs" />
     <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Data\Migrations.cs" />
+    <Compile Include="Data\Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

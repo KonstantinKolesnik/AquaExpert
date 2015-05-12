@@ -1,10 +1,6 @@
 ﻿using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -15,12 +11,8 @@ namespace SmartHub.Plugins.AquaController
         {
             try
             {
-                //Context.GetPlugin<MySensorsPlugin>();
-
-                //UserScript script = GetScript(options.id);
-
                 //var data = Context.GetPlugin<MySensorsPlugin>();
-
+                //UserScript script = GetScript(options.id);
 
                 webTile.title = "Aqua Controller";
                 webTile.url = "/webapp/aquacontroller/module.js"; //options.url;

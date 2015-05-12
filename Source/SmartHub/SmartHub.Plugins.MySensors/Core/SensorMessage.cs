@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace SmartHub.Plugins.MySensors.Core
@@ -12,6 +13,7 @@ namespace SmartHub.Plugins.MySensors.Core
         public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
         public string Payload { get; set; }
+        public float PayloadFloat { get; set; }
         #endregion
 
         #region Constructor
@@ -36,7 +38,7 @@ namespace SmartHub.Plugins.MySensors.Core
             if (parts.Length != 6)
                 return null;
 
-            string rawPayload = parts[5].Trim();
+            //string rawPayload = parts[5].Trim();
 
             //var payload;
             //if ((MessageType)byte.Parse(parts[2]) == MessageType.Stream)
@@ -59,6 +61,12 @@ namespace SmartHub.Plugins.MySensors.Core
                     byte.Parse(parts[3]) == 1,
                     byte.Parse(parts[4]),
                     parts[5]);
+
+                string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                string p = msg.Payload.Replace(",", ds).Replace(".", ds);
+                float v;
+                if (float.TryParse(parts[5], out v))
+                    msg.PayloadFloat = v;
             }
             catch (Exception) { }
 
@@ -66,7 +74,7 @@ namespace SmartHub.Plugins.MySensors.Core
         }
         public string ToRawMessage()
         {
-            //if (command == 4)
+            //if (command == SensorMessageType.Stream)
             //{
             //    for (var i = 0; i < payload.length; i++)
             //    {
@@ -157,7 +165,6 @@ namespace SmartHub.Plugins.MySensors.Core
                     break;
             }
             sb.Append(string.Format("[{0}]", Payload));
-
 
             return sb.ToString();
         }
