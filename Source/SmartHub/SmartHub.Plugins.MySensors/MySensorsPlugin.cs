@@ -199,7 +199,7 @@ namespace SmartHub.Plugins.MySensors
                             SaveOrUpdate(node);
                         }
                         Run(SensorMessageHandlers, x => x(message));
-                        signalServer.Broadcast(new { MsgId = "NodePresentation", Value = BuildNodeModel(node) });
+                        signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                     }
                     else // sensor message
                     {
@@ -226,7 +226,7 @@ namespace SmartHub.Plugins.MySensors
                                 SaveOrUpdate(sensor);
                             }
                             Run(SensorMessageHandlers, x => x(message));
-                            signalServer.Broadcast(new { MsgId = "SensorPresentation", Value = BuildSensorModel(sensor) });
+                            signalServer.Broadcast(new { MsgId = "SensorPresentation", Data = BuildSensorModel(sensor) });
                         }
                     }
                     break;
@@ -248,7 +248,7 @@ namespace SmartHub.Plugins.MySensors
 
                         Save(sv);
                         Run(SensorMessageHandlers, x => x(message));
-                        signalServer.Broadcast(new { MsgId = "SensorValue", Value = sv });
+                        signalServer.Broadcast(new { MsgId = "SensorValue", Data = sv });
                     }
                     break;
                 #endregion
@@ -277,7 +277,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 Save(bl);
                                 Run(SensorMessageHandlers, x => x(message));
-                                signalServer.Broadcast(new { MsgId = "BatteryLevel", Value = bl });
+                                signalServer.Broadcast(new { MsgId = "BatteryLevel", Data = bl });
                             }
                             break;
                         case InternalValueType.Time:
@@ -314,7 +314,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 SaveOrUpdate(node);
                                 Run(SensorMessageHandlers, x => x(message));
-                                signalServer.Broadcast(new { MsgId = "NodePresentation", Value = BuildNodeModel(node) });
+                                signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -474,7 +474,8 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer.Broadcast(new {
                 MsgId = "NodeNameChanged",
-                Value = new {
+                Data = new
+                {
                     Id = id,
                     Name = name
                 }
@@ -496,7 +497,7 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer.Broadcast(new {
                 MsgId = "NodeDeleted",
-                Value = new { Id = id }
+                Data = new { Id = id }
             });
 
             return null;
@@ -523,7 +524,8 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer.Broadcast(new {
                 MsgId = "SensorNameChanged",
-                Value = new {
+                Data = new
+                {
                     Id = id,
                     Name = name
                 }
@@ -545,7 +547,7 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer.Broadcast(new {
                 MsgId = "SensorDeleted",
-                Value = new { Id = id }
+                Data = new { Id = id }
             });
 
             return null;
@@ -574,7 +576,7 @@ namespace SmartHub.Plugins.MySensors
 
             signalServer.Broadcast(new {
                 MsgId = "UnitSystemChanged",
-                Value = value
+                Data = value
             });
 
             return null;
@@ -585,6 +587,12 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
                 return session.Query<BatteryLevel>().ToArray();
+        }
+        [HttpCommand("/api/mysensors/sensorvalues")]
+        private object GetSensorValues(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().ToArray();
         }
         #endregion
     }

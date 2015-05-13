@@ -13,7 +13,7 @@ namespace SmartHub.Plugins.MySensors.Core
         public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
         public string Payload { get; set; }
-        public float PayloadFloat { get; set; }
+        public float PayloadFloat { get; private set; }
         #endregion
 
         #region Constructor

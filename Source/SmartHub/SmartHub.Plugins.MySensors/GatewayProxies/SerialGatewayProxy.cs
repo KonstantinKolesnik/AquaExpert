@@ -94,6 +94,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                 try
                 {
                     serialPort.WriteLine(message.ToRawMessage());
+                    Thread.Sleep(100);
                 }
                 catch (Exception) { }
             }
@@ -146,11 +147,11 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                                 {
                                     serialPort.DataReceived += serialPort_DataReceived;
 
-                                    if (Connected != null)
-                                        Connected(this, EventArgs.Empty);
-
                                     if (MessageReceived != null)
                                         MessageReceived(this, new SensorMessageEventArgs(msg));
+
+                                    if (Connected != null)
+                                        Connected(this, EventArgs.Empty);
 
                                     return true;
                                 }

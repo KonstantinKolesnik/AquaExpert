@@ -193,6 +193,15 @@ namespace SmartHub.Plugins.AquaController
 
             //var s = mySensors.GetSensor(3, 0);
             //mySensors.GetSensorValue(s, SensorValueType.Temperature);
+
+
+            //if (heaterSensor != null)
+            //    mySensors.RequestSensorValue(heaterSensor, SensorValueType.Temperature);
+
+
+            //if (heaterRelay != null)
+            //    mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
+
         }
         #endregion
     }

@@ -20,10 +20,6 @@
                     <label class="control-label" for="ddlUnitSystem">Система единиц измерения</label>
                     <select id="ddlUnitSystem" data-bind="value: UnitSystem" data-value-primitive="true"></select>
                 </div>
-                <!--<div>
-                    <label class="control-label" for="tbComPort">COM-порт</label>
-                    <input type="text" id="tbComPort" class="k-textbox" data-bind="value: SerialPortName"/>
-                </div>-->
             </div>
         </div>
     </div>
@@ -55,15 +51,15 @@
         </ul>
         <div><div class="nodeDetailsSensors" style="height:250px;" data-bind="source: Sensors"></div></div>
         <div>
-            <!--<div>filter</div>-->
+            <div>filter</div>
             <div class="nodeDetailsBatteryLevels" style="height:250px;" data-bind="source: BatteryLevels"></div>
         </div>
     </div>
 </script>
 <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
     <div>
-        <!--<div>filter</div>
-        <div class="sensorDetailsValues" style="height:250px;" data-bind="source: Values"></div>-->
+        <div>filter</div>
+        <div class="sensorDetailsValues" style="height:250px;" data-bind="source: SensorValues"></div>
     </div>
 </script>
 
@@ -77,8 +73,8 @@
         <div>-</div>
     # } else { #
         <div>
-            <span>#: kendo.toString(new Date(val), "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(new Date(val), "hh:mm:ss") #</span>
+            <span>#: kendo.toString(val, "dd.MM.yyyy") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(val, "hh:mm:ss") #</span>
         </div>
     # } #
 </script>
@@ -92,8 +88,8 @@
         <div>-</div>
     # } else { #
         <div>
-            <span>#: kendo.toString(new Date(val), "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(new Date(val), "hh:mm:ss") #</span>
+            <span>#: kendo.toString(val, "dd.MM.yyyy") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(val, "hh:mm:ss") #</span>
         </div>
     # } #
 </script>

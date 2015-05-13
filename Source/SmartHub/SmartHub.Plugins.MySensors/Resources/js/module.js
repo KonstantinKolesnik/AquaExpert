@@ -6,6 +6,11 @@ define(
 	        getNodes: function (onComplete) {
 	            $.getJSON('/api/mysensors/nodes')
 					.done(function (data) {
+					    $.each(data, function (idx, item) {
+					        if (item.BatteryLevel)
+                                item.BatteryLevel.TimeStamp = new Date(item.BatteryLevel.TimeStamp);
+					    });
+
 					    if (onComplete)
 					        onComplete(data);
 					})
@@ -37,6 +42,11 @@ define(
 	        getSensors: function (onComplete) {
 	            $.getJSON('/api/mysensors/sensors')
 					.done(function (data) {
+					    $.each(data, function (idx, item) {
+					        if (item.SensorValue)
+					            item.SensorValue.TimeStamp = new Date(item.SensorValue.TimeStamp);
+					    });
+
 					    if (onComplete)
 					        onComplete(data);
 					})
@@ -89,6 +99,8 @@ define(
 	        getBatteryLevels: function (onComplete) {
 	            $.getJSON('/api/mysensors/batterylevels')
 					.done(function (data) {
+					    $.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
+
 					    if (onComplete)
 					        onComplete(data);
 					})
@@ -96,13 +108,27 @@ define(
 	                    onError(data);
 	                });
 	        },
-	    }
+	        getSensorValues: function (onComplete) {
+	            $.getJSON('/api/mysensors/sensorvalues')
+					.done(function (data) {
+					    $.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
+
+					    if (onComplete)
+					        onComplete(data);
+					})
+	                .fail(function (data) {
+	                    onError(data);
+	                });
+	        },
+	    };
 
 	    var viewModel = kendo.observable({
 	        UnitSystem: "M",
 	        Nodes: [],
 	        Sensors: [],
-            BatteryLevels: [],
+	        BatteryLevels: [],
+	        SensorValues: [],
+
             update: function () {
                 var me = this;
 
@@ -114,6 +140,14 @@ define(
 
 	                    api.getSensors(function (data) {
 	                        me.set("Sensors", data);
+
+	                        api.getBatteryLevels(function (data) {
+	                            me.set("BatteryLevels", data);
+
+	                            api.getSensorValues(function (data) {
+	                                me.set("SensorValues", data);
+	                            });
+	                        });
                         });
                     });
 	            });
@@ -136,24 +170,24 @@ define(
 
 	            function onNodePresentation(data) {
 	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Value.Id) {
-	                        me.Nodes[i].set("NodeNo", data.Value.NodeNo);
-	                        me.Nodes[i].set("TypeName", data.Value.TypeName);
-	                        me.Nodes[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                        me.Nodes[i].set("SketchName", data.Value.SketchName);
-	                        me.Nodes[i].set("SketchVersion", data.Value.SketchVersion);
-	                        me.Nodes[i].set("Name", data.Value.Name);
-	                        me.Nodes[i].set("BatteryLevel", data.Value.BatteryLevel);
+	                    if (me.Nodes[i].Id == data.Data.Id) {
+	                        me.Nodes[i].set("NodeNo", data.Data.NodeNo);
+	                        me.Nodes[i].set("TypeName", data.Data.TypeName);
+	                        me.Nodes[i].set("ProtocolVersion", data.Data.ProtocolVersion);
+	                        me.Nodes[i].set("SketchName", data.Data.SketchName);
+	                        me.Nodes[i].set("SketchVersion", data.Data.SketchVersion);
+	                        me.Nodes[i].set("Name", data.Data.Name);
+	                        me.Nodes[i].set("BatteryLevel", data.Data.BatteryLevel);
 	                        return;
 	                    }
 	                }
 
-	                me.Nodes.push(data.Value);
+	                me.Nodes.push(data.Data);
 	            }
 	            function onNodeNameChanged(data) {
 	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Value.Id) {
-	                        me.Nodes[i].set("Name", data.Value.Name);
+	                    if (me.Nodes[i].Id == data.Data.Id) {
+	                        me.Nodes[i].set("Name", data.Data.Name);
 	                        break;
 	                    }
 	                }
@@ -161,7 +195,7 @@ define(
 	            function onNodeDeleted(data) {
 	                var nodeNo = null;
 	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Value.Id) {
+	                    if (me.Nodes[i].Id == data.Data.Id) {
 	                        nodeNo = me.Nodes[i].NodeNo;
 	                        me.Nodes.splice(i, 1);
 	                        break;
@@ -178,56 +212,63 @@ define(
 	                }
 	            }
 	            function onBatteryLevel(data) {
+	                data.Data.TimeStamp = new Date(data.Data.TimeStamp);
+
 	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].NodeNo == data.Value.NodeNo) {
-	                        me.Nodes[i].set("BatteryLevel", data.Value);
+	                    if (me.Nodes[i].NodeNo == data.Data.NodeNo) {
+	                        me.Nodes[i].set("BatteryLevel", data.Data);
 	                        break;
 	                    }
 	                }
+
+	                me.BatteryLevels.push(data.Data);
 	            }
 	            function onSensorPresentation(data) {
 	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Value.Id) {
-	                        me.Sensors[i].set("NodeNo", data.Value.NodeNo);
-	                        me.Sensors[i].set("SensorNo", data.Value.SensorNo);
-	                        me.Sensors[i].set("TypeName", data.Value.TypeName);
-	                        me.Sensors[i].set("ProtocolVersion", data.Value.ProtocolVersion);
-	                        me.Sensors[i].set("Name", data.Value.Name);
-	                        me.Sensors[i].set("SensorValue", data.Value.SensorValue);
+	                    if (me.Sensors[i].Id == data.Data.Id) {
+	                        me.Sensors[i].set("NodeNo", data.Data.NodeNo);
+	                        me.Sensors[i].set("SensorNo", data.Data.SensorNo);
+	                        me.Sensors[i].set("TypeName", data.Data.TypeName);
+	                        me.Sensors[i].set("ProtocolVersion", data.Data.ProtocolVersion);
+	                        me.Sensors[i].set("Name", data.Data.Name);
+	                        me.Sensors[i].set("SensorValue", data.Data.SensorValue);
 	                        return;
 	                    }
 	                }
 
-	                me.Sensors.push(data.Value);
+	                me.Sensors.push(data.Data);
 	            }
 	            function onSensorNameChanged(data) {
 	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Value.Id) {
-	                        me.Sensors[i].set("Name", data.Value.Name);
+	                    if (me.Sensors[i].Id == data.Data.Id) {
+	                        me.Sensors[i].set("Name", data.Data.Name);
 	                        break;
 	                    }
 	                }
 	            }
 	            function onSensorDeleted(data) {
 	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Value.Id) {
+	                    if (me.Sensors[i].Id == data.Data.Id) {
 	                        me.Sensors.splice(i, 1);
 	                        break;
 	                    }
 	                }
 	            }
 	            function onSensorValue(data) {
-	                console.log(data.Value.Type + ": " + data.Value.Value);
+	                console.log(data.Data.Type + ": " + data.Data.Value);
+	                data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
 	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].NodeNo == data.Value.NodeNo && me.Sensors[i].SensorNo == data.Value.SensorNo) {
-	                        me.Sensors[i].set("SensorValue", data.Value);
+	                    if (me.Sensors[i].NodeNo == data.Data.NodeNo && me.Sensors[i].SensorNo == data.Data.SensorNo) {
+	                        me.Sensors[i].set("SensorValue", data.Data);
 	                        break;
 	                    }
 	                }
+
+	                me.SensorValues.push(data.Data);
 	            }
 	            function onUnitSystemChanged(data) {
-	                me.set("UnitSystem", data.Value);
+	                me.set("UnitSystem", data.Data);
 	            }
 	        }
 	    });
@@ -236,9 +277,9 @@ define(
 	        template: _.template(templates),
 	        onShow: function () {
 	            createTabStrip($("#tabstrip"));
-	            createUnitSystemSelector();
 	            createNodesGrid();
 	            createSensorsGrid();
+	            createUnitSystemSelector();
 
 	            $(window).bind("resize", adjustSizes);
 	            $(window).resize(adjustSizes);
@@ -254,19 +295,6 @@ define(
 	                    activate: function () {
 	                        if (selector = $("#tabstrip"))
                                 adjustSizes();
-	                    }
-	                });
-	            }
-	            function createUnitSystemSelector() {
-	                $("#ddlUnitSystem").kendoDropDownList({
-	                    dataSource: [
-                            { value: "M", text: "Метрическая" },
-                            { value: "I", text: "Эмпирическая" }
-	                    ],
-	                    dataTextField: "text",
-	                    dataValueField: "value",
-	                    change: function (e) {
-	                        api.setUnitSystem(e.sender.value());
 	                    }
 	                });
 	            }
@@ -328,16 +356,10 @@ define(
 	                    detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
 	                    detailInit: function (e) {
 	                        createTabStrip(e.detailRow.find(".nodeDetailsTabStrip"));
-
 	                        createChildSensorsGrid();
-	                        createBatteryLevelsChart(e.detailRow.find(".nodeDetailsBatteryLevels"));
+	                        createBatteryLevelsChart();
 
 	                        kendo.bind(e.detailRow, e.data);
-
-	                        api.getBatteryLevels(function (data) {
-	                            viewModel.set("BatteryLevels", data);
-	                        });
-
 
 	                        //$(document).bind("kendo:skinChange", createChart);
 	                        //e.detailRow.find(".nodeDetailsBatteryLevels").data("kendoChart").setOptions({
@@ -371,7 +393,7 @@ define(
                                         {
                                             title: "Состояние",
                                             columns: [
-                                                { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                                { field: "SensorValue.Value", title: "Величина", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
                                                 { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
                                             ]
                                         },
@@ -392,6 +414,83 @@ define(
                                             ]
                                         }
 	                                ]
+	                            });
+	                        }
+	                        function createBatteryLevelsChart() {
+	                            e.detailRow.find(".nodeDetailsBatteryLevels").kendoChart({
+	                                dataSource: {
+	                                    filter: { field: "NodeNo", operator: "eq", value: e.data.NodeNo }
+	                                },
+
+	                                //theme: "blueOpal",
+	                                transitions: true,
+	                                style: "smooth",
+	                                //title: { text: "Internet Users in United States" },
+	                                legend: { visible: true, position: "bottom" },
+	                                //seriesDefaults: {
+	                                //    type: "line",
+	                                //    labels: {
+	                                //        visible: true,
+	                                //        format: "{0}%",
+	                                //        background: "transparent"
+	                                //    }
+	                                //},
+	                                series: [
+                                        {
+                                            //name: "Levels",
+                                            categoryField: "TimeStamp",
+                                            field: "Level",
+                                            //axis: "levels",
+                                            type: "area",//"line",
+                                            labels: {
+                                                visible: true,
+                                                format: "{0}%",
+                                                background: "transparent"
+                                            }
+                                        }
+	                                ],
+	                                valueAxis: {
+	                                    //name: "levels",
+	                                    labels: { format: "{0}%", visible: true },
+	                                    line: { visible: true },
+	                                    majorGridLines: { visible: true },
+	                                    min: 0,
+	                                    max: 120,
+	                                    color: "#000000"
+	                                },
+	                                categoryAxis: {
+	                                    //field: "TimeStamp",
+	                                    // or
+	                                    //categories: [2005, 2006, 2007, 2008, 2009],
+
+	                                    //name: "levels",
+
+	                                    //axisCrossingValue: [0, 3],
+
+	                                    type: "date",
+
+	                                    baseUnit: "hours",
+	                                    //baseUnit: "days",
+	                                    //baseUnit: "months",
+	                                    //baseUnit: "weeks",
+	                                    //baseUnit: "years",
+
+	                                    labels: {
+	                                        dateFormats: {
+	                                            hours: "HH:mm",
+	                                            days: "MMM, d",
+	                                            months: "MMM-yy",
+	                                            weeks: "M-d",
+	                                            years: "yyyy"
+	                                        },
+	                                        //format: "{0} aa}",
+	                                        visible: true
+	                                    },
+
+	                                    line: { visible: true },
+	                                    majorGridLines: { visible: true },
+	                                    color: "#000000"
+	                                }
 	                            });
 	                        }
 	                    },
@@ -418,6 +517,12 @@ define(
 	                //me.gridSensorsStateManager = new GridStateManager("gridSensors");
 
 	                $("#gridSensors").kendoGrid({
+	                    dataSource: {
+	                        sort: [
+                                { field: "NodeNo", dir: "asc" },
+                                { field: "SensorNo", dir: "asc" }
+	                        ]
+	                    },
 	                    groupable: true,
 	                    sortable: true,
 	                    reorderable: true,
@@ -432,7 +537,7 @@ define(
 	                    },
 	                    columns:
                             [
-                                { field: "NodeNo", title: "ID узла", width: 55, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                                { field: "NodeNo", title: "ID узла", width: 65, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                 { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                                 { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                                 { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
@@ -465,8 +570,107 @@ define(
                             ],
 	                    detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
 	                    detailInit: function (e) {
-	                        //createSensorValuesChart(e.detailRow.find(".sensorDetailsValues"), e.data);
-	                        //kendo.bind(e.detailRow, e.data);
+	                        createSensorValuesChart();
+
+	                        kendo.bind(e.detailRow, e.data);
+
+	                        function createSensorValuesChart() {
+	                            e.detailRow.find(".sensorDetailsValues").kendoChart({
+	                                dataSource: {
+	                                    filter: [
+                                            { field: "NodeNo", operator: "eq", value: e.data.NodeNo },
+                                            { field: "SensorNo", operator: "eq", value: e.data.SensorNo }
+	                                    ]
+	                                },
+	                                series: [{
+	                                    line: {
+	                                        style: "smooth"
+	                                    },
+	                                    type: "area",
+	                                    //aggregate: "avg",
+	                                    field: "Value",
+	                                    categoryField: "TimeStamp"
+	                                }],
+	                                categoryAxis: {
+	                                    baseUnit: "days"
+	                                }
+
+
+
+
+	                                ////theme: "blueOpal",
+	                                //transitions: true,
+	                                ////style: "step",//"smooth",
+	                                //title: { text: e.data.TypeName + " статистика" },
+	                                //legend: { visible: true, position: "bottom" },
+	                                //series: [
+                                    //    {
+                                    //        categoryField: "TimeStamp",
+                                    //        field: "Value",
+                                    //        type: "area",
+                                    //        labels: {
+                                    //            //format: "{0}" + me.getSensorValueUnit(e.data),
+                                    //            visible: true
+                                    //            //background: "transparent"
+                                    //        },
+                                    //        line: {
+                                    //            color: "cornflowerblue",
+                                    //            //opacity: 0.5,
+                                    //            width: 0.5,
+                                    //            style: "smooth" // "step", ""
+                                    //        }
+                                    //    }
+	                                //],
+	                                //valueAxis: {
+	                                //    labels: {
+	                                //        //format: "{0}" + me.getSensorValueUnit(e.data),
+	                                //        visible: true
+	                                //    },
+	                                //    line: { visible: true },
+	                                //    majorGridLines: { visible: true },
+	                                //    //title: {
+	                                //    //    text: "wwwww",
+	                                //    //    background: "green",
+	                                //    //    border: {
+	                                //    //        width: 1,
+	                                //    //    }
+	                                //    //}
+	                                //    //min: 0,
+	                                //    //max: 120
+	                                //},
+	                                //categoryAxis: {
+	                                //    type: "date",
+
+	                                //    baseUnit: "fit",
+	                                //    //baseUnit: "seconds",
+	                                //    //baseUnit: "minutes",
+	                                //    //baseUnit: "hours",
+	                                //    //baseUnit: "days",
+	                                //    //baseUnit: "weeks",
+	                                //    //baseUnit: "months",
+	                                //    //baseUnit: "years",
+
+	                                //    labels: {
+	                                //        dateFormats: {
+	                                //            hours: "MMM d HH:mm",
+	                                //            //hours: "HH:mm",
+
+	                                //            days: "MMM d",
+	                                //            weeks: "MMM d",
+	                                //            months: "yyyy MMM",
+	                                //            years: "yyyy"
+	                                //        },
+	                                //        visible: true,
+	                                //        rotation: 270,
+	                                //        step: 3
+	                                //        //min: 5//new Date()
+	                                //    },
+
+	                                //    line: { visible: true },
+	                                //    majorGridLines: { visible: true }
+	                                //}
+	                            });
+	                        }
 	                    },
 	                    detailExpand: function (e) {
 	                        //me.gridSensorsStateManager.onDetailExpand(e);
@@ -505,6 +709,20 @@ define(
 	                    }
 	                });
 	            }
+	            function createUnitSystemSelector() {
+	                $("#ddlUnitSystem").kendoDropDownList({
+	                    dataSource: [
+                            { value: "M", text: "Метрическая" },
+                            { value: "I", text: "Эмпирическая" }
+	                    ],
+	                    dataTextField: "text",
+	                    dataValueField: "value",
+	                    change: function (e) {
+	                        api.setUnitSystem(e.sender.value());
+	                    }
+	                });
+	            }
+
 	            function showDialog(txt, title) {
 	                var win = $("#dlg").kendoWindow({
 	                    actions: ["Close"],
@@ -524,6 +742,7 @@ define(
 
 	                win.center().open();
 	            }
+
 	            function getNodeEditor(container, options) {
 	                return getEditor(container, options, true);
 	            }
@@ -563,6 +782,7 @@ define(
 	                    }
 	                }
 	            }
+
 	            function adjustSizes() {
 	                var bottomOffset = 15;
 
@@ -590,158 +810,6 @@ define(
 	                        yPosition += el.offsetTop;
 	                    return yPosition;
 	                }
-	            }
-	            function createBatteryLevelsChart(selector) {
-	                selector.kendoChart({
-	                    //dataSource: {
-	                    //    filter: { field: "NodeNo", operator: "eq", value: e.data.NodeNo }
-	                    //},
-
-	                    //theme: "blueOpal",
-	                    transitions: true,
-	                    style: "smooth",
-	                    //title: { text: "Internet Users in United States" },
-	                    legend: { visible: true, position: "bottom" },
-	                    //seriesDefaults: {
-	                    //    type: "line",
-	                    //    labels: {
-	                    //        visible: true,
-	                    //        format: "{0}%",
-	                    //        background: "transparent"
-	                    //    }
-	                    //},
-	                    series: [
-                            {
-                                //name: "Levels",
-                                categoryField: "Time",
-                                field: "Percent",
-                                //axis: "levels",
-                                type: "area",//"line",
-                                labels: {
-                                    visible: true,
-                                    format: "{0}%",
-                                    background: "transparent"
-                                }
-                            }
-	                    ],
-	                    valueAxis: {
-	                        //name: "levels",
-	                        labels: { format: "{0}%", visible: true },
-	                        line: { visible: true },
-	                        majorGridLines: { visible: true },
-	                        min: 0,
-	                        max: 120,
-	                        color: "#000000"
-	                    },
-	                    categoryAxis: {
-	                        //field: "Time",
-	                        // or
-	                        //categories: [2005, 2006, 2007, 2008, 2009],
-
-	                        //name: "levels",
-
-	                        //axisCrossingValue: [0, 3],
-
-	                        type: "date",
-
-	                        baseUnit: "hours",
-	                        //baseUnit: "days",
-	                        //baseUnit: "months",
-	                        //baseUnit: "weeks",
-	                        //baseUnit: "years",
-
-	                        labels: {
-	                            dateFormats: {
-	                                hours: "HH:mm",
-	                                days: "MMM, d",
-	                                months: "MMM-yy",
-	                                weeks: "M-d",
-	                                years: "yyyy"
-	                            },
-	                            //format: "{0} aa}",
-	                            visible: true
-	                        },
-
-	                        line: { visible: true },
-	                        majorGridLines: { visible: true },
-	                        color: "#000000"
-	                    }
-	                });
-	            }
-	            function createSensorValuesChart(selector, sensor) {
-	                selector.kendoChart({
-	                    //theme: "blueOpal",
-	                    transitions: true,
-	                    //style: "step",//"smooth",
-	                    title: { text: sensor.TypeName() + " statistics" },
-	                    legend: { visible: true, position: "bottom" },
-	                    series: [
-                            {
-                                categoryField: "Time",
-                                field: "Value",
-                                type: "area",
-                                labels: {
-                                    format: "{0}" + me.getSensorValueUnit(sensor),
-                                    visible: true
-                                    //background: "transparent"
-                                },
-                                line: {
-                                    color: "cornflowerblue",
-                                    //opacity: 0.5,
-                                    width: 0.5,
-                                    style: "smooth" // "step", ""
-                                }
-                            }
-	                    ],
-	                    valueAxis: {
-	                        labels: {
-	                            format: "{0}" + me.getSensorValueUnit(sensor),
-	                            visible: true
-	                        },
-	                        line: { visible: true },
-	                        majorGridLines: { visible: true },
-	                        //title: {
-	                        //    text: "wwwww",
-	                        //    background: "green",
-	                        //    border: {
-	                        //        width: 1,
-	                        //    }
-	                        //}
-	                        //min: 0,
-	                        //max: 120
-	                    },
-	                    categoryAxis: {
-	                        type: "date",
-
-	                        baseUnit: "fit",
-	                        //baseUnit: "seconds",
-	                        //baseUnit: "minutes",
-	                        //baseUnit: "hours",
-	                        //baseUnit: "days",
-	                        //baseUnit: "weeks",
-	                        //baseUnit: "months",
-	                        //baseUnit: "years",
-
-	                        labels: {
-	                            dateFormats: {
-	                                hours: "MMM d HH:mm",
-	                                //hours: "HH:mm",
-
-	                                days: "MMM d",
-	                                weeks: "MMM d",
-	                                months: "yyyy MMM",
-	                                years: "yyyy"
-	                            },
-	                            visible: true,
-	                            rotation: 270,
-	                            step: 3
-	                            //min: 5//new Date()
-	                        },
-
-	                        line: { visible: true },
-	                        majorGridLines: { visible: true }
-	                    }
-	                });
 	            }
 	        }
 	    });
