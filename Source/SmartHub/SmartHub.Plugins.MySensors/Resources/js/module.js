@@ -575,6 +575,21 @@ define(
 	                        kendo.bind(e.detailRow, e.data);
 
 	                        function createSensorValuesChart() {
+	                            e.detailRow.find(".sensorDetailsOptions").bind("change", function () {
+	                                var chart = e.detailRow.find(".sensorDetailsValues").data("kendoChart"),
+                                        series = chart.options.series,
+                                        categoryAxis = chart.options.categoryAxis,
+                                        baseUnitInputs = e.detailRow.find(".sensorDetailsOptions input:radio[name=baseUnit]"),
+                                        aggregateInputs = e.detailRow.find(".sensorDetailsOptions input:radio[name=aggregate]");
+
+	                                for (var i = 0, length = series.length; i < length; i++)
+	                                    series[i].aggregate = aggregateInputs.filter(":checked").val();
+
+	                                categoryAxis.baseUnit = baseUnitInputs.filter(":checked").val();
+
+	                                chart.refresh();
+	                            });
+
 	                            e.detailRow.find(".sensorDetailsValues").kendoChart({
 	                                dataSource: {
 	                                    filter: [
@@ -587,15 +602,17 @@ define(
 	                                        style: "smooth"
 	                                    },
 	                                    type: "area",
-	                                    //aggregate: "avg",
+	                                    aggregate: "avg",
 	                                    field: "Value",
 	                                    categoryField: "TimeStamp"
 	                                }],
-	                                categoryAxis: {
-	                                    baseUnit: "days"
-	                                }
 
-
+	                                tooltip: {
+	                                    visible: true,
+	                                    //format: "{0}qqqqq",
+	                                    //template: "#= kendo.toString(category, 'dd.MM.yyyy') #: #= value #"
+	                                    template: "#= value #"
+	                                },
 
 
 	                                ////theme: "blueOpal",
@@ -638,37 +655,35 @@ define(
 	                                //    //min: 0,
 	                                //    //max: 120
 	                                //},
-	                                //categoryAxis: {
-	                                //    type: "date",
+	                                categoryAxis: {
+	                                    type: "date",
 
-	                                //    baseUnit: "fit",
-	                                //    //baseUnit: "seconds",
-	                                //    //baseUnit: "minutes",
-	                                //    //baseUnit: "hours",
-	                                //    //baseUnit: "days",
-	                                //    //baseUnit: "weeks",
-	                                //    //baseUnit: "months",
-	                                //    //baseUnit: "years",
+	                                    baseUnit: "fit",
+	                                    //baseUnit: "seconds",
+	                                    //baseUnit: "minutes",
+	                                    //baseUnit: "hours",
+	                                    //baseUnit: "days",
+	                                    //baseUnit: "weeks",
+	                                    //baseUnit: "months",
+	                                    //baseUnit: "years",
 
-	                                //    labels: {
-	                                //        dateFormats: {
-	                                //            hours: "MMM d HH:mm",
-	                                //            //hours: "HH:mm",
-
-	                                //            days: "MMM d",
-	                                //            weeks: "MMM d",
-	                                //            months: "yyyy MMM",
-	                                //            years: "yyyy"
-	                                //        },
-	                                //        visible: true,
-	                                //        rotation: 270,
-	                                //        step: 3
-	                                //        //min: 5//new Date()
-	                                //    },
-
-	                                //    line: { visible: true },
-	                                //    majorGridLines: { visible: true }
-	                                //}
+	                                    labels: {
+	                                        dateFormats: {
+	                                            hours: "MMM d HH:mm",
+	                                            //hours: "HH:mm",
+	                                            days: "MMM d",
+	                                            weeks: "MMM d",
+	                                            months: "yyyy MMM",
+	                                            years: "yyyy"
+	                                        },
+	                                        visible: true,
+	                                        rotation: 270,
+	                                        step: 3
+	                                        //min: 5//new Date()
+	                                    },
+	                                    line: { visible: true },
+	                                    majorGridLines: { visible: true }
+	                                }
 	                            });
 	                        }
 	                    },
