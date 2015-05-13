@@ -67,10 +67,10 @@ namespace SmartHub.Plugins.AquaController
 
         private void heater_Connected()
         {
-            if (heaterRelay != null)
-                mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
             if (heaterSensor != null)
                 mySensors.RequestSensorValue(heaterSensor, SensorValueType.Temperature);
+            if (heaterRelay != null)
+                mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
         }
         private void heater_MessageReceived(SensorMessage msg)
         {
@@ -195,12 +195,16 @@ namespace SmartHub.Plugins.AquaController
             //mySensors.GetSensorValue(s, SensorValueType.Temperature);
 
 
-            //if (heaterSensor != null)
-            //    mySensors.RequestSensorValue(heaterSensor, SensorValueType.Temperature);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(2, 0), SensorValueType.Temperature);
+
+            //mySensors.RequestSensorValue(mySensors.GetSensor(2, 1), SensorValueType.Ph);
 
 
-            //if (heaterRelay != null)
-            //    mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 0), SensorValueType.Switch);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 1), SensorValueType.Switch);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 2), SensorValueType.Switch);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 3), SensorValueType.Switch);
+            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 4), SensorValueType.Switch);
 
         }
         #endregion

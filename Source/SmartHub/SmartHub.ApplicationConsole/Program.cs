@@ -18,7 +18,6 @@ namespace SmartHub.ApplicationConsole
 
             Console.WriteLine("Success!");
             Console.WriteLine("Press ENTER to exit");
-
             Console.ReadLine();
 
             hub.StopServices();

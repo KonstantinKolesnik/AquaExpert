@@ -18,7 +18,7 @@ DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
 float lastTemperature;
 unsigned long prevMsTemperature = 0;
-const long intervalTemperature = 3000;	// interval at which to measure (milliseconds)
+const long intervalTemperature = 30000;	// interval at which to measure (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PH_SENSOR_ID			1
@@ -27,7 +27,7 @@ const long intervalTemperature = 3000;	// interval at which to measure (millisec
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh;
 unsigned long prevMsPh = 0;
-const long intervalPh = 5000;
+const long intervalPh = 30000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define WATER_SENSOR_ID			2
@@ -35,7 +35,7 @@ const long intervalPh = 5000;
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = 0;
-const long intervalWater = 5000;
+const long intervalWater = 10000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISTANCE_SENSOR_ID		3
@@ -46,7 +46,7 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
 uint16_t lastDistance;
 unsigned long prevMsDistance = 0;
-const long intervalDistance = 1000;
+const long intervalDistance = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // common section
@@ -91,7 +91,7 @@ void loop()
 
 	//gw.requestTime(onTimeReceived);
 
-	if (SLEEP_TIME)
+	if (SLEEP_TIME > 0)
 		gw.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +180,9 @@ void processDistance(unsigned long ms)
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
 {
-	if (mGetCommand(message) == C_REQ)
+	uint8_t cmd = mGetCommand(message);
+
+	if (cmd == C_REQ)
 	{
 		if (message.sensor == TEMPERATURE_SENSOR_ID && message.type == V_TEMP)
 			gw.send(msgTemperature.set(lastTemperature, 1));
@@ -199,7 +201,8 @@ void onTimeReceived(unsigned long time) // incoming argument is seconds since 19
 	//Serial.println(time);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-void printTime() {
+void printTime()
+{
 	//sprintf(timeBuf, "%02d:%02d:%02d", hour(), minute(), second());
 	//myGLCD.print(timeBuf, 60, 7);
 }

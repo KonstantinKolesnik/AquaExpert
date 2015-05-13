@@ -50,7 +50,7 @@ namespace SmartHub.Core.Infrastructure
                     plugin.InitPlugin();
                 }
 
-                WatchPlugins();
+                //WatchPlugins();
             }
             catch (Exception ex)
             {
@@ -131,7 +131,6 @@ namespace SmartHub.Core.Infrastructure
 
             // todo: sql
             var provider = ProviderFactory.Create<SqlServerCeTransformationProvider>(connection, null);
-            //var provider = ProviderFactory.Create<SqlServerTransformationProvider>(connection, null);
 
             using (var migrator = new Migrator(provider, assembly))
             {
@@ -198,6 +197,7 @@ namespace SmartHub.Core.Infrastructure
 
             new CompositionContainer(catalog).SatisfyImportsOnce(this);
         }
+        
         private void WatchPlugins()
         {
             FileSystemWatcher watcher = new FileSystemWatcher();

@@ -12,7 +12,6 @@ using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 namespace SmartHub.Plugins.MySensors
