@@ -17,7 +17,8 @@ namespace SmartHub.Plugins.SignalR
         // This will *ONLY* bind to localhost, if you want to bind to all addresses use http://*:8080 to bind to all addresses. 
         // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx for more information.
         private const string url = "http://localhost:55556";
-        private IDisposable wsServer;
+
+        private IDisposable server;
         //private MyHub wsHub;
         #endregion
 
@@ -33,14 +34,14 @@ namespace SmartHub.Plugins.SignalR
         }
         public override void StartPlugin()
         {
-            wsServer = WebApp.Start<WSStartup>(url);
+            server = WebApp.Start(url, ConfigureModules);
         }
         public override void StopPlugin()
         {
-            if (wsServer != null)
+            if (server != null)
             {
-                wsServer.Dispose();
-                wsServer = null;
+                server.Dispose();
+                server = null;
             }
         }
         #endregion
@@ -50,7 +51,6 @@ namespace SmartHub.Plugins.SignalR
         {
             var context = GlobalHost.ConnectionManager.GetConnectionContext<ChatConnection>();
             context.Connection.Broadcast(data);
-            //Thread.Sleep(10);
         }
         #endregion
 
@@ -85,22 +85,22 @@ namespace SmartHub.Plugins.SignalR
 
         //    return handlers;
         //}
-        #endregion
-
-        class WSStartup
+        private void ConfigureModules(IAppBuilder appBuilder)
         {
-            public void Configuration(IAppBuilder app)
-            {
-                //GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(60);
-                GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(5);
-                //GlobalHost.Configuration.DefaultMessageBufferSize = 1;
+            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(5); // 10 = default
+            //GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(60);
+            //GlobalHost.Configuration.DefaultMessageBufferSize = 1;
 
-                app.UseCors(CorsOptions.AllowAll);
+            appBuilder
+                .UseCors(CorsOptions.AllowAll)
+                //.UseWelcomePage()
+                //.Use<HttpListenerModule>(registeredHandlers, Logger)
+                //.UseErrorPage()
 
-                //app.MapSignalR(); // for hubs
-                app.MapSignalR<ChatConnection>("/chat"); // for persistent connection
-            }
+                //.MapSignalR(); // for hubs
+                .MapSignalR<ChatConnection>("/chat"); // for persistent connection
         }
+        #endregion
 
         class ChatConnection : PersistentConnection
         {

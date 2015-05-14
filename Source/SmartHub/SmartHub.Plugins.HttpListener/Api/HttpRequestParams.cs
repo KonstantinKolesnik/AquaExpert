@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using Microsoft.Owin;
+using System;
 
 namespace SmartHub.Plugins.HttpListener.Api
 {
     public class HttpRequestParams
     {
-        public readonly NameValueCollection UrlData;
-        public readonly NameValueCollection FormData;
+        public readonly IReadableStringCollection UrlData;
+        public readonly IFormCollection FormData;
 
-        public HttpRequestParams(NameValueCollection urlData, NameValueCollection formData)
+        public HttpRequestParams(IReadableStringCollection urlData, IFormCollection formData)
         {
             UrlData = urlData;
             FormData = formData;
@@ -20,10 +20,14 @@ namespace SmartHub.Plugins.HttpListener.Api
             var formValue = FormData.Get(name);
 
             if (string.IsNullOrWhiteSpace(urlValue))
+            {
                 return formValue;
+            }
 
             if (string.IsNullOrWhiteSpace(formValue))
+            {
                 return urlValue;
+            }
 
             return string.Format("{0},{1}", urlValue, formValue);
         }

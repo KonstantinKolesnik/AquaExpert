@@ -1,13 +1,12 @@
-﻿using SmartHub.Plugins.HttpListener.Api;
+﻿using Microsoft.Owin;
 using System;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public class ResourceListenerHandler : ListenerHandlerBase
+    public class ResourceListenerHandler : IListenerHandler
     {
         private readonly object lockObject = new object();
         private WeakReference<byte[]> resourceReference;
@@ -23,14 +22,17 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             this.contentType = contentType;
         }
 
-        public override HttpContent GetResponseContent(HttpRequestParams parameters)
+        public Task ProcessRequest(OwinRequest request)
         {
-            var resource = PrepareResource();
+            byte[] resource = PrepareResource();
 
-            var content = new ByteArrayContent(resource);
-            content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            var response = new OwinResponse(request.Environment)
+            {
+                ContentType = contentType,
+                ContentLength = resource.Length
+            };
 
-            return content;
+            return response.WriteAsync(resource);
         }
 
         private byte[] PrepareResource()
@@ -38,7 +40,6 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             byte[] result;
 
             if (resourceReference == null || !resourceReference.TryGetTarget(out result))
-            {
                 lock (lockObject)
                 {
                     if (resourceReference == null || !resourceReference.TryGetTarget(out result))
@@ -47,7 +48,6 @@ namespace SmartHub.Plugins.HttpListener.Handlers
                         resourceReference = new WeakReference<byte[]>(result);
                     }
                 }
-            }
 
             return result;
         }

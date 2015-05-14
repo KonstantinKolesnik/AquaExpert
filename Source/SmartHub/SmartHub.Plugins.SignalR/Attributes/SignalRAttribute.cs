@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace SmartHub.Plugins.SignalR
+namespace SmartHub.Plugins.SignalR.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class SignalRAttribute : ExportAttribute

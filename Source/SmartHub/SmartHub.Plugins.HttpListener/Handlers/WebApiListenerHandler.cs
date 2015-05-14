@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Owin;
+using Newtonsoft.Json;
 using SmartHub.Plugins.HttpListener.Api;
 using System;
-using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.HttpListener.Handlers
 {
-    public class WebApiListenerHandler : ListenerHandlerBase
+    public class WebApiListenerHandler : IListenerHandler
     {
         private readonly Func<HttpRequestParams, object> action;
 
@@ -18,17 +19,33 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             this.action = action;
         }
 
-        public override bool CacheResponse
+        public Task ProcessRequest(OwinRequest request)
         {
-            get { return false; }
+            var parameters = GetRequestParams(request);
+            var result = action(parameters);
+            var json = JsonConvert.SerializeObject(result);
+            var jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            var response = new OwinResponse(request.Environment)
+            {
+                Headers =
+				{
+					{"Cache-Control", new []{"no-store", "no-cache"}},
+					{"Pragma", new []{"no-cache"}}
+				},
+                ContentType = "application/json;charset=utf-8",
+                ContentLength = jsonBytes.Length
+            };
+
+            return response.WriteAsync(jsonBytes);
         }
 
-        public override HttpContent GetResponseContent(HttpRequestParams parameters)
+        private static HttpRequestParams GetRequestParams(OwinRequest request)
         {
-            object result = action(parameters);
-            string json = JsonConvert.SerializeObject(result);
+            var task = request.ReadFormAsync();
+            task.Wait();
 
-            return new StringContent(json, Encoding.UTF8, "application/json");
+            return new HttpRequestParams(request.Query, task.Result);
         }
     }
 }

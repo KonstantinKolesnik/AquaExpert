@@ -1,4 +1,6 @@
-﻿using SmartHub.Core.Plugins;
+﻿using Microsoft.Owin.Hosting;
+using Owin;
+using SmartHub.Core.Plugins;
 using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
@@ -6,8 +8,6 @@ using SmartHub.Plugins.HttpListener.Handlers;
 using System;
 using System.ComponentModel.Composition;
 using System.Reflection;
-using System.Web.Http;
-using System.Web.Http.SelfHost;
 
 namespace SmartHub.Plugins.HttpListener
 {
@@ -15,9 +15,10 @@ namespace SmartHub.Plugins.HttpListener
     public class HttpListenerPlugin : PluginBase
     {
         #region Fields
-        private const string BASE_URL_HTTP = "http://localhost:55555";
-        private HttpSelfHostConfiguration httpConfig;
-        private HttpSelfHostServer httpServer;
+        private const string BASE_URL_HTTP = "http://+:55555";
+
+        private IDisposable server;
+        private InternalDictionary<IListenerHandler> registeredHandlers;
         #endregion
 
         #region Import
@@ -28,32 +29,26 @@ namespace SmartHub.Plugins.HttpListener
         #region Plugin overrides
         public override void InitPlugin()
         {
-            var handlers = RegisterAllHandlers();
-
-            httpConfig = new HttpSelfHostConfiguration(BASE_URL_HTTP);
-            httpConfig.DependencyResolver = new DependencyResolver(handlers, Logger);
-            httpConfig.Routes.MapHttpRoute("Global", "{*url}", new { controller = "Common", action = "Index" });
+            registeredHandlers = RegisterAllHandlers();
         }
         public override void StartPlugin()
         {
-            httpServer = new HttpSelfHostServer(httpConfig);
-            httpServer.OpenAsync().Wait();
+            server = WebApp.Start(BASE_URL_HTTP, ConfigureModules);
         }
         public override void StopPlugin()
         {
-            if (httpServer != null)
+            if (server != null)
             {
-                httpServer.CloseAsync().Wait();
-                httpServer.Dispose();
-                httpServer = null;
+                server.Dispose();
+                server = null;
             }
         }
         #endregion
 
         #region Private methods
-        private InternalDictionary<ListenerHandlerBase> RegisterAllHandlers()
+        private InternalDictionary<IListenerHandler> RegisterAllHandlers()
         {
-            var result = new InternalDictionary<ListenerHandlerBase>();
+            var result = new InternalDictionary<IListenerHandler>();
 
             // регистрируем обработчики для методов плагинов
             foreach (var action in HttpCommandHandlers)
@@ -76,6 +71,12 @@ namespace SmartHub.Plugins.HttpListener
             }
 
             return result;
+        }
+        private void ConfigureModules(IAppBuilder appBuilder)
+        {
+            appBuilder
+                .Use<HttpListenerModule>(registeredHandlers, Logger)
+                .UseErrorPage();
         }
         #endregion
     }
