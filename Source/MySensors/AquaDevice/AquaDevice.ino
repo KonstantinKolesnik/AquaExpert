@@ -35,21 +35,20 @@ const long intervalPh = 30000;
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = 0;
-const long intervalWater = 10000;
+const long intervalWater = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISTANCE_SENSOR_ID		3
 #define TRIGGER_PIN				A2  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
 #define ECHO_PIN				A1  // Arduino pin tied to Echo pin on the ultrasonic sensor.
-#define MAX_DISTANCE			100 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+#define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
 uint16_t lastDistance;
 unsigned long prevMsDistance = 0;
-const long intervalDistance = 5000;
+const long intervalDistance = 3000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// common section
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 bool isMetric = true;
 unsigned long SLEEP_TIME = 0; //3000;	// sleep time between reads (in milliseconds)
@@ -66,28 +65,26 @@ void setup()
 
 	dallas.begin();
 	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
-	gw.send(msgTemperature.set(readTemperature(), 1));
+	processTemperature(true);
 
 	gw.present(PH_SENSOR_ID, S_PH);
-	gw.send(msgPh.set(readPh(), 1));
+	processPH(true);
 
 	pinMode(WATER_PIN, INPUT);
 	gw.present(WATER_SENSOR_ID, S_WATER);
-	gw.send(msgWater.set(readWater() ? 1 : 0));
+	processWater(true);
 
 	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE);
-	gw.send(msgDistance.set(readDistance()));
+	processDistance(true);
 }
 void loop()
 {
 	gw.process();
 
-	unsigned long ms = millis();
-
-	processTemperature(ms);
-	processPH(ms);
-	processWater(ms);
-	processDistance(ms);
+	processTemperature(false);
+	processPH(false);
+	processWater(false);
+	processDistance(false);
 
 	//gw.requestTime(onTimeReceived);
 
@@ -95,36 +92,43 @@ void loop()
 		gw.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-void processTemperature(unsigned long ms)
+void processTemperature(bool force)
 {
-	if (ms - prevMsTemperature >= intervalTemperature)
+	unsigned long ms = millis();
+
+	if (force || (ms - prevMsTemperature >= intervalTemperature))
 	{
 		prevMsTemperature = ms;
 
 		float temperature = readTemperature();
 
-		if (temperature != -127.00 && abs(lastTemperature - temperature) >= 0.1f)
+		if (temperature != -127.00)
 		{
-			lastTemperature = temperature;
-			gw.send(msgTemperature.set(temperature, 1));
+			if (force || (abs(lastTemperature - temperature) >= 0.1f))
+			{
+				lastTemperature = temperature;
+				gw.send(msgTemperature.set(temperature, 1));
 
 #ifdef DEBUG
-			Serial.print("Temperature: ");
-			Serial.print(temperature, 1);
-			Serial.println(isMetric ? " C" : " F");
+				Serial.print("Temperature: ");
+				Serial.print(temperature, 1);
+				Serial.println(isMetric ? " C" : " F");
 #endif
+			}
 		}
 	}
 }
-void processPH(unsigned long ms)
+void processPH(bool force)
 {
-	if (ms - prevMsPh >= intervalPh)
+	unsigned long ms = millis();
+
+	if (force || (ms - prevMsPh >= intervalPh))
 	{
 		prevMsPh = ms;
 
 		float ph = readPh();
 
-		if (abs(ph - lastPh) >= 0.1f)
+		if (force || (abs(ph - lastPh) >= 0.1f))
 		{
 			lastPh = ph;
 			gw.send(msgPh.set(ph, 1));
@@ -136,15 +140,17 @@ void processPH(unsigned long ms)
 		}
 	}
 }
-void processWater(unsigned long ms)
+void processWater(bool force)
 {
-	if (ms - prevMsWater >= intervalWater)
+	unsigned long ms = millis();
+
+	if (force || (ms - prevMsWater >= intervalWater))
 	{
 		prevMsWater = ms;
 
 		bool water = readWater();
 
-		if (water != lastWater)
+		if (force || (water != lastWater))
 		{
 			lastWater = water;
 			gw.send(msgWater.set(water ? 1 : 0));
@@ -156,24 +162,29 @@ void processWater(unsigned long ms)
 		}
 	}
 }
-void processDistance(unsigned long ms)
+void processDistance(bool force)
 {
-	if (ms - prevMsDistance >= intervalDistance)
+	unsigned long ms = millis();
+
+	if (force || (ms - prevMsDistance >= intervalDistance))
 	{
 		prevMsDistance = ms;
 
 		uint16_t distance = readDistance();
 
-		if (distance != 0 && distance != lastDistance)
+		if (distance != 0)
 		{
-			lastDistance = distance;
-			gw.send(msgDistance.set(distance));
+			if (force || (distance != lastDistance))
+			{
+				lastDistance = distance;
+				gw.send(msgDistance.set(distance));
 
 #ifdef DEBUG
-			Serial.print("Distance: ");
-			Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-			Serial.println(isMetric ? " cm" : " in");
+				Serial.print("Distance: ");
+				Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+				Serial.println(isMetric ? " cm" : " in");
 #endif
+			}
 		}
 	}
 }
