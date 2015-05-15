@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Cors;
+//using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
 using Owin;
 using SmartHub.Core.Plugins;
@@ -92,7 +92,7 @@ namespace SmartHub.Plugins.SignalR
             //GlobalHost.Configuration.DefaultMessageBufferSize = 1;
 
             appBuilder
-                .UseCors(CorsOptions.AllowAll)
+                //.UseCors(CorsOptions.AllowAll)
                 //.UseWelcomePage()
                 //.Use<HttpListenerModule>(registeredHandlers, Logger)
                 //.UseErrorPage()

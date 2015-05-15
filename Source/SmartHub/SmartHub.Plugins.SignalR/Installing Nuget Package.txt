@@ -1,0 +1,2 @@
+﻿
+Install-Package Microsoft.AspNet.SignalR.SelfHost -Version 2.1.2
