@@ -3,6 +3,7 @@
 	paths: {
 		app: 'application/app',
 		common: 'application/common',
+		lib: 'application/lib',
 
 		text: 'vendor/js/require-text',
 		json: 'vendor/js/require-json',
@@ -16,44 +17,45 @@
 		bootstrap: 'vendor/js/bootstrap.min',
 		moment: 'vendor/js/moment.min',
 		codemirror: 'vendor/js/codemirror-all',
-		highcharts: 'vendor/js/highcharts.min',
+		chart: 'vendor/js/chart.min',
+		'chart.scatter': 'vendor/js/chart.scatter.min',
 
-		kendo: 'vendor/js/kendo.all.min',
-
-		signalR: 'vendor/js/jquery.signalR-2.1.2.min',
-		
 		tiles:				'application/tiles/tiles',
 		'tiles-edit-mode':	'application/tiles/tiles-edit-mode',
 		apps:				'application/sections/user',
-		settings:			'application/sections/system'
+		settings:			'application/sections/system',
+
+		kendo: 'vendor/js/kendo.all.min',
+		signalR: 'vendor/js/jquery.signalR-2.1.2.min'
 	},
 	shim: {
-		bootstrap: ['jquery'],
-		backbone: {
-			deps: ['json2', 'jquery', 'underscore'],
-			exports: 'Backbone'
-		},
-		syphon: {
-			deps: ['backbone'],
-			exports: 'Backbone.Syphon'
-		},
-		marionette: {
-			deps: ['backbone', 'syphon'],
-			exports: 'Marionette'
-		},
-		highcharts: {
-			exports: 'Highcharts'
-		},
+	    bootstrap: ['jquery'],
+	    backbone: {
+	        deps: ['json2', 'jquery', 'underscore'],
+	        exports: 'Backbone'
+	    },
+	    syphon: {
+	        deps: ['backbone'],
+	        exports: 'Backbone.Syphon'
+	    },
+	    marionette: {
+	        deps: ['backbone', 'syphon'],
+	        exports: 'Marionette'
+	    },
 
 		kendo: {
 		    deps: ['jquery'],
 		    exports: 'kendo'
 		},
-
 		signalR: {
 		    deps: ['jquery'],
 		    exports: 'signalR'
 		}
+	},
+	map: {
+	    'chart.scatter': {
+	        'Chart': 'chart'
+	    }
 	}
 });
 

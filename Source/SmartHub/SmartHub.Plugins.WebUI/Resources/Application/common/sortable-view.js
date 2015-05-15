@@ -1,144 +1,132 @@
 define(
-	['app'],
-	function(application) {
+	['lib'],
+	function (lib) {
 
-		application.module('Common', function (module, app, backbone, marionette, $, _) {
-			
-			module.SortableItemView = marionette.ItemView.extend({
+	    var sortableItemView = lib.marionette.ItemView.extend({
 
-				attributes: {
-					"draggable": true
-				},
+	        attributes: {
+	            "draggable": true
+	        },
 
-				dragEvents: {
-					"dragstart": "start",
-					"dragenter": "enter",
-					"dragleave": "leave",
-					"dragend": "leave",
-					"dragover": "over",
-					"drop": "drop"
-				},
+	        dragEvents: {
+	            "dragstart": "start",
+	            "dragenter": "enter",
+	            "dragleave": "leave",
+	            "dragend": "leave",
+	            "dragover": "over",
+	            "drop": "drop"
+	        },
 
-				initialize: function (options) {
-					_.extend(this, options);
-				},
+	        initialize: function (options) {
+	            lib._.extend(this, options);
+	        },
 
-				onRender: function () {
-					this.$el.addClass('sortable-view-item');
-				},
+	        onRender: function () {
+	            this.$el.addClass('sortable-view-item');
+	        },
 
-				// Adds the drag events
-				delegateEvents: function (events) {
-					var ev = _.extend({}, events, this.dragEvents);
-					marionette.View.prototype.delegateEvents.call(this, ev);
-				},
+	        // Adds the drag events
+	        delegateEvents: function (events) {
+	            var ev = lib._.extend({}, events, this.dragEvents);
+	            lib.marionette.View.prototype.delegateEvents.call(this, ev);
+	        },
 
-				start: function (e) {
-					this.parent.draggedModel = this.model;
+	        start: function (e) {
+	            this.parent.draggedModel = this.model;
 
-					if (e.originalEvent) {
-						e = e.originalEvent;
-					}
+	            if (e.originalEvent) {
+	                e = e.originalEvent;
+	            }
 
-					e.dataTransfer.effectAllowed = "move";
-					e.dataTransfer.dropEffect = "move";
-					e.dataTransfer.setData('text', "Drag");
-				},
+	            e.dataTransfer.effectAllowed = "move";
+	            e.dataTransfer.dropEffect = "move";
+	            e.dataTransfer.setData('text', "Drag");
+	        },
 
-				enter: function (e) {
-					e.preventDefault();
-					this.$el.addClass(this.overClass);
-				},
+	        enter: function (e) {
+	            e.preventDefault();
+	            this.$el.addClass(this.overClass);
+	        },
 
-				leave: function (e) {
-					e.preventDefault();
-					this.$el.removeClass(this.overClass);
-				},
+	        leave: function (e) {
+	            e.preventDefault();
+	            this.$el.removeClass(this.overClass);
+	        },
 
-				over: function (e) {
-					e.preventDefault();
-					return false;
-				},
+	        over: function (e) {
+	            e.preventDefault();
+	            return false;
+	        },
 
-				drop: function (e) {
-					e.preventDefault();
-					this.leave(e);
-					var collection = this.model.collection,
-					parent = this.parent,
-					currentIndex = this.$el.index();
+	        drop: function (e) {
+	            e.preventDefault();
+	            this.leave(e);
+	            var collection = this.model.collection,
+				parent = this.parent,
+				currentIndex = this.$el.index();
 
-					collection.remove(parent.draggedModel);
-					collection.add(parent.draggedModel, { at: currentIndex });
+	            collection.remove(parent.draggedModel);
+	            collection.add(parent.draggedModel, { at: currentIndex });
 
-					this.trigger('drop', this.parent.draggedModel);
-				}
+	            this.trigger('drop', this.parent.draggedModel);
+	        }
 
-			});
+	    });
 
-			module.SortableCollectionView = marionette.CompositeView.extend({
-			
-				onRender: function () {
-				    if (this.$childViewContainer)
-                        this.$childViewContainer.addClass('sortable-view');
-				},
+	    var sortableCollectionView = lib.marionette.CompositeView.extend({
 
-				childView: module.SortableItemView,
+	        onRender: function () {
 
-				overClass: 'over',
+	            this.$childViewContainer.addClass('sortable-view');
+	        },
 
-				childEvents: {
-					'childview:drop': 'onDropItem'
-				},
+	        childView: sortableItemView,
 
-				delegateEvents: function (events) {
-					marionette.View.prototype.delegateEvents.call(this, events);
-					marionette.bindEntityEvents(this, this, marionette.getOption(this, 'childEvents'));
-				},
+	        overClass: 'over',
 
-				buildChildView: function (item, childViewType, childViewOptions) {
-					var options = _.extend({
-						model: item,
-						overClass: this.overClass,
-						parent: this
-					}, childViewOptions);
+	        childEvents: {
+	            'childview:drop': 'onDropItem'
+	        },
 
-					return new childViewType(options);
-				},
+	        delegateEvents: function (events) {
+	            lib.marionette.View.prototype.delegateEvents.call(this, events);
+	            lib.marionette.bindEntityEvents(this, this, lib.marionette.getOption(this, 'childEvents'));
+	        },
 
-				appendHtml: function (collectionView, childView, index) {
-					var childrenContainer = collectionView.childViewContainer
-						? collectionView.$(collectionView.childViewContainer)
-						: collectionView.$el;
+	        buildChildView: function (item, childViewType, childViewOptions) {
+	            var options = lib._.extend({
+	                model: item,
+	                overClass: this.overClass,
+	                parent: this
+	            }, childViewOptions);
 
-					var children = childrenContainer.children();
+	            return new childViewType(options);
+	        },
 
-					if (children.size() <= index) {
-						childrenContainer.append(childView.el);
-					} else {
-						childrenContainer.children().eq(index).before(childView.el);
-					}
-				},
+	        appendHtml: function (collectionView, childView, index) {
+	            var childrenContainer = collectionView.childViewContainer
+					? collectionView.$(collectionView.childViewContainer)
+					: collectionView.$el;
 
-				onDropItem: function (model) {
-					//console.log('DROPPED ITEM', model);
-				}
+	            var children = childrenContainer.children();
 
-			});
-		});
-		
-		return application.Common;
+	            if (children.size() <= index) {
+	                childrenContainer.append(childView.el);
+	            } else {
+	                childrenContainer.children().eq(index).before(childView.el);
+	            }
+	        },
+
+	        onDropItem: function (model) {
+	            //console.log('DROPPED ITEM', model);
+	        }
+
+	    });
+
+	    return {
+
+	        SortableItemView: sortableItemView,
+	        SortableCollectionView: sortableCollectionView
+	    };
 	});
-
-/*
-define(
-	['app'],
-	function(application) {
-
-		application.module('Common', function (module, app, backbone, marionette, $, _) {
-			
-
-		});
-		
-		return application.Common;
-	});*/
 

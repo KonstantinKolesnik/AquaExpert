@@ -1,35 +1,39 @@
-
 define(
-	['app', 'syphon'],
-	function (application, syphon) {
-		application.module('Common', function (module, app, backbone, marionette, $, _) {
-			module.FormView = marionette.ItemView.extend({
-				onRender: function () {
-					var data = this.serializeData();
+	['lib', 'syphon'],
+	function (lib, syphon) {
 
-					this.$('select').each(function (index, select) {
-						select = $(select);
+	    var formView = lib.marionette.ItemView.extend({
 
-						var fieldName = select.data('items-field') || (select.attr('name') + '-options');
-						var items = data[fieldName];
+	        onRender: function () {
 
-						if (items) {
-							_.each(items, function (item) {
-								$('<option />').val(item.id).text(item.name).appendTo(select);
-							});
-						}
-					});
+	            var data = this.serializeData();
 
-					syphon.deserialize(this, data);
-				},
-				updateModel: function () {
-				    var data = syphon.serialize(this);
-					this.model.set(data);
-				}
-			});
+	            this.$('select').each(function (index, select) {
 
-		});
+	                select = lib.$(select);
 
-		return application.Common;
+	                var fieldName = select.data('items-field') || (select.attr('name') + '-options');
+	                var items = data[fieldName];
+
+	                if (items) {
+
+	                    lib._.each(items, function (item) {
+
+	                        lib.$('<option />').val(item.id).text(item.name).appendTo(select);
+	                    });
+	                }
+	            });
+
+	            syphon.deserialize(this, data);
+	        },
+
+	        updateModel: function () {
+
+	            var data = syphon.serialize(this);
+	            this.model.set(data);
+	        }
+	    });
+
+	    return formView;
 	});
 

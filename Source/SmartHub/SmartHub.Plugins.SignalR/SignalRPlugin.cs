@@ -48,8 +48,12 @@ namespace SmartHub.Plugins.SignalR
         #region Public methods
         public void Broadcast(object data)
         {
-            var context = GlobalHost.ConnectionManager.GetConnectionContext<ChatConnection>();
-            context.Connection.Broadcast(data);
+            if (data != null)
+            {
+                var context = GlobalHost.ConnectionManager.GetConnectionContext<ChatConnection>();
+                if (context != null && context.Connection != null)
+                    context.Connection.Broadcast(data);
+            }
         }
         #endregion
 
@@ -65,21 +69,6 @@ namespace SmartHub.Plugins.SignalR
 
         //        var handler = new ApiListenerHandler(action.Value);
         //        handlers.Register(action.Metadata.Url, handler);
-        //    }
-
-        //    // регистрируем обработчики для ресурсов
-        //    foreach (var plugin in Context.GetAllPlugins())
-        //    {
-        //        Type type = plugin.GetType();
-        //        var attributes = type.GetCustomAttributes<HttpResourceAttribute>();
-
-        //        foreach (var attribute in attributes)
-        //        {
-        //            Logger.Info("Register HTTP resource handler: '{0}'", attribute.Url);
-
-        //            var resHandler = new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType);
-        //            handlers.Register(attribute.Url, resHandler);
-        //        }
         //    }
 
         //    return handlers;

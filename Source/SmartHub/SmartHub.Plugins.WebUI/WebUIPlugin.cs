@@ -16,9 +16,16 @@ namespace SmartHub.Plugins.WebUI
 
     [JavaScriptResource("/vendor/js/json2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.json2.min.js")]
     [JavaScriptResource("/vendor/js/jquery.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.min.js")]
+
     [JavaScriptResource("/vendor/js/underscore.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.underscore.min.js")]
+    [HttpResource("/vendor/js/underscore.min.js.map", "SmartHub.Plugins.WebUI.Resources.Vendor.js.underscore.min.js.map", "application/json")]
+
     [JavaScriptResource("/vendor/js/backbone.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.min.js")]
+    [HttpResource("/vendor/js/backbone.min.js.map", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.min.js.map", "application/json")]
+
     [JavaScriptResource("/vendor/js/backbone.marionette.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.marionette.min.js")]
+    [HttpResource("/vendor/js/backbone.marionette.min.js.map", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.marionette.min.js.map", "application/json")]
+
     [JavaScriptResource("/vendor/js/backbone.syphon.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.syphon.js")]
     [JavaScriptResource("/vendor/js/bootstrap.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.bootstrap.min.js")]
     [JavaScriptResource("/vendor/js/moment.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.moment.min.js")]
@@ -28,11 +35,14 @@ namespace SmartHub.Plugins.WebUI
     [JavaScriptResource("/vendor/js/codemirror-javascript.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror-javascript.js")]
     [JavaScriptResource("/vendor/js/codemirror-closebrackets.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror-closebrackets.js")]
     [JavaScriptResource("/vendor/js/codemirror-matchbrackets.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror-matchbrackets.js")]
+    [JavaScriptResource("/vendor/js/codemirror-fullscreen.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror-fullscreen.js")]
 
-    [JavaScriptResource("/vendor/js/highcharts.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.highcharts.min.js")]
+    [JavaScriptResource("/vendor/js/chart.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.chart.min.js")]
+    [HttpResource("/vendor/js/chart.min.js.map", "SmartHub.Plugins.WebUI.Resources.Vendor.js.chart.min.js.map", "application/json")]
+    [JavaScriptResource("/vendor/js/chart.scatter.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.chart.scatter.min.js")]
+    [HttpResource("/vendor/js/chart.scatter.min.js.map", "SmartHub.Plugins.WebUI.Resources.Vendor.js.chart.scatter.min.js.map", "application/json")]
 
     [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
-    
     [JavaScriptResource("/vendor/js/jquery.signalR-2.1.2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.signalR-2.1.2.min.js")]
 
     // css
@@ -66,6 +76,7 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.svg", "image/svg+xml")]
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.ttf", "application/x-font-truetype")]
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff", "application/font-woff")]
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff2", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff2", "application/font-woff2")]
 
     [HttpResource("/vendor/fonts/fontawesome-webfont.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.eot", "application/vnd.ms-fontobject")]
     [HttpResource("/vendor/fonts/fontawesome-webfont.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.svg", "image/svg+xml")]
@@ -76,12 +87,14 @@ namespace SmartHub.Plugins.WebUI
     #region Application resources
     // html
     [HttpResource("/", "SmartHub.Plugins.WebUI.Resources.Application.index.html", "text/html")]
-    [HttpResource("/favicon.ico", "SmartHub.Plugins.WebUI.Resources.Application.favicon.ico", "image/svg+xml")]
+    [HttpResource("/favicon.ico", "SmartHub.Plugins.WebUI.Resources.Application.favicon.ico", "image/x-icon")]
 
     // webapp: main
     [JavaScriptResource("/application/index.js", "SmartHub.Plugins.WebUI.Resources.Application.index.js")]
     [JavaScriptResource("/application/app.js", "SmartHub.Plugins.WebUI.Resources.Application.app.js")]
     [JavaScriptResource("/application/common.js", "SmartHub.Plugins.WebUI.Resources.Application.common.js")]
+    [JavaScriptResource("/application/lib.js", "SmartHub.Plugins.WebUI.Resources.Application.lib.js")]
+
     [JavaScriptResource("/application/common/sortable-view.js", "SmartHub.Plugins.WebUI.Resources.Application.common.sortable-view.js")]
     [JavaScriptResource("/application/common/complex-view.js", "SmartHub.Plugins.WebUI.Resources.Application.common.complex-view.js")]
     [JavaScriptResource("/application/common/form-view.js", "SmartHub.Plugins.WebUI.Resources.Application.common.form-view.js")]
@@ -90,6 +103,7 @@ namespace SmartHub.Plugins.WebUI
     // webapp: sections
     [JavaScriptResource("/application/sections/system.js", "SmartHub.Plugins.WebUI.Resources.Application.sections.system.js")]
     [JavaScriptResource("/application/sections/user.js", "SmartHub.Plugins.WebUI.Resources.Application.sections.user.js")]
+
     [JavaScriptResource("/application/sections/list.js", "SmartHub.Plugins.WebUI.Resources.Application.sections.list.js")]
     [JavaScriptResource("/application/sections/list-model.js", "SmartHub.Plugins.WebUI.Resources.Application.sections.list-model.js")]
     [JavaScriptResource("/application/sections/list-view.js", "SmartHub.Plugins.WebUI.Resources.Application.sections.list-view.js")]

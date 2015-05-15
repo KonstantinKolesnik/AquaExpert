@@ -1,7 +1,5 @@
 ﻿
-define(
-    ['marionette', 'backbone', 'jquery', 'signalR'],
-    function (marionette, backbone, $, signalR) {
+define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, backbone, $, signalR) {
 	    var api = {
 		    parseParameters: function (queryString) {
 			    var result = [];
