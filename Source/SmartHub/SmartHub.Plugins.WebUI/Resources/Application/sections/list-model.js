@@ -1,55 +1,65 @@
-﻿
-define(['app'], function (application) {
-	application.module('WebUI.Sections', function (module, app, backbone, marionette, $, _) {
+﻿define(['lib'], function (lib) {
 
-		// entities
-		module.Page = backbone.Model.extend({
-			defaults: {
-				sortOrder: 0
-			}
-		});
+    // entities
+    var pageModel = lib.backbone.Model.extend({
+        defaults: {
+            sortOrder: 0
+        }
+    });
 
-		module.PageCollection = backbone.Collection.extend({
-			model: module.Page,
-			comparator: 'sortOrder'
-		});
+    var pageCollection = lib.backbone.Collection.extend({
+        model: pageModel,
+        comparator: 'sortOrder'
+    });
 
-		// api
-		var api = {
-			loadCommonSections: function () {
-				var defer = $.Deferred();
+    // api
+    var api = {
 
-				$.getJSON('/api/webui/sections/common')
-					.done(function (items) {
-						var collection = new module.PageCollection(items);
-						defer.resolve(collection);
-					})
-					.fail(function () {
-						defer.resolve(undefined);
-					});
+        loadCommonSections: function () {
 
-				return defer.promise();
-			},
-			loadSystemSections: function () {
-				var defer = $.Deferred();
+            var defer = lib.$.Deferred();
 
-				$.getJSON('/api/webui/sections/system')
-					.done(function (items) {
-						var collection = new module.PageCollection(items);
-						defer.resolve(collection);
-					})
-					.fail(function () {
-						defer.resolve(undefined);
-					});
+            lib.$.getJSON('/api/webui/sections/common')
+				.done(function (items) {
 
-				return defer.promise();
-			}
-		};
+				    var collection = new pageCollection(items);
+				    defer.resolve(collection);
+				})
+				.fail(function () {
 
-		// requests
-		app.reqres.setHandler('query:sections:common', api.loadCommonSections);
-		app.reqres.setHandler('query:sections:system', api.loadSystemSections);
-	});
+				    defer.resolve(undefined);
+				});
 
-	return application.WebUI.Sections;
+            return defer.promise();
+        },
+
+        loadSystemSections: function () {
+
+            var defer = lib.$.Deferred();
+
+            lib.$.getJSON('/api/webui/sections/system')
+				.done(function (items) {
+
+				    var collection = new pageCollection(items);
+				    defer.resolve(collection);
+				})
+				.fail(function () {
+
+				    defer.resolve(undefined);
+				});
+
+            return defer.promise();
+        }
+    };
+
+    return {
+
+        // entities
+        Page: pageModel,
+        PageCollection: pageCollection,
+
+        // requests
+        loadCommonSections: api.loadCommonSections,
+        loadSystemSections: api.loadSystemSections
+    };
 });

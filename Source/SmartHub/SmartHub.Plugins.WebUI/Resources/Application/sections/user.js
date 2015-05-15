@@ -1,11 +1,10 @@
 ﻿define(
-	['app', 'application/sections/list'],
-	function (application, sections) {
-		application.module('WebUI.UserSections', function (module, app, backbone, marionette, $, _) {
-			module.start = function () {
-				sections.api.reload('query:sections:common', 'Приложения');
-			};
-		});
+	['application/sections/list'],
+	function (sections) {
 
-		return application.WebUI.UserSections;
+	    return {
+	        start: function () {
+	            sections.api.reload('loadCommonSections', 'Приложения');
+	        }
+	    };
 	});

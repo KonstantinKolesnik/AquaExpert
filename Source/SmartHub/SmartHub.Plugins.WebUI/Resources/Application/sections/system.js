@@ -1,11 +1,10 @@
 ﻿define(
-	['app', 'application/sections/list'],
-	function (application, sections) {
-		application.module('WebUI.SystemSections', function (module, app, backbone, marionette, $, _) {
-			module.start = function () {
-				sections.api.reload('query:sections:system', 'Система');
-			};
-		});
+	['application/sections/list'],
+	function (sections) {
 
-		return application.WebUI.SystemSections;
+	    return {
+	        start: function () {
+	            sections.api.reload('loadSystemSections', 'Система');
+	        }
+	    };
 	});

@@ -136,7 +136,7 @@ define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, ba
 	    //}
 
 	    app.on('start', function () {
-	        initSignalRPersistent(function () { });
+	        initSignalRPersistent();
 
 	        if (backbone.history) {
 			    backbone.history.start();

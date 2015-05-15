@@ -1,40 +1,45 @@
-﻿
-define(
+﻿define(
 	['app', 'common', 'application/tiles/tiles-edit-mode-model', 'application/tiles/tiles-edit-mode-view'],
-	function (application, commonModule) {
-		application.module('WebUI.TilesEditMode', function (module, app, backbone, marionette, $, _) {
-			var api = {
-				del: function (childView) {
-					var title = childView.model.get('title');
+	function (application, common, models, views) {
 
-					if (commonModule.utils.confirm('Delete the tile "{0}"?', title)) {
-						var id = childView.model.get('id');
-						app.request('cmd:tiles:edit-mode-delete', id).done(api.reload);
-					}
-				},
-				sort: function () {
-					var collection = this.collection;
-					app.request('cmd:tiles:edit-mode-sort', collection);
-				},
-				reload: function () {
-					app.request('query:tiles:edit-mode-list').done(function (collection) {
+	    var api = {
 
-						var view = new module.TileCollectionViewEditMode({
-							collection: collection
-						});
+	        del: function (childView) {
 
-						view.on('webui:tile:sort', api.sort);
-						view.on('childview:webui:tile:delete', api.del);
-						
-						app.setContentView(view);
-					});
-				}
-			};
+	            var title = childView.model.get('title');
 
-			module.start = function () {
-				api.reload();
-			};
-		});
+	            if (common.utils.confirm('Delete the tile "{0}"?', title)) {
 
-		return application.WebUI.TilesEditMode;
+	                var id = childView.model.get('id');
+	                models.remove(id).done(api.reload);
+	            }
+	        },
+
+	        sort: function () {
+
+	            var collection = this.collection;
+	            models.saveOrder(collection);
+	        },
+
+	        reload: function () {
+
+	            models.load().done(function (collection) {
+
+	                var view = new views.TileCollectionViewEditMode({
+	                    collection: collection
+	                });
+
+	                view.on('webui:tile:sort', api.sort);
+	                view.on('childview:webui:tile:delete', api.del);
+
+	                application.setContentView(view);
+	            });
+	        }
+	    };
+
+	    return {
+	        start: function () {
+	            api.reload();
+	        }
+	    };
 	});
