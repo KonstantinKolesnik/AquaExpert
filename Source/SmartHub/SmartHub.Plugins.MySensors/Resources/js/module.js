@@ -820,6 +820,9 @@ define(
 	                }
 	                function getY(selector) {
 	                    var el = selector[0];
+	                    if (!el)
+	                        return 0;
+
 	                    var yPosition = el.offsetTop;
 	                    while (el = el.offsetParent)
 	                        yPosition += el.offsetTop;

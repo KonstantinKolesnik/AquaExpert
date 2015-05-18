@@ -7,10 +7,8 @@ namespace SmartHub.Plugins.Timer
     class PeriodicalActionState
     {
         private static readonly Random random = new Random();
-
         private DateTime lastRun;
         private readonly Logger logger;
-
         private readonly object lockObject = new object();
         private readonly Action<DateTime> action;
         private readonly int interval;
@@ -64,6 +62,5 @@ namespace SmartHub.Plugins.Timer
                 }
             }
         }
-
     }
 }

@@ -76,7 +76,7 @@ namespace SmartHub.Plugins.Timer
         {
             var now = DateTime.Now;
 
-            // periodical actions
+            // periodical actions:
             foreach (var handler in periodicalHandlers)
                 handler.TryToExecute(now);
 

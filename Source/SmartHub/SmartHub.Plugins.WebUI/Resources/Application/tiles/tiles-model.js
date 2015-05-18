@@ -40,6 +40,7 @@
 
 				        if (item.attributes.SignalRReceiveHandler) {
 				            item.attributes.SignalRReceiveHandler = eval("window.myF = " + item.attributes.SignalRReceiveHandler);
+				            delete(window.myF);
 
 				            if (item.attributes.SignalRReceiveHandler)
                                 app.SignalRReceiveHandlers.push(item.attributes.SignalRReceiveHandler);

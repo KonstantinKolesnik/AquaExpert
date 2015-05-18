@@ -6,6 +6,9 @@
 body {
 	padding-top: 64px;
 	font-weight: 300;
+
+    font-size:12px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Consolas;
 }
 
 .btn-default:hover {
