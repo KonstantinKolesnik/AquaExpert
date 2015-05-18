@@ -11,6 +11,7 @@ namespace SmartHub.Plugins.WebUI.Tiles
         public object[] parameters; // if (url) -> navigate url parameters; 
         public string cssClassName;
         public bool wide = false;
+        public string SignalRReceiveHandler;
 
         public TileWeb(Guid tileId)
         {

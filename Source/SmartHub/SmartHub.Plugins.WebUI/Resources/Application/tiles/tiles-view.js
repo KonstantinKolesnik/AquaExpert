@@ -20,6 +20,9 @@
 		        },
 		        triggers: {
 		            'click': 'webui:tile:click'
+		        },
+		        initialize: function () {
+		            this.model.on('change', this.render, this);
 		        }
 		    });
 

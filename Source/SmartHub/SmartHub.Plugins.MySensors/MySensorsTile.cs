@@ -11,10 +11,7 @@ namespace SmartHub.Plugins.MySensors
         {
             try
             {
-                //Context.GetPlugin<MySensorsPlugin>();
-
                 //UserScript script = GetScript(options.id);
-
                 //var data = Context.GetPlugin<MySensorsPlugin>();
 
 
@@ -23,6 +20,7 @@ namespace SmartHub.Plugins.MySensors
                 webTile.cssClassName = "btn-info th-tile-icon th-tile-icon-fa fa-cog";
                 //webTile.content = "Узлов: 1\nСенсоров: 8";
                 webTile.wide = true;
+                webTile.SignalRReceiveHandler = "function onSignalR(data) { item.set({ 'content': new Date(data.Value) }); }";
             }
             catch (Exception ex)
             {
