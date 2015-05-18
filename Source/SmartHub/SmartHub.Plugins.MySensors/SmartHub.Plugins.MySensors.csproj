@@ -116,12 +116,6 @@
     <EmbeddedResource Include="Resources\js\module.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\templates2.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module2.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
