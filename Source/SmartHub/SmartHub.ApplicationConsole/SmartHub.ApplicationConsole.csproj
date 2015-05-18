@@ -64,6 +64,7 @@
     <ProjectReference Include="..\SmartHub.Core.Infrastructure\SmartHub.Core.Infrastructure.csproj">
       <Project>{47b49308-37b1-4114-956e-66d508f2bb93}</Project>
       <Name>SmartHub.Core.Infrastructure</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

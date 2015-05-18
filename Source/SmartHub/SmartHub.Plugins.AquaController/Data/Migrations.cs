@@ -15,7 +15,7 @@ namespace SmartHub.Plugins.AquaController.Data
             Database.AddTable("AquaController_Settings",
                 new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
                 new Column("Name", DbType.String, ColumnProperty.NotNull),
-                new Column("Value", DbType.String, ColumnProperty.NotNull)
+                new Column("SerializedValue", DbType.String, ColumnProperty.NotNull)
             );
             Database.AddUniqueConstraint("UK_AquaController_Settings_Name", "AquaController_Settings", "Name");
         }

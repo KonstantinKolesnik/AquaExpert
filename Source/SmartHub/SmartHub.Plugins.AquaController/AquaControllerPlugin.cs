@@ -36,8 +36,8 @@ namespace SmartHub.Plugins.AquaController
         public override void StartPlugin()
         {
             InitHeater();
+            InitPh();
             //InitLight();
-            //InitPh();
         }
         //public override void StopPlugin()
         //{
@@ -120,38 +120,29 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Ph
-        //private Sensor phRelay;
-        //private Sensor phSensor;
-        //private float phNormalValue;
+        private Sensor phRelay;
+        private Sensor phSensor;
+        private float phNormalValue;
 
-        //private void InitPh()
-        //{
-        //    phNormalValue = 7.0f;
+        private void InitPh()
+        {
+            phNormalValue = 7.0f;
 
-        //    phRelay = controller.GetSensor(20, 0);
-        //    if (phRelay == null)
-        //        throw new ArgumentNullException("phRelay (20, 2)");
-
-        //    phSensor = controller.GetSensor(20, 10);
-        //    if (phSensor == null)
-        //        throw new ArgumentNullException("phSensor (20, 10)");
-
-        //    if (phSensor.LastValue != null)
-        //        controller.SetSensorValue(phRelay, SensorValueType.Light, phSensor.LastValue.Value <= phNormalValue ? 1 : 0);
-
-        //    phSensor.PropertyChanged += phSensor_PropertyChanged;
-        //}
-        //private void phSensor_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    if (e.PropertyName == "LastValue")
-        //        controller.SetSensorValue(phRelay, SensorValueType.Light, phSensor.LastValue.Value < phNormalValue ? 1 : 0);
-        //}
-        //private void UninitPh()
-        //{
-        //    phSensor.PropertyChanged -= phSensor_PropertyChanged;
-        //    phSensor = null;
-        //    phRelay = null;
-        //}
+            phRelay = mySensors.GetSensor(1, 1);
+            phSensor = mySensors.GetSensor(2, 1);
+        }
+        private void ph_Connected()
+        {
+            if (phSensor != null)
+                mySensors.RequestSensorValue(phSensor, SensorValueType.Ph);
+            if (phRelay != null)
+                mySensors.RequestSensorValue(phRelay, SensorValueType.Switch);
+        }
+        private void ph_MessageReceived(SensorMessage msg)
+        {
+            if (phRelay != null && phSensor != null && msg.NodeID == phSensor.NodeNo && msg.SensorID == phSensor.SensorNo)
+                mySensors.SetSensorValue(phRelay, SensorValueType.Switch, msg.PayloadFloat < phNormalValue ? 1 : 0);
+        }
         #endregion
 
         #region Water level
@@ -169,14 +160,14 @@ namespace SmartHub.Plugins.AquaController
         private void MySensors_Connected()
         {
             heater_Connected();
-
+            ph_Connected();
 
         }
         [MySensorsMessage]
         private void MySensors_MessageReceived(SensorMessage msg)
         {
             heater_MessageReceived(msg);
-
+            ph_MessageReceived(msg);
 
 
         }
@@ -186,11 +177,11 @@ namespace SmartHub.Plugins.AquaController
         //}
 
         float vvv = 0;
-        [Timer_5_sec_Elapsed]
-        private void timer_1_sec_Elapsed(DateTime now)
+        [Timer_10_sec_Elapsed]
+        private void timer_Elapsed(DateTime now)
         {
             //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
-            //vvv = vvv == 0 ? 1 : 0;
+            vvv = vvv == 0 ? 1 : 0;
 
             //var s = mySensors.GetSensor(3, 0);
             //mySensors.GetSensorValue(s, SensorValueType.Temperature);

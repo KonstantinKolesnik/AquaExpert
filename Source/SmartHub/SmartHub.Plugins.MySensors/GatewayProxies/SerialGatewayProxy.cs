@@ -42,24 +42,17 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             {
                 while (!IsStarted && !FindAndConnect()) ;
             });
-            //thread.Priority = ThreadPriority.AboveNormal;
+            thread.Priority = ThreadPriority.BelowNormal;
 
             //timer = new System.Timers.Timer(2000);
             //timer.AutoReset = false;
             //timer.Elapsed += (object source, ElapsedEventArgs e) =>
             //{
+            //    Debug.WriteLine("Test");
             //    timer.Stop();
-            //    Debug.WriteLine("Timer elapsed");
-            //    Debug.WriteLine("Timer disabled");
 
             //    if (!FindAndConnect())
-            //    {
-            //        Debug.WriteLine("Find failed");
             //        timer.Start();
-            //        Debug.WriteLine("Timer enabled");
-            //    }
-            //    else
-            //        Debug.WriteLine("Find OK");
             //};
         }
         #endregion
@@ -94,7 +87,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                 try
                 {
                     serialPort.WriteLine(message.ToRawMessage());
-                    Thread.Sleep(0);
+                    Thread.Sleep(100);
                 }
                 catch (Exception) { }
             }
@@ -137,7 +130,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
 
                         if (IsStarted)
                         {
-                            Thread.Sleep(2000); // let hardware gateway initialize
+                            Thread.Sleep(3000); // let hardware gateway initialize
 
                             try
                             {

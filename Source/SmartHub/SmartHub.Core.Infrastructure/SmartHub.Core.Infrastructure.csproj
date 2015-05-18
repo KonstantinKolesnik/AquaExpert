@@ -35,16 +35,20 @@
   <ItemGroup>
     <Reference Include="ECM7.Migrator">
       <HintPath>..\packages\ECM7Migrator.2.8.0.0\tools\ECM7.Migrator.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ECM7.Migrator.Framework">
       <HintPath>..\packages\ECM7Migrator.2.8.0.0\lib\net40\ECM7.Migrator.Framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ECM7.Migrator.Providers.SqlServer">
       <HintPath>..\packages\ECM7Migrator.2.8.0.0\tools\ECM7.Migrator.Providers.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
@@ -84,6 +88,7 @@
     <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
       <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
       <Name>SmartHub.Core.Plugins</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

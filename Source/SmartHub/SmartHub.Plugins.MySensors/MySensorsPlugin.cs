@@ -151,11 +151,12 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        [Timer_5_sec_Elapsed]
-        private void Timer_5_sec_Elapsed(DateTime now)
-        {
-            signalServer.Broadcast(new { MsgId = "Test", Value = now });
-        }
+        //[Timer_5_sec_Elapsed]
+        //private void Timer_5_sec_Elapsed(DateTime now)
+        //{
+        //    //Debug.WriteLine("Timer 5 sec");
+        //    //signalServer.Broadcast(new { MsgId = "Test", Value = now });
+        //}
 
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
@@ -166,7 +167,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
         {
             SensorMessage message = args.Message;
-            
+
             Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeID == 0 || message.SensorID == 255;
