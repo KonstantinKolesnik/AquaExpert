@@ -76,7 +76,7 @@ namespace SmartHub.Plugins.HttpListener
         {
             appBuilder
                 .Use<HttpListenerModule>(registeredHandlers, Logger)
-                .UseErrorPage();
+                .Use<Error404Module>();//.UseErrorPage();
         }
         #endregion
     }

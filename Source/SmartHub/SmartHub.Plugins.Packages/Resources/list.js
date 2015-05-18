@@ -1,41 +1,39 @@
-﻿
-define(
+﻿define(
 	['app', 'webapp/packages/list-model', 'webapp/packages/list-view'],
-	function (application) {
-	    application.module('Packages.List', function (module, app, backbone, marionette, $, _) {
-	        var api = {
-	            install: function (childView) {
-	                var packageId = childView.model.get('id');
-	                var rq = app.request('cmd:packages:install', packageId);
+	function (application, models, views) {
 
-	                $.when(rq).done(api.reload);
-	            },
-	            uninstall: function (childView) {
-	                var packageId = childView.model.get('id');
-	                var rq = app.request('cmd:packages:uninstall', packageId);
+		var api = {
 
-	                $.when(rq).done(api.reload);
-	            },
-	            reload: function () {
-	                var rq = app.request('query:packages:all');
+			install: function (childView) {
 
-	                $.when(rq).done(function (items) {
+				var packageId = childView.model.get('id');
+				models.installPackage(packageId).done(api.reload);
+			},
 
-	                    var view = new module.PackageListView({ collection: items });
+			uninstall: function (childView) {
 
-	                    view.on('childview:packages:install', api.install);
-	                    view.on('childview:packages:uninstall', api.uninstall);
+				var packageId = childView.model.get('id');
+				models.uninstallPackage(packageId).done(api.reload);
+			},
 
-	                    app.setContentView(view);
-	                });
-	            }
-	        };
+			reload: function () {
 
-	        module.start = function () {
-	            api.reload();
-	        };
+				models.loadPackages()
+					.done(function (items) {
 
-	    });
+						var view = new views.PackageListView({ collection: items });
 
-	    return application.Packages.List;
+						view.on('childview:packages:install', api.install);
+						view.on('childview:packages:uninstall', api.uninstall);
+
+						application.setContentView(view);
+					});
+			}
+		};
+
+		return {
+			start: function () {
+				api.reload();
+			}
+		};
 	});

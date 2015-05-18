@@ -82,6 +82,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\jslibs\chart.min.js.map">
+      <Link>Resources\Vendor\js\chart.min.js.map</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\jslibs\chart.scatter.min.js.map">
+      <Link>Resources\Vendor\js\chart.scatter.min.js.map</Link>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Vendor\fonts\glyphicons-halflings-regular.woff2" />
     <EmbeddedResource Include="Resources\Vendor\js\backbone.marionette.min.js.map" />
@@ -181,6 +187,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Application\lib.js" />
     <EmbeddedResource Include="Resources\Vendor\js\codemirror-fullscreen.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\jslibs\chart.min.js">
+      <Link>Resources\Vendor\js\chart.min.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\jslibs\chart.scatter.min.js">
+      <Link>Resources\Vendor\js\chart.scatter.min.js</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

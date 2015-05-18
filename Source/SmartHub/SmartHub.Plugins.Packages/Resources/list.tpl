@@ -1,2 +1,2 @@
-﻿<h4>Пакеты</h4>
+﻿<h1>Packages</h1>
 <div class="js-list"></div>

@@ -10,8 +10,8 @@ namespace SmartHub.Plugins.Packages
     [AppSection("Пакеты", SectionType.System, "/webapp/packages/list.js", "SmartHub.Plugins.Packages.Resources.list.js")]
     [JavaScriptResource("/webapp/packages/list-model.js", "SmartHub.Plugins.Packages.Resources.list-model.js")]
     [JavaScriptResource("/webapp/packages/list-view.js", "SmartHub.Plugins.Packages.Resources.list-view.js")]
-    [HttpResource("/webapp/packages/list-item.html", "SmartHub.Plugins.Packages.Resources.list-item.html")]
-    [HttpResource("/webapp/packages/list.html", "SmartHub.Plugins.Packages.Resources.list.html")]
+    [HttpResource("/webapp/packages/list-item.tpl", "SmartHub.Plugins.Packages.Resources.list-item.tpl")]
+    [HttpResource("/webapp/packages/list.tpl", "SmartHub.Plugins.Packages.Resources.list.tpl")]
     [Plugin]
     public class PackagesPlugin : PluginBase
     {

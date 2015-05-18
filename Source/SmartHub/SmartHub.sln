@@ -49,6 +49,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{672171
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.AquaController", "SmartHub.Plugins.AquaController\SmartHub.Plugins.AquaController.csproj", "{21C10EC6-02CF-47BE-B92B-C0A8D498C52C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jslibs", "jslibs", "{0F6D3975-EA7E-42E7-8D64-7C946BB033AF}"
+	ProjectSection(SolutionItems) = preProject
+		jslibs\chart.js = jslibs\chart.js
+		jslibs\chart.min.js = jslibs\chart.min.js
+		jslibs\chart.min.js.gzip = jslibs\chart.min.js.gzip
+		jslibs\chart.min.js.map = jslibs\chart.min.js.map
+		jslibs\chart.scatter.js = jslibs\chart.scatter.js
+		jslibs\chart.scatter.min.js = jslibs\chart.scatter.min.js
+		jslibs\chart.scatter.min.js.gzip = jslibs\chart.scatter.min.js.gzip
+		jslibs\chart.scatter.min.js.map = jslibs\chart.scatter.min.js.map
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

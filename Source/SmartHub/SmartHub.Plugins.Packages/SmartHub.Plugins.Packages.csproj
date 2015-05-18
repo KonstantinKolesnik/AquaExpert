@@ -56,12 +56,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\list-item.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\list.html" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\list-model.js" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\list.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\list-item.tpl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\list.tpl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

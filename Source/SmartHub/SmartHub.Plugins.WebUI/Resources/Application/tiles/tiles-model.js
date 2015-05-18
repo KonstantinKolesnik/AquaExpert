@@ -1,4 +1,4 @@
-﻿define(['lib', 'app'], function (lib, application) {
+﻿define(['lib', 'app'], function (lib, app) {
 
     var tileModel = lib.backbone.Model.extend({
         defaults: {
