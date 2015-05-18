@@ -10,21 +10,14 @@
 	            var url = childView.model.get('url');
 
 	            if (url) {
-
 	                var args = childView.model.get('parameters');
 	                application.loadPath(url, args);
-
 	            } else {
-
-	                models.action(id).done(api.done);
-	            }
-	        },
-
-	        done: function (message) {
-
-	            if (message) {
-
-	                alert(message);
+	                models.action(id).done(function (message) {
+	                    if (message) {
+	                        alert(message);
+	                    }
+	                });
 	            }
 	        },
 

@@ -1,5 +1,7 @@
 ﻿using SmartHub.Core.Plugins;
+using SmartHub.Plugins.Timer.Attributes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Timers;
 
@@ -18,6 +20,8 @@ namespace SmartHub.Plugins.Timer
         private System.Timers.Timer timer_5_sec;
         private System.Timers.Timer timer_10_sec;
         private System.Timers.Timer timer_30_sec;
+
+        private readonly List<PeriodicalActionState> periodicalHandlers = new List<PeriodicalActionState>();
         #endregion
 
         #region Import
@@ -29,6 +33,9 @@ namespace SmartHub.Plugins.Timer
         public Action<DateTime>[] Timer_10_sec_ElapsedEventHandlers { get; set; }
         [ImportMany("9A9A8F9B-8389-4481-9ECC-7F8A27DC08CB")]
         public Action<DateTime>[] Timer_30_sec_ElapsedEventHandlers { get; set; }
+
+        [ImportMany("38A9F1A7-63A4-4688-8089-31F4ED4A9A61")]
+        public Lazy<Action<DateTime>, IRunPeriodicallyAttribute>[] PeriodicalActions { get; set; }
         #endregion
 
         #region Plugin ovverrides
@@ -45,6 +52,8 @@ namespace SmartHub.Plugins.Timer
 
             timer_30_sec = new System.Timers.Timer(TIMER_INTERVAL_30_SEC);
             timer_30_sec.Elapsed += timer_30_sec_Elapsed;
+
+            RegisterPeriodicalHandlers();
         }
         public override void StartPlugin()
         {
@@ -66,6 +75,10 @@ namespace SmartHub.Plugins.Timer
         private void timer_3_sec_Elapsed(object source, ElapsedEventArgs e)
         {
             var now = DateTime.Now;
+
+            // periodical actions
+            foreach (var handler in periodicalHandlers)
+                handler.TryToExecute(now);
 
             //timer_3_sec.Enabled = false;
             Run(Timer_3_sec_ElapsedEventHandlers, handler => handler(now));
@@ -94,6 +107,21 @@ namespace SmartHub.Plugins.Timer
             //timer_30_sec.Enabled = false;
             Run(Timer_30_sec_ElapsedEventHandlers, handler => handler(now));
             //timer_30_sec.Enabled = true;
+        }
+        #endregion
+
+        #region Private methods
+        private void RegisterPeriodicalHandlers()
+        {
+            var now = DateTime.Now;
+
+            Logger.Info("Register periodical actions at {0:yyyy.MM.dd, HH:mm:ss}", now);
+
+            foreach (var action in PeriodicalActions)
+            {
+                var handler = new PeriodicalActionState(action.Value, action.Metadata.Interval, now, Logger);
+                periodicalHandlers.Add(handler);
+            }
         }
         #endregion
     }

@@ -8,6 +8,7 @@ using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer;
+using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.ComponentModel.Composition;

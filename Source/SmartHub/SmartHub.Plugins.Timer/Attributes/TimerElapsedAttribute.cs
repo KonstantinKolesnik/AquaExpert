@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace SmartHub.Plugins.Timer
+namespace SmartHub.Plugins.Timer.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class Timer_3_sec_ElapsedAttribute : ExportAttribute
