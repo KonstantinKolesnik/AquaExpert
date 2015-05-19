@@ -13,7 +13,8 @@ namespace SmartHub.Plugins.AlarmClock
             webTile.title = "Оповещения";
             webTile.url = "webapp/alarm-clock/list";
             webTile.content = GetAlarmTileContent();
-            webTile.cssClassName = "btn-primary th-tile-icon th-tile-icon-fa fa-bell";
+            webTile.wide = true;
+            webTile.className = "btn-warning th-tile-icon th-tile-icon-fa fa-bell";
         }
 
         private string GetAlarmTileContent()

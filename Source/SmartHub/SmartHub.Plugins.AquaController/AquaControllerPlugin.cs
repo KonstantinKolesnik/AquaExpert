@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace SmartHub.Plugins.AquaController
 {
-    [AppSection("Aqua Controller", SectionType.Common, "/webapp/aquacontroller/module.js", "SmartHub.Plugins.AquaController.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
+    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/module.js", "SmartHub.Plugins.AquaController.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
     [Plugin]
     public class AquaControllerPlugin : PluginBase
     {
@@ -66,6 +66,7 @@ namespace SmartHub.Plugins.AquaController
             heaterSensor = mySensors.GetSensor(2, 0);
         }
 
+        [MySensorsConnected]
         private void heater_Connected()
         {
             if (heaterSensor != null)
@@ -73,10 +74,12 @@ namespace SmartHub.Plugins.AquaController
             if (heaterRelay != null)
                 mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
         }
+
+        [MySensorsMessage]
         private void heater_MessageReceived(SensorMessage msg)
         {
-            if (heaterRelay != null && heaterSensor != null && msg.NodeID == heaterSensor.NodeNo && msg.SensorID == heaterSensor.SensorNo)
-                mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, msg.PayloadFloat < minHeaterTemperature ? 1 : 0);
+            //if (heaterRelay != null && heaterSensor != null && msg.NodeID == heaterSensor.NodeNo && msg.SensorID == heaterSensor.SensorNo)
+            //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, msg.PayloadFloat < minHeaterTemperature ? 1 : 0);
         }
         #endregion
 
@@ -131,6 +134,8 @@ namespace SmartHub.Plugins.AquaController
             phRelay = mySensors.GetSensor(1, 1);
             phSensor = mySensors.GetSensor(2, 1);
         }
+
+        [MySensorsConnected]
         private void ph_Connected()
         {
             if (phSensor != null)
@@ -138,10 +143,12 @@ namespace SmartHub.Plugins.AquaController
             if (phRelay != null)
                 mySensors.RequestSensorValue(phRelay, SensorValueType.Switch);
         }
+
+        [MySensorsMessage]
         private void ph_MessageReceived(SensorMessage msg)
         {
-            if (phRelay != null && phSensor != null && msg.NodeID == phSensor.NodeNo && msg.SensorID == phSensor.SensorNo)
-                mySensors.SetSensorValue(phRelay, SensorValueType.Switch, msg.PayloadFloat < phNormalValue ? 1 : 0);
+            //if (phRelay != null && phSensor != null && msg.NodeID == phSensor.NodeNo && msg.SensorID == phSensor.SensorNo)
+            //    mySensors.SetSensorValue(phRelay, SensorValueType.Switch, msg.PayloadFloat < phNormalValue ? 1 : 0);
         }
         #endregion
 
@@ -156,37 +163,13 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Event handlers
-        [MySensorsConnected]
-        private void MySensors_Connected()
-        {
-            heater_Connected();
-            ph_Connected();
 
-        }
-        [MySensorsMessage]
-        private void MySensors_MessageReceived(SensorMessage msg)
-        {
-            heater_MessageReceived(msg);
-            ph_MessageReceived(msg);
-
-
-        }
-        //[MySensorsDisconnected]
-        //private void MySensors_Disconnected()
-        //{
-        //}
-
-        float vvv = 0;
+        float on = 0;
         [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
-            //mySensors.RebootNode(mySensors.GetNode(3));
-
-
-
-
-            //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
-            vvv = vvv == 0 ? 1 : 0;
+            //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, on);
+            on = on == 0 ? 1 : 0;
 
             //var s = mySensors.GetSensor(3, 0);
             //mySensors.GetSensorValue(s, SensorValueType.Temperature);

@@ -9,7 +9,7 @@ namespace SmartHub.Plugins.WebUI.Tiles
         {
             webTile.title = options.title;
             webTile.url = options.url;
-            webTile.cssClassName = "btn-primary th-tile-icon th-tile-icon-fa fa-arrow-circle-right";
+            webTile.className = "btn-primary th-tile-icon th-tile-icon-fa fa-arrow-circle-right";
         }
     }
 }

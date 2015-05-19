@@ -6,9 +6,9 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.MySensors.GatewayProxies;
+using SmartHub.Plugins.Scripts;
+using SmartHub.Plugins.Scripts.Attributes;
 using SmartHub.Plugins.SignalR;
-using SmartHub.Plugins.Timer;
-using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.ComponentModel.Composition;
@@ -21,6 +21,7 @@ namespace SmartHub.Plugins.MySensors
     [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
     [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
+
     [Plugin]
     public class MySensorsPlugin : PluginBase
     {
@@ -206,7 +207,9 @@ namespace SmartHub.Plugins.MySensors
 
                             SaveOrUpdate(node);
                         }
+
                         Run(SensorMessageHandlers, x => x(message));
+                        NotifyMessageReceivedScriptEvent(message);
                         signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                     }
                     else // sensor message
@@ -233,7 +236,9 @@ namespace SmartHub.Plugins.MySensors
 
                                 SaveOrUpdate(sensor);
                             }
+
                             Run(SensorMessageHandlers, x => x(message));
+                            NotifyMessageReceivedScriptEvent(message);
                             signalServer.Broadcast(new { MsgId = "SensorPresentation", Data = BuildSensorModel(sensor) });
                         }
                     }
@@ -255,7 +260,9 @@ namespace SmartHub.Plugins.MySensors
                         };
 
                         Save(sv);
+
                         Run(SensorMessageHandlers, x => x(message));
+                        NotifyMessageReceivedScriptEvent(message);
                         signalServer.Broadcast(new { MsgId = "SensorValue", Data = sv });
                     }
                     break;
@@ -284,7 +291,9 @@ namespace SmartHub.Plugins.MySensors
                                 };
 
                                 Save(bl);
+
                                 Run(SensorMessageHandlers, x => x(message));
+                                NotifyMessageReceivedScriptEvent(message);
                                 signalServer.Broadcast(new { MsgId = "BatteryLevel", Data = bl });
                             }
                             break;
@@ -321,7 +330,9 @@ namespace SmartHub.Plugins.MySensors
                                     node.SketchVersion = message.Payload;
 
                                 SaveOrUpdate(node);
+
                                 Run(SensorMessageHandlers, x => x(message));
+                                NotifyMessageReceivedScriptEvent(message);
                                 signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                             }
                             break;
@@ -601,6 +612,22 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
+        }
+        #endregion
+
+        #region Script commands & events
+        [ScriptCommand("mySensorsSendCommand")]
+        public void SendCommand(int nodeNo, int sensorNo, int commandType, int valueType, float value)
+        {
+            if (gatewayProxy != null)
+                gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value.ToString()));
+        }
+
+        [ScriptEvent("mySensors.messageReceived")]
+        public ScriptEventHandlerDelegate[] OnMessageReceivedForScripts { get; set; }
+        private void NotifyMessageReceivedScriptEvent(SensorMessage msg)
+        {
+            this.RaiseScriptEvent(x => x.OnMessageReceivedForScripts, msg.NodeID, msg.SensorID, msg.Type, msg.SubType, msg.Payload);
         }
         #endregion
     }

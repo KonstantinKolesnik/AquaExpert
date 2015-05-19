@@ -16,7 +16,7 @@ namespace SmartHub.Plugins.Scripts
 
                 webTile.title = script.Name;
                 webTile.content = "Выполнить скрипт\r\n" + script.Name;
-                webTile.cssClassName = "btn-primary th-tile-icon th-tile-icon-fa fa-rocket";
+                webTile.className = "btn-primary th-tile-icon th-tile-icon-fa fa-file-code-o";
             }
             catch (Exception ex)
             {

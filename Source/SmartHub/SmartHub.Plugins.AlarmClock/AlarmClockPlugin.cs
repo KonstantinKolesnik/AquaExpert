@@ -162,8 +162,7 @@ namespace SmartHub.Plugins.AlarmClock
             {
                 Logger.Info("Run event handlers: {0} ({1})", alarm.Name, alarm.Id);
 
-                Guid alarmId = alarm.Id;
-                Run(AlarmStartedForPlugins, x => x(alarmId));
+                Run(AlarmStartedForPlugins, x => x(alarm.Id));
 
                 if (alarm.UserScript != null)
                 {
@@ -178,7 +177,7 @@ namespace SmartHub.Plugins.AlarmClock
         #endregion
 
         #region Event handlers
-        [Timer_30_sec_Elapsed]
+        [Timer_5_sec_Elapsed]
         public void OnTimerElapsed(DateTime now)
         {
             lock (lockObject)
@@ -259,7 +258,7 @@ namespace SmartHub.Plugins.AlarmClock
         [HttpCommand("/api/alarm-clock/stop")]
         public object StopAlarm(HttpRequestParams request)
         {
-            Context.GetPlugin<AlarmClockPlugin>().StopSound();
+            StopSound();
             return null;
         }
         #endregion

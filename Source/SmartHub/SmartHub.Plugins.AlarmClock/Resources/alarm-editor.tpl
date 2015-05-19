@@ -1,7 +1,6 @@
 ﻿<form>
 	<div class="row">
 		<div class="col-md-4">
-
 			<h2>Редактирование оповещения</h2>
 			<p>
 				<input type="button" value="Сохранить" class="btn btn-primary js-btn-save" />&nbsp;
@@ -9,15 +8,11 @@
 				<input type="button" value="Удалить" class="btn btn-danger pull-right js-btn-delete" />
 			</p>
 			<div class="form-group">
-				<label>
-					Имя
-				</label>
+				<label>Имя</label>
 				<input name="name" class="form-control" />
 			</div>
 			<div class="form-group">
-				<label>
-					Время
-				</label>
+				<label>Время</label>
 				<ul class="list-inline">
 					<li>
 						<select name="hours" class="form-control">
@@ -36,9 +31,7 @@
 				</ul>
 			</div>
 			<div class="form-group">
-				<label>
-					Действие
-				</label>
+				<label>Действие</label>
 				<select name="scriptId" data-items-field="scripts" class="form-control">
 					<option value="">&lt;Звуковой сигнал&gt;</option>
 				</select>
