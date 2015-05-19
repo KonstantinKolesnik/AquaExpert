@@ -1,17 +1,16 @@
 
 Изменить в свойствах проекта -> Build ->  Build Output Path на:
-	..\bin\Plugins\[SmartHub.Plugins.xxxxxxxx]\
+	..\bin\Plugins\SmartHub.Plugins.xxxxxxxx\
 
 Изменить в свойствах проекта -> Debug ->  Start Action на:
-	Start external program, ..\bin\Plugins\[SmartHub.Plugins.xxxxxxxx]\
-
+	Start external program,
 	D:\Work\SmartHub\Source\SmartHub\bin\SmartHub.ApplicationConsole.exe
 
 Добавить зависимости:
 	SmartHub.Core.Plugins (Copy Local = False)
 	System.ComponentModel.Composition (Copy Local = False)
-	NLog (Copy Local = True)
-	NHibernate (Copy Local = True) - если используется БД
+	NLog (Copy Local = False)
+	NHibernate (Copy Local = False) - если используется БД
 	ECM7.Migrator (Copy Local = False) - если используется БД
 
 Пометить класс плагина атрибутом [SmartHub.Core.Plugins.PluginAttribute]

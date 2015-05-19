@@ -74,6 +74,7 @@ define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, ba
 	        var hostName = document.location.hostname;
 
 	        var connection = $.connection("http://" + hostName + ":55556/chat");
+	        $.support.cors = true;
 	        connection.received(function (data) {
 	            $.each(app.SignalRReceiveHandlers, function (idx, handler) {
 	                if (handler)

@@ -4,7 +4,7 @@
 
 	    return {
 	        start: function () {
-	            sections.api.reload('loadSystemSections', 'Система');
+	            sections.api.reload('loadSystemSections', 'Настройки');
 	        }
 	    };
 	});
