@@ -15,7 +15,7 @@ namespace SmartHub.Plugins.Scripts
                 UserScript script = GetScript(options);
 
                 webTile.title = script.Name;
-                webTile.content = "Run the script\r\n" + script.Name;
+                webTile.content = "Выполнить скрипт\r\n" + script.Name;
                 webTile.cssClassName = "btn-primary th-tile-icon th-tile-icon-fa fa-rocket";
             }
             catch (Exception ex)
@@ -28,8 +28,8 @@ namespace SmartHub.Plugins.Scripts
             try
             {
                 UserScript script = GetScript(options);
-
                 Context.GetPlugin<ScriptsPlugin>().ExecuteScript(script);
+
                 return null;
             }
             catch (Exception ex)

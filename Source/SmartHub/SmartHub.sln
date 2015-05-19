@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Scripts", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Speech", "SmartHub.Plugins.Speech\SmartHub.Plugins.Speech.csproj", "{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.AlarmClock", "SmartHub.Plugins.AlarmClock\SmartHub.Plugins.AlarmClock.csproj", "{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -329,6 +331,22 @@ Global
 		{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8}.Release|Win32.ActiveCfg = Release|Any CPU
 		{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8}.Release|x64.ActiveCfg = Release|Any CPU
 		{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8}.Release|x86.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|ARM.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|Win32.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|x64.ActiveCfg = Release|Any CPU
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -352,5 +370,6 @@ Global
 		{21C10EC6-02CF-47BE-B92B-C0A8D498C52C} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{E9B99C9B-9738-494B-96F0-CF39B820C61B} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 		{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
+		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 	EndGlobalSection
 EndGlobal

@@ -40,7 +40,7 @@ namespace SmartHub.Plugins.Speech
         public override void InitPlugin()
         {
             InitSpeechSynthesizer();
-            InitRecognitionEngine();
+            //InitRecognitionEngine();
         }
         public override void StopPlugin()
         {
@@ -88,7 +88,7 @@ namespace SmartHub.Plugins.Speech
             speechSynthesizer.Volume = 100;
 
             var voiceList = speechSynthesizer.GetInstalledVoices();
-            string voiceName = voiceList[0].VoiceInfo.Name;   //  в панели управления во вкладке распознавание речи выставить Ivona
+            string voiceName = voiceList[0].VoiceInfo.Name;
             speechSynthesizer.SelectVoice(voiceName);
         }
         private void CloseSpeechSynthesizer()

@@ -565,7 +565,7 @@ define(
                 }
 
                 function adjustSizes() {
-                    var bottomOffset = 15;
+                    var bottomOffset = 25;
 
                     adjustGrid($("#gridNodes"));
                     adjustGrid($("#gridSensors"));
