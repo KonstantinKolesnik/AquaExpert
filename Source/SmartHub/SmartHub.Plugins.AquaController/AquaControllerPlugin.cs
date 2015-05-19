@@ -180,6 +180,11 @@ namespace SmartHub.Plugins.AquaController
         [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
+            //mySensors.RebootNode(mySensors.GetNode(3));
+
+
+
+
             //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, vvv);
             vvv = vvv == 0 ? 1 : 0;
 

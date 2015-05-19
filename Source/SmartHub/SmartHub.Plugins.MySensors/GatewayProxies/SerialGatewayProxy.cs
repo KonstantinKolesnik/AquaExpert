@@ -87,7 +87,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                 try
                 {
                     serialPort.WriteLine(message.ToRawMessage());
-                    Thread.Sleep(100);
+                    Thread.Sleep(1);
                 }
                 catch (Exception) { }
             }

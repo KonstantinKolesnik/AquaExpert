@@ -85,6 +85,7 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
+        #region Public methods
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
         {
             if (gatewayProxy != null && sensor != null)
@@ -95,6 +96,12 @@ namespace SmartHub.Plugins.MySensors
             if (gatewayProxy != null && sensor != null)
                 gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Request, false, (byte)type, ""));
         }
+        public void RebootNode(Node node)
+        {
+            if (gatewayProxy != null && node != null)
+                gatewayProxy.Send(new SensorMessage(node.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
+        }
+        #endregion
 
         #region DB actions
         private Setting GetSetting(string name)
@@ -102,7 +109,7 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Setting>().FirstOrDefault(setting => setting.Name == name);
         }
-        private Node GetNode(byte nodeID)
+        public Node GetNode(byte nodeID)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeID);

@@ -72,19 +72,19 @@ void setup()
 	dhtInner.setup(DHT_INNER_PIN);
 
 	gw.present(TEMPERATURE_OUTER_SENSOR_ID, S_TEMP);
-	processTemperature(true, true);
+	//processTemperature(true, true);
 
 	gw.present(HUMIDITY_OUTER_SENSOR_ID, S_HUM);
-	processHumidity(true, true);
+	//processHumidity(true, true);
 
 	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
-	processTemperature(false, true);
+	//processTemperature(false, true);
 
 	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
-	processHumidity(false, true);
+	//processHumidity(false, true);
 
 	gw.present(PRESSURE_SENSOR_ID, S_BARO);
-	processPressure(true);
+	//processPressure(true);
 }
 void loop()
 {
