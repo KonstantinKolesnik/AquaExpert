@@ -1,7 +1,6 @@
 ﻿define(
 	['lib', 'text!webapp/scripts/script-list.tpl', 'text!webapp/scripts/script-list-item.tpl'],
 	function (lib, listTemplate, itemTemplate) {
-
 		var scriptView = lib.marionette.ItemView.extend({
 			template: lib._.template(itemTemplate),
 			triggers: {
@@ -20,7 +19,6 @@
 				'click .js-add-script': 'scripts:add'
 			}
 		});
-
 
 		return {
 			ScriptView: scriptView,

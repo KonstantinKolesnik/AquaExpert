@@ -14,7 +14,6 @@ namespace SmartHub.Plugins.AquaController
                 webTile.title = "Аква-контроллер";
                 webTile.url = "/webapp/aquacontroller/module.js";
                 webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-tachometer";
-                webTile.wide = true;
             }
             catch (Exception ex)
             {

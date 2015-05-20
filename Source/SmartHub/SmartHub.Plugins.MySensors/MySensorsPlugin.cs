@@ -18,8 +18,9 @@ using System.Linq;
 namespace SmartHub.Plugins.MySensors
 {
     [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
-    [JavaScriptResource("/webapp/mysensors/views.js", "SmartHub.Plugins.MySensors.Resources.js.views.js")]
-    [HttpResource("/webapp/mysensors/templates.html", "SmartHub.Plugins.MySensors.Resources.js.templates.html")]
+    [JavaScriptResource("/webapp/mysensors/module-model.js", "SmartHub.Plugins.MySensors.Resources.js.module-model.js")]
+    [JavaScriptResource("/webapp/mysensors/module-view.js", "SmartHub.Plugins.MySensors.Resources.js.module-view.js")]
+    [HttpResource("/webapp/mysensors/module.html", "SmartHub.Plugins.MySensors.Resources.js.module.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
 
     [Plugin]

@@ -1,5 +1,4 @@
 ﻿define(['lib'], function (lib) {
-
 	// entities
 	var scriptListItem = lib.backbone.Model.extend();
 
@@ -9,9 +8,7 @@
 
 	// api
 	var api = {
-
 		loadScriptList: function () {
-
 			var defer = lib.$.Deferred();
 
 			lib.$.getJSON('/api/scripts/list')
@@ -20,24 +17,20 @@
 					defer.resolve(collection);
 				})
 				.fail(function () {
-
 					defer.resolve(undefined);
 				});
 
 			return defer.promise();
 		},
-
 		runScript: function (scriptId) {
 			return lib.$.post('/api/scripts/run', { scriptId: scriptId }).promise();
 		},
-
 		deleteScript: function (scriptId) {
 			return lib.$.post('/api/scripts/delete', { scriptId: scriptId }).promise();
 		}
 	};
 
 	return {
-
 		// entities
 		ScriptListItem: scriptListItem,
 		ScriptCollection: scriptCollection,

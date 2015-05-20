@@ -42,10 +42,9 @@
 	        deps: ['backbone', 'syphon'],
 	        exports: 'Marionette'
 	    },
-
 		kendo: {
 		    deps: ['jquery'],
-		    exports: 'kendo'
+		    exports: 'Kendo'
 		},
 		signalR: {
 		    deps: ['jquery'],

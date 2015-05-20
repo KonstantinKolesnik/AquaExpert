@@ -1,11 +1,11 @@
 ﻿
 define(
-	['app', 'common', 'marionette', 'backbone', 'underscore', 'kendo', 'text!webapp/mysensors/templates.html'],
-    function (application, common, marionette, backbone, _, kendo, templates) {
-        var layoutView = marionette.LayoutView.extend({
-            template: _.template(templates),
-            bind: function (viewModel) {
-                kendo.bind($("#content"), viewModel);
+	['common', 'lib', 'text!webapp/mysensors/module.html'],
+    function (common, lib, templates) {
+        var layoutView = lib.marionette.LayoutView.extend({
+            template: lib._.template(templates),
+            triggers: {
+                'click .js-test': 'node:test'
             },
             onShow: function () {
                 var me = this;
@@ -25,7 +25,7 @@ define(
 
                 function initKendoCustomGrid() {
                     // add "beforeEdit" event:
-                    kendo.ui.Grid.fn.editCell = (function (editCell) {
+                    lib.kendo.ui.Grid.fn.editCell = (function (editCell) {
                         return function (cell) {
                             cell = $(cell);
 
@@ -50,7 +50,7 @@ define(
 
                             editCell.call(this, cell);
                         };
-                    })(kendo.ui.Grid.fn.editCell);
+                    })(lib.kendo.ui.Grid.fn.editCell);
                 }
 
                 function createTabStrip(selector) {
@@ -95,8 +95,8 @@ define(
                             {
                                 title: "Батарея",
                                 columns: [
-                                    { field: "BatteryLevel.Level", title: "Уровень, %", width: 80, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-right" }, template: kendo.template($("#batteryLevelCellTemplate").html()) },
-                                    { field: "BatteryLevel.TimeStamp", title: "Дата", width: 120, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" }, template: kendo.template($("#batteryTimeStampCellTemplate").html()) }
+                                    { field: "BatteryLevel.Level", title: "Уровень, %", width: 80, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#batteryLevelCellTemplate").html()) },
+                                    { field: "BatteryLevel.TimeStamp", title: "Дата", width: 120, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#batteryTimeStampCellTemplate").html()) }
                                 ]
                             },
                             { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
@@ -114,18 +114,19 @@ define(
 
                                             if (common.utils.confirm('Удалить элемент "{0}"?', item.Name))
                                                 me.onDeleteNode(item.Id);
+                                            //layoutView.trigger('node:delete', item.Id);
                                         }
                                     }
                                 ]
                             }
                         ],
-                        detailTemplate: kendo.template($("#nodeDetailsTemplate").html()),
+                        detailTemplate: lib.kendo.template($("#nodeDetailsTemplate").html()),
                         detailInit: function (e) {
                             createTabStrip(e.detailRow.find(".nodeDetailsTabStrip"));
                             createChildSensorsGrid();
                             createBatteryLevelsChart();
 
-                            kendo.bind(e.detailRow, e.data);
+                            lib.kendo.bind(e.detailRow, e.data);
 
                             //$(document).bind("kendo:skinChange", createChart);
                             //e.detailRow.find(".nodeDetailsBatteryLevels").data("kendoChart").setOptions({
@@ -159,8 +160,8 @@ define(
                                         {
                                             title: "Состояние",
                                             columns: [
-                                                { field: "SensorValue.Value", title: "Величина", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
-                                                { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
+                                                { field: "SensorValue.Value", title: "Величина", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                                { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
                                             ]
                                         },
                                         //{ field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
@@ -268,7 +269,7 @@ define(
                         },
                         dataBinding: function (e) {
                             //if (ctrlNodesGrid)
-                            //    localStorage["kendo-grid-options"] = kendo.stringify(ctrlNodesGrid.getOptions());
+                            //    localStorage["kendo-grid-options"] = lib.kendo.stringify(ctrlNodesGrid.getOptions());
                         },
                         dataBound: function (e) {
                             //me.gridNodesStateManager.onDataBound();
@@ -310,8 +311,8 @@ define(
                                 {
                                     title: "Состояние",
                                     columns: [
-                                        { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: kendo.template($("#sensorValueValueCellTemplate").html()) },
-                                        { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
+                                        { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                        { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
                                     ]
                                 },
                                 { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
@@ -334,11 +335,11 @@ define(
                                     ]
                                 }
                             ],
-                        detailTemplate: kendo.template($("#sensorDetailsTemplate").html()),
+                        detailTemplate: lib.kendo.template($("#sensorDetailsTemplate").html()),
                         detailInit: function (e) {
                             createSensorValuesChart();
 
-                            kendo.bind(e.detailRow, e.data);
+                            lib.kendo.bind(e.detailRow, e.data);
 
                             function createSensorValuesChart() {
                                 e.detailRow.find(".sensorDetailsOptions").bind("change", function () {
@@ -376,7 +377,7 @@ define(
                                     tooltip: {
                                         visible: true,
                                         //format: "{0}qqqqq",
-                                        //template: "#= kendo.toString(category, 'dd.MM.yyyy') #: #= value #"
+                                        //template: "#= lib.kendo.toString(category, 'dd.MM.yyyy') #: #= value #"
                                         template: "#= value #"
                                     },
 
@@ -597,6 +598,10 @@ define(
                 }
             },
 
+            bind: function (viewModel) {
+                lib.kendo.bind($("#content"), viewModel);
+            },
+
             onDeleteNode: function (id) { },
 	        onDeleteSensor: function (id) { },
 	        onNodeNameChanged: function (id, name) { },
@@ -605,6 +610,6 @@ define(
         });
 
 	    return {
-	        layoutView: layoutView
+	        LayoutView: layoutView
 	    };
 	});

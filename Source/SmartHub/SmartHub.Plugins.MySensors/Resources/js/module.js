@@ -1,317 +1,65 @@
 ﻿
 define(
-	['app', 'jquery', 'webapp/mysensors/views'],
-	function (application, $, views) {
-	    var api = {
-	        getNodes: function (onComplete) {
-	            $.getJSON('/api/mysensors/nodes')
-					.done(function (data) {
-					    $.each(data, function (idx, item) {
-					        if (item.BatteryLevel)
-                                item.BatteryLevel.TimeStamp = new Date(item.BatteryLevel.TimeStamp);
-					    });
-
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
+	['app', 'webapp/mysensors/module-model', 'webapp/mysensors/module-view'],
+	function (application, models, views) {
+	    var module = {
+	        setNodeName: function (id, name) {
+	            models.setNodeName(id, name);
 	        },
-	        setNodeName: function (id, name, onComplete) {
-	            $.post('/api/mysensors/nodes/setname', { Id: id, Name: name })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
+	        setSensorName: function (id, name) {
+	            models.setSensorName(id, name);
 	        },
-	        deleteNode: function (id, onComplete) {
-	            $.post('/api/mysensors/nodes/delete', { Id: id })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
+	        deleteNode: function (id) {
+	            models.deleteNode(id);
+	        },
+	        deleteSensor: function (id) {
+	            models.deleteSensor(id);
+	        },
+	        setUnitSystem: function (us) {
+	            models.setUnitSystem(us);
 	        },
 
-	        getSensors: function (onComplete) {
-	            $.getJSON('/api/mysensors/sensors')
-					.done(function (data) {
-					    $.each(data, function (idx, item) {
-					        if (item.SensorValue)
-					            item.SensorValue.TimeStamp = new Date(item.SensorValue.TimeStamp);
-					    });
+	        reload: function () {
+	            application.SignalRReceiveHandlers.push(models.ViewModel.onSignalRReceived);
 
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
+	            models.ViewModel.update(function (items) {
+					//var view = new views.ScriptListView({ collection: items });
+					//view.on('scripts:add', api.addScript);
+					//view.on('childview:scripts:edit', api.editScript);
+					//view.on('childview:scripts:run', api.runScript);
+					//view.on('childview:scripts:delete', api.deleteScript);
+					//view.on('childview:scripts:add-tile', api.addScriptTile);
+	                //application.setContentView(view);
+
+
+
+
+
+	                var view = new views.LayoutView();
+	                view.onNodeNameChanged = module.setNodeName;
+	                view.onSensorNameChanged = module.setSensorName;
+	                view.onDeleteNode = module.deleteNode;
+	                view.onDeleteSensor = module.deleteSensor;
+	                view.onUnitSystemChanged = module.setUnitSystem;
+	                view.on('node:test', function (view) {
+	                    //debugger;
+
+	                    //Внутри функции обработчика события можно обращаться к экземпляру представления при помощи переменной this. this==view.view
+	                    //С ее помощью можно получить доступ к модели (при помощи поля model) и элементам интерфейса (при помощи метода $).
+	                    //Также можно обратиться к корневому элементу интерфейса через поле $el.
+
+	                    alert("Test");
 	                });
-	        },
-	        setSensorName: function (id, name, onComplete) {
-	            $.post('/api/mysensors/sensors/setname', { Id: id, Name: name })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-	        deleteSensor: function (id, onComplete) {
-	            $.post('/api/mysensors/sensors/delete', { Id: id })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
+	                application.setContentView(view);
 
-	        getUnitSystem: function (onComplete) {
-	            $.getJSON('/api/mysensors/unitsystem')
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-	        setUnitSystem: function (value, onComplete) {
-	            $.post('/api/mysensors/setunitsystem', { Value: value })
-					.done(function (data) {
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-
-	        getBatteryLevels: function (onComplete) {
-	            $.getJSON('/api/mysensors/batterylevels')
-					.done(function (data) {
-					    $.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
-
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-	        getSensorValues: function (onComplete) {
-	            $.getJSON('/api/mysensors/sensorvalues')
-					.done(function (data) {
-					    $.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
-
-					    if (onComplete)
-					        onComplete(data);
-					})
-	                .fail(function (data) {
-	                    onError(data);
-	                });
-	        },
-	    };
-
-	    var viewModel = kendo.observable({
-	        UnitSystem: "M",
-	        Nodes: [],
-	        Sensors: [],
-	        BatteryLevels: [],
-	        SensorValues: [],
-
-            update: function () {
-                var me = this;
-
-	            api.getUnitSystem(function (data) {
-	                me.set("UnitSystem", data.Value);
-
-	                api.getNodes(function (data) {
-	                    me.set("Nodes", data);
-
-	                    api.getSensors(function (data) {
-	                        me.set("Sensors", data);
-
-	                        api.getBatteryLevels(function (data) {
-	                            me.set("BatteryLevels", data);
-
-	                            api.getSensorValues(function (data) {
-	                                me.set("SensorValues", data);
-	                            });
-	                        });
-                        });
-                    });
+	                view.bind(models.ViewModel);
 	            });
-	        },
-            onSignalRReceived: function (data) {
-                var me = viewModel; // not "this" because is called from another context!!!
-
-	            switch (data.MsgId) {
-	                case "NodePresentation": onNodePresentation(data); break;
-	                case "NodeNameChanged": onNodeNameChanged(data); break;
-	                case "NodeDeleted": onNodeDeleted(data); break;
-	                case "BatteryLevel": onBatteryLevel(data); break;
-	                case "SensorPresentation": onSensorPresentation(data); break;
-	                case "SensorNameChanged": onSensorNameChanged(data); break;
-	                case "SensorDeleted": onSensorDeleted(data); break;
-	                case "SensorValue": onSensorValue(data); break;
-	                case "UnitSystemChanged": onUnitSystemChanged(data); break;
-	                default: break;
-	            }
-
-	            function onNodePresentation(data) {
-	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Data.Id) {
-	                        me.Nodes[i].set("NodeNo", data.Data.NodeNo);
-	                        me.Nodes[i].set("TypeName", data.Data.TypeName);
-	                        me.Nodes[i].set("ProtocolVersion", data.Data.ProtocolVersion);
-	                        me.Nodes[i].set("SketchName", data.Data.SketchName);
-	                        me.Nodes[i].set("SketchVersion", data.Data.SketchVersion);
-	                        me.Nodes[i].set("Name", data.Data.Name);
-	                        me.Nodes[i].set("BatteryLevel", data.Data.BatteryLevel);
-	                        return;
-	                    }
-	                }
-
-	                me.Nodes.push(data.Data);
-	            }
-	            function onNodeNameChanged(data) {
-	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Data.Id) {
-	                        me.Nodes[i].set("Name", data.Data.Name);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onNodeDeleted(data) {
-	                var nodeNo = null;
-	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].Id == data.Data.Id) {
-	                        nodeNo = me.Nodes[i].NodeNo;
-	                        me.Nodes.splice(i, 1);
-	                        break;
-	                    }
-	                }
-
-	                if (nodeNo) {
-	                    for (var i = 0; i < me.Sensors.length;) {
-	                        if (me.Sensors[i].NodeNo == nodeNo)
-	                            me.Sensors.splice(i, 1);
-	                        else
-	                            i++;
-	                    }
-	                }
-	            }
-	            function onBatteryLevel(data) {
-	                data.Data.TimeStamp = new Date(data.Data.TimeStamp);
-
-	                for (var i = 0; i < me.Nodes.length; i++) {
-	                    if (me.Nodes[i].NodeNo == data.Data.NodeNo) {
-	                        me.Nodes[i].set("BatteryLevel", data.Data);
-	                        break;
-	                    }
-	                }
-
-	                me.BatteryLevels.push(data.Data);
-	            }
-	            function onSensorPresentation(data) {
-	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Data.Id) {
-	                        me.Sensors[i].set("NodeNo", data.Data.NodeNo);
-	                        me.Sensors[i].set("SensorNo", data.Data.SensorNo);
-	                        me.Sensors[i].set("TypeName", data.Data.TypeName);
-	                        me.Sensors[i].set("ProtocolVersion", data.Data.ProtocolVersion);
-	                        me.Sensors[i].set("Name", data.Data.Name);
-	                        me.Sensors[i].set("SensorValue", data.Data.SensorValue);
-	                        return;
-	                    }
-	                }
-
-	                me.Sensors.push(data.Data);
-	            }
-	            function onSensorNameChanged(data) {
-	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Data.Id) {
-	                        me.Sensors[i].set("Name", data.Data.Name);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onSensorDeleted(data) {
-	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].Id == data.Data.Id) {
-	                        me.Sensors.splice(i, 1);
-	                        break;
-	                    }
-	                }
-	            }
-	            function onSensorValue(data) {
-	                console.log(data.Data.Type + ": " + data.Data.Value);
-	                data.Data.TimeStamp = new Date(data.Data.TimeStamp);
-
-	                for (var i = 0; i < me.Sensors.length; i++) {
-	                    if (me.Sensors[i].NodeNo == data.Data.NodeNo && me.Sensors[i].SensorNo == data.Data.SensorNo) {
-	                        me.Sensors[i].set("SensorValue", data.Data);
-	                        break;
-	                    }
-	                }
-
-	                me.SensorValues.push(data.Data);
-	            }
-	            function onUnitSystemChanged(data) {
-	                me.set("UnitSystem", data.Data);
-	            }
-	        }
-	    });
-
-	    var events = {
-	        onNodeNameChanged: function (id, name) {
-	            api.setNodeName(id, name);
-	        },
-	        onSensorNameChanged: function (id, name) {
-	            api.setSensorName(id, name);
-	        },
-	        onDeleteNode: function (id) {
-	            api.deleteNode(id);
-	        },
-	        onDeleteSensor: function (id) {
-	            api.deleteSensor(id);
-	        },
-	        onUnitSystemChanged: function (us) {
-	            api.setUnitSystem(us);
 	        }
 	    };
-
-	    function onError(data) {
-	        //alert(data.responseJSON.ExceptionMessage);
-	        //alert(data.statusText);
-	        alert(data.responseText);
-	    }
 
 	    return {
 	        start: function () {
-	            application.SignalRReceiveHandlers.push(viewModel.onSignalRReceived);
-
-	            var layoutView = new views.layoutView();
-	            application.setContentView(layoutView);
-
-	            layoutView.bind(viewModel);
-	            viewModel.update();
-
-	            layoutView.onNodeNameChanged = events.onNodeNameChanged;
-	            layoutView.onSensorNameChanged = events.onSensorNameChanged;
-	            layoutView.onDeleteNode = events.onDeleteNode;
-	            layoutView.onDeleteSensor = events.onDeleteSensor;
-	            layoutView.onUnitSystemChanged = events.onUnitSystemChanged;
+	            module.reload();
 	        }
 	    };
 	});

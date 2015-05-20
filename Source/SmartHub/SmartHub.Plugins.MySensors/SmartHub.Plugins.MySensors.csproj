@@ -113,16 +113,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\js\templates.html" />
+    <EmbeddedResource Include="Resources\js\module.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\views.js" />
+    <EmbeddedResource Include="Resources\js\module-view.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\js\module.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\module-model.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

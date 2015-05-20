@@ -1,5 +1,4 @@
 ﻿define(['lib'], function (lib) {
-
 	// entities
 	var packageModel = lib.backbone.Model.extend();
 
@@ -10,9 +9,7 @@
 
 	// api
 	var api = {
-
 		loadPackages: function () {
-
 			var defer = lib.$.Deferred();
 
 			lib.$.getJSON('/api/packages/list')
@@ -21,24 +18,17 @@
 					defer.resolve(collection);
 				})
 				.fail(function () {
-
 					defer.resolve(undefined);
 				});
 
 			return defer.promise();
 		},
-
 		installPackage: function (packageId) {
-
 			var rq = lib.$.post('/api/packages/install', { packageId: packageId });
-
 			return rq.promise();
 		},
-
 		uninstallPackage: function (packageId) {
-
 			var rq = lib.$.post('/api/packages/uninstall', { packageId: packageId });
-
 			return rq.promise();
 		}
 	};

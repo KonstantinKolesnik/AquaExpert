@@ -11,15 +11,12 @@
 				'click .js-btn-uninstall': 'packages:uninstall'
 			},
 			onRender: function () {
-
 				var packageVersion = this.model.get('installedVersion');
 
 				if (packageVersion) {
-
 					this.$('.js-btn-install').hide();
 					this.$('.js-btn-uninstall').stateSwitcher();
 				} else {
-
 					this.$('.js-btn-install').stateSwitcher();
 					this.$('.js-btn-uninstall').hide();
 				}
@@ -31,7 +28,6 @@
 			childView: packageView,
 			childViewContainer: '.js-list'
 		});
-
 
 		return {
 			PackageView: packageView,

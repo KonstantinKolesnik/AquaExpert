@@ -9,4 +9,3 @@
     <div class="js-list"></div>
   </div>
 </div>
-
