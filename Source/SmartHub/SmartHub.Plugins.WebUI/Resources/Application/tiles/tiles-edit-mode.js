@@ -8,7 +8,7 @@
 
 	            var title = childView.model.get('title');
 
-	            if (common.utils.confirm('Delete the tile "{0}"?', title)) {
+	            if (common.utils.confirm('Удалить виджет "{0}"?', title)) {
 
 	                var id = childView.model.get('id');
 	                models.remove(id).done(api.reload);

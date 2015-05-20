@@ -14,6 +14,10 @@ using System.Linq;
 namespace SmartHub.Plugins.AquaController
 {
     [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/module.js", "SmartHub.Plugins.AquaController.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
+
+
+
+
     [Plugin]
     public class AquaControllerPlugin : PluginBase
     {
