@@ -11,13 +11,9 @@ namespace SmartHub.Plugins.AquaController
         {
             try
             {
-                //var data = Context.GetPlugin<MySensorsPlugin>();
-                //UserScript script = GetScript(options.id);
-
                 webTile.title = "Аква-контроллер";
-                webTile.url = "/webapp/aquacontroller/module.js"; //options.url;
+                webTile.url = "/webapp/aquacontroller/module.js";
                 webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-tachometer";
-                //webTile.content = "Узлов: 1\nСенсоров: 8";
                 webTile.wide = true;
             }
             catch (Exception ex)

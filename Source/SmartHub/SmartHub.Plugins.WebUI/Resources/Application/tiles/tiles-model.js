@@ -1,5 +1,4 @@
 ﻿define(['lib', 'app'], function (lib, app) {
-
     var tileModel = lib.backbone.Model.extend({
         defaults: {
             id: null,
@@ -15,14 +14,11 @@
 
     var api = {
         load: function () {
-
             var defer = lib.$.Deferred();
 
             lib.$.getJSON('/api/webui/tiles')
 				.done(function (tiles) {
-
 				    var collection = new tileCollection(tiles);
-
 
 				    $.each(collection.models, function (idx, item) {
 				        //debugger;
@@ -37,36 +33,29 @@
 				        //});
 
 
+				        //if (item.attributes.SignalRReceiveHandler) {
+				        //    item.attributes.SignalRReceiveHandler = eval("window.myF = " + item.attributes.SignalRReceiveHandler);
+				        //    delete(window.myF);
 
-				        if (item.attributes.SignalRReceiveHandler) {
-				            item.attributes.SignalRReceiveHandler = eval("window.myF = " + item.attributes.SignalRReceiveHandler);
-				            delete(window.myF);
-
-				            if (item.attributes.SignalRReceiveHandler)
-                                app.SignalRReceiveHandlers.push(item.attributes.SignalRReceiveHandler);
-				        }
+				        //    if (item.attributes.SignalRReceiveHandler)
+                        //        app.SignalRReceiveHandlers.push(item.attributes.SignalRReceiveHandler);
+				        //}
 				    })
-
-
 
 				    defer.resolve(collection);
 				})
 				.fail(function () {
-
 				    defer.resolve(undefined);
 				});
 
             return defer.promise();
         },
-
         action: function (id) {
-
             return lib.$.post('/api/webui/tiles/action', { id: id }).promise();
         }
     };
 
     return {
-
         // entities
         Tile: tileModel,
         TileCollection: tileCollection,
