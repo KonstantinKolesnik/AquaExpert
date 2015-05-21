@@ -11,5 +11,10 @@ namespace SmartHub.Plugins.MySensors.Data
         public virtual DateTime TimeStamp { get; set; }
         public virtual SensorValueType Type { get; set; }
         public virtual float Value { get; set; }
+
+        public virtual string TypeName
+        {
+            get { return Type.ToString(); }
+        }
     }
 }
