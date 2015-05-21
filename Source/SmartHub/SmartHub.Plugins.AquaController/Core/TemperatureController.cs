@@ -1,10 +1,12 @@
-﻿using SmartHub.Plugins.MySensors;
+﻿using SmartHub.Core.Plugins;
+using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +20,10 @@ namespace SmartHub.Plugins.AquaController.Core
         private Sensor sensor;
         private float minTemperature = 25.0f;
         private float maxTemperature = 26.0f;
+
+        [Import(typeof(IServiceContext))]
+        private IServiceContext context;
+
 
 
         public void Init(MySensorsPlugin mySensors)

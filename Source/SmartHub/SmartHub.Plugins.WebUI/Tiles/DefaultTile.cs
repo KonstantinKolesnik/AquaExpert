@@ -2,10 +2,16 @@
 
 namespace SmartHub.Plugins.WebUI.Tiles
 {
+    /// <summary>
+    /// A Tile for section item when its AppSection::TileTypeFullName not defined.
+    /// Is created at client side by clicking a section item's shortcut icon.
+    /// Has options with the only fields: "title"=sectionItem.Title & "url"=sectionItem.GetModulePath() automatically populated while creating.
+    /// See SmartHub.Plugins.WebUI\Resources\Application\sections\list.js\api.addTile method.
+    /// </summary>
     [Tile]
     public class DefaultTile : TileBase
     {
-        public override void PopulateModel(TileWeb webTile, dynamic options)
+        public override void PopulateWebModel(TileWebModel webTile, dynamic options)
         {
             webTile.title = options.title;
             webTile.url = options.url;

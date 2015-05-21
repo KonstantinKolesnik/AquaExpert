@@ -8,13 +8,13 @@ namespace SmartHub.Plugins.AlarmClock
     [Tile]
     public class AlarmClockTile : TileBase
     {
-        public override void PopulateModel(TileWeb webTile, dynamic options)
+        public override void PopulateWebModel(TileWebModel tileWebModel, dynamic parameters)
         {
-            webTile.title = "Оповещения";
-            webTile.url = "webapp/alarm-clock/list";
-            webTile.content = GetAlarmTileContent();
-            webTile.wide = true;
-            webTile.className = "btn-warning th-tile-icon th-tile-icon-fa fa-bell";
+            tileWebModel.title = "Оповещения";
+            tileWebModel.url = "webapp/alarm-clock/list";
+            tileWebModel.content = GetAlarmTileContent();
+            tileWebModel.wide = true;
+            tileWebModel.className = "btn-warning th-tile-icon th-tile-icon-fa fa-bell";
         }
 
         private string GetAlarmTileContent()

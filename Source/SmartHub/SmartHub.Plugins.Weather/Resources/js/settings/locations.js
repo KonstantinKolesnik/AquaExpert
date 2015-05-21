@@ -7,13 +7,10 @@
 		var layoutView;
 
 		var api = {
-
 			addWeatherTile: function (view) {
-
 				var locationId = view.model.get('id');
 				application.addTile('SmartHub.Plugins.Weather.WeatherTile', { cityId: locationId });
 			},
-
 			addLocation: function () {
 
 				var displayName = this.model.get('displayName');
@@ -24,7 +21,6 @@
 					models.addLocation(displayName, query).done(api.reloadList);
 				}
 			},
-
 			deleteLocation: function (childView) {
 
 				var displayName = childView.model.get('displayName');
@@ -36,7 +32,6 @@
 					models.deleteLocation(locationId).done(api.reloadList);
 				}
 			},
-
 			updateLocation: function (childView) {
 
 				var locationId = childView.model.get('id');
@@ -48,7 +43,6 @@
 						childView.hideSpinner();
 					});
 			},
-
 			reloadForm: function () {
 
 				var formData = new models.Location();
@@ -57,7 +51,6 @@
 				form.on('weather:location:add', api.addLocation);
 				layoutView.regionForm.show(form);
 			},
-
 			reloadList: function () {
 
 				models.loadLocations()

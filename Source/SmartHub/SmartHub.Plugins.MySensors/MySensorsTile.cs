@@ -7,7 +7,7 @@ namespace SmartHub.Plugins.MySensors
     [Tile]
     public class MySensorsTile : TileBase
     {
-        public override void PopulateModel(TileWeb webTile, dynamic options)
+        public override void PopulateWebModel(TileWebModel tileWebModel, dynamic parameters)
         {
             try
             {
@@ -16,15 +16,14 @@ namespace SmartHub.Plugins.MySensors
                 //return session.Query<Node>().Select(BuildNodeModel).Where(x => x != null).ToArray();
 
 
-                webTile.title = "Сеть MySensors";
-                webTile.url = "/webapp/mysensors/module.js"; //options.url;
-                webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-share-alt";
-                //webTile.content = "Узлов: 1\nСенсоров: 8";
-                webTile.SignalRReceiveHandler = "function onSignalR(data) { item.set({ 'content': new Date(data.Value) }); }";
+                tileWebModel.title = "Сеть MySensors";
+                tileWebModel.url = "/webapp/mysensors/module.js";
+                tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-share-alt";
+                tileWebModel.SignalRReceiveHandler = "function onSignalR(data) { item.set({ 'content': new Date(data.Value) }); }";
             }
             catch (Exception ex)
             {
-                webTile.content = ex.Message;
+                tileWebModel.content = ex.Message;
             }
         }
     }

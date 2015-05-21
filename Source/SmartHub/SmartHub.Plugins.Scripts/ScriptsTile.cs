@@ -8,26 +8,26 @@ namespace SmartHub.Plugins.Scripts
     [Tile]
     public class ScriptsTile : TileBase
     {
-        public override void PopulateModel(TileWeb webTile, dynamic options)
+        public override void PopulateWebModel(TileWebModel tileWebModel, dynamic parameters)
         {
             try
             {
-                UserScript script = GetScript(options);
+                UserScript script = GetScript(parameters);
 
-                webTile.title = script.Name;
-                webTile.content = "Выполнить скрипт\r\n" + script.Name;
-                webTile.className = "btn-primary th-tile-icon th-tile-icon-fa fa-file-code-o";
+                tileWebModel.title = script.Name;
+                tileWebModel.content = "Выполнить скрипт\r\n" + script.Name;
+                tileWebModel.className = "btn-primary th-tile-icon th-tile-icon-fa fa-file-code-o";
             }
             catch (Exception ex)
             {
-                webTile.content = ex.Message;
+                tileWebModel.content = ex.Message;
             }
         }
-        public override string ExecuteAction(object options)
+        public override string ExecuteAction(object parameters)
         {
             try
             {
-                UserScript script = GetScript(options);
+                UserScript script = GetScript(parameters);
                 Context.GetPlugin<ScriptsPlugin>().ExecuteScript(script);
 
                 return null;
@@ -38,9 +38,9 @@ namespace SmartHub.Plugins.Scripts
             }
         }
 
-        private UserScript GetScript(dynamic options)
+        private UserScript GetScript(dynamic parameters)
         {
-            string strId = options.id;
+            string strId = parameters.id;
             if (string.IsNullOrWhiteSpace(strId))
                 throw new Exception("Missing id parameter");
 

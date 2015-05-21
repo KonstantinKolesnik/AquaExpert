@@ -7,7 +7,7 @@ namespace SmartHub.Plugins.AquaController
     [Tile]
     public class AquaControllerTile : TileBase
     {
-        public override void PopulateModel(TileWeb webTile, dynamic options)
+        public override void PopulateWebModel(TileWebModel webTile, dynamic options)
         {
             try
             {

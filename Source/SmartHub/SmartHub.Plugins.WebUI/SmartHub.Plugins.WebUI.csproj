@@ -63,7 +63,7 @@
     <Compile Include="Attributes\SectionType.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\TileDB.cs" />
-    <Compile Include="Tiles\TileWeb.cs" />
+    <Compile Include="Tiles\TileWebModel.cs" />
     <Compile Include="Attributes\TileAttribute.cs" />
     <Compile Include="Tiles\TileBase.cs" />
     <Compile Include="WebUIPlugin.cs" />

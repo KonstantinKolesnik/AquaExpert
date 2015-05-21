@@ -6,16 +6,12 @@
 
 		var api = {
 			addWeatherTile: function (view) {
-
 				var locationId = view.model.get('id');
 				application.addTile('SmartHub.Plugins.Weather.WeatherTile', { cityId: locationId });
 			},
-
 			reload: function () {
-
 				models.loadList()
 					.done(function (collection) {
-
 						var view = new views.WeatherForecastView({
 							collection: collection
 						});
@@ -29,7 +25,6 @@
 
 		return {
 			start: function () {
-
 				api.reload();
 			}
 		};

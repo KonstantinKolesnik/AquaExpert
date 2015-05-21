@@ -38,7 +38,7 @@ namespace SmartHub.Plugins.WebUI
 
         #region Import
         [ImportMany("FA4F97A0-41A0-4A72-BEF3-6DB579D909F4")]
-        public TileBase[] Tiles { get; set; }
+        public TileBase[] PluginsTiles { get; set; }
         #endregion
 
         #region Plugin overrides
@@ -49,7 +49,7 @@ namespace SmartHub.Plugins.WebUI
         public override void InitPlugin()
         {
             // регистрируем типы плиток
-            foreach (var tile in Tiles)
+            foreach (var tile in PluginsTiles)
             {
                 var typeFullName = tile.GetType().FullName;
                 registeredTiles.Register(typeFullName, tile);
@@ -65,7 +65,7 @@ namespace SmartHub.Plugins.WebUI
         {
             using (var session = Context.OpenSession())
             {
-                var result = new List<TileWeb>();
+                var result = new List<TileWebModel>();
 
                 var dbTiles = session.Query<TileDB>().OrderBy(t => t.SortOrder).ToList();
                 foreach (var dbTile in dbTiles)
@@ -73,19 +73,19 @@ namespace SmartHub.Plugins.WebUI
                     TileBase tile;
                     if (registeredTiles.TryGetValue(dbTile.HandlerKey, out tile))
                     {
-                        var webTile = new TileWeb(dbTile.Id);
+                        var tileWebModel = new TileWebModel(dbTile.Id);
 
                         try
                         {
                             var parameters = dbTile.GetParameters();
-                            tile.PopulateModel(webTile, parameters);
+                            tile.PopulateWebModel(tileWebModel, parameters);
                         }
                         catch (Exception ex)
                         {
-                            webTile.content = ex.Message;
+                            tileWebModel.content = ex.Message;
                         }
 
-                        result.Add(webTile);
+                        result.Add(tileWebModel);
                     }
                 }
 
@@ -136,8 +136,8 @@ namespace SmartHub.Plugins.WebUI
                 TileBase tile;
                 if (registeredTiles.TryGetValue(dbTile.HandlerKey, out tile))
                 {
-                    var options = dbTile.GetParameters();
-                    return tile.ExecuteAction(options);
+                    var parameters = dbTile.GetParameters();
+                    return tile.ExecuteAction(parameters);
                 }
             }
 
