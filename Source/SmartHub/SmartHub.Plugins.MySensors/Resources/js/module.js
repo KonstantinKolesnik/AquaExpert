@@ -24,23 +24,12 @@ define(
 
 	            models.ViewModel.update(function (items) {
 					//var view = new views.ScriptListView({ collection: items });
-					//view.on('scripts:add', api.addScript);
-					//view.on('childview:scripts:edit', api.editScript);
-					//view.on('childview:scripts:run', api.runScript);
-					//view.on('childview:scripts:delete', api.deleteScript);
-					//view.on('childview:scripts:add-tile', api.addScriptTile);
-	                //application.setContentView(view);
-
-
-
-
-
 	                var view = new views.LayoutView();
-	                view.onNodeNameChanged = module.setNodeName;
-	                view.onSensorNameChanged = module.setSensorName;
-	                view.onDeleteNode = module.deleteNode;
-	                view.onDeleteSensor = module.deleteSensor;
-	                view.onUnitSystemChanged = module.setUnitSystem;
+	                view.on('node:setName', module.setNodeName);
+	                view.on('sensor:setName', module.setSensorName);
+	                view.on('node:delete', module.deleteNode);
+	                view.on('sensor:delete', module.deleteSensor);
+	                view.on('unitSystem:set', module.setUnitSystem);
 	                view.on('node:test', function (view) {
 	                    //debugger;
 
@@ -50,6 +39,7 @@ define(
 
 	                    alert("Test");
 	                });
+
 	                application.setContentView(view);
 
 	                view.bind(models.ViewModel);

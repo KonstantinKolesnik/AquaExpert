@@ -4,9 +4,9 @@ define(
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
-            triggers: {
-                'click .js-test': 'node:test'
-            },
+            //triggers: {
+            //    'click .js-test': 'node:test'
+            //},
             onShow: function () {
                 var me = this;
                 var ctrlNodesGrid;
@@ -113,8 +113,7 @@ define(
                                             //var item = $("#gridNodes").data("kendoGrid").dataItem($(e.target).closest("tr"));
 
                                             if (common.utils.confirm('Удалить элемент "{0}"?', item.Name))
-                                                me.onDeleteNode(item.Id);
-                                            //layoutView.trigger('node:delete', item.Id);
+                                                me.trigger('node:delete', item.Id);
                                         }
                                     }
                                 ]
@@ -175,7 +174,7 @@ define(
                                                         e.stopPropagation();
                                                         var item = this.dataItem($(e.currentTarget).closest("tr"));
                                                         //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
-                                                        me.onDeleteSensor(item.Id);
+                                                        me.trigger('sensor:delete', item.Id);
                                                     }
                                                 }
                                             ]
@@ -329,7 +328,7 @@ define(
                                                 //var item = $("#gridSensors").data("kendoGrid").dataItem($(e.target).closest("tr"));
 
                                                 if (common.utils.confirm('Удалить элемент "{0}"?', item.Name))
-                                                    me.onDeleteSensor(item.Id);
+                                                    me.trigger('sensor:delete', item.Id);
                                             }
                                         }
                                     ]
@@ -501,28 +500,9 @@ define(
                         dataValueField: "value",
                         change: function (e) {
                             me.onUnitSystemChanged(e.sender.value());
+                            me.trigger('unitSystem:set', e.sender.value());
                         }
                     });
-                }
-
-                function showDialog(txt, title) {
-                    var win = $("#dlg").kendoWindow({
-                        actions: ["Close"],
-                        width: "400px",
-                        //height: "200px",
-                        title: "Smart Hub",
-                        visible: false,
-                        draggable: true,
-                        resizable: false,
-                        modal: true
-                    }).data("kendoWindow");
-
-                    if (txt)
-                        win.content(txt);
-                    if (title)
-                        win.title(title);
-
-                    win.center().open();
                 }
 
                 function getNodeEditor(container, options) {
@@ -551,9 +531,9 @@ define(
                         var newValue = editor.val();
                         if (newValue != oldValue) {
                             if (isNodes)
-                                me.onNodeNameChanged(options.model.Id, newValue);
+                                me.trigger('node:setName', options.model.Id, newValue);
                             else
-                                me.onSensorNameChanged(options.model.Id, newValue);
+                                me.trigger('sensor:setName', options.model.Id, newValue);
                         }
                     }
                     function preventEnter(e) {
@@ -600,13 +580,7 @@ define(
 
             bind: function (viewModel) {
                 lib.kendo.bind($("#content"), viewModel);
-            },
-
-            onDeleteNode: function (id) { },
-	        onDeleteSensor: function (id) { },
-	        onNodeNameChanged: function (id, name) { },
-	        onSensorNameChanged: function (id, name) { },
-            onUnitSystemChanged: function (us) { }
+            }
         });
 
 	    return {
