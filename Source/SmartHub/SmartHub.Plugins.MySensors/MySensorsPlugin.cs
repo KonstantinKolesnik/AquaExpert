@@ -34,14 +34,63 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Import
-        [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
-        public Action<SensorMessage>[] SensorMessageHandlers { get; set; }
-
         [ImportMany("46CD89C9-08A2-4E3C-84EE-826DA51127CF")]
         public Action[] ConnectedHandlers { get; set; }
+        private void NotifyConnectedForPlugins()
+        {
+            Run(ConnectedHandlers, x => x());
+        }
+
+        [ImportMany("7CDDD153-64E0-4050-8533-C47C1BACBC6B")]
+        public Action<SensorMessage>[] SensorMessageHandlers { get; set; }
+        private void NotifyMessageReceivedForPlugins(SensorMessage msg)
+        {
+            Run(SensorMessageHandlers, x => x(msg));
+        }
 
         [ImportMany("8E26E0FB-657F-4DEA-BF9D-A9E93A5632DC")]
         public Action[] DisconnectedHandlers { get; set; }
+        private void NotifyDisconnectedForPlugins()
+        {
+            Run(DisconnectedHandlers, x => x());
+        }
+        #endregion
+
+        #region Script commands & events
+        [ScriptCommand("mySensorsSendCommand")]
+        public void SendCommand(int nodeNo, int sensorNo, int commandType, int valueType, float value)
+        {
+            if (gatewayProxy != null)
+                gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value.ToString()));
+        }
+
+        [ScriptEvent("mySensors.connected")]
+        public ScriptEventHandlerDelegate[] OnConnectedForScripts { get; set; }
+        private void NotifyConnectedForScripts()
+        {
+            this.RaiseScriptEvent(x => x.OnConnectedForScripts);
+        }
+
+        [ScriptEvent("mySensors.messageReceived")]
+        public ScriptEventHandlerDelegate[] OnMessageReceivedForScripts { get; set; }
+        private void NotifyMessageReceivedForScripts(SensorMessage msg)
+        {
+            this.RaiseScriptEvent(x => x.OnMessageReceivedForScripts, msg.NodeID, msg.SensorID, msg.Type, msg.SubType, msg.Payload);
+        }
+
+        [ScriptEvent("mySensors.disconnected")]
+        public ScriptEventHandlerDelegate[] OnDisconnectedForScripts { get; set; }
+        private void NotifyDisconnectedForScripts()
+        {
+            this.RaiseScriptEvent(x => x.OnDisconnectedForScripts);
+        }
+        #endregion
+
+        #region SignalR events
+        private void NotifyForSignalR(object msg)
+        {
+            signalServer.Broadcast(msg);
+        }
         #endregion
 
         #region Plugin overrides
@@ -164,14 +213,14 @@ namespace SmartHub.Plugins.MySensors
         //private void Timer_5_sec_Elapsed(DateTime now)
         //{
         //    //Debug.WriteLine("Timer 5 sec");
-        //    //signalServer.Broadcast(new { MsgId = "Test", Value = now });
+        //    //NotifyForSignalR(new { MsgId = "Test", Value = now });
         //}
 
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
             Logger.Info("Connected.");
-            Debug.WriteLine("Connected.");
-            Run(ConnectedHandlers, x => x());
+            NotifyConnectedForPlugins();
+            NotifyConnectedForScripts();
         }
         private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
         {
@@ -209,9 +258,9 @@ namespace SmartHub.Plugins.MySensors
                             SaveOrUpdate(node);
                         }
 
-                        Run(SensorMessageHandlers, x => x(message));
-                        NotifyMessageReceivedScriptEvent(message);
-                        signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
+                        NotifyMessageReceivedForPlugins(message);
+                        NotifyMessageReceivedForScripts(message);
+                        NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                     }
                     else // sensor message
                     {
@@ -238,9 +287,9 @@ namespace SmartHub.Plugins.MySensors
                                 SaveOrUpdate(sensor);
                             }
 
-                            Run(SensorMessageHandlers, x => x(message));
-                            NotifyMessageReceivedScriptEvent(message);
-                            signalServer.Broadcast(new { MsgId = "SensorPresentation", Data = BuildSensorModel(sensor) });
+                            NotifyMessageReceivedForPlugins(message);
+                            NotifyMessageReceivedForScripts(message);
+                            NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorModel(sensor) });
                         }
                     }
                     break;
@@ -262,9 +311,9 @@ namespace SmartHub.Plugins.MySensors
 
                         Save(sv);
 
-                        Run(SensorMessageHandlers, x => x(message));
-                        NotifyMessageReceivedScriptEvent(message);
-                        signalServer.Broadcast(new { MsgId = "SensorValue", Data = sv });
+                        NotifyMessageReceivedForPlugins(message);
+                        NotifyMessageReceivedForScripts(message);
+                        NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });
                     }
                     break;
                 #endregion
@@ -293,9 +342,9 @@ namespace SmartHub.Plugins.MySensors
 
                                 Save(bl);
 
-                                Run(SensorMessageHandlers, x => x(message));
-                                NotifyMessageReceivedScriptEvent(message);
-                                signalServer.Broadcast(new { MsgId = "BatteryLevel", Data = bl });
+                                NotifyMessageReceivedForPlugins(message);
+                                NotifyMessageReceivedForScripts(message);
+                                NotifyForSignalR(new { MsgId = "BatteryLevel", Data = bl });
                             }
                             break;
                         case InternalValueType.Time:
@@ -332,9 +381,9 @@ namespace SmartHub.Plugins.MySensors
 
                                 SaveOrUpdate(node);
 
-                                Run(SensorMessageHandlers, x => x(message));
-                                NotifyMessageReceivedScriptEvent(message);
-                                signalServer.Broadcast(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
+                                NotifyMessageReceivedForPlugins(message);
+                                NotifyMessageReceivedForScripts(message);
+                                NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -378,9 +427,9 @@ namespace SmartHub.Plugins.MySensors
         }
         private void gatewayProxy_Disconnected(object sender, EventArgs e)
         {
-            Logger.Error("Disconnected.");
-            Debug.WriteLine("Disconnected.");
-            Run(DisconnectedHandlers, x => x());
+            Logger.Info("Disconnected.");
+            NotifyDisconnectedForPlugins();
+            NotifyDisconnectedForScripts();
         }
         #endregion
 
@@ -422,53 +471,41 @@ namespace SmartHub.Plugins.MySensors
             if (node == null)
                 return null;
 
+            BatteryLevel lastBL = null;
             using (var session = Context.OpenSession())
-                return new
-                {
-                    Id = node.Id,
-                    NodeNo = node.NodeNo,
-                    TypeName = node.TypeName,
-                    ProtocolVersion = node.ProtocolVersion,
-                    SketchName = node.SketchName,
-                    SketchVersion = node.SketchVersion,
-                    Name = node.Name,
-                    BatteryLevel = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault()
-                };
+                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = node.Id,
+                NodeNo = node.NodeNo,
+                TypeName = node.TypeName,
+                ProtocolVersion = node.ProtocolVersion,
+                SketchName = node.SketchName,
+                SketchVersion = node.SketchVersion,
+                Name = node.Name,
+                BatteryLevel = lastBL
+            };
         }
         private object BuildSensorModel(Sensor sensor)
         {
             if (sensor == null)
                 return null;
 
-            //SensorValue lastSv = null;
-            //using (var session = Context.OpenSession())
-            //{
-            //    var svs = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo);
-            //    var lastTimeStamp = svs.Select(vv => vv.TimeStamp).Max();
-            //    lastSv = svs.Any() ? svs.FirstOrDefault(v => v.TimeStamp == lastTimeStamp) : null;
-            //}
-            //return new
-            //{
-            //    Id = sensor.Id,
-            //    NodeNo = sensor.NodeNo,
-            //    SensorNo = sensor.SensorNo,
-            //    TypeName = sensor.TypeName,
-            //    ProtocolVersion = sensor.ProtocolVersion,
-            //    Name = sensor.Name,
-            //    SensorValue = lastSv
-            //};
-
+            SensorValue lastSV = null;
             using (var session = Context.OpenSession())
-                return new
-                {
-                    Id = sensor.Id,
-                    NodeNo = sensor.NodeNo,
-                    SensorNo = sensor.SensorNo,
-                    TypeName = sensor.TypeName,
-                    ProtocolVersion = sensor.ProtocolVersion,
-                    Name = sensor.Name,
-                    SensorValue = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault()
-                };
+                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = sensor.Id,
+                NodeNo = sensor.NodeNo,
+                SensorNo = sensor.SensorNo,
+                TypeName = sensor.TypeName,
+                ProtocolVersion = sensor.ProtocolVersion,
+                Name = sensor.Name,
+                SensorValue = lastSV
+            };
         }
         #endregion
 
@@ -510,7 +547,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var node = session.Load<Node>(id);
+                var node = session.Get<Node>(id);
                 session.Delete(node);
                 session.Flush();
             }
@@ -560,7 +597,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Load<Sensor>(id);
+                var sensor = session.Get<Sensor>(id);
                 session.Delete(sensor);
                 session.Flush();
             }
@@ -613,22 +650,6 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
-        }
-        #endregion
-
-        #region Script commands & events
-        [ScriptCommand("mySensorsSendCommand")]
-        public void SendCommand(int nodeNo, int sensorNo, int commandType, int valueType, float value)
-        {
-            if (gatewayProxy != null)
-                gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value.ToString()));
-        }
-
-        [ScriptEvent("mySensors.messageReceived")]
-        public ScriptEventHandlerDelegate[] OnMessageReceivedForScripts { get; set; }
-        private void NotifyMessageReceivedScriptEvent(SensorMessage msg)
-        {
-            this.RaiseScriptEvent(x => x.OnMessageReceivedForScripts, msg.NodeID, msg.SensorID, msg.Type, msg.SubType, msg.Payload);
         }
         #endregion
     }
