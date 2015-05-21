@@ -80,8 +80,14 @@ define(
 	        connection.received(function (data) {
 	            $.each(app.SignalRReceivers, function (idx, receiver) {
 	                if (receiver && receiver.SignalRReceiveHandler) {
-	                    //debugger;
-	                    receiver.SignalRReceiveHandler(receiver, data);
+	                    try {
+	                        receiver.SignalRReceiveHandler(receiver, data);
+	                    }
+	                    catch (ex) {
+                            // most likely tile's handler when we aren't at the main page
+	                        var idx = app.SignalRReceivers.indexOf(receiver);
+	                        app.SignalRReceivers.splice(idx, 1);
+	                    }
 	                }
 	            })
 	        });

@@ -19,17 +19,6 @@
             lib.$.getJSON('/api/webui/tiles')
 				.done(function (tiles) {
 				    var collection = new tileCollection(tiles);
-
-				    $.each(collection.models, function (idx, tile) { // tile is TileWebModel
-				        if (tile.attributes.SignalRReceiveHandler) {
-				            tile.attributes.SignalRReceiveHandler = new Function("model, data", tile.attributes.SignalRReceiveHandler);
-				            if (tile.attributes.SignalRReceiveHandler) {
-				                tile.attributes.tileModel = tile;
-				                //app.SignalRReceivers.push(tile.attributes);
-				            }
-				        }
-				    })
-
 				    defer.resolve(collection);
 				})
 				.fail(function () {

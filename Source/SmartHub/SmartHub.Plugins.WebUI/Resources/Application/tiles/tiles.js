@@ -17,6 +17,16 @@
 	        },
 	        reload: function () {
 	            models.load().done(function (collection) {
+	                $.each(collection.models, function (idx, tile) { // tile is TileWebModel
+	                    if (tile.attributes.SignalRReceiveHandler) {
+	                        tile.attributes.SignalRReceiveHandler = new Function("model, data", tile.attributes.SignalRReceiveHandler);
+	                        if (tile.attributes.SignalRReceiveHandler) {
+	                            tile.attributes.tileModel = tile;
+	                            application.SignalRReceivers.push(tile.attributes);
+	                        }
+	                    }
+	                })
+
 	                var view = new views.TileCollectionView({ collection: collection });
 	                view.on('childview:webui:tile:click', api.open);
 

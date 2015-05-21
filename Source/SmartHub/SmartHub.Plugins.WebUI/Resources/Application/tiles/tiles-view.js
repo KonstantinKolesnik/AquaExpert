@@ -1,28 +1,22 @@
 ﻿define(
-	['lib',
-		'text!application/tiles/tile.tpl',
-		'text!application/tiles/tiles.tpl'],
-		function (lib, itemTemplate, listTemplate) {
-
+	['lib', 'text!application/tiles/tile.tpl', 'text!application/tiles/tiles.tpl'],
+    function (lib, itemTemplate, listTemplate) {
 		    var tileView = lib.marionette.ItemView.extend({
 		        template: lib._.template(itemTemplate),
 		        tagName: 'a',
 		        className: 'th-tile',
 		        onRender: function () {
-
 		            var className = this.model.get('className') || "btn-primary";
 		            this.$el.addClass(className);
 
-		            if (this.model.get('wide')) {
-
+		            if (this.model.get('wide'))
 		                this.$el.addClass('th-tile-double');
-		            }
 		        },
 		        triggers: {
 		            'click': 'webui:tile:click'
 		        },
 		        initialize: function () {
-		            this.model.on('change', this.render, this);
+		            this.model.on('change', this.render, this); //!!!!!!!!
 		        }
 		    });
 
@@ -33,9 +27,7 @@
 		        childViewContainer: '.js-list'
 		    });
 
-
 		    return {
-
 		        TileView: tileView,
 		        TileCollectionView: tileCollectionView
 		    };

@@ -20,7 +20,6 @@ define(
 	        },
 
 	        reload: function () {
-	                //debugger;
 	            if (application.SignalRReceivers.indexOf(models.ViewModel) == -1)
                     application.SignalRReceivers.push(models.ViewModel);
 
