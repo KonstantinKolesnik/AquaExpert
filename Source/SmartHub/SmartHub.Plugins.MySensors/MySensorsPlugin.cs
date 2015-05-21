@@ -260,7 +260,7 @@ namespace SmartHub.Plugins.MySensors
 
                         NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
-                        NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
+                        NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeWebModel(node) });
                     }
                     else // sensor message
                     {
@@ -289,7 +289,7 @@ namespace SmartHub.Plugins.MySensors
 
                             NotifyMessageReceivedForPlugins(message);
                             NotifyMessageReceivedForScripts(message);
-                            NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorModel(sensor) });
+                            NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorWebModel(sensor) });
                         }
                     }
                     break;
@@ -304,7 +304,7 @@ namespace SmartHub.Plugins.MySensors
                             Id = Guid.NewGuid(),
                             NodeNo = message.NodeID,
                             SensorNo = message.SensorID,
-                            TimeStamp = DateTime.Now,
+                            TimeStamp = DateTime.UtcNow,
                             Type = (SensorValueType)message.SubType,
                             Value = message.PayloadFloat
                         };
@@ -336,7 +336,7 @@ namespace SmartHub.Plugins.MySensors
                                 {
                                     Id = Guid.NewGuid(),
                                     NodeNo = message.NodeID,
-                                    TimeStamp = DateTime.Now,
+                                    TimeStamp = DateTime.UtcNow,
                                     Level = byte.Parse(message.Payload)
                                 };
 
@@ -383,7 +383,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 NotifyMessageReceivedForPlugins(message);
                                 NotifyMessageReceivedForScripts(message);
-                                NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeModel(node) });
+                                NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeWebModel(node) });
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -466,7 +466,7 @@ namespace SmartHub.Plugins.MySensors
             TimeSpan result = dtNow.Subtract(unixEpoch);
             return Convert.ToInt32(result.TotalSeconds);
         }
-        private object BuildNodeModel(Node node)
+        private object BuildNodeWebModel(Node node)
         {
             if (node == null)
                 return null;
@@ -484,10 +484,11 @@ namespace SmartHub.Plugins.MySensors
                 SketchName = node.SketchName,
                 SketchVersion = node.SketchVersion,
                 Name = node.Name,
-                BatteryLevel = lastBL
+                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
+                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
             };
         }
-        private object BuildSensorModel(Sensor sensor)
+        private object BuildSensorWebModel(Sensor sensor)
         {
             if (sensor == null)
                 return null;
@@ -504,7 +505,8 @@ namespace SmartHub.Plugins.MySensors
                 TypeName = sensor.TypeName,
                 ProtocolVersion = sensor.ProtocolVersion,
                 Name = sensor.Name,
-                SensorValue = lastSV
+                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
+                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
             };
         }
         #endregion
@@ -514,7 +516,7 @@ namespace SmartHub.Plugins.MySensors
         private object GetNodes(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Node>().Select(BuildNodeModel).Where(x => x != null).ToArray();
+                return session.Query<Node>().Select(BuildNodeWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/nodes/setname")]
         private object SetNodeName(HttpRequestParams request)
@@ -564,7 +566,7 @@ namespace SmartHub.Plugins.MySensors
         public object GetSensors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Sensor>().Select(BuildSensorModel).Where(x => x != null).ToArray();
+                return session.Query<Sensor>().Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensors/setname")]
         private object SetSensorName(HttpRequestParams request)

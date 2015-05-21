@@ -68,7 +68,9 @@ define(
                     ctrlNodesGrid = selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
-                        sortable: true,
+                        sortable: {
+                            mode: "multiple"
+                        },
                         reorderable: true,
                         resizable: true,
                         editable: true,
@@ -122,8 +124,8 @@ define(
                             {
                                 title: "Батарея",
                                 columns: [
-                                    { field: "BatteryLevel.Level", title: "Уровень, %", width: 80, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#batteryLevelCellTemplate").html()) },
-                                    { field: "BatteryLevel.TimeStamp", title: "Дата", width: 120, groupable: false, sortable: false, editor: getNodeEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#batteryTimeStampCellTemplate").html()) }
+                                    { field: "BatteryLevelLevel", title: "Уровень, %", width: 80, sortable: false, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#batteryLevelLevelCellTemplate").html()) },
+                                    { field: "BatteryLevelTimeStamp", title: "Дата", width: 120, groupable: false, editor: getNodeEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#batteryLevelTimeStampCellTemplate").html()) }
                                 ]
                             },
                             { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getNodeEditor, attributes: { "class": "text-center" } },
@@ -153,7 +155,9 @@ define(
                     selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
-                        sortable: true,
+                        sortable: {
+                            mode: "multiple"
+                        },
                         reorderable: true,
                         resizable: true,
                         editable: true,
@@ -327,8 +331,8 @@ define(
                             {
                                 title: "Состояние",
                                 columns: [
-                                    { field: "SensorValue.Value", title: "Значение", width: 80, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#sensorValueValueCellTemplate").html()) },
-                                    { field: "SensorValue.TimeStamp", title: "Дата", width: 150, groupable: false, sortable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
+                                    { field: "SensorValueValue", title: "Значение", width: 80, sortable: false, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" }, template: lib.kendo.template($("#sensorValueValueCellTemplate").html()) },
+                                    { field: "SensorValueTimeStamp", title: "Дата", width: 150, groupable: false, editor: getSensorEditor, attributes: { "class": "text-center" }, template: lib.kendo.template($("#sensorValueTimeStampCellTemplate").html()) }
                                 ]
                             },
                             { field: "ProtocolVersion", title: "Версия протокола", width: 120, editor: getSensorEditor, attributes: { "class": "text-center" } },
@@ -441,7 +445,6 @@ define(
                         }
                     });
                 }
-
 
                 function getNodeEditor(container, options) {
                     return getEditor(container, options, true);

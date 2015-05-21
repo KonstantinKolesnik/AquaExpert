@@ -5,8 +5,8 @@ define(['jquery'], function ($) {
 	        $.getJSON('/api/mysensors/nodes')
 				.done(function (data) {
 					$.each(data, function (idx, item) {
-					    if (item.BatteryLevel)
-                            item.BatteryLevel.TimeStamp = new Date(item.BatteryLevel.TimeStamp);
+					    if (item.BatteryLevelTimeStamp)
+                            item.BatteryLevelTimeStamp = new Date(item.BatteryLevelTimeStamp);
 					});
 
 					if (onComplete)
@@ -41,8 +41,8 @@ define(['jquery'], function ($) {
 	        $.getJSON('/api/mysensors/sensors')
 				.done(function (data) {
 					$.each(data, function (idx, item) {
-					    if (item.SensorValue)
-					        item.SensorValue.TimeStamp = new Date(item.SensorValue.TimeStamp);
+					    if (item.SensorValueTimeStamp)
+					        item.SensorValueTimeStamp = new Date(item.SensorValueTimeStamp);
 					});
 
 					if (onComplete)
@@ -217,7 +217,8 @@ define(['jquery'], function ($) {
 
 	            for (var i = 0; i < me.Nodes.length; i++) {
 	                if (me.Nodes[i].NodeNo == data.Data.NodeNo) {
-	                    me.Nodes[i].set("BatteryLevel", data.Data);
+	                    me.Nodes[i].set("BatteryLevelLevel", data.Data.Level);
+	                    me.Nodes[i].set("BatteryLevelTimeStamp", data.Data.TimeStamp);
 	                    break;
 	                }
 	            }
@@ -261,7 +262,8 @@ define(['jquery'], function ($) {
 
 	            for (var i = 0; i < me.Sensors.length; i++) {
 	                if (me.Sensors[i].NodeNo == data.Data.NodeNo && me.Sensors[i].SensorNo == data.Data.SensorNo) {
-	                    me.Sensors[i].set("SensorValue", data.Data);
+	                    me.Sensors[i].set("SensorValueValue", data.Data.Value);
+	                    me.Sensors[i].set("SensorValueTimeStamp", data.Data.TimeStamp);
 	                    break;
 	                }
 	            }
