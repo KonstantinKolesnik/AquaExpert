@@ -20,10 +20,11 @@ define(
 	        },
 
 	        reload: function () {
-	            application.SignalRReceivers.push(models.ViewModel);
+	                //debugger;
+	            if (application.SignalRReceivers.indexOf(models.ViewModel) == -1)
+                    application.SignalRReceivers.push(models.ViewModel);
 
-	            models.ViewModel.update(function (items) {
-					//var view = new views.ScriptListView({ collection: items });
+	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView();
 	                view.on('node:setName', module.setNodeName);
 	                view.on('sensor:setName', module.setSensorName);
@@ -42,7 +43,7 @@ define(
 
 	                application.setContentView(view);
 
-	                view.bind(models.ViewModel);
+	                view.bindModel(models.ViewModel);
 	            });
 	        }
 	    };

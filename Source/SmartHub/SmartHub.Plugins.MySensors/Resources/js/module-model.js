@@ -154,8 +154,7 @@ define(['jquery'], function ($) {
 	        });
 	    },
         SignalRReceiveHandler: function (model, data) {
-            var me = viewModel; // not "this" because is called from another context!!!
-            //var me = model;
+            var me = model;
 
 	        switch (data.MsgId) {
 	            case "NodePresentation": onNodePresentation(data); break;
@@ -258,7 +257,7 @@ define(['jquery'], function ($) {
 	            }
 	        }
 	        function onSensorValue(data) {
-	            console.log(data.Data.Type + ": " + data.Data.Value);
+	            console.log("["+data.Data.NodeNo+"]["+data.Data.SensorNo+"]["+ data.Data.Type + "]: " + data.Data.Value);
 
 	            data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 

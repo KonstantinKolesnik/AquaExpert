@@ -25,7 +25,7 @@
 				            tile.attributes.SignalRReceiveHandler = new Function("model, data", tile.attributes.SignalRReceiveHandler);
 				            if (tile.attributes.SignalRReceiveHandler) {
 				                tile.attributes.tileModel = tile;
-				                app.SignalRReceivers.push(tile.attributes);
+				                //app.SignalRReceivers.push(tile.attributes);
 				            }
 				        }
 				    })

@@ -2,20 +2,23 @@
 define(
 	['common', 'lib', 'text!webapp/mysensors/module.html'],
     function (common, lib, templates) {
+        var ctrlNodesGrid;
+        var ctrlSensorsGrid;
+
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             //triggers: {
             //    'click .js-test': 'node:test'
             //},
+            //initialize: function () {
             onShow: function () {
                 var me = this;
-                var ctrlNodesGrid;
 
                 initKendoCustomGrid();
 
                 createTabStrip($("#tabstrip"));
-                createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
-                createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
+                ctrlNodesGrid = createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
+                ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
                 createUnitSystemSelector();
 
                 $(window).bind("resize", adjustSizes);
@@ -65,7 +68,7 @@ define(
                 }
                 function createNodesGrid(selector, filter, sort) {
                     //me.gridNodesStateManager = new GridStateManager("gridNodes");
-                    ctrlNodesGrid = selector.kendoGrid({
+                    return selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
                         sortable: {
@@ -89,6 +92,8 @@ define(
                             createBatteryLevelsChart(e.detailRow.find(".nodeDetailsBatteryLevels"),
                                 { field: "NodeNo", operator: "eq", value: e.data.NodeNo }
                             );
+
+                            lib.kendo.bind(e.detailRow, e.data);
                         },
                         detailExpand: function (e) {
                             //me.gridNodesStateManager.onDetailExpand(e);
@@ -111,7 +116,7 @@ define(
 
                     function createNodeGridColumns() {
                         return [
-                            { field: "NodeNo", title: "ID", width: 35, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" } },
+                            { field: "NodeNo", title: "ID", width: 40, groupable: false, editor: getNodeEditor, attributes: { "class": "text-right" } },
                             { field: "Name", title: "Имя", groupable: false, editor: getNodeEditor },
                             { field: "TypeName", title: "Тип", width: 95, editor: getNodeEditor },
                             {
@@ -152,7 +157,7 @@ define(
                 }
                 function createSensorsGrid(selector, filter, sort) {
                     //me.gridSensorsStateManager = new GridStateManager("gridSensors");
-                    selector.kendoGrid({
+                    return selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
                         sortable: {
@@ -320,12 +325,12 @@ define(
                         dataBound: function (e) {
                             //me.gridSensorsStateManager.onDataBound();
                         }
-                    });
+                    }).data("kendoGrid");
 
                     function createSensorsGridColumns() {
                         return [
                             { field: "NodeNo", title: "ID узла", width: 65, editor: getSensorEditor, attributes: { "class": "text-right" } },
-                            { field: "SensorNo", title: "ID", width: 35, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
+                            { field: "SensorNo", title: "ID", width: 40, groupable: false, editor: getSensorEditor, attributes: { "class": "text-right" } },
                             { field: "Name", title: "Имя", groupable: false, editor: getSensorEditor },
                             { field: "TypeName", title: "Тип", width: 95, editor: getSensorEditor },
                             {
@@ -365,8 +370,8 @@ define(
                         ],
                         dataTextField: "text",
                         dataValueField: "value",
+                        valuePrimitive: true,
                         change: function (e) {
-                            me.onUnitSystemChanged(e.sender.value());
                             me.trigger('unitSystem:set', e.sender.value());
                         }
                     });
@@ -518,8 +523,12 @@ define(
                     }
                 }
             },
+            onDestroy: function () {
+                ctrlNodesGrid.destroy();
+                ctrlSensorsGrid.destroy();
+            },
 
-            bind: function (viewModel) {
+            bindModel: function (viewModel) {
                 lib.kendo.bind($("#content"), viewModel);
             }
         });

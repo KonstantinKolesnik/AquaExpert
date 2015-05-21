@@ -1,5 +1,7 @@
 ﻿
-define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, backbone, $, signalR) {
+define(
+    ['marionette', 'backbone', 'jquery', 'signalR'],
+    function (marionette, backbone, $, signalR) {
 	    var api = {
 		    parseParameters: function (queryString) {
 			    var result = [];
@@ -77,8 +79,10 @@ define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, ba
 	        $.support.cors = true;
 	        connection.received(function (data) {
 	            $.each(app.SignalRReceivers, function (idx, receiver) {
-	                if (receiver && receiver.SignalRReceiveHandler)
+	                if (receiver && receiver.SignalRReceiveHandler) {
+	                    //debugger;
 	                    receiver.SignalRReceiveHandler(receiver, data);
+	                }
 	            })
 	        });
 	        connection.error(function (error) {

@@ -20,7 +20,7 @@
             <div id="pnlSettings">
                 <div>
                     <label class="control-label" for="ddlUnitSystem">Система единиц измерения</label>
-                    <select id="ddlUnitSystem" data-bind="value: UnitSystem" data-value-primitive="true"></select>
+                    <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
                 </div>
             </div>
         </div>
@@ -133,7 +133,7 @@
     # } else { #
         <div>
             <span>#: kendo.toString(data.BatteryLevelTimeStamp, "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.BatteryLevelTimeStamp, "hh:mm:ss") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.BatteryLevelTimeStamp, "HH:mm:ss") #</span>
         </div>
     # } #
 </script>
@@ -146,7 +146,7 @@
     # } else { #
         <div>
             <span>#: kendo.toString(data.SensorValueTimeStamp, "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.SensorValueTimeStamp, "hh:mm:ss") #</span>
+            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</span>
         </div>
     # } #
 </script>
