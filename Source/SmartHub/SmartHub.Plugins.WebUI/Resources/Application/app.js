@@ -68,7 +68,7 @@ define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, ba
 	    });
 
 
-	    app.SignalRReceiveHandlers = [];
+	    app.SignalRReceivers = [];
 	    app.SignalRSend = function (data) { };
 	    function initSignalRPersistent(onComplete) {
 	        var hostName = document.location.hostname;
@@ -76,9 +76,9 @@ define(['marionette', 'backbone', 'jquery', 'signalR'], function (marionette, ba
 	        var connection = $.connection("http://" + hostName + ":55556/chat");
 	        $.support.cors = true;
 	        connection.received(function (data) {
-	            $.each(app.SignalRReceiveHandlers, function (idx, handler) {
-	                if (handler)
-	                    handler(data);
+	            $.each(app.SignalRReceivers, function (idx, receiver) {
+	                if (receiver && receiver.SignalRReceiveHandler)
+	                    receiver.SignalRReceiveHandler(receiver, data);
 	            })
 	        });
 	        connection.error(function (error) {

@@ -19,7 +19,7 @@ namespace SmartHub.Plugins.MySensors
                 tileWebModel.title = "Сеть MySensors";
                 tileWebModel.url = "/webapp/mysensors/module.js";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-share-alt";
-                tileWebModel.SignalRReceiveHandler = "function onSignalR(data) { item.set({ 'content': new Date(data.Value) }); }";
+                tileWebModel.SignalRReceiveHandler = "if (data.MsgId == 'TestTime') model.tileModel.set({ 'content': new Date(data.Value) });";
             }
             catch (Exception ex)
             {

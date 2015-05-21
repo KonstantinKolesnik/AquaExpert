@@ -9,6 +9,7 @@ using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.Scripts;
 using SmartHub.Plugins.Scripts.Attributes;
 using SmartHub.Plugins.SignalR;
+using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.ComponentModel.Composition;
@@ -209,12 +210,12 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        //[Timer_5_sec_Elapsed]
-        //private void Timer_5_sec_Elapsed(DateTime now)
-        //{
-        //    //Debug.WriteLine("Timer 5 sec");
-        //    //NotifyForSignalR(new { MsgId = "Test", Value = now });
-        //}
+        [Timer_3_sec_Elapsed]
+        private void Timer_5_sec_Elapsed(DateTime now)
+        {
+            //Debug.WriteLine("Timer 5 sec");
+            NotifyForSignalR(new { MsgId = "TestTime", Value = now });
+        }
 
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {

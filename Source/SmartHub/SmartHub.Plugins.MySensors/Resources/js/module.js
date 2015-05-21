@@ -20,7 +20,7 @@ define(
 	        },
 
 	        reload: function () {
-	            application.SignalRReceiveHandlers.push(models.ViewModel.onSignalRReceived);
+	            application.SignalRReceivers.push(models.ViewModel);
 
 	            models.ViewModel.update(function (items) {
 					//var view = new views.ScriptListView({ collection: items });

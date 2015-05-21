@@ -13,9 +13,9 @@ namespace SmartHub.Plugins.WebUI.Tiles
         public string content; // body text
         public string className; // CSS class attribute
         public bool wide = false; // normal or wide
-        public string url; // navigate url
-        public object[] parameters; // if (url) -> navigate url parameters; 
-        public string SignalRReceiveHandler;
+        public string url; // navigate url; if undefined then only TileBase::ExecuteAction is used and "parameters" field is ignored
+        public object[] parameters; // if url defined then this is navigate parameters
+        public string SignalRReceiveHandler; // string containing the body of signalR event handler function
 
         public TileWebModel(Guid tileId)
         {
