@@ -66,7 +66,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         public void Stop()
         {
             if (thread.IsAlive)
-                thread.Join();
+                //thread.Join();
+                thread.Abort();
             //if (timer.Enabled)
             //    timer.Enabled = false;
 
