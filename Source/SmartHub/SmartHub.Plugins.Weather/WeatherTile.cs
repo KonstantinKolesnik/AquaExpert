@@ -27,12 +27,11 @@ namespace SmartHub.Plugins.Weather
                 return;
             }
 
-            var data = Context.GetPlugin<WeatherPlugin>().GetWeatherData(DateTime.Now);
-            WeatherLocatioinModel location = data.FirstOrDefault(l => l.LocationId == cityId);
+            WeatherLocatioinModel location = Context.GetPlugin<WeatherPlugin>().GetWeatherData(DateTime.Now).FirstOrDefault(l => l.LocationId == cityId);
 
             if (location == null)
             {
-                tileWebModel.content = string.Format("Location with id = {0} is not found", cityId);
+                tileWebModel.content = string.Format("Локация с id = {0} не найдена", cityId);
                 return;
             }
 
@@ -41,13 +40,13 @@ namespace SmartHub.Plugins.Weather
             // текущая погода
             if (location.Now == null)
             {
-                tileWebModel.content = "Current weather is undefined";
+                tileWebModel.content = "<нет данных>";
                 return;
             }
+            tileWebModel.className = "btn-info th-tile-icon th-tile-icon-wa " + WeatherUtils.GetIconClass(location.Now.Code);
 
             string formattedNow = WeatherUtils.FormatTemperature(location.Now.Temperature);
             tileWebModel.content = string.Format("сейчас: {0}°C", formattedNow);
-            tileWebModel.className = "btn-info th-tile-icon th-tile-icon-wa " + WeatherUtils.GetIconClass(location.Now.Code);
 
             // погода на завтра
             var tomorrow = location.Forecast.FirstOrDefault();

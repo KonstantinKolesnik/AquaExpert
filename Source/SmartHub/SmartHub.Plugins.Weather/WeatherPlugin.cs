@@ -68,10 +68,31 @@ namespace SmartHub.Plugins.Weather
         #endregion
 
         #region Public methods
-        public static DateTime DateTimeFromUnixTimestampSeconds(long seconds)
+        public void UpdateWeatherData()
         {
-            return unixEpoch.AddSeconds(seconds);
+            lock (lockObject)
+            {
+                using (var session = Context.OpenSession())
+                {
+                    var locations = session.Query<Location>().ToList();
+                    foreach (var location in locations)
+                        UpdateOneLocation(location, session);
+                }
+            }
         }
+        public void UpdateWeatherData(Guid locationId)
+        {
+            lock (lockObject)
+            {
+                using (var session = Context.OpenSession())
+                {
+                    var location = session.Get<Location>(locationId);
+                    if (location != null)
+                        UpdateOneLocation(location, session);
+                }
+            }
+        }
+
         public WeatherLocatioinModel[] GetWeatherData(DateTime now)
         {
             var list = new List<WeatherLocatioinModel>();
@@ -91,31 +112,6 @@ namespace SmartHub.Plugins.Weather
 
             return list.ToArray();
         }
-
-        public void ReloadWeatherData()
-        {
-            lock (lockObject)
-            {
-                using (var session = Context.OpenSession())
-                {
-                    var locations = session.Query<Location>().ToList();
-                    foreach (var location in locations)
-                        UpdateOneLocation(location, session);
-                }
-            }
-        }
-        public void ReloadWeatherData(Guid locationId)
-        {
-            lock (lockObject)
-            {
-                using (var session = Context.OpenSession())
-                {
-                    var location = session.Get<Location>(locationId);
-                    if (location != null)
-                        UpdateOneLocation(location, session);
-                }
-            }
-        }
         #endregion
 
         #region Event handlers
@@ -123,9 +119,7 @@ namespace SmartHub.Plugins.Weather
         public void AutomaticUpdate(DateTime now)
         {
             Logger.Info("Automatic update all locations");
-
-            ReloadWeatherData();
-
+            UpdateWeatherData();
             Logger.Info("Update completed");
         }
         #endregion
@@ -136,7 +130,7 @@ namespace SmartHub.Plugins.Weather
             try
             {
                 var forecast = LoadForecast(location.Query, Logger);
-                UpdateWeatherData(session, location, forecast, Logger);
+                UpdateWeatherDataItem(location, forecast, session, Logger);
             }
             catch (Exception ex)
             {
@@ -150,46 +144,39 @@ namespace SmartHub.Plugins.Weather
             string encodedCityName = WebUtility.UrlEncode(query);
             string url = string.Format(SERVICE_URL_FORMAT, encodedCityName);
 
-            logger.Info("send request: {0}", url);
+            logger.Info("Send weather request: {0}", url);
 
             using (var client = new WebClient())
             {
                 var json = client.DownloadString(url);
-                logger.Info("complete");
+                logger.Info("Weather request complete");
 
                 return Extensions.FromJson(json);
             }
         }
-        private static void UpdateWeatherData(ISession session, Location location, dynamic forecast, Logger logger)
+
+        private static void UpdateWeatherDataItem(Location location, dynamic forecast, ISession session, Logger logger)
         {
             var list = forecast.list as IEnumerable;
 
             int count = 0;
 
             if (list != null)
-            {
                 foreach (dynamic item in list)
                 {
-                    long seconds = item.dt;
-
-                    var dataItem = GetWeatherDataItem(seconds, session, location);
-                    UpdateWeatherDataItem(dataItem, item);
+                    var date = DateTimeFromUnixTimestampSeconds(item.dt);
+                    var dataItem = GetWeatherDataItem(location, date, session);
+                    PopulateWeatherDataItem(dataItem, item);
                     session.Flush();
 
                     count++;
                 }
-            }
 
-            logger.Info("updated {0} items", count);
+            logger.Info("Updated {0} items", count);
         }
-        private static WeatherData GetWeatherDataItem(long seconds, ISession session, Location location)
+        private static WeatherData GetWeatherDataItem(Location location, DateTime date, ISession session)
         {
-            var date = DateTimeFromUnixTimestampSeconds(seconds);
-
-            var dataItem = session
-                .Query<WeatherData>()
-                .FirstOrDefault(obj => obj.Date == date && obj.Location.Id == location.Id);
-
+            var dataItem = session.Query<WeatherData>().FirstOrDefault(obj => obj.Date == date && obj.Location.Id == location.Id);
             if (dataItem == null)
             {
                 dataItem = new WeatherData { Id = Guid.NewGuid(), Date = date, Location = location };
@@ -198,7 +185,7 @@ namespace SmartHub.Plugins.Weather
 
             return dataItem;
         }
-        private static void UpdateWeatherDataItem(WeatherData dataItem, dynamic item)
+        private static void PopulateWeatherDataItem(WeatherData dataItem, dynamic item)
         {
             dataItem.Temperature = item.main.temp;
             dataItem.Cloudiness = item.clouds.all;
@@ -217,9 +204,29 @@ namespace SmartHub.Plugins.Weather
             else
                 dataItem.WeatherCode = dataItem.WeatherDescription = null;
         }
+        private static DateTime DateTimeFromUnixTimestampSeconds(long seconds)
+        {
+            return unixEpoch.AddSeconds(seconds);
+        }
         #endregion
 
         #region Web API
+        [HttpCommand("/api/weather/locations/list")]
+        public object GetLocations(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+            {
+                return session.Query<Location>()
+                    .OrderBy(l => l.DisplayName)
+                    .Select(l => new
+                    {
+                        id = l.Id,
+                        displayName = l.DisplayName,
+                        query = l.Query
+                    })
+                    .ToList();
+            }
+        }
         [HttpCommand("/api/weather/locations/add")]
         public object AddLocation(HttpRequestParams request)
         {
@@ -241,15 +248,14 @@ namespace SmartHub.Plugins.Weather
 
             return null;
         }
-
         [HttpCommand("/api/weather/locations/delete")]
         public object DeleteLocation(HttpRequestParams request)
         {
             var locationId = request.GetRequiredGuid("locationId");
+            
             using (var session = Context.OpenSession())
             {
                 var location = session.Get<Location>(locationId);
-
                 if (location != null)
                 {
                     session.Delete(location);
@@ -263,48 +269,21 @@ namespace SmartHub.Plugins.Weather
         [HttpCommand("/api/weather/update")]
         public object UpdateAllWeather(HttpRequestParams request)
         {
-            ReloadWeatherData();
-
+            UpdateWeatherData();
             return null;
         }
-
         [HttpCommand("/api/weather/locations/update")]
         public object UpdateLocationWeather(HttpRequestParams request)
         {
             var locationId = request.GetRequiredGuid("locationId");
-            ReloadWeatherData(locationId);
-
+            UpdateWeatherData(locationId);
             return null;
         }
 
         [HttpCommand("/api/weather/all")]
         public object GetWeather(HttpRequestParams request)
         {
-            WeatherLocatioinModel[] weatherData = GetWeatherData(DateTime.Now);
-
-            return weatherData.Select(BuildLocationModel).ToArray();
-        }
-
-        [HttpCommand("/api/weather/locations/list")]
-        public object GetLocations(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-            {
-                var locations = session.Query<Location>()
-                    .OrderBy(l => l.DisplayName)
-                    .ToList();
-
-                var model = locations
-                    .Select(l => new
-                    {
-                        id = l.Id,
-                        displayName = l.DisplayName,
-                        query = l.Query
-                    })
-                    .ToList();
-
-                return model;
-            }
+            return GetWeatherData(DateTime.Now).Select(BuildLocationModel).ToArray();
         }
 
         #region Helpers
