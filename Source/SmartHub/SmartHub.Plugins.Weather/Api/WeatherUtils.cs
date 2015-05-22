@@ -8,12 +8,17 @@ namespace SmartHub.Plugins.Weather.Api
             string format = t > 0 ? "+{0}" : "{0}";
             return string.Format(format, t);
         }
-
         public static string FormatTemperatureRange(int t1, int t2)
         {
             return t1 == t2
                 ? FormatTemperature(t1)
                 : string.Format("{0} ... {1}", FormatTemperature(t1), FormatTemperature(t2));
+        }
+        public static string FormatRange(int v1, int v2)
+        {
+            return v1 == v2
+                ? string.Format("{0}", v1)
+                : string.Format("{0} ... {1}", v1, v2);
         }
 
         public static string GetIconClass(string code)

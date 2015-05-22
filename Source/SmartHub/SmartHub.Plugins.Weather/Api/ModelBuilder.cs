@@ -29,21 +29,18 @@ namespace SmartHub.Plugins.Weather.Api
                         .GroupBy(d => d.Date.Date)
                         .Take(3);
 
-            var model = new WeatherLocatioinModel
+            return new WeatherLocatioinModel
             {
                 LocationId = location.Id,
                 LocationName = location.DisplayName,
-                Now = CreateModel(current),
-                Today = day.Select(CreateModel).ToArray(),
-                Forecast = forecast.Select(CreateDailyModel).ToArray()
+                Now = CreateNowModel(current),
+                Today = day.Select(CreateNowModel).ToArray(),
+                Forecast = forecast.Select(CreateDayModel).ToArray()
             };
-
-            return model;
         }
 
         #region Private methods
-
-        private static DailyWeatherDataModel CreateDailyModel(IGrouping<DateTime, WeatherData> gr)
+        private static WeatherDayDataModel CreateDayModel(IGrouping<DateTime, WeatherData> gr)
         {
             if (gr == null)
                 return null;
@@ -64,7 +61,7 @@ namespace SmartHub.Plugins.Weather.Api
             int minH = items.Min(d => d.Humidity);
             int maxH = items.Max(d => d.Humidity);
 
-            return new DailyWeatherDataModel
+            return new WeatherDayDataModel
             {
                 DateTime = gr.Key,
                 MinTemperature = Convert.ToInt32(minT),
@@ -79,12 +76,11 @@ namespace SmartHub.Plugins.Weather.Api
                 Description = first.WeatherDescription
             };
         }
-
-        private static WeatherDataModel CreateModel(WeatherData obj)
+        private static WeatherNowDataModel CreateNowModel(WeatherData obj)
         {
             return obj == null
                 ? null
-                : new WeatherDataModel
+                : new WeatherNowDataModel
                 {
                     DateTime = obj.Date,
                     Code = obj.WeatherCode,
@@ -94,7 +90,6 @@ namespace SmartHub.Plugins.Weather.Api
                     Humidity = obj.Humidity,
                 };
         }
-
         private static bool FilterByHours(WeatherData data)
         {
             return data != null && (
@@ -103,7 +98,6 @@ namespace SmartHub.Plugins.Weather.Api
                 data.Date.Hour == 15 ||
                 data.Date.Hour == 21);
         }
-
         #endregion
     }
 }

@@ -30,7 +30,7 @@ namespace SmartHub.Plugins.AquaController
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            //mapper.Class<Setting>(cfg => cfg.Table("AquaController_Settings"));
+            mapper.Class<Setting>(cfg => cfg.Table("AquaController_Settings"));
         }
         public override void InitPlugin()
         {

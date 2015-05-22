@@ -9,7 +9,7 @@ namespace SmartHub.Plugins.WebUI.Tiles
     /// See SmartHub.Plugins.WebUI\Resources\Application\sections\list.js\api.addTile method.
     /// </summary>
     [Tile]
-    public class DefaultTile : TileBase
+    public class AppSectionTile : TileBase
     {
         public override void PopulateWebModel(TileWebModel webTile, dynamic options)
         {

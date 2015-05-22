@@ -105,8 +105,7 @@ namespace SmartHub.Plugins.Weather
                 foreach (var location in locations)
                 {
                     var locationData = data.Where(d => d.Location.Id == location.Id).ToArray();
-                    var model = ModelBuilder.LoadLocationWeatherData(now, location, locationData);
-                    list.Add(model);
+                    list.Add(ModelBuilder.LoadLocationWeatherData(now, location, locationData));
                 }
             }
 
@@ -283,11 +282,22 @@ namespace SmartHub.Plugins.Weather
         [HttpCommand("/api/weather/all")]
         public object GetWeather(HttpRequestParams request)
         {
-            return GetWeatherData(DateTime.Now).Select(BuildLocationModel).ToArray();
+            return GetWeatherData(DateTime.Now).Select(BuildWeatherLocationWebModel).ToArray();
         }
 
         #region Helpers
-        private object BuildModel(WeatherDataModel data)
+        private object BuildWeatherLocationWebModel(WeatherLocatioinModel data)
+        {
+            return new
+            {
+                id = data.LocationId,
+                name = data.LocationName,
+                now = BuildWeatherNowWebModel(data.Now),
+                day = data.Today.Select(BuildWeatherNowWebModel).ToArray(),
+                forecast = data.Forecast.Select(BuildWeatherDayWebModel).ToArray()
+            };
+        }
+        private object BuildWeatherNowWebModel(WeatherNowDataModel data)
         {
             return data == null
                 ? null
@@ -301,7 +311,7 @@ namespace SmartHub.Plugins.Weather
                     description = data.Description
                 };
         }
-        private object BuildModel(DailyWeatherDataModel data)
+        private object BuildWeatherDayWebModel(WeatherDayDataModel data)
         {
             return data == null
                 ? null
@@ -309,22 +319,11 @@ namespace SmartHub.Plugins.Weather
                 {
                     when = data.DateTime.ToString("M"),
                     t = WeatherUtils.FormatTemperatureRange(data.MinTemperature, data.MaxTemperature),
-                    p = string.Format("{0} .. {1}", data.MinPressure, data.MaxPressure),
-                    h = string.Format("{0} .. {1}", data.MinHumidity, data.MaxHumidity),
+                    p = WeatherUtils.FormatRange(data.MinPressure, data.MaxPressure),
+                    h = WeatherUtils.FormatRange(data.MinHumidity, data.MaxHumidity),
                     icon = WeatherUtils.GetIconClass(data.Code),
                     description = data.Description
                 };
-        }
-        private object BuildLocationModel(WeatherLocatioinModel data)
-        {
-            return new
-            {
-                id = data.LocationId,
-                name = data.LocationName,
-                now = BuildModel(data.Now),
-                day = data.Today.Select(BuildModel).ToArray(),
-                forecast = data.Forecast.Select(BuildModel).ToArray()
-            };
         }
         #endregion
         #endregion

@@ -18,15 +18,15 @@
 	            // title & url must be populated in TileBase::PopulateWebModel method directly;
 
 	            // if tileTypeFullName is undefined:
-	            // the DefaultTile type is used,
+	            // the AppSectionTile type is used,
 	            // parameters has "title" and "url" fields populated from "name" and "path" of section item;
-	            // title & url are being populated in DefaultTile::PopulateWebModel method from parameters "title" and "url";
+	            // title & url are being populated in AppSectionTile::PopulateWebModel method from parameters "title" and "url";
 
 	            var tileTypeFullName = childView.model.get('tileTypeFullName');
 	            var parameters = { };
 
 	            if (!tileTypeFullName) {
-	                tileTypeFullName = 'SmartHub.Plugins.WebUI.Tiles.DefaultTile';
+	                tileTypeFullName = 'SmartHub.Plugins.WebUI.Tiles.AppSectionTile';
 	                parameters.title = childView.model.get('name');
 	                parameters.url = childView.model.get('path');
 	            }
