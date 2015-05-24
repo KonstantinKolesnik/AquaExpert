@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{21C10EC6-02CF-47BE-B92B-C0A8D498C52C}</ProjectGuid>
+    <ProjectGuid>{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.Plugins.AquaController</RootNamespace>
-    <AssemblyName>SmartHub.Plugins.AquaController</AssemblyName>
+    <RootNamespace>SmartHub.Plugins.MeteoStation</RootNamespace>
+    <AssemblyName>SmartHub.Plugins.MeteoStation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Plugins\SmartHub.Plugins.AquaController\</OutputPath>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.MeteoStation\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Plugins\SmartHub.Plugins.AquaController\</OutputPath>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.MeteoStation\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,7 +37,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -49,17 +49,17 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AquaControllerPlugin.cs" />
-    <Compile Include="AquaControllerTile.cs" />
-    <Compile Include="Core\TemperatureController.cs" />
+    <Compile Include="Data\MeteoStationSetting.cs" />
     <Compile Include="Data\Migrations.cs" />
-    <Compile Include="Data\AquaControllerSetting.cs" />
+    <Compile Include="MeteoStationPlugin.cs" />
+    <Compile Include="MeteoStationTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SensorsConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
@@ -77,11 +77,6 @@
       <Name>SmartHub.Plugins.MySensors</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
-      <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
-      <Name>SmartHub.Plugins.Timer</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
       <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
       <Name>SmartHub.Plugins.WebUI</Name>
@@ -89,21 +84,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\views.js" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module.js" />
+    <EmbeddedResource Include="Resources\js\module-main-model.js" />
+    <EmbeddedResource Include="Resources\js\module-main-view.js" />
+    <EmbeddedResource Include="Resources\js\module-main.html" />
+    <EmbeddedResource Include="Resources\js\module-main.js" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\module-settings.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\module-settings-model.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\module-settings-view.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\module-settings.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\templates.html" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.AlarmClock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Weather", "SmartHub.Plugins.Weather\SmartHub.Plugins.Weather.csproj", "{158E3A55-1FC7-4996-972B-8AD738A018B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.MeteoStation", "SmartHub.Plugins.MeteoStation\SmartHub.Plugins.MeteoStation.csproj", "{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -372,6 +374,22 @@ Global
 		{158E3A55-1FC7-4996-972B-8AD738A018B8}.Release|Win32.ActiveCfg = Release|Any CPU
 		{158E3A55-1FC7-4996-972B-8AD738A018B8}.Release|x64.ActiveCfg = Release|Any CPU
 		{158E3A55-1FC7-4996-972B-8AD738A018B8}.Release|x86.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|x64.ActiveCfg = Release|Any CPU
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -398,5 +416,6 @@ Global
 		{74EE7AE8-C021-48B5-8C2D-E1F45C8BFBD8} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 		{18DFCD61-1EA4-4E82-AD9A-8D7A1B218506} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 		{158E3A55-1FC7-4996-972B-8AD738A018B8} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
+		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 	EndGlobalSection
 EndGlobal

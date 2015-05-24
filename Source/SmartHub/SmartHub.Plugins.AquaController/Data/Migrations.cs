@@ -1,6 +1,5 @@
 ﻿using ECM7.Migrator.Framework;
 using System.Data;
-using ForeignKeyConstraint = ECM7.Migrator.Framework.ForeignKeyConstraint;
 
 [assembly: MigrationAssembly("SmartHub.Plugins.AquaController")]
 

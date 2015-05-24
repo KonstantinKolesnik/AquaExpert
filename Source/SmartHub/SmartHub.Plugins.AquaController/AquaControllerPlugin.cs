@@ -30,7 +30,7 @@ namespace SmartHub.Plugins.AquaController
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<Setting>(cfg => cfg.Table("AquaController_Settings"));
+            mapper.Class<AquaControllerSetting>(cfg => cfg.Table("AquaController_Settings"));
         }
         public override void InitPlugin()
         {
@@ -54,10 +54,10 @@ namespace SmartHub.Plugins.AquaController
         //}
         #endregion
 
-        private Setting GetSetting(string name)
+        private AquaControllerSetting GetSetting(string name)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Setting>().FirstOrDefault(setting => setting.Name == name);
+                return session.Query<AquaControllerSetting>().FirstOrDefault(setting => setting.Name == name);
         }
 
         #region Lines

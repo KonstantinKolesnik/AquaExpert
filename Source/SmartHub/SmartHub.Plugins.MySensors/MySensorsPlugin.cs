@@ -96,7 +96,7 @@ namespace SmartHub.Plugins.MySensors
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<Setting>(cfg => cfg.Table("MySensors_Settings"));
+            mapper.Class<MySensorsSetting>(cfg => cfg.Table("MySensors_Settings"));
             mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
             mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensors"));
             mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevels"));
@@ -105,7 +105,7 @@ namespace SmartHub.Plugins.MySensors
         public override void InitPlugin()
         {
             if (GetSetting("UnitSystem") == null)
-                Save(new Setting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
+                Save(new MySensorsSetting() { Id = Guid.NewGuid(), Name = "UnitSystem", Value = "M" });
             //if (GetSetting("SerialPortName") == null)
             //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
 
@@ -155,20 +155,25 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region DB actions
-        private Setting GetSetting(string name)
+        private MySensorsSetting GetSetting(string name)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Setting>().FirstOrDefault(setting => setting.Name == name);
+                return session.Query<MySensorsSetting>().FirstOrDefault(setting => setting.Name == name);
         }
-        public Node GetNode(byte nodeID)
+        public Node GetNode(byte nodeNo)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeID);
+                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
         }
-        public Sensor GetSensor(byte nodeID, byte sensorID)
+        public Sensor GetSensor(byte nodeNo, byte sensorNo)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeID && sensor.SensorNo == sensorID);
+                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeNo && sensor.SensorNo == sensorNo);
+        }
+        public Sensor GetSensor(Guid sensorID)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
         }
         public SensorValue GetSensorValue(Sensor sensor)
         {
@@ -624,7 +629,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var setting = session.Query<Setting>().FirstOrDefault(s => s.Name == "UnitSystem");
+                var setting = session.Query<MySensorsSetting>().FirstOrDefault(s => s.Name == "UnitSystem");
                 setting.Value = value;
                 session.Flush();
             }
