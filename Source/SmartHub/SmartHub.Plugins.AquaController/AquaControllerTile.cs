@@ -12,7 +12,7 @@ namespace SmartHub.Plugins.AquaController
             try
             {
                 webTile.title = "Аква-контроллер";
-                webTile.url = "/webapp/aquacontroller/module.js";
+                webTile.url = "webapp/aquacontroller/module";
                 webTile.className = "btn-info th-tile-icon th-tile-icon-fa fa-tachometer";
             }
             catch (Exception ex)

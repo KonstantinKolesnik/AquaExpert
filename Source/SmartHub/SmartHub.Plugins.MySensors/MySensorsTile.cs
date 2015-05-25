@@ -16,7 +16,7 @@ namespace SmartHub.Plugins.MySensors
             try
             {
                 tileWebModel.title = "Сеть MySensors";
-                tileWebModel.url = "/webapp/mysensors/module.js";
+                tileWebModel.url = "webapp/mysensors/module";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-sitemap";
                 tileWebModel.content = BuildContent();
                 tileWebModel.SignalRReceiveHandler = BuildSignalRReceiveHandler();

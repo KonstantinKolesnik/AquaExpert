@@ -62,6 +62,7 @@ define(['jquery'], function ($) {
                             api.getSensor(me.SensorsConfiguration.SensorHumidityOuterID, function (data) {
                                 me.set("SensorHumidityOuter", data);
 
+                                me.SensorValues = [];
                                 api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
                                     me.set("SensorAtmospherePressure", data);
 
