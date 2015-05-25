@@ -31,15 +31,31 @@ namespace SmartHub.Plugins.MeteoStation
     {
         #region Fields
         private MySensorsPlugin mySensors;
-
         private SensorsConfiguration sensorsConfiguration;
         private MeteoStationSetting sensorsConfigurationSetting;
+        #endregion
 
-        private Sensor sensorTemperatureInner;
-        private Sensor sensorTemperatureOuter;
-        private Sensor sensorHumidityInner;
-        private Sensor sensorHumidityOuter;
-        private Sensor sensorAtmospherePressure;
+        #region Properties
+        public Sensor SensorTemperatureInner
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorTemperatureInnerID); }
+        }
+        public Sensor SensorHumidityInner
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorHumidityInnerID); }
+        }
+        public Sensor SensorTemperatureOuter
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorTemperatureOuterID); }
+        }
+        public Sensor SensorHumidityOuter
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorHumidityOuterID); }
+        }
+        public Sensor SensorAtmospherePressure
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorAtmospherePressureID); }
+        }
         #endregion
 
         #region Plugin overrides
@@ -76,8 +92,6 @@ namespace SmartHub.Plugins.MeteoStation
             }
             else
                 sensorsConfiguration = sensorsConfigurationSetting.GetValue(typeof(SensorsConfiguration));
-
-            InitSensors();
         }
         #endregion
 
@@ -100,26 +114,20 @@ namespace SmartHub.Plugins.MeteoStation
             }
         }
         
-        private void InitSensors()
-        {
-            sensorTemperatureInner = mySensors.GetSensor(sensorsConfiguration.SensorTemperatureInnerID);
-            sensorHumidityInner = mySensors.GetSensor(sensorsConfiguration.SensorHumidityInnerID);
-            sensorTemperatureOuter = mySensors.GetSensor(sensorsConfiguration.SensorTemperatureOuterID);
-            sensorHumidityOuter = mySensors.GetSensor(sensorsConfiguration.SensorHumidityOuterID);
-            sensorAtmospherePressure = mySensors.GetSensor(sensorsConfiguration.SensorAtmospherePressureID);
-        }
         private void UpdateSensorsValues()
         {
-            if (sensorTemperatureInner != null)
-                mySensors.RequestSensorValue(sensorTemperatureInner, SensorValueType.Temperature);
-            if (sensorHumidityInner != null)
-                mySensors.RequestSensorValue(sensorHumidityInner, SensorValueType.Humidity);
-            if (sensorTemperatureOuter != null)
-                mySensors.RequestSensorValue(sensorTemperatureOuter, SensorValueType.Temperature);
-            if (sensorHumidityOuter != null)
-                mySensors.RequestSensorValue(sensorHumidityOuter, SensorValueType.Humidity);
-            if (sensorAtmospherePressure != null)
-                mySensors.RequestSensorValue(sensorAtmospherePressure, SensorValueType.Pressure);
+            Sensor sensor;
+
+            if ((sensor = SensorTemperatureInner) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
+            if ((sensor = SensorHumidityInner) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Humidity);
+            if ((sensor = SensorTemperatureOuter) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
+            if ((sensor = SensorHumidityOuter) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Humidity);
+            if ((sensor = SensorAtmospherePressure) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Pressure);
         }
         private object BuildSensorSummaryWebModel(Sensor sensor)
         {
@@ -184,7 +192,6 @@ namespace SmartHub.Plugins.MeteoStation
             sensorsConfigurationSetting.SetValue(sensorsConfiguration);
             SaveOrUpdate(sensorsConfigurationSetting);
 
-            InitSensors();
             UpdateSensorsValues();
 
             return null;

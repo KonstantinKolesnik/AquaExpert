@@ -1,7 +1,11 @@
-﻿using SmartHub.Plugins.WebUI.Attributes;
+﻿using SmartHub.Plugins.MySensors.Data;
+using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
 using System.Text;
+using NHibernate.Linq;
+using System.Linq;
+using NHibernate;
 
 namespace SmartHub.Plugins.MeteoStation
 {
@@ -15,6 +19,7 @@ namespace SmartHub.Plugins.MeteoStation
                 tileWebModel.title = "Метеостанция";
                 tileWebModel.url = "/webapp/meteostation/module-main.js";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-umbrella";
+                tileWebModel.wide = true;
                 tileWebModel.content = BuildContent();
                 tileWebModel.SignalRReceiveHandler = BuildSignalRReceiveHandler();
             }
@@ -28,15 +33,28 @@ namespace SmartHub.Plugins.MeteoStation
         {
             string result = "";
 
-            //SensorValue lastSV = null;
-            //using (var session = Context.OpenSession())
-            //    lastSV = session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+            SensorValue lastSVTemperatureInner = null;
+            SensorValue lastSVHumidityInner = null;
+            SensorValue lastSVTemperatureOuter = null;
+            SensorValue lastSVHumidityOuter = null;
+            SensorValue lastSVAtmospherePressure = null;
 
-            //if (lastSV != null)
-            //{
-            //    result += string.Format("<span>{0:dd.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
-            //    result += string.Format("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.Type.ToString(), lastSV.Value);
-            //}
+            var meteoStationPlugin = Context.GetPlugin<MeteoStationPlugin>();
+
+            using (var session = Context.OpenSession())
+            {
+                lastSVTemperatureInner = GetLastSensorValue(meteoStationPlugin.SensorTemperatureInner, session);
+                lastSVHumidityInner = GetLastSensorValue(meteoStationPlugin.SensorHumidityInner, session);
+                lastSVTemperatureOuter = GetLastSensorValue(meteoStationPlugin.SensorTemperatureOuter, session);
+                lastSVHumidityOuter = GetLastSensorValue(meteoStationPlugin.SensorHumidityOuter, session);
+                lastSVAtmospherePressure = GetLastSensorValue(meteoStationPlugin.SensorAtmospherePressure, session);
+            }
+
+            result += "<div>Температура внутренняя: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + "°C" : "") + "</div>";
+            result += "<div>Влажность внутренняя: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + "%" : "") + "</div>";
+            result += "<div>Температура наружная: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + "°C" : "") + "</div>";
+            result += "<div>Влажность наружная: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + "%" : "") + "</div>";
+            result += "<div>Атмосферное давление: " + (lastSVAtmospherePressure != null ? lastSVAtmospherePressure.Value + "" : "") + "</div>";
 
             return result;
         }
@@ -55,6 +73,11 @@ namespace SmartHub.Plugins.MeteoStation
             //sb.Append("}");
 
             return sb.ToString();
+        }
+
+        private SensorValue GetLastSensorValue(Sensor sensor, ISession session)
+        {
+            return sensor == null ? null : session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
         }
     }
 }
