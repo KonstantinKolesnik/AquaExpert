@@ -37,6 +37,8 @@ define(['jquery'], function ($) {
         SensorsTemperatureDataSource: [],
         SensorsHumidityDataSource: [],
         SensorsBarometerDataSource: [],
+        SensorsForecastDataSource: [],
+
         SensorsConfiguration: null,
 
         update: function (onComplete) {
@@ -55,11 +57,15 @@ define(['jquery'], function ($) {
                     api.getSensorsDataSource(8, function (data) {
                         me.set("SensorsBarometerDataSource", data);
 
-                        api.getSensorsConfiguration(function (sc) {
-                            me.set("SensorsConfiguration", sc);
+                        api.getSensorsDataSource(8, function (data) {
+                            me.set("SensorsForecastDataSource", data);
 
-                            if (onComplete)
-                                onComplete();
+                            api.getSensorsConfiguration(function (sc) {
+                                me.set("SensorsConfiguration", sc);
+
+                                if (onComplete)
+                                    onComplete();
+                            });
                         });
                     });
                 });

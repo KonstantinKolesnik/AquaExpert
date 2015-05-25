@@ -41,6 +41,7 @@ define(['jquery'], function ($) {
         SensorTemperatureOuter: null,
         SensorHumidityOuter: null,
         SensorAtmospherePressure: null,
+        SensorForecast: null,
 
         SensorValues: [],
 
@@ -62,17 +63,23 @@ define(['jquery'], function ($) {
                             api.getSensor(me.SensorsConfiguration.SensorHumidityOuterID, function (data) {
                                 me.set("SensorHumidityOuter", data);
 
-                                me.SensorValues = [];
-                                api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
-                                    me.set("SensorAtmospherePressure", data);
+                                api.getSensor(me.SensorsConfiguration.SensorForecastID, function (data) {
+                                    me.set("SensorForecast", data);
 
-                                    getSensorValues(me.SensorTemperatureInner, function () {
-                                        getSensorValues(me.SensorHumidityInner, function () {
-                                            getSensorValues(me.SensorTemperatureOuter, function () {
-                                                getSensorValues(me.SensorHumidityOuter, function () {
-                                                    getSensorValues(me.SensorAtmospherePressure, function () {
-                                                        if (onComplete)
-                                                            onComplete();
+                                    me.SensorValues = [];
+                                    api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
+                                        me.set("SensorAtmospherePressure", data);
+
+                                        getSensorValues(me.SensorTemperatureInner, function () {
+                                            getSensorValues(me.SensorHumidityInner, function () {
+                                                getSensorValues(me.SensorTemperatureOuter, function () {
+                                                    getSensorValues(me.SensorHumidityOuter, function () {
+                                                        getSensorValues(me.SensorAtmospherePressure, function () {
+                                                            getSensorValues(me.SensorForecast, function () {
+                                                                if (onComplete)
+                                                                    onComplete();
+                                                            });
+                                                        });
                                                     });
                                                 });
                                             });
@@ -110,7 +117,8 @@ define(['jquery'], function ($) {
                         if (!checkFromSensor(data.Data), SensorTemperatureOuter)
                             if (!checkFromSensor(data.Data), SensorHumidityOuter)
                                 if (!checkFromSensor(data.Data), SensorAtmospherePressure)
-                                    return;
+                                    if (!checkFromSensor(data.Data), SensorForecast)
+                                        return;
             }
 
             function checkFromSensor(sv, sensor) {

@@ -9,6 +9,7 @@ namespace SmartHub.Plugins.MeteoStation
         public Guid SensorHumidityInnerID { get; set; }
         public Guid SensorHumidityOuterID { get; set; }
         public Guid SensorAtmospherePressureID { get; set; }
+        public Guid SensorForecastID { get; set; }
 
         public static SensorsConfiguration Default
         {
@@ -20,7 +21,8 @@ namespace SmartHub.Plugins.MeteoStation
                     SensorTemperatureOuterID = Guid.Empty,
                     SensorHumidityInnerID = Guid.Empty,
                     SensorHumidityOuterID = Guid.Empty,
-                    SensorAtmospherePressureID = Guid.Empty
+                    SensorAtmospherePressureID = Guid.Empty,
+                    SensorForecastID = Guid.Empty
                 };
             }
         }

@@ -38,6 +38,7 @@ namespace SmartHub.Plugins.MeteoStation
             SensorValue lastSVTemperatureOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorTemperatureOuter);
             SensorValue lastSVHumidityOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorHumidityOuter);
             SensorValue lastSVAtmospherePressure = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorAtmospherePressure);
+            SensorValue lastSVForecast = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorForecast);
 
             string result = "";
             result += "<div>Температура внутренняя: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
@@ -45,6 +46,7 @@ namespace SmartHub.Plugins.MeteoStation
             result += "<div>Температура наружная: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
             result += "<div>Влажность наружная: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + "%" : "&lt;нет данных&gt;") + "</div>";
             result += "<div>Атмосферное давление: " + (lastSVAtmospherePressure != null ? lastSVAtmospherePressure.Value + "" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Прогноз: " + (lastSVForecast != null ? lastSVForecast.Value + "" : "&lt;нет данных&gt;") + "</div>";
 
             return result;
         }

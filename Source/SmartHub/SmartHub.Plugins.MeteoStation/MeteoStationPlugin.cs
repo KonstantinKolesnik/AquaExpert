@@ -58,6 +58,10 @@ namespace SmartHub.Plugins.MeteoStation
         {
             get { return mySensors.GetSensor(sensorsConfiguration.SensorAtmospherePressureID); }
         }
+        public Sensor SensorForecast
+        {
+            get { return mySensors.GetSensor(sensorsConfiguration.SensorForecastID); }
+        }
         #endregion
 
         #region Plugin overrides
@@ -79,17 +83,8 @@ namespace SmartHub.Plugins.MeteoStation
                     Name = "SensorsConfiguration"
                 };
 
-                sensorsConfiguration = new SensorsConfiguration()
-                {
-                    SensorTemperatureInnerID = Guid.Empty,
-                    SensorTemperatureOuterID = Guid.Empty,
-                    SensorHumidityInnerID = Guid.Empty,
-                    SensorHumidityOuterID = Guid.Empty,
-                    SensorAtmospherePressureID = Guid.Empty
-                };
-
+                sensorsConfiguration = SensorsConfiguration.Default;
                 sensorsConfigurationSetting.SetValue(sensorsConfiguration);
-
                 SaveOrUpdate(sensorsConfigurationSetting);
             }
             else
@@ -141,6 +136,8 @@ namespace SmartHub.Plugins.MeteoStation
                 mySensors.RequestSensorValue(sensor, SensorValueType.Humidity);
             if ((sensor = SensorAtmospherePressure) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Pressure);
+            if ((sensor = SensorForecast) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Forecast);
         }
         private object BuildSensorSummaryWebModel(Sensor sensor)
         {
@@ -150,8 +147,8 @@ namespace SmartHub.Plugins.MeteoStation
             return new
             {
                 Id = sensor.Id,
-                NodeNo = sensor.NodeNo,
-                SensorNo = sensor.SensorNo,
+                //NodeNo = sensor.NodeNo,
+                //SensorNo = sensor.SensorNo,
                 Name = sensor.Name
             };
         }

@@ -12,6 +12,7 @@ define(
                 createSensorSelector($("#ddlSensorTemperatureOuter"));
                 createSensorSelector($("#ddlSensorHumidityOuter"));
                 createSensorSelector($("#ddlSensorAtmospherePressure"));
+                createSensorSelector($("#ddlSensorForecast"));
 
                 function createSensorSelector(selector) {
                     selector.kendoDropDownList({
