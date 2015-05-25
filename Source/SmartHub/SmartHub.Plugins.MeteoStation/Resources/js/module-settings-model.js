@@ -22,7 +22,7 @@ define(['jquery'], function ($) {
 	            });
         },
         setSensorsConfiguration: function (sc, onComplete) {
-            $.post('/api/meteostation/setSensorsCofiguration', { sc: JSON.stringify(sc) })
+            $.post('/api/meteostation/sensorsCofiguration/set', { sc: JSON.stringify(sc) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);

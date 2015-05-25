@@ -3,3 +3,17 @@
 {
     width:250px;
 }
+
+.valueText
+{
+    font-size:28px;
+}
+.valueChart
+{
+    height:200px;
+}
+
+.weather-forecast
+{
+	font-size: 52px;
+}

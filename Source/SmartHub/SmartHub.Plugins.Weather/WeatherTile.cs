@@ -40,7 +40,7 @@ namespace SmartHub.Plugins.Weather
             // текущая погода
             if (location.Now == null)
             {
-                tileWebModel.content = "<нет данных>";
+                tileWebModel.content = "<нет данных>";//&lt;нет данных&gt;
                 return;
             }
             tileWebModel.className = "btn-info th-tile-icon th-tile-icon-wa " + WeatherUtils.GetIconClass(location.Now.Code);

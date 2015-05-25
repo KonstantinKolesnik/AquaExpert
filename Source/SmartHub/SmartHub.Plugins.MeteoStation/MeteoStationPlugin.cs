@@ -19,12 +19,14 @@ namespace SmartHub.Plugins.MeteoStation
     [JavaScriptResource("/webapp/meteostation/module-main-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-main-view.js")]
     [JavaScriptResource("/webapp/meteostation/module-main-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-main-model.js")]
     [HttpResource("/webapp/meteostation/module-main.html", "SmartHub.Plugins.MeteoStation.Resources.js.module-main.html")]
-    [CssResource("/webapp/meteostation/css/style.css", "SmartHub.Plugins.MeteoStation.Resources.css.style.css", AutoLoad = true)]
 
     [AppSection("Метеостанция", SectionType.System, "/webapp/meteostation/module-settings.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings.js")]
     [JavaScriptResource("/webapp/meteostation/module-settings-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings-view.js")]
     [JavaScriptResource("/webapp/meteostation/module-settings-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings-model.js")]
     [HttpResource("/webapp/meteostation/module-settings.html", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings.html")]
+
+    [CssResource("/webapp/meteostation/css/style.css", "SmartHub.Plugins.MeteoStation.Resources.css.style.css", AutoLoad = true)]
+    [CssResource("/webapp/meteostation/css/weather-icons.min.css", "SmartHub.Plugins.MeteoStation.Resources.css.weather-icons.min.css", AutoLoad = true)]
 
     [Plugin]
     public class MeteoStationPlugin : PluginBase
@@ -92,6 +94,17 @@ namespace SmartHub.Plugins.MeteoStation
             }
             else
                 sensorsConfiguration = sensorsConfigurationSetting.GetValue(typeof(SensorsConfiguration));
+        }
+        #endregion
+
+        #region Public methods
+        public SensorValue GetLastSensorValue(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
         }
         #endregion
 
@@ -178,13 +191,25 @@ namespace SmartHub.Plugins.MeteoStation
             var id = request.GetRequiredGuid("id");
             return mySensors.BuildSensorWebModel(mySensors.GetSensor(id));
         }
-        
+        [HttpCommand("/api/meteostation/sensorvalues")]
+        public object GetSensorValues(HttpRequestParams request)
+        {
+            var nodeNo = request.GetRequiredInt32("nodeNo");
+            var sensorNo = request.GetRequiredInt32("sensorNo");
+            var days = request.GetRequiredInt32("days");
+
+            DateTime dt = DateTime.UtcNow.AddDays(-days);
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
+        }
+
         [HttpCommand("/api/meteostation/sensorsCofiguration")]
         public object GetSensorsConfiguration(HttpRequestParams request)
         {
             return sensorsConfiguration;
         }
-        [HttpCommand("/api/meteostation/setSensorsCofiguration")]
+        [HttpCommand("/api/meteostation/sensorsCofiguration/set")]
         public object SetSensorsConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("sc");

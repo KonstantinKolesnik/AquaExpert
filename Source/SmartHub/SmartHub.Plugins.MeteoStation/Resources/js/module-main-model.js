@@ -1,16 +1,6 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensor: function (id, onComplete) {
-            $.getJSON('/api/meteostation/sensor', { id: id })
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        },
         getSensorsConfiguration: function (onComplete) {
             $.getJSON('/api/meteostation/sensorsCofiguration')
 				.done(function (data) {
@@ -21,6 +11,26 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
+        getSensor: function (id, onComplete) {
+            $.getJSON('/api/meteostation/sensor', { id: id })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+        getSensorValues: function (nodeNo, sensorNo, days, onComplete) {
+            $.getJSON('/api/meteostation/sensorvalues', { nodeNo: nodeNo, sensorNo: sensorNo, days: days })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        }
     };
 
     var viewModel = kendo.observable({
@@ -55,14 +65,38 @@ define(['jquery'], function ($) {
                                 api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
                                     me.set("SensorAtmospherePressure", data);
 
-                                    if (onComplete)
-                                        onComplete();
+                                    getSensorValues(me.SensorTemperatureInner, function () {
+                                        getSensorValues(me.SensorHumidityInner, function () {
+                                            getSensorValues(me.SensorTemperatureOuter, function () {
+                                                getSensorValues(me.SensorHumidityOuter, function () {
+                                                    getSensorValues(me.SensorAtmospherePressure, function () {
+                                                        if (onComplete)
+                                                            onComplete();
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });
                     });
                 });
             });
+
+            function getSensorValues(sensor, onComplete) {
+                if (sensor)
+                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 7, function (data) {
+                        data = data || [];
+                        $.each(data, function (idx, sv) { me.SensorValues.push(sv); });
+
+                        if (onComplete)
+                            onComplete();
+                    });
+                else
+                    if (onComplete)
+                        onComplete();
+            }
         },
         SignalRReceiveHandler: function (model, data) {
             var me = model;

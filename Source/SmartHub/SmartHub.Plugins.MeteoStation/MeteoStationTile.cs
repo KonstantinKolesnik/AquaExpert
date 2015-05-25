@@ -1,11 +1,11 @@
-﻿using SmartHub.Plugins.MySensors.Data;
+﻿using NHibernate;
+using NHibernate.Linq;
+using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
-using System.Text;
-using NHibernate.Linq;
 using System.Linq;
-using NHibernate;
+using System.Text;
 
 namespace SmartHub.Plugins.MeteoStation
 {
@@ -31,30 +31,20 @@ namespace SmartHub.Plugins.MeteoStation
 
         private string BuildContent()
         {
-            string result = "";
-
-            SensorValue lastSVTemperatureInner = null;
-            SensorValue lastSVHumidityInner = null;
-            SensorValue lastSVTemperatureOuter = null;
-            SensorValue lastSVHumidityOuter = null;
-            SensorValue lastSVAtmospherePressure = null;
-
             var meteoStationPlugin = Context.GetPlugin<MeteoStationPlugin>();
 
-            using (var session = Context.OpenSession())
-            {
-                lastSVTemperatureInner = GetLastSensorValue(meteoStationPlugin.SensorTemperatureInner, session);
-                lastSVHumidityInner = GetLastSensorValue(meteoStationPlugin.SensorHumidityInner, session);
-                lastSVTemperatureOuter = GetLastSensorValue(meteoStationPlugin.SensorTemperatureOuter, session);
-                lastSVHumidityOuter = GetLastSensorValue(meteoStationPlugin.SensorHumidityOuter, session);
-                lastSVAtmospherePressure = GetLastSensorValue(meteoStationPlugin.SensorAtmospherePressure, session);
-            }
+            SensorValue lastSVTemperatureInner = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorTemperatureInner);
+            SensorValue lastSVHumidityInner = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorHumidityInner);
+            SensorValue lastSVTemperatureOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorTemperatureOuter);
+            SensorValue lastSVHumidityOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorHumidityOuter);
+            SensorValue lastSVAtmospherePressure = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorAtmospherePressure);
 
-            result += "<div>Температура внутренняя: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + "°C" : "") + "</div>";
-            result += "<div>Влажность внутренняя: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + "%" : "") + "</div>";
-            result += "<div>Температура наружная: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + "°C" : "") + "</div>";
-            result += "<div>Влажность наружная: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + "%" : "") + "</div>";
-            result += "<div>Атмосферное давление: " + (lastSVAtmospherePressure != null ? lastSVAtmospherePressure.Value + "" : "") + "</div>";
+            string result = "";
+            result += "<div>Температура внутренняя: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Влажность внутренняя: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + "%" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Температура наружная: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Влажность наружная: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + "%" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Атмосферное давление: " + (lastSVAtmospherePressure != null ? lastSVAtmospherePressure.Value + "" : "&lt;нет данных&gt;") + "</div>";
 
             return result;
         }
@@ -73,11 +63,6 @@ namespace SmartHub.Plugins.MeteoStation
             //sb.Append("}");
 
             return sb.ToString();
-        }
-
-        private SensorValue GetLastSensorValue(Sensor sensor, ISession session)
-        {
-            return sensor == null ? null : session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
         }
     }
 }

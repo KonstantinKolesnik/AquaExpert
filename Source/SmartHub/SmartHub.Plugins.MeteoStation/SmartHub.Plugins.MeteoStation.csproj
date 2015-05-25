@@ -92,7 +92,9 @@
     <EmbeddedResource Include="Resources\js\module-main.html" />
     <EmbeddedResource Include="Resources\js\module-main.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\css\weather-icons.min.css" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\js\module-settings.js" />
   </ItemGroup>
