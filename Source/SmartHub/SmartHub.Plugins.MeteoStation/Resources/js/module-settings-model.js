@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensors: function (type, onComplete) {
-            $.getJSON('/api/meteostation/sensors', { type: type })
+        getSensorsDataSource: function (type, onComplete) {
+            $.getJSON('/api/meteostation/sensorsDataSource', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -22,7 +22,7 @@ define(['jquery'], function ($) {
 	            });
         },
         setSensorsConfiguration: function (sc, onComplete) {
-            $.post('/api/meteostation/setSensorsCofiguration', { Value: JSON.stringify(sc) })
+            $.post('/api/meteostation/setSensorsCofiguration', { sc: JSON.stringify(sc) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -34,9 +34,9 @@ define(['jquery'], function ($) {
     };
 
     var viewModel = kendo.observable({
-        SensorsTemperature: [],
-        SensorsHumidity: [],
-        SensorsBarometer: [],
+        SensorsTemperatureDataSource: [],
+        SensorsHumidityDataSource: [],
+        SensorsBarometerDataSource: [],
         SensorsConfiguration: null,
 
         update: function (onComplete) {
@@ -46,14 +46,14 @@ define(['jquery'], function ($) {
             //Humidity = 7,           // Humidity sensor
             //Barometer = 8,          // Barometer sensor (Pressure)
 
-            api.getSensors(6, function (data) {
-                me.set("SensorsTemperature", data);
+            api.getSensorsDataSource(6, function (data) {
+                me.set("SensorsTemperatureDataSource", data);
 
-                api.getSensors(7, function (data) {
-                    me.set("SensorsHumidity", data);
+                api.getSensorsDataSource(7, function (data) {
+                    me.set("SensorsHumidityDataSource", data);
 
-                    api.getSensors(8, function (data) {
-                        me.set("SensorsBarometer", data);
+                    api.getSensorsDataSource(8, function (data) {
+                        me.set("SensorsBarometerDataSource", data);
 
                         api.getSensorsConfiguration(function (sc) {
                             me.set("SensorsConfiguration", sc);

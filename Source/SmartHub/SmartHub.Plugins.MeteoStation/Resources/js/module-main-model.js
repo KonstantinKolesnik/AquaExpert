@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensors: function (type, onComplete) {
-            $.getJSON('/api/meteostation/sensors', { type: type })
+        getSensor: function (id, onComplete) {
+            $.getJSON('/api/meteostation/sensor', { id: id })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -10,45 +10,86 @@ define(['jquery'], function ($) {
 	            .fail(function (data) {
 	                onError(data);
 	            });
-        }
+        },
+        getSensorsConfiguration: function (onComplete) {
+            $.getJSON('/api/meteostation/sensorsCofiguration')
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
     };
 
-
-
-
     var viewModel = kendo.observable({
-        SensorsTemperature: [],
-        SensorsHumidyty: [],
-        SensorsBarometer: [],
+        SensorsConfiguration: null,
 
-        SensorTemperatureInnerID: null,
+        SensorTemperatureInner: null,
+        SensorHumidityInner: null,
+        SensorTemperatureOuter: null,
+        SensorHumidityOuter: null,
+        SensorAtmospherePressure: null,
+
+        SensorValues: [],
 
         update: function (onComplete) {
             var me = this;
 
-            //Temperature = 6,        // Temperature sensor
-            //Humidity = 7,           // Humidity sensor
-            //Barometer = 8,          // Barometer sensor (Pressure)
+            api.getSensorsConfiguration(function (data) {
+                me.set("SensorsConfiguration", data);
 
+                api.getSensor(me.SensorsConfiguration.SensorTemperatureInnerID, function (data) {
+                    me.set("SensorTemperatureInner", data);
 
-            api.getSensors(6, function (data) {
-                me.set("SensorsTemperature", data);
+                    api.getSensor(me.SensorsConfiguration.SensorHumidityInnerID, function (data) {
+                        me.set("SensorHumidityInner", data);
 
-                api.getSensors(7, function (data) {
-                    me.set("SensorsHumidyty", data);
+                        api.getSensor(me.SensorsConfiguration.SensorTemperatureOuterID, function (data) {
+                            me.set("SensorTemperatureOuter", data);
 
-                    api.getSensors(8, function (data) {
-                        me.set("SensorsBarometer", data);
+                            api.getSensor(me.SensorsConfiguration.SensorHumidityOuterID, function (data) {
+                                me.set("SensorHumidityOuter", data);
 
-                        //debugger;
-                        if (onComplete)
-                            onComplete();
+                                api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
+                                    me.set("SensorAtmospherePressure", data);
+
+                                    if (onComplete)
+                                        onComplete();
+                                });
+                            });
+                        });
                     });
                 });
             });
+        },
+        SignalRReceiveHandler: function (model, data) {
+            var me = model;
 
+            if (data.MsgId == "SensorValue") {
+                data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
+                if (!checkFromSensor(data.Data), SensorTemperatureInner)
+                    if (!checkFromSensor(data.Data), SensorHumidityInner)
+                        if (!checkFromSensor(data.Data), SensorTemperatureOuter)
+                            if (!checkFromSensor(data.Data), SensorHumidityOuter)
+                                if (!checkFromSensor(data.Data), SensorAtmospherePressure)
+                                    return;
+            }
 
+            function checkFromSensor(sv, sensor) {
+                var isFromSensor = sensor.NodeNo == sv.NodeNo && sensor.SensorNo == sv.SensorNo;
+
+                if (isFromSensor) {
+                    sensor.set("SensorValueValue", sv.Value);
+                    sensor.set("SensorValueTimeStamp", sv.TimeStamp);
+
+                    me.SensorValues.push(sv);
+                }
+
+                return isFromSensor;
+            }
         }
     });
 
@@ -59,17 +100,6 @@ define(['jquery'], function ($) {
     }
 
     return {
-        ViewModel: viewModel,
-
-        //getNodes: api.getNodes,
-        //setNodeName: api.setNodeName,
-        //deleteNode: api.deleteNode,
-        //getSensors: api.getSensors,
-        //setSensorName: api.setSensorName,
-        //deleteSensor: api.deleteSensor,
-        //getUnitSystem: api.getUnitSystem,
-        //setUnitSystem: api.setUnitSystem,
-        //getBatteryLevels: api.getBatteryLevels,
-        //getSensorValues: api.getSensorValues
+        ViewModel: viewModel
     };
 });

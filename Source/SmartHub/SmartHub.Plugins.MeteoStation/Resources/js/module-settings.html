@@ -5,23 +5,23 @@
     <form role="form">
         <div class="form-group">
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorTemperatureInner">Сенсор внутренней температуры</label>
-            <select class="ddlSensorSelector" id="ddlSensorTemperatureInner" data-bind="source: SensorsTemperature, value: SensorsConfiguration.SensorTemperatureInnerID"></select>
+            <select class="ddlSensorSelector" id="ddlSensorTemperatureInner" data-bind="source: SensorsTemperatureDataSource, value: SensorsConfiguration.SensorTemperatureInnerID"></select>
         </div>
         <div class="form-group">
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorHumidityInner">Сенсор внутренней влажности</label>
-            <select class="ddlSensorSelector" id="ddlSensorHumidityInner" data-bind="source: SensorsHumidity, value: SensorsConfiguration.SensorHumidityInnerID"></select>
+            <select class="ddlSensorSelector" id="ddlSensorHumidityInner" data-bind="source: SensorsHumidityDataSource, value: SensorsConfiguration.SensorHumidityInnerID"></select>
         </div>
         <div class="form-group">
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorTemperatureOuter">Сенсор внешней температуры</label>
-            <select class="ddlSensorSelector" id="ddlSensorTemperatureOuter" data-bind="source: SensorsTemperature, value: SensorsConfiguration.SensorTemperatureOuterID"></select>
+            <select class="ddlSensorSelector" id="ddlSensorTemperatureOuter" data-bind="source: SensorsTemperatureDataSource, value: SensorsConfiguration.SensorTemperatureOuterID"></select>
         </div>
         <div class="form-group">
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorHumidityOuter">Сенсор внешней влажности</label>
-            <select class="ddlSensorSelector" id="ddlSensorHumidityOuter" data-bind="source: SensorsHumidity, value: SensorsConfiguration.SensorHumidityOuterID"></select>
+            <select class="ddlSensorSelector" id="ddlSensorHumidityOuter" data-bind="source: SensorsHumidityDataSource, value: SensorsConfiguration.SensorHumidityOuterID"></select>
         </div>
         <div class="form-group">
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorAtmospherePressure">Сенсор атмосферного давления</label>
-            <select class="ddlSensorSelector" id="ddlSensorAtmospherePressure" data-bind="source: SensorsBarometer, value: SensorsConfiguration.SensorAtmospherePressureID"></select>
+            <select class="ddlSensorSelector" id="ddlSensorAtmospherePressure" data-bind="source: SensorsBarometerDataSource, value: SensorsConfiguration.SensorAtmospherePressureID"></select>
         </div>
     </form>
 </div>

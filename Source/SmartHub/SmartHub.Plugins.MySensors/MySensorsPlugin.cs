@@ -493,7 +493,7 @@ namespace SmartHub.Plugins.MySensors
                 BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
             };
         }
-        private object BuildSensorWebModel(Sensor sensor)
+        public object BuildSensorWebModel(Sensor sensor)
         {
             if (sensor == null)
                 return null;
