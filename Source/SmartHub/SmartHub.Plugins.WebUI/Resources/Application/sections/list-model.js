@@ -53,7 +53,6 @@
     };
 
     return {
-
         // entities
         Page: pageModel,
         PageCollection: pageCollection,

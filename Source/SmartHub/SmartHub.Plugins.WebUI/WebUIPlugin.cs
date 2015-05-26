@@ -157,6 +157,7 @@ namespace SmartHub.Plugins.WebUI
         {
             return sectionItems
                 .Where(sectionItem => sectionItem.Type == sectionType)
+                .OrderBy(sectionItem => sectionItem.Title)
                 .Select(sectionItem => new
                     {
                         id = Guid.NewGuid(),

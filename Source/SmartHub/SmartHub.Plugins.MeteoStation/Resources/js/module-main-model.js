@@ -70,12 +70,12 @@ define(['jquery'], function ($) {
                                     api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
                                         me.set("SensorAtmospherePressure", data);
 
-                                        getSensorValues(me.SensorTemperatureInner, function () {
-                                            getSensorValues(me.SensorHumidityInner, function () {
-                                                getSensorValues(me.SensorTemperatureOuter, function () {
-                                                    getSensorValues(me.SensorHumidityOuter, function () {
-                                                        getSensorValues(me.SensorAtmospherePressure, function () {
-                                                            getSensorValues(me.SensorForecast, function () {
+                                        getSensorValues(me.SensorTemperatureInner, "TI", function () {
+                                            getSensorValues(me.SensorHumidityInner, "HI", function () {
+                                                getSensorValues(me.SensorTemperatureOuter, "TO", function () {
+                                                    getSensorValues(me.SensorHumidityOuter, "HO", function () {
+                                                        getSensorValues(me.SensorAtmospherePressure, "P", function () {
+                                                            getSensorValues(me.SensorForecast, "FC", function () {
                                                                 if (onComplete)
                                                                     onComplete();
                                                             });
@@ -92,11 +92,14 @@ define(['jquery'], function ($) {
                 });
             });
 
-            function getSensorValues(sensor, onComplete) {
+            function getSensorValues(sensor, fieldName, onComplete) {
                 if (sensor)
-                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 12, function (data) {
+                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 72, function (data) {
                         data = data || [];
-                        $.each(data, function (idx, sv) { me.SensorValues.push(sv); });
+                        $.each(data, function (idx, sv) {
+                            sv[fieldName] = sv.Value;
+                            me.SensorValues.push(sv);
+                        });
 
                         if (onComplete)
                             onComplete();
@@ -107,26 +110,29 @@ define(['jquery'], function ($) {
             }
         },
         SignalRReceiveHandler: function (model, data) {
+            var me = model;
+
             if (data.MsgId == "SensorValue") {
                 data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
-                if (!checkFromSensor(data.Data, model.SensorTemperatureInner))
-                    if (!checkFromSensor(data.Data, model.SensorHumidityInner))
-                        if (!checkFromSensor(data.Data, model.SensorTemperatureOuter))
-                            if (!checkFromSensor(data.Data, model.SensorHumidityOuter))
-                                if (!checkFromSensor(data.Data, model.SensorAtmospherePressure))
-                                    if (!checkFromSensor(data.Data, model.SensorForecast))
+                if (!checkFromSensor(data.Data, me.SensorTemperatureInner, "TI"))
+                    if (!checkFromSensor(data.Data, me.SensorHumidityInner, "HI"))
+                        if (!checkFromSensor(data.Data, me.SensorTemperatureOuter, "TO"))
+                            if (!checkFromSensor(data.Data, me.SensorHumidityOuter, "HO"))
+                                if (!checkFromSensor(data.Data, me.SensorAtmospherePressure, "P"))
+                                    if (!checkFromSensor(data.Data, me.SensorForecast, "FC"))
                                         return;
             }
 
-            function checkFromSensor(sv, sensor) {
+            function checkFromSensor(sv, sensor, fieldName) {
                 var isFromSensor = (sensor.NodeNo == sv.NodeNo && sensor.SensorNo == sv.SensorNo);
 
                 if (isFromSensor) {
                     sensor.set("SensorValueValue", sv.Value);
                     sensor.set("SensorValueTimeStamp", sv.TimeStamp);
 
-                    model.SensorValues.push(sv);
+                    sv[fieldName] = sv.Value;
+                    me.SensorValues.push(sv);
                 }
 
                 return isFromSensor;

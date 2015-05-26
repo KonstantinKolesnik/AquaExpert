@@ -3,7 +3,6 @@
 		'webapp/weather/locations-model',
 		'webapp/weather/locations-view'],
 	function (application, common, models, views) {
-
 		var layoutView;
 
 		var api = {

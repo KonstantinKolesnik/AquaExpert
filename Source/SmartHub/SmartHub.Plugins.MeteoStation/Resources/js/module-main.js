@@ -8,7 +8,6 @@
 
 	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView();
-	                view.viewModel = models.ViewModel;
 	                application.setContentView(view);
 
 	                view.bindModel(models.ViewModel);

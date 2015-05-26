@@ -27,6 +27,10 @@ namespace SmartHub.Plugins.MeteoStation
 
     [CssResource("/webapp/meteostation/css/style.css", "SmartHub.Plugins.MeteoStation.Resources.css.style.css", AutoLoad = true)]
     [CssResource("/webapp/meteostation/css/weather-icons.min.css", "SmartHub.Plugins.MeteoStation.Resources.css.weather-icons.min.css", AutoLoad = true)]
+    [HttpResource("/webapp/meteostation/fonts/weathericons-regular-webfont.eot", "SmartHub.Plugins.MeteoStation.Resources.fonts.weathericons-regular-webfont.eot", "application/vnd.ms-fontobject")]
+    [HttpResource("/webapp/meteostation/fonts/weathericons-regular-webfont.svg", "SmartHub.Plugins.MeteoStation.Resources.fonts.weathericons-regular-webfont.svg", "image/svg+xml")]
+    [HttpResource("/webapp/meteostation/fonts/weathericons-regular-webfont.ttf", "SmartHub.Plugins.MeteoStation.Resources.fonts.weathericons-regular-webfont.ttf", "application/x-font-truetype")]
+    [HttpResource("/webapp/meteostation/fonts/weathericons-regular-webfont.woff", "SmartHub.Plugins.MeteoStation.Resources.fonts.weathericons-regular-webfont.woff", "application/font-woff")]
 
     [Plugin]
     public class MeteoStationPlugin : PluginBase

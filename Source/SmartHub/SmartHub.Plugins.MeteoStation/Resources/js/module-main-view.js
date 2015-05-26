@@ -4,50 +4,106 @@ define(
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
-            viewModel: null,
             onShow: function () {
                 var me = this;
 
-                createSensorValuesChart($("#sensorTemperatureInnerChart"), [
-                    { field: "NodeNo", operator: "eq", value: me.viewModel.SensorTemperatureInner.NodeNo },
-                    { field: "SensorNo", operator: "eq", value: me.viewModel.SensorTemperatureInner.SensorNo }
-                ]);
-                createSensorValuesChart($("#sensorHumidityInnerChart"), [
-                    { field: "NodeNo", operator: "eq", value: me.viewModel.SensorHumidityInner.NodeNo },
-                    { field: "SensorNo", operator: "eq", value: me.viewModel.SensorHumidityInner.SensorNo }
-                ]);
-                createSensorValuesChart($("#sensorTemperatureOuterChart"), [
-                    { field: "NodeNo", operator: "eq", value: me.viewModel.SensorTemperatureOuter.NodeNo },
-                    { field: "SensorNo", operator: "eq", value: me.viewModel.SensorTemperatureOuter.SensorNo }
-                ]);
-                createSensorValuesChart($("#sensorHumidityOuterChart"), [
-                    { field: "NodeNo", operator: "eq", value: me.viewModel.SensorHumidityOuter.NodeNo },
-                    { field: "SensorNo", operator: "eq", value: me.viewModel.SensorHumidityOuter.SensorNo }
-                ]);
-                createSensorValuesChart($("#sensorAtmospherePressureChart"), [
-                    { field: "NodeNo", operator: "eq", value: me.viewModel.SensorAtmospherePressure.NodeNo },
-                    { field: "SensorNo", operator: "eq", value: me.viewModel.SensorAtmospherePressure.SensorNo }
-                ]);
+                createSensorValuesChart($("#sensorsChart"));
 
-                function createSensorValuesChart(selector, filter) {
+                function createSensorValuesChart(selector) {
                     selector.kendoChart({
-                        dataSource: { filter: filter },
-                        series: [{
-                            line: {
-                                style: "smooth"
+                        //theme: "MetroBlack",
+                        title: {
+                            text: "Статистика"
+                        },
+                        legend: {
+                            position: "right"
+                        },
+                        seriesDefault: {
+                            //line: {
+                            //    style: "smooth"
+                            //},
+                            style: "smooth"
+                            //aggregate: "avg",
+                        },
+                        series: [
+                            {
+                                type: "line",
+                                name: "Температура внутри",
+                                field: "TI",
+                                color: "red",
+                                axis: "temp"
                             },
-                            type: "area",
-                            aggregate: "avg",
-                            field: "Value",
-                            categoryField: "TimeStamp"
-                        }],
-
+                            {
+                                type: "line",
+                                name: "Влажность внутри",
+                                field: "HI",
+                                color: "blue",
+                                axis: "hum"
+                            },
+                            {
+                                type: "line",
+                                name: "Температура снаружи",
+                                field: "TO",
+                                color: "pink",
+                                axis: "temp"
+                            },
+                            {
+                                type: "line",
+                                name: "Влажность снаружи",
+                                field: "HO",
+                                color: "cornflowerblue",
+                                axis: "hum"
+                            },
+                            {
+                                type: "area",
+                                name: "Давление",
+                                field: "P",
+                                color: "lightgreen",
+                                axis: "press",
+                                tooltip: {
+                                    visible: true,
+                                    template: "#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
+                                }
+                            },
+                        ],
                         tooltip: {
                             visible: true,
-                            template: "#= value #"
+                            //format: "Value: {0:N0}",
+                            //template: "${category} - ${value}"
+                            template: "#= kendo.toString(value, 'n1') #"
                         },
-
+                        valueAxes: [
+                            {
+                                name: "temp",
+                                color: "red",
+                                //min: -50,
+                                //max: 50,
+                                labels: {
+                                    format: "{0} °C",
+                                }
+                            },
+                            {
+                                name: "hum",
+                                color: "cornflowerblue",
+                                //min: 0,
+                                //max: 100,
+                                labels: {
+                                    format: "{0} %",
+                                }
+                            },
+                            {
+                                name: "press",
+                                color: "lightgreen",
+                                //min: 30000,
+                                //max: 110000,
+                                labels: {
+                                    //format: "{0} Pa",
+                                    template: "#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
+                                }
+                            },
+                        ],
                         categoryAxis: {
+                            field: "TimeStamp",
                             type: "date",
 
                             //baseUnit: "fit",
@@ -59,10 +115,11 @@ define(
                             //baseUnit: "months",
                             //baseUnit: "years",
 
+                            axisCrossingValues: [0, 0, 1000000],
                             labels: {
                                 dateFormats: {
-                                    //hours: "MMM d HH:mm",
-                                    hours: "HH:mm",
+                                    hours: "MMM d, HH:mm",
+                                    //hours: "HH:mm",
                                     days: "MMM d",
                                     weeks: "MMM d",
                                     months: "yyyy MMM",
@@ -77,9 +134,6 @@ define(
                     });
                 }
             },
-            //onDestroy: function () {
-
-            //},
 
             bindModel: function (viewModel) {
                 lib.kendo.bind($("#content"), viewModel);

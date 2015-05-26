@@ -1,7 +1,5 @@
 ﻿define(
-	['lib',
-		'text!application/sections/list.tpl',
-		'text!application/sections/list-item.tpl'],
+	['lib',	'text!application/sections/list.tpl', 'text!application/sections/list-item.tpl'],
 	function (lib, listTemplate, itemTemplate) {
 
 	    var sectionView = lib.marionette.ItemView.extend({
@@ -18,10 +16,8 @@
 	        childViewContainer: '.js-list',
 
 	        onRender: function () {
-
-	            if (this.options.title) {
+	            if (this.options.title)
 	                this.$('.js-title').text(this.options.title);
-	            }
 	        }
 	    });
 

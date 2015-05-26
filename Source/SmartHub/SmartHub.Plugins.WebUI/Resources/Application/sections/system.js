@@ -1,7 +1,5 @@
-﻿define(
-	['application/sections/list'],
+﻿define(['application/sections/list'],
 	function (sections) {
-
 	    return {
 	        start: function () {
 	            sections.api.reload('loadSystemSections', 'Настройки');

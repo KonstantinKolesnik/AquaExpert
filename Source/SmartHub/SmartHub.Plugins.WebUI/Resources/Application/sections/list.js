@@ -2,17 +2,16 @@
 	['app', 'application/sections/list-model', 'application/sections/list-view'],
 	function (application, models, views) {
 	    var api = {
-	        // childView (section item) properties:
-	        /*
-                id = Guid.NewGuid(),
-                name = sectionItem.Title,
-                path = sectionItem.GetModulePath(),
-                sortOrder = sectionItem.SortOrder,
-                tileTypeFullName = sectionItem.TileTypeFullName
-            */
+	        addSectionItemTile: function (childView) {
+	            // childView (section item) properties:
+	            /*
+                    id = Guid.NewGuid(),
+                    name = sectionItem.Title,
+                    path = sectionItem.GetModulePath(),
+                    sortOrder = sectionItem.SortOrder,
+                    tileTypeFullName = sectionItem.TileTypeFullName
+                */
 
-            // add tile for SectionItem only:
-	        addTile: function (childView) {
 	            // if tileTypeFullName is defined:
 	            // parameters are empty,
 	            // title & url must be populated in TileBase::PopulateWebModel method directly;
@@ -41,7 +40,7 @@
 	            // todo: переписать выбор метода для загрузки списка
 	            models[requestName]().done(function (items) {
 	                var view = new views.SectionListView({ collection: items, title: pageTitle });
-	                view.on('childview:sections:add-tile', api.addTile);
+	                view.on('childview:sections:add-tile', api.addSectionItemTile);
 	                view.on('childview:sections:navigate', api.navigate);
 
 	                application.setContentView(view);

@@ -19,7 +19,7 @@ namespace SmartHub.Plugins.MeteoStation
                 tileWebModel.title = "Метеостанция";
                 tileWebModel.url = "webapp/meteostation/module-main";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-umbrella";
-                tileWebModel.wide = true;
+                //tileWebModel.wide = true;
                 tileWebModel.content = BuildContent();
                 tileWebModel.SignalRReceiveHandler = BuildSignalRReceiveHandler();
             }
@@ -41,11 +41,11 @@ namespace SmartHub.Plugins.MeteoStation
             SensorValue lastSVForecast = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorForecast);
 
             string result = "";
-            result += "<div>Температура внутренняя: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Влажность внутренняя: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + "%" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Температура наружная: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + "°C" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Влажность наружная: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + "%" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Атмосферное давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value /133.3f) + "mmHg" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>";
+            result += "<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value /133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>";
             result += "<div>Прогноз: " + (lastSVForecast != null ? lastSVForecast.Value + "" : "&lt;нет данных&gt;") + "</div>";
             //const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
 
@@ -55,7 +55,7 @@ namespace SmartHub.Plugins.MeteoStation
         {
             StringBuilder sb = new StringBuilder();
 
-            //sb.Append("if (data.MsgId == 'SensorValue') { ");
+            sb.Append("if (data.MsgId == 'SensorValue') { ");
             //sb.Append("var dt = kendo.toString(new Date(data.Data.TimeStamp), 'dd.MM.yyyy'); ");
             //sb.Append("var tm = kendo.toString(new Date(data.Data.TimeStamp), 'HH:mm:ss'); ");
             //sb.Append("var val = '[' + data.Data.NodeNo + '][' + data.Data.SensorNo + '] ' + data.Data.TypeName + ': ' + data.Data.Value; ");
@@ -63,7 +63,7 @@ namespace SmartHub.Plugins.MeteoStation
             //sb.Append("result += '<span style=\"font-size:0.9em; font-style:italic;\">' + tm + '</span>'; ");
             //sb.Append("result += '<div>' + val + '</div>'; ");
             //sb.Append("model.tileModel.set({ 'content': result }); ");
-            //sb.Append("}");
+            sb.Append("}");
 
             return sb.ToString();
         }

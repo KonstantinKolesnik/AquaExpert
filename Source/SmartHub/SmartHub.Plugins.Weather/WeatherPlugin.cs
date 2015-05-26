@@ -163,7 +163,7 @@ namespace SmartHub.Plugins.Weather
             if (list != null)
                 foreach (dynamic item in list)
                 {
-                    var date = DateTimeFromUnixTimestampSeconds(item.dt);
+                    var date = DateTimeFromUnixTimestampSeconds((long)item.dt);
                     var dataItem = GetWeatherDataItem(location, date, session);
                     PopulateWeatherDataItem(dataItem, item);
                     session.Flush();
