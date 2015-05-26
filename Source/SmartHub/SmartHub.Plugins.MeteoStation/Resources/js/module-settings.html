@@ -27,5 +27,9 @@
             <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorForecast">Сенсор прогноза</label>
             <select class="ddlSensorSelector" id="ddlSensorForecast" data-bind="source: SensorsForecastDataSource, value: SensorsConfiguration.SensorForecastID"></select>
         </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-12 col-md-2" for="ntbHeight">Высота над уровнем моря, м</label>
+            <input class="ddlSensorSelector" id="ntbHeight" data-bind="value: SensorsConfiguration.Height"/>
+        </div>
     </form>
 </div>

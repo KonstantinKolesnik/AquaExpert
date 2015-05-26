@@ -13,11 +13,22 @@ define(
                 createSensorSelector($("#ddlSensorHumidityOuter"));
                 createSensorSelector($("#ddlSensorAtmospherePressure"));
                 createSensorSelector($("#ddlSensorForecast"));
+                createNumericTextBox($("#ntbHeight"));
 
                 function createSensorSelector(selector) {
                     selector.kendoDropDownList({
                         dataValueField: "Id",
                         dataTextField: "Name",
+                        change: function (e) { me.trigger('SensorsConfiguration:set'); }
+                    });
+                }
+                function createNumericTextBox(selector) {
+                    selector.kendoNumericTextBox({
+                        min: -500,
+                        max: 9000,
+                        step: 1,
+                        format: "n0",
+                        decimals: 0,
                         change: function (e) { me.trigger('SensorsConfiguration:set'); }
                     });
                 }

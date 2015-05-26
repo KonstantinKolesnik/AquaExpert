@@ -193,9 +193,9 @@ namespace SmartHub.Plugins.MeteoStation
         {
             var nodeNo = request.GetRequiredInt32("nodeNo");
             var sensorNo = request.GetRequiredInt32("sensorNo");
-            var days = request.GetRequiredInt32("days");
+            var hours = request.GetRequiredInt32("hours");
 
-            DateTime dt = DateTime.UtcNow.AddDays(-days);
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
 
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();

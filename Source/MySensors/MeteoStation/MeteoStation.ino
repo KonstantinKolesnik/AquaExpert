@@ -12,47 +12,47 @@
 #include <MySensor.h>
 #include <SPI.h>
 #include <DHT.h>
-//#include <Wire.h>
-//#include <Adafruit_BMP085.h>
+#include <Wire.h>
+#include <Adafruit_BMP085.h>
 #include <eeprom.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_INNER_SENSOR_ID	0
 MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);
 float lastTemperatureInner;
-unsigned long prevMsTemperatureInner = -1000;
+unsigned long prevMsTemperatureInner = -1000000;
 const long intervalTemperatureInner = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_INNER_SENSOR_ID	1
 MyMessage msgHumidityInner(HUMIDITY_INNER_SENSOR_ID, V_HUM);
 float lastHumidityInner;
-unsigned long prevMsHumidityInner = 0;
+unsigned long prevMsHumidityInner = -1000000;
 const long intervalHumidityInner = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_OUTER_SENSOR_ID	2
 MyMessage msgTemperatureOuter(TEMPERATURE_OUTER_SENSOR_ID, V_TEMP);
 float lastTemperatureOuter;
-unsigned long prevMsTemperatureOuter = -1000;
+unsigned long prevMsTemperatureOuter = -1000000;
 const long intervalTemperatureOuter = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_OUTER_SENSOR_ID	3
 MyMessage msgHumidityOuter(HUMIDITY_OUTER_SENSOR_ID, V_HUM);
 float lastHumidityOuter;
-unsigned long prevMsHumidityOuter = 0;
+unsigned long prevMsHumidityOuter = -1000000;
 const long intervalHumidityOuter = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PRESSURE_SENSOR_ID			4
 MyMessage msgPressure(PRESSURE_SENSOR_ID, V_PRESSURE);
-float lastPressure;
-unsigned long prevMsPressure = 0;
-const long intervalPressure = 180000;
+int32_t lastPressure;
+unsigned long prevMsPressure = -1000000;
+const long intervalPressure = 60000;
 
 #define FORECAST_SENSOR_ID			5
 MyMessage msgForecast(FORECAST_SENSOR_ID, V_FORECAST);
-float lastForecast;
+int lastForecast = 5;
 const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
 float pressureSamples[7][6];
 float pressureAvg[7];
@@ -64,9 +64,9 @@ bool firstRound = true;
 bool isMetric = true;
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 DHT dhtOuter, dhtInner;
-#define DHT_OUTER_PIN	2
-#define DHT_INNER_PIN	3
-//Adafruit_BMP085 bmp = Adafruit_BMP085();
+#define DHT_INNER_PIN	2
+#define DHT_OUTER_PIN	3
+Adafruit_BMP085 bmp = Adafruit_BMP085();
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -83,11 +83,11 @@ void setup()
 	dhtOuter.setup(DHT_OUTER_PIN);
 	dhtInner.setup(DHT_INNER_PIN);
 
-	//if (!bmp.begin())
-	//{
-	//	Serial.println("Could not find a valid BMP085 sensor, check wiring!");
-	//	while (1) {}
-	//}
+	if (!bmp.begin())
+	{
+		Serial.println("Could not find a valid BMP085/BMP180 sensor, check wiring!");
+		while (1) {}
+	}
 
 	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
 	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
@@ -98,10 +98,10 @@ void setup()
 }
 void loop()
 {
-	processTemperature(true);
-	processHumidity(true);
 	processTemperature(false);
 	processHumidity(false);
+	processTemperature(true);
+	processHumidity(true);
 	processPressure();
 
 	gw.process();
@@ -128,10 +128,9 @@ void onMessageReceived(const MyMessage &message)
 		else if (message.sensor == HUMIDITY_INNER_SENSOR_ID && message.type == V_HUM)
 			gw.send(msgHumidityInner.set(lastHumidityInner, 1));
 		else if (message.sensor == PRESSURE_SENSOR_ID && message.type == V_PRESSURE)
-		{
-
-
-		}
+			gw.send(msgPressure.set(lastPressure));
+		else if (message.sensor == PRESSURE_SENSOR_ID && message.type == V_FORECAST)
+			gw.send(msgForecast.set(lastForecast));
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -220,33 +219,53 @@ void processPressure()
 	{
 		prevMsPressure = ms;
 
-		//float pressure = bmp.readSealevelPressure(205) / 100; // 205 meters above sealevel
+		//int32_t pressure = bmp.readSealevelPressure(190) / 1000; // 205 meters above sealevel
 		//int forecast = sample(pressure);
 
-//		if (!isnan(pressure))
-//		{
-//			if (lastPressure != pressure)
-//			{
-//				lastPressure = pressure;
-//				gw.send(msgPressure.set(pressure));
-//
-//#ifdef DEBUG
-//				Serial.print("Temperature Outer: ");
-//				Serial.print(temperature, 1);
-//				Serial.println(isMetric ? " C" : " F");
-//#endif
-//			}
-//		}
-//#ifdef DEBUG
-//		else
-//			Serial.println("Failed reading Temperature Outer");
-//#endif
+		//float altitude = bmp.readAltitude();
 
+		//Serial.println(bmp.readSealevelPressure(altitude));
+		//Serial.println(bmp.readPressure());
+		//Serial.println(bmp.readSealevelPressure(altitude) / 133.3);
+		//Serial.println(bmp.readPressure() / 133.3);
+		//Serial.println(weather[forecast]);
+		//Serial.println(bmp.readTemperature());
+		//Serial.println((int16_t)altitude);
+		//Serial.println("-------------------------");
 
-		//if (forecast != lastForecast) {
-		//	lastForecast = forecast;
-		//	gw.send(msgForecast.set(weather[forecast]));
-		//}
+		int32_t pressure = bmp.readPressure(); // in Pa
+
+		if (!isnan(pressure))
+		{
+			if (lastPressure != pressure)
+			{
+				lastPressure = pressure;
+				gw.send(msgPressure.set(pressure));
+
+#ifdef DEBUG
+				Serial.print("Pressure: ");
+				Serial.print(pressure);
+				Serial.println(" Pa");
+#endif
+
+				int forecast = sample(pressure / 1000); // in kPa
+				if (lastForecast != forecast)
+				{
+					lastForecast = forecast;
+					//gw.send(msgForecast.set(weather[forecast]));
+					gw.send(msgForecast.set(forecast));
+
+#ifdef DEBUG
+					Serial.print("Forecast: ");
+					Serial.println(weather[forecast]);
+#endif
+				}
+			}
+		}
+#ifdef DEBUG
+		else
+			Serial.println("Failed reading Pressure");
+#endif
 	}
 }
 
@@ -373,7 +392,7 @@ int sample(float pressure)
 		return 2; // Slowly falling Low Pressure System, stable rainy weather
 	else if ((dP_dt > 0.05) && (dP_dt < 0.25))
 		return 1; // Slowly rising HP stable good weather
-	else if ((dP_dt >(-0.05)) && (dP_dt < 0.05))
+	else if ((dP_dt > (-0.05)) && (dP_dt < 0.05))
 		return 0; // Stable weather
 	else
 		return 5; // Unknown

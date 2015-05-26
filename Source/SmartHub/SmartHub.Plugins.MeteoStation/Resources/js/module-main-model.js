@@ -21,8 +21,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        getSensorValues: function (nodeNo, sensorNo, days, onComplete) {
-            $.getJSON('/api/meteostation/sensorvalues', { nodeNo: nodeNo, sensorNo: sensorNo, days: days })
+        getSensorValues: function (nodeNo, sensorNo, hours, onComplete) {
+            $.getJSON('/api/meteostation/sensorvalues', { nodeNo: nodeNo, sensorNo: sensorNo, hours: hours })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -94,7 +94,7 @@ define(['jquery'], function ($) {
 
             function getSensorValues(sensor, onComplete) {
                 if (sensor)
-                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 7, function (data) {
+                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 12, function (data) {
                         data = data || [];
                         $.each(data, function (idx, sv) { me.SensorValues.push(sv); });
 
@@ -112,12 +112,12 @@ define(['jquery'], function ($) {
             if (data.MsgId == "SensorValue") {
                 data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
-                if (!checkFromSensor(data.Data), SensorTemperatureInner)
-                    if (!checkFromSensor(data.Data), SensorHumidityInner)
-                        if (!checkFromSensor(data.Data), SensorTemperatureOuter)
-                            if (!checkFromSensor(data.Data), SensorHumidityOuter)
-                                if (!checkFromSensor(data.Data), SensorAtmospherePressure)
-                                    if (!checkFromSensor(data.Data), SensorForecast)
+                if (!checkFromSensor(data.Data, model.SensorTemperatureInner))
+                    if (!checkFromSensor(data.Data, model.SensorHumidityInner))
+                        if (!checkFromSensor(data.Data, model.SensorTemperatureOuter))
+                            if (!checkFromSensor(data.Data, model.SensorHumidityOuter))
+                                if (!checkFromSensor(data.Data, model.SensorAtmospherePressure))
+                                    if (!checkFromSensor(data.Data, model.SensorForecast))
                                         return;
             }
 
