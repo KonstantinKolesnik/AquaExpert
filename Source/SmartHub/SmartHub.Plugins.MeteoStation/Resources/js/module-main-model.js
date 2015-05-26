@@ -107,8 +107,6 @@ define(['jquery'], function ($) {
             }
         },
         SignalRReceiveHandler: function (model, data) {
-            var me = model;
-
             if (data.MsgId == "SensorValue") {
                 data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
@@ -122,13 +120,13 @@ define(['jquery'], function ($) {
             }
 
             function checkFromSensor(sv, sensor) {
-                var isFromSensor = sensor.NodeNo == sv.NodeNo && sensor.SensorNo == sv.SensorNo;
+                var isFromSensor = (sensor.NodeNo == sv.NodeNo && sensor.SensorNo == sv.SensorNo);
 
                 if (isFromSensor) {
                     sensor.set("SensorValueValue", sv.Value);
                     sensor.set("SensorValueTimeStamp", sv.TimeStamp);
 
-                    me.SensorValues.push(sv);
+                    model.SensorValues.push(sv);
                 }
 
                 return isFromSensor;

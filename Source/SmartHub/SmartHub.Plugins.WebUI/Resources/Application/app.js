@@ -42,12 +42,11 @@ define(
 		    app.regionContent.show(view);
 	    };
 	    app.addTile = function (typeFullName, parameters) {
-	        $.post(
-                '/api/webui/tiles/add',
-                {
-                    typeFullName: typeFullName,
-                    parameters: JSON.stringify(parameters)
-                })
+	        var args = {
+	            typeFullName: typeFullName,
+	            parameters: JSON.stringify(parameters)
+	        };
+	        $.post('/api/webui/tiles/add', args)
 			    .done(function () {
 				    app.navigate('tiles');
 			    });
@@ -84,7 +83,7 @@ define(
 	                        receiver.SignalRReceiveHandler(receiver, data);
 	                    }
 	                    catch (ex) {
-                            // most likely tile's handler when we aren't at the main page
+                            // most likely it's a tile's handler and we aren't at the main page
 	                        var idx = app.SignalRReceivers.indexOf(receiver);
 	                        app.SignalRReceivers.splice(idx, 1);
 	                    }
@@ -99,7 +98,7 @@ define(
 	                console.log('Reconnecting');
 	            }
 	            else if (change.newState === $.signalR.connectionState.connected) {
-	                console.log('The server is online');
+	                console.log('Connected');
 	            }
 	        });
 	        connection.reconnected(function () {

@@ -247,19 +247,19 @@ void processPressure()
 				Serial.print(pressure);
 				Serial.println(" Pa");
 #endif
+			}
 
-				int forecast = sample(pressure / 1000); // in kPa
-				if (lastForecast != forecast)
-				{
-					lastForecast = forecast;
-					//gw.send(msgForecast.set(weather[forecast]));
-					gw.send(msgForecast.set(forecast));
+			int forecast = sample(pressure / 1000); // in kPa
+			if (lastForecast != forecast)
+			{
+				lastForecast = forecast;
+				//gw.send(msgForecast.set(weather[forecast]));
+				gw.send(msgForecast.set(forecast));
 
 #ifdef DEBUG
-					Serial.print("Forecast: ");
-					Serial.println(weather[forecast]);
+				Serial.print("Forecast: ");
+				Serial.println(weather[forecast]);
 #endif
-				}
 			}
 		}
 #ifdef DEBUG

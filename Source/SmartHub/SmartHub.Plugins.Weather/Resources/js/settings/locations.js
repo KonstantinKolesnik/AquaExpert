@@ -12,14 +12,11 @@
 				application.addTile('SmartHub.Plugins.Weather.WeatherTile', { cityId: locationId });
 			},
 			addLocation: function () {
-
 				var displayName = this.model.get('displayName');
 				var query = this.model.get('query');
 
-				if (displayName && query) {
-
+				if (displayName && query)
 					models.addLocation(displayName, query).done(api.reloadList);
-				}
 			},
 			deleteLocation: function (childView) {
 
@@ -44,7 +41,6 @@
 					});
 			},
 			reloadForm: function () {
-
 				var formData = new models.Location();
 
 				var form = new views.WeatherSettingsFormView({ model: formData });
@@ -52,10 +48,8 @@
 				layoutView.regionForm.show(form);
 			},
 			reloadList: function () {
-
 				models.loadLocations()
 					.done(function (list) {
-
 						var view = new views.LocationListView({ collection: list });
 						view.on('childview:weather:location:delete', api.deleteLocation);
 						view.on('childview:weather:location:update', api.updateLocation);
@@ -68,7 +62,6 @@
 
 		return {
 			start: function () {
-
 				// init layout
 				layoutView = new views.WeatherSettingsLayout();
 				application.setContentView(layoutView);
