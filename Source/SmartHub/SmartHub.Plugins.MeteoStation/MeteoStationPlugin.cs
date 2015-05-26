@@ -123,8 +123,9 @@ namespace SmartHub.Plugins.MeteoStation
             sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
             sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
             sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Прогноз: " + (lastSVForecast != null ? lastSVForecast.Value + "" : "&lt;нет данных&gt;") + "</div>");
-            //const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
+            
+            string[] weather = { "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" };
+            sb.Append("<div>Прогноз: " + (lastSVForecast != null ? weather[(int)lastSVForecast.Value] : "&lt;нет данных&gt;") + "</div>");
             return sb.ToString();
         }
         public string BuildSignalRReceiveHandler()
@@ -216,14 +217,7 @@ namespace SmartHub.Plugins.MeteoStation
                 IsMessageFromSensor(message, SensorHumidityOuter) ||
                 IsMessageFromSensor(message, SensorAtmospherePressure) ||
                 IsMessageFromSensor(message, SensorForecast))
-            {
-                var msg = new
-                {
-                    MsgId = "MeteoStationTileContent",
-                    Data = BuildTileContent()
-                };
-                NotifyForSignalR(msg);
-            }
+                NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
         }
         #endregion
 

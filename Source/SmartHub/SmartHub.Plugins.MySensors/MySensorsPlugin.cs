@@ -14,6 +14,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace SmartHub.Plugins.MySensors
 {
@@ -151,6 +152,117 @@ namespace SmartHub.Plugins.MySensors
         {
             if (gatewayProxy != null && node != null)
                 gatewayProxy.Send(new SensorMessage(node.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
+        }
+
+        public string BuildTileContent()
+        {
+            SensorValue lastSV = null;
+            using (var session = Context.OpenSession())
+                lastSV = session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+
+            StringBuilder sb = new StringBuilder();
+            if (lastSV != null)
+            {
+                sb.AppendFormat("<span>{0:dd.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
+                sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.Type.ToString(), lastSV.Value);
+            }
+            return sb.ToString();
+        }
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            //sb.Append("if (data.MsgId == 'SensorValue') { ");
+            //sb.Append("var dt = kendo.toString(new Date(data.Data.TimeStamp), 'dd.MM.yyyy'); ");
+            //sb.Append("var tm = kendo.toString(new Date(data.Data.TimeStamp), 'HH:mm:ss'); ");
+            //sb.Append("var val = '[' + data.Data.NodeNo + '][' + data.Data.SensorNo + '] ' + data.Data.TypeName + ': ' + data.Data.Value; ");
+            //sb.Append("var result = '<span>' + dt + '</span>&nbsp;&nbsp;'; ");
+            //sb.Append("result += '<span style=\"font-size:0.9em; font-style:italic;\">' + tm + '</span>'; ");
+            //sb.Append("result += '<div>' + val + '</div>'; ");
+            //sb.Append("model.tileModel.set({ 'content': result }); ");
+            //sb.Append("}");
+
+            sb.Append("if (data.MsgId == 'MySensorsTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
+        }
+        #endregion
+
+        #region Private methods
+        private void GetNextAvailableNodeID()
+        {
+            using (var session = Context.OpenSession())
+            {
+                var nds = session.Query<Node>().OrderBy(node => node.NodeNo).ToList();
+
+                byte id = 1;
+                for (byte i = 0; i < nds.Count; i++)
+                    if (nds[i].NodeNo > i + 1)
+                    {
+                        id = (byte)(i + 1);
+                        break;
+                    }
+                    else
+                        id++;
+
+                if (id < 255)
+                {
+                    Node node = new Node { Id = Guid.NewGuid(), NodeNo = id };
+                    Save(node);
+
+                    gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
+                }
+            }
+        }
+        private int GetTimeForSensors() // seconds since 1970
+        {
+            DateTime dtNow = DateTime.Now;
+
+            TimeSpan result = dtNow.Subtract(unixEpoch);
+            return Convert.ToInt32(result.TotalSeconds);
+        }
+        private object BuildNodeWebModel(Node node)
+        {
+            if (node == null)
+                return null;
+
+            BatteryLevel lastBL = null;
+            using (var session = Context.OpenSession())
+                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = node.Id,
+                Name = node.Name,
+                NodeNo = node.NodeNo,
+                TypeName = node.TypeName,
+                ProtocolVersion = node.ProtocolVersion,
+                SketchName = node.SketchName,
+                SketchVersion = node.SketchVersion,
+                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
+                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
+            };
+        }
+        public object BuildSensorWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            SensorValue lastSV = null;
+            using (var session = Context.OpenSession())
+                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name,
+                NodeNo = sensor.NodeNo,
+                SensorNo = sensor.SensorNo,
+                TypeName = sensor.TypeName,
+                ProtocolVersion = sensor.ProtocolVersion,
+                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
+                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
+            };
         }
         #endregion
 
@@ -319,6 +431,7 @@ namespace SmartHub.Plugins.MySensors
                         NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
                         NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });
+                        NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() });
                     }
                     break;
                 #endregion
@@ -435,84 +548,6 @@ namespace SmartHub.Plugins.MySensors
             Logger.Info("Disconnected.");
             NotifyDisconnectedForPlugins();
             NotifyDisconnectedForScripts();
-        }
-        #endregion
-
-        #region Private methods
-        private void GetNextAvailableNodeID()
-        {
-            using (var session = Context.OpenSession())
-            {
-                var nds = session.Query<Node>().OrderBy(node => node.NodeNo).ToList();
-
-                byte id = 1;
-                for (byte i = 0; i < nds.Count; i++)
-                    if (nds[i].NodeNo > i + 1)
-                    {
-                        id = (byte)(i + 1);
-                        break;
-                    }
-                    else
-                        id++;
-
-                if (id < 255)
-                {
-                    Node node = new Node { Id = Guid.NewGuid(), NodeNo = id };
-                    Save(node);
-
-                    gatewayProxy.Send(new SensorMessage(255, 255, SensorMessageType.Internal, false, (byte)InternalValueType.IDResponse, id.ToString()));
-                }
-            }
-        }
-        private int GetTimeForSensors() // seconds since 1970
-        {
-            DateTime dtNow = DateTime.Now;
-
-            TimeSpan result = dtNow.Subtract(unixEpoch);
-            return Convert.ToInt32(result.TotalSeconds);
-        }
-        private object BuildNodeWebModel(Node node)
-        {
-            if (node == null)
-                return null;
-
-            BatteryLevel lastBL = null;
-            using (var session = Context.OpenSession())
-                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
-
-            return new
-            {
-                Id = node.Id,
-                NodeNo = node.NodeNo,
-                TypeName = node.TypeName,
-                ProtocolVersion = node.ProtocolVersion,
-                SketchName = node.SketchName,
-                SketchVersion = node.SketchVersion,
-                Name = node.Name,
-                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
-                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
-            };
-        }
-        public object BuildSensorWebModel(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            SensorValue lastSV = null;
-            using (var session = Context.OpenSession())
-                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
-
-            return new
-            {
-                Id = sensor.Id,
-                NodeNo = sensor.NodeNo,
-                SensorNo = sensor.SensorNo,
-                TypeName = sensor.TypeName,
-                ProtocolVersion = sensor.ProtocolVersion,
-                Name = sensor.Name,
-                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
-                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
-            };
         }
         #endregion
 

@@ -94,7 +94,7 @@ define(['jquery'], function ($) {
 
             function getSensorValues(sensor, fieldName, onComplete) {
                 if (sensor)
-                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 72, function (data) {
+                    api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 24, function (data) {
                         data = data || [];
                         $.each(data, function (idx, sv) {
                             sv[fieldName] = sv.Value;

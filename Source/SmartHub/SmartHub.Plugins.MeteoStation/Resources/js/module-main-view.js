@@ -31,28 +31,44 @@ define(
                                 name: "Температура внутри",
                                 field: "TI",
                                 color: "red",
-                                axis: "temp"
+                                axis: "temp",
+                                tooltip: {
+                                    visible: true,
+                                    template: "#= kendo.toString(value, 'n1') #&nbsp;°C"
+                                }
                             },
                             {
                                 type: "line",
                                 name: "Влажность внутри",
                                 field: "HI",
                                 color: "blue",
-                                axis: "hum"
+                                axis: "hum",
+                                tooltip: {
+                                    visible: true,
+                                    template: "#= kendo.toString(value, 'n1') #&nbsp;%"
+                                }
                             },
                             {
                                 type: "line",
                                 name: "Температура снаружи",
                                 field: "TO",
                                 color: "pink",
-                                axis: "temp"
+                                axis: "temp",
+                                tooltip: {
+                                    visible: true,
+                                    template: "#= kendo.toString(value, 'n1') #&nbsp;°C"
+                                }
                             },
                             {
                                 type: "line",
                                 name: "Влажность снаружи",
                                 field: "HO",
                                 color: "cornflowerblue",
-                                axis: "hum"
+                                axis: "hum",
+                                tooltip: {
+                                    visible: true,
+                                    template: "#= kendo.toString(value, 'n1') #&nbsp;%"
+                                }
                             },
                             {
                                 type: "area",
@@ -66,12 +82,12 @@ define(
                                 }
                             },
                         ],
-                        tooltip: {
-                            visible: true,
-                            //format: "Value: {0:N0}",
-                            //template: "${category} - ${value}"
-                            template: "#= kendo.toString(value, 'n1') #"
-                        },
+                        //tooltip: {
+                        //    visible: true,
+                        //    //format: "Value: {0:N0}",
+                        //    //template: "${category} - ${value}"
+                        //    template: "#= kendo.toString(value, 'n1') #"
+                        //},
                         valueAxes: [
                             {
                                 name: "temp",
