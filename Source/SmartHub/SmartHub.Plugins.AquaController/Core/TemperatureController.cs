@@ -53,7 +53,7 @@ namespace SmartHub.Plugins.AquaController.Core
         [MySensorsMessage]
         private void MessageReceived(SensorMessage msg)
         {
-            if (relay != null && sensor != null && msg.NodeID == sensor.NodeNo && msg.SensorID == sensor.SensorNo)
+            if (relay != null && sensor != null && msg.NodeNo == sensor.NodeNo && msg.SensorNo == sensor.SensorNo)
                 mySensors.SetSensorValue(relay, SensorValueType.Switch, msg.PayloadFloat < minTemperature ? 1 : 0);
         }
 

@@ -1,11 +1,6 @@
-﻿using NHibernate;
-using NHibernate.Linq;
-using SmartHub.Plugins.MySensors.Data;
-using SmartHub.Plugins.WebUI.Attributes;
+﻿using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
-using System.Linq;
-using System.Text;
 
 namespace SmartHub.Plugins.MeteoStation
 {
@@ -20,52 +15,13 @@ namespace SmartHub.Plugins.MeteoStation
                 tileWebModel.url = "webapp/meteostation/module-main";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-umbrella";
                 //tileWebModel.wide = true;
-                tileWebModel.content = BuildContent();
-                tileWebModel.SignalRReceiveHandler = BuildSignalRReceiveHandler();
+                tileWebModel.content = Context.GetPlugin<MeteoStationPlugin>().BuildTileContent();
+                tileWebModel.SignalRReceiveHandler = Context.GetPlugin<MeteoStationPlugin>().BuildSignalRReceiveHandler();
             }
             catch (Exception ex)
             {
                 tileWebModel.content = ex.Message;
             }
-        }
-
-        private string BuildContent()
-        {
-            var meteoStationPlugin = Context.GetPlugin<MeteoStationPlugin>();
-
-            SensorValue lastSVTemperatureInner = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorTemperatureInner);
-            SensorValue lastSVHumidityInner = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorHumidityInner);
-            SensorValue lastSVTemperatureOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorTemperatureOuter);
-            SensorValue lastSVHumidityOuter = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorHumidityOuter);
-            SensorValue lastSVAtmospherePressure = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorAtmospherePressure);
-            SensorValue lastSVForecast = meteoStationPlugin.GetLastSensorValue(meteoStationPlugin.SensorForecast);
-
-            string result = "";
-            result += "<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value /133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>";
-            result += "<div>Прогноз: " + (lastSVForecast != null ? lastSVForecast.Value + "" : "&lt;нет данных&gt;") + "</div>";
-            //const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
-
-            return result;
-        }
-        private string BuildSignalRReceiveHandler()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append("if (data.MsgId == 'SensorValue') { ");
-            //sb.Append("var dt = kendo.toString(new Date(data.Data.TimeStamp), 'dd.MM.yyyy'); ");
-            //sb.Append("var tm = kendo.toString(new Date(data.Data.TimeStamp), 'HH:mm:ss'); ");
-            //sb.Append("var val = '[' + data.Data.NodeNo + '][' + data.Data.SensorNo + '] ' + data.Data.TypeName + ': ' + data.Data.Value; ");
-            //sb.Append("var result = '<span>' + dt + '</span>&nbsp;&nbsp;'; ");
-            //sb.Append("result += '<span style=\"font-size:0.9em; font-style:italic;\">' + tm + '</span>'; ");
-            //sb.Append("result += '<div>' + val + '</div>'; ");
-            //sb.Append("model.tileModel.set({ 'content': result }); ");
-            sb.Append("}");
-
-            return sb.ToString();
         }
     }
 }

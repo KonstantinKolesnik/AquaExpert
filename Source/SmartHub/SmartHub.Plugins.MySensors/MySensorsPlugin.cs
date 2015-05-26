@@ -75,7 +75,7 @@ namespace SmartHub.Plugins.MySensors
         public ScriptEventHandlerDelegate[] OnMessageReceivedForScripts { get; set; }
         private void NotifyMessageReceivedForScripts(SensorMessage msg)
         {
-            this.RaiseScriptEvent(x => x.OnMessageReceivedForScripts, msg.NodeID, msg.SensorID, msg.Type, msg.SubType, msg.Payload);
+            this.RaiseScriptEvent(x => x.OnMessageReceivedForScripts, msg.NodeNo, msg.SensorNo, msg.Type, msg.SubType, msg.Payload);
         }
 
         [ScriptEvent("mySensors.disconnected")]
@@ -233,9 +233,9 @@ namespace SmartHub.Plugins.MySensors
 
             Debug.WriteLine(message.ToString());
 
-            bool isNodeMessage = message.NodeID == 0 || message.SensorID == 255;
-            Node node = GetNode(message.NodeID);
-            Sensor sensor = GetSensor(message.NodeID, message.SensorID); // if message.SensorID == 255 it returns null
+            bool isNodeMessage = message.NodeNo == 0 || message.SensorNo == 255;
+            Node node = GetNode(message.NodeNo);
+            Sensor sensor = GetSensor(message.NodeNo, message.SensorNo); // if message.SensorID == 255 it returns null
 
             switch (message.Type)
             {
@@ -248,7 +248,7 @@ namespace SmartHub.Plugins.MySensors
                             node = new Node
                             {
                                 Id = Guid.NewGuid(),
-                                NodeNo = message.NodeID,
+                                NodeNo = message.NodeNo,
                                 Type = (SensorType)message.SubType,
                                 ProtocolVersion = message.Payload
                             };
@@ -277,7 +277,7 @@ namespace SmartHub.Plugins.MySensors
                                 {
                                     Id = Guid.NewGuid(),
                                     NodeNo = node.NodeNo,
-                                    SensorNo = message.SensorID,
+                                    SensorNo = message.SensorNo,
                                     Type = (SensorType)message.SubType,
                                     ProtocolVersion = message.Payload
                                 };
@@ -307,8 +307,8 @@ namespace SmartHub.Plugins.MySensors
                         SensorValue sv = new SensorValue()
                         {
                             Id = Guid.NewGuid(),
-                            NodeNo = message.NodeID,
-                            SensorNo = message.SensorID,
+                            NodeNo = message.NodeNo,
+                            SensorNo = message.SensorNo,
                             TimeStamp = DateTime.UtcNow,
                             Type = (SensorValueType)message.SubType,
                             Value = message.PayloadFloat
@@ -340,7 +340,7 @@ namespace SmartHub.Plugins.MySensors
                                 BatteryLevel bl = new BatteryLevel()
                                 {
                                     Id = Guid.NewGuid(),
-                                    NodeNo = message.NodeID,
+                                    NodeNo = message.NodeNo,
                                     TimeStamp = DateTime.UtcNow,
                                     Level = byte.Parse(message.Payload)
                                 };
@@ -353,7 +353,7 @@ namespace SmartHub.Plugins.MySensors
                             }
                             break;
                         case InternalValueType.Time:
-                            gatewayProxy.Send(new SensorMessage(message.NodeID, message.SensorID, SensorMessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
+                            gatewayProxy.Send(new SensorMessage(message.NodeNo, message.SensorNo, SensorMessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
                             break;
                         case InternalValueType.Version:
                             break;
@@ -365,7 +365,7 @@ namespace SmartHub.Plugins.MySensors
                         case InternalValueType.InclusionMode:
                             break;
                         case InternalValueType.Config:
-                            gatewayProxy.Send(new SensorMessage(message.NodeID, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Config, GetSetting("UnitSystem").Value));
+                            gatewayProxy.Send(new SensorMessage(message.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Config, GetSetting("UnitSystem").Value));
                             break;
                         case InternalValueType.FindParent:
                             break;

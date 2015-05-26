@@ -77,6 +77,11 @@
       <Name>SmartHub.Plugins.MySensors</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.SignalR\SmartHub.Plugins.SignalR.csproj">
+      <Project>{46e58075-b4a0-4779-9f24-79d4b6f26a7b}</Project>
+      <Name>SmartHub.Plugins.SignalR</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
       <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
       <Name>SmartHub.Plugins.WebUI</Name>

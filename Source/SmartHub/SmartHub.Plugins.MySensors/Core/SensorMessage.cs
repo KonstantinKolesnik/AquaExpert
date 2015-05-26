@@ -7,8 +7,8 @@ namespace SmartHub.Plugins.MySensors.Core
     public class SensorMessage
     {
         #region Properties
-        public byte NodeID { get; set; }
-        public byte SensorID { get; set; }
+        public byte NodeNo { get; set; }
+        public byte SensorNo { get; set; }
         public SensorMessageType Type { get; set; }
         public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
@@ -19,8 +19,8 @@ namespace SmartHub.Plugins.MySensors.Core
         #region Constructor
         public SensorMessage(byte nodeID, byte sensorID, SensorMessageType type, bool isAckNeeded, byte subType, string payload)
         {
-            NodeID = nodeID;
-            SensorID = sensorID;
+            NodeNo = nodeID;
+            SensorNo = sensorID;
             Type = type;
             IsAckNeeded = isAckNeeded;
             SubType = subType;
@@ -90,8 +90,8 @@ namespace SmartHub.Plugins.MySensors.Core
 
 
             return string.Format("{0};{1};{2};{3};{4};{5}",
-                NodeID,
-                SensorID,
+                NodeNo,
+                SensorNo,
                 (byte)Type,
                 IsAckNeeded ? "1" : "0",
                 (byte)SubType,
@@ -141,8 +141,8 @@ namespace SmartHub.Plugins.MySensors.Core
 
 
 
-            sb.Append(string.Format("[{0:d3}] ", NodeID));
-            sb.Append(string.Format("[{0:d3}] ", SensorID));
+            sb.Append(string.Format("[{0:d3}] ", NodeNo));
+            sb.Append(string.Format("[{0:d3}] ", SensorNo));
             sb.Append(string.Format("[{0}] ", Type));
             //sb.Append(string.Format("[Ack: {0}] ", IsAckNeeded));
             switch (Type)

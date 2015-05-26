@@ -9,9 +9,11 @@ using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
+using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace SmartHub.Plugins.MeteoStation
 {
@@ -36,6 +38,7 @@ namespace SmartHub.Plugins.MeteoStation
     public class MeteoStationPlugin : PluginBase
     {
         #region Fields
+        private SignalRPlugin signalServer;
         private MySensorsPlugin mySensors;
         private SensorsConfiguration sensorsConfiguration;
         private MeteoStationSetting sensorsConfigurationSetting;
@@ -68,6 +71,13 @@ namespace SmartHub.Plugins.MeteoStation
         }
         #endregion
 
+        #region SignalR events
+        private void NotifyForSignalR(object msg)
+        {
+            signalServer.Broadcast(msg);
+        }
+        #endregion
+
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
@@ -75,6 +85,7 @@ namespace SmartHub.Plugins.MeteoStation
         }
         public override void InitPlugin()
         {
+            signalServer = Context.GetPlugin<SignalRPlugin>();
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
             sensorsConfigurationSetting = GetSetting("SensorsConfiguration");
@@ -97,13 +108,32 @@ namespace SmartHub.Plugins.MeteoStation
         #endregion
 
         #region Public methods
-        public SensorValue GetLastSensorValue(Sensor sensor)
+        public string BuildTileContent()
         {
-            if (sensor == null)
-                return null;
+            SensorValue lastSVTemperatureInner = GetLastSensorValue(SensorTemperatureInner);
+            SensorValue lastSVHumidityInner = GetLastSensorValue(SensorHumidityInner);
+            SensorValue lastSVTemperatureOuter = GetLastSensorValue(SensorTemperatureOuter);
+            SensorValue lastSVHumidityOuter = GetLastSensorValue(SensorHumidityOuter);
+            SensorValue lastSVAtmospherePressure = GetLastSensorValue(SensorAtmospherePressure);
+            SensorValue lastSVForecast = GetLastSensorValue(SensorForecast);
 
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Прогноз: " + (lastSVForecast != null ? lastSVForecast.Value + "" : "&lt;нет данных&gt;") + "</div>");
+            //const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
+            return sb.ToString();
+        }
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("if (data.MsgId == 'MeteoStationTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
         }
         #endregion
 
@@ -143,6 +173,14 @@ namespace SmartHub.Plugins.MeteoStation
             if ((sensor = SensorForecast) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Forecast);
         }
+        private SensorValue GetLastSensorValue(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+        }
         private object BuildSensorSummaryWebModel(Sensor sensor)
         {
             if (sensor == null)
@@ -156,6 +194,10 @@ namespace SmartHub.Plugins.MeteoStation
                 Name = sensor.Name
             };
         }
+        private bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
+        {
+            return sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
+        }
         #endregion
 
         #region Event handlers
@@ -166,10 +208,22 @@ namespace SmartHub.Plugins.MeteoStation
         }
 
         [MySensorsMessage]
-        private void MessageReceived(SensorMessage msg)
+        private void MessageReceived(SensorMessage message)
         {
-            //if (sensorTemperatureInner != null msg.NodeID == sensorTemperatureInner.NodeNo && msg.SensorID == sensorTemperatureInner.SensorNo)
-            //    mySensors.SetSensorValue(relay, SensorValueType.Switch, msg.PayloadFloat < minTemperature ? 1 : 0);
+            if (IsMessageFromSensor(message, SensorTemperatureInner) ||
+                IsMessageFromSensor(message, SensorHumidityInner) ||
+                IsMessageFromSensor(message, SensorTemperatureOuter) ||
+                IsMessageFromSensor(message, SensorHumidityOuter) ||
+                IsMessageFromSensor(message, SensorAtmospherePressure) ||
+                IsMessageFromSensor(message, SensorForecast))
+            {
+                var msg = new
+                {
+                    MsgId = "MeteoStationTileContent",
+                    Data = BuildTileContent()
+                };
+                NotifyForSignalR(msg);
+            }
         }
         #endregion
 
