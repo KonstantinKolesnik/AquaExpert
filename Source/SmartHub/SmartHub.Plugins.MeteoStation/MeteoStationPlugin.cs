@@ -154,8 +154,8 @@ namespace SmartHub.Plugins.MeteoStation
                 catch (Exception) { }
             }
         }
-        
-        private void UpdateSensorsValues()
+
+        private void RequestSensorsValues()
         {
             Sensor sensor;
 
@@ -203,7 +203,7 @@ namespace SmartHub.Plugins.MeteoStation
         [MySensorsConnected]
         private void Connected()
         {
-            UpdateSensorsValues();
+            RequestSensorsValues();
         }
 
         [MySensorsMessage]
@@ -251,12 +251,12 @@ namespace SmartHub.Plugins.MeteoStation
                 return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
         }
 
-        [HttpCommand("/api/meteostation/sensorsCofiguration")]
+        [HttpCommand("/api/meteostation/configuration")]
         public object GetSensorsConfiguration(HttpRequestParams request)
         {
             return sensorsConfiguration;
         }
-        [HttpCommand("/api/meteostation/sensorsCofiguration/set")]
+        [HttpCommand("/api/meteostation/configuration/set")]
         public object SetSensorsConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("sc");
@@ -264,7 +264,7 @@ namespace SmartHub.Plugins.MeteoStation
             sensorsConfigurationSetting.SetValue(sensorsConfiguration);
             SaveOrUpdate(sensorsConfigurationSetting);
 
-            UpdateSensorsValues();
+            RequestSensorsValues();
 
             return null;
         }

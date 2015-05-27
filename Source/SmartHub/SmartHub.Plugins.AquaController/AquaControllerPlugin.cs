@@ -1,30 +1,30 @@
-﻿using NHibernate.Linq;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Core;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.HttpListener.Attributes;
-using SmartHub.Plugins.MySensors;
-using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
-using System;
-using System.Linq;
+using System.Text;
 
 namespace SmartHub.Plugins.AquaController
 {
-    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/module.js", "SmartHub.Plugins.AquaController.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
-    [JavaScriptResource("/webapp/aquacontroller/views.js", "SmartHub.Plugins.AquaController.Resources.js.views.js")]
-    [HttpResource("/webapp/aquacontroller/templates.html", "SmartHub.Plugins.AquaController.Resources.js.templates.html")]
+    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/module-main.js", "SmartHub.Plugins.AquaController.Resources.js.module-main.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
+    [JavaScriptResource("/webapp/aquacontroller/module-main-view.js", "SmartHub.Plugins.AquaController.Resources.js.module-main-view.js")]
+    [JavaScriptResource("/webapp/aquacontroller/module-main-model.js", "SmartHub.Plugins.AquaController.Resources.js.module-main-model.js")]
+    [HttpResource("/webapp/aquacontroller/module-main.html", "SmartHub.Plugins.AquaController.Resources.js.module-main.html")]
+
+    [AppSection("Аква-контроллер", SectionType.System, "/webapp/aquacontroller/module-settings.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings.js")]
+    [JavaScriptResource("/webapp/aquacontroller/module-settings-view.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings-view.js")]
+    [JavaScriptResource("/webapp/aquacontroller/module-settings-model.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings-model.js")]
+    [HttpResource("/webapp/aquacontroller/module-settings.html", "SmartHub.Plugins.AquaController.Resources.js.module-settings.html")]
+
     [CssResource("/webapp/aquacontroller/css/style.css", "SmartHub.Plugins.AquaController.Resources.css.style.css", AutoLoad = true)]
 
     [Plugin]
     public class AquaControllerPlugin : PluginBase
     {
         #region Fields
-        private MySensorsPlugin mySensors;
         private TemperatureController temperatureController = new TemperatureController();
-
-
         #endregion
 
         #region Plugin overrides
@@ -34,62 +34,44 @@ namespace SmartHub.Plugins.AquaController
         }
         public override void InitPlugin()
         {
-            mySensors = Context.GetPlugin<MySensorsPlugin>();
-
-            temperatureController.Init(mySensors);
-
-            //if (GetSetting("SerialPortName") == null)
-            //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
+            temperatureController.Init(Context);
         }
-        public override void StartPlugin()
-        {
-            //InitHeater();
-            //InitPh();
-            //InitLight();
-        }
-        //public override void StopPlugin()
-        //{
-        //    //UninitLight();
-        //    //UninitPh();
-        //}
         #endregion
 
-        private AquaControllerSetting GetSetting(string name)
+        #region Public methods
+        public string BuildTileContent()
         {
-            using (var session = Context.OpenSession())
-                return session.Query<AquaControllerSetting>().FirstOrDefault(setting => setting.Name == name);
+            //SensorValue lastSVTemperatureInner = GetLastSensorValue(SensorTemperatureInner);
+            //SensorValue lastSVHumidityInner = GetLastSensorValue(SensorHumidityInner);
+            //SensorValue lastSVTemperatureOuter = GetLastSensorValue(SensorTemperatureOuter);
+            //SensorValue lastSVHumidityOuter = GetLastSensorValue(SensorHumidityOuter);
+            //SensorValue lastSVAtmospherePressure = GetLastSensorValue(SensorAtmospherePressure);
+            //SensorValue lastSVForecast = GetLastSensorValue(SensorForecast);
+
+            StringBuilder sb = new StringBuilder();
+            //sb.Append("<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
+
+            //string[] weather = { "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" };
+            //sb.Append("<div>Прогноз: " + (lastSVForecast != null ? weather[(int)lastSVForecast.Value] : "&lt;нет данных&gt;") + "</div>");
+            return sb.ToString();
         }
-
-        #region Lines
-        #region Heater
-        //private Sensor heaterRelay;
-        //private Sensor heaterSensor;
-        //private float minHeaterTemperature;
-
-        //private void InitHeater()
-        //{
-        //    minHeaterTemperature = 24.0f;
-
-        //    heaterRelay = mySensors.GetSensor(1, 0);
-        //    heaterSensor = mySensors.GetSensor(2, 0);
-        //}
-
-        //[MySensorsConnected]
-        //private void heater_Connected()
-        //{
-        //    if (heaterSensor != null)
-        //        mySensors.RequestSensorValue(heaterSensor, SensorValueType.Temperature);
-        //    if (heaterRelay != null)
-        //        mySensors.RequestSensorValue(heaterRelay, SensorValueType.Switch);
-        //}
-
-        //[MySensorsMessage]
-        //private void heater_MessageReceived(SensorMessage msg)
-        //{
-        //    //if (heaterRelay != null && heaterSensor != null && msg.NodeID == heaterSensor.NodeNo && msg.SensorID == heaterSensor.SensorNo)
-        //    //    mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, msg.PayloadFloat < minHeaterTemperature ? 1 : 0);
-        //}
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("if (data.MsgId == 'AquaControllerTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
+        }
         #endregion
+
+
+
+
 
         #region Light
         //private Sensor lightRelay;
@@ -128,70 +110,6 @@ namespace SmartHub.Plugins.AquaController
         //    lightTimer = null;
         //    lightRelay = null;
         //}
-        #endregion
-
-        #region Ph
-        //private Sensor phRelay;
-        //private Sensor phSensor;
-        //private float phNormalValue;
-
-        //private void InitPh()
-        //{
-        //    phNormalValue = 7.0f;
-
-        //    phRelay = mySensors.GetSensor(1, 1);
-        //    phSensor = mySensors.GetSensor(2, 1);
-        //}
-
-        //[MySensorsConnected]
-        //private void ph_Connected()
-        //{
-        //    if (phSensor != null)
-        //        mySensors.RequestSensorValue(phSensor, SensorValueType.Ph);
-        //    if (phRelay != null)
-        //        mySensors.RequestSensorValue(phRelay, SensorValueType.Switch);
-        //}
-
-        //[MySensorsMessage]
-        //private void ph_MessageReceived(SensorMessage msg)
-        //{
-        //    //if (phRelay != null && phSensor != null && msg.NodeID == phSensor.NodeNo && msg.SensorID == phSensor.SensorNo)
-        //    //    mySensors.SetSensorValue(phRelay, SensorValueType.Switch, msg.PayloadFloat < phNormalValue ? 1 : 0);
-        //}
-        #endregion
-
-        #region Water level
-        //private Sensor waterInputRelay;
-        //private Sensor waterOutputRelay;
-        //private Sensor waterSensor;
-        //private float waterNormalDistance;
-        #endregion
-        #endregion
-
-        #region Event handlers
-        float on = 0;
-        [Timer_10_sec_Elapsed]
-        private void timer_Elapsed(DateTime now)
-        {
-            //mySensors.SetSensorValue(heaterRelay, SensorValueType.Switch, on);
-            on = on == 0 ? 1 : 0;
-
-            //var s = mySensors.GetSensor(3, 0);
-            //mySensors.GetSensorValue(s, SensorValueType.Temperature);
-
-
-            //mySensors.RequestSensorValue(mySensors.GetSensor(2, 0), SensorValueType.Temperature);
-
-            //mySensors.RequestSensorValue(mySensors.GetSensor(2, 1), SensorValueType.Ph);
-
-
-            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 0), SensorValueType.Switch);
-            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 1), SensorValueType.Switch);
-            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 2), SensorValueType.Switch);
-            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 3), SensorValueType.Switch);
-            //mySensors.RequestSensorValue(mySensors.GetSensor(1, 4), SensorValueType.Switch);
-
-        }
         #endregion
     }
 }

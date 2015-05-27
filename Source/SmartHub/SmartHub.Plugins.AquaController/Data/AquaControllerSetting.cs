@@ -9,6 +9,11 @@ namespace SmartHub.Plugins.AquaController.Data
         public virtual string Name { get; set; }
         public virtual string SerializedValue { get; set; }
 
+        public virtual dynamic GetValue(Type type)
+        {
+            var json = string.IsNullOrWhiteSpace(SerializedValue) ? "{}" : SerializedValue;
+            return Extensions.FromJson(type, json);
+        }
         public virtual dynamic GetValue()
         {
             var json = string.IsNullOrWhiteSpace(SerializedValue) ? "{}" : SerializedValue;

@@ -1,4 +1,5 @@
 ﻿using SmartHub.Core.Plugins;
+using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
@@ -13,48 +14,111 @@ using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.AquaController.Core
 {
-    public class TemperatureController
+    public class TemperatureController : ControllerBase
     {
-        private MySensorsPlugin mySensors;
-        private Sensor relay;
-        private Sensor sensor;
-        private float minTemperature = 25.0f;
-        private float maxTemperature = 26.0f;
-
-        [Import(typeof(IServiceContext))]
-        private IServiceContext context;
-
-
-
-        public void Init(MySensorsPlugin mySensors)
+        public class Configuration
         {
-            this.mySensors = mySensors;
+            public Guid SensorTemperatureID { get; set; }
+            public Guid SensorSwitchID { get; set; }
+            public float TemperatureMin { get; set; }
+            public float TemperatureMax { get; set; }
 
-            relay = mySensors.GetSensor(1, 0);
-            sensor = mySensors.GetSensor(2, 0);
+            public static Configuration Default
+            {
+                get
+                {
+                    return new Configuration()
+                    {
+                        SensorTemperatureID = Guid.Empty,
+                        SensorSwitchID = Guid.Empty,
+                        TemperatureMin = 25.0f,
+                        TemperatureMax = 26.0f
+                    };
+                }
+            }
         }
 
-        //private SmartHub.Plugins.AquaController.Data.Setting GetSetting(string name)
-        //{
-        //    using (var session = mySensors.Context.OpenSession())
-        //        return session.Query<SmartHub.Plugins.AquaController.Data.Setting>().FirstOrDefault(setting => setting.Name == name);
-        //}
+        #region Fields
+        private const string settingName = "TemperatureControllerConfiguration";
+        private Configuration configuration;
+        private AquaControllerSetting configurationSetting;
+        #endregion
 
-
-        [MySensorsConnected]
-        private void Connected()
+        #region Properties
+        public Sensor SensorTemperature
         {
-            if (sensor != null)
+            get { return mySensors.GetSensor(configuration.SensorTemperatureID); }
+        }
+        public Sensor SensorSwitch
+        {
+            get { return mySensors.GetSensor(configuration.SensorSwitchID); }
+        }
+        #endregion
+
+        #region Public methods
+        public override void Init(IServiceContext context)
+        {
+            base.Init(context);
+
+            configurationSetting = GetSetting(settingName);
+
+            if (configurationSetting == null)
+            {
+                configurationSetting = new AquaControllerSetting()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = settingName
+                };
+
+                configuration = Configuration.Default;
+                configurationSetting.SetValue(configuration);
+                SaveOrUpdate(configurationSetting);
+            }
+            else
+                configuration = configurationSetting.GetValue(typeof(Configuration));
+        }
+        #endregion
+
+        #region Private methods
+        protected override void RequestSensorsValues()
+        {
+            Sensor sensor;
+
+            if ((sensor = SensorTemperature) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
-            if (relay != null)
-                mySensors.RequestSensorValue(relay, SensorValueType.Switch);
+            if ((sensor = SensorSwitch) != null)
+                mySensors.RequestSensorValue(sensor, SensorValueType.Switch);
         }
+        #endregion
 
+        #region Event handlers
         [MySensorsMessage]
-        private void MessageReceived(SensorMessage msg)
+        protected override void MessageReceived(SensorMessage message)
         {
-            if (relay != null && sensor != null && msg.NodeNo == sensor.NodeNo && msg.SensorNo == sensor.SensorNo)
-                mySensors.SetSensorValue(relay, SensorValueType.Switch, msg.PayloadFloat < minTemperature ? 1 : 0);
+            //if (IsMessageFromSensor(message, SensorTemperatureInner) ||
+            //    IsMessageFromSensor(message, SensorHumidityInner) ||
+            //    IsMessageFromSensor(message, SensorTemperatureOuter) ||
+            //    IsMessageFromSensor(message, SensorHumidityOuter) ||
+            //    IsMessageFromSensor(message, SensorAtmospherePressure) ||
+            //    IsMessageFromSensor(message, SensorForecast))
+            //    NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
+
+            if (IsMessageFromSensor(message, SensorTemperature))
+            {
+                var switchValue = GetLastSensorValue(SensorSwitch);
+
+                float t = message.PayloadFloat;
+                bool on = false;
+
+                if (t < configuration.TemperatureMin)
+                    on = true;
+                else if (t >= configuration.TemperatureMin && t < configuration.TemperatureMax)
+                    on = true;
+                else if (t > configuration.TemperatureMax)
+                    on = false;
+
+                mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, on ? 1 : 0);
+            }
         }
 
         [Timer_5_sec_Elapsed]
@@ -63,6 +127,6 @@ namespace SmartHub.Plugins.AquaController.Core
             int a = 0;
             int b = a;
         }
-
+        #endregion
     }
 }

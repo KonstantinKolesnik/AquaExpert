@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getSensorsDataSource: function (type, onComplete) {
-            $.getJSON('/api/meteostation/sensorsDataSource', { type: type })
+            $.getJSON('/api/aquacontroller/sensorsDataSource', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -12,7 +12,7 @@ define(['jquery'], function ($) {
 	            });
         },
         getSensorsConfiguration: function (onComplete) {
-            $.getJSON('/api/meteostation/configuration')
+            $.getJSON('/api/aquacontroller/sensorsCofiguration')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -22,7 +22,7 @@ define(['jquery'], function ($) {
 	            });
         },
         setSensorsConfiguration: function (sc, onComplete) {
-            $.post('/api/meteostation/configuration/set', { sc: JSON.stringify(sc) })
+            $.post('/api/aquacontroller/sensorsCofiguration/set', { sc: JSON.stringify(sc) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
