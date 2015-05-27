@@ -61,7 +61,7 @@
     <None Include="..\NLog.config">
       <Link>NLog.config</Link>
     </None>
-    <None Include="InstallService.bat">
+    <None Include="Install\InstallService.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -79,7 +79,10 @@
       <Link>SmartHub.sdf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Install\ConfigService.bat" />
+    <None Include="Install\UninstallService.bat" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

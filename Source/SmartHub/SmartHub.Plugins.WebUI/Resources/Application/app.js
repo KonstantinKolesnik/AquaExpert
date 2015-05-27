@@ -72,10 +72,11 @@ define(
 	    app.SignalRReceivers = [];
 	    app.SignalRSend = function (data) { };
 	    function initSignalRPersistent(onComplete) {
+	        $.support.cors = true;
+
 	        var hostName = document.location.hostname;
 
 	        var connection = $.connection("http://" + hostName + ":55556/chat");
-	        $.support.cors = true;
 	        connection.received(function (data) {
 	            $.each(app.SignalRReceivers, function (idx, receiver) {
 	                if (receiver && receiver.SignalRReceiveHandler) {
@@ -94,12 +95,10 @@ define(
 	            console.warn(error);
 	        });
 	        connection.stateChanged(function (change) {
-	            if (change.newState === $.signalR.connectionState.reconnecting) {
+	            if (change.newState === $.signalR.connectionState.reconnecting)
 	                console.log('Reconnecting');
-	            }
-	            else if (change.newState === $.signalR.connectionState.connected) {
+	            else if (change.newState === $.signalR.connectionState.connected)
 	                console.log('Connected');
-	            }
 	        });
 	        connection.reconnected(function () {
 	            console.log('Reconnected');
@@ -108,15 +107,16 @@ define(
 	            console.log('Connection is slow');
 	        });
 
-	        connection.start().done(function () {
-	            app.SignalRSend = function (data) {
-	                if (data)
-	                    connection.send(JSON.stringify(data));
-	            }
+	        connection.start()
+                .done(function () {
+	                app.SignalRSend = function (data) {
+	                    if (data)
+	                        connection.send(JSON.stringify(data));
+	                };
 
-	            if (onComplete)
-                    onComplete();
-	        });
+	                if (onComplete)
+                        onComplete();
+	            });
 	    }
 
 
@@ -135,7 +135,7 @@ define(
 	    //        $.connection.myHub.client.onServerMessage = app.onServerMessage;
 
 	    //        // Start the connection.
-	    //        $.connection.hub.start().done(function () {
+        //        $.connection.hub.start({ jsonp: true }).done(function () {
 	    //            app.wsClient = $.connection.myHub.client;
 	    //            app.wsServer = $.connection.myHub.server;
 

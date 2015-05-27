@@ -27,10 +27,6 @@ namespace SmartHub.Plugins.SignalR
         #endregion
 
         #region Plugin overrides
-        public override void InitPlugin()
-        {
-            //var handlers = RegisterHandlers();
-        }
         public override void StartPlugin()
         {
             server = WebApp.Start(url, ConfigureModules);
@@ -52,27 +48,13 @@ namespace SmartHub.Plugins.SignalR
             {
                 var context = GlobalHost.ConnectionManager.GetConnectionContext<ChatConnection>();
                 if (context != null && context.Connection != null)
+                    //context.Connection.Broadcast(data).Wait();
                     context.Connection.Broadcast(data);
             }
         }
         #endregion
 
         #region Private methods
-        //private InternalDictionary<ListenerHandlerBase> RegisterHandlers()
-        //{
-        //    var handlers = new InternalDictionary<ListenerHandlerBase>();
-
-        //    // регистрируем обработчики для методов плагинов
-        //    foreach (var action in HttpCommandHandlers)
-        //    {
-        //        Logger.Info("Register WebApi command handler '{0}'", action.Metadata.Url);
-
-        //        var handler = new ApiListenerHandler(action.Value);
-        //        handlers.Register(action.Metadata.Url, handler);
-        //    }
-
-        //    return handlers;
-        //}
         private void ConfigureModules(IAppBuilder appBuilder)
         {
             GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(5); // 10 = default
@@ -81,11 +63,12 @@ namespace SmartHub.Plugins.SignalR
 
             appBuilder
                 .UseCors(CorsOptions.AllowAll)
-                //.Use<HttpListenerModule>(registeredHandlers, Logger)
                 //.UseErrorPage()
 
                 //.MapSignalR(); // for hubs
-                .MapSignalR<ChatConnection>("/chat"); // for persistent connection
+
+                //.MapSignalR<ChatConnection>("/chat"); // for persistent connection
+                .MapSignalR("/chat", typeof(ChatConnection), new ConnectionConfiguration() { EnableJSONP = true });
         }
         #endregion
 

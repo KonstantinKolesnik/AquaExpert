@@ -1,0 +1,2 @@
+﻿Sc delete SmartHub
+pause
