@@ -11,24 +11,23 @@ namespace SmartHub.Plugins.Weather
     {
         public override void PopulateWebModel(TileWebModel tileWebModel, dynamic parameters)
         {
-            tileWebModel.title = "Weather";
+            tileWebModel.title = "Погода";
             tileWebModel.url = "webapp/weather/forecast";
 
             string strCityId = parameters.cityId;
             if (string.IsNullOrWhiteSpace(strCityId))
             {
-                tileWebModel.content = "Missing cityId parameter";
+                tileWebModel.content = "Отсутствует cityId параметр";
                 return;
             }
             Guid cityId;
             if (!Guid.TryParse(strCityId, out cityId))
             {
-                tileWebModel.content = "CityId parameter must contain GUID value";
+                tileWebModel.content = "Параметр cityId должен содержать GUID";
                 return;
             }
 
             WeatherLocatioinModel location = Context.GetPlugin<WeatherPlugin>().GetWeatherData(DateTime.Now).FirstOrDefault(l => l.LocationId == cityId);
-
             if (location == null)
             {
                 tileWebModel.content = string.Format("Локация с id = {0} не найдена", cityId);
@@ -39,21 +38,16 @@ namespace SmartHub.Plugins.Weather
 
             // текущая погода
             if (location.Now == null)
+                tileWebModel.content = "&lt;нет данных&gt";
+            else
             {
-                tileWebModel.content = "<нет данных>";//&lt;нет данных&gt;
-                return;
-            }
-            tileWebModel.className = "btn-info th-tile-icon th-tile-icon-wa " + WeatherUtils.GetIconClass(location.Now.Code);
+                tileWebModel.className = "btn-info th-tile-icon th-tile-icon-wa " + WeatherUtils.GetIconClass(location.Now.Code);
+                tileWebModel.content = string.Format("сейчас: {0}°C", WeatherUtils.FormatTemperature(location.Now.Temperature));
 
-            string formattedNow = WeatherUtils.FormatTemperature(location.Now.Temperature);
-            tileWebModel.content = string.Format("сейчас: {0}°C", formattedNow);
-
-            // погода на завтра
-            var tomorrow = location.Forecast.FirstOrDefault();
-            if (tomorrow != null)
-            {
-                string formattedTomorrow = WeatherUtils.FormatTemperatureRange(tomorrow.MinTemperature, tomorrow.MaxTemperature);
-                tileWebModel.content += string.Format("\nзавтра: {0}°C", formattedTomorrow);
+                // погода на завтра
+                var tomorrow = location.Forecast.FirstOrDefault();
+                if (tomorrow != null)
+                    tileWebModel.content += string.Format("\nзавтра: {0}°C", WeatherUtils.FormatTemperatureRange(tomorrow.MinTemperature, tomorrow.MaxTemperature));
             }
         }
     }

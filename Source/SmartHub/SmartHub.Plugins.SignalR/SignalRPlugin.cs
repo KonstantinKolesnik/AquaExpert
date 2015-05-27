@@ -15,7 +15,9 @@ namespace SmartHub.Plugins.SignalR
         #region Fields
         // This will *ONLY* bind to localhost, if you want to bind to all addresses use http://*:8080 to bind to all addresses. 
         // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx for more information.
-        private const string url = "http://localhost:55556";
+        //private const string url = "http://localhost:55556";
+
+        private const string url = "http://+:55556";
 
         private IDisposable server;
         //private MyHub wsHub;
@@ -67,8 +69,8 @@ namespace SmartHub.Plugins.SignalR
 
                 //.MapSignalR(); // for hubs
 
-                //.MapSignalR<ChatConnection>("/chat"); // for persistent connection
-                .MapSignalR("/chat", typeof(ChatConnection), new ConnectionConfiguration() { EnableJSONP = true });
+                .MapSignalR<ChatConnection>("/chat"); // for persistent connection
+                //.MapSignalR("/chat", typeof(ChatConnection), new ConnectionConfiguration() { EnableJSONP = true });
         }
         #endregion
 

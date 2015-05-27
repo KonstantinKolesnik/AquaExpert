@@ -79,6 +79,7 @@ define(
 	        var connection = $.connection("http://" + hostName + ":55556/chat");
 	        connection.received(function (data) {
 	            $.each(app.SignalRReceivers, function (idx, receiver) {
+	                console.log(data);
 	                if (receiver && receiver.SignalRReceiveHandler) {
 	                    try {
 	                        receiver.SignalRReceiveHandler(receiver, data);

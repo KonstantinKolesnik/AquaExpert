@@ -387,7 +387,7 @@ define(['jquery'], function ($) {
 	            }
 	        }
 	        function onSensorValue(data) {
-	            console.log("["+data.Data.NodeNo+"]["+data.Data.SensorNo+"] "+ data.Data.TypeName + ": " + data.Data.Value);
+	            //console.log("["+data.Data.NodeNo+"]["+data.Data.SensorNo+"] "+ data.Data.TypeName + ": " + data.Data.Value);
 
 	            data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 

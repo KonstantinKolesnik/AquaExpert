@@ -4,8 +4,7 @@
 
     <div class="row">
         <div class="col-md-3 col-xs-12" style="font-family:'weathericons';">
-            <!--<span data-bind="attr: { class: SensorForecast.SensorValueValue }" style="font-size:52px;"></span>-->
-            <span class="wi-storm-showers" style="font-size:52px;"></span>
+            <div data-bind="source: SensorForecast.SensorValueValue" style="font-size:52px;" data-template="tmplForecast"></div>
 
             <div class="row">
                 <span class="col-xs-4 valueText">Внутри:</span>
@@ -29,6 +28,20 @@
     </div>
 </div>
 
+<script id="tmplForecast" type="text/x-kendo-template">
+    #
+    var icon = "wi-cloud-refresh";
+    switch (data) {
+    case 0: icon = "wi-day-cloudy"; break;
+    case 1: icon = "wi-day-sunny"; break;
+    case 2: icon = "wi-cloudy"; break;
+    case 3: icon = "wi-day-rain-mix"; break;
+    case 4: icon = "wi-storm-showers"; break;
+    case 5: icon = ""; break;
+    }
+    #
+    <span class="${icon}" style="font-size:52px;"></span>
+</script>
 <script id="tmplTemperature" type="text/x-kendo-template">
     #= kendo.toString(data, "n1") #&nbsp;&deg;C
 </script>

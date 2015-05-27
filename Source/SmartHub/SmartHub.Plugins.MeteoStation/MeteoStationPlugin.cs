@@ -38,7 +38,6 @@ namespace SmartHub.Plugins.MeteoStation
     public class MeteoStationPlugin : PluginBase
     {
         #region Fields
-        private SignalRPlugin signalServer;
         private MySensorsPlugin mySensors;
         private SensorsConfiguration sensorsConfiguration;
         private MeteoStationSetting sensorsConfigurationSetting;
@@ -74,7 +73,7 @@ namespace SmartHub.Plugins.MeteoStation
         #region SignalR events
         private void NotifyForSignalR(object msg)
         {
-            signalServer.Broadcast(msg);
+            Context.GetPlugin<SignalRPlugin>().Broadcast(msg);
         }
         #endregion
 
@@ -85,7 +84,6 @@ namespace SmartHub.Plugins.MeteoStation
         }
         public override void InitPlugin()
         {
-            signalServer = Context.GetPlugin<SignalRPlugin>();
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
             sensorsConfigurationSetting = GetSetting("SensorsConfiguration");

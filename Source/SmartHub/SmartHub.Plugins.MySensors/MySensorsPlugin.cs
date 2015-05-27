@@ -30,7 +30,6 @@ namespace SmartHub.Plugins.MySensors
         #region Fields
         private bool isSerialGateway = true;
         private IGatewayProxy gatewayProxy;
-        private SignalRPlugin signalServer;
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         #endregion
 
@@ -90,7 +89,7 @@ namespace SmartHub.Plugins.MySensors
         #region SignalR events
         private void NotifyForSignalR(object msg)
         {
-            signalServer.Broadcast(msg);
+            Context.GetPlugin<SignalRPlugin>().Broadcast(msg);
         }
         #endregion
 
@@ -114,8 +113,6 @@ namespace SmartHub.Plugins.MySensors
             gatewayProxy.Connected += gatewayProxy_Connected;
             gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
             gatewayProxy.Disconnected += gatewayProxy_Disconnected;
-
-            signalServer = Context.GetPlugin<SignalRPlugin>();
         }
         public override void StartPlugin()
         {
@@ -571,7 +568,8 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new {
+            NotifyForSignalR(new
+            {
                 MsgId = "NodeNameChanged",
                 Data = new
                 {
@@ -594,7 +592,8 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new {
+            NotifyForSignalR(new
+            {
                 MsgId = "NodeDeleted",
                 Data = new { Id = id }
             });
@@ -621,7 +620,8 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new {
+            NotifyForSignalR(new
+            {
                 MsgId = "SensorNameChanged",
                 Data = new
                 {
@@ -644,10 +644,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            signalServer.Broadcast(new {
-                MsgId = "SensorDeleted",
-                Data = new { Id = id }
-            });
+            NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
 
             return null;
         }
@@ -673,10 +670,7 @@ namespace SmartHub.Plugins.MySensors
             //setting.Value = value;
             //SaveOrUpdate(setting);
 
-            signalServer.Broadcast(new {
-                MsgId = "UnitSystemChanged",
-                Data = value
-            });
+            NotifyForSignalR(new { MsgId = "UnitSystemChanged", Data = value });
 
             return null;
         }

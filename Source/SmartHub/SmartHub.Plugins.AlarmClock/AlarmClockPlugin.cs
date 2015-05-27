@@ -10,12 +10,14 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Scripts;
 using SmartHub.Plugins.Scripts.Attributes;
 using SmartHub.Plugins.Scripts.Data;
+using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Text;
 
 namespace SmartHub.Plugins.AlarmClock
 {
@@ -49,6 +51,13 @@ namespace SmartHub.Plugins.AlarmClock
 
         [ScriptEvent("alarmClock.alarmStarted")]
         public ScriptEventHandlerDelegate[] AlarmStartedForScripts { get; set; }
+        #endregion
+
+        #region SignalR events
+        private void NotifyForSignalR(object msg)
+        {
+            Context.GetPlugin<SignalRPlugin>().Broadcast(msg);
+        }
         #endregion
 
         #region Plugin overrides
@@ -125,6 +134,23 @@ namespace SmartHub.Plugins.AlarmClock
                 }
             }
         }
+
+        public string BuildTileContent()
+        {
+            //var times = GetNextAlarmTimes(DateTime.Now).Take(4);
+            //var strTimes = times.Select(t => t.ToShortTimeString()).ToArray();
+
+            var strTimes = GetNextAlarmsTimesAndNames(DateTime.Now).Take(6);
+            return strTimes.Any() ? string.Join(Environment.NewLine, strTimes) : "Нет активных оповещений";
+        }
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("if (data.MsgId == 'AlarmClockTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
+        }
         #endregion
 
         #region Private methods
@@ -183,13 +209,14 @@ namespace SmartHub.Plugins.AlarmClock
             lock (lockObject)
             {
                 LoadTimes();
-
                 var alarms = times.Where(x => CheckTime(x, now, lastAlarmTime)).ToArray();
                 if (alarms.Any())
                 {
                     lastAlarmTime = now;
                     Alarm(alarms);
                 }
+
+                NotifyForSignalR(new { MsgId = "AlarmClockTileContent", Data = BuildTileContent() });
             }
         }
         #endregion
