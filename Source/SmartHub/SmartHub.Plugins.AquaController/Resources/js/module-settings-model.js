@@ -11,8 +11,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        getSensorsConfiguration: function (onComplete) {
-            $.getJSON('/api/aquacontroller/sensorsCofiguration')
+        getConfiguration: function (onComplete) {
+            $.getJSON('/api/aquacontroller/configuration')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -21,8 +21,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        setSensorsConfiguration: function (sc, onComplete) {
-            $.post('/api/aquacontroller/sensorsCofiguration/set', { sc: JSON.stringify(sc) })
+        setConfiguration: function (sc, onComplete) {
+            $.post('/api/aquacontroller/configuration/set', { sc: JSON.stringify(sc) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -39,7 +39,7 @@ define(['jquery'], function ($) {
         SensorsBarometerDataSource: [],
         SensorsForecastDataSource: [],
 
-        SensorsConfiguration: null,
+        Configuration: null,
 
         update: function (onComplete) {
             var me = this;
@@ -60,8 +60,8 @@ define(['jquery'], function ($) {
                         api.getSensorsDataSource(8, function (data) {
                             me.set("SensorsForecastDataSource", data);
 
-                            api.getSensorsConfiguration(function (sc) {
-                                me.set("SensorsConfiguration", sc);
+                            api.getConfiguration(function (sc) {
+                                me.set("Configuration", sc);
 
                                 if (onComplete)
                                     onComplete();
@@ -81,6 +81,6 @@ define(['jquery'], function ($) {
 
     return {
         ViewModel: viewModel,
-        setSensorsConfiguration: api.setSensorsConfiguration
+        setConfiguration: api.setConfiguration
     };
 });

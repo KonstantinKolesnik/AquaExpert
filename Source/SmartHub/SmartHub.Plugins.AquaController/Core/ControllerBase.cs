@@ -19,6 +19,7 @@ namespace SmartHub.Plugins.AquaController.Core
     {
         #region Fields
         protected MySensorsPlugin mySensors;
+        //[Import(typeof(IServiceContext))]
         protected IServiceContext Context;
         #endregion
 
@@ -132,12 +133,12 @@ namespace SmartHub.Plugins.AquaController.Core
 
 
         //[HttpCommand("/api/aquacontroller/configuration")]
-        //public object GetSensorsConfiguration(HttpRequestParams request)
+        //public object GetConfiguration(HttpRequestParams request)
         //{
         //    return configuration;
         //}
         //[HttpCommand("/api/aquacontroller/configuration/set")]
-        //public object SetSensorsConfiguration(HttpRequestParams request)
+        //public object SetConfiguration(HttpRequestParams request)
         //{
         //    var json = request.GetRequiredString("sc");
         //    configuration = (Configuration)Extensions.FromJson(typeof(Configuration), json);
