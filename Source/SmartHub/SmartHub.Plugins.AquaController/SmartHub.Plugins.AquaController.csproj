@@ -57,7 +57,6 @@
     <Compile Include="AquaControllerPlugin.cs" />
     <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Core\ControllerBase.cs" />
-    <Compile Include="Core\ControllerConfigurationBase.cs" />
     <Compile Include="Core\TemperatureController.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\AquaControllerSetting.cs" />

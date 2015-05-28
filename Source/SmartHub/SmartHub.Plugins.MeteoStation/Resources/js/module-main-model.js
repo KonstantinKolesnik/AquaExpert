@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getSensorsConfiguration: function (onComplete) {
-            $.getJSON('/api/meteostation/sensorsCofiguration')
+            $.getJSON('/api/meteostation/configuration')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);

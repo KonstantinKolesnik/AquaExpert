@@ -11,6 +11,7 @@ using SmartHub.Plugins.Scripts.Attributes;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
@@ -135,15 +136,51 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Public methods
+        public void RequestSensorValue(Sensor sensor, SensorValueType type)
+        {
+            if (gatewayProxy != null && sensor != null)
+                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Request, false, (byte)type, ""));
+        }
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
         {
             if (gatewayProxy != null && sensor != null)
                 gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
         }
-        public void RequestSensorValue(Sensor sensor, SensorValueType type)
+        
+        public Node GetNode(byte nodeNo)
         {
-            if (gatewayProxy != null && sensor != null)
-                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Request, false, (byte)type, ""));
+            using (var session = Context.OpenSession())
+                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
+        }
+        public Sensor GetSensor(byte nodeNo, byte sensorNo)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeNo && sensor.SensorNo == sensorNo);
+        }
+        public Sensor GetSensor(Guid sensorID)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
+        }
+        public List<Sensor> GetSensorsByType(SensorType type)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().Where(s => s.Type == type).ToList();
+        }
+        public SensorValue GetLastSensorValue(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>()
+                    .Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo)
+                    .OrderByDescending(sv => sv.TimeStamp)
+                    .FirstOrDefault();
+        }
+        public bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
+        {
+            return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
         }
         public void RebootNode(Node node)
         {
@@ -261,36 +298,11 @@ namespace SmartHub.Plugins.MySensors
                 SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
             };
         }
-        #endregion
-
-        #region DB actions
+        
         private MySensorsSetting GetSetting(string name)
         {
             using (var session = Context.OpenSession())
                 return session.Query<MySensorsSetting>().FirstOrDefault(setting => setting.Name == name);
-        }
-        public Node GetNode(byte nodeNo)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
-        }
-        public Sensor GetSensor(byte nodeNo, byte sensorNo)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.NodeNo == nodeNo && sensor.SensorNo == sensorNo);
-        }
-        public Sensor GetSensor(Guid sensorID)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
-        }
-        public SensorValue GetSensorValue(Sensor sensor)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().
-                    Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).
-                    OrderByDescending(sv => sv.TimeStamp).
-                    FirstOrDefault();
         }
         private void Save(object item)
         {

@@ -39,34 +39,35 @@ namespace SmartHub.Plugins.MeteoStation
     {
         #region Fields
         private MySensorsPlugin mySensors;
-        private SensorsConfiguration sensorsConfiguration;
-        private MeteoStationSetting sensorsConfigurationSetting;
+        private Configuration configuration;
+        private MeteoStationSetting configurationSetting;
+        private const string settingName = "SensorsConfiguration";
         #endregion
 
         #region Properties
         public Sensor SensorTemperatureInner
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorTemperatureInnerID); }
+            get { return mySensors.GetSensor(configuration.SensorTemperatureInnerID); }
         }
         public Sensor SensorHumidityInner
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorHumidityInnerID); }
+            get { return mySensors.GetSensor(configuration.SensorHumidityInnerID); }
         }
         public Sensor SensorTemperatureOuter
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorTemperatureOuterID); }
+            get { return mySensors.GetSensor(configuration.SensorTemperatureOuterID); }
         }
         public Sensor SensorHumidityOuter
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorHumidityOuterID); }
+            get { return mySensors.GetSensor(configuration.SensorHumidityOuterID); }
         }
         public Sensor SensorAtmospherePressure
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorAtmospherePressureID); }
+            get { return mySensors.GetSensor(configuration.SensorAtmospherePressureID); }
         }
         public Sensor SensorForecast
         {
-            get { return mySensors.GetSensor(sensorsConfiguration.SensorForecastID); }
+            get { return mySensors.GetSensor(configuration.SensorForecastID); }
         }
         #endregion
 
@@ -86,34 +87,34 @@ namespace SmartHub.Plugins.MeteoStation
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-            sensorsConfigurationSetting = GetSetting("SensorsConfiguration");
+            configurationSetting = GetSetting(settingName);
 
-            if (sensorsConfigurationSetting == null)
+            if (configurationSetting == null)
             {
-                sensorsConfigurationSetting = new MeteoStationSetting()
+                configurationSetting = new MeteoStationSetting()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "SensorsConfiguration"
+                    Name = settingName
                 };
 
-                sensorsConfiguration = SensorsConfiguration.Default;
-                sensorsConfigurationSetting.SetValue(sensorsConfiguration);
-                SaveOrUpdate(sensorsConfigurationSetting);
+                configuration = Configuration.Default;
+                configurationSetting.SetValue(configuration);
+                SaveOrUpdate(configurationSetting);
             }
             else
-                sensorsConfiguration = sensorsConfigurationSetting.GetValue(typeof(SensorsConfiguration));
+                configuration = configurationSetting.GetValue(typeof(Configuration));
         }
         #endregion
 
         #region Public methods
         public string BuildTileContent()
         {
-            SensorValue lastSVTemperatureInner = GetLastSensorValue(SensorTemperatureInner);
-            SensorValue lastSVHumidityInner = GetLastSensorValue(SensorHumidityInner);
-            SensorValue lastSVTemperatureOuter = GetLastSensorValue(SensorTemperatureOuter);
-            SensorValue lastSVHumidityOuter = GetLastSensorValue(SensorHumidityOuter);
-            SensorValue lastSVAtmospherePressure = GetLastSensorValue(SensorAtmospherePressure);
-            SensorValue lastSVForecast = GetLastSensorValue(SensorForecast);
+            SensorValue lastSVTemperatureInner = mySensors.GetLastSensorValue(SensorTemperatureInner);
+            SensorValue lastSVHumidityInner = mySensors.GetLastSensorValue(SensorHumidityInner);
+            SensorValue lastSVTemperatureOuter = mySensors.GetLastSensorValue(SensorTemperatureOuter);
+            SensorValue lastSVHumidityOuter = mySensors.GetLastSensorValue(SensorHumidityOuter);
+            SensorValue lastSVAtmospherePressure = mySensors.GetLastSensorValue(SensorAtmospherePressure);
+            SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
@@ -172,14 +173,6 @@ namespace SmartHub.Plugins.MeteoStation
             if ((sensor = SensorForecast) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Forecast);
         }
-        private SensorValue GetLastSensorValue(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
-        }
         private object BuildSensorSummaryWebModel(Sensor sensor)
         {
             if (sensor == null)
@@ -188,14 +181,8 @@ namespace SmartHub.Plugins.MeteoStation
             return new
             {
                 Id = sensor.Id,
-                //NodeNo = sensor.NodeNo,
-                //SensorNo = sensor.SensorNo,
                 Name = sensor.Name
             };
-        }
-        private bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
-        {
-            return sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
         }
         #endregion
 
@@ -209,28 +196,26 @@ namespace SmartHub.Plugins.MeteoStation
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
-            if (IsMessageFromSensor(message, SensorTemperatureInner) ||
-                IsMessageFromSensor(message, SensorHumidityInner) ||
-                IsMessageFromSensor(message, SensorTemperatureOuter) ||
-                IsMessageFromSensor(message, SensorHumidityOuter) ||
-                IsMessageFromSensor(message, SensorAtmospherePressure) ||
-                IsMessageFromSensor(message, SensorForecast))
+            if (mySensors.IsMessageFromSensor(message, SensorTemperatureInner) ||
+                mySensors.IsMessageFromSensor(message, SensorHumidityInner) ||
+                mySensors.IsMessageFromSensor(message, SensorTemperatureOuter) ||
+                mySensors.IsMessageFromSensor(message, SensorHumidityOuter) ||
+                mySensors.IsMessageFromSensor(message, SensorAtmospherePressure) ||
+                mySensors.IsMessageFromSensor(message, SensorForecast))
                 NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
         }
         #endregion
 
         #region Web API
-        [HttpCommand("/api/meteostation/sensorsDataSource")]
-        public object GetSensorsDataSource(HttpRequestParams request)
+        [HttpCommand("/api/meteostation/sensorsByType")]
+        public object GetSensorsByType(HttpRequestParams request)
         {
-            var type = request.GetInt32("type");
+            var type = (SensorType)request.GetRequiredInt32("type");
 
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>()
-                    .Where(s => type.HasValue ? (int)s.Type == type.Value : true)
-                    .Select(BuildSensorSummaryWebModel)
-                    .Where(x => x != null)
-                    .ToArray();
+            return mySensors.GetSensorsByType(type)
+                .Select(BuildSensorSummaryWebModel)
+                .Where(x => x != null)
+                .ToArray();
         }
         [HttpCommand("/api/meteostation/sensor")]
         public object GetSensor(HttpRequestParams request)
@@ -254,15 +239,15 @@ namespace SmartHub.Plugins.MeteoStation
         [HttpCommand("/api/meteostation/configuration")]
         public object GetSensorsConfiguration(HttpRequestParams request)
         {
-            return sensorsConfiguration;
+            return configuration;
         }
         [HttpCommand("/api/meteostation/configuration/set")]
         public object SetSensorsConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("sc");
-            sensorsConfiguration = (SensorsConfiguration)Extensions.FromJson(typeof(SensorsConfiguration), json);
-            sensorsConfigurationSetting.SetValue(sensorsConfiguration);
-            SaveOrUpdate(sensorsConfigurationSetting);
+            configuration = (Configuration)Extensions.FromJson(typeof(Configuration), json);
+            configurationSetting.SetValue(configuration);
+            SaveOrUpdate(configurationSetting);
 
             RequestSensorsValues();
 

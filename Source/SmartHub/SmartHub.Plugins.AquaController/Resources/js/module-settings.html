@@ -1,35 +1,38 @@
 ﻿
 <div id="content" class="container-fluid">
-    <h2>Метеостанция - настройки</h2>
+    <h2>Аква-контроллер - настройки</h2>
 
-    <form role="form">
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorTemperatureInner">Сенсор внутренней температуры</label>
-            <select class="ddlSensorSelector" id="ddlSensorTemperatureInner" data-bind="source: SensorsTemperatureDataSource, value: SensorsConfiguration.SensorTemperatureInnerID"></select>
+    <div id="tabstrip">
+        <ul>
+            <li class="k-state-active">Контроллер температуры воды</li>
+            <li>Контроллер света</li>
+            <li>Контроллер PH</li>
+        </ul>
+        <div>
+            <form role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ddlSensorTemperatureWater">Сенсор температуры воды</label>
+                    <select class="ddlSensorSelector" id="ddlSensorTemperatureWater" data-bind="source: SensorsTemperatureDataSource, value: TemperatureControllerConfiguration.SensorTemperatureWaterID"></select>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ddlSensorSwitchHeater">Розетка обогревателя</label>
+                    <select class="ddlSensorSelector" id="ddlSensorSwitchHeater" data-bind="source: SensorsSwitchDataSource, value: TemperatureControllerConfiguration.SensorSwitchHeaterID"></select>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ntbTemperatureWaterMax">Макс. температура воды, &deg;C</label>
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMax" data-bind="value: TemperatureControllerConfiguration.TemperatureMax" />
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ntbTemperatureWaterMin">Мин. температура воды, &deg;C</label>
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMin" data-bind="value: TemperatureControllerConfiguration.TemperatureMin" />
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorHumidityInner">Сенсор внутренней влажности</label>
-            <select class="ddlSensorSelector" id="ddlSensorHumidityInner" data-bind="source: SensorsHumidityDataSource, value: SensorsConfiguration.SensorHumidityInnerID"></select>
+        <div>
+
         </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorTemperatureOuter">Сенсор внешней температуры</label>
-            <select class="ddlSensorSelector" id="ddlSensorTemperatureOuter" data-bind="source: SensorsTemperatureDataSource, value: SensorsConfiguration.SensorTemperatureOuterID"></select>
+        <div>
+
         </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorHumidityOuter">Сенсор внешней влажности</label>
-            <select class="ddlSensorSelector" id="ddlSensorHumidityOuter" data-bind="source: SensorsHumidityDataSource, value: SensorsConfiguration.SensorHumidityOuterID"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorAtmospherePressure">Сенсор атмосферного давления</label>
-            <select class="ddlSensorSelector" id="ddlSensorAtmospherePressure" data-bind="source: SensorsBarometerDataSource, value: SensorsConfiguration.SensorAtmospherePressureID"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ddlSensorForecast">Сенсор прогноза</label>
-            <select class="ddlSensorSelector" id="ddlSensorForecast" data-bind="source: SensorsForecastDataSource, value: SensorsConfiguration.SensorForecastID"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-12 col-md-2" for="ntbHeight">Высота над уровнем моря, м</label>
-            <input class="ddlSensorSelector" id="ntbHeight" data-bind="value: SensorsConfiguration.Height"/>
-        </div>
-    </form>
+    </div>
 </div>

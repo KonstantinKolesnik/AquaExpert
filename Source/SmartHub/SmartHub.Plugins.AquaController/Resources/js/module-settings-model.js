@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensorsDataSource: function (type, onComplete) {
-            $.getJSON('/api/aquacontroller/sensorsDataSource', { type: type })
+        getSensorsByType: function (type, onComplete) {
+            $.getJSON('/api/aquacontroller/sensorsByType', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -11,8 +11,9 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        getConfiguration: function (onComplete) {
-            $.getJSON('/api/aquacontroller/configuration')
+
+        getTemperatureControllerConfiguration: function (onComplete) {
+            $.getJSON('/api/aquacontroller/configuration/temperaturecontroller')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -21,8 +22,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        setConfiguration: function (sc, onComplete) {
-            $.post('/api/aquacontroller/configuration/set', { sc: JSON.stringify(sc) })
+        setTemperatureControllerConfiguration: function (conf, onComplete) {
+            $.post('/api/aquacontroller/configuration/temperaturecontroller/set', { conf: JSON.stringify(conf) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -31,42 +32,34 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         }
+
+
+
     };
 
     var viewModel = kendo.observable({
         SensorsTemperatureDataSource: [],
-        SensorsHumidityDataSource: [],
-        SensorsBarometerDataSource: [],
-        SensorsForecastDataSource: [],
+        SensorsSwitchDataSource: [],
 
-        Configuration: null,
+        TemperatureControllerConfiguration: null,
 
         update: function (onComplete) {
             var me = this;
 
+            //Switch = 3,             // Switch Actuator (on/off)
             //Temperature = 6,        // Temperature sensor
-            //Humidity = 7,           // Humidity sensor
-            //Barometer = 8,          // Barometer sensor (Pressure)
 
-            api.getSensorsDataSource(6, function (data) {
+            api.getSensorsByType(6, function (data) {
                 me.set("SensorsTemperatureDataSource", data);
 
-                api.getSensorsDataSource(7, function (data) {
-                    me.set("SensorsHumidityDataSource", data);
+                api.getSensorsByType(3, function (data) {
+                    me.set("SensorsSwitchDataSource", data);
 
-                    api.getSensorsDataSource(8, function (data) {
-                        me.set("SensorsBarometerDataSource", data);
+                    api.getTemperatureControllerConfiguration(function (data) {
+                        me.set("TemperatureControllerConfiguration", data);
 
-                        api.getSensorsDataSource(8, function (data) {
-                            me.set("SensorsForecastDataSource", data);
-
-                            api.getConfiguration(function (sc) {
-                                me.set("Configuration", sc);
-
-                                if (onComplete)
-                                    onComplete();
-                            });
-                        });
+                        if (onComplete)
+                            onComplete();
                     });
                 });
             });
@@ -81,6 +74,6 @@ define(['jquery'], function ($) {
 
     return {
         ViewModel: viewModel,
-        setConfiguration: api.setConfiguration
+        setTemperatureControllerConfiguration: api.setTemperatureControllerConfiguration
     };
 });

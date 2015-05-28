@@ -17,28 +17,16 @@
             <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
         <div>
-            <div id="pnlSettings">
-                <div>
-                    <label class="control-label" for="ddlUnitSystem">Система единиц измерения</label>
-                    <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
-                </div>
+            <div id="pnlSettings" class="row">
+                <form role="form">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-md-2" for="ddlUnitSystem">Система единиц измерения</label>
+                        <select style="width:250px;" id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-    <!--<div class="row">
-        <div class="col-md-12">
-            <h5>Настройки</h5>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-            <h5>Узлы</h5>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-            <h5>Сенсоры</h5>
-        </div>
-    </div>-->
 </div>
 
 <!-- Templates  -->
@@ -150,8 +138,3 @@
         </div>
     # } #
 </script>
-
-
-
-<!--<div>#: val == null ? "-" : kendo.toString(val, "n1") #</div>-->
-<!--<div>#: val == null ? "-" : val + " " + mainView.getSensorValueUnit(data) #</div>-->

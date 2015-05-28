@@ -2,9 +2,17 @@
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Core;
 using SmartHub.Plugins.AquaController.Data;
+using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
+using SmartHub.Plugins.MySensors;
+using SmartHub.Plugins.MySensors.Core;
+using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.WebUI.Attributes;
 using System.Text;
+using System.Linq;
+using System;
+using NHibernate.Linq;
+using SmartHub.Core.Plugins.Utils;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -24,7 +32,9 @@ namespace SmartHub.Plugins.AquaController
     public class AquaControllerPlugin : PluginBase
     {
         #region Fields
+        private MySensorsPlugin mySensors;
         private TemperatureController temperatureController = new TemperatureController();
+
         #endregion
 
         #region Plugin overrides
@@ -34,7 +44,11 @@ namespace SmartHub.Plugins.AquaController
         }
         public override void InitPlugin()
         {
+            mySensors = Context.GetPlugin<MySensorsPlugin>();
+
             temperatureController.Init(Context);
+
+
         }
         #endregion
 
@@ -68,6 +82,66 @@ namespace SmartHub.Plugins.AquaController
             return sb.ToString();
         }
         #endregion
+
+        #region Private methods
+        private object BuildSensorSummaryWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name
+            };
+        }
+        #endregion
+
+        #region Web API
+        [HttpCommand("/api/aquacontroller/sensorsByType")]
+        public object GetSensorsByType(HttpRequestParams request)
+        {
+            var type = (SensorType)request.GetRequiredInt32("type");
+
+            return mySensors.GetSensorsByType(type)
+                .Select(BuildSensorSummaryWebModel)
+                .Where(x => x != null)
+                .ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/sensor")]
+        public object GetSensor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            return mySensors.BuildSensorWebModel(mySensors.GetSensor(id));
+        }
+        [HttpCommand("/api/aquacontroller/sensorvalues")]
+        public object GetSensorValues(HttpRequestParams request)
+        {
+            var nodeNo = request.GetRequiredInt32("nodeNo");
+            var sensorNo = request.GetRequiredInt32("sensorNo");
+            var hours = request.GetRequiredInt32("hours");
+
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
+        }
+
+        [HttpCommand("/api/aquacontroller/configuration/temperaturecontroller")]
+        public object GetTemperatureControllerConfiguration(HttpRequestParams request)
+        {
+            return temperatureController.ControllerConfiguration;
+        }
+        [HttpCommand("/api/aquacontroller/configuration/temperaturecontroller/set")]
+        public object SetTemperatureControllerConfiguration(HttpRequestParams request)
+        {
+            var json = request.GetRequiredString("conf");
+            temperatureController.ControllerConfiguration = (TemperatureController.Configuration)Extensions.FromJson(typeof(TemperatureController.Configuration), json);
+
+            return null;
+        }
+        #endregion
+
 
 
 

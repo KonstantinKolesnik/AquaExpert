@@ -1,16 +1,10 @@
 ﻿using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Data;
-using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer.Attributes;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.AquaController.Core
 {
@@ -18,8 +12,8 @@ namespace SmartHub.Plugins.AquaController.Core
     {
         public class Configuration
         {
-            public Guid SensorTemperatureID { get; set; }
-            public Guid SensorSwitchID { get; set; }
+            public Guid SensorTemperatureWaterID { get; set; }
+            public Guid SensorSwitchHeaterID { get; set; }
             public float TemperatureMin { get; set; }
             public float TemperatureMax { get; set; }
 
@@ -29,8 +23,8 @@ namespace SmartHub.Plugins.AquaController.Core
                 {
                     return new Configuration()
                     {
-                        SensorTemperatureID = Guid.Empty,
-                        SensorSwitchID = Guid.Empty,
+                        SensorTemperatureWaterID = Guid.Empty,
+                        SensorSwitchHeaterID = Guid.Empty,
                         TemperatureMin = 25.0f,
                         TemperatureMax = 26.0f
                     };
@@ -45,13 +39,25 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Properties
-        public Sensor SensorTemperature
+        public Configuration ControllerConfiguration
         {
-            get { return mySensors.GetSensor(configuration.SensorTemperatureID); }
+            get { return configuration; }
+            set
+            {
+                configuration = value;
+                configurationSetting.SetValue(configuration);
+                SaveOrUpdate(configurationSetting);
+
+                RequestSensorsValues();
+            }
         }
-        public Sensor SensorSwitch
+        public Sensor SensorTemperatureWater
         {
-            get { return mySensors.GetSensor(configuration.SensorSwitchID); }
+            get { return mySensors.GetSensor(configuration.SensorTemperatureWaterID); }
+        }
+        public Sensor SensorSwitchHeater
+        {
+            get { return mySensors.GetSensor(configuration.SensorSwitchHeaterID); }
         }
         #endregion
 
@@ -84,9 +90,9 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             Sensor sensor;
 
-            if ((sensor = SensorTemperature) != null)
+            if ((sensor = SensorTemperatureWater) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
-            if ((sensor = SensorSwitch) != null)
+            if ((sensor = SensorSwitchHeater) != null)
                 mySensors.RequestSensorValue(sensor, SensorValueType.Switch);
         }
         #endregion
@@ -103,9 +109,9 @@ namespace SmartHub.Plugins.AquaController.Core
             //    IsMessageFromSensor(message, SensorForecast))
             //    NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
 
-            if (IsMessageFromSensor(message, SensorTemperature))
+            if (mySensors.IsMessageFromSensor(message, SensorTemperatureWater))
             {
-                var switchValue = GetLastSensorValue(SensorSwitch);
+                var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
 
                 float t = message.PayloadFloat;
                 bool on = false;
@@ -117,7 +123,7 @@ namespace SmartHub.Plugins.AquaController.Core
                 else if (t > configuration.TemperatureMax)
                     on = false;
 
-                mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, on ? 1 : 0);
+                mySensors.SetSensorValue(SensorSwitchHeater, SensorValueType.Switch, on ? 1 : 0);
             }
         }
 

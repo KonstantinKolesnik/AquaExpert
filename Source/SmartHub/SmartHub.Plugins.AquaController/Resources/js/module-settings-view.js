@@ -7,29 +7,38 @@ define(
             onShow: function () {
                 var me = this;
 
-                createSensorSelector($("#ddlSensorTemperatureInner"));
-                createSensorSelector($("#ddlSensorHumidityInner"));
-                createSensorSelector($("#ddlSensorTemperatureOuter"));
-                createSensorSelector($("#ddlSensorHumidityOuter"));
-                createSensorSelector($("#ddlSensorAtmospherePressure"));
-                createSensorSelector($("#ddlSensorForecast"));
-                createNumericTextBox($("#ntbHeight"));
+                createTabStrip($("#tabstrip"));
+                createSensorSelector($("#ddlSensorTemperatureWater"));
+                createSensorSelector($("#ddlSensorSwitchHeater"));
+                createNumericTextBox($("#ntbTemperatureWaterMin"), 20, 28, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureWaterMax"), 20, 28, "n1", 1);
 
+                function createTabStrip(selector) {
+                    selector.kendoTabStrip({
+                        animation: {
+                            open: { effects: "fadeIn" }
+                        },
+                        activate: function () {
+                            //if (selector = $("#tabstrip"))
+                            //    adjustSizes();
+                        }
+                    });
+                }
                 function createSensorSelector(selector) {
                     selector.kendoDropDownList({
                         dataValueField: "Id",
                         dataTextField: "Name",
-                        change: function (e) { me.trigger('configuration:set'); }
+                        change: function (e) { me.trigger('temperatureControllerConfiguration:set'); }
                     });
                 }
-                function createNumericTextBox(selector) {
+                function createNumericTextBox(selector, min, max, format, decimals) {
                     selector.kendoNumericTextBox({
-                        min: -500,
-                        max: 9000,
+                        min: min,
+                        max: max,
                         step: 1,
-                        format: "n0",
-                        decimals: 0,
-                        change: function (e) { me.trigger('configuration:set'); }
+                        format: format,
+                        decimals: decimals,
+                        change: function (e) { me.trigger('temperatureControllerConfiguration:set'); }
                     });
                 }
             },

@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensorsDataSource: function (type, onComplete) {
-            $.getJSON('/api/meteostation/sensorsDataSource', { type: type })
+        getSensorsByType: function (type, onComplete) {
+            $.getJSON('/api/meteostation/sensorsByType', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -48,16 +48,16 @@ define(['jquery'], function ($) {
             //Humidity = 7,           // Humidity sensor
             //Barometer = 8,          // Barometer sensor (Pressure)
 
-            api.getSensorsDataSource(6, function (data) {
+            api.getSensorsByType(6, function (data) {
                 me.set("SensorsTemperatureDataSource", data);
 
-                api.getSensorsDataSource(7, function (data) {
+                api.getSensorsByType(7, function (data) {
                     me.set("SensorsHumidityDataSource", data);
 
-                    api.getSensorsDataSource(8, function (data) {
+                    api.getSensorsByType(8, function (data) {
                         me.set("SensorsBarometerDataSource", data);
 
-                        api.getSensorsDataSource(8, function (data) {
+                        api.getSensorsByType(8, function (data) {
                             me.set("SensorsForecastDataSource", data);
 
                             api.getSensorsConfiguration(function (sc) {

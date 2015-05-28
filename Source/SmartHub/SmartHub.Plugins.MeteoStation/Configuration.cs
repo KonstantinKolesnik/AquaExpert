@@ -2,7 +2,7 @@
 
 namespace SmartHub.Plugins.MeteoStation
 {
-    public class SensorsConfiguration
+    public class Configuration
     {
         public Guid SensorTemperatureInnerID { get; set; }
         public Guid SensorTemperatureOuterID { get; set; }
@@ -12,11 +12,11 @@ namespace SmartHub.Plugins.MeteoStation
         public Guid SensorForecastID { get; set; }
         public int Height { get; set; }
 
-        public static SensorsConfiguration Default
+        public static Configuration Default
         {
             get
             {
-                return new SensorsConfiguration()
+                return new Configuration()
                 {
                     SensorTemperatureInnerID = Guid.Empty,
                     SensorTemperatureOuterID = Guid.Empty,

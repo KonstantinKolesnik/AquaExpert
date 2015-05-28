@@ -59,7 +59,7 @@
     <Compile Include="MeteoStationPlugin.cs" />
     <Compile Include="MeteoStationTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SensorsConfiguration.cs" />
+    <Compile Include="Configuration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
