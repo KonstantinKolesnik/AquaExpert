@@ -62,7 +62,7 @@ namespace SmartHub.Plugins.MySensors
         public void SendCommand(int nodeNo, int sensorNo, int commandType, int valueType, float value)
         {
             if (gatewayProxy != null)
-                gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value.ToString()));
+                gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value));
         }
 
         [ScriptEvent("mySensors.connected")]
@@ -144,7 +144,7 @@ namespace SmartHub.Plugins.MySensors
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
         {
             if (gatewayProxy != null && sensor != null)
-                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value.ToString()));
+                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value));
         }
         
         public Node GetNode(byte nodeNo)
@@ -181,6 +181,27 @@ namespace SmartHub.Plugins.MySensors
         public bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
+        }
+        public object BuildSensorWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            SensorValue lastSV = null;
+            using (var session = Context.OpenSession())
+                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name,
+                NodeNo = sensor.NodeNo,
+                SensorNo = sensor.SensorNo,
+                TypeName = sensor.TypeName,
+                ProtocolVersion = sensor.ProtocolVersion,
+                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
+                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
+            };
         }
         public void RebootNode(Node node)
         {
@@ -277,26 +298,21 @@ namespace SmartHub.Plugins.MySensors
                 BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
             };
         }
-        public object BuildSensorWebModel(Sensor sensor)
+        private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
-            if (sensor == null)
-                return null;
-
-            SensorValue lastSV = null;
-            using (var session = Context.OpenSession())
-                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
-
-            return new
+            SensorValue sv = new SensorValue()
             {
-                Id = sensor.Id,
-                Name = sensor.Name,
-                NodeNo = sensor.NodeNo,
-                SensorNo = sensor.SensorNo,
-                TypeName = sensor.TypeName,
-                ProtocolVersion = sensor.ProtocolVersion,
-                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
-                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
+                Id = Guid.NewGuid(),
+                NodeNo = message.NodeNo,
+                SensorNo = message.SensorNo,
+                TimeStamp = DateTime.UtcNow,
+                Type = (SensorValueType)message.SubType,
+                Value = message.PayloadFloat
             };
+
+            Save(sv);
+
+            return sv;
         }
         
         private MySensorsSetting GetSetting(string name)
@@ -335,13 +351,6 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Event handlers
-        //[Timer_3_sec_Elapsed]
-        //private void Timer_5_sec_Elapsed(DateTime now)
-        //{
-        //    //Debug.WriteLine("Timer 5 sec");
-        //    //NotifyForSignalR(new { MsgId = "TestTime", Value = now });
-        //}
-
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
             Logger.Info("Connected.");
@@ -425,19 +434,10 @@ namespace SmartHub.Plugins.MySensors
                 case SensorMessageType.Set: // sent from or to a sensor when a sensor value should be updated
                     if (sensor != null)
                     {
-                        SensorValue sv = new SensorValue()
-                        {
-                            Id = Guid.NewGuid(),
-                            NodeNo = message.NodeNo,
-                            SensorNo = message.SensorNo,
-                            TimeStamp = DateTime.UtcNow,
-                            Type = (SensorValueType)message.SubType,
-                            Value = message.PayloadFloat
-                        };
+                        NotifyMessageReceivedForPlugins(message); // goes before saving to to DB 'cause plugin may adjust the sensor value due to calibration
+                        
+                        var sv = SaveSensorValueToDB(message);
 
-                        Save(sv);
-
-                        NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
                         NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });
                         NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() });

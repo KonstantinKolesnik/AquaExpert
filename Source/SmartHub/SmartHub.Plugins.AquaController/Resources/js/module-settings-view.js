@@ -10,10 +10,11 @@ define(
                 createTabStrip($("#tabstrip"));
                 createSensorSelector($("#ddlHeaterSensorTemperature"));
                 createSensorSelector($("#ddlHeaterSensorSwitch"));
-                createNumericTextBox($("#ntbTemperatureWaterMin"), 20, 28, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureWaterMax"), 20, 28, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureWaterAlarmMin"), 20, 28, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureWaterAlarmMax"), 20, 28, "n1", 1);
+                createNumericTextBox($("#ntbHeaterTemperatureCalibration"), -10, 10, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureMin"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureMax"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureAlarmMin"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureAlarmMax"), 10, 32, "n1", 1);
                 createTextBox($("#tbHeaterTemperatureAlarmMaxText"));
                 createTextBox($("#tbHeaterTemperatureAlarmMinText"));
 

@@ -12,8 +12,24 @@ namespace SmartHub.Plugins.MySensors.Core
         public SensorMessageType Type { get; set; }
         public bool IsAckNeeded { get; set; }
         public byte SubType { get; set; }
-        public string Payload { get; set; }
-        public float PayloadFloat { get; private set; }
+        public string Payload { get; private set; }
+        
+        public float PayloadFloat
+        {
+            get
+            {
+                string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                string p = Payload.Replace(",", ds).Replace(".", ds);
+
+                float v;
+                return float.TryParse(p, out v) ? v : float.NaN;
+            }
+            set
+            {
+                if (PayloadFloat != value)
+                    Payload = value.ToString();
+            }
+        }
         #endregion
 
         #region Constructor
@@ -25,6 +41,15 @@ namespace SmartHub.Plugins.MySensors.Core
             IsAckNeeded = isAckNeeded;
             SubType = subType;
             Payload = payload;
+        }
+        public SensorMessage(byte nodeID, byte sensorID, SensorMessageType type, bool isAckNeeded, byte subType, float payload)
+        {
+            NodeNo = nodeID;
+            SensorNo = sensorID;
+            Type = type;
+            IsAckNeeded = isAckNeeded;
+            SubType = subType;
+            PayloadFloat = payload;
         }
         #endregion
 
@@ -61,12 +86,6 @@ namespace SmartHub.Plugins.MySensors.Core
                     byte.Parse(parts[3]) == 1,
                     byte.Parse(parts[4]),
                     parts[5]);
-
-                string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                string p = msg.Payload.Replace(",", ds).Replace(".", ds);
-                float v;
-                if (float.TryParse(parts[5], out v))
-                    msg.PayloadFloat = v;
             }
             catch (Exception) { }
 

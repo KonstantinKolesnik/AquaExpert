@@ -15,6 +15,7 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             public Guid SensorTemperatureID { get; set; }
             public Guid SensorSwitchID { get; set; }
+            public float TemperatureCalibration { get; set; }
 
             public bool IsAutoMode { get; set; }
             public float TemperatureMin { get; set; }
@@ -32,6 +33,7 @@ namespace SmartHub.Plugins.AquaController.Core
                     {
                         SensorTemperatureID = Guid.Empty,
                         SensorSwitchID = Guid.Empty,
+                        TemperatureCalibration = 0.0f,
 
                         IsAutoMode = true,
                         TemperatureMin = 25.0f,
@@ -135,16 +137,13 @@ namespace SmartHub.Plugins.AquaController.Core
         [MySensorsMessage]
         protected override void MessageReceived(SensorMessage message)
         {
-            //if (IsMessageFromSensor(message, SensorTemperatureInner) ||
-            //    IsMessageFromSensor(message, SensorHumidityInner) ||
-            //    IsMessageFromSensor(message, SensorTemperatureOuter) ||
-            //    IsMessageFromSensor(message, SensorHumidityOuter) ||
-            //    IsMessageFromSensor(message, SensorAtmospherePressure) ||
-            //    IsMessageFromSensor(message, SensorForecast))
-            //    NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
-
             if (mySensors.IsMessageFromSensor(message, SensorTemperature))
+            {
+                // calibrate value:
+                message.PayloadFloat += ControllerConfiguration.TemperatureCalibration;
+
                 Process(message.PayloadFloat);
+            }
         }
 
         [RunPeriodically(1)]

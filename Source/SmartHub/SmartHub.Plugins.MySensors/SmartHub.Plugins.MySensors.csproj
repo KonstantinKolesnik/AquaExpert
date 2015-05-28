@@ -100,11 +100,6 @@
       <Name>SmartHub.Plugins.SignalR</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
-      <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
-      <Name>SmartHub.Plugins.Timer</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
       <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
       <Name>SmartHub.Plugins.WebUI</Name>
