@@ -74,9 +74,7 @@ define(['jquery'], function ($) {
     });
 
     function onError(data) {
-        //alert(data.responseJSON.ExceptionMessage);
-        //alert(data.statusText);
-        alert(data.responseText);
+        alert(data.statusText);
     }
 
     return {

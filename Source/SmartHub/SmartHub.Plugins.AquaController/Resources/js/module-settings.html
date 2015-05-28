@@ -4,27 +4,50 @@
 
     <div id="tabstrip">
         <ul>
-            <li class="k-state-active">Контроллер температуры воды</li>
-            <li>Контроллер света</li>
-            <li>Контроллер PH</li>
+            <li class="k-state-active">Обогреватель</li>
+            <li>Свет</li>
+            <li>PH</li>
         </ul>
         <div>
             <form role="form">
                 <div class="form-group">
-                    <label class="col-xs-12 col-md-2" for="ddlSensorTemperatureWater">Сенсор температуры воды</label>
-                    <select class="ddlSensorSelector" id="ddlSensorTemperatureWater" data-bind="source: SensorsTemperatureDataSource, value: TemperatureControllerConfiguration.SensorTemperatureWaterID"></select>
+                    <label class="col-xs-12 col-md-2" for="ddlHeaterSensorTemperature">Сенсор температуры воды</label>
+                    <select class="ddlSensorSelector" id="ddlHeaterSensorTemperature" data-bind="source: SensorsTemperatureDataSource, value: HeaterControllerConfiguration.SensorTemperatureID"></select>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-md-2" for="ddlSensorSwitchHeater">Розетка обогревателя</label>
-                    <select class="ddlSensorSelector" id="ddlSensorSwitchHeater" data-bind="source: SensorsSwitchDataSource, value: TemperatureControllerConfiguration.SensorSwitchHeaterID"></select>
+                    <label class="col-xs-12 col-md-2" for="ddlHeaterSensorSwitch">Розетка обогревателя</label>
+                    <select class="ddlSensorSelector" id="ddlHeaterSensorSwitch" data-bind="source: SensorsSwitchDataSource, value: HeaterControllerConfiguration.SensorSwitchID"></select>
                 </div>
+
+                <hr />
+
                 <div class="form-group">
                     <label class="col-xs-12 col-md-2" for="ntbTemperatureWaterMax">Макс. температура воды, &deg;C</label>
-                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMax" data-bind="value: TemperatureControllerConfiguration.TemperatureMax" />
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMax" data-bind="value: HeaterControllerConfiguration.TemperatureMax" />
                 </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-md-2" for="ntbTemperatureWaterMin">Мин. температура воды, &deg;C</label>
-                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMin" data-bind="value: TemperatureControllerConfiguration.TemperatureMin" />
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterMin" data-bind="value: HeaterControllerConfiguration.TemperatureMin" />
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ntbTemperatureWateAlarmMax">Макс. критич. температура воды, &deg;C</label>
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterAlarmMax" data-bind="value: HeaterControllerConfiguration.TemperatureAlarmMax" />
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="tbHeaterTemperatureAlarmMaxText">Оповещение при макс. критич. темп. воды</label>
+                    <input type='text' class="ddlSensorSelector k-textbox" id="tbHeaterTemperatureAlarmMaxText" data-bind="value: HeaterControllerConfiguration.TemperatureAlarmMaxText" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="ntbTemperatureWaterAlarmMin">Мин. критич. температура воды, &deg;C</label>
+                    <input class="ddlSensorSelector" id="ntbTemperatureWaterAlarmMin" data-bind="value: HeaterControllerConfiguration.TemperatureAlarmMin" />
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-md-2" for="tbHeaterTemperatureAlarmMinText">Оповещение при мин. критич. темп. воды</label>
+                    <input type='text' class="ddlSensorSelector k-textbox" id="tbHeaterTemperatureAlarmMinText" data-bind="value: HeaterControllerConfiguration.TemperatureAlarmMinText" />
                 </div>
             </form>
         </div>
@@ -34,5 +57,9 @@
         <div>
 
         </div>
+
+
+
+
     </div>
 </div>

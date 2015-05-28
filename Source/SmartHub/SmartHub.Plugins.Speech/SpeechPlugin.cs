@@ -54,10 +54,7 @@ namespace SmartHub.Plugins.Speech
         {
             using (var session = Context.OpenSession())
             {
-                List<string> list = session
-                    .Query<VoiceCommand>()
-                    .Select(cmd => cmd.CommandText)
-                    .ToList();
+                List<string> list = session.Query<VoiceCommand>().Select(cmd => cmd.CommandText).ToList();
 
                 Logger.Info("Loaded commands: {0}", list.ToJson("[]"));
 
@@ -168,7 +165,7 @@ namespace SmartHub.Plugins.Speech
 
                         Context.GetPlugin<ScriptsPlugin>().ExecuteScript(command.UserScript);
 
-                        this.RaiseScriptEvent(x => x.OnCommandReceivedForScripts, commandText);
+                        this.RaiseScriptEvent(x => x.OnVoiceCommandReceivedForScripts, commandText);
 
                         readyDate = null;
                     }
@@ -184,15 +181,16 @@ namespace SmartHub.Plugins.Speech
 
         #region Script events
         [ScriptEvent("speech.commandReceived")]
-        public ScriptEventHandlerDelegate[] OnCommandReceivedForScripts { get; set; }
+        public ScriptEventHandlerDelegate[] OnVoiceCommandReceivedForScripts { get; set; }
         #endregion
 
         #region Script commands
         [ScriptCommand("say")]
         public void Say(string text)
         {
-            //speechSynthesizer.Speak(text);
-            speechSynthesizer.SpeakAsync(text);
+            if (!string.IsNullOrEmpty(text))
+                //speechSynthesizer.Speak(text);
+                speechSynthesizer.SpeakAsync(text);
         }
         #endregion
     }

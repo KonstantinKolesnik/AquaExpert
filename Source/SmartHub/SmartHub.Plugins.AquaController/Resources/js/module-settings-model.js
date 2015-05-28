@@ -12,8 +12,8 @@ define(['jquery'], function ($) {
 	            });
         },
 
-        getTemperatureControllerConfiguration: function (onComplete) {
-            $.getJSON('/api/aquacontroller/configuration/temperaturecontroller')
+        getHeaterControllerConfiguration: function (onComplete) {
+            $.getJSON('/api/aquacontroller/heatercontroller/configuration')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -22,8 +22,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        setTemperatureControllerConfiguration: function (conf, onComplete) {
-            $.post('/api/aquacontroller/configuration/temperaturecontroller/set', { conf: JSON.stringify(conf) })
+        setHeaterControllerConfiguration: function (conf, onComplete) {
+            $.post('/api/aquacontroller/heatercontroller/configuration/set', { conf: JSON.stringify(conf) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -41,7 +41,9 @@ define(['jquery'], function ($) {
         SensorsTemperatureDataSource: [],
         SensorsSwitchDataSource: [],
 
-        TemperatureControllerConfiguration: null,
+        HeaterControllerConfiguration: null,
+
+
 
         update: function (onComplete) {
             var me = this;
@@ -55,8 +57,8 @@ define(['jquery'], function ($) {
                 api.getSensorsByType(3, function (data) {
                     me.set("SensorsSwitchDataSource", data);
 
-                    api.getTemperatureControllerConfiguration(function (data) {
-                        me.set("TemperatureControllerConfiguration", data);
+                    api.getHeaterControllerConfiguration(function (data) {
+                        me.set("HeaterControllerConfiguration", data);
 
                         if (onComplete)
                             onComplete();
@@ -67,13 +69,11 @@ define(['jquery'], function ($) {
     });
 
     function onError(data) {
-        //alert(data.responseJSON.ExceptionMessage);
-        //alert(data.statusText);
-        alert(data.responseText);
+        alert(data.statusText);
     }
 
     return {
         ViewModel: viewModel,
-        setTemperatureControllerConfiguration: api.setTemperatureControllerConfiguration
+        setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };
 });

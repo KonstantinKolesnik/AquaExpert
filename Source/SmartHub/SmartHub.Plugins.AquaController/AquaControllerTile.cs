@@ -14,6 +14,7 @@ namespace SmartHub.Plugins.AquaController
                 tileWebModel.title = "Аква-контроллер";
                 tileWebModel.url = "webapp/aquacontroller/module-main";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-tachometer";
+                tileWebModel.wide = true;
                 tileWebModel.content = Context.GetPlugin<AquaControllerPlugin>().BuildTileContent();
                 tileWebModel.SignalRReceiveHandler = Context.GetPlugin<AquaControllerPlugin>().BuildSignalRReceiveHandler();
             }

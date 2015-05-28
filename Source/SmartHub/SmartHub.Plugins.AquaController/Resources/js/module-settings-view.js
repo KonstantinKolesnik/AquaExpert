@@ -8,10 +8,14 @@ define(
                 var me = this;
 
                 createTabStrip($("#tabstrip"));
-                createSensorSelector($("#ddlSensorTemperatureWater"));
-                createSensorSelector($("#ddlSensorSwitchHeater"));
+                createSensorSelector($("#ddlHeaterSensorTemperature"));
+                createSensorSelector($("#ddlHeaterSensorSwitch"));
                 createNumericTextBox($("#ntbTemperatureWaterMin"), 20, 28, "n1", 1);
                 createNumericTextBox($("#ntbTemperatureWaterMax"), 20, 28, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureWaterAlarmMin"), 20, 28, "n1", 1);
+                createNumericTextBox($("#ntbTemperatureWaterAlarmMax"), 20, 28, "n1", 1);
+                createTextBox($("#tbHeaterTemperatureAlarmMaxText"));
+                createTextBox($("#tbHeaterTemperatureAlarmMinText"));
 
                 function createTabStrip(selector) {
                     selector.kendoTabStrip({
@@ -28,8 +32,11 @@ define(
                     selector.kendoDropDownList({
                         dataValueField: "Id",
                         dataTextField: "Name",
-                        change: function (e) { me.trigger('temperatureControllerConfiguration:set'); }
+                        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
                     });
+                }
+                function createTextBox(selector) {
+                    selector.unbind("keydown").keydown(preventEnter).blur(function () { me.trigger("heaterControllerConfiguration:set"); });
                 }
                 function createNumericTextBox(selector, min, max, format, decimals) {
                     selector.kendoNumericTextBox({
@@ -38,8 +45,15 @@ define(
                         step: 1,
                         format: format,
                         decimals: decimals,
-                        change: function (e) { me.trigger('temperatureControllerConfiguration:set'); }
+                        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
                     });
+                }
+                function preventEnter(e) {
+                    if (e.keyCode == 13) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(e.target).blur(); //run saving
+                    }
                 }
             },
 

@@ -2,8 +2,8 @@
 	['app', 'webapp/aquacontroller/module-settings-model', 'webapp/aquacontroller/module-settings-view'],
 	function (application, models, views) {
 	    var module = {
-	        setTemperatureControllerConfiguration: function () {
-	            models.setTemperatureControllerConfiguration(models.ViewModel.TemperatureControllerConfiguration);
+	        setHeaterControllerConfiguration: function () {
+	            models.setHeaterControllerConfiguration(models.ViewModel.HeaterControllerConfiguration);
 	        },
 
 
@@ -11,7 +11,7 @@
 	        reload: function () {
 	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView();
-	                view.on('temperatureControllerConfiguration:set', module.setTemperatureControllerConfiguration);
+	                view.on('heaterControllerConfiguration:set', module.setHeaterControllerConfiguration);
 
 
 

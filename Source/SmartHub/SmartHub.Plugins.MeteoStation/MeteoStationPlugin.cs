@@ -158,20 +158,12 @@ namespace SmartHub.Plugins.MeteoStation
 
         private void RequestSensorsValues()
         {
-            Sensor sensor;
-
-            if ((sensor = SensorTemperatureInner) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
-            if ((sensor = SensorHumidityInner) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Humidity);
-            if ((sensor = SensorTemperatureOuter) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Temperature);
-            if ((sensor = SensorHumidityOuter) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Humidity);
-            if ((sensor = SensorAtmospherePressure) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Pressure);
-            if ((sensor = SensorForecast) != null)
-                mySensors.RequestSensorValue(sensor, SensorValueType.Forecast);
+            mySensors.RequestSensorValue(SensorTemperatureInner, SensorValueType.Temperature);
+            mySensors.RequestSensorValue(SensorHumidityInner, SensorValueType.Humidity);
+            mySensors.RequestSensorValue(SensorTemperatureOuter, SensorValueType.Temperature);
+            mySensors.RequestSensorValue(SensorHumidityOuter, SensorValueType.Humidity);
+            mySensors.RequestSensorValue(SensorAtmospherePressure, SensorValueType.Pressure);
+            mySensors.RequestSensorValue(SensorForecast, SensorValueType.Forecast);
         }
         private object BuildSensorSummaryWebModel(Sensor sensor)
         {

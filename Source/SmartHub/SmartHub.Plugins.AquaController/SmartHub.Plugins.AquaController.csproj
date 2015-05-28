@@ -57,7 +57,7 @@
     <Compile Include="AquaControllerPlugin.cs" />
     <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Core\ControllerBase.cs" />
-    <Compile Include="Core\TemperatureController.cs" />
+    <Compile Include="Core\HeaterController.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\AquaControllerSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +81,11 @@
     <ProjectReference Include="..\SmartHub.Plugins.SignalR\SmartHub.Plugins.SignalR.csproj">
       <Project>{46e58075-b4a0-4779-9f24-79d4b6f26a7b}</Project>
       <Name>SmartHub.Plugins.SignalR</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Speech\SmartHub.Plugins.Speech.csproj">
+      <Project>{74ee7ae8-c021-48b5-8c2d-e1f45c8bfbd8}</Project>
+      <Name>SmartHub.Plugins.Speech</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">

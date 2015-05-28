@@ -42,12 +42,8 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             using (var session = Context.OpenSession())
             {
-                try
-                {
-                    session.SaveOrUpdate(item);
-                    session.Flush();
-                }
-                catch (Exception) { }
+                session.SaveOrUpdate(item);
+                session.Flush();
             }
         }
 

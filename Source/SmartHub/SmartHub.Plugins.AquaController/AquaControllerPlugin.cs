@@ -33,7 +33,7 @@ namespace SmartHub.Plugins.AquaController
     {
         #region Fields
         private MySensorsPlugin mySensors;
-        private TemperatureController temperatureController = new TemperatureController();
+        private HeaterController heaterController = new HeaterController();
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace SmartHub.Plugins.AquaController
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-            temperatureController.Init(Context);
+            heaterController.Init(Context);
 
 
         }
@@ -55,16 +55,16 @@ namespace SmartHub.Plugins.AquaController
         #region Public methods
         public string BuildTileContent()
         {
-            //SensorValue lastSVTemperatureInner = GetLastSensorValue(SensorTemperatureInner);
-            //SensorValue lastSVHumidityInner = GetLastSensorValue(SensorHumidityInner);
-            //SensorValue lastSVTemperatureOuter = GetLastSensorValue(SensorTemperatureOuter);
-            //SensorValue lastSVHumidityOuter = GetLastSensorValue(SensorHumidityOuter);
-            //SensorValue lastSVAtmospherePressure = GetLastSensorValue(SensorAtmospherePressure);
-            //SensorValue lastSVForecast = GetLastSensorValue(SensorForecast);
+            SensorValue lastSVHeaterTemperature = mySensors.GetLastSensorValue(heaterController.SensorTemperature);
+            SensorValue lastSVHeaterSwitch = mySensors.GetLastSensorValue(heaterController.SensorSwitch);
+            //SensorValue lastSVTemperatureOuter = mySensors.GetLastSensorValue(SensorTemperatureOuter);
+            //SensorValue lastSVHumidityOuter = mySensors.GetLastSensorValue(SensorHumidityOuter);
+            //SensorValue lastSVAtmospherePressure = mySensors.GetLastSensorValue(SensorAtmospherePressure);
+            //SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
 
             StringBuilder sb = new StringBuilder();
-            //sb.Append("<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            //sb.Append("<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Температура воды: " + (lastSVHeaterTemperature != null ? lastSVHeaterTemperature.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Обогреватель: " + (lastSVHeaterSwitch != null ? (lastSVHeaterSwitch.Value == 1 ? "Вкл." : "Выкл.") : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
@@ -127,16 +127,16 @@ namespace SmartHub.Plugins.AquaController
                 return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
         }
 
-        [HttpCommand("/api/aquacontroller/configuration/temperaturecontroller")]
-        public object GetTemperatureControllerConfiguration(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
+        public object GetHeaterControllerConfiguration(HttpRequestParams request)
         {
-            return temperatureController.ControllerConfiguration;
+            return heaterController.ControllerConfiguration;
         }
-        [HttpCommand("/api/aquacontroller/configuration/temperaturecontroller/set")]
-        public object SetTemperatureControllerConfiguration(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/heatercontroller/configuration/set")]
+        public object SetHeaterControllerConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("conf");
-            temperatureController.ControllerConfiguration = (TemperatureController.Configuration)Extensions.FromJson(typeof(TemperatureController.Configuration), json);
+            heaterController.ControllerConfiguration = (HeaterController.Configuration)Extensions.FromJson(typeof(HeaterController.Configuration), json);
 
             return null;
         }
