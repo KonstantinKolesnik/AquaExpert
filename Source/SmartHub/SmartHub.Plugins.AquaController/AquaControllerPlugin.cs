@@ -13,6 +13,8 @@ using System.Linq;
 using System;
 using NHibernate.Linq;
 using SmartHub.Core.Plugins.Utils;
+using SmartHub.Plugins.MySensors.Attributes;
+using SmartHub.Plugins.SignalR;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -35,6 +37,13 @@ namespace SmartHub.Plugins.AquaController
         private MySensorsPlugin mySensors;
         private HeaterController heaterController = new HeaterController();
 
+        #endregion
+
+        #region SignalR events
+        private void NotifyForSignalR(object msg)
+        {
+            Context.GetPlugin<SignalRPlugin>().Broadcast(msg);
+        }
         #endregion
 
         #region Plugin overrides
@@ -97,6 +106,19 @@ namespace SmartHub.Plugins.AquaController
         }
         #endregion
 
+        #region Event handlers
+        [MySensorsMessage]
+        private void MessageReceived(SensorMessage message)
+        {
+            if (heaterController.IsMyMessage(message)
+                
+                
+                
+                )
+                NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
+        }
+        #endregion
+
         #region Web API
         [HttpCommand("/api/aquacontroller/sensorsByType")]
         public object GetSensorsByType(HttpRequestParams request)
@@ -140,6 +162,11 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
+
+
+
+
+
         #endregion
 
 

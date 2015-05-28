@@ -97,23 +97,12 @@ namespace SmartHub.Plugins.AquaController.Core
         public override void Init(IServiceContext context)
         {
             base.Init(context);
-
-            //configurationSetting = GetSetting(settingName);
-
-            //if (configurationSetting == null)
-            //{
-            //    configurationSetting = new AquaControllerSetting()
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        Name = settingName
-            //    };
-
-            //    configuration = Configuration.Default;
-            //    configurationSetting.SetValue(configuration);
-            //    SaveOrUpdate(configurationSetting);
-            //}
-            //else
-            //    configuration = configurationSetting.GetValue(typeof(Configuration));
+        }
+        public override bool IsMyMessage(SensorMessage message)
+        {
+            return
+                mySensors.IsMessageFromSensor(message, SensorTemperature) ||
+                mySensors.IsMessageFromSensor(message, SensorSwitch);
         }
         #endregion
 
@@ -125,20 +114,20 @@ namespace SmartHub.Plugins.AquaController.Core
         }
         private void Process(float temperature)
         {
-            //if (ControllerConfiguration.IsAutoMode)
-            //{
-            //    //var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
+            if (ControllerConfiguration.IsAutoMode)
+            {
+                //var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
 
-            //    if (temperature < ControllerConfiguration.TemperatureMin)
-            //        mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
-            //    else if (temperature > ControllerConfiguration.TemperatureMax)
-            //        mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
-            //}
+                if (temperature < ControllerConfiguration.TemperatureMin)
+                    mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
+                else if (temperature > ControllerConfiguration.TemperatureMax)
+                    mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
+            }
 
-            //if (temperature <= ControllerConfiguration.TemperatureAlarmMin)
-            //    Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMinText);
-            //else if (temperature >= ControllerConfiguration.TemperatureAlarmMax)
-            //    Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMaxText);
+            if (temperature <= ControllerConfiguration.TemperatureAlarmMin)
+                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMinText + string.Format("{0} градусов.", temperature));
+            else if (temperature >= ControllerConfiguration.TemperatureAlarmMax)
+                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMaxText + string.Format("{0} градусов.", temperature));
         }
         #endregion
 

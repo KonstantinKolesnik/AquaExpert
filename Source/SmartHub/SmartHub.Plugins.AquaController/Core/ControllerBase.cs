@@ -30,6 +30,7 @@ namespace SmartHub.Plugins.AquaController.Core
             Context = context;
             mySensors = Context.GetPlugin<MySensorsPlugin>();
         }
+        public abstract bool IsMyMessage(SensorMessage message);
         #endregion
 
         #region Private methods
