@@ -11,10 +11,10 @@ define(
                 createSensorSelector($("#ddlHeaterSensorTemperature"));
                 createSensorSelector($("#ddlHeaterSensorSwitch"));
                 createNumericTextBox($("#ntbHeaterTemperatureCalibration"), -10, 10, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureMin"), 10, 32, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureMax"), 10, 32, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureAlarmMin"), 10, 32, "n1", 1);
-                createNumericTextBox($("#ntbTemperatureAlarmMax"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbHeaterTemperatureMin"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbHeaterTemperatureMax"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbHeaterTemperatureAlarmMin"), 10, 32, "n1", 1);
+                createNumericTextBox($("#ntbHeaterTemperatureAlarmMax"), 10, 32, "n1", 1);
                 createTextBox($("#tbHeaterTemperatureAlarmMaxText"));
                 createTextBox($("#tbHeaterTemperatureAlarmMinText"));
 

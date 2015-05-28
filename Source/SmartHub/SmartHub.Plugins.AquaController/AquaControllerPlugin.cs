@@ -15,6 +15,7 @@ using NHibernate.Linq;
 using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.SignalR;
+using SmartHub.Plugins.Timer.Attributes;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -96,9 +97,21 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Event handlers
+        [MySensorsConnected]
+        private void Connected()
+        {
+            heaterController.Connected();
+
+
+        }
+
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
+            heaterController.MessageReceived(message);
+
+
+
             if (heaterController.IsMyMessage(message)
                 
                 
@@ -106,6 +119,14 @@ namespace SmartHub.Plugins.AquaController
                 )
                 NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
         }
+
+        //[RunPeriodically(1)]
+        [Timer_5_sec_Elapsed]
+        private void timer_Elapsed(DateTime now)
+        {
+            heaterController.timer_Elapsed(now);
+        }
+
         #endregion
 
         #region Web API

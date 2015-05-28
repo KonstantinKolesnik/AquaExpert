@@ -50,6 +50,7 @@ namespace SmartHub.Plugins.AquaController.Core
         #region Fields
         private const string settingName = "HeaterControllerConfiguration";
         private Configuration configuration;
+        private AquaControllerSetting s;
         #endregion
 
         #region Properties
@@ -57,20 +58,20 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             get
             {
-                if (configuration == null)
-                {
-                    var s = GetSetting(settingName);
-                    if (s == null)
-                    {
-                        configuration = Configuration.Default;
+                //if (configuration == null)
+                //{
+                //    var s = GetSetting(settingName);
+                //    if (s == null)
+                //    {
+                //        configuration = Configuration.Default;
 
-                        s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = settingName };
-                        s.SetValue(configuration);
-                        SaveOrUpdate(s);
-                    }
-                    else
-                        configuration = s.GetValue(typeof(Configuration));
-                }
+                //        s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = settingName };
+                //        s.SetValue(configuration);
+                //        SaveOrUpdate(s);
+                //    }
+                //    else
+                //        configuration = s.GetValue(typeof(Configuration));
+                //}
 
                 return configuration;
             }
@@ -78,7 +79,7 @@ namespace SmartHub.Plugins.AquaController.Core
             {
                 configuration = value;
 
-                var s = GetSetting(settingName);
+                //var s = GetSetting(settingName);
                 s.SetValue(configuration);
                 SaveOrUpdate(s);
 
@@ -99,6 +100,18 @@ namespace SmartHub.Plugins.AquaController.Core
         public override void Init(IServiceContext context)
         {
             base.Init(context);
+
+            s = GetSetting(settingName);
+            if (s == null)
+            {
+                configuration = Configuration.Default;
+
+                s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = settingName };
+                s.SetValue(configuration);
+                SaveOrUpdate(s);
+            }
+            else
+                configuration = s.GetValue(typeof(Configuration));
         }
         public override bool IsMyMessage(SensorMessage message)
         {
@@ -134,8 +147,7 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Event handlers
-        [MySensorsMessage]
-        protected override void MessageReceived(SensorMessage message)
+        internal override void MessageReceived(SensorMessage message)
         {
             if (mySensors.IsMessageFromSensor(message, SensorTemperature))
             {
@@ -146,8 +158,7 @@ namespace SmartHub.Plugins.AquaController.Core
             }
         }
 
-        [RunPeriodically(1)]
-        private void timer_Elapsed(DateTime now)
+        internal void timer_Elapsed(DateTime now)
         {
             var lastSV = mySensors.GetLastSensorValue(SensorTemperature);
             if (lastSV != null)

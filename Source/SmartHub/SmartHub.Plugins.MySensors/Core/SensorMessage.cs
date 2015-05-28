@@ -18,11 +18,16 @@ namespace SmartHub.Plugins.MySensors.Core
         {
             get
             {
-                string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                string p = Payload.Replace(",", ds).Replace(".", ds);
+                if (!string.IsNullOrEmpty(Payload))
+                {
+                    string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                    string p = Payload.Replace(",", ds).Replace(".", ds);
 
-                float v;
-                return float.TryParse(p, out v) ? v : float.NaN;
+                    float v;
+                    return float.TryParse(p, out v) ? v : float.NaN;
+                }
+
+                return float.NaN;
             }
             set
             {

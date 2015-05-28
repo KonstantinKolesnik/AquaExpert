@@ -445,9 +445,9 @@ namespace SmartHub.Plugins.MySensors
                 case SensorMessageType.Set: // sent from or to a sensor when a sensor value should be updated
                     if (sensor != null)
                     {
+                        var sv = SaveSensorValueToDB(message);
                         NotifyMessageReceivedForPlugins(message); // goes before saving to to DB 'cause plugin may adjust the sensor value due to calibration
                         
-                        var sv = SaveSensorValueToDB(message);
 
                         NotifyMessageReceivedForScripts(message);
                         NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });

@@ -2,10 +2,8 @@
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors;
-using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.SignalR;
-using System;
 using System.Linq;
 
 namespace SmartHub.Plugins.AquaController.Core
@@ -28,7 +26,7 @@ namespace SmartHub.Plugins.AquaController.Core
         public virtual void Init(IServiceContext context)
         {
             Context = context;
-            mySensors = Context.GetPlugin<MySensorsPlugin>();
+            mySensors = context.GetPlugin<MySensorsPlugin>();
         }
         public abstract bool IsMyMessage(SensorMessage message);
         #endregion
@@ -52,14 +50,12 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Event handlers
-        [MySensorsConnected]
-        private void Connected()
+        internal void Connected()
         {
             RequestSensorsValues();
         }
 
-        [MySensorsMessage]
-        abstract protected void MessageReceived(SensorMessage message);
+        abstract internal void MessageReceived(SensorMessage message);
         #endregion
     }
 }
