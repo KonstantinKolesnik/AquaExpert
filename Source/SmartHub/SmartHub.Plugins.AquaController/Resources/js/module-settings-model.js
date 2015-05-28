@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getSensorsByType: function (type, onComplete) {
-            $.getJSON('/api/aquacontroller/sensorsByType', { type: type })
+            $.getJSON('/api/mysensors/sensorsByType', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -63,6 +63,7 @@ define(['jquery'], function ($) {
                         if (onComplete)
                             onComplete();
                     });
+
                 });
             });
         }

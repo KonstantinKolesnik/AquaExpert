@@ -298,6 +298,17 @@ namespace SmartHub.Plugins.MySensors
                 BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
             };
         }
+        private object BuildSensorSummaryWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name
+            };
+        }
         private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
             SensorValue sv = new SensorValue()
@@ -562,13 +573,13 @@ namespace SmartHub.Plugins.MySensors
 
         #region Web API
         [HttpCommand("/api/mysensors/nodes")]
-        private object GetNodes(HttpRequestParams request)
+        private object apiGetNodes(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Node>().Select(BuildNodeWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/nodes/setname")]
-        private object SetNodeName(HttpRequestParams request)
+        private object apiSetNodeName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
             var name = request.GetString("Name");
@@ -593,7 +604,7 @@ namespace SmartHub.Plugins.MySensors
             return null;
         }
         [HttpCommand("/api/mysensors/nodes/delete")]
-        private object DeleteNode(HttpRequestParams request)
+        private object apiDeleteNode(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
 
@@ -614,13 +625,29 @@ namespace SmartHub.Plugins.MySensors
         }
 
         [HttpCommand("/api/mysensors/sensors")]
-        public object GetSensors(HttpRequestParams request)
+        private object apiGetSensors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
+        [HttpCommand("/api/mysensors/sensorsByType")]
+        private object apiGetSensorsByType(HttpRequestParams request)
+        {
+            var type = (SensorType)request.GetRequiredInt32("type");
+
+            return GetSensorsByType(type)
+                .Select(BuildSensorSummaryWebModel)
+                .Where(x => x != null)
+                .ToArray();
+        }
+        [HttpCommand("/api/mysensors/sensor")]
+        private object apiGetSensor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            return BuildSensorWebModel(GetSensor(id));
+        }
         [HttpCommand("/api/mysensors/sensors/setname")]
-        private object SetSensorName(HttpRequestParams request)
+        private object apiSetSensorName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
             var name = request.GetString("Name");
@@ -645,7 +672,7 @@ namespace SmartHub.Plugins.MySensors
             return null;
         }
         [HttpCommand("/api/mysensors/sensors/delete")]
-        private object DeleteSensor(HttpRequestParams request)
+        private object apiDeleteSensor(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
 
@@ -662,12 +689,12 @@ namespace SmartHub.Plugins.MySensors
         }
 
         [HttpCommand("/api/mysensors/unitsystem")]
-        private object GetUnitSystem(HttpRequestParams request)
+        private object apiGetUnitSystem(HttpRequestParams request)
         {
             return GetSetting("UnitSystem");
         }
         [HttpCommand("/api/mysensors/setunitsystem")]
-        private object SetUnitSystem(HttpRequestParams request)
+        private object apiSetUnitSystem(HttpRequestParams request)
         {
             var value = request.GetRequiredString("Value");
 
@@ -687,17 +714,30 @@ namespace SmartHub.Plugins.MySensors
             return null;
         }
 
-        [HttpCommand("/api/mysensors/batterylevels")]
-        private object GetBatteryLevels(HttpRequestParams request)
+        [HttpCommand("/api/mysensors/allbatterylevels")]
+        private object apiGetAllBatteryLevels(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<BatteryLevel>().ToArray();
         }
-        [HttpCommand("/api/mysensors/sensorvalues")]
-        private object GetSensorValues(HttpRequestParams request)
+
+        [HttpCommand("/api/mysensors/allsensorvalues")]
+        private object apiGetAllSensorValues(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
+        }
+        [HttpCommand("/api/mysensors/sensorvalues")]
+        private object apiGetSensorValues(HttpRequestParams request)
+        {
+            var nodeNo = request.GetRequiredInt32("nodeNo");
+            var sensorNo = request.GetRequiredInt32("sensorNo");
+            var hours = request.GetRequiredInt32("hours");
+
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
         }
         #endregion
     }

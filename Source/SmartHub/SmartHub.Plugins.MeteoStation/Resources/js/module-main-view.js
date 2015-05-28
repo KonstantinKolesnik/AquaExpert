@@ -28,7 +28,7 @@ define(
                         series: [
                             {
                                 type: "line",
-                                name: "Температура внутри",
+                                name: "T in",
                                 field: "TI",
                                 color: "red",
                                 axis: "temp",
@@ -39,7 +39,7 @@ define(
                             },
                             {
                                 type: "line",
-                                name: "Влажность внутри",
+                                name: "Hum in",
                                 field: "HI",
                                 color: "blue",
                                 axis: "hum",
@@ -50,7 +50,7 @@ define(
                             },
                             {
                                 type: "line",
-                                name: "Температура снаружи",
+                                name: "T out",
                                 field: "TO",
                                 color: "pink",
                                 axis: "temp",
@@ -61,7 +61,7 @@ define(
                             },
                             {
                                 type: "line",
-                                name: "Влажность снаружи",
+                                name: "Hum out",
                                 field: "HO",
                                 color: "cornflowerblue",
                                 axis: "hum",
@@ -72,7 +72,7 @@ define(
                             },
                             {
                                 type: "area",
-                                name: "Давление",
+                                name: "P",
                                 field: "P",
                                 color: "lightgreen",
                                 axis: "press",
@@ -112,6 +112,8 @@ define(
                                 color: "lightgreen",
                                 //min: 30000,
                                 //max: 110000,
+                                min: 93300,
+                                max: 104000,
                                 labels: {
                                     //format: "{0} Pa",
                                     template: "#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"

@@ -1,18 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getSensorsConfiguration: function (onComplete) {
-            $.getJSON('/api/meteostation/configuration')
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        },
         getSensor: function (id, onComplete) {
-            $.getJSON('/api/meteostation/sensor', { id: id })
+            $.getJSON('/api/mysensors/sensor', { id: id })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -22,7 +12,18 @@ define(['jquery'], function ($) {
 	            });
         },
         getSensorValues: function (nodeNo, sensorNo, hours, onComplete) {
-            $.getJSON('/api/meteostation/sensorvalues', { nodeNo: nodeNo, sensorNo: sensorNo, hours: hours })
+            $.getJSON('/api/mysensors/sensorvalues', { nodeNo: nodeNo, sensorNo: sensorNo, hours: hours })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+
+        getConfiguration: function (onComplete) {
+            $.getJSON('/api/meteostation/configuration')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -34,7 +35,7 @@ define(['jquery'], function ($) {
     };
 
     var viewModel = kendo.observable({
-        SensorsConfiguration: null,
+        Configuration: null,
 
         SensorTemperatureInner: null,
         SensorHumidityInner: null,
@@ -48,26 +49,27 @@ define(['jquery'], function ($) {
         update: function (onComplete) {
             var me = this;
 
-            api.getSensorsConfiguration(function (data) {
-                me.set("SensorsConfiguration", data);
+            me.SensorValues = [];
 
-                api.getSensor(me.SensorsConfiguration.SensorTemperatureInnerID, function (data) {
+            api.getConfiguration(function (data) {
+                me.set("Configuration", data);
+
+                api.getSensor(me.Configuration.SensorTemperatureInnerID, function (data) {
                     me.set("SensorTemperatureInner", data);
 
-                    api.getSensor(me.SensorsConfiguration.SensorHumidityInnerID, function (data) {
+                    api.getSensor(me.Configuration.SensorHumidityInnerID, function (data) {
                         me.set("SensorHumidityInner", data);
 
-                        api.getSensor(me.SensorsConfiguration.SensorTemperatureOuterID, function (data) {
+                        api.getSensor(me.Configuration.SensorTemperatureOuterID, function (data) {
                             me.set("SensorTemperatureOuter", data);
 
-                            api.getSensor(me.SensorsConfiguration.SensorHumidityOuterID, function (data) {
+                            api.getSensor(me.Configuration.SensorHumidityOuterID, function (data) {
                                 me.set("SensorHumidityOuter", data);
 
-                                api.getSensor(me.SensorsConfiguration.SensorForecastID, function (data) {
+                                api.getSensor(me.Configuration.SensorForecastID, function (data) {
                                     me.set("SensorForecast", data);
 
-                                    me.SensorValues = [];
-                                    api.getSensor(me.SensorsConfiguration.SensorAtmospherePressureID, function (data) {
+                                    api.getSensor(me.Configuration.SensorAtmospherePressureID, function (data) {
                                         me.set("SensorAtmospherePressure", data);
 
                                         getSensorValues(me.SensorTemperatureInner, "TI", function () {

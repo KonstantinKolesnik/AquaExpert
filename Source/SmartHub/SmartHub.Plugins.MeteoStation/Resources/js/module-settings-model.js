@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getSensorsByType: function (type, onComplete) {
-            $.getJSON('/api/meteostation/sensorsByType', { type: type })
+            $.getJSON('/api/mysensors/sensorsByType', { type: type })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -11,7 +11,7 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        getSensorsConfiguration: function (onComplete) {
+        getConfiguration: function (onComplete) {
             $.getJSON('/api/meteostation/configuration')
 				.done(function (data) {
 				    if (onComplete)
@@ -21,8 +21,8 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-        setSensorsConfiguration: function (sc, onComplete) {
-            $.post('/api/meteostation/configuration/set', { sc: JSON.stringify(sc) })
+        setConfiguration: function (conf, onComplete) {
+            $.post('/api/meteostation/configuration/set', { conf: JSON.stringify(conf) })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -39,7 +39,7 @@ define(['jquery'], function ($) {
         SensorsBarometerDataSource: [],
         SensorsForecastDataSource: [],
 
-        SensorsConfiguration: null,
+        Configuration: null,
 
         update: function (onComplete) {
             var me = this;
@@ -60,8 +60,8 @@ define(['jquery'], function ($) {
                         api.getSensorsByType(8, function (data) {
                             me.set("SensorsForecastDataSource", data);
 
-                            api.getSensorsConfiguration(function (sc) {
-                                me.set("SensorsConfiguration", sc);
+                            api.getConfiguration(function (data) {
+                                me.set("Configuration", data);
 
                                 if (onComplete)
                                     onComplete();
@@ -79,6 +79,6 @@ define(['jquery'], function ($) {
 
     return {
         ViewModel: viewModel,
-        setSensorsConfiguration: api.setSensorsConfiguration
+        setConfiguration: api.setConfiguration
     };
 });

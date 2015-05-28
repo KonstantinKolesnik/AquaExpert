@@ -19,7 +19,7 @@ define(
                     selector.kendoDropDownList({
                         dataValueField: "Id",
                         dataTextField: "Name",
-                        change: function (e) { me.trigger('SensorsConfiguration:set'); }
+                        change: function (e) { me.trigger('Configuration:set'); }
                     });
                 }
                 function createNumericTextBox(selector) {
@@ -29,7 +29,7 @@ define(
                         step: 1,
                         format: "n0",
                         decimals: 0,
-                        change: function (e) { me.trigger('SensorsConfiguration:set'); }
+                        change: function (e) { me.trigger('Configuration:set'); }
                     });
                 }
             },

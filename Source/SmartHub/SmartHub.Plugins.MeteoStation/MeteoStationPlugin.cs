@@ -117,11 +117,11 @@ namespace SmartHub.Plugins.MeteoStation
             SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("<div>Температура внутри: " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Влажность внутри: " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Т <sub>in</sub>:  " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Hum <sub>in</sub>:  " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>T <sub>out</sub>:  " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Hum <sub>out</sub>:  " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>P: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
             
             string[] weather = { "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" };
             sb.Append("<div>Прогноз: " + (lastSVForecast != null ? weather[(int)lastSVForecast.Value] : "&lt;нет данных&gt;") + "</div>");
@@ -165,17 +165,6 @@ namespace SmartHub.Plugins.MeteoStation
             mySensors.RequestSensorValue(SensorAtmospherePressure, SensorValueType.Pressure);
             mySensors.RequestSensorValue(SensorForecast, SensorValueType.Forecast);
         }
-        private object BuildSensorSummaryWebModel(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            return new
-            {
-                Id = sensor.Id,
-                Name = sensor.Name
-            };
-        }
         #endregion
 
         #region Event handlers
@@ -199,44 +188,16 @@ namespace SmartHub.Plugins.MeteoStation
         #endregion
 
         #region Web API
-        [HttpCommand("/api/meteostation/sensorsByType")]
-        public object GetSensorsByType(HttpRequestParams request)
-        {
-            var type = (SensorType)request.GetRequiredInt32("type");
-
-            return mySensors.GetSensorsByType(type)
-                .Select(BuildSensorSummaryWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        [HttpCommand("/api/meteostation/sensor")]
-        public object GetSensor(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            return mySensors.BuildSensorWebModel(mySensors.GetSensor(id));
-        }
-        [HttpCommand("/api/meteostation/sensorvalues")]
-        public object GetSensorValues(HttpRequestParams request)
-        {
-            var nodeNo = request.GetRequiredInt32("nodeNo");
-            var sensorNo = request.GetRequiredInt32("sensorNo");
-            var hours = request.GetRequiredInt32("hours");
-
-            DateTime dt = DateTime.UtcNow.AddHours(-hours);
-
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
-        }
-
         [HttpCommand("/api/meteostation/configuration")]
-        public object GetSensorsConfiguration(HttpRequestParams request)
+        public object apiGetSensorsConfiguration(HttpRequestParams request)
         {
             return configuration;
         }
+        
         [HttpCommand("/api/meteostation/configuration/set")]
-        public object SetSensorsConfiguration(HttpRequestParams request)
+        public object apiSetSensorsConfiguration(HttpRequestParams request)
         {
-            var json = request.GetRequiredString("sc");
+            var json = request.GetRequiredString("conf");
             configuration = (Configuration)Extensions.FromJson(typeof(Configuration), json);
             configurationSetting.SetValue(configuration);
             SaveOrUpdate(configurationSetting);

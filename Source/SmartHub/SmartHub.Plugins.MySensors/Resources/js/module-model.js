@@ -95,7 +95,7 @@ define(['jquery'], function ($) {
 	    },
 
 	    getBatteryLevels: function (onComplete) {
-	        $.getJSON('/api/mysensors/batterylevels')
+	        $.getJSON('/api/mysensors/allbatterylevels')
 				.done(function (data) {
 					$.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
 
@@ -107,7 +107,7 @@ define(['jquery'], function ($) {
 	            });
 	    },
 	    getSensorValues: function (onComplete) {
-	        $.getJSON('/api/mysensors/sensorvalues')
+	        $.getJSON('/api/mysensors/allsensorvalues')
 				.done(function (data) {
 					$.each(data, function (idx, item) { item.TimeStamp = new Date(item.TimeStamp); });
 

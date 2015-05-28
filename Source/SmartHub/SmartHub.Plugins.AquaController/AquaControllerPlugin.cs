@@ -93,17 +93,6 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Private methods
-        private object BuildSensorSummaryWebModel(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            return new
-            {
-                Id = sensor.Id,
-                Name = sensor.Name
-            };
-        }
         #endregion
 
         #region Event handlers
@@ -120,42 +109,13 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Web API
-        [HttpCommand("/api/aquacontroller/sensorsByType")]
-        public object GetSensorsByType(HttpRequestParams request)
-        {
-            var type = (SensorType)request.GetRequiredInt32("type");
-
-            return mySensors.GetSensorsByType(type)
-                .Select(BuildSensorSummaryWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        [HttpCommand("/api/aquacontroller/sensor")]
-        public object GetSensor(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            return mySensors.BuildSensorWebModel(mySensors.GetSensor(id));
-        }
-        [HttpCommand("/api/aquacontroller/sensorvalues")]
-        public object GetSensorValues(HttpRequestParams request)
-        {
-            var nodeNo = request.GetRequiredInt32("nodeNo");
-            var sensorNo = request.GetRequiredInt32("sensorNo");
-            var hours = request.GetRequiredInt32("hours");
-
-            DateTime dt = DateTime.UtcNow.AddHours(-hours);
-
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
-        }
-
         [HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
-        public object GetHeaterControllerConfiguration(HttpRequestParams request)
+        public object apiGetHeaterControllerConfiguration(HttpRequestParams request)
         {
             return heaterController.ControllerConfiguration;
         }
         [HttpCommand("/api/aquacontroller/heatercontroller/configuration/set")]
-        public object SetHeaterControllerConfiguration(HttpRequestParams request)
+        public object apiSetHeaterControllerConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("conf");
             heaterController.ControllerConfiguration = (HeaterController.Configuration)Extensions.FromJson(typeof(HeaterController.Configuration), json);
