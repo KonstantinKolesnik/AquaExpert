@@ -32,6 +32,17 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
+        setHeaterControllerConfiguration: function (conf, onComplete) {
+            $.post('/api/aquacontroller/heatercontroller/configuration/set', { conf: JSON.stringify(conf) })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+
     };
 
     var viewModel = kendo.observable({
@@ -120,11 +131,17 @@ define(['jquery'], function ($) {
         }
     });
 
+    viewModel.bind("change", function (e) {
+        if (e.field == "HeaterControllerConfiguration.IsAutoMode")
+            api.setHeaterControllerConfiguration(e.sender.HeaterControllerConfiguration);
+    });
+
     function onError(data) {
         alert(data.statusText);
     }
 
     return {
-        ViewModel: viewModel
+        ViewModel: viewModel,
+        setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };
 });

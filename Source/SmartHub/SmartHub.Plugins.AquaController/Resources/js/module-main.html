@@ -2,5 +2,35 @@
 <div id="content" class="container-fluid">
     <h2>Аква-контроллер</h2>
 
+    <div class="row btn-info">
+        <div class="col-md-3 col-xs-12">
+            <div class="row">
+                <span class="col-xs-8 valueText">Температура воды:</span>
+                <span class="col-xs-4 valueText text-right" data-bind="source: HeaterSensorTemperature.SensorValueValue" data-template="tmplTemperature"></span>
+            </div>
+            <div class="row">
+                <span class="col-xs-8 valueText">Обогреватель:</span>
+                <input type="checkbox" class="col-xs-4 valueText k-checkbox2" data-bind="checked: HeaterSensorSwitch.SensorValueValue, disabled: HeaterControllerConfiguration.IsAutoMode" />
+            </div>
+        </div>
+        <div class="col-md-1 col-xs-12 btn-info">
+            <div class="row">
+                <span class="col-xs-8 valueText">Авто:</span>
+                <input type="checkbox" id="chbHeaterAutoMode" class="col-xs-4 valueText" data-bind="checked: HeaterControllerConfiguration.IsAutoMode" />
+            </div>
+        </div>
+
+        <div class="col-md-8 col-xs-12">
+            <div id="sensorsChart" data-bind="source: SensorValues"></div>
+        </div>
+    </div>
+
+
+
+
 
 </div>
+
+<script id="tmplTemperature" type="text/x-kendo-template">
+    #= kendo.toString(data, "n1") #&nbsp;&deg;C
+</script>

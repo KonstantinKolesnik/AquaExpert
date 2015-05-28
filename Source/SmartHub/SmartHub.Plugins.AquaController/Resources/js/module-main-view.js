@@ -7,7 +7,14 @@ define(
             onShow: function () {
                 var me = this;
 
+                //createCheckBox($("#chbHeaterAutoMode"));
 
+                //function createCheckBox(selector) {
+                //    selector.change(function () {
+                //        debugger;
+                //        me.trigger("heaterControllerConfiguration:set");
+                //    });
+                //}
 
             },
 
