@@ -2,10 +2,13 @@
 
 namespace SmartHub.Plugins.AquaController.Data
 {
-    public class Monitor
+    public class Controller
     {
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
-        public virtual Guid SensorId { get; set; }
+
+
+
+
     }
 }
