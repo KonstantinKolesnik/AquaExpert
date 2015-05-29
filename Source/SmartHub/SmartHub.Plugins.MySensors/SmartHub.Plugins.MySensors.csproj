@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Attributes\MySensorsConnectedAttribute.cs" />
     <Compile Include="Attributes\MySensorsDisconnectedAttribute.cs" />
+    <Compile Include="Attributes\MySensorsMessageCalibrationAttribute.cs" />
     <Compile Include="Core\InternalValueType.cs" />
     <Compile Include="Core\SensorMessage.cs" />
     <Compile Include="Core\SensorMessageEventArgs.cs" />

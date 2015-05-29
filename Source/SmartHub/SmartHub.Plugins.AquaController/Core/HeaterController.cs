@@ -48,40 +48,24 @@ namespace SmartHub.Plugins.AquaController.Core
         }
 
         #region Fields
-        private const string settingName = "HeaterControllerConfiguration";
         private Configuration configuration;
-        private AquaControllerSetting s;
         #endregion
 
         #region Properties
+        protected override string SettingName
+        {
+            get { return "HeaterControllerConfiguration"; }
+        }
         public Configuration ControllerConfiguration
         {
-            get
-            {
-                //if (configuration == null)
-                //{
-                //    var s = GetSetting(settingName);
-                //    if (s == null)
-                //    {
-                //        configuration = Configuration.Default;
-
-                //        s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = settingName };
-                //        s.SetValue(configuration);
-                //        SaveOrUpdate(s);
-                //    }
-                //    else
-                //        configuration = s.GetValue(typeof(Configuration));
-                //}
-
-                return configuration;
-            }
+            get { return configuration; }
             set
             {
                 configuration = value;
 
-                //var s = GetSetting(settingName);
+                var s = GetSetting();
                 s.SetValue(configuration);
-                SaveOrUpdate(s);
+                SaveSetting(s);
 
                 RequestSensorsValues();
             }
@@ -101,14 +85,14 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             base.Init(context);
 
-            s = GetSetting(settingName);
+            var s = GetSetting();
             if (s == null)
             {
                 configuration = Configuration.Default;
 
-                s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = settingName };
+                s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = SettingName };
                 s.SetValue(configuration);
-                SaveOrUpdate(s);
+                SaveSetting(s);
             }
             else
                 configuration = s.GetValue(typeof(Configuration));
@@ -127,38 +111,37 @@ namespace SmartHub.Plugins.AquaController.Core
             mySensors.RequestSensorValue(SensorTemperature, SensorValueType.Temperature);
             mySensors.RequestSensorValue(SensorSwitch, SensorValueType.Switch);
         }
-        private void Process(float temperature)
+        protected override void Process(float value)
         {
             if (ControllerConfiguration.IsAutoMode)
             {
                 //var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
 
-                if (temperature < ControllerConfiguration.TemperatureMin)
+                if (value < ControllerConfiguration.TemperatureMin)
                     mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
-                else if (temperature > ControllerConfiguration.TemperatureMax)
+                else if (value > ControllerConfiguration.TemperatureMax)
                     mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
             }
 
-            if (temperature <= ControllerConfiguration.TemperatureAlarmMin)
-                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMinText + string.Format("{0} градусов.", temperature));
-            else if (temperature >= ControllerConfiguration.TemperatureAlarmMax)
-                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMaxText + string.Format("{0} градусов.", temperature));
+            if (value <= ControllerConfiguration.TemperatureAlarmMin)
+                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMinText + string.Format("{0} градусов.", value));
+            else if (value >= ControllerConfiguration.TemperatureAlarmMax)
+                Context.GetPlugin<SpeechPlugin>().Say(ControllerConfiguration.TemperatureAlarmMaxText + string.Format("{0} градусов.", value));
         }
         #endregion
 
         #region Event handlers
-        internal override void MessageReceived(SensorMessage message)
+        public override void MessageCalibration(SensorMessage message)
         {
             if (mySensors.IsMessageFromSensor(message, SensorTemperature))
-            {
-                // calibrate value:
                 message.PayloadFloat += ControllerConfiguration.TemperatureCalibration;
-
-                Process(message.PayloadFloat);
-            }
         }
-
-        internal void timer_Elapsed(DateTime now)
+        public override void MessageReceived(SensorMessage message)
+        {
+            if (mySensors.IsMessageFromSensor(message, SensorTemperature))
+                Process(message.PayloadFloat);
+        }
+        public override void TimerElapsed(DateTime now)
         {
             var lastSV = mySensors.GetLastSensorValue(SensorTemperature);
             if (lastSV != null)

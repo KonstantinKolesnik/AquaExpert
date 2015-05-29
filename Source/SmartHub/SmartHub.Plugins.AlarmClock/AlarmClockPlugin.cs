@@ -203,7 +203,7 @@ namespace SmartHub.Plugins.AlarmClock
         #endregion
 
         #region Event handlers
-        [Timer_5_sec_Elapsed]
+        [Timer_10_sec_Elapsed]
         public void OnTimerElapsed(DateTime now)
         {
             lock (lockObject)
@@ -214,9 +214,9 @@ namespace SmartHub.Plugins.AlarmClock
                 {
                     lastAlarmTime = now;
                     Alarm(alarms);
-                }
 
-                NotifyForSignalR(new { MsgId = "AlarmClockTileContent", Data = BuildTileContent() });
+                    NotifyForSignalR(new { MsgId = "AlarmClockTileContent", Data = BuildTileContent() });
+                }
             }
         }
         #endregion

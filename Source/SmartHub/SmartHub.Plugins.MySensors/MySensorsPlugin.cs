@@ -49,6 +49,13 @@ namespace SmartHub.Plugins.MySensors
             Run(SensorMessageHandlers, x => x(msg));
         }
 
+        [ImportMany("6536BBC2-3B62-4D01-B786-E5A4A2D7A095")]
+        public Action<SensorMessage>[] SensorMessageCalibrationHandlers { get; set; }
+        private void NotifyMessageCalibrationForPlugins(SensorMessage msg)
+        {
+            Run(SensorMessageCalibrationHandlers, x => x(msg));
+        }
+
         [ImportMany("8E26E0FB-657F-4DEA-BF9D-A9E93A5632DC")]
         public Action[] DisconnectedHandlers { get; set; }
         private void NotifyDisconnectedForPlugins()
@@ -445,13 +452,13 @@ namespace SmartHub.Plugins.MySensors
                 case SensorMessageType.Set: // sent from or to a sensor when a sensor value should be updated
                     if (sensor != null)
                     {
+                        NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
                         var sv = SaveSensorValueToDB(message);
-                        NotifyMessageReceivedForPlugins(message); // goes before saving to to DB 'cause plugin may adjust the sensor value due to calibration
+                        NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() });
                         
-
+                        NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
                         NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });
-                        NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() });
                     }
                     break;
                 #endregion

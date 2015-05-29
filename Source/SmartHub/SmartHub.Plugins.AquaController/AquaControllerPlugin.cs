@@ -105,6 +105,14 @@ namespace SmartHub.Plugins.AquaController
 
         }
 
+        [MySensorsMessageCalibration]
+        private void MessageCalibration(SensorMessage message)
+        {
+            heaterController.MessageCalibration(message);
+
+
+        }
+
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
@@ -113,7 +121,7 @@ namespace SmartHub.Plugins.AquaController
 
 
             if (heaterController.IsMyMessage(message)
-                
+                //|| hhhhjiujijhuhgo
                 
                 
                 )
@@ -124,7 +132,8 @@ namespace SmartHub.Plugins.AquaController
         [Timer_5_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
-            heaterController.timer_Elapsed(now);
+            heaterController.TimerElapsed(now);
+
         }
 
         #endregion

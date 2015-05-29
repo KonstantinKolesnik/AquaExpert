@@ -4,6 +4,7 @@ using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.SignalR;
+using System;
 using System.Linq;
 
 namespace SmartHub.Plugins.AquaController.Core
@@ -15,11 +16,8 @@ namespace SmartHub.Plugins.AquaController.Core
         protected IServiceContext Context;
         #endregion
 
-        #region SignalR events
-        private void NotifyForSignalR(object msg)
-        {
-            Context.GetPlugin<SignalRPlugin>().Broadcast(msg);
-        }
+        #region Properties
+        abstract protected string SettingName { get; }
         #endregion
 
         #region Public methods
@@ -32,12 +30,12 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Private methods
-        protected AquaControllerSetting GetSetting(string name)
+        protected AquaControllerSetting GetSetting()
         {
             using (var session = Context.OpenSession())
-                return session.Query<AquaControllerSetting>().FirstOrDefault(setting => setting.Name == name);
+                return session.Query<AquaControllerSetting>().FirstOrDefault(setting => setting.Name == SettingName);
         }
-        protected void SaveOrUpdate(object item)
+        protected void SaveSetting(object item)
         {
             using (var session = Context.OpenSession())
             {
@@ -47,15 +45,22 @@ namespace SmartHub.Plugins.AquaController.Core
         }
 
         abstract protected void RequestSensorsValues();
+        abstract protected void Process(float value);
         #endregion
 
         #region Event handlers
-        internal void Connected()
+        public void Connected()
         {
             RequestSensorsValues();
         }
 
-        abstract internal void MessageReceived(SensorMessage message);
+        public virtual void MessageCalibration(SensorMessage message)
+        {
+        }
+        abstract public void MessageReceived(SensorMessage message);
+        public virtual void TimerElapsed(DateTime now)
+        {
+        }
         #endregion
     }
 }
