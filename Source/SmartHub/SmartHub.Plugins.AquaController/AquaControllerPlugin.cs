@@ -51,6 +51,7 @@ namespace SmartHub.Plugins.AquaController
         public override void InitDbModel(ModelMapper mapper)
         {
             mapper.Class<AquaControllerSetting>(cfg => cfg.Table("AquaController_Settings"));
+            mapper.Class<Monitor>(cfg => cfg.Table("AquaController_Monitors"));
         }
         public override void InitPlugin()
         {
@@ -91,9 +92,6 @@ namespace SmartHub.Plugins.AquaController
             sb.Append("}");
             return sb.ToString();
         }
-        #endregion
-
-        #region Private methods
         #endregion
 
         #region Event handlers
@@ -139,6 +137,100 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Web API
+        [HttpCommand("/api/aquacontroller/monitor/list")]
+        private object apiGetMonitors(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>()
+                    .OrderBy(monitor => monitor.Name)
+                    .Select(monitor => new {
+                        Id = monitor.Id,
+                        Name = monitor.Name,
+                        Sensor = mySensors.GetSensor(monitor.SensorId)
+                    })
+                    .ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/monitor/add")]
+        private object apiAddMonitor(HttpRequestParams request)
+        {
+            var name = request.GetRequiredString("name");
+            var sensorId = request.GetRequiredGuid("sensorId");
+
+            using (var session = Context.OpenSession())
+            {
+                Monitor monitor = new Monitor()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    SensorId = sensorId
+                };
+
+                session.Save(monitor);
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/aquacontroller/monitor/setname")]
+        private object apiSetMonitorName(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var name = request.GetString("name");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Get<Monitor>(id);
+                sensor.Name = name;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/aquacontroller/monitor/delete")]
+        private object apiDeleteMonitor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Get<Monitor>(id);
+                session.Delete(sensor);
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
+
+            return null;
+        }
+
+
+
+
+
+
+
+
+
         [HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
         public object apiGetHeaterControllerConfiguration(HttpRequestParams request)
         {

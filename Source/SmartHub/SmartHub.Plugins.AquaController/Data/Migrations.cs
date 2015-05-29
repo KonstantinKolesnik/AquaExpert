@@ -26,4 +26,27 @@ namespace SmartHub.Plugins.AquaController.Data
             Database.RemoveTable("AquaController_Settings");
         }
     }
+
+
+    [Migration(2)]
+    public class Migration02 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddTable("AquaController_Monitors",
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("Name", DbType.String, ColumnProperty.NotNull),
+                new Column("SensorId", DbType.Guid, ColumnProperty.NotNull)
+            );
+            Database.AddUniqueConstraint("UK_AquaController_Monitors_Name", "AquaController_Monitors", "Name");
+            Database.AddUniqueConstraint("UK_AquaController_Monitors_Sensor", "AquaController_Monitors", "SensorId");
+        }
+
+        public override void Revert()
+        {
+            Database.RemoveConstraint("AquaController_Monitors", "UK_AquaController_Monitors_Sensor");
+            Database.RemoveConstraint("AquaController_Monitors", "UK_AquaController_Monitors_Name");
+            Database.RemoveTable("AquaController_Monitors");
+        }
+    }
 }

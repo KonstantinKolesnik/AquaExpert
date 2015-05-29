@@ -74,8 +74,8 @@ define(['jquery'], function ($) {
                         api.getSensor(me.HeaterControllerConfiguration.SensorSwitchID, function (data) {
                             me.set("HeaterSensorSwitch", data);
 
-                            getSensorValues(me.HeaterSensorTemperature, "TI", function () {
-                                getSensorValues(me.HeaterSensorSwitch, "TI", function () {
+                            getSensorValues(me.HeaterSensorTemperature, "T", function () {
+                                getSensorValues(me.HeaterSensorSwitch, "S", function () {
                                     if (onComplete)
                                         onComplete();
                                 });
@@ -90,7 +90,7 @@ define(['jquery'], function ($) {
                     api.getSensorValues(sensor.NodeNo, sensor.SensorNo, 24, function (data) {
                         data = data || [];
                         $.each(data, function (idx, sv) {
-                            //sv[fieldName] = sv.Value;
+                            sv[fieldName] = sv.Value;
                             me.SensorValues.push(sv);
                         });
 
@@ -110,8 +110,8 @@ define(['jquery'], function ($) {
             if (data.MsgId == "SensorValue") {
                 data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
-                if (!checkFromSensor(data.Data, me.HeaterSensorTemperature, ""))
-                    if (!checkFromSensor(data.Data, me.HeaterSensorSwitch, ""))
+                if (!checkFromSensor(data.Data, me.HeaterSensorTemperature, "T"))
+                    if (!checkFromSensor(data.Data, me.HeaterSensorSwitch, "S"))
                         return;
             }
 
@@ -122,7 +122,7 @@ define(['jquery'], function ($) {
                     sensor.set("SensorValueValue", sv.Value);
                     sensor.set("SensorValueTimeStamp", sv.TimeStamp);
 
-                    //sv[fieldName] = sv.Value;
+                    sv[fieldName] = sv.Value;
                     me.SensorValues.push(sv);
                 }
 

@@ -5,7 +5,6 @@
 		'text!webapp/scripts/subscriptions-list.tpl',
 		'text!webapp/scripts/subscriptions-list-item.tpl'],
 	function (lib, common, layoutTemplate, formTemplate, listTemplate, itemTemplate) {
-
 		var subscriptionLayout = lib.marionette.LayoutView.extend({
 			template: lib._.template(layoutTemplate),
 			regions: {
@@ -26,7 +25,6 @@
 				this.trigger('scripts:subscription:add');
 			}
 		});
-
 
 		var subscriptionView = lib.marionette.ItemView.extend({
 			template: lib._.template(itemTemplate),

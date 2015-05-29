@@ -58,6 +58,7 @@
     <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Core\ControllerBase.cs" />
     <Compile Include="Core\HeaterController.cs" />
+    <Compile Include="Data\Monitor.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\AquaControllerSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

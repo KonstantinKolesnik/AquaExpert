@@ -1,6 +1,37 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
+        addMonitor: function (name, sensorId, onComplete) {
+            $.post('/api/aquacontroller/monitor/add', { name: name, sensorId: sensorId })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+        setMonitorName: function (id, name, onComplete) {
+            $.post('/api/aquacontroller/monitor/setname', { id: id, name: name })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
+        deleteMonitor: function (id, onComplete) {
+            $.post('/api/aquacontroller/monitor/delete', { id: id })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
+
         getSensorsByType: function (type, onComplete) {
             $.getJSON('/api/mysensors/sensorsByType', { type: type })
 				.done(function (data) {
@@ -75,6 +106,10 @@ define(['jquery'], function ($) {
 
     return {
         ViewModel: viewModel,
+
+        addMonitor: api.addMonitor,
+        setMonitorName: api.setMonitorName,
+        deleteMonitor: api.deleteMonitor,
         setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };
 });

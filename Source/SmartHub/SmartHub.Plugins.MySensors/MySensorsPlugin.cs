@@ -642,10 +642,7 @@ namespace SmartHub.Plugins.MySensors
         {
             var type = (SensorType)request.GetRequiredInt32("type");
 
-            return GetSensorsByType(type)
-                .Select(BuildSensorSummaryWebModel)
-                .Where(x => x != null)
-                .ToArray();
+            return GetSensorsByType(type).Select(BuildSensorSummaryWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensor")]
         private object apiGetSensor(HttpRequestParams request)

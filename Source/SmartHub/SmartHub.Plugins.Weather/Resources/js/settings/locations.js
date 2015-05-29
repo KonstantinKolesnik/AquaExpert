@@ -1,7 +1,5 @@
 ﻿define(
-	['app', 'common',
-		'webapp/weather/locations-model',
-		'webapp/weather/locations-view'],
+	['app', 'common', 'webapp/weather/locations-model', 'webapp/weather/locations-view'],
 	function (application, common, models, views) {
 		var layoutView;
 
@@ -41,18 +39,18 @@
 			},
 			reloadForm: function () {
 				var formData = new models.Location();
-
 				var form = new views.WeatherSettingsFormView({ model: formData });
 				form.on('weather:location:add', api.addLocation);
+
 				layoutView.regionForm.show(form);
 			},
 			reloadList: function () {
 				models.loadLocations()
 					.done(function (list) {
 						var view = new views.LocationListView({ collection: list });
-						view.on('childview:weather:location:delete', api.deleteLocation);
-						view.on('childview:weather:location:update', api.updateLocation);
 						view.on('childview:weather:location:add-tile', api.addWeatherTile);
+						view.on('childview:weather:location:update', api.updateLocation);
+						view.on('childview:weather:location:delete', api.deleteLocation);
 
 						layoutView.regionList.show(view);
 					});

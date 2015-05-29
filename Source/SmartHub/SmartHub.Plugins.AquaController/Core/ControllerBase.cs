@@ -3,7 +3,6 @@ using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
-using SmartHub.Plugins.SignalR;
 using System;
 using System.Linq;
 
