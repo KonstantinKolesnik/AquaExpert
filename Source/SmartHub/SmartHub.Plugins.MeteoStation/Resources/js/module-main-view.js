@@ -72,6 +72,9 @@ define(
                             },
                             {
                                 type: "area",
+                                line: {
+                                    style: "smooth"
+                                },
                                 name: "P",
                                 field: "P",
                                 color: "lightgreen",

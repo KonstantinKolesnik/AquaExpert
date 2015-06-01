@@ -27,6 +27,7 @@ define(
 
                 createTabStrip($("#tabstrip"));
                 createMonitorsTab();
+                createControllersTab();
 
 
 
@@ -140,7 +141,9 @@ define(
                         }
                     }
                 }
+                function createControllersTab() {
 
+                }
 
                 function createSensorSelector(selector) {
                     selector.kendoDropDownList({

@@ -743,6 +743,17 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
         }
+        [HttpCommand("/api/mysensors/sensorvaluesbyid")]
+        private object apiGetSensorValuesByID(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var hours = request.GetRequiredInt32("hours");
+
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.Id == id && sv.TimeStamp >= dt).ToArray();
+        }
         #endregion
     }
 }

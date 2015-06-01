@@ -2,7 +2,15 @@
 <div id="content" class="container-fluid">
     <h2>Аква-контроллер</h2>
 
-    <div class="row">
+    <div>
+        <div id="listMonitors" style="background-color:transparent; border-width:0;"></div>
+        <div id="listMonitorsPager" class="k-pager-wrap"></div>
+    </div>
+    
+    
+    
+    
+    <!--<div class="row">
         <div class="col-md-3 col-xs-12">
             <div class="row">
                 <span class="col-xs-8 valueText">Температура воды:</span>
@@ -23,7 +31,7 @@
         <div class="col-md-8 col-xs-12">
             <div id="heaterChart" style="height:350px;" data-bind="source: SensorValues"></div>
         </div>
-    </div>
+    </div>-->
 
 
 
@@ -33,4 +41,10 @@
 
 <script id="tmplTemperature" type="text/x-kendo-template">
     #= kendo.toString(data, "n1") #&nbsp;&deg;C
+</script>
+<script id="tmplMonitorsListItem" type="text/x-kendo-template">
+    <div class="monitor">
+        <h5>#:Name#</h5>
+        <div>#: Sensor.SensorValueValue == null ? "-" : Sensor.SensorValueValue #</div>
+    </div>
 </script>

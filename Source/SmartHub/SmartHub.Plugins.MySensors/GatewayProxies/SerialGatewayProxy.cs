@@ -36,7 +36,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             serialPort.DtrEnable = true;
             serialPort.Encoding = Encoding.ASCII;
             serialPort.NewLine = "\n";
-            //serialPort.ReadTimeout = 10000; // !!! to let gateway initialize befero it sens a first message
+            serialPort.ReadTimeout = 10000;
+            serialPort.WriteTimeout = 5000;
 
             thread = new Thread(() =>
             {

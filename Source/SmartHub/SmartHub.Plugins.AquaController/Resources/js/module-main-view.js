@@ -6,10 +6,53 @@ define(
             template: lib._.template(templates),
             onShow: function () {
                 var me = this;
-
+                
+                createMonitorsList();
                 //createCheckBox($("#chbHeaterAutoMode"));
-                createHeaterChart($("#heaterChart"));
+                //createHeaterChart($("#heaterChart"));
 
+
+                function createMonitorsList() {
+                    var dataSource = new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
+                                //dataType: "jsonp"
+                            }
+                        },
+                        pageSize: 20
+                    });
+
+                    $("#listMonitorsPager").kendoPager({
+                        dataSource: dataSource
+                    });
+
+                    $("#listMonitors").kendoListView({
+                        dataSource: dataSource,
+                        template: kendo.template($("#tmplMonitorsListItem").html())
+                    });
+
+                    $("#listMonitors").kendoSortable({
+                        filter: ">div.monitor",
+                        cursor: "move",
+                        placeholder: function (element) {
+                            return element.clone().css("opacity", 0.1);
+                        },
+                        hint: function (element) {
+                            return element.clone().removeClass("k-state-selected");
+                        },
+                        change: function (e) {
+                            var skip = dataSource.skip(),
+                                oldIndex = e.oldIndex + skip,
+                                newIndex = e.newIndex + skip,
+                                data = dataSource.data(),
+                                dataItem = dataSource.getByUid(e.item.data("uid"));
+
+                            dataSource.remove(dataItem);
+                            dataSource.insert(newIndex, dataItem);
+                        }
+                    });
+                }
                 //function createCheckBox(selector) {
                 //    selector.change(function () {
                 //        debugger;
@@ -64,18 +107,18 @@ define(
                                     //    width: 5,
                                     //}
                                 },
-                                //min: 18,
-                                //max: 32,
+                                min: 18,
+                                max: 32,
                                 majorUnit: 1,
                                 majorTicks: {
-                                    step: 2
+                                    step: 1
                                 },
-                                minorTicks: {
-                                    size: 2,
-                                    color: "red",
-                                    width: 5,
-                                    visible: true
-                                },
+                                //minorTicks: {
+                                //    size: 2,
+                                //    color: "red",
+                                //    width: 5,
+                                //    visible: true
+                                //},
                                 labels: {
                                     format: "{0} °C",
                                 }
@@ -125,6 +168,7 @@ define(
                         }
                     });
                 }
+
             },
 
             bindModel: function (viewModel) {

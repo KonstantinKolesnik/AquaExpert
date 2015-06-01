@@ -146,7 +146,7 @@ namespace SmartHub.Plugins.AquaController
                     .Select(monitor => new {
                         Id = monitor.Id,
                         Name = monitor.Name,
-                        Sensor = mySensors.GetSensor(monitor.SensorId)
+                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
                     })
                     .ToArray();
         }
