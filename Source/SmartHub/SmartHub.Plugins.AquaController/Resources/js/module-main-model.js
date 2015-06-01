@@ -1,6 +1,17 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
+        getMonitors: function ( onComplete) {
+            $.getJSON('/api/aquacontroller/monitor/list')
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+
         getSensor: function (id, onComplete) {
             $.getJSON('/api/mysensors/sensor', { id: id })
 				.done(function (data) {
@@ -46,24 +57,33 @@ define(['jquery'], function ($) {
     };
 
     var viewModel = kendo.observable({
-        HeaterControllerConfiguration: null,
-        HeaterSensorTemperature: null,
-        HeaterSensorSwitch: null,
+        //HeaterControllerConfiguration: null,
+        //HeaterSensorTemperature: null,
+        //HeaterSensorSwitch: null,
 
 
-
+        Monitors: [],
         SensorValues: [],
 
         update: function (onComplete) {
             var me = this;
 
+            me.Monitors = [];
             me.SensorValues = [];
 
-            updateHeater(function () {
+            updateMonitors(function () {
                 if (onComplete)
                     onComplete();
             });
 
+            function updateMonitors(onComplete) {
+                api.getMonitors(function (data) {
+                    me.set("Monitors", data);
+
+                    if (onComplete)
+                        onComplete();
+                });
+            }
             function updateHeater(onComplete) {
                 api.getHeaterControllerConfiguration(function (data) {
                     me.set("HeaterControllerConfiguration", data);

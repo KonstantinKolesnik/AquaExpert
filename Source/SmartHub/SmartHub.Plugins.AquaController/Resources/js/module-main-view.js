@@ -13,23 +13,23 @@ define(
 
 
                 function createMonitorsList() {
-                    var dataSource = new kendo.data.DataSource({
-                        transport: {
-                            read: {
-                                url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
-                                //dataType: "jsonp"
-                            }
-                        },
-                        pageSize: 20
-                    });
+                    //var dataSource = new kendo.data.DataSource({
+                    //    transport: {
+                    //        read: {
+                    //            url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
+                    //            //dataType: "jsonp"
+                    //        }
+                    //    },
+                    //    pageSize: 20
+                    //});
 
-                    $("#listMonitorsPager").kendoPager({
-                        dataSource: dataSource
-                    });
+                    //$("#listMonitorsPager").kendoPager({
+                    //    dataSource: dataSource
+                    //});
 
                     $("#listMonitors").kendoListView({
-                        dataSource: dataSource,
-                        template: kendo.template($("#tmplMonitorsListItem").html())
+                        //dataSource: Monitors,
+                        //template: kendo.template($("#tmplMonitorsListItem").html())
                     });
 
                     $("#listMonitors").kendoSortable({
@@ -42,14 +42,14 @@ define(
                             return element.clone().removeClass("k-state-selected");
                         },
                         change: function (e) {
-                            var skip = dataSource.skip(),
-                                oldIndex = e.oldIndex + skip,
-                                newIndex = e.newIndex + skip,
-                                data = dataSource.data(),
-                                dataItem = dataSource.getByUid(e.item.data("uid"));
+                            //var skip = dataSource.skip(),
+                            //    oldIndex = e.oldIndex + skip,
+                            //    newIndex = e.newIndex + skip,
+                            //    data = dataSource.data(),
+                            //    dataItem = dataSource.getByUid(e.item.data("uid"));
 
-                            dataSource.remove(dataItem);
-                            dataSource.insert(newIndex, dataItem);
+                            //dataSource.remove(dataItem);
+                            //dataSource.insert(newIndex, dataItem);
                         }
                     });
                 }
