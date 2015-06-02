@@ -31,9 +31,25 @@
 	            models.deleteMonitor(id, function () { view.refreshMonitorsGrid(); });
 	        },
 
-	        setHeaterControllerConfiguration: function () {
-	            models.setHeaterControllerConfiguration(models.ViewModel.HeaterControllerConfiguration);
+	        addController: function (name, type, isVisible) {
+	            if (!name) {
+	                alert("Не указано имя контроллера!");
+	                return;
+	            }
+	            if (!type) {
+	                alert("Не указан тип контроллера!");
+	                return;
+	            }
+
+	            models.addController(name, type, isVisible, function () { view.refreshControllersGrid(); });
 	        },
+
+
+
+
+	        //setHeaterControllerConfiguration: function () {
+	        //    models.setHeaterControllerConfiguration(models.ViewModel.HeaterControllerConfiguration);
+	        //},
 
 
 
@@ -44,7 +60,10 @@
 	                view.on('monitor:setName', module.setMonitorName);
 	                view.on('monitor:setIsVisible', module.setMonitorIsVisible);
 	                view.on('monitor:delete', module.deleteMonitor);
-	                view.on('heaterControllerConfiguration:set', module.setHeaterControllerConfiguration);
+
+	                view.on('controller:add', module.addController);
+
+	                //view.on('heaterControllerConfiguration:set', module.setHeaterControllerConfiguration);
 	                application.setContentView(view);
 
 	                view.bindModel(models.ViewModel);

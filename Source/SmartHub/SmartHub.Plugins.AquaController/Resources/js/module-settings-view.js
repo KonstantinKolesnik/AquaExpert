@@ -10,11 +10,16 @@ define(
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
-                'click .js-btn-add-monitor': 'addMonitor'
+                'click .js-btn-add-monitor': 'addMonitor',
+                'click .js-btn-add-controller': 'addController'
             },
             addMonitor: function (e) {
                 e.preventDefault();
                 this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value(), $("#chbNewMonitorIsVisible").prop("checked"));
+            },
+            addController: function (e) {
+                e.preventDefault();
+                this.trigger('controller:add', $("#tbNewControllerName").val(), ddlNewControllerType.value(), $("#chbNewControllerIsVisible").prop("checked"));
             },
             //triggers: {
             //    'click .js-add-monitor': 'monitor:add'
@@ -22,6 +27,9 @@ define(
 
             refreshMonitorsGrid: function () {
                 gridMonitors.dataSource.read();
+            },
+            refreshControllersGrid: function () {
+                gridControllers.dataSource.read();
             },
 
             onShow: function () {
@@ -268,26 +276,26 @@ define(
 
 
 
-                function createSensorSelector(selector) {
-                    selector.kendoDropDownList({
-                        dataValueField: "Id",
-                        dataTextField: "Name",
-                        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
-                    });
-                }
-                function createTextBox(selector) {
-                    selector.unbind("keydown").keydown(preventEnter).blur(function () { me.trigger("heaterControllerConfiguration:set"); });
-                }
-                function createNumericTextBox(selector, min, max, format, decimals) {
-                    selector.kendoNumericTextBox({
-                        min: min,
-                        max: max,
-                        step: 1,
-                        format: format,
-                        decimals: decimals,
-                        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
-                    });
-                }
+                //function createSensorSelector(selector) {
+                //    selector.kendoDropDownList({
+                //        dataValueField: "Id",
+                //        dataTextField: "Name",
+                //        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
+                //    });
+                //}
+                //function createTextBox(selector) {
+                //    selector.unbind("keydown").keydown(preventEnter).blur(function () { me.trigger("heaterControllerConfiguration:set"); });
+                //}
+                //function createNumericTextBox(selector, min, max, format, decimals) {
+                //    selector.kendoNumericTextBox({
+                //        min: min,
+                //        max: max,
+                //        step: 1,
+                //        format: format,
+                //        decimals: decimals,
+                //        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
+                //    });
+                //}
                 function preventEnter(e) {
                     if (e.keyCode == 13) {
                         e.preventDefault();

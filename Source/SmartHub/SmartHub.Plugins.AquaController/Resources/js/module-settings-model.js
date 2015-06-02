@@ -42,8 +42,8 @@ define(['jquery'], function ($) {
                 });
         },
 
-        getSensorsByType: function (type, onComplete) {
-            $.getJSON('/api/mysensors/sensorsByType', { type: type })
+        addController: function (name, type, isVisible, onComplete) {
+            $.post('/api/aquacontroller/controller/add', { name: name, type: type, isVisible: isVisible })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -53,36 +53,50 @@ define(['jquery'], function ($) {
 	            });
         },
 
-        getHeaterControllerConfiguration: function (onComplete) {
-            $.getJSON('/api/aquacontroller/heatercontroller/configuration')
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        },
-        setHeaterControllerConfiguration: function (conf, onComplete) {
-            $.post('/api/aquacontroller/heatercontroller/configuration/set', { conf: JSON.stringify(conf) })
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        }
+
+
+
+        //getSensorsByType: function (type, onComplete) {
+        //    $.getJSON('/api/mysensors/sensorsByType', { type: type })
+		//		.done(function (data) {
+		//		    if (onComplete)
+		//		        onComplete(data);
+		//		})
+	    //        .fail(function (data) {
+	    //            onError(data);
+	    //        });
+        //},
+
+        //getHeaterControllerConfiguration: function (onComplete) {
+        //    $.getJSON('/api/aquacontroller/heatercontroller/configuration')
+		//		.done(function (data) {
+		//		    if (onComplete)
+		//		        onComplete(data);
+		//		})
+	    //        .fail(function (data) {
+	    //            onError(data);
+	    //        });
+        //},
+        //setHeaterControllerConfiguration: function (conf, onComplete) {
+        //    $.post('/api/aquacontroller/heatercontroller/configuration/set', { conf: JSON.stringify(conf) })
+		//		.done(function (data) {
+		//		    if (onComplete)
+		//		        onComplete(data);
+		//		})
+	    //        .fail(function (data) {
+	    //            onError(data);
+	    //        });
+        //}
 
 
 
     };
 
     var viewModel = kendo.observable({
-        SensorsTemperatureDataSource: [],
-        SensorsSwitchDataSource: [],
+        //SensorsTemperatureDataSource: [],
+        //SensorsSwitchDataSource: [],
 
-        HeaterControllerConfiguration: null,
+        //HeaterControllerConfiguration: null,
 
 
 
@@ -92,21 +106,21 @@ define(['jquery'], function ($) {
             //Switch = 3,             // Switch Actuator (on/off)
             //Temperature = 6,        // Temperature sensor
 
-            api.getSensorsByType(6, function (data) {
-                me.set("SensorsTemperatureDataSource", data);
+            //api.getSensorsByType(6, function (data) {
+            //    me.set("SensorsTemperatureDataSource", data);
 
-                api.getSensorsByType(3, function (data) {
-                    me.set("SensorsSwitchDataSource", data);
+            //    api.getSensorsByType(3, function (data) {
+            //        me.set("SensorsSwitchDataSource", data);
 
-                    api.getHeaterControllerConfiguration(function (data) {
-                        me.set("HeaterControllerConfiguration", data);
+            //        api.getHeaterControllerConfiguration(function (data) {
+            //            me.set("HeaterControllerConfiguration", data);
 
                         if (onComplete)
                             onComplete();
-                    });
+            //        });
 
-                });
-            });
+            //    });
+            //});
         }
     });
 
@@ -121,6 +135,10 @@ define(['jquery'], function ($) {
         setMonitorName: api.setMonitorName,
         setMonitorIsVisible: api.setMonitorIsVisible,
         deleteMonitor: api.deleteMonitor,
-        setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
+
+        addController: api.addController,
+
+
+        //setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };
 });

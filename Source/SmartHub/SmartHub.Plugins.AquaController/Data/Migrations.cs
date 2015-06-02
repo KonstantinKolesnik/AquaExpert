@@ -27,7 +27,6 @@ namespace SmartHub.Plugins.AquaController.Data
         }
     }
 
-
     [Migration(2)]
     public class Migration02 : Migration
     {
@@ -61,6 +60,28 @@ namespace SmartHub.Plugins.AquaController.Data
         public override void Revert()
         {
             Database.RemoveColumn("AquaController_Monitors", "IsVisible");
+        }
+    }
+
+    [Migration(4)]
+    public class Migration04 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddTable("AquaController_Controllers",
+                new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
+                new Column("Name", DbType.String, ColumnProperty.NotNull),
+                new Column("Type", DbType.Byte, ColumnProperty.NotNull),
+                new Column("IsVisible", DbType.Boolean, ColumnProperty.NotNull, true),
+                new Column("Configuration", DbType.String.WithSize(int.MaxValue), ColumnProperty.NotNull)
+            );
+            Database.AddUniqueConstraint("UK_AquaController_Controllers_Name", "AquaController_Controllers", "Name");
+        }
+
+        public override void Revert()
+        {
+            Database.RemoveConstraint("AquaController_Controllers", "UK_AquaController_Controllers_Name");
+            Database.RemoveTable("AquaController_Controllers");
         }
     }
 }

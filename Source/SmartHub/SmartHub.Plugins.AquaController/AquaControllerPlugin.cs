@@ -1,22 +1,24 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Linq;
+using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.AquaController.Core;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors;
+using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
-using SmartHub.Plugins.WebUI.Attributes;
-using System.Text;
-using System.Linq;
-using System;
-using NHibernate.Linq;
-using SmartHub.Core.Plugins.Utils;
-using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
+using SmartHub.Plugins.WebUI.Attributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -37,8 +39,7 @@ namespace SmartHub.Plugins.AquaController
     {
         #region Fields
         private MySensorsPlugin mySensors;
-        private HeaterController heaterController = new HeaterController();
-
+        private List<ControllerBase> controllers = new List<ControllerBase>();
         #endregion
 
         #region SignalR events
@@ -53,30 +54,32 @@ namespace SmartHub.Plugins.AquaController
         {
             mapper.Class<AquaControllerSetting>(cfg => cfg.Table("AquaController_Settings"));
             mapper.Class<Monitor>(cfg => cfg.Table("AquaController_Monitors"));
+            mapper.Class<Controller>(cfg => cfg.Table("AquaController_Controllers"));
         }
         public override void InitPlugin()
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-            heaterController.Init(Context);
 
 
+            foreach (ControllerBase controller in controllers)
+                controller.Init(Context);
         }
         #endregion
 
         #region Public methods
         public string BuildTileContent()
         {
-            SensorValue lastSVHeaterTemperature = mySensors.GetLastSensorValue(heaterController.SensorTemperature);
-            SensorValue lastSVHeaterSwitch = mySensors.GetLastSensorValue(heaterController.SensorSwitch);
+            //SensorValue lastSVHeaterTemperature = mySensors.GetLastSensorValue(heaterController.SensorTemperature);
+            //SensorValue lastSVHeaterSwitch = mySensors.GetLastSensorValue(heaterController.SensorSwitch);
             //SensorValue lastSVTemperatureOuter = mySensors.GetLastSensorValue(SensorTemperatureOuter);
             //SensorValue lastSVHumidityOuter = mySensors.GetLastSensorValue(SensorHumidityOuter);
             //SensorValue lastSVAtmospherePressure = mySensors.GetLastSensorValue(SensorAtmospherePressure);
             //SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("<div>Температура воды: " + (lastSVHeaterTemperature != null ? lastSVHeaterTemperature.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Обогреватель: " + (lastSVHeaterSwitch != null ? (lastSVHeaterSwitch.Value == 1 ? "Вкл." : "Выкл.") : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Температура воды: " + (lastSVHeaterTemperature != null ? lastSVHeaterTemperature.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            //sb.Append("<div>Обогреватель: " + (lastSVHeaterSwitch != null ? (lastSVHeaterSwitch.Value == 1 ? "Вкл." : "Выкл.") : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Температура снаружи: " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Влажность снаружи: " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
             //sb.Append("<div>Давление: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
@@ -95,46 +98,76 @@ namespace SmartHub.Plugins.AquaController
         }
         #endregion
 
+        #region Private methods
+        private static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
+        private List<Controller> GetAllControllers()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Controller>()
+                    .OrderBy(controller => controller.Name)
+                    .ToList();
+        }
+
+
+        public object BuildControllerSummaryWebModel(Controller controller)
+        {
+            if (controller == null)
+                return null;
+
+            return new
+            {
+                Id = controller.Id,
+                Name = controller.Name,
+                Type = controller.Type.ToString(),
+                IsVisible = controller.IsVisible
+            };
+        }
+
+        #endregion
+
         #region Event handlers
         [MySensorsConnected]
         private void Connected()
         {
-            heaterController.Connected();
-
-
+            foreach (ControllerBase controller in controllers)
+                controller.Connected();
         }
 
         [MySensorsMessageCalibration]
         private void MessageCalibration(SensorMessage message)
         {
-            heaterController.MessageCalibration(message);
-
-
+            foreach (ControllerBase controller in controllers)
+                controller.MessageCalibration(message);
         }
 
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
-            heaterController.MessageReceived(message);
+            foreach (ControllerBase controller in controllers)
+            {
+                controller.MessageReceived(message);
 
-
-
-            if (heaterController.IsMyMessage(message)
-                //|| hhhhjiujijhuhgo
-                
-                
-                )
-                NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
+                if (controller.IsMyMessage(message))
+                    NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
+            }
         }
 
         //[RunPeriodically(1)]
         [Timer_5_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
-            heaterController.TimerElapsed(now);
-
+            foreach (ControllerBase controller in controllers)
+                controller.TimerElapsed(now);
         }
-
         #endregion
 
         #region Web API
@@ -269,58 +302,85 @@ namespace SmartHub.Plugins.AquaController
         }
 
         [HttpCommand("/api/aquacontroller/controller/type/list")]
-        private object apiControllerTypes(HttpRequestParams request)
+        private object apiGetControllerTypes(HttpRequestParams request)
         {
-            //Enum.GetNames
-            //ControllerType.
-
-            //using (var session = Context.OpenSession())
-            //    return session.Query<Controller>()
-            //        .OrderBy(controller => controller.Name)
-            //        .Select(controller => new
-            //        {
-            //            Id = controller.Id,
-            //            Name = controller.Name,
-            //            //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-            //            IsVisible = controller.IsVisible
-            //        })
-            //        .ToArray();
-
-            return new List<ControllerType>().ToArray();
+            return Enum.GetValues(typeof(ControllerType))
+                .Cast<ControllerType>()
+                .Select(v => new
+                {
+                    Id = v,
+                    Name = GetEnumDescription(v)
+                }).ToArray();
         }
-
         [HttpCommand("/api/aquacontroller/controller/listall")]
         private object apiGetAllControllers(HttpRequestParams request)
         {
+            return GetAllControllers().Select(BuildControllerSummaryWebModel).ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/controller/listvisible")]
+        private object apiGetVisibleControllers(HttpRequestParams request)
+        {
             using (var session = Context.OpenSession())
                 return session.Query<Controller>()
+                    .Where(controller => controller.IsVisible)
                     .OrderBy(controller => controller.Name)
-                    .Select(controller => new
+                    .Select(monitor => new
                     {
-                        Id = controller.Id,
-                        Name = controller.Name,
-                        Type = controller.Type.ToString(),
-                        IsVisible = controller.IsVisible
+                        Id = monitor.Id,
+                        Name = monitor.Name,
+                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                        //SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
                     })
                     .ToArray();
         }
-
-
-
-
-
-
-
-        [HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
-        public object apiGetHeaterControllerConfiguration(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/controller/add")]
+        private object apiAddController(HttpRequestParams request)
         {
-            return heaterController.ControllerConfiguration;
-        }
-        [HttpCommand("/api/aquacontroller/heatercontroller/configuration/set")]
-        public object apiSetHeaterControllerConfiguration(HttpRequestParams request)
-        {
-            var json = request.GetRequiredString("conf");
-            heaterController.ControllerConfiguration = (HeaterController.Configuration)Extensions.FromJson(typeof(HeaterController.Configuration), json);
+            var name = request.GetRequiredString("name");
+            var type = (ControllerType)request.GetRequiredInt32("type");
+            var isVisible = request.GetRequiredBool("isVisible");
+
+            
+                ControllerBase controller = null;
+
+                switch (type)
+                {
+                    case ControllerType.Heater: controller = new HeaterController(); break;
+
+
+                }
+
+                if (controller != null)
+                {
+                    controller.Id = Guid.NewGuid();
+                    controller.Name = name;
+                    controller.Type = type;
+                    controller.IsVisible = isVisible;
+                    controller.SetDefaultConfiguration();
+
+                    controller.Init(Context);
+                    controller.Save();
+
+                    //using (var session = Context.OpenSession())
+                    //{
+                    //    session.Save(controller);
+                    //    session.Flush();
+                    //}
+
+                    controller.Connected();
+
+                    controllers.Add(controller);
+
+                    //NotifyForSignalR(new
+                    //{
+                    //    MsgId = "SensorNameChanged",
+                    //    Data = new
+                    //    {
+                    //        Id = id,
+                    //        Name = name
+                    //    }
+                    //});
+                }
 
             return null;
         }
@@ -329,6 +389,25 @@ namespace SmartHub.Plugins.AquaController
 
 
 
+
+
+
+
+
+
+        //[HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
+        //public object apiGetHeaterControllerConfiguration(HttpRequestParams request)
+        //{
+        //    return heaterController.ControllerConfiguration;
+        //}
+        //[HttpCommand("/api/aquacontroller/heatercontroller/configuration/set")]
+        //public object apiSetHeaterControllerConfiguration(HttpRequestParams request)
+        //{
+        //    var json = request.GetRequiredString("conf");
+        //    heaterController.ControllerConfiguration = (HeaterController.Configuration)Extensions.FromJson(typeof(HeaterController.Configuration), json);
+
+        //    return null;
+        //}
         #endregion
 
 
