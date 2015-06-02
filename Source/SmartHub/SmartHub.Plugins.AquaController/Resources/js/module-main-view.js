@@ -28,8 +28,9 @@ define(
                     //});
 
                     $("#listMonitors").kendoListView({
-                        //dataSource: Monitors,
-                        //template: kendo.template($("#tmplMonitorsListItem").html())
+                        dataBound: function () {
+                            $.each($(".monitor-chart"), function (idx, selector) { createMonitorChart($(selector)); });
+                        }
                     });
 
                     $("#listMonitors").kendoSortable({
@@ -52,7 +53,86 @@ define(
                             //dataSource.insert(newIndex, dataItem);
                         }
                     });
+
+                    function createMonitorChart(selector) {
+                        selector.kendoChart({
+                            //theme: "MaterialBlack",
+                            theme: "Black",
+                            series: [
+                                {
+                                    type: "line",
+                                    style: "smooth",
+                                    field: "Value",
+                                    color: "cornflowerblue",//getRandomColor(),
+                                    axis: "axisValue",
+                                    tooltip: {
+                                        visible: true,
+                                        //template: "#= kendo.toString(value, 'n1') #&nbsp;°C"
+                                    },
+                                    //aggregate: "avg",
+                                },
+                            ],
+                            valueAxes: [
+                                {
+                                    name: "axisValue",
+                                    //majorUnit: 1,
+                                    //majorTicks: {
+                                    //    step: 1
+                                    //},
+                                    //minorTicks: {
+                                    //    size: 3,
+                                    //    //color: "red",
+                                    //    width: 2,
+                                    //    visible: true
+                                    //},
+                                    labels: {
+                                        //format: "{0} °C",
+                                    }
+                                },
+                            ],
+                            categoryAxis: {
+                                field: "TimeStamp",
+                                type: "date",
+
+                                //baseUnit: "fit",
+                                //baseUnit: "seconds",
+                                //baseUnit: "minutes",
+                                baseUnit: "hours",
+                                //baseUnit: "days",
+                                //baseUnit: "weeks",
+                                //baseUnit: "months",
+                                //baseUnit: "years",
+
+                                axisCrossingValues: [0],
+                                labels: {
+                                    dateFormats: {
+                                        hours: "MMM d, HH:mm",
+                                        //hours: "HH:mm",
+                                        days: "MMM d",
+                                        weeks: "MMM d",
+                                        months: "yyyy MMM",
+                                        years: "yyyy"
+                                    },
+                                    visible: false,
+                                    rotation: 270,
+                                },
+                                line: { visible: true },
+                                majorGridLines: { visible: true }
+                            }
+                        });
+                    }
+                    function getRandomColor() {
+                        var letters = '0123456789ABCDEF'.split('');
+                        var color = '#';
+                        for (var i = 0; i < 6; i++) {
+                            color += letters[Math.floor(Math.random() * 16)];
+                        }
+                        return color;
+                    }
                 }
+
+
+
                 //function createCheckBox(selector) {
                 //    selector.change(function () {
                 //        debugger;

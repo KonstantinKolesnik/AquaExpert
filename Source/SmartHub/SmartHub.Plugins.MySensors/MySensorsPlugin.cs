@@ -185,6 +185,18 @@ namespace SmartHub.Plugins.MySensors
                     .OrderByDescending(sv => sv.TimeStamp)
                     .FirstOrDefault();
         }
+        public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours)
+        {
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
+
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToList();
+        }
+        public List<SensorValue> GetSensorValuesByID(Guid id, int hours)
+        {
+            var sensor = GetSensor(id);
+            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours);
+        }
         public bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
@@ -737,22 +749,14 @@ namespace SmartHub.Plugins.MySensors
             var nodeNo = request.GetRequiredInt32("nodeNo");
             var sensorNo = request.GetRequiredInt32("sensorNo");
             var hours = request.GetRequiredInt32("hours");
-
-            DateTime dt = DateTime.UtcNow.AddHours(-hours);
-
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToArray();
+            return GetSensorValues(nodeNo, sensorNo, hours).ToArray();
         }
         [HttpCommand("/api/mysensors/sensorvaluesbyid")]
         private object apiGetSensorValuesByID(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
             var hours = request.GetRequiredInt32("hours");
-
-            DateTime dt = DateTime.UtcNow.AddHours(-hours);
-
-            using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.Id == id && sv.TimeStamp >= dt).ToArray();
+            return GetSensorValuesByID(id, hours).ToArray();
         }
         #endregion
     }
