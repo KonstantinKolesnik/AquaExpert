@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        addMonitor: function (name, sensorId, onComplete) {
-            $.post('/api/aquacontroller/monitor/add', { name: name, sensorId: sensorId })
+        addMonitor: function (name, sensorId, isVisible, onComplete) {
+            $.post('/api/aquacontroller/monitor/add', { name: name, sensorId: sensorId, isVisible: isVisible })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -13,6 +13,16 @@ define(['jquery'], function ($) {
         },
         setMonitorName: function (id, name, onComplete) {
             $.post('/api/aquacontroller/monitor/setname', { id: id, name: name })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
+        setMonitorIsVisible: function (id, isVisible, onComplete) {
+            $.post('/api/aquacontroller/monitor/setisvisible', { id: id, isVisible: isVisible })
                 .done(function (data) {
                     if (onComplete)
                         onComplete(data);
@@ -109,6 +119,7 @@ define(['jquery'], function ($) {
 
         addMonitor: api.addMonitor,
         setMonitorName: api.setMonitorName,
+        setMonitorIsVisible: api.setMonitorIsVisible,
         deleteMonitor: api.deleteMonitor,
         setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };

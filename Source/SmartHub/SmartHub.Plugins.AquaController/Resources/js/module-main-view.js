@@ -4,6 +4,21 @@ define(
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
+            //regions: {
+            //    filter: '#region-dashboard',
+            //    list: '#region-graphs'
+            //},
+            //events: {
+            //    'click .js-btn-add-monitor': 'addMonitor'
+            //},
+            //addMonitor: function (e) {
+            //    e.preventDefault();
+            //    this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value());
+            //},
+            triggers: {
+                'click .js-btn-graphs': 'graphs:show'
+            },
+
             onShow: function () {
                 var me = this;
                 
@@ -64,40 +79,42 @@ define(
                                     style: "smooth",
                                     field: "Value",
                                     color: "cornflowerblue",//getRandomColor(),
-                                    axis: "axisValue",
+                                    //axis: "axisValue",
                                     tooltip: {
                                         visible: true,
                                         //template: "#= kendo.toString(value, 'n1') #&nbsp;°C"
+                                        //template: "#= kendo.toString(category, 'MMM d, HH:mm:ss') + " - " + kendo.toString(value, 'n1') #"
+                                        //template: "#= category + " - " + kendo.toString(value, 'n1') #"
                                     },
                                     //aggregate: "avg",
                                 },
                             ],
-                            valueAxes: [
-                                {
-                                    name: "axisValue",
-                                    //majorUnit: 1,
-                                    //majorTicks: {
-                                    //    step: 1
-                                    //},
-                                    //minorTicks: {
-                                    //    size: 3,
-                                    //    //color: "red",
-                                    //    width: 2,
-                                    //    visible: true
-                                    //},
-                                    labels: {
-                                        //format: "{0} °C",
-                                    }
-                                },
-                            ],
+                            //valueAxes: [
+                            //    {
+                            //        name: "axisValue",
+                            //        //majorUnit: 1,
+                            //        //majorTicks: {
+                            //        //    step: 1
+                            //        //},
+                            //        //minorTicks: {
+                            //        //    size: 3,
+                            //        //    //color: "red",
+                            //        //    width: 2,
+                            //        //    visible: true
+                            //        //},
+                            //        labels: {
+                            //            //format: "{0} °C",
+                            //        }
+                            //    },
+                            //],
                             categoryAxis: {
                                 field: "TimeStamp",
                                 type: "date",
 
-                                //baseUnit: "fit",
+                                baseUnit: "fit",
                                 //baseUnit: "seconds",
                                 //baseUnit: "minutes",
-                                baseUnit: "hours",
+                                //baseUnit: "hours",
                                 //baseUnit: "days",
                                 //baseUnit: "weeks",
                                 //baseUnit: "months",
@@ -105,15 +122,16 @@ define(
 
                                 axisCrossingValues: [0],
                                 labels: {
-                                    dateFormats: {
-                                        hours: "MMM d, HH:mm",
-                                        //hours: "HH:mm",
-                                        days: "MMM d",
-                                        weeks: "MMM d",
-                                        months: "yyyy MMM",
-                                        years: "yyyy"
-                                    },
-                                    visible: false,
+                                    //dateFormats: {
+                                    //    //minutes: "mm:ss",
+                                    //    hours: "MMM d, HH:mm",
+                                    //    //hours: "HH:mm",
+                                    //    days: "MMM d",
+                                    //    weeks: "MMM d",
+                                    //    months: "yyyy MMM",
+                                    //    years: "yyyy"
+                                    //},
+                                    visible: true,
                                     rotation: 270,
                                 },
                                 line: { visible: true },

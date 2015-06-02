@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getMonitors: function ( onComplete) {
-            $.getJSON('/api/aquacontroller/monitor/list')
+            $.getJSON('/api/aquacontroller/monitor/listvisible')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -11,6 +11,17 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
+        getControllers: function (onComplete) {
+            $.getJSON('/api/aquacontroller/controller/listvisible')
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+        },
+
 
         //getSensor: function (id, onComplete) {
         //    $.getJSON('/api/mysensors/sensor', { id: id })
@@ -63,22 +74,34 @@ define(['jquery'], function ($) {
 
 
         Monitors: [],
+        Controllers: [],
+
         //SensorValues: [],
 
         update: function (onComplete) {
             var me = this;
 
             me.Monitors = [];
-            //me.SensorValues = [];
+            me.Controllers = [];
 
             updateMonitors(function () {
-                if (onComplete)
-                    onComplete();
+                //updateControllers(function () {
+                    if (onComplete)
+                        onComplete();
+                //});
             });
 
             function updateMonitors(onComplete) {
                 api.getMonitors(function (data) {
                     me.set("Monitors", data);
+
+                    if (onComplete)
+                        onComplete();
+                });
+            }
+            function updateControllers(onComplete) {
+                api.getControllers(function (data) {
+                    me.set("Controllers", data);
 
                     if (onComplete)
                         onComplete();
@@ -164,10 +187,10 @@ define(['jquery'], function ($) {
         }
     });
 
-    viewModel.bind("change", function (e) {
-        if (e.field == "HeaterControllerConfiguration.IsAutoMode")
-            api.setHeaterControllerConfiguration(e.sender.HeaterControllerConfiguration);
-    });
+    //viewModel.bind("change", function (e) {
+    //    if (e.field == "HeaterControllerConfiguration.IsAutoMode")
+    //        api.setHeaterControllerConfiguration(e.sender.HeaterControllerConfiguration);
+    //});
 
     function onError(data) {
         alert(data.statusText);
@@ -175,6 +198,6 @@ define(['jquery'], function ($) {
 
     return {
         ViewModel: viewModel,
-        setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
+        //setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };
 });

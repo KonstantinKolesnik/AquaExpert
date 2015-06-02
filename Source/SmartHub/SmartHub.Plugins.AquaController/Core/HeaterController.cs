@@ -56,6 +56,10 @@ namespace SmartHub.Plugins.AquaController.Core
         {
             get { return "HeaterControllerConfiguration"; }
         }
+        public override ControllerType Type
+        {
+            get { return ControllerType.Heater; }
+        }
         public Configuration ControllerConfiguration
         {
             get { return configuration; }

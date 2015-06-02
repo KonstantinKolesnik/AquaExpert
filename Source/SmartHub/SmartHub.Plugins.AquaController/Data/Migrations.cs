@@ -49,4 +49,18 @@ namespace SmartHub.Plugins.AquaController.Data
             Database.RemoveTable("AquaController_Monitors");
         }
     }
+
+    [Migration(3)]
+    public class Migration03 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddColumn("AquaController_Monitors", new Column("IsVisible", DbType.Boolean, ColumnProperty.NotNull, true));
+        }
+
+        public override void Revert()
+        {
+            Database.RemoveColumn("AquaController_Monitors", "IsVisible");
+        }
+    }
 }

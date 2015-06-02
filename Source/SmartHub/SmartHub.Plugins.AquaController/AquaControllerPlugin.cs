@@ -16,6 +16,7 @@ using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
+using System.Collections.Generic;
 
 namespace SmartHub.Plugins.AquaController
 {
@@ -137,11 +138,27 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Web API
-        [HttpCommand("/api/aquacontroller/monitor/list")]
-        private object apiGetMonitors(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/monitor/listall")]
+        private object apiGetAllMonitors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Monitor>()
+                    .OrderBy(monitor => monitor.Name)
+                    .Select(monitor => new
+                    {
+                        Id = monitor.Id,
+                        Name = monitor.Name,
+                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                        IsVisible = monitor.IsVisible
+                    })
+                    .ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/monitor/listvisible")]
+        private object apiGetVisibleMonitors(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>()
+                    .Where(monitor => monitor.IsVisible)
                     .OrderBy(monitor => monitor.Name)
                     .Select(monitor => new {
                         Id = monitor.Id,
@@ -156,6 +173,7 @@ namespace SmartHub.Plugins.AquaController
         {
             var name = request.GetRequiredString("name");
             var sensorId = request.GetRequiredGuid("sensorId");
+            var isVisible = request.GetRequiredBool("isVisible");
 
             using (var session = Context.OpenSession())
             {
@@ -163,7 +181,8 @@ namespace SmartHub.Plugins.AquaController
                 {
                     Id = Guid.NewGuid(),
                     Name = name,
-                    SensorId = sensorId
+                    SensorId = sensorId,
+                    IsVisible = isVisible
                 };
 
                 session.Save(monitor);
@@ -207,6 +226,31 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
+        [HttpCommand("/api/aquacontroller/monitor/setisvisible")]
+        private object apiSetMonitorIsVisible(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var isVisible = request.GetRequiredBool("isVisible");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Get<Monitor>(id);
+                sensor.IsVisible = isVisible;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorIsVisibleChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
         [HttpCommand("/api/aquacontroller/monitor/delete")]
         private object apiDeleteMonitor(HttpRequestParams request)
         {
@@ -224,7 +268,42 @@ namespace SmartHub.Plugins.AquaController
             return null;
         }
 
+        [HttpCommand("/api/aquacontroller/controller/type/list")]
+        private object apiControllerTypes(HttpRequestParams request)
+        {
+            //Enum.GetNames
+            //ControllerType.
 
+            //using (var session = Context.OpenSession())
+            //    return session.Query<Controller>()
+            //        .OrderBy(controller => controller.Name)
+            //        .Select(controller => new
+            //        {
+            //            Id = controller.Id,
+            //            Name = controller.Name,
+            //            //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+            //            IsVisible = controller.IsVisible
+            //        })
+            //        .ToArray();
+
+            return new List<ControllerType>().ToArray();
+        }
+
+        [HttpCommand("/api/aquacontroller/controller/listall")]
+        private object apiGetAllControllers(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Controller>()
+                    .OrderBy(controller => controller.Name)
+                    .Select(controller => new
+                    {
+                        Id = controller.Id,
+                        Name = controller.Name,
+                        Type = controller.Type.ToString(),
+                        IsVisible = controller.IsVisible
+                    })
+                    .ToArray();
+        }
 
 
 

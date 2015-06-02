@@ -17,6 +17,7 @@ namespace SmartHub.Plugins.AquaController.Core
 
         #region Properties
         abstract protected string SettingName { get; }
+        abstract public ControllerType Type { get; }
         #endregion
 
         #region Public methods

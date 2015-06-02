@@ -45,16 +45,28 @@ namespace SmartHub.Plugins.WebUI
     [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
     [JavaScriptResource("/vendor/js/jquery.signalR-2.1.2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.signalR-2.1.2.min.js")]
 
+    // fonts
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.eot", "application/vnd.ms-fontobject")]
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.svg", "image/svg+xml")]
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.ttf", "application/x-font-truetype")]
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff", "application/font-woff")]
+    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff2", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff2", "application/font-woff2")]
+
+    [HttpResource("/vendor/fonts/fontawesome-webfont.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.eot", "application/vnd.ms-fontobject")]
+    [HttpResource("/vendor/fonts/fontawesome-webfont.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.svg", "image/svg+xml")]
+    [HttpResource("/vendor/fonts/fontawesome-webfont.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.ttf", "application/x-font-truetype")]
+    [HttpResource("/vendor/fonts/fontawesome-webfont.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.woff", "application/font-woff")]
+
     // css
     [CssResource("/vendor/css/bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.bootstrap.min.css")]
     [CssResource("/vendor/css/font-awesome.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.font-awesome.min.css")]
     [CssResource("/vendor/css/site.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.site.css")]
-
     [CssResource("/vendor/css/codemirror.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.codemirror.css", AutoLoad = true)]
 
     [CssResource("/vendor/css/kendo.common.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common.min.css")]
-    [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
+    
+    [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.default.min.css")]
     [HttpResource("/vendor/css/Default/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.editor.png")]
     [HttpResource("/vendor/css/Default/imagebrowser.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.imagebrowser.png")]
@@ -71,17 +83,22 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/vendor/css/Default/sprite_kpi.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi.png")]
     [HttpResource("/vendor/css/Default/sprite_kpi_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi_2x.png")]
 
-    // fonts
-    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.eot", "application/vnd.ms-fontobject")]
-    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.svg", "image/svg+xml")]
-    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.ttf", "application/x-font-truetype")]
-    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff", "application/font-woff")]
-    [HttpResource("/vendor/fonts/glyphicons-halflings-regular.woff2", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.woff2", "application/font-woff2")]
-
-    [HttpResource("/vendor/fonts/fontawesome-webfont.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.eot", "application/vnd.ms-fontobject")]
-    [HttpResource("/vendor/fonts/fontawesome-webfont.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.svg", "image/svg+xml")]
-    [HttpResource("/vendor/fonts/fontawesome-webfont.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.ttf", "application/x-font-truetype")]
-    [HttpResource("/vendor/fonts/fontawesome-webfont.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.fontawesome-webfont.woff", "application/font-woff")]
+    [CssResource("/vendor/css/kendo.black.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.black.min.css")]
+    [CssResource("/vendor/css/kendo.dataviz.black.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.black.min.css")]
+    [HttpResource("/vendor/css/Black/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.editor.png")]
+    [HttpResource("/vendor/css/Black/imagebrowser.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.imagebrowser.png")]
+    [HttpResource("/vendor/css/Black/indeterminate.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.indeterminate.gif")]
+    [HttpResource("/vendor/css/Black/loading-image.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.loading-image.gif")]
+    [HttpResource("/vendor/css/Black/loading.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.loading.gif")]
+    [HttpResource("/vendor/css/Black/loading_2x.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.loading_2x.gif")]
+    [HttpResource("/vendor/css/Black/markers.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.markers.png")]
+    [HttpResource("/vendor/css/Black/markers_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.markers_2x.png")]
+    [HttpResource("/vendor/css/Black/slider-h.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.slider-h.gif")]
+    [HttpResource("/vendor/css/Black/slider-v.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.slider-v.gif")]
+    [HttpResource("/vendor/css/Black/sprite.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.sprite.png")]
+    [HttpResource("/vendor/css/Black/sprite_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.sprite_2x.png")]
+    [HttpResource("/vendor/css/Black/sprite_kpi.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.sprite_kpi.png")]
+    [HttpResource("/vendor/css/Black/sprite_kpi_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.sprite_kpi_2x.png")]
     #endregion
 
     #region Application resources
