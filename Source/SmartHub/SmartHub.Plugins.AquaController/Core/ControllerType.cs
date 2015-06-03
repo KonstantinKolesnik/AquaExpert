@@ -6,6 +6,11 @@ namespace SmartHub.Plugins.AquaController.Core
     {
         [Description("Обогреватель")]
         Heater,
+        [Description("Выключатель")]
+        Switch,
+
+
+
         [Description("Освещение")]
         Light,
         [Description("Уровень воды")]
@@ -18,7 +23,6 @@ namespace SmartHub.Plugins.AquaController.Core
         CO2,
         [Description("Кормление")]
         Feeder,
-
         [Description("Другой")]
         Custom
     }

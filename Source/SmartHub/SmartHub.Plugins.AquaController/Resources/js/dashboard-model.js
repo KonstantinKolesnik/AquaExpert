@@ -53,6 +53,8 @@ define(['jquery'], function ($) {
                     if (monitor.Sensor.NodeNo == sv.NodeNo && monitor.Sensor.SensorNo == sv.SensorNo) {
                         monitor.Sensor.set("SensorValueValue", sv.Value);
                         monitor.Sensor.set("SensorValueTimeStamp", sv.TimeStamp);
+
+                        monitor.SensorValues.splice(0, 1);
                         monitor.SensorValues.push(sv);
                     }
                 });

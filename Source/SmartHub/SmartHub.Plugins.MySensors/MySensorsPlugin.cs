@@ -190,7 +190,12 @@ namespace SmartHub.Plugins.MySensors
             DateTime dt = DateTime.UtcNow.AddHours(-hours);
 
             using (var session = Context.OpenSession())
-                return session.Query<SensorValue>().Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt).ToList();
+                return session.Query<SensorValue>()
+                    .Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt)
+                    //.OrderByDescending(x => x.TimeStamp)
+                    //.Take(20)
+                    //.OrderBy(x => x.TimeStamp)
+                    .ToList();
         }
         public List<SensorValue> GetSensorValuesByID(Guid id, int hours)
         {
@@ -330,17 +335,22 @@ namespace SmartHub.Plugins.MySensors
         }
         private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
+            var dtDB = DateTime.UtcNow;
+            var dt = DateTime.Now;
+
             SensorValue sv = new SensorValue()
             {
                 Id = Guid.NewGuid(),
                 NodeNo = message.NodeNo,
                 SensorNo = message.SensorNo,
-                TimeStamp = DateTime.UtcNow,
+                TimeStamp = dtDB,
                 Type = (SensorValueType)message.SubType,
                 Value = message.PayloadFloat
             };
 
             Save(sv);
+
+            sv.TimeStamp = dt;
 
             return sv;
         }
@@ -489,15 +499,20 @@ namespace SmartHub.Plugins.MySensors
                         case InternalValueType.BatteryLevel: // int, in %
                             if (node != null)
                             {
+                                var dtDB = DateTime.UtcNow;
+                                var dt = DateTime.Now;
+
                                 BatteryLevel bl = new BatteryLevel()
                                 {
                                     Id = Guid.NewGuid(),
                                     NodeNo = message.NodeNo,
-                                    TimeStamp = DateTime.UtcNow,
+                                    TimeStamp = dtDB,
                                     Level = byte.Parse(message.Payload)
                                 };
 
                                 Save(bl);
+
+                                bl.TimeStamp = dt;
 
                                 NotifyMessageReceivedForPlugins(message);
                                 NotifyMessageReceivedForScripts(message);

@@ -11,7 +11,7 @@ MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 void setup()
 {
 	gw.begin(onMessageReceived);
-	String sketchName = "Power switch " + NUMBER_OF_RELAYS;
+	String sketchName = "Power switch 8";
 	gw.sendSketchInfo(sketchName.c_str(), "1.0");
 
 	// (sensorID = 0...7)

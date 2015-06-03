@@ -108,9 +108,9 @@ define(
                             //],
                             categoryAxis: {
                                 field: "TimeStamp",
-                                type: "date",
+                                //type: "date",
 
-                                baseUnit: "fit",
+                                //baseUnit: "fit",
                                 //baseUnit: "seconds",
                                 //baseUnit: "minutes",
                                 //baseUnit: "hours",
@@ -131,7 +131,8 @@ define(
                                     },
                                     visible: true,
                                     rotation: 270,
-                                    font: "9px sans-serif"
+                                    font: "9px sans-serif",
+                                    template: "#: kendo.toString(new Date(value), 'd.MM HH:mm') #"
                                 },
                                 line: { visible: true },
                                 majorGridLines: { visible: true }

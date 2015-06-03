@@ -95,22 +95,22 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Private methods
-        protected override void Process(float value)
+        protected override void Process(float? value)
         {
             if (configuration.IsAutoMode)
             {
                 //var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
 
-                if (value < configuration.TemperatureMin)
+                if (value.Value < configuration.TemperatureMin)
                     mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
-                else if (value > configuration.TemperatureMax)
+                else if (value.Value > configuration.TemperatureMax)
                     mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
             }
 
-            if (value <= configuration.TemperatureAlarmMin)
-                Context.GetPlugin<SpeechPlugin>().Say(configuration.TemperatureAlarmMinText + string.Format("{0} градусов.", value));
-            else if (value >= configuration.TemperatureAlarmMax)
-                Context.GetPlugin<SpeechPlugin>().Say(configuration.TemperatureAlarmMaxText + string.Format("{0} градусов.", value));
+            if (value.Value <= configuration.TemperatureAlarmMin)
+                Context.GetPlugin<SpeechPlugin>().Say(configuration.TemperatureAlarmMinText + string.Format("{0} градусов.", value.Value));
+            else if (value.Value >= configuration.TemperatureAlarmMax)
+                Context.GetPlugin<SpeechPlugin>().Say(configuration.TemperatureAlarmMaxText + string.Format("{0} градусов.", value.Value));
         }
         #endregion
 

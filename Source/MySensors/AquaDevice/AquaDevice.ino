@@ -17,7 +17,7 @@ OneWire oneWire(ONE_WIRE_PIN);
 DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
 float lastTemperature;
-unsigned long prevMsTemperature = 0;
+unsigned long prevMsTemperature = -1000000;
 const long intervalTemperature = 30000;	// interval at which to measure (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ const long intervalTemperature = 30000;	// interval at which to measure (millise
 #define PH_OFFSET				0.2f//-0.12
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh;
-unsigned long prevMsPh = 0;
+unsigned long prevMsPh = -1000000;
 const long intervalPh = 30000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ const long intervalPh = 30000;
 #define WATER_PIN				A3
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
-unsigned long prevMsWater = 0;
+unsigned long prevMsWater = -1000000;
 const long intervalWater = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ const long intervalWater = 5000;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
 uint16_t lastDistance;
-unsigned long prevMsDistance = 0;
-const long intervalDistance = 3000;
+unsigned long prevMsDistance = -1000000;
+const long intervalDistance = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
@@ -64,27 +64,21 @@ void setup()
 	isMetric = gw.getConfig().isMetric;
 
 	dallas.begin();
-	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
-	processTemperature(true);
-
-	gw.present(PH_SENSOR_ID, S_PH);
-	processPH(true);
-
 	pinMode(WATER_PIN, INPUT);
-	gw.present(WATER_SENSOR_ID, S_WATER);
-	processWater(true);
 
+	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
+	gw.present(PH_SENSOR_ID, S_PH);
+	gw.present(WATER_SENSOR_ID, S_WATER);
 	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE);
-	processDistance(true);
 }
 void loop()
 {
-	gw.process();
+	processTemperature();
+	processPH();
+	processWater();
+	processDistance();
 
-	processTemperature(false);
-	processPH(false);
-	processWater(false);
-	processDistance(false);
+	gw.process();
 
 	//gw.requestTime(onTimeReceived);
 
@@ -92,11 +86,11 @@ void loop()
 		gw.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-void processTemperature(bool force)
+void processTemperature()
 {
 	unsigned long ms = millis();
 
-	if (force || (ms - prevMsTemperature >= intervalTemperature))
+	if (ms - prevMsTemperature >= intervalTemperature)
 	{
 		prevMsTemperature = ms;
 
@@ -104,7 +98,7 @@ void processTemperature(bool force)
 
 		if (temperature != -127.00)
 		{
-			if (force || (abs(lastTemperature - temperature) >= 0.1f))
+			if (abs(lastTemperature - temperature) >= 0.1f)
 			{
 				lastTemperature = temperature;
 				gw.send(msgTemperature.set(temperature, 1));
@@ -118,17 +112,17 @@ void processTemperature(bool force)
 		}
 	}
 }
-void processPH(bool force)
+void processPH()
 {
 	unsigned long ms = millis();
 
-	if (force || (ms - prevMsPh >= intervalPh))
+	if (ms - prevMsPh >= intervalPh)
 	{
 		prevMsPh = ms;
 
 		float ph = readPh();
 
-		if (force || (abs(ph - lastPh) >= 0.1f))
+		if (abs(ph - lastPh) >= 0.1f)
 		{
 			lastPh = ph;
 			gw.send(msgPh.set(ph, 1));
@@ -140,17 +134,17 @@ void processPH(bool force)
 		}
 	}
 }
-void processWater(bool force)
+void processWater()
 {
 	unsigned long ms = millis();
 
-	if (force || (ms - prevMsWater >= intervalWater))
+	if (ms - prevMsWater >= intervalWater)
 	{
 		prevMsWater = ms;
 
 		bool water = readWater();
 
-		if (force || (water != lastWater))
+		if (water != lastWater)
 		{
 			lastWater = water;
 			gw.send(msgWater.set(water ? 1 : 0));
@@ -162,19 +156,19 @@ void processWater(bool force)
 		}
 	}
 }
-void processDistance(bool force)
+void processDistance()
 {
 	unsigned long ms = millis();
 
-	if (force || (ms - prevMsDistance >= intervalDistance))
+	if (ms - prevMsDistance >= intervalDistance)
 	{
 		prevMsDistance = ms;
 
 		uint16_t distance = readDistance();
 
-		if (distance != 0)
+		if (distance > 0)
 		{
-			if (force || (distance != lastDistance))
+			if (distance != lastDistance)
 			{
 				lastDistance = distance;
 				gw.send(msgDistance.set(distance));
@@ -221,7 +215,8 @@ void printTime()
 float readTemperature()
 {
 	dallas.requestTemperatures();
-	float temperature = static_cast<float>(static_cast<int>((isMetric ? dallas.getTempCByIndex(0) : dallas.getTempFByIndex(0)) * 10.)) / 10.;
+	float t = isMetric ? dallas.getTempCByIndex(0) : dallas.getTempFByIndex(0);
+	float temperature = static_cast<float>(static_cast<int>(t * 10.)) / 10.;
 	return temperature;
 }
 float readPh()
@@ -290,7 +285,7 @@ uint16_t readDistance()
 
 	// 3)
 	// get 10 sample value from the sensor for smooth the value:
-	uint16_t buf[10];
+	unsigned int buf[10];
 	for (int i = 0; i < 10; i++)
 	{
 		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
@@ -304,7 +299,7 @@ uint16_t readDistance()
 		{
 			if (buf[i] > buf[j])
 			{
-				uint16_t temp = buf[i];
+				unsigned int temp = buf[i];
 				buf[i] = buf[j];
 				buf[j] = temp;
 			}

@@ -49,14 +49,16 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Private methods
-        abstract protected void Process(float value);
+        abstract protected void Process(float? value);
         #endregion
 
         #region Event handlers
         public virtual void MessageCalibration(SensorMessage message)
         {
         }
-        abstract public void MessageReceived(SensorMessage message);
+        public virtual void MessageReceived(SensorMessage message)
+        {
+        }
         public virtual void TimerElapsed(DateTime now)
         {
         }

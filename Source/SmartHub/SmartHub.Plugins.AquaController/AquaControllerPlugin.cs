@@ -8,6 +8,7 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
+using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
@@ -124,6 +125,7 @@ namespace SmartHub.Plugins.AquaController
             switch (controller.Type)
             {
                 case ControllerType.Heater: return new HeaterController(controller);
+                case ControllerType.Switch: return new SwitchController(controller);
 
                 default: return null;
             }
@@ -221,6 +223,7 @@ namespace SmartHub.Plugins.AquaController
                         Name = monitor.Name,
                         Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
                         SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24).ToArray()
+                        //SensorValues = (mySensors.GetSensorValuesByID(monitor.SensorId, 24) as IEnumerable<SensorValue>).OrderByDescending(x => x.TimeStamp).Take(20).OrderBy(x => x.TimeStamp).ToArray()
                     })
                     .ToArray();
         }

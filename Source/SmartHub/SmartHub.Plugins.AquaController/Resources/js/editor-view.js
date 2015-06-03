@@ -12,17 +12,15 @@ define(
                 var tmpl = $("#tmpl" + type);
                 if (!tmpl.length)
                     tmpl = $("#tmplError");
+                $("#container").html(tmpl.html());
 
                 var fn = null;
-
                 switch (type) {
                     case 0: fn = initHeaterController; break;
-
+                    case 1: fn = initSwitchController; break;
 
 
                 }
-
-                $("#container").html(tmpl.html());
                 if (fn)
                     fn();
 
@@ -41,6 +39,18 @@ define(
                     createNumericTextBox($("#ntbHeaterTemperatureAlarmMax"), 18, 32, "n1", 1);
                     createTextBox($("#tbHeaterTemperatureAlarmMaxText"));
                     createTextBox($("#tbHeaterTemperatureAlarmMinText"));
+                }
+                function initSwitchController() {
+                    //Switch = 3,             // Switch Actuator (on/off)
+                    createSensorSelector($("#ddlSwitchSensorSwitch"), 3);
+
+
+
+
+
+
+
+
                 }
 
                 function createSensorSelector(selector, type) {
