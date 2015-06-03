@@ -15,8 +15,8 @@ define(
                     models.ViewModel = data;
 
                     var view = new views.LayoutView();
-                    view.on('editor:cancel', module.redirectToList);
-                    view.on('editor:save', module.save);
+                    //view.on('editor:cancel', module.redirectToList);
+                    //view.on('editor:save', module.save);
                     application.setContentView(view);
 
                     view.bindModel(models.ViewModel);
