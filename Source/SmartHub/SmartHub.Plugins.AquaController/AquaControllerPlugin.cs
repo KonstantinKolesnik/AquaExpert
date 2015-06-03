@@ -60,7 +60,13 @@ namespace SmartHub.Plugins.AquaController
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-
+            var ctrls = GetAllControllers();
+            foreach (var ctrl in ctrls)
+            {
+                ControllerBase controller = CreateController(ctrl);
+                if (controller != null)
+                    controllers.Add(controller);
+            }
 
             foreach (ControllerBase controller in controllers)
                 controller.Init(Context);
@@ -109,6 +115,15 @@ namespace SmartHub.Plugins.AquaController
             else
                 return value.ToString();
         }
+        private static ControllerBase CreateController(Controller controller)
+        {
+            switch (controller.Type)
+            {
+                case ControllerType.Heater: return new HeaterController(controller);
+
+                default: return null;
+            }
+        }
         private List<Controller> GetAllControllers()
         {
             using (var session = Context.OpenSession())
@@ -116,9 +131,7 @@ namespace SmartHub.Plugins.AquaController
                     .OrderBy(controller => controller.Name)
                     .ToList();
         }
-
-
-        public object BuildControllerSummaryWebModel(Controller controller)
+        private object BuildControllerSummaryWebModel(Controller controller)
         {
             if (controller == null)
                 return null;
@@ -127,11 +140,10 @@ namespace SmartHub.Plugins.AquaController
             {
                 Id = controller.Id,
                 Name = controller.Name,
-                Type = controller.Type.ToString(),
+                Type = GetEnumDescription(controller.Type),
                 IsVisible = controller.IsVisible
             };
         }
-
         #endregion
 
         #region Event handlers
@@ -139,7 +151,7 @@ namespace SmartHub.Plugins.AquaController
         private void Connected()
         {
             foreach (ControllerBase controller in controllers)
-                controller.Connected();
+                controller.RequestSensorsValues();
         }
 
         [MySensorsMessageCalibration]
@@ -315,7 +327,7 @@ namespace SmartHub.Plugins.AquaController
         [HttpCommand("/api/aquacontroller/controller/listall")]
         private object apiGetAllControllers(HttpRequestParams request)
         {
-            return GetAllControllers().Select(BuildControllerSummaryWebModel).ToArray();
+            return GetAllControllers().Select(BuildControllerSummaryWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/aquacontroller/controller/listvisible")]
         private object apiGetVisibleControllers(HttpRequestParams request)
@@ -340,47 +352,56 @@ namespace SmartHub.Plugins.AquaController
             var type = (ControllerType)request.GetRequiredInt32("type");
             var isVisible = request.GetRequiredBool("isVisible");
 
-            
-                ControllerBase controller = null;
+            var controllerDB = new Controller()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Type = type,
+                IsVisible = isVisible
+            };
 
-                switch (type)
-                {
-                    case ControllerType.Heater: controller = new HeaterController(); break;
+            ControllerBase controller = CreateController(controllerDB);
+            if (controller != null)
+            {
+                controller.Init(Context);
+                controller.Save();
+                controllers.Add(controller);
 
+                //NotifyForSignalR(new
+                //{
+                //    MsgId = "SensorNameChanged",
+                //    Data = new
+                //    {
+                //        Id = id,
+                //        Name = name
+                //    }
+                //});
+            }
 
-                }
+            return null;
+        }
+        [HttpCommand("/api/aquacontroller/controller/setname")]
+        private object apiSetControllerName(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var name = request.GetString("name");
 
-                if (controller != null)
-                {
-                    controller.Id = Guid.NewGuid();
-                    controller.Name = name;
-                    controller.Type = type;
-                    controller.IsVisible = isVisible;
-                    controller.SetDefaultConfiguration();
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Get<Controller>(id);
+                sensor.Name = name;
+                session.Flush();
+            }
 
-                    controller.Init(Context);
-                    controller.Save();
-
-                    //using (var session = Context.OpenSession())
-                    //{
-                    //    session.Save(controller);
-                    //    session.Flush();
-                    //}
-
-                    controller.Connected();
-
-                    controllers.Add(controller);
-
-                    //NotifyForSignalR(new
-                    //{
-                    //    MsgId = "SensorNameChanged",
-                    //    Data = new
-                    //    {
-                    //        Id = id,
-                    //        Name = name
-                    //    }
-                    //});
-                }
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
 
             return null;
         }

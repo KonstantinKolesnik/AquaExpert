@@ -205,7 +205,7 @@ define(
                             },
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
-                                //{ field: "Type", title: "Тип", editor: getEditor },
+                                { field: "Type", title: "Тип", editor: getEditor },
                                 { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
                                 {
                                     title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },

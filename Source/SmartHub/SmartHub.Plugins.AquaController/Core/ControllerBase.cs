@@ -1,50 +1,50 @@
-﻿using NHibernate.Linq;
-using SmartHub.Core.Plugins;
+﻿using SmartHub.Core.Plugins;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using System;
-using System.Linq;
 
 namespace SmartHub.Plugins.AquaController.Core
 {
-    public abstract class ControllerBase : Controller
+    public abstract class ControllerBase
     {
         #region Fields
+        private Controller controller;
         protected MySensorsPlugin mySensors;
         protected IServiceContext Context;
         #endregion
 
+        #region Constructor
+        public ControllerBase(Controller controller)
+        {
+            this.controller = controller;
+        }
+        #endregion
+
         #region Public methods
-        public virtual void Init(IServiceContext context)
+        public void Init(IServiceContext context)
         {
             Context = context;
             mySensors = context.GetPlugin<MySensorsPlugin>();
         }
-        public abstract bool IsMyMessage(SensorMessage message);
-        public abstract void SetDefaultConfiguration();
         public void Save()
         {
             using (var session = Context.OpenSession())
             {
-                session.SaveOrUpdate(this);
+                session.SaveOrUpdate(controller);
                 session.Flush();
             }
         }
+
+        public abstract bool IsMyMessage(SensorMessage message);
+        public abstract void RequestSensorsValues();
         #endregion
 
         #region Private methods
-
-        abstract protected void RequestSensorsValues();
         abstract protected void Process(float value);
         #endregion
 
         #region Event handlers
-        public void Connected()
-        {
-            RequestSensorsValues();
-        }
-
         public virtual void MessageCalibration(SensorMessage message)
         {
         }

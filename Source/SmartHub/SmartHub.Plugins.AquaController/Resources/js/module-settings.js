@@ -43,8 +43,16 @@
 
 	            models.addController(name, type, isVisible, function () { view.refreshControllersGrid(); });
 	        },
+	        setControllerName: function (id, name) {
+	            if (!name) {
+	                alert("Не указано имя контроллера!");
+	                return;
+	            }
 
+	            models.setControllerName(id, name, function () { view.refreshControllersGrid(); });
+	        },
 
+	        
 
 
 	        //setHeaterControllerConfiguration: function () {
@@ -62,6 +70,8 @@
 	                view.on('monitor:delete', module.deleteMonitor);
 
 	                view.on('controller:add', module.addController);
+	                view.on('controller:setName', module.setControllerName);
+	                
 
 	                //view.on('heaterControllerConfiguration:set', module.setHeaterControllerConfiguration);
 	                application.setContentView(view);

@@ -1,10 +1,7 @@
-﻿using SmartHub.Core.Plugins;
-using SmartHub.Plugins.AquaController.Data;
-using SmartHub.Plugins.MySensors.Attributes;
+﻿using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Speech;
-using SmartHub.Plugins.Timer.Attributes;
 using System;
 
 namespace SmartHub.Plugins.AquaController.Core
@@ -52,19 +49,6 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Properties
-        //public ControllerConfiguration ControllerConfiguration
-        //{
-        //    get { return configuration; }
-        //    set
-        //    {
-        //        configuration = value;
-
-        //        SerializeConfiguration(configuration);
-        //        Save();
-
-        //        RequestSensorsValues();
-        //    }
-        //}
         public Sensor SensorTemperature
         {
             get { return mySensors.GetSensor(configuration.SensorTemperatureID); }
@@ -75,44 +59,35 @@ namespace SmartHub.Plugins.AquaController.Core
         }
         #endregion
 
-        #region Public methods
-        public override void Init(IServiceContext context)
+        #region Constructor
+        public HeaterController(Controller controller)
+            : base (controller)
         {
-            base.Init(context);
-
-            //var s = GetSetting();
-            //if (s == null)
-            //{
-            //    configuration = Configuration.Default;
-
-            //    s = new AquaControllerSetting() { Id = Guid.NewGuid(), Name = SettingName };
-            //    s.SetValue(configuration);
-            //    SaveSetting(s);
-            //}
-            //else
-            if (configuration == null)
-                configuration = DeserializeConfiguration(typeof(ControllerConfiguration));
-
+            if (string.IsNullOrEmpty(controller.Configuration))
+            {
+                configuration = ControllerConfiguration.Default;
+                controller.SerializeConfiguration(configuration);
+            }
+            else
+                configuration = controller.DeserializeConfiguration(typeof(ControllerConfiguration));
         }
+        #endregion
+
+        #region Public methods
         public override bool IsMyMessage(SensorMessage message)
         {
             return
                 mySensors.IsMessageFromSensor(message, SensorTemperature) ||
                 mySensors.IsMessageFromSensor(message, SensorSwitch);
         }
-        public override void SetDefaultConfiguration()
-        {
-            configuration = ControllerConfiguration.Default;
-            SerializeConfiguration(configuration);
-        }
-        #endregion
-
-        #region Private methods
-        protected override void RequestSensorsValues()
+        public override void RequestSensorsValues()
         {
             mySensors.RequestSensorValue(SensorTemperature, SensorValueType.Temperature);
             mySensors.RequestSensorValue(SensorSwitch, SensorValueType.Switch);
         }
+        #endregion
+
+        #region Private methods
         protected override void Process(float value)
         {
             if (configuration.IsAutoMode)

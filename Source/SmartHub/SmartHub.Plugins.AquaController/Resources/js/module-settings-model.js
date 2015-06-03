@@ -52,7 +52,16 @@ define(['jquery'], function ($) {
 	                onError(data);
 	            });
         },
-
+        setControllerName: function (id, name, onComplete) {
+            $.post('/api/aquacontroller/controller/setname', { id: id, name: name })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
 
 
 
@@ -137,7 +146,7 @@ define(['jquery'], function ($) {
         deleteMonitor: api.deleteMonitor,
 
         addController: api.addController,
-
+        setControllerName: api.setControllerName,
 
         //setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
     };

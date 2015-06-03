@@ -12,7 +12,6 @@ namespace SmartHub.Plugins.AquaController.Data
         public virtual bool IsVisible { get; set; }
         public virtual string Configuration { get; set; }
 
-
         public virtual dynamic DeserializeConfiguration(Type type)
         {
             var json = string.IsNullOrWhiteSpace(Configuration) ? "{}" : Configuration;
