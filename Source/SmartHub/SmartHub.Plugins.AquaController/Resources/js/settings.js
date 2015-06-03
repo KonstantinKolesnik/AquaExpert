@@ -62,7 +62,7 @@
 	        },
 
 	        reload: function () {
-	            view = new views.LayoutView();
+	            view = new views.LayoutView({ viewModel: models.ViewModel });
 	            view.on('monitor:add', module.addMonitor);
 	            view.on('monitor:setName', module.setMonitorName);
 	            view.on('monitor:setIsVisible', module.setMonitorIsVisible);
@@ -73,8 +73,6 @@
 	            view.on('controller:edit', module.editController);
 	            view.on('controller:delete', module.deleteController);
 	            application.setContentView(view);
-
-	            view.bindModel(models.ViewModel);
 	        }
 	    };
 

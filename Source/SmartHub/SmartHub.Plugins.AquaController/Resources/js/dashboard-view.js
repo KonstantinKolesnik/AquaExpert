@@ -26,6 +26,7 @@ define(
                 //createCheckBox($("#chbHeaterAutoMode"));
                 //createHeaterChart($("#heaterChart"));
 
+                kendo.bind($("#content"), this.options.viewModel);
 
                 function createMonitorsList() {
                     //var dataSource = new kendo.data.DataSource({
@@ -148,9 +149,6 @@ define(
                         return color;
                     }
                 }
-
-
-
                 //function createCheckBox(selector) {
                 //    selector.change(function () {
                 //        debugger;
@@ -266,11 +264,6 @@ define(
                         }
                     });
                 }
-
-            },
-
-            bindModel: function (viewModel) {
-                lib.kendo.bind($("#content"), viewModel);
             }
         });
 

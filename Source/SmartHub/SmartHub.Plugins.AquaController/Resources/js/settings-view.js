@@ -39,6 +39,8 @@ define(
                 createMonitorsTab();
                 createControllersTab();
 
+                kendo.bind($("#content"), this.options.viewModel);
+
                 function createTabStrip(selector) {
                     selector.kendoTabStrip({
                         animation: {
@@ -92,7 +94,7 @@ define(
                                 { field: "Sensor.Name", title: "Сенсор", editor: getEditor },
                                 { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
                                 {
-                                    title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
+                                    title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
                                         {
                                             text: "Удалить",
@@ -196,7 +198,7 @@ define(
                                 { field: "TypeName", title: "Тип", editor: getEditor },
                                 { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
                                 {
-                                    title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
+                                    title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
                                         {
                                             text: "Редактировать",
@@ -207,12 +209,7 @@ define(
                                                 var item = this.dataItem($(e.currentTarget).closest("tr"));
                                                 me.trigger('controller:edit', item.Id);
                                             }
-                                        }
-                                    ]
-                                },
-                                {
-                                    title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
-                                    command: [
+                                        },
                                         {
                                             text: "Удалить",
                                             click: function (e) {
@@ -281,10 +278,6 @@ define(
                         $(e.target).blur(); //run saving
                     }
                 }
-            },
-
-            bindModel: function (viewModel) {
-                lib.kendo.bind($("#content"), viewModel);
             }
         });
 

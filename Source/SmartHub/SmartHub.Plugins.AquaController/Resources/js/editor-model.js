@@ -5,6 +5,9 @@ define(['jquery'],
             getController: function (id, onComplete) {
                 $.getJSON('/api/aquacontroller/controller', { id: id })
                     .done(function (data) {
+                        if (data)
+                            data.Configuration = JSON.parse(data.Configuration);
+
                         if (onComplete)
                             onComplete(data);
                     })
@@ -12,55 +15,41 @@ define(['jquery'],
                         onError(data);
                     });
             },
-            //saveScript: function (model) {
-
-            //    var scriptId = model.get('id');
-            //    var scriptName = model.get('name');
-            //    var scriptBody = model.get('body');
-
-            //    var rq = lib.$.post('/api/scripts/save', {
-            //        id: scriptId,
-            //        name: scriptName,
-            //        body: scriptBody
-            //    });
-
-            //    return rq.promise();
-            //}
+            setControllerConfiguration: function (id, config, onComplete) {
+                $.post('/api/aquacontroller/controller/setconfiguration', { id: id, config: JSON.stringify(config) })
+            		.done(function (data) {
+            		    if (onComplete)
+            		        onComplete(data);
+            		})
+                    .fail(function (data) {
+                        onError(data);
+                    });
+            }
         };
 
-        var viewModel = null;
-        //Switch = 3,             // Switch Actuator (on/off)
-        //Temperature = 6,        // Temperature sensor
+        var viewModel = kendo.observable({
+            Controller: null,
+            update: function (id, onComplete) {
+                var me = this;
 
-        //api.getSensorsByType(6, function (data) {
-        //    me.set("SensorsTemperatureDataSource", data);
+                api.getController(id, function (data) {
+                    me.set("Controller", data);
 
-        //    api.getSensorsByType(3, function (data) {
-        //        me.set("SensorsSwitchDataSource", data);
-
-        //        api.getHeaterControllerConfiguration(function (data) {
-        //            me.set("HeaterControllerConfiguration", data);
-
-        //if (onComplete)
-        //    onComplete();
-        //        });
-
-        //    });
-        //});
-
+                    if (onComplete)
+                        onComplete();
+                });
+            }
+        });
+        viewModel.bind("change", function (e) {
+            if (e.field.indexOf("Controller.Configuration") > -1)
+                api.setControllerConfiguration(e.sender.Controller.Id, e.sender.Controller.Configuration);
+        });
 
         function onError(data) {
             alert(data.statusText);
         }
 
         return {
-            // entities
-            //ScriptData: scriptData,
-
-            ViewModel: viewModel,
-
-            // requests
-            getController: api.getController,
-            //saveScript: api.saveScript
+            ViewModel: viewModel
         }
     });

@@ -1,4 +1,5 @@
-﻿using SmartHub.Plugins.AquaController.Data;
+﻿using SmartHub.Core.Plugins.Utils;
+using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Speech;
@@ -74,6 +75,12 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Public methods
+        public override void SetConfiguration(string config)
+        {
+            configuration = (HeaterController.ControllerConfiguration)Extensions.FromJson(typeof(HeaterController.ControllerConfiguration), config);
+            controller.SerializeConfiguration(configuration);
+            Save();
+        }
         public override bool IsMyMessage(SensorMessage message)
         {
             return

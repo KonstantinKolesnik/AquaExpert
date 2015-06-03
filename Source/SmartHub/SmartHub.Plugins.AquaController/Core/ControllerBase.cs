@@ -9,7 +9,7 @@ namespace SmartHub.Plugins.AquaController.Core
     public abstract class ControllerBase
     {
         #region Fields
-        private Controller controller;
+        protected Controller controller;
         protected MySensorsPlugin mySensors;
         protected IServiceContext Context;
         #endregion
@@ -18,6 +18,13 @@ namespace SmartHub.Plugins.AquaController.Core
         public ControllerBase(Controller controller)
         {
             this.controller = controller;
+        }
+        #endregion
+
+        #region Properties
+        public Guid ControllerID
+        {
+            get { return controller.Id; }
         }
         #endregion
 
@@ -36,6 +43,7 @@ namespace SmartHub.Plugins.AquaController.Core
             }
         }
 
+        public abstract void SetConfiguration(string configuration);
         public abstract bool IsMyMessage(SensorMessage message);
         public abstract void RequestSensorsValues();
         #endregion

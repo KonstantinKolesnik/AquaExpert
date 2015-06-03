@@ -1,7 +1,6 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
-using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.AquaController.Core;
 using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.HttpListener.Api;
@@ -9,7 +8,6 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
-using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
@@ -371,7 +369,7 @@ namespace SmartHub.Plugins.AquaController
             var type = (ControllerType)request.GetRequiredInt32("type");
             var isVisible = request.GetRequiredBool("isVisible");
 
-            var controllerDB = new Controller()
+            var ctrl = new Controller()
             {
                 Id = Guid.NewGuid(),
                 Name = name,
@@ -379,7 +377,7 @@ namespace SmartHub.Plugins.AquaController
                 IsVisible = isVisible
             };
 
-            ControllerBase controller = CreateController(controllerDB);
+            ControllerBase controller = CreateController(ctrl);
             if (controller != null)
             {
                 controller.Init(Context);
@@ -449,6 +447,31 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
+        [HttpCommand("/api/aquacontroller/controller/setconfiguration")]
+        private object apiSetControllerConfiguration(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var conf = request.GetRequiredString("config");
+
+            foreach (ControllerBase controller in controllers)
+                if (controller.ControllerID == id)
+                {
+                    controller.SetConfiguration(conf);
+                    break;
+                }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
         [HttpCommand("/api/aquacontroller/controller/delete")]
         private object apiDeleteController(HttpRequestParams request)
         {
@@ -465,73 +488,6 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
-
-
-
-
-
-
-
-
-
-
-        //[HttpCommand("/api/aquacontroller/heatercontroller/configuration")]
-        //public object apiGetHeaterControllerConfiguration(HttpRequestParams request)
-        //{
-        //    return heaterController.ControllerConfiguration;
-        //}
-        //[HttpCommand("/api/aquacontroller/heatercontroller/configuration/set")]
-        //public object apiSetHeaterControllerConfiguration(HttpRequestParams request)
-        //{
-        //    var json = request.GetRequiredString("conf");
-        //    heaterController.ControllerConfiguration = (HeaterController.Configuration)Extensions.FromJson(typeof(HeaterController.Configuration), json);
-
-        //    return null;
-        //}
-        #endregion
-
-
-
-
-
-
-        #region Light
-        //private Sensor lightRelay;
-        //private Timer lightTimer;
-        //private DateTime lightTimeOn;
-        //private DateTime lightTimeOff;
-
-        //private void InitLight()
-        //{
-        //    lightTimeOn = new DateTime(1970, 1, 1, 10, 0, 0);
-        //    lightTimeOff = new DateTime(1970, 1, 1, 22, 0, 0);
-
-        //    lightRelay = controller.GetSensor(20, 1);
-        //    if (lightRelay == null)
-        //        throw new ArgumentNullException("lightRelay (20, 1)");
-
-        //    lightTimer = new Timer(1000 * 5);
-        //    lightTimer.Elapsed += lightTimer_Elapsed;
-        //    lightTimer.Start();
-        //}
-        ////private bool relayValue = false;
-        //private void lightTimer_Elapsed(object sender, ElapsedEventArgs e)
-        //{
-        //    //controller.SetSensorValue(lightRelay, SensorValueType.Light, relayValue ? 1 : 0);
-        //    //relayValue = !relayValue;
-
-        //    DateTime now = DateTime.Now;
-        //    bool isOn = now.Hour > lightTimeOn.Hour && now.Hour < lightTimeOff.Hour;
-
-        //    controller.SetSensorValue(lightRelay, SensorValueType.Light, isOn ? 1 : 0);
-        //}
-        //private void UninitLight()
-        //{
-        //    lightTimer.Stop();
-        //    lightTimer.Elapsed -= lightTimer_Elapsed;
-        //    lightTimer = null;
-        //    lightRelay = null;
-        //}
         #endregion
     }
 }
