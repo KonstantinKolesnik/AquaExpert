@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/aquacontroller/module-settings-model', 'webapp/aquacontroller/module-settings-view'],
+	['app', 'webapp/aquacontroller/settings-model', 'webapp/aquacontroller/settings-view'],
 	function (application, models, views) {
 	    var view;
 
@@ -54,25 +54,27 @@
 	        setControllerIsVisible: function (id, isVisible) {
 	            models.setControllerIsVisible(id, isVisible, function () { view.refreshControllersGrid(); });
 	        },
+	        editController: function (id) {
+	            application.navigate('webapp/aquacontroller/editor', id);
+	        },
 	        deleteController: function (id) {
 	            models.deleteController(id, function () { view.refreshControllersGrid(); });
 	        },
 
 	        reload: function () {
-	            models.ViewModel.update(function () {
-	                view = new views.LayoutView();
-	                view.on('monitor:add', module.addMonitor);
-	                view.on('monitor:setName', module.setMonitorName);
-	                view.on('monitor:setIsVisible', module.setMonitorIsVisible);
-	                view.on('monitor:delete', module.deleteMonitor);
-	                view.on('controller:add', module.addController);
-	                view.on('controller:setName', module.setControllerName);
-	                view.on('controller:setIsVisible', module.setControllerIsVisible);
-	                view.on('controller:delete', module.deleteController);
-	                application.setContentView(view);
+	            view = new views.LayoutView();
+	            view.on('monitor:add', module.addMonitor);
+	            view.on('monitor:setName', module.setMonitorName);
+	            view.on('monitor:setIsVisible', module.setMonitorIsVisible);
+	            view.on('monitor:delete', module.deleteMonitor);
+	            view.on('controller:add', module.addController);
+	            view.on('controller:setName', module.setControllerName);
+	            view.on('controller:setIsVisible', module.setControllerIsVisible);
+	            view.on('controller:edit', module.editController);
+	            view.on('controller:delete', module.deleteController);
+	            application.setContentView(view);
 
-	                view.bindModel(models.ViewModel);
-	            });
+	            view.bindModel(models.ViewModel);
 	        }
 	    };
 

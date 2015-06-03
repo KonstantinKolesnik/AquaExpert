@@ -10,7 +10,6 @@
 
 	// api
 	var api = {
-
 		loadScript: function (scriptId) {
 
 			var defer = lib.$.Deferred();
@@ -43,7 +42,6 @@
 	};
 
 	return {
-
 		// entities
 		ScriptData: scriptData,
 

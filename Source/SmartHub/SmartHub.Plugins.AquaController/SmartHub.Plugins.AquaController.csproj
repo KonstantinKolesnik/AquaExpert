@@ -103,37 +103,49 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-main-view.js" />
+    <EmbeddedResource Include="Resources\js\dashboard-view.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-main.js" />
+    <EmbeddedResource Include="Resources\js\dashboard.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-main.html" />
+    <EmbeddedResource Include="Resources\js\dashboard.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-main-model.js" />
+    <EmbeddedResource Include="Resources\js\dashboard-model.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-settings-model.js" />
+    <EmbeddedResource Include="Resources\js\settings-model.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-settings-view.js" />
+    <EmbeddedResource Include="Resources\js\settings-view.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-settings.html" />
+    <EmbeddedResource Include="Resources\js\settings.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-settings.js" />
+    <EmbeddedResource Include="Resources\js\settings.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-graphs.html" />
+    <EmbeddedResource Include="Resources\js\graphs.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor-view.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor-model.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -1,6 +1,6 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/aquacontroller/module-settings.html'],
+	['common', 'lib', 'text!webapp/aquacontroller/settings.html'],
     function (common, lib, templates) {
         var ddlNewMonitorSensor;
         var gridMonitors;
@@ -13,6 +13,9 @@ define(
                 'click .js-btn-add-monitor': 'addMonitor',
                 'click .js-btn-add-controller': 'addController'
             },
+            //triggers: {
+            //    'click .js-btn-add-monitor': 'monitor:add'
+            //},
             addMonitor: function (e) {
                 e.preventDefault();
                 this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value(), $("#chbNewMonitorIsVisible").prop("checked"));
@@ -21,9 +24,6 @@ define(
                 e.preventDefault();
                 this.trigger('controller:add', $("#tbNewControllerName").val(), ddlNewControllerType.value(), $("#chbNewControllerIsVisible").prop("checked"));
             },
-            //triggers: {
-            //    'click .js-btn-add-monitor': 'monitor:add'
-            //},
 
             refreshMonitorsGrid: function () {
                 gridMonitors.dataSource.read();
@@ -38,18 +38,6 @@ define(
                 createTabStrip($("#tabstrip"));
                 createMonitorsTab();
                 createControllersTab();
-
-
-
-                //createSensorSelector($("#ddlHeaterSensorTemperature"));
-                //createSensorSelector($("#ddlHeaterSensorSwitch"));
-                //createNumericTextBox($("#ntbHeaterTemperatureCalibration"), -10, 10, "n1", 1);
-                //createNumericTextBox($("#ntbHeaterTemperatureMin"), 18, 32, "n1", 1);
-                //createNumericTextBox($("#ntbHeaterTemperatureMax"), 18, 32, "n1", 1);
-                //createNumericTextBox($("#ntbHeaterTemperatureAlarmMin"), 18, 32, "n1", 1);
-                //createNumericTextBox($("#ntbHeaterTemperatureAlarmMax"), 18, 32, "n1", 1);
-                //createTextBox($("#tbHeaterTemperatureAlarmMaxText"));
-                //createTextBox($("#tbHeaterTemperatureAlarmMinText"));
 
                 function createTabStrip(selector) {
                     selector.kendoTabStrip({
@@ -286,31 +274,6 @@ define(
                         }
                     }
                 }
-
-
-
-
-
-                //function createSensorSelector(selector) {
-                //    selector.kendoDropDownList({
-                //        dataValueField: "Id",
-                //        dataTextField: "Name",
-                //        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
-                //    });
-                //}
-                //function createTextBox(selector) {
-                //    selector.unbind("keydown").keydown(preventEnter).blur(function () { me.trigger("heaterControllerConfiguration:set"); });
-                //}
-                //function createNumericTextBox(selector, min, max, format, decimals) {
-                //    selector.kendoNumericTextBox({
-                //        min: min,
-                //        max: max,
-                //        step: 1,
-                //        format: format,
-                //        decimals: decimals,
-                //        change: function (e) { me.trigger("heaterControllerConfiguration:set"); }
-                //    });
-                //}
                 function preventEnter(e) {
                     if (e.keyCode == 13) {
                         e.preventDefault();

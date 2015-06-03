@@ -1,7 +1,7 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        getMonitors: function ( onComplete) {
+        getMonitors: function (onComplete) {
             $.getJSON('/api/aquacontroller/monitor/listvisible')
 				.done(function (data) {
 				    if (onComplete)

@@ -22,15 +22,21 @@ using System.Text;
 
 namespace SmartHub.Plugins.AquaController
 {
-    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/module-main.js", "SmartHub.Plugins.AquaController.Resources.js.module-main.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
-    [JavaScriptResource("/webapp/aquacontroller/module-main-view.js", "SmartHub.Plugins.AquaController.Resources.js.module-main-view.js")]
-    [JavaScriptResource("/webapp/aquacontroller/module-main-model.js", "SmartHub.Plugins.AquaController.Resources.js.module-main-model.js")]
-    [HttpResource("/webapp/aquacontroller/module-main.html", "SmartHub.Plugins.AquaController.Resources.js.module-main.html")]
+    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/dashboard.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
+    [JavaScriptResource("/webapp/aquacontroller/dashboard-view.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard-view.js")]
+    [JavaScriptResource("/webapp/aquacontroller/dashboard-model.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard-model.js")]
+    [HttpResource("/webapp/aquacontroller/dashboard.html", "SmartHub.Plugins.AquaController.Resources.js.dashboard.html")]
 
-    [AppSection("Аква-контроллер", SectionType.System, "/webapp/aquacontroller/module-settings.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings.js")]
-    [JavaScriptResource("/webapp/aquacontroller/module-settings-view.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings-view.js")]
-    [JavaScriptResource("/webapp/aquacontroller/module-settings-model.js", "SmartHub.Plugins.AquaController.Resources.js.module-settings-model.js")]
-    [HttpResource("/webapp/aquacontroller/module-settings.html", "SmartHub.Plugins.AquaController.Resources.js.module-settings.html")]
+    [AppSection("Аква-контроллер", SectionType.System, "/webapp/aquacontroller/settings.js", "SmartHub.Plugins.AquaController.Resources.js.settings.js")]
+    [JavaScriptResource("/webapp/aquacontroller/settings-view.js", "SmartHub.Plugins.AquaController.Resources.js.settings-view.js")]
+    [JavaScriptResource("/webapp/aquacontroller/settings-model.js", "SmartHub.Plugins.AquaController.Resources.js.settings-model.js")]
+    [HttpResource("/webapp/aquacontroller/settings.html", "SmartHub.Plugins.AquaController.Resources.js.settings.html")]
+
+    // controller editor
+    [JavaScriptResource("/webapp/aquacontroller/editor.js", "SmartHub.Plugins.AquaController.Resources.js.editor.js")]
+    [JavaScriptResource("/webapp/aquacontroller/editor-view.js", "SmartHub.Plugins.AquaController.Resources.js.editor-view.js")]
+    [JavaScriptResource("/webapp/aquacontroller/editor-model.js", "SmartHub.Plugins.AquaController.Resources.js.editor-model.js")]
+    [HttpResource("/webapp/aquacontroller/editor.html", "SmartHub.Plugins.AquaController.Resources.js.editor.html")]
 
     [CssResource("/webapp/aquacontroller/css/style.css", "SmartHub.Plugins.AquaController.Resources.css.style.css", AutoLoad = true)]
 
@@ -134,7 +140,7 @@ namespace SmartHub.Plugins.AquaController
         private Controller GetController(Guid id)
         {
             using (var session = Context.OpenSession())
-                return session.Load<Controller>(id);
+                return session.Get<Controller>(id);
         }
         private object BuildControllerWebModel(Controller controller)
         {

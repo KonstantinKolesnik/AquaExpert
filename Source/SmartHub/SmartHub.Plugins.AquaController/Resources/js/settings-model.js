@@ -84,30 +84,7 @@ define(['jquery'], function ($) {
         },
     };
 
-    var viewModel = kendo.observable({
-        update: function (onComplete) {
-            var me = this;
-
-            //Switch = 3,             // Switch Actuator (on/off)
-            //Temperature = 6,        // Temperature sensor
-
-            //api.getSensorsByType(6, function (data) {
-            //    me.set("SensorsTemperatureDataSource", data);
-
-            //    api.getSensorsByType(3, function (data) {
-            //        me.set("SensorsSwitchDataSource", data);
-
-            //        api.getHeaterControllerConfiguration(function (data) {
-            //            me.set("HeaterControllerConfiguration", data);
-
-                        if (onComplete)
-                            onComplete();
-            //        });
-
-            //    });
-            //});
-        }
-    });
+    var viewModel = kendo.observable({ });
 
     function onError(data) {
         alert(data.statusText);

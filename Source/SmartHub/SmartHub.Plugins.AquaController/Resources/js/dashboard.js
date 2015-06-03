@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/aquacontroller/module-main-model', 'webapp/aquacontroller/module-main-view'],
+	['app', 'webapp/aquacontroller/dashboard-model', 'webapp/aquacontroller/dashboard-view'],
 	function (application, models, views) {
 	    var module = {
 	        //setHeaterControllerConfiguration: function () {

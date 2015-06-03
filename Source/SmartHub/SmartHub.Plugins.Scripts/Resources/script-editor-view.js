@@ -1,15 +1,9 @@
 ﻿define(
-	['lib',
-		'common',
-		'codemirror',
-		'text!webapp/scripts/script-editor.tpl'
-	],
+	['lib', 'common', 'codemirror', 'text!webapp/scripts/script-editor.tpl'],
 	function (lib, common, codemirror, editorTemplate) {
-
 		var scriptEditorView = common.FormView.extend({
 			template: lib._.template(editorTemplate),
 			onShow: function () {
-
 				var textarea = this.$('.js-script-body')[0];
 
 				this.cm = codemirror.fromTextArea(textarea, {
@@ -32,7 +26,6 @@
 				'click @ui.btnExitFullscreen': 'btnExitFullscreenEditing'
 			},
 			toogleFuulscreen: function(flag) {
-				
 				if (flag == undefined) {
 					flag = !this.cm.getOption("fullScreen");
 				}
@@ -44,13 +37,11 @@
 			},
 
 			btnFullscreenEditing: function(e) {
-
 				e.stopPropagation();
 				e.preventDefault();
 				this.toogleFuulscreen(true);
 			},
 			btnExitFullscreenEditing: function (e) {
-
 				e.stopPropagation();
 				e.preventDefault();
 				this.toogleFuulscreen(false);
