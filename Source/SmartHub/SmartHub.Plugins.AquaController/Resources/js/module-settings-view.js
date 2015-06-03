@@ -22,7 +22,7 @@ define(
                 this.trigger('controller:add', $("#tbNewControllerName").val(), ddlNewControllerType.value(), $("#chbNewControllerIsVisible").prop("checked"));
             },
             //triggers: {
-            //    'click .js-add-monitor': 'monitor:add'
+            //    'click .js-btn-add-monitor': 'monitor:add'
             //},
 
             refreshMonitorsGrid: function () {
@@ -205,8 +205,23 @@ define(
                             },
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
-                                { field: "Type", title: "Тип", editor: getEditor },
+                                { field: "TypeName", title: "Тип", editor: getEditor },
                                 { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
+                                {
+                                    title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
+                                    command: [
+                                        {
+                                            text: "Редактировать",
+                                            click: function (e) {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+
+                                                var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                                me.trigger('controller:edit', item.Id);
+                                            }
+                                        }
+                                    ]
+                                },
                                 {
                                     title: "&nbsp;", width: 80, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [

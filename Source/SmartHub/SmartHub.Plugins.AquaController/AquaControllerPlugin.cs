@@ -131,7 +131,12 @@ namespace SmartHub.Plugins.AquaController
                     .OrderBy(controller => controller.Name)
                     .ToList();
         }
-        private object BuildControllerSummaryWebModel(Controller controller)
+        private Controller GetController(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Load<Controller>(id);
+        }
+        private object BuildControllerWebModel(Controller controller)
         {
             if (controller == null)
                 return null;
@@ -140,8 +145,10 @@ namespace SmartHub.Plugins.AquaController
             {
                 Id = controller.Id,
                 Name = controller.Name,
-                Type = GetEnumDescription(controller.Type),
-                IsVisible = controller.IsVisible
+                Type = (int)controller.Type,
+                TypeName = GetEnumDescription(controller.Type),
+                IsVisible = controller.IsVisible,
+                Configuration = controller.Configuration
             };
         }
         #endregion
@@ -327,7 +334,7 @@ namespace SmartHub.Plugins.AquaController
         [HttpCommand("/api/aquacontroller/controller/listall")]
         private object apiGetAllControllers(HttpRequestParams request)
         {
-            return GetAllControllers().Select(BuildControllerSummaryWebModel).Where(x => x != null).ToArray();
+            return GetAllControllers().Select(BuildControllerWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/aquacontroller/controller/listvisible")]
         private object apiGetVisibleControllers(HttpRequestParams request)
@@ -344,6 +351,12 @@ namespace SmartHub.Plugins.AquaController
                         //SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
                     })
                     .ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/controller")]
+        private object apiGetController(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            return GetController(id);
         }
         [HttpCommand("/api/aquacontroller/controller/add")]
         private object apiAddController(HttpRequestParams request)
@@ -405,7 +418,47 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
+        [HttpCommand("/api/aquacontroller/controller/setisvisible")]
+        private object apiSetControllerIsVisible(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var isVisible = request.GetRequiredBool("isVisible");
 
+            using (var session = Context.OpenSession())
+            {
+                var controller = session.Get<Controller>(id);
+                controller.IsVisible = isVisible;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorIsVisibleChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/aquacontroller/controller/delete")]
+        private object apiDeleteController(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
+            {
+                var controller = session.Get<Controller>(id);
+                session.Delete(controller);
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
+
+            return null;
+        }
 
 
 

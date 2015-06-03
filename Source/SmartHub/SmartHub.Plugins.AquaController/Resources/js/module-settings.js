@@ -51,15 +51,12 @@
 
 	            models.setControllerName(id, name, function () { view.refreshControllersGrid(); });
 	        },
-
-	        
-
-
-	        //setHeaterControllerConfiguration: function () {
-	        //    models.setHeaterControllerConfiguration(models.ViewModel.HeaterControllerConfiguration);
-	        //},
-
-
+	        setControllerIsVisible: function (id, isVisible) {
+	            models.setControllerIsVisible(id, isVisible, function () { view.refreshControllersGrid(); });
+	        },
+	        deleteController: function (id) {
+	            models.deleteController(id, function () { view.refreshControllersGrid(); });
+	        },
 
 	        reload: function () {
 	            models.ViewModel.update(function () {
@@ -68,12 +65,10 @@
 	                view.on('monitor:setName', module.setMonitorName);
 	                view.on('monitor:setIsVisible', module.setMonitorIsVisible);
 	                view.on('monitor:delete', module.deleteMonitor);
-
 	                view.on('controller:add', module.addController);
 	                view.on('controller:setName', module.setControllerName);
-	                
-
-	                //view.on('heaterControllerConfiguration:set', module.setHeaterControllerConfiguration);
+	                view.on('controller:setIsVisible', module.setControllerIsVisible);
+	                view.on('controller:delete', module.deleteController);
 	                application.setContentView(view);
 
 	                view.bindModel(models.ViewModel);

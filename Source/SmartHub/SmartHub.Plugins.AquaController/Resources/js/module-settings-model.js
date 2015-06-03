@@ -62,53 +62,29 @@ define(['jquery'], function ($) {
                     onError(data);
                 });
         },
-
-
-
-        //getSensorsByType: function (type, onComplete) {
-        //    $.getJSON('/api/mysensors/sensorsByType', { type: type })
-		//		.done(function (data) {
-		//		    if (onComplete)
-		//		        onComplete(data);
-		//		})
-	    //        .fail(function (data) {
-	    //            onError(data);
-	    //        });
-        //},
-
-        //getHeaterControllerConfiguration: function (onComplete) {
-        //    $.getJSON('/api/aquacontroller/heatercontroller/configuration')
-		//		.done(function (data) {
-		//		    if (onComplete)
-		//		        onComplete(data);
-		//		})
-	    //        .fail(function (data) {
-	    //            onError(data);
-	    //        });
-        //},
-        //setHeaterControllerConfiguration: function (conf, onComplete) {
-        //    $.post('/api/aquacontroller/heatercontroller/configuration/set', { conf: JSON.stringify(conf) })
-		//		.done(function (data) {
-		//		    if (onComplete)
-		//		        onComplete(data);
-		//		})
-	    //        .fail(function (data) {
-	    //            onError(data);
-	    //        });
-        //}
-
-
-
+        setControllerIsVisible: function (id, isVisible, onComplete) {
+            $.post('/api/aquacontroller/controller/setisvisible', { id: id, isVisible: isVisible })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
+        deleteController: function (id, onComplete) {
+            $.post('/api/aquacontroller/controller/delete', { id: id })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
     };
 
     var viewModel = kendo.observable({
-        //SensorsTemperatureDataSource: [],
-        //SensorsSwitchDataSource: [],
-
-        //HeaterControllerConfiguration: null,
-
-
-
         update: function (onComplete) {
             var me = this;
 
@@ -147,7 +123,7 @@ define(['jquery'], function ($) {
 
         addController: api.addController,
         setControllerName: api.setControllerName,
-
-        //setHeaterControllerConfiguration: api.setHeaterControllerConfiguration
+        setControllerIsVisible: api.setControllerIsVisible,
+        deleteController: api.deleteController,
     };
 });
