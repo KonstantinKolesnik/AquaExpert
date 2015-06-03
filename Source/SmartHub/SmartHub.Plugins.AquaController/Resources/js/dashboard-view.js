@@ -72,8 +72,6 @@ define(
 
                     function createMonitorChart(selector) {
                         selector.kendoChart({
-                            //theme: "MaterialBlack",
-                            theme: "Black",
                             series: [
                                 {
                                     type: "line",
@@ -123,17 +121,17 @@ define(
 
                                 axisCrossingValues: [0],
                                 labels: {
-                                    //dateFormats: {
-                                    //    //minutes: "mm:ss",
-                                    //    hours: "MMM d, HH:mm",
-                                    //    //hours: "HH:mm",
-                                    //    days: "MMM d",
-                                    //    weeks: "MMM d",
-                                    //    months: "yyyy MMM",
-                                    //    years: "yyyy"
-                                    //},
+                                    dateFormats: {
+                                        //minutes: "mm:ss",
+                                        hours: "d.MM HH:mm",
+                                        days: "MMM d",
+                                        weeks: "MMM d",
+                                        months: "yyyy MMM",
+                                        years: "yyyy"
+                                    },
                                     visible: true,
                                     rotation: 270,
+                                    font: "9px sans-serif"
                                 },
                                 line: { visible: true },
                                 majorGridLines: { visible: true }

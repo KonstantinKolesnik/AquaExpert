@@ -220,7 +220,7 @@ namespace SmartHub.Plugins.AquaController
                         Id = monitor.Id,
                         Name = monitor.Name,
                         Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
+                        SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24).ToArray()
                     })
                     .ToArray();
         }

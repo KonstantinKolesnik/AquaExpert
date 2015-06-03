@@ -7,20 +7,22 @@ define(
             onShow: function () {
                 var me = this;
 
-                var tmplName = "tmplError";
+                var type = this.options.viewModel.Controller.Type;
+
+                var tmpl = $("#tmpl" + type);
+                if (!tmpl.length)
+                    tmpl = $("#tmplError");
+
                 var fn = null;
 
-                switch (this.options.viewModel.Controller.Type) {
-                    case 0:
-                        tmplName = "tmplHeaterController";
-                        fn = initHeaterController;
-                        break;
+                switch (type) {
+                    case 0: fn = initHeaterController; break;
 
 
 
                 }
 
-                $("#container").html($("#" + tmplName).html());
+                $("#container").html(tmpl.html());
                 if (fn)
                     fn();
 

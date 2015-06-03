@@ -9,48 +9,20 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-xs-2">
+        <div class="col-md-6 col-xs-2">
             <div id="listMonitors" style="background-color:transparent; border-width:0;" data-bind="source: Monitors" data-template="tmplMonitorsListItem"></div>
             <!--<div id="listMonitorsPager" class="k-pager-wrap"></div>-->
         </div>
-        <div class="col-md-4 col-xs-2"></div>
-        <div class="col-md-4 col-xs-2"></div>
+        <div class="col-md-6 col-xs-2"></div>
     </div>
-    
-    <!--<div class="row">
-        <div class="col-md-3 col-xs-12">
-            <div class="row">
-                <span class="col-xs-8 valueText">Температура воды:</span>
-                <span class="col-xs-4 valueText text-right" data-bind="source: HeaterSensorTemperature.SensorValueValue" data-template="tmplTemperature"></span>
-            </div>
-            <div class="row">
-                <span class="col-xs-8 valueText">Обогреватель:</span>
-                <input type="checkbox" class="col-xs-4 valueText k-checkbox2" data-bind="checked: HeaterSensorSwitch.SensorValueValue, disabled: HeaterControllerConfiguration.IsAutoMode" />
-            </div>
-        </div>
-        <div class="col-md-1 col-xs-12">
-            <div class="row">
-                <span class="col-xs-8 valueText">Авто:</span>
-                <input type="checkbox" id="chbHeaterAutoMode" class="col-xs-4 valueText" data-bind="checked: HeaterControllerConfiguration.IsAutoMode" />
-            </div>
-        </div>
-
-        <div class="col-md-8 col-xs-12">
-            <div id="heaterChart" style="height:350px;" data-bind="source: SensorValues"></div>
-        </div>
-    </div>-->
-
 </div>
 
-<script id="tmplTemperature" type="text/x-kendo-template">
-    #= kendo.toString(data, "n1") #&nbsp;&deg;C
-</script>
 <script id="tmplMonitorsListItem" type="text/x-kendo-template">
     <div class="monitor k-block" style="margin-bottom:15px;">
         <table style="width:100%" cellpadding="2" cellspacing="2">
             <tr>
                 <td>
-                    <div class="monitor-chart" style="height:100px;" data-bind="source: SensorValues"></div>
+                    <div class="monitor-chart" style="height:150px;" data-bind="source: SensorValues"></div>
                 </td>
                 <td style="width:20%;"> <!--border-left:1px solid \#cccccc;-->
                     <div class="text-center text-nowrap"><h6>#:Name#</h6></div>
