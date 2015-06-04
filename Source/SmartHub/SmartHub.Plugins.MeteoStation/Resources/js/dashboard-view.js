@@ -60,8 +60,8 @@ define(
                             //],
                             categoryAxis: {
                                 field: "TimeStamp",
-                                //type: "date",
 
+                                //type: "date",
                                 //baseUnit: "fit",
                                 //baseUnit: "seconds",
                                 //baseUnit: "minutes",

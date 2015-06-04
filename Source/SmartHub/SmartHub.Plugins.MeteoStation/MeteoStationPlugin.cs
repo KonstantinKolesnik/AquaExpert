@@ -167,11 +167,12 @@ namespace SmartHub.Plugins.MeteoStation
             mySensors.RequestSensorValue(SensorForecast, SensorValueType.Forecast);
         }
 
-        private object ConvertSensorToMonitor(Guid sensorID, string name)
+        private object ConvertSensorToMonitor(Guid sensorID, string name, string type)
         {
             return new
             {
                 Name = name,
+                Type = type,
                 Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(sensorID)),
                 SensorValues = mySensors.GetSensorValuesByID(sensorID, 24, 30).ToArray()
             };
@@ -204,12 +205,12 @@ namespace SmartHub.Plugins.MeteoStation
         {
             List<object> result = new List<object>();
 
-            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureInnerID, "T in"));
-            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityInnerID, "Hum in"));
-            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureOuterID, "T out"));
-            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityOuterID, "Hum out"));
-            result.Add(ConvertSensorToMonitor(configuration.SensorAtmospherePressureID, "P"));
-            result.Add(ConvertSensorToMonitor(configuration.SensorForecastID, "Прогноз"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureInnerID, "Температура внутри", "T"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityInnerID, "Влажность внутри", "H"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureOuterID, "Температура снаружи", "T"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityOuterID, "Влажность снаружи", "H"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorAtmospherePressureID, "Давление", "P"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorForecastID, "Прогноз", "F"));
 
             return result.ToArray();
         }

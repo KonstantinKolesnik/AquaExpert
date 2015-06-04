@@ -7,34 +7,6 @@
             <div id="listMonitors" style="background-color:transparent; border-width:0;" data-bind="source: Monitors" data-template="tmplMonitorsListItem"></div>
         </div>
     </div>
-
-
-
-
-    <!--<div class="row">
-        <div class="col-md-3 col-xs-12 btn-info" style="font-family:'weathericons';">
-            <div data-bind="source: SensorForecast.SensorValueValue" style="font-size:52px;" data-template="tmplForecast"></div>
-
-            <div class="row">
-                <span class="col-xs-4 valueText">Внутри:</span>
-                <span class="col-xs-4 valueText text-right" data-bind="source: SensorTemperatureInner.SensorValueValue" data-template="tmplTemperature"></span>
-                <span class="col-xs-4 valueText text-right" data-bind="source: SensorHumidityInner.SensorValueValue" data-template="tmplHumidity"></span>
-            </div>
-            <div class="row">
-                <span class="col-xs-4 valueText">Снаружи:</span>
-                <span class="col-xs-4 valueText text-right" data-bind="source: SensorTemperatureOuter.SensorValueValue" data-template="tmplTemperature"></span>
-                <span class="col-xs-4 valueText text-right" data-bind="source: SensorHumidityOuter.SensorValueValue" data-template="tmplHumidity"></span>
-            </div>
-            <div class="row">
-                <span class="col-xs-4 valueText">Давление:</span>
-                <span class="col-xs-8 valueText text-right" data-bind="source: SensorAtmospherePressure.SensorValueValue" data-template="tmplPressure"></span>
-            </div>
-        </div>
-        
-        <div class="col-md-9 col-xs-12">
-            <div id="sensorsChart" data-bind="source: SensorValues"></div>
-        </div>
-    </div>-->
 </div>
 
 <script id="tmplMonitorsListItem" type="text/x-kendo-template">
@@ -44,44 +16,32 @@
                 <td>
                     <div class="monitor-chart" style="height:150px;" data-bind="source: SensorValues"></div>
                 </td>
-                <td style="width:20%;">
+                <td style="width:33%; min-width:33%;">
                     <div class="text-center text-nowrap"><h6>#: Name #</h6></div>
-                    <div class="text-center lead" data-bind="source: Sensor.SensorValueValue" data-template="tmplLastSensorValue"></div>
+                    <div class="text-center lead" data-bind="source: this" data-template="tmplLastSensorValue"></div>
                 </td>
             </tr>
         </table>
     </div>
 </script>
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
-    #= data == null ? "-" : data  #
-</script>
-
-
-
-
-
-
-
-<script id="tmplForecast" type="text/x-kendo-template">
     #
-    var icon = "wi-cloud-refresh";
-    switch (data) {
-    case 0: icon = "wi-day-cloudy"; break;
-    case 1: icon = "wi-day-sunny"; break;
-    case 2: icon = "wi-cloudy"; break;
-    case 3: icon = "wi-day-rain-mix"; break;
-    case 4: icon = "wi-storm-showers"; break;
-    case 5: icon = ""; break;
+    var val = data.Sensor.SensorValueValue;
+    switch (data.Type) {
+        case "T": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;&deg;C</span> #; break;
+        case "H": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;%</span> #; break;
+        case "P": # <span>#= val == null ? "-" : kendo.toString(val / 133.3, "n0") #&nbsp;mmHg</span> #; break;
+        case "F":
+            var icon = "wi-cloud-refresh";
+            switch (data) {
+                case 0: icon = "wi-day-cloudy"; break;
+                case 1: icon = "wi-day-sunny"; break;
+                case 2: icon = "wi-cloudy"; break;
+                case 3: icon = "wi-day-rain-mix"; break;
+                case 4: icon = "wi-storm-showers"; break;
+                case 5: icon = ""; break;
+            } # <span class="${icon}" style="font-size:52px;"></span> #; break;
+        default: # <span>#= val == null ? "-" : val #</span> #; break;
     }
     #
-    <span class="${icon}" style="font-size:52px;"></span>
-</script>
-<script id="tmplTemperature" type="text/x-kendo-template">
-    #= kendo.toString(data, "n1") #&nbsp;&deg;C
-</script>
-<script id="tmplHumidity" type="text/x-kendo-template">
-    #= kendo.toString(data, "n1") #&nbsp;%
-</script>
-<script id="tmplPressure" type="text/x-kendo-template">
-    #= kendo.toString(data / 133.3, "n0") #&nbsp;mmHg
 </script>
