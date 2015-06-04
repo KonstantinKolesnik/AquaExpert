@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/meteostation/module-main-model', 'webapp/meteostation/module-main-view'],
+	['app', 'webapp/meteostation/dashboard-model', 'webapp/meteostation/dashboard-view'],
 	function (application, models, views) {
 	    var module = {
 	        reload: function () {
@@ -7,10 +7,8 @@
 	                application.SignalRReceivers.push(models.ViewModel);
 
 	            models.ViewModel.update(function () {
-	                var view = new views.LayoutView();
+	                var view = new views.LayoutView({ viewModel: models.ViewModel });
 	                application.setContentView(view);
-
-	                view.bindModel(models.ViewModel);
 	            });
 	        }
 	    };

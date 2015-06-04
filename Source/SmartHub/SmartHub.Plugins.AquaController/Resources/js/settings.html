@@ -10,19 +10,19 @@
 
         <div>
             <div class="row">
-                <div class="col-xs-12 col-md-3" style="margin-bottom:15px;">
+                <div class="col-xs-12 col-md-3">
                     <form class="form">
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="tbNewMonitorName">Имя</label>
-                            <input type="text" class="ddlSensorSelector2 k-textbox" id="tbNewMonitorName" />
+                            <input type="text" class="k-textbox" id="tbNewMonitorName" />
                         </div>
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="ddlNewMonitorSensor">Сенсор</label>
-                            <select class="ddlSensorSelector2" id="ddlNewMonitorSensor"></select>
+                            <select id="ddlNewMonitorSensor"></select>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="chbNewMonitorIsVisible">Видимый</label>
-                            <input type="checkbox" class="ddlSensorSelector2 k-checkbox2" id="chbNewMonitorIsVisible" checked="checked" />
+                            <input type="checkbox" id="chbNewMonitorIsVisible" checked="checked" />
                         </div>
                         <div class="form-group">
                             <input type="button" class="k-button js-btn-add-monitor" value="Добавить монитор" />
@@ -41,15 +41,15 @@
                     <form class="form">
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="tbNewControllerName">Имя</label>
-                            <input type="text" class="ddlSensorSelector2 k-textbox" id="tbNewControllerName" />
+                            <input type="text" class="k-textbox" id="tbNewControllerName" />
                         </div>
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="ddlNewControllerType">Тип</label>
-                            <select class="ddlSensorSelector2" id="ddlNewControllerType"></select>
+                            <select id="ddlNewControllerType"></select>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-12 col-md-2" for="chbNewControllerIsVisible">Видимый</label>
-                            <input type="checkbox" class="ddlSensorSelector2 k-checkbox2" id="chbNewControllerIsVisible" checked="checked" />
+                            <input type="checkbox" id="chbNewControllerIsVisible" checked="checked" />
                         </div>
                         <div class="form-group">
                             <input type="button" class="k-button js-btn-add-controller" value="Добавить контроллер" />
@@ -65,5 +65,9 @@
 </div>
 
 <script id="tmplIsVisible" type="text/x-kendo-template">
-    <input type="checkbox" data-bind="checked: IsVisible" />
+    # if (data.IsVisible) { #
+        <span class="k-icon k-i-tick"></span>
+    # } else { #
+        <span class="k-icon k-i-close"></span>
+    # } #
 </script>

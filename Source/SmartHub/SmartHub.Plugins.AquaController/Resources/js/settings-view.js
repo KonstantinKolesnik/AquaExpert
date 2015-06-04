@@ -77,7 +77,7 @@ define(
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
-                                        url: function () { return document.location.origin + "/api/aquacontroller/monitor/listall" },
+                                        url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
                                     }
                                 },
                                 pageSize: 20
@@ -92,7 +92,7 @@ define(
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
                                 { field: "Sensor.Name", title: "Сенсор", editor: getEditor },
-                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
+                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsVisible").html()) },
                                 {
                                     title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
@@ -181,7 +181,7 @@ define(
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
-                                        url: function () { return document.location.origin + "/api/aquacontroller/controller/listall" },
+                                        url: function () { return document.location.origin + "/api/aquacontroller/controller/list" },
                                     }
                                 },
                                 pageSize: 20
@@ -196,7 +196,7 @@ define(
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
                                 { field: "TypeName", title: "Тип", editor: getEditor },
-                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor/*, template: kendo.template($("#tmplIsVisible").html())*/ },
+                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsVisible").html()) },
                                 {
                                     title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [

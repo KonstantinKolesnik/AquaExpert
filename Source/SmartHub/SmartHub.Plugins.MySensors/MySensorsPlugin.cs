@@ -185,22 +185,22 @@ namespace SmartHub.Plugins.MySensors
                     .OrderByDescending(sv => sv.TimeStamp)
                     .FirstOrDefault();
         }
-        public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours)
+        public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours, int count)
         {
             DateTime dt = DateTime.UtcNow.AddHours(-hours);
 
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>()
                     .Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo && sv.TimeStamp >= dt)
-                    //.OrderByDescending(x => x.TimeStamp)
-                    //.Take(20)
-                    //.OrderBy(x => x.TimeStamp)
+                    .OrderByDescending(x => x.TimeStamp)
+                    .Take(count)
+                    .OrderBy(x => x.TimeStamp)
                     .ToList();
         }
-        public List<SensorValue> GetSensorValuesByID(Guid id, int hours)
+        public List<SensorValue> GetSensorValuesByID(Guid id, int hours, int count)
         {
             var sensor = GetSensor(id);
-            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours);
+            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours, count);
         }
         public bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
@@ -625,15 +625,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            NotifyForSignalR(new
-            {
-                MsgId = "NodeNameChanged",
-                Data = new
-                {
-                    Id = id,
-                    Name = name
-                }
-            });
+            NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
             return null;
         }
@@ -649,11 +641,7 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
 
-            NotifyForSignalR(new
-            {
-                MsgId = "NodeDeleted",
-                Data = new { Id = id }
-            });
+            NotifyForSignalR(new { MsgId = "NodeDeleted", Data = new { Id = id } });
 
             return null;
         }
@@ -745,33 +733,28 @@ namespace SmartHub.Plugins.MySensors
             return null;
         }
 
-        [HttpCommand("/api/mysensors/allbatterylevels")]
-        private object apiGetAllBatteryLevels(HttpRequestParams request)
+        [HttpCommand("/api/mysensors/batterylevels/list")]
+        private object apiGetBatteryLevels(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<BatteryLevel>().ToArray();
         }
 
-        [HttpCommand("/api/mysensors/allsensorvalues")]
-        private object apiGetAllSensorValues(HttpRequestParams request)
+        [HttpCommand("/api/mysensors/sensorvalues/list")]
+        private object apiGetSensorValues(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
         }
-        [HttpCommand("/api/mysensors/sensorvalues")]
-        private object apiGetSensorValues(HttpRequestParams request)
+        [HttpCommand("/api/mysensors/sensorvalues/customlist")]
+        private object apiGetCustomSensorValues(HttpRequestParams request)
         {
             var nodeNo = request.GetRequiredInt32("nodeNo");
             var sensorNo = request.GetRequiredInt32("sensorNo");
             var hours = request.GetRequiredInt32("hours");
-            return GetSensorValues(nodeNo, sensorNo, hours).ToArray();
-        }
-        [HttpCommand("/api/mysensors/sensorvaluesbyid")]
-        private object apiGetSensorValuesByID(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            var hours = request.GetRequiredInt32("hours");
-            return GetSensorValuesByID(id, hours).ToArray();
+            var count = request.GetRequiredInt32("count");
+
+            return GetSensorValues(nodeNo, sensorNo, hours, count).ToArray();
         }
         #endregion
     }

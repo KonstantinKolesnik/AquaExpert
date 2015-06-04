@@ -12,7 +12,7 @@ namespace SmartHub.Plugins.MeteoStation
             try
             {
                 tileWebModel.title = "Метеостанция";
-                tileWebModel.url = "webapp/meteostation/module-main";
+                tileWebModel.url = "webapp/meteostation/dashboard";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-umbrella";
                 //tileWebModel.wide = true;
                 tileWebModel.content = Context.GetPlugin<MeteoStationPlugin>().BuildTileContent();

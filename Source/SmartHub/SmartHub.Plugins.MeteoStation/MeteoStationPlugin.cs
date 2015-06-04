@@ -12,20 +12,21 @@ using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace SmartHub.Plugins.MeteoStation
 {
-    [AppSection("Метеостанция", SectionType.Common, "/webapp/meteostation/module-main.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-main.js", TileTypeFullName = "SmartHub.Plugins.MeteoStation.MeteoStationTile")]
-    [JavaScriptResource("/webapp/meteostation/module-main-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-main-view.js")]
-    [JavaScriptResource("/webapp/meteostation/module-main-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-main-model.js")]
-    [HttpResource("/webapp/meteostation/module-main.html", "SmartHub.Plugins.MeteoStation.Resources.js.module-main.html")]
+    [AppSection("Метеостанция", SectionType.Common, "/webapp/meteostation/dashboard.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.MeteoStation.MeteoStationTile")]
+    [JavaScriptResource("/webapp/meteostation/dashboard-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard-view.js")]
+    [JavaScriptResource("/webapp/meteostation/dashboard-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard-model.js")]
+    [HttpResource("/webapp/meteostation/dashboard.html", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.html")]
 
-    [AppSection("Метеостанция", SectionType.System, "/webapp/meteostation/module-settings.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings.js")]
-    [JavaScriptResource("/webapp/meteostation/module-settings-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings-view.js")]
-    [JavaScriptResource("/webapp/meteostation/module-settings-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings-model.js")]
-    [HttpResource("/webapp/meteostation/module-settings.html", "SmartHub.Plugins.MeteoStation.Resources.js.module-settings.html")]
+    [AppSection("Метеостанция", SectionType.System, "/webapp/meteostation/settings.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings.js")]
+    [JavaScriptResource("/webapp/meteostation/settings-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings-view.js")]
+    [JavaScriptResource("/webapp/meteostation/settings-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings-model.js")]
+    [HttpResource("/webapp/meteostation/settings.html", "SmartHub.Plugins.MeteoStation.Resources.js.settings.html")]
 
     [CssResource("/webapp/meteostation/css/style.css", "SmartHub.Plugins.MeteoStation.Resources.css.style.css", AutoLoad = true)]
     [CssResource("/webapp/meteostation/css/weather-icons.min.css", "SmartHub.Plugins.MeteoStation.Resources.css.weather-icons.min.css", AutoLoad = true)]
@@ -165,6 +166,16 @@ namespace SmartHub.Plugins.MeteoStation
             mySensors.RequestSensorValue(SensorAtmospherePressure, SensorValueType.Pressure);
             mySensors.RequestSensorValue(SensorForecast, SensorValueType.Forecast);
         }
+
+        private object ConvertSensorToMonitor(Guid sensorID, string name)
+        {
+            return new
+            {
+                Name = name,
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(sensorID)),
+                SensorValues = mySensors.GetSensorValuesByID(sensorID, 24, 30).ToArray()
+            };
+        }
         #endregion
 
         #region Event handlers
@@ -188,14 +199,28 @@ namespace SmartHub.Plugins.MeteoStation
         #endregion
 
         #region Web API
+        [HttpCommand("/api/meteostation/monitor/list")]
+        private object apiGetMonitors(HttpRequestParams request)
+        {
+            List<object> result = new List<object>();
+
+            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureInnerID, "T in"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityInnerID, "Hum in"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorTemperatureOuterID, "T out"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorHumidityOuterID, "Hum out"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorAtmospherePressureID, "P"));
+            result.Add(ConvertSensorToMonitor(configuration.SensorForecastID, "Прогноз"));
+
+            return result.ToArray();
+        }
+
         [HttpCommand("/api/meteostation/configuration")]
-        public object apiGetSensorsConfiguration(HttpRequestParams request)
+        public object apiGetConfiguration(HttpRequestParams request)
         {
             return configuration;
         }
-        
         [HttpCommand("/api/meteostation/configuration/set")]
-        public object apiSetSensorsConfiguration(HttpRequestParams request)
+        public object apiSetConfiguration(HttpRequestParams request)
         {
             var json = request.GetRequiredString("conf");
             configuration = (Configuration)Extensions.FromJson(typeof(Configuration), json);

@@ -65,10 +65,10 @@ namespace SmartHub.Plugins.AquaController
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-            var ctrls = GetAllControllers();
+            var ctrls = GetControllers();
             foreach (var ctrl in ctrls)
             {
-                ControllerBase controller = CreateController(ctrl);
+                ControllerBase controller = ConvertController(ctrl);
                 if (controller != null)
                     controllers.Add(controller);
             }
@@ -120,7 +120,7 @@ namespace SmartHub.Plugins.AquaController
             else
                 return value.ToString();
         }
-        private static ControllerBase CreateController(Controller controller)
+        private static ControllerBase ConvertController(Controller controller)
         {
             switch (controller.Type)
             {
@@ -130,17 +130,13 @@ namespace SmartHub.Plugins.AquaController
                 default: return null;
             }
         }
-        private List<Controller> GetAllControllers()
+        
+        private List<Controller> GetControllers()
         {
             using (var session = Context.OpenSession())
                 return session.Query<Controller>()
                     .OrderBy(controller => controller.Name)
                     .ToList();
-        }
-        private Controller GetController(Guid id)
-        {
-            using (var session = Context.OpenSession())
-                return session.Get<Controller>(id);
         }
         private object BuildControllerWebModel(Controller controller)
         {
@@ -196,8 +192,8 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Web API
-        [HttpCommand("/api/aquacontroller/monitor/listall")]
-        private object apiGetAllMonitors(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/monitor/list")]
+        private object apiGetMonitors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Monitor>()
@@ -208,22 +204,6 @@ namespace SmartHub.Plugins.AquaController
                         Name = monitor.Name,
                         Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
                         IsVisible = monitor.IsVisible
-                    })
-                    .ToArray();
-        }
-        [HttpCommand("/api/aquacontroller/monitor/listvisible")]
-        private object apiGetVisibleMonitors(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Monitor>()
-                    .Where(monitor => monitor.IsVisible)
-                    .OrderBy(monitor => monitor.Name)
-                    .Select(monitor => new {
-                        Id = monitor.Id,
-                        Name = monitor.Name,
-                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24).ToArray()
-                        //SensorValues = (mySensors.GetSensorValuesByID(monitor.SensorId, 24) as IEnumerable<SensorValue>).OrderByDescending(x => x.TimeStamp).Take(20).OrderBy(x => x.TimeStamp).ToArray()
                     })
                     .ToArray();
         }
@@ -338,32 +318,21 @@ namespace SmartHub.Plugins.AquaController
                     Name = GetEnumDescription(v)
                 }).ToArray();
         }
-        [HttpCommand("/api/aquacontroller/controller/listall")]
-        private object apiGetAllControllers(HttpRequestParams request)
+        [HttpCommand("/api/aquacontroller/controller/list")]
+        private object apiGetControllers(HttpRequestParams request)
         {
-            return GetAllControllers().Select(BuildControllerWebModel).Where(x => x != null).ToArray();
-        }
-        [HttpCommand("/api/aquacontroller/controller/listvisible")]
-        private object apiGetVisibleControllers(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Controller>()
-                    .Where(controller => controller.IsVisible)
-                    .OrderBy(controller => controller.Name)
-                    .Select(monitor => new
-                    {
-                        Id = monitor.Id,
-                        Name = monitor.Name,
-                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        //SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
-                    })
-                    .ToArray();
+            return GetControllers()
+                .Select(BuildControllerWebModel)
+                .Where(x => x != null)
+                .ToArray();
         }
         [HttpCommand("/api/aquacontroller/controller")]
         private object apiGetController(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            return GetController(id);
+
+            using (var session = Context.OpenSession())
+                return session.Get<Controller>(id);
         }
         [HttpCommand("/api/aquacontroller/controller/add")]
         private object apiAddController(HttpRequestParams request)
@@ -380,22 +349,14 @@ namespace SmartHub.Plugins.AquaController
                 IsVisible = isVisible
             };
 
-            ControllerBase controller = CreateController(ctrl);
+            ControllerBase controller = ConvertController(ctrl);
             if (controller != null)
             {
                 controller.Init(Context);
                 controller.Save();
                 controllers.Add(controller);
 
-                //NotifyForSignalR(new
-                //{
-                //    MsgId = "SensorNameChanged",
-                //    Data = new
-                //    {
-                //        Id = id,
-                //        Name = name
-                //    }
-                //});
+                NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
             }
 
             return null;
@@ -408,20 +369,12 @@ namespace SmartHub.Plugins.AquaController
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Get<Controller>(id);
-                sensor.Name = name;
+                var ctrl = session.Load<Controller>(id);
+                ctrl.Name = name;
                 session.Flush();
+                
+                NotifyForSignalR(new { MsgId = "ControllerNameChanged", Data = BuildControllerWebModel(ctrl) });
             }
-
-            //NotifyForSignalR(new
-            //{
-            //    MsgId = "SensorNameChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
 
             return null;
         }
@@ -433,20 +386,12 @@ namespace SmartHub.Plugins.AquaController
 
             using (var session = Context.OpenSession())
             {
-                var controller = session.Get<Controller>(id);
-                controller.IsVisible = isVisible;
+                var ctrl = session.Get<Controller>(id);
+                ctrl.IsVisible = isVisible;
                 session.Flush();
-            }
 
-            //NotifyForSignalR(new
-            //{
-            //    MsgId = "SensorIsVisibleChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
+                NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
+            }
 
             return null;
         }
@@ -463,15 +408,7 @@ namespace SmartHub.Plugins.AquaController
                     break;
                 }
 
-            //NotifyForSignalR(new
-            //{
-            //    MsgId = "SensorNameChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
+            //NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
 
             return null;
         }
@@ -482,14 +419,46 @@ namespace SmartHub.Plugins.AquaController
 
             using (var session = Context.OpenSession())
             {
-                var controller = session.Get<Controller>(id);
-                session.Delete(controller);
+                var ctrl = session.Get<Controller>(id);
+                session.Delete(ctrl);
                 session.Flush();
+
+                NotifyForSignalR(new { MsgId = "ControllerDeleted", Data = new { Id = id } });
             }
 
-            //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
-
             return null;
+        }
+
+        [HttpCommand("/api/aquacontroller/monitor/list/dashboard")]
+        private object apiGetMonitorsForDashboard(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>()
+                    .Where(monitor => monitor.IsVisible)
+                    .OrderBy(monitor => monitor.Name)
+                    .Select(monitor => new {
+                        Id = monitor.Id,
+                        Name = monitor.Name,
+                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                        SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray()
+                    })
+                    .ToArray();
+        }
+        [HttpCommand("/api/aquacontroller/controller/list/dashboard")]
+        private object apiGetControllersForDashboard(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Controller>()
+                    .Where(controller => controller.IsVisible)
+                    .OrderBy(controller => controller.Name)
+                    .Select(monitor => new
+                    {
+                        Id = monitor.Id,
+                        Name = monitor.Name,
+                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                        //SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
+                    })
+                    .ToArray();
         }
         #endregion
     }

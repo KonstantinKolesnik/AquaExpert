@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getMonitors: function (onComplete) {
-            $.getJSON('/api/aquacontroller/monitor/list/dashboard')
+            $.getJSON('/api/meteostation/monitor/list')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -10,37 +10,21 @@ define(['jquery'], function ($) {
 	            .fail(function (data) {
 	                onError(data);
 	            });
-        },
-        getControllers: function (onComplete) {
-            $.getJSON('/api/aquacontroller/controller/list/dashboard')
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        },
+        }
     };
 
     var viewModel = kendo.observable({
         Monitors: [],
-        Controllers: [],
         update: function (onComplete) {
             var me = this;
 
             me.Monitors = [];
-            me.Controllers = [];
 
             api.getMonitors(function (data) {
                 me.set("Monitors", data);
 
-                api.getControllers(function (data) {
-                    me.set("Controllers", data);
-
-                    if (onComplete)
-                        onComplete();
-                });
+                if (onComplete)
+                    onComplete();
             });
         },
         SignalRReceiveHandler: function (model, data) {
