@@ -3,17 +3,29 @@ using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using System;
+using System.Collections.Generic;
 
 namespace SmartHub.Plugins.AquaController.Core
 {
+    public struct DatePoint
+    {
+        public int Hours;
+        public int Minutes;
+    }
+    public struct DateRange
+    {
+        public DatePoint From;
+        public DatePoint To;
+    }
+
     public class SwitchController : ControllerBase
     {
         public class ControllerConfiguration
         {
             public Guid SensorSwitchID { get; set; }
+            public List<DateRange> ActivePeriods { get; set; }
 
             public bool IsAutoMode { get; set; }
-
 
             public static ControllerConfiguration Default
             {
@@ -22,8 +34,9 @@ namespace SmartHub.Plugins.AquaController.Core
                     return new ControllerConfiguration()
                     {
                         SensorSwitchID = Guid.Empty,
-
-                        IsAutoMode = true,
+                        ActivePeriods = new List<DateRange>(),
+                        
+                        IsAutoMode = true
                     };
                 }
             }
@@ -72,16 +85,23 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Private methods
+        private static bool IsInRange(DateTime dt, DateRange range)
+        {
+            return (dt.Hour >= range.From.Hours && dt.Minute >= range.From.Minutes) &&
+                   (dt.Hour <= range.To.Hours && dt.Minute <= range.To.Minutes);
+        }
+
         protected override void Process(float? value)
         {
             if (configuration.IsAutoMode)
             {
-                ////var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
+                bool isActive = false;
+                DateTime now = DateTime.Now;
 
-                //if (value < configuration.TemperatureMin)
-                //    mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
-                //else if (value > configuration.TemperatureMax)
-                //    mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
+                foreach (var range in configuration.ActivePeriods)
+                    isActive |= IsInRange(now, range);
+
+                mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActive ? 1 : 0);
             }
         }
         #endregion

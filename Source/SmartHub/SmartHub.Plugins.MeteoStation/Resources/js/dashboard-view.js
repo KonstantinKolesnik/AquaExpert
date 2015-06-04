@@ -6,18 +6,22 @@ define(
             template: lib._.template(templates),
             onShow: function () {
                 var me = this;
+                var viewModel = me.options.viewModel;
 
                 createMonitorsList();
-                kendo.bind($("#content"), this.options.viewModel);
+                kendo.bind($("#content"), viewModel);
 
                 function createMonitorsList() {
                     $("#listMonitors").kendoListView({
-                        dataBound: function () {
-                            $.each($(".monitor-chart"), function (idx, selector) { createMonitorChart($(selector)); });
+                        dataBound: function (e) {
+                            $.each($(".monitor-chart"), function (idx, selector) {
+                                var type = viewModel.Monitors[idx].Type;
+                                createMonitorChart($(selector), type);
+                            });
                         }
                     });
 
-                    function createMonitorChart(selector) {
+                    function createMonitorChart(selector, type) {
                         selector.kendoChart({
                             series: [
                                 {
@@ -25,39 +29,66 @@ define(
                                     style: "smooth",
                                     field: "Value",
                                     color: "cornflowerblue",
-                                    //axis: "axisValue",
+                                    axis: "axisValue",
                                     tooltip: {
                                         visible: true,
-
-                                        //template: "#= kendo.toString(value, 'n1') #&nbsp;°C",
-                                        //template: "#= kendo.toString(value, 'n1') #&nbsp;%",
-                                        //template: "#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
-
+                                        template: function (data) {
+                                            switch (type) {
+                                                case "T": return kendo.toString(data.value, 'n1') + "&nbsp;°C";
+                                                case "H": return kendo.toString(data.value, 'n1') + "&nbsp;%";
+                                                case "P": return kendo.toString(data.value / 133.3, 'n2') + "&nbsp;mmHg";
+                                                case "F":
+                                                    var weather = [ "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" ];
+                                                    return weather[data.value];
+                                                default: return data.value;
+                                            }
+                                        }
                                     }
                                 },
                             ],
-                            //valueAxes: [
-                            //    {
-                            //        name: "axisValue",
-                            //        //majorUnit: 1,
-                            //        //majorTicks: {
-                            //        //    step: 1
-                            //        //},
-                            //        //minorTicks: {
-                            //        //    size: 3,
-                            //        //    //color: "red",
-                            //        //    width: 2,
-                            //        //    visible: true
-                            //        //},
-                            //          min: 93300,
-                            //          max: 104000,
-                            //        labels: {
-                            //            //format: "{0} °C",
-                            //              format: "{0} %",
-                            //              template: "#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
-                            //        }
-                            //    },
-                            //],
+                            valueAxes: [
+                                {
+                                    name: "axisValue",
+                                    majorUnit: type == "P" ? 133 : 1,
+                                    //majorTicks: {
+                                    //    step: 1
+                                    //},
+                                    //minorTicks: {
+                                    //    size: 3,
+                                    //    //color: "red",
+                                    //    width: 2,
+                                    //    visible: true
+                                    //},
+                                    //min: 93300,
+                                    //max: 104000,
+                                    labels: {
+                                        //format: "{0} °C",
+                                        template: function (data) {
+                                            switch (type) {
+                                                case "T": return kendo.toString(data.value, 'n1') + "&nbsp;°C";
+                                                case "H": return kendo.toString(data.value, 'n1') + "&nbsp;%";
+                                                case "P": return kendo.toString(data.value / 133.3, 'n2') + "&nbsp;mmHg";
+                                                case "F":
+                                                    var weather = ["Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-"];
+                                                    return weather[data.value];
+
+                                                    //var icon = "wi-cloud-refresh";
+                                                    //switch (data.value) {
+                                                    //    case 0: icon = "wi-day-cloudy"; break;
+                                                    //    case 1: icon = "wi-day-sunny"; break;
+                                                    //    case 2: icon = "wi-cloudy"; break;
+                                                    //    case 3: icon = "wi-day-rain-mix"; break;
+                                                    //    case 4: icon = "wi-storm-showers"; break;
+                                                    //    case 5: icon = ""; break;
+                                                    //}
+                                                    //return "<span class='" + icon + "' style='font-size:22px;'></span>";
+
+                                                default: return data.value;
+                                            }
+                                        }
+                                    }
+                                },
+                            ],
                             categoryAxis: {
                                 field: "TimeStamp",
 

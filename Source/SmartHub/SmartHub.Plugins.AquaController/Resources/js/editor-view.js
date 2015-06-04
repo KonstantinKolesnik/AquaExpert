@@ -43,8 +43,8 @@ define(
                 function initSwitchController() {
                     //Switch = 3,             // Switch Actuator (on/off)
                     createSensorSelector($("#ddlSwitchSensorSwitch"), 3);
-
-
+                    createHourMinuteSelector($("#ddlNewPeriodFromHour"), true);
+                    createHourMinuteSelector($("#ddlNewPeriodFromMinute"), false);
 
 
 
@@ -78,6 +78,17 @@ define(
                         step: 1,
                         format: format,
                         decimals: decimals
+                    });
+                }
+                function createHourMinuteSelector(selector, isHour) {
+                    var ds = [];
+                    for (var i = 0; i < (isHour ? 24 : 60) ; i++)
+                        ds.push({ Value: i, Text: ('0' + i).slice(-2) });
+
+                    selector.kendoDropDownList({
+                        dataSource: ds,
+                        dataValueField: "Value",
+                        dataTextField: "Text"
                     });
                 }
                 function preventEnter(e) {
