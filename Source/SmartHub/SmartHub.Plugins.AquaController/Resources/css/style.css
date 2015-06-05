@@ -8,3 +8,8 @@
 {
     font-size:22px;
 }
+
+.k-grid .k-dirty
+{
+  display:none;
+}

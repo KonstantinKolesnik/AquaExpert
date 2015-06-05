@@ -7,15 +7,11 @@ using System.Collections.Generic;
 
 namespace SmartHub.Plugins.AquaController.Core
 {
-    public struct DatePoint
+    public struct Period
     {
-        public int Hours;
-        public int Minutes;
-    }
-    public struct DateRange
-    {
-        public DatePoint From;
-        public DatePoint To;
+        public DateTime From;
+        public DateTime To;
+        public bool IsActive;
     }
 
     public class SwitchController : ControllerBase
@@ -23,7 +19,7 @@ namespace SmartHub.Plugins.AquaController.Core
         public class ControllerConfiguration
         {
             public Guid SensorSwitchID { get; set; }
-            public List<DateRange> ActivePeriods { get; set; }
+            public List<Period> ActivePeriods { get; set; }
 
             public bool IsAutoMode { get; set; }
 
@@ -34,7 +30,7 @@ namespace SmartHub.Plugins.AquaController.Core
                     return new ControllerConfiguration()
                     {
                         SensorSwitchID = Guid.Empty,
-                        ActivePeriods = new List<DateRange>(),
+                        ActivePeriods = new List<Period>(),
                         
                         IsAutoMode = true
                     };
@@ -85,10 +81,10 @@ namespace SmartHub.Plugins.AquaController.Core
         #endregion
 
         #region Private methods
-        private static bool IsInRange(DateTime dt, DateRange range)
+        private static bool IsInRange(DateTime dt, Period range)
         {
-            return (dt.Hour >= range.From.Hours && dt.Minute >= range.From.Minutes) &&
-                   (dt.Hour <= range.To.Hours && dt.Minute <= range.To.Minutes);
+            return (dt.Hour >= range.From.Hour && dt.Minute >= range.From.Minute) &&
+                   (dt.Hour <= range.To.Hour && dt.Minute <= range.To.Minute);
         }
 
         protected override void Process(float? value)
@@ -96,10 +92,10 @@ namespace SmartHub.Plugins.AquaController.Core
             if (configuration.IsAutoMode)
             {
                 bool isActive = false;
-                DateTime now = DateTime.Now;
+                DateTime now = DateTime.UtcNow;
 
                 foreach (var range in configuration.ActivePeriods)
-                    isActive |= IsInRange(now, range);
+                    isActive |= (range.IsActive && IsInRange(now, range));
 
                 mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActive ? 1 : 0);
             }

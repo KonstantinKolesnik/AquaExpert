@@ -16,7 +16,7 @@ It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 OneWire oneWire(ONE_WIRE_PIN);
 DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
-float lastTemperature;
+float lastTemperature = -1000;
 unsigned long prevMsTemperature = -1000000;
 const long intervalTemperature = 30000;	// interval at which to measure (milliseconds)
 
@@ -25,7 +25,7 @@ const long intervalTemperature = 30000;	// interval at which to measure (millise
 #define PH_PIN					A4
 #define PH_OFFSET				0.2f//-0.12
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
-float lastPh;
+float lastPh = -1000;
 unsigned long prevMsPh = -1000000;
 const long intervalPh = 30000;
 
@@ -44,7 +44,7 @@ const long intervalWater = 5000;
 #define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
-uint16_t lastDistance;
+uint16_t lastDistance = -1;
 unsigned long prevMsDistance = -1000000;
 const long intervalDistance = 5000;
 

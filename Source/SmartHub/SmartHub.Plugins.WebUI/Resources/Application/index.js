@@ -26,6 +26,9 @@
 		settings:			'application/sections/system',
 
 		kendo: 'vendor/js/kendo.all.min',
+		cultureRU: 'vendor/js/cultures/kendo.culture.ru-RU.min',
+		messagesRU: 'vendor/js/messages/kendo.messages.ru-RU.min',
+
 		signalR: 'vendor/js/jquery.signalR-2.1.2.min'
 	},
 	shim: {
