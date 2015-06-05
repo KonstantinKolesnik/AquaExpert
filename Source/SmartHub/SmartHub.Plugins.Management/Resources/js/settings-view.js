@@ -253,8 +253,18 @@ define(
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
                                 {
-                                    title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
+                                    title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
+                                        {
+                                            text: "Редактировать",
+                                            click: function (e) {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+
+                                                var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                                me.trigger('zone:edit', item.Id);
+                                            }
+                                        },
                                         {
                                             text: "Удалить",
                                             click: function (e) {

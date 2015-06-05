@@ -8,8 +8,8 @@
 
 	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView({ viewModel: models.ViewModel });
-	                //view.on('graphs: show', function () {
-	                //    application.navigate('webapp/aquacontroller/module-graphs'/*, param1*/);
+	                //view.on('graphs:show', function () {
+	                //    application.navigate('webapp/management/graphs'/*, param1*/);
 	                //});
 	                application.setContentView(view);
 	            });

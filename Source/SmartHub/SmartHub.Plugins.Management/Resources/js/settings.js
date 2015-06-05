@@ -49,7 +49,7 @@
 	            models.setControllerName(id, name, function () { view.refreshControllersGrid(); });
 	        },
 	        editController: function (id) {
-	            application.navigate('webapp/management/editor', id);
+	            application.navigate('webapp/management/controller-editor', id);
 	        },
 	        deleteController: function (id) {
 	            models.deleteController(id, function () { view.refreshControllersGrid(); });
@@ -71,6 +71,9 @@
 
 	            models.setZoneName(id, name, function () { view.refreshZonesGrid(); });
 	        },
+	        editZone: function (id) {
+	            application.navigate('webapp/management/zone-editor', id);
+	        },
 	        deleteZone: function (id) {
 	            models.deleteZone(id, function () { view.refreshZonesGrid(); });
 	        },
@@ -86,6 +89,7 @@
 	            view.on('controller:delete', module.deleteController);
 	            view.on('zone:add', module.addZone);
 	            view.on('zone:setName', module.setZoneName);
+	            view.on('zone:edit', module.editZone);
 	            view.on('zone:delete', module.deleteZone);
 	            application.setContentView(view);
 	        }

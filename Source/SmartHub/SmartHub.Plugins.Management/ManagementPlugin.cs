@@ -31,10 +31,16 @@ namespace SmartHub.Plugins.Management
     [HttpResource("/webapp/management/settings.html", "SmartHub.Plugins.Management.Resources.js.settings.html")]
 
     // controller editor
-    [JavaScriptResource("/webapp/management/editor.js", "SmartHub.Plugins.Management.Resources.js.editor.js")]
-    [JavaScriptResource("/webapp/management/editor-view.js", "SmartHub.Plugins.Management.Resources.js.editor-view.js")]
-    [JavaScriptResource("/webapp/management/editor-model.js", "SmartHub.Plugins.Management.Resources.js.editor-model.js")]
-    [HttpResource("/webapp/management/editor.html", "SmartHub.Plugins.Management.Resources.js.editor.html")]
+    [JavaScriptResource("/webapp/management/controller-editor.js", "SmartHub.Plugins.Management.Resources.js.controller-editor.js")]
+    [JavaScriptResource("/webapp/management/controller-editor-view.js", "SmartHub.Plugins.Management.Resources.js.controller-editor-view.js")]
+    [JavaScriptResource("/webapp/management/controller-editor-model.js", "SmartHub.Plugins.Management.Resources.js.controller-editor-model.js")]
+    [HttpResource("/webapp/management/controller-editor.html", "SmartHub.Plugins.Management.Resources.js.controller-editor.html")]
+
+    // zone editor
+    [JavaScriptResource("/webapp/management/zone-editor.js", "SmartHub.Plugins.Management.Resources.js.zone-editor.js")]
+    [JavaScriptResource("/webapp/management/zone-editor-view.js", "SmartHub.Plugins.Management.Resources.js.zone-editor-view.js")]
+    [JavaScriptResource("/webapp/management/zone-editor-model.js", "SmartHub.Plugins.Management.Resources.js.zone-editor-model.js")]
+    [HttpResource("/webapp/management/zone-editor.html", "SmartHub.Plugins.Management.Resources.js.zone-editor.html")]
 
     [CssResource("/webapp/management/css/style.css", "SmartHub.Plugins.Management.Resources.css.style.css", AutoLoad = true)]
 
@@ -137,6 +143,14 @@ namespace SmartHub.Plugins.Management
                     .OrderBy(controller => controller.Name)
                     .ToList();
         }
+        private List<Zone> GetZones()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Zone>()
+                    .OrderBy(zone => zone.Name)
+                    .ToList();
+        }
+
         private object BuildControllerWebModel(Controller controller)
         {
             if (controller == null)
@@ -149,6 +163,19 @@ namespace SmartHub.Plugins.Management
                 Type = (int)controller.Type,
                 TypeName = GetEnumDescription(controller.Type),
                 Configuration = controller.Configuration
+            };
+        }
+        private object BuildZoneWebModel(Zone zone)
+        {
+            if (zone == null)
+                return null;
+
+            return new
+            {
+                Id = zone.Id,
+                Name = zone.Name,
+                MonitorsList = zone.MonitorsList,
+                ControllersList = zone.ControllersList
             };
         }
         #endregion
@@ -302,7 +329,7 @@ namespace SmartHub.Plugins.Management
             var id = request.GetRequiredGuid("id");
 
             using (var session = Context.OpenSession())
-                return session.Get<Controller>(id);
+                return BuildControllerWebModel(session.Get<Controller>(id));
         }
         [HttpCommand("/api/management/controller/add")]
         private object apiAddController(HttpRequestParams request)
@@ -383,16 +410,18 @@ namespace SmartHub.Plugins.Management
         [HttpCommand("/api/management/zone/list")]
         private object apiGetZones(HttpRequestParams request)
         {
+            return GetZones()
+                .Select(BuildZoneWebModel)
+                .Where(x => x != null)
+                .ToArray();
+        }
+        [HttpCommand("/api/management/zone")]
+        private object apiGetZone(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+
             using (var session = Context.OpenSession())
-                return session.Query<Zone>()
-                    .OrderBy(zone => zone.Name)
-                    .Select(zone => new
-                    {
-                        Id = zone.Id,
-                        Name = zone.Name,
-                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(zone.SensorId))
-                    })
-                    .ToArray();
+                return BuildZoneWebModel(session.Get<Zone>(id));
         }
         [HttpCommand("/api/management/zone/add")]
         private object apiAddZone(HttpRequestParams request)
@@ -445,6 +474,25 @@ namespace SmartHub.Plugins.Management
             //        Name = name
             //    }
             //});
+
+            return null;
+        }
+        [HttpCommand("/api/management/zone/setconfiguration")]
+        private object apiSetZoneConfiguration(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var monitorsList = request.GetRequiredString("monitorsList");
+            var controllersList = request.GetRequiredString("controllersList");
+
+            using (var session = Context.OpenSession())
+            {
+                var zone = session.Load<Zone>(id);
+                zone.MonitorsList = monitorsList;
+                zone.ControllersList = controllersList;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
 
             return null;
         }

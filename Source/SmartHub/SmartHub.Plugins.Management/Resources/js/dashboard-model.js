@@ -2,7 +2,7 @@
 define(['jquery'], function ($) {
     var api = {
         getMonitors: function (onComplete) {
-            $.getJSON('/api/aquacontroller/monitor/list/dashboard')
+            $.getJSON('/api/management/monitor/list/dashboard')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);
@@ -12,7 +12,7 @@ define(['jquery'], function ($) {
 	            });
         },
         getControllers: function (onComplete) {
-            $.getJSON('/api/aquacontroller/controller/list/dashboard')
+            $.getJSON('/api/management/controller/list/dashboard')
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);

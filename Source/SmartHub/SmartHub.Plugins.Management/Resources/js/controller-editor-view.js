@@ -1,6 +1,6 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/management/editor.html'],
+	['common', 'lib', 'text!webapp/management/controller-editor.html'],
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
