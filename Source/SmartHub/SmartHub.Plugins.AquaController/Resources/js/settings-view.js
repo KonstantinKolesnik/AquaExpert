@@ -123,7 +123,11 @@ define(
                                 .show().focus()
                                 .unbind("keydown").keydown(preventEnter)
                                 .val(oldValue)
-                                .blur(saveName);
+                                .blur(function () {
+                                    var newValue = editor.val();
+                                    if (newValue != oldValue)
+                                        me.trigger('monitor:setName', options.model.Id, newValue);
+                                });
                         }
                         else if (options.field == "IsVisible") {
                             var oldValue = options.model[options.field];
@@ -133,28 +137,14 @@ define(
                                 .show().focus()
                                 .unbind("keydown").keydown(preventEnter)
                                 .prop("checked", oldValue)
-                                .change(saveIsVisible);
+                                .change(function () {
+                                    var newValue = editor.prop("checked");
+                                    if (newValue != oldValue)
+                                        me.trigger('monitor:setIsVisible', options.model.Id, newValue);
+                                });
                         }
                         else
                             grid.closeCell();
-
-                        function saveName(e) {
-                            var newValue = editor.val();
-                            if (newValue != oldValue)
-                                me.trigger('monitor:setName', options.model.Id, newValue);
-                        }
-                        function saveIsVisible(e) {
-                            var newValue = editor.prop("checked");
-                            if (newValue != oldValue)
-                                me.trigger('monitor:setIsVisible', options.model.Id, newValue);
-                        }
-                        function preventEnter(e) {
-                            if (e.keyCode == 13) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                $(e.target).blur(); //run saving
-                            }
-                        }
                     }
                 }
                 function createControllersTab() {
@@ -237,7 +227,11 @@ define(
                                 .show().focus()
                                 .unbind("keydown").keydown(preventEnter)
                                 .val(oldValue)
-                                .blur(saveName);
+                                .blur(function () {
+                                    var newValue = editor.val();
+                                    if (newValue != oldValue)
+                                        me.trigger('controller:setName', options.model.Id, newValue);
+                                });
                         }
                         else if (options.field == "IsVisible") {
                             var oldValue = options.model[options.field];
@@ -247,28 +241,14 @@ define(
                                 .show().focus()
                                 .unbind("keydown").keydown(preventEnter)
                                 .prop("checked", oldValue)
-                                .change(saveIsVisible);
+                                .change(function () {
+                                    var newValue = editor.prop("checked");
+                                    if (newValue != oldValue)
+                                        me.trigger('controller:setIsVisible', options.model.Id, newValue);
+                                });
                         }
                         else
                             grid.closeCell();
-
-                        function saveName(e) {
-                            var newValue = editor.val();
-                            if (newValue != oldValue)
-                                me.trigger('controller:setName', options.model.Id, newValue);
-                        }
-                        function saveIsVisible(e) {
-                            var newValue = editor.prop("checked");
-                            if (newValue != oldValue)
-                                me.trigger('controller:setIsVisible', options.model.Id, newValue);
-                        }
-                        function preventEnter(e) {
-                            if (e.keyCode == 13) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                $(e.target).blur(); //run saving
-                            }
-                        }
                     }
                 }
                 function preventEnter(e) {

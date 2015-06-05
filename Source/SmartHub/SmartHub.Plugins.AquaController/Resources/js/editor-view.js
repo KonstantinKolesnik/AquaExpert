@@ -143,14 +143,6 @@ define(
                         }
                         else
                             grid.closeCell();
-
-                        function preventEnter(e) {
-                            if (e.keyCode == 13) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                $(e.target).blur(); //run saving
-                            }
-                        }
                     }
                 }
 
