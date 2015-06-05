@@ -7,10 +7,6 @@ define(
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
-            //triggers: {
-            //    'click .js-test': 'node:test'
-            //},
-            //initialize: function () {
             onShow: function () {
                 var me = this;
 
@@ -24,6 +20,8 @@ define(
                 $(window).bind("resize", adjustSizes);
                 $(window).resize(adjustSizes);
                 adjustSizes();
+
+                kendo.bind($("#content"), this.options.viewModel);
 
                 function initKendoCustomGrid() {
                     // add "beforeEdit" event:
@@ -174,7 +172,6 @@ define(
                         detailTemplate: lib.kendo.template($("#sensorDetailsTemplate").html()),
                         detailInit: function (e) {
                             createSensorValuesChart();
-
                             lib.kendo.bind(e.detailRow, e.data);
 
                             function createSensorValuesChart() {
@@ -205,21 +202,19 @@ define(
                                             style: "smooth"
                                         },
                                         type: "area",
-                                        aggregate: "avg",
+                                        //aggregate: "avg",
                                         field: "Value",
                                         categoryField: "TimeStamp"
                                     }],
 
-                                    tooltip: {
-                                        visible: true,
-                                        //format: "{0}qqqqq",
-                                        //template: "#= lib.kendo.toString(category, 'dd.MM.yyyy') #: #= value #"
-                                        template: "#= value #"
-                                    },
+                                    //tooltip: {
+                                    //    visible: true,
+                                    //    //format: "{0}qqqqq",
+                                    //    //template: "#= lib.kendo.toString(category, 'dd.MM.yyyy') #: #= value #"
+                                    //    template: "#= value #"
+                                    //},
 
 
-                                    ////theme: "blueOpal",
-                                    //transitions: true,
                                     ////style: "step",//"smooth",
                                     //title: { text: e.data.TypeName + " статистика" },
                                     //legend: { visible: true, position: "bottom" },
@@ -379,7 +374,6 @@ define(
                 function createBatteryLevelsChart(selector, filter, sort) {
                     selector.kendoChart({
                         dataSource: { filter: filter, sort: sort },
-                        //theme: "blueOpal",
                         transitions: true,
                         style: "smooth",
                         //title: { text: "Internet Users in United States" },
@@ -425,7 +419,6 @@ define(
                             //axisCrossingValue: [0, 3],
 
                             type: "date",
-
                             baseUnit: "hours",
                             //baseUnit: "days",
                             //baseUnit: "months",
@@ -467,21 +460,20 @@ define(
                         editor.appendTo(container)
                             .show().focus()
                             .unbind("keydown").keydown(preventEnter)
-                        .val(oldValue)
-                        .blur(save);
+                            .val(oldValue)
+                            .blur(function () {
+                                var newValue = editor.val();
+                                if (newValue != oldValue) {
+                                    if (isNodes)
+                                        me.trigger('node:setName', options.model.Id, newValue);
+                                    else
+                                        me.trigger('sensor:setName', options.model.Id, newValue);
+                                }
+                            });
                     }
                     else
                         grid.closeCell();
 
-                    function save(e) {
-                        var newValue = editor.val();
-                        if (newValue != oldValue) {
-                            if (isNodes)
-                                me.trigger('node:setName', options.model.Id, newValue);
-                            else
-                                me.trigger('sensor:setName', options.model.Id, newValue);
-                        }
-                    }
                     function preventEnter(e) {
                         if (e.keyCode == 13) {
                             e.preventDefault();
@@ -526,10 +518,6 @@ define(
             onDestroy: function () {
                 ctrlNodesGrid.destroy();
                 ctrlSensorsGrid.destroy();
-            },
-
-            bindModel: function (viewModel) {
-                lib.kendo.bind($("#content"), viewModel);
             }
         });
 

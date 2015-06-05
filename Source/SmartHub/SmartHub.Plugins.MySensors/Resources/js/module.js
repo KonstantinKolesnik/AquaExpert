@@ -24,7 +24,7 @@ define(
                     application.SignalRReceivers.push(models.ViewModel);
 
 	            models.ViewModel.update(function () {
-	                var view = new views.LayoutView();
+	                var view = new views.LayoutView({ viewModel: models.ViewModel });
 	                view.on('node:setName', module.setNodeName);
 	                view.on('sensor:setName', module.setSensorName);
 	                view.on('node:delete', module.deleteNode);
@@ -39,10 +39,7 @@ define(
 
 	                    alert("Test");
 	                });
-
 	                application.setContentView(view);
-
-	                view.bindModel(models.ViewModel);
 	            });
 	        }
 	    };

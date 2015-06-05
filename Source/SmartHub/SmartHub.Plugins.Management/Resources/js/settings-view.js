@@ -1,21 +1,21 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/aquacontroller/settings.html'],
+	['common', 'lib', 'text!webapp/management/settings.html'],
     function (common, lib, templates) {
         var ddlNewMonitorSensor;
         var gridMonitors;
         var ddlNewControllerType;
         var gridControllers;
+        var gridZones;
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
                 'click .js-btn-add-monitor': 'addMonitor',
-                'click .js-btn-add-controller': 'addController'
+                'click .js-btn-add-controller': 'addController',
+                'click .js-btn-add-zone': 'addZone'
             },
-            //triggers: {
-            //    'click .js-btn-add-monitor': 'monitor:add'
-            //},
+
             addMonitor: function (e) {
                 e.preventDefault();
                 this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value(), $("#chbNewMonitorIsVisible").prop("checked"));
@@ -24,6 +24,10 @@ define(
                 e.preventDefault();
                 this.trigger('controller:add', $("#tbNewControllerName").val(), ddlNewControllerType.value(), $("#chbNewControllerIsVisible").prop("checked"));
             },
+            addZone: function (e) {
+                e.preventDefault();
+                this.trigger('zone:add', $("#tbNewZoneName").val());
+            },
 
             refreshMonitorsGrid: function () {
                 gridMonitors.dataSource.read();
@@ -31,18 +35,22 @@ define(
             refreshControllersGrid: function () {
                 gridControllers.dataSource.read();
             },
+            refreshZonesGrid: function () {
+                gridZones.dataSource.read();
+            },
 
             onShow: function () {
                 var me = this;
 
-                createTabStrip($("#tabstrip"));
+                createTabStrip();
                 createMonitorsTab();
                 createControllersTab();
+                createZonesTab();
 
                 kendo.bind($("#content"), this.options.viewModel);
 
                 function createTabStrip(selector) {
-                    selector.kendoTabStrip({
+                    $("#tabstrip").kendoTabStrip({
                         animation: {
                             open: { effects: "fadeIn" }
                         },
@@ -77,7 +85,7 @@ define(
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
-                                        url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
+                                        url: function () { return document.location.origin + "/api/management/monitor/list" },
                                     }
                                 },
                                 pageSize: 20
@@ -92,7 +100,6 @@ define(
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
                                 { field: "Sensor.Name", title: "Сенсор", editor: getEditor },
-                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsVisible").html()) },
                                 {
                                     title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
@@ -129,20 +136,6 @@ define(
                                         me.trigger('monitor:setName', options.model.Id, newValue);
                                 });
                         }
-                        else if (options.field == "IsVisible") {
-                            var oldValue = options.model[options.field];
-
-                            var editor = $("<input type='checkbox' style='width:100%;'/>");
-                            editor.appendTo(container)
-                                .show().focus()
-                                .unbind("keydown").keydown(preventEnter)
-                                .prop("checked", oldValue)
-                                .change(function () {
-                                    var newValue = editor.prop("checked");
-                                    if (newValue != oldValue)
-                                        me.trigger('monitor:setIsVisible', options.model.Id, newValue);
-                                });
-                        }
                         else
                             grid.closeCell();
                     }
@@ -156,7 +149,7 @@ define(
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
-                                        url: function () { return document.location.origin + "/api/aquacontroller/controller/type/list" },
+                                        url: function () { return document.location.origin + "/api/management/controllertype/list" },
                                     }
                                 }
                             }),
@@ -171,7 +164,7 @@ define(
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
-                                        url: function () { return document.location.origin + "/api/aquacontroller/controller/list" },
+                                        url: function () { return document.location.origin + "/api/management/controller/list" },
                                     }
                                 },
                                 pageSize: 20
@@ -186,7 +179,6 @@ define(
                             columns: [
                                 { field: "Name", title: "Имя", editor: getEditor },
                                 { field: "TypeName", title: "Тип", editor: getEditor },
-                                { field: "IsVisible", title: "Видимый", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsVisible").html()) },
                                 {
                                     title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
@@ -233,18 +225,67 @@ define(
                                         me.trigger('controller:setName', options.model.Id, newValue);
                                 });
                         }
-                        else if (options.field == "IsVisible") {
+                        else
+                            grid.closeCell();
+                    }
+                }
+                function createZonesTab() {
+                    createZonesGrid();
+
+                    function createZonesGrid() {
+                        gridZones = $("#gridZones").kendoGrid({
+                            height: 350,
+                            dataSource: new kendo.data.DataSource({
+                                transport: {
+                                    read: {
+                                        url: function () { return document.location.origin + "/api/management/zone/list" },
+                                    }
+                                },
+                                pageSize: 20
+                            }),
+                            sortable: true,
+                            resizable: true,
+                            editable: true,
+                            pageable: {
+                                pageSizes: [10, 20, 50, 100],
+                                pageSize: 20
+                            },
+                            columns: [
+                                { field: "Name", title: "Имя", editor: getEditor },
+                                {
+                                    title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
+                                    command: [
+                                        {
+                                            text: "Удалить",
+                                            click: function (e) {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+
+                                                var item = this.dataItem($(e.currentTarget).closest("tr"));
+                                                if (common.utils.confirm('Удалить зону "{0}"?', item.Name))
+                                                    me.trigger('zone:delete', item.Id);
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }).data("kendoGrid");
+                    }
+                    function getEditor(container, options) {
+                        var grid = container.closest(".k-grid").data("kendoGrid");
+
+                        if (options.field == "Name") {
                             var oldValue = options.model[options.field];
 
-                            var editor = $("<input type='checkbox' style='width:100%;'/>");
+                            var editor = $("<input type='text' class='k-textbox' style='width:100%;'/>");
                             editor.appendTo(container)
                                 .show().focus()
                                 .unbind("keydown").keydown(preventEnter)
-                                .prop("checked", oldValue)
-                                .change(function () {
-                                    var newValue = editor.prop("checked");
+                                .val(oldValue)
+                                .blur(function () {
+                                    var newValue = editor.val();
                                     if (newValue != oldValue)
-                                        me.trigger('controller:setIsVisible', options.model.Id, newValue);
+                                        me.trigger('zone:setName', options.model.Id, newValue);
                                 });
                         }
                         else

@@ -1,6 +1,6 @@
 ﻿
 define(
-    ['app', 'webapp/aquacontroller/editor-model', 'webapp/aquacontroller/editor-view'],
+    ['app', 'webapp/management/editor-model', 'webapp/management/editor-view'],
     function (application, models, views) {
         var module = {
             reload: function (id) {

@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{21C10EC6-02CF-47BE-B92B-C0A8D498C52C}</ProjectGuid>
+    <ProjectGuid>{9B2DD9BE-77F9-455E-B219-7E4110A6AA16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.Plugins.AquaController</RootNamespace>
-    <AssemblyName>SmartHub.Plugins.AquaController</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>SmartHub.Plugins.Management</RootNamespace>
+    <AssemblyName>SmartHub.Plugins.Management</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Plugins\SmartHub.Plugins.AquaController\</OutputPath>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.Management\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,44 +26,44 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Plugins\SmartHub.Plugins.AquaController\</OutputPath>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.Management\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ECM7.Migrator.Framework, Version=2.8.0.0, Culture=neutral, PublicKeyToken=46e9efbd947bd0df, processorArchitecture=MSIL">
+    <Reference Include="ECM7.Migrator.Framework">
       <HintPath>..\packages\ECM7Migrator.2.8.0.0\lib\net40\ECM7.Migrator.Framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NLog, Version=3.2.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+    <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.1\lib\net45\NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AquaControllerPlugin.cs" />
-    <Compile Include="AquaControllerTile.cs" />
     <Compile Include="Core\ControllerBase.cs" />
     <Compile Include="Core\ControllerType.cs" />
     <Compile Include="Core\HeaterController.cs" />
     <Compile Include="Core\SwitchController.cs" />
     <Compile Include="Data\Controller.cs" />
-    <Compile Include="Data\Monitor.cs" />
     <Compile Include="Data\Migrations.cs" />
-    <Compile Include="Data\AquaControllerSetting.cs" />
+    <Compile Include="Data\Monitor.cs" />
+    <Compile Include="Data\Zone.cs" />
+    <Compile Include="ManagementPlugin.cs" />
+    <Compile Include="ManagementTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,22 +104,37 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\dashboard-view.js" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\dashboard.js" />
+    <EmbeddedResource Include="Resources\js\dashboard-model.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\js\dashboard-view.js" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\js\dashboard.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\dashboard-model.js" />
+    <EmbeddedResource Include="Resources\js\dashboard.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor-model.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor-view.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\editor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\graphs.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\js\settings-model.js" />
@@ -132,21 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\js\settings.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\graphs.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\editor.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\editor-view.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\editor-model.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\js\editor.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

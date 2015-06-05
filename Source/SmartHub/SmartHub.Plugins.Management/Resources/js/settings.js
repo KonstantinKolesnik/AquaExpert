@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/aquacontroller/settings-model', 'webapp/aquacontroller/settings-view'],
+	['app', 'webapp/management/settings-model', 'webapp/management/settings-view'],
 	function (application, models, views) {
 	    var view;
 
@@ -23,9 +23,6 @@
 	            }
 
 	            models.setMonitorName(id, name, function () { view.refreshMonitorsGrid(); });
-	        },
-	        setMonitorIsVisible: function (id, isVisible) {
-	            models.setMonitorIsVisible(id, isVisible, function () { view.refreshMonitorsGrid(); });
 	        },
 	        deleteMonitor: function (id) {
 	            models.deleteMonitor(id, function () { view.refreshMonitorsGrid(); });
@@ -51,27 +48,45 @@
 
 	            models.setControllerName(id, name, function () { view.refreshControllersGrid(); });
 	        },
-	        setControllerIsVisible: function (id, isVisible) {
-	            models.setControllerIsVisible(id, isVisible, function () { view.refreshControllersGrid(); });
-	        },
 	        editController: function (id) {
-	            application.navigate('webapp/aquacontroller/editor', id);
+	            application.navigate('webapp/management/editor', id);
 	        },
 	        deleteController: function (id) {
 	            models.deleteController(id, function () { view.refreshControllersGrid(); });
+	        },
+
+	        addZone: function (name, isVisible) {
+	            if (!name) {
+	                alert("Не указано имя зоны!");
+	                return;
+	            }
+
+	            models.addZone(name, function () { view.refreshZonesGrid(); });
+	        },
+	        setZoneName: function (id, name) {
+	            if (!name) {
+	                alert("Не указано имя зоны!");
+	                return;
+	            }
+
+	            models.setZoneName(id, name, function () { view.refreshZonesGrid(); });
+	        },
+	        deleteZone: function (id) {
+	            models.deleteZone(id, function () { view.refreshZonesGrid(); });
 	        },
 
 	        reload: function () {
 	            view = new views.LayoutView({ viewModel: models.ViewModel });
 	            view.on('monitor:add', module.addMonitor);
 	            view.on('monitor:setName', module.setMonitorName);
-	            view.on('monitor:setIsVisible', module.setMonitorIsVisible);
 	            view.on('monitor:delete', module.deleteMonitor);
 	            view.on('controller:add', module.addController);
 	            view.on('controller:setName', module.setControllerName);
-	            view.on('controller:setIsVisible', module.setControllerIsVisible);
 	            view.on('controller:edit', module.editController);
 	            view.on('controller:delete', module.deleteController);
+	            view.on('zone:add', module.addZone);
+	            view.on('zone:setName', module.setZoneName);
+	            view.on('zone:delete', module.deleteZone);
 	            application.setContentView(view);
 	        }
 	    };

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SmartHub.Plugins.AquaController.Core
+namespace SmartHub.Plugins.Management.Core
 {
     public enum ControllerType
     {

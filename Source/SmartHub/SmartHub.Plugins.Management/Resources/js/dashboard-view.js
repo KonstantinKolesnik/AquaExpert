@@ -1,6 +1,6 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/aquacontroller/dashboard.html'],
+	['common', 'lib', 'text!webapp/management/dashboard.html'],
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),

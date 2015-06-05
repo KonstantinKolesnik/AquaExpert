@@ -1,11 +1,12 @@
 ﻿
 <div id="content" class="container-fluid">
-    <h2>Аква-контроллер: настройки</h2>
+    <h2>Менеджмент: настройки</h2>
 
     <div id="tabstrip" class="col-md-8">
         <ul>
             <li class="k-state-active">Мониторы</li>
             <li>Контроллеры</li>
+            <li>Зоны</li>
         </ul>
 
         <div>
@@ -17,10 +18,6 @@
                 <div class="form-group">
                     <label for="ddlNewMonitorSensor">Сенсор</label>
                     <select id="ddlNewMonitorSensor"></select>
-                </div>
-                <div class="form-group">
-                    <label for="chbNewMonitorIsVisible">Видимый</label>
-                    <input type="checkbox" id="chbNewMonitorIsVisible" checked="checked" />
                 </div>
                 <button class="k-button js-btn-add-monitor">Добавить монитор</button>
             </form>
@@ -38,22 +35,22 @@
                     <label for="ddlNewControllerType">Тип</label>
                     <select id="ddlNewControllerType"></select>
                 </div>
-                <div class="form-group">
-                    <label for="chbNewControllerIsVisible">Видимый</label>
-                    <input type="checkbox" id="chbNewControllerIsVisible" checked="checked" />
-                </div>
                 <button class="k-button js-btn-add-controller">Добавить контроллер</button>
             </form>
 
             <div id="gridControllers"></div>
         </div>
+
+        <div>
+            <form class="form-inline" style="margin-bottom:5px;">
+                <div class="form-group">
+                    <label for="tbNewZoneName">Имя</label>
+                    <input type="text" class="k-textbox" id="tbNewZoneName" />
+                </div>
+                <button class="k-button js-btn-add-zone">Добавить зону</button>
+            </form>
+
+            <div id="gridZones"></div>
+        </div>
     </div>
 </div>
-
-<script id="tmplIsVisible" type="text/x-kendo-template">
-    # if (data.IsVisible) { #
-        <span class="k-icon k-i-tick"></span>
-    # } else { #
-        <!--<span class="k-icon k-i-close"></span>-->
-    # } #
-</script>

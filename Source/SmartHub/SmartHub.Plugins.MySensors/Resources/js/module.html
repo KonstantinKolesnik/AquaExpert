@@ -17,11 +17,11 @@
             <div id="gridSensors" data-bind="source: Sensors"></div>
         </div>
         <div>
-            <div id="pnlSettings" class="row">
-                <form role="form">
+            <div id="pnlSettings">
+                <form class="form-inline">
                     <div class="form-group">
-                        <label class="col-xs-12 col-md-1" for="ddlUnitSystem">Система единиц измерения</label>
-                        <select style="width:250px;" id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
+                        <label for="ddlUnitSystem">Система единиц измерения</label>
+                        <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
                     </div>
                 </form>
             </div>
@@ -48,62 +48,57 @@
 <script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
     <div>
         <div class="sensorDetailsOptions">
-            <div class="box-col2">
+            <div>
                 <h6>Ед. времени</h6>
-                <ul class="options">
+                <ul class="list-inline">
                     <li>
                         <input id="baseUnitAuto" name="baseUnit" type="radio" value="" checked="checked" autocomplete="off" />
-                        <label for="baseUnitAuto">Automatic (default)</label>
+                        <label for="baseUnitAuto">Авто (по умолчанию)</label>
                     </li>
                     <li>
                         <input id="baseUnitYears" name="baseUnit" type="radio" value="years" autocomplete="off" />
-                        <label for="baseUnitYears">Years</label>
+                        <label for="baseUnitYears">Год</label>
                     </li>
                     <li>
                         <input id="baseUnitMonths" name="baseUnit" type="radio" value="months" autocomplete="off" />
-                        <label for="baseUnitMonths">Months</label>
+                        <label for="baseUnitMonths">Месяц</label>
                     </li>
                     <li>
                         <input id="baseUnitWeeks" name="baseUnit" type="radio" value="weeks" autocomplete="off" />
-                        <label for="baseUnitWeeks">Weeks</label>
+                        <label for="baseUnitWeeks">Неделя</label>
                     </li>
                     <li>
                         <input id="baseUnitDays" name="baseUnit" type="radio" value="days" autocomplete="off" />
-                        <label for="baseUnitDays">Days</label>
+                        <label for="baseUnitDays">День</label>
                     </li>
                     <li>
                         <input id="baseUnitHours" name="baseUnit" type="radio" value="hours" autocomplete="off" />
-                        <label for="baseUnitHours">Hours</label>
+                        <label for="baseUnitHours">Час</label>
                     </li>
                 </ul>
             </div>
-            <div class="box-col">
-                <h6>Aggregate function</h6>
-                <ul class="options">
+            <div>
+                <h6>Аггрегация</h6>
+                <ul class="list-inline">
                     <li>
-                        <input id="aggregateMax" name="aggregate"
-                               type="radio" value="max" autocomplete="off" />
-                        <label for="aggregateMax">Max (default)</label>
+                        <input id="aggregateMax" name="aggregate" type="radio" value="max" autocomplete="off" />
+                        <label for="aggregateMax">Макс (по умолчанию)</label>
                     </li>
                     <li>
-                        <input id="aggregateMin" name="aggregate"
-                               type="radio" value="min" autocomplete="off" />
-                        <label for="aggregateMin">Min</label>
+                        <input id="aggregateMin" name="aggregate" type="radio" value="min" autocomplete="off" />
+                        <label for="aggregateMin">Мин</label>
                     </li>
                     <li>
-                        <input id="aggregateSum" name="aggregate"
-                               type="radio" value="sum" autocomplete="off" />
-                        <label for="aggregateSum">Sum</label>
+                        <input id="aggregateSum" name="aggregate" type="radio" value="sum" autocomplete="off" />
+                        <label for="aggregateSum">Сумма</label>
                     </li>
                     <li>
-                        <input id="aggregateAvg" name="aggregate"
-                               type="radio" value="avg" checked="checked" autocomplete="off" />
-                        <label for="aggregateAvg">Avg</label>
+                        <input id="aggregateAvg" name="aggregate" type="radio" value="avg" checked="checked" autocomplete="off" />
+                        <label for="aggregateAvg">Среднее</label>
                     </li>
                     <li>
-                        <input id="aggregateCount" name="aggregate"
-                               type="radio" value="count" autocomplete="off" />
-                        <label for="aggregateCount">Count</label>
+                        <input id="aggregateCount" name="aggregate" type="radio" value="count" autocomplete="off" />
+                        <label for="aggregateCount">Количество</label>
                     </li>
                 </ul>
             </div>

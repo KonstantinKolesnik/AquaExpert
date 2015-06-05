@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/aquacontroller/dashboard-model', 'webapp/aquacontroller/dashboard-view'],
+	['app', 'webapp/management/dashboard-model', 'webapp/management/dashboard-view'],
 	function (application, models, views) {
 	    var module = {
 	        reload: function () {

@@ -1,11 +1,11 @@
 ﻿using SmartHub.Core.Plugins.Utils;
-using SmartHub.Plugins.AquaController.Data;
+using SmartHub.Plugins.Management.Data;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using System;
 using System.Collections.Generic;
 
-namespace SmartHub.Plugins.AquaController.Core
+namespace SmartHub.Plugins.Management.Core
 {
     public struct Period
     {
@@ -56,10 +56,10 @@ namespace SmartHub.Plugins.AquaController.Core
             if (string.IsNullOrEmpty(controller.Configuration))
             {
                 configuration = ControllerConfiguration.Default;
-                controller.SerializeConfiguration(configuration);
+                controller.SetConfiguration(configuration);
             }
             else
-                configuration = controller.DeserializeConfiguration(typeof(ControllerConfiguration));
+                configuration = controller.GetConfiguration(typeof(ControllerConfiguration));
         }
         #endregion
 
@@ -67,8 +67,8 @@ namespace SmartHub.Plugins.AquaController.Core
         public override void SetConfiguration(string config)
         {
             configuration = (SwitchController.ControllerConfiguration)Extensions.FromJson(typeof(SwitchController.ControllerConfiguration), config);
-            controller.SerializeConfiguration(configuration);
-            Save();
+            controller.SetConfiguration(configuration);
+            SaveToDB();
         }
         public override bool IsMyMessage(SensorMessage message)
         {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SmartHub.Plugins.AquaController")]
+[assembly: AssemblyTitle("SmartHub.Plugins.Management")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SmartHub.Plugins.AquaController")]
+[assembly: AssemblyProduct("SmartHub.Plugins.Management")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1c360832-8f42-4b84-8830-8dd2b4382a97")]
+[assembly: Guid("b938e99a-7af6-42d9-9f1d-7a016378b6f4")]
 
 // Version information for an assembly consists of the following four values:
 //

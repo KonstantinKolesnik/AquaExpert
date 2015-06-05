@@ -1,10 +1,10 @@
 ﻿using SmartHub.Core.Plugins;
-using SmartHub.Plugins.AquaController.Data;
+using SmartHub.Plugins.Management.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using System;
 
-namespace SmartHub.Plugins.AquaController.Core
+namespace SmartHub.Plugins.Management.Core
 {
     public abstract class ControllerBase
     {
@@ -34,7 +34,7 @@ namespace SmartHub.Plugins.AquaController.Core
             Context = context;
             mySensors = context.GetPlugin<MySensorsPlugin>();
         }
-        public void Save()
+        public void SaveToDB()
         {
             using (var session = Context.OpenSession())
             {

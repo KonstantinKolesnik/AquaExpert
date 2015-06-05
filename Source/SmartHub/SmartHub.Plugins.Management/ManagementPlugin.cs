@@ -1,14 +1,13 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
-using SmartHub.Plugins.AquaController.Core;
-using SmartHub.Plugins.AquaController.Data;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
+using SmartHub.Plugins.Management.Core;
+using SmartHub.Plugins.Management.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
 using SmartHub.Plugins.MySensors.Core;
-using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
@@ -19,28 +18,28 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SmartHub.Plugins.AquaController
+namespace SmartHub.Plugins.Management
 {
-    [AppSection("Аква-контроллер", SectionType.Common, "/webapp/aquacontroller/dashboard.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.AquaController.AquaControllerTile")]
-    [JavaScriptResource("/webapp/aquacontroller/dashboard-view.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard-view.js")]
-    [JavaScriptResource("/webapp/aquacontroller/dashboard-model.js", "SmartHub.Plugins.AquaController.Resources.js.dashboard-model.js")]
-    [HttpResource("/webapp/aquacontroller/dashboard.html", "SmartHub.Plugins.AquaController.Resources.js.dashboard.html")]
+    [AppSection("Менеджмент", SectionType.Common, "/webapp/management/dashboard.js", "SmartHub.Plugins.Management.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.Management.ManagementTile")]
+    [JavaScriptResource("/webapp/management/dashboard-view.js", "SmartHub.Plugins.Management.Resources.js.dashboard-view.js")]
+    [JavaScriptResource("/webapp/management/dashboard-model.js", "SmartHub.Plugins.Management.Resources.js.dashboard-model.js")]
+    [HttpResource("/webapp/management/dashboard.html", "SmartHub.Plugins.Management.Resources.js.dashboard.html")]
 
-    [AppSection("Аква-контроллер", SectionType.System, "/webapp/aquacontroller/settings.js", "SmartHub.Plugins.AquaController.Resources.js.settings.js")]
-    [JavaScriptResource("/webapp/aquacontroller/settings-view.js", "SmartHub.Plugins.AquaController.Resources.js.settings-view.js")]
-    [JavaScriptResource("/webapp/aquacontroller/settings-model.js", "SmartHub.Plugins.AquaController.Resources.js.settings-model.js")]
-    [HttpResource("/webapp/aquacontroller/settings.html", "SmartHub.Plugins.AquaController.Resources.js.settings.html")]
+    [AppSection("Менеджмент", SectionType.System, "/webapp/management/settings.js", "SmartHub.Plugins.Management.Resources.js.settings.js")]
+    [JavaScriptResource("/webapp/management/settings-view.js", "SmartHub.Plugins.Management.Resources.js.settings-view.js")]
+    [JavaScriptResource("/webapp/management/settings-model.js", "SmartHub.Plugins.Management.Resources.js.settings-model.js")]
+    [HttpResource("/webapp/management/settings.html", "SmartHub.Plugins.Management.Resources.js.settings.html")]
 
     // controller editor
-    [JavaScriptResource("/webapp/aquacontroller/editor.js", "SmartHub.Plugins.AquaController.Resources.js.editor.js")]
-    [JavaScriptResource("/webapp/aquacontroller/editor-view.js", "SmartHub.Plugins.AquaController.Resources.js.editor-view.js")]
-    [JavaScriptResource("/webapp/aquacontroller/editor-model.js", "SmartHub.Plugins.AquaController.Resources.js.editor-model.js")]
-    [HttpResource("/webapp/aquacontroller/editor.html", "SmartHub.Plugins.AquaController.Resources.js.editor.html")]
+    [JavaScriptResource("/webapp/management/editor.js", "SmartHub.Plugins.Management.Resources.js.editor.js")]
+    [JavaScriptResource("/webapp/management/editor-view.js", "SmartHub.Plugins.Management.Resources.js.editor-view.js")]
+    [JavaScriptResource("/webapp/management/editor-model.js", "SmartHub.Plugins.Management.Resources.js.editor-model.js")]
+    [HttpResource("/webapp/management/editor.html", "SmartHub.Plugins.Management.Resources.js.editor.html")]
 
-    [CssResource("/webapp/aquacontroller/css/style.css", "SmartHub.Plugins.AquaController.Resources.css.style.css", AutoLoad = true)]
+    [CssResource("/webapp/management/css/style.css", "SmartHub.Plugins.Management.Resources.css.style.css", AutoLoad = true)]
 
     [Plugin]
-    public class AquaControllerPlugin : PluginBase
+    public class ManagementPlugin : PluginBase
     {
         #region Fields
         private MySensorsPlugin mySensors;
@@ -57,9 +56,9 @@ namespace SmartHub.Plugins.AquaController
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<AquaControllerSetting>(cfg => cfg.Table("AquaController_Settings"));
-            mapper.Class<Monitor>(cfg => cfg.Table("AquaController_Monitors"));
-            mapper.Class<Controller>(cfg => cfg.Table("AquaController_Controllers"));
+            mapper.Class<Zone>(cfg => cfg.Table("Management_Zones"));
+            //mapper.Class<Monitor>(cfg => cfg.Table("Management_Monitors"));
+            mapper.Class<Controller>(cfg => cfg.Table("Management_Controllers"));
         }
         public override void InitPlugin()
         {
@@ -130,7 +129,7 @@ namespace SmartHub.Plugins.AquaController
                 default: return null;
             }
         }
-        
+
         private List<Controller> GetControllers()
         {
             using (var session = Context.OpenSession())
@@ -149,7 +148,6 @@ namespace SmartHub.Plugins.AquaController
                 Name = controller.Name,
                 Type = (int)controller.Type,
                 TypeName = GetEnumDescription(controller.Type),
-                IsVisible = controller.IsVisible,
                 Configuration = controller.Configuration
             };
         }
@@ -178,12 +176,12 @@ namespace SmartHub.Plugins.AquaController
                 controller.MessageReceived(message);
 
                 if (controller.IsMyMessage(message))
-                    NotifyForSignalR(new { MsgId = "AquaControllerTileContent", Data = BuildTileContent() });
+                    NotifyForSignalR(new { MsgId = "ManagementTileContent", Data = BuildTileContent() });
             }
         }
 
         //[RunPeriodically(1)]
-        [Timer_5_sec_Elapsed]
+        [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
             foreach (ControllerBase controller in controllers)
@@ -192,7 +190,7 @@ namespace SmartHub.Plugins.AquaController
         #endregion
 
         #region Web API
-        [HttpCommand("/api/aquacontroller/monitor/list")]
+        [HttpCommand("/api/management/monitor/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
@@ -202,17 +200,15 @@ namespace SmartHub.Plugins.AquaController
                     {
                         Id = monitor.Id,
                         Name = monitor.Name,
-                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        IsVisible = monitor.IsVisible
+                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
                     })
                     .ToArray();
         }
-        [HttpCommand("/api/aquacontroller/monitor/add")]
+        [HttpCommand("/api/management/monitor/add")]
         private object apiAddMonitor(HttpRequestParams request)
         {
             var name = request.GetRequiredString("name");
             var sensorId = request.GetRequiredGuid("sensorId");
-            var isVisible = request.GetRequiredBool("isVisible");
 
             using (var session = Context.OpenSession())
             {
@@ -220,8 +216,7 @@ namespace SmartHub.Plugins.AquaController
                 {
                     Id = Guid.NewGuid(),
                     Name = name,
-                    SensorId = sensorId,
-                    IsVisible = isVisible
+                    SensorId = sensorId
                 };
 
                 session.Save(monitor);
@@ -240,15 +235,15 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
-        [HttpCommand("/api/aquacontroller/monitor/setname")]
+        [HttpCommand("/api/management/monitor/setname")]
         private object apiSetMonitorName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            var name = request.GetString("name");
+            var name = request.GetRequiredString("name");
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Get<Monitor>(id);
+                var sensor = session.Load<Monitor>(id);
                 sensor.Name = name;
                 session.Flush();
             }
@@ -265,39 +260,14 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
-        [HttpCommand("/api/aquacontroller/monitor/setisvisible")]
-        private object apiSetMonitorIsVisible(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            var isVisible = request.GetRequiredBool("isVisible");
-
-            using (var session = Context.OpenSession())
-            {
-                var sensor = session.Get<Monitor>(id);
-                sensor.IsVisible = isVisible;
-                session.Flush();
-            }
-
-            //NotifyForSignalR(new
-            //{
-            //    MsgId = "SensorIsVisibleChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
-
-            return null;
-        }
-        [HttpCommand("/api/aquacontroller/monitor/delete")]
+        [HttpCommand("/api/management/monitor/delete")]
         private object apiDeleteMonitor(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Get<Monitor>(id);
+                var sensor = session.Load<Monitor>(id);
                 session.Delete(sensor);
                 session.Flush();
             }
@@ -307,7 +277,7 @@ namespace SmartHub.Plugins.AquaController
             return null;
         }
 
-        [HttpCommand("/api/aquacontroller/controller/type/list")]
+        [HttpCommand("/api/management/controllertype/list")]
         private object apiGetControllerTypes(HttpRequestParams request)
         {
             return Enum.GetValues(typeof(ControllerType))
@@ -318,7 +288,7 @@ namespace SmartHub.Plugins.AquaController
                     Name = GetEnumDescription(v)
                 }).ToArray();
         }
-        [HttpCommand("/api/aquacontroller/controller/list")]
+        [HttpCommand("/api/management/controller/list")]
         private object apiGetControllers(HttpRequestParams request)
         {
             return GetControllers()
@@ -326,7 +296,7 @@ namespace SmartHub.Plugins.AquaController
                 .Where(x => x != null)
                 .ToArray();
         }
-        [HttpCommand("/api/aquacontroller/controller")]
+        [HttpCommand("/api/management/controller")]
         private object apiGetController(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
@@ -334,26 +304,24 @@ namespace SmartHub.Plugins.AquaController
             using (var session = Context.OpenSession())
                 return session.Get<Controller>(id);
         }
-        [HttpCommand("/api/aquacontroller/controller/add")]
+        [HttpCommand("/api/management/controller/add")]
         private object apiAddController(HttpRequestParams request)
         {
             var name = request.GetRequiredString("name");
             var type = (ControllerType)request.GetRequiredInt32("type");
-            var isVisible = request.GetRequiredBool("isVisible");
 
             var ctrl = new Controller()
             {
                 Id = Guid.NewGuid(),
                 Name = name,
-                Type = type,
-                IsVisible = isVisible
+                Type = type
             };
 
             ControllerBase controller = ConvertController(ctrl);
             if (controller != null)
             {
                 controller.Init(Context);
-                controller.Save();
+                controller.SaveToDB();
                 controllers.Add(controller);
 
                 NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
@@ -361,41 +329,24 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
-        [HttpCommand("/api/aquacontroller/controller/setname")]
+        [HttpCommand("/api/management/controller/setname")]
         private object apiSetControllerName(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            var name = request.GetString("name");
+            var name = request.GetRequiredString("name");
 
             using (var session = Context.OpenSession())
             {
                 var ctrl = session.Load<Controller>(id);
                 ctrl.Name = name;
                 session.Flush();
-                
+
                 NotifyForSignalR(new { MsgId = "ControllerNameChanged", Data = BuildControllerWebModel(ctrl) });
             }
 
             return null;
         }
-        [HttpCommand("/api/aquacontroller/controller/setisvisible")]
-        private object apiSetControllerIsVisible(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            var isVisible = request.GetRequiredBool("isVisible");
-
-            using (var session = Context.OpenSession())
-            {
-                var ctrl = session.Get<Controller>(id);
-                ctrl.IsVisible = isVisible;
-                session.Flush();
-
-                NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
-            }
-
-            return null;
-        }
-        [HttpCommand("/api/aquacontroller/controller/setconfiguration")]
+        [HttpCommand("/api/management/controller/setconfiguration")]
         private object apiSetControllerConfiguration(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
@@ -412,14 +363,14 @@ namespace SmartHub.Plugins.AquaController
 
             return null;
         }
-        [HttpCommand("/api/aquacontroller/controller/delete")]
+        [HttpCommand("/api/management/controller/delete")]
         private object apiDeleteController(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
 
             using (var session = Context.OpenSession())
             {
-                var ctrl = session.Get<Controller>(id);
+                var ctrl = session.Load<Controller>(id);
                 session.Delete(ctrl);
                 session.Flush();
 
@@ -429,14 +380,100 @@ namespace SmartHub.Plugins.AquaController
             return null;
         }
 
-        [HttpCommand("/api/aquacontroller/monitor/list/dashboard")]
+        [HttpCommand("/api/management/zone/list")]
+        private object apiGetZones(HttpRequestParams request)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Zone>()
+                    .OrderBy(zone => zone.Name)
+                    .Select(zone => new
+                    {
+                        Id = zone.Id,
+                        Name = zone.Name,
+                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(zone.SensorId))
+                    })
+                    .ToArray();
+        }
+        [HttpCommand("/api/management/zone/add")]
+        private object apiAddZone(HttpRequestParams request)
+        {
+            var name = request.GetRequiredString("name");
+
+            using (var session = Context.OpenSession())
+            {
+                Zone zone = new Zone()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name
+                };
+
+                session.Save(zone);
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/management/zone/setname")]
+        private object apiSetZoneName(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var name = request.GetRequiredString("name");
+
+            using (var session = Context.OpenSession())
+            {
+                var zone = session.Load<Zone>(id);
+                zone.Name = name;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/management/zone/delete")]
+        private object apiDeleteZone(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("Id");
+
+            using (var session = Context.OpenSession())
+            {
+                var zone = session.Load<Zone>(id);
+                session.Delete(zone);
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
+
+            return null;
+        }
+
+
+        [HttpCommand("/api/management/monitor/list/dashboard")]
         private object apiGetMonitorsForDashboard(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Monitor>()
-                    .Where(monitor => monitor.IsVisible)
                     .OrderBy(monitor => monitor.Name)
-                    .Select(monitor => new {
+                    .Select(monitor => new
+                    {
                         Id = monitor.Id,
                         Name = monitor.Name,
                         Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
@@ -444,12 +481,11 @@ namespace SmartHub.Plugins.AquaController
                     })
                     .ToArray();
         }
-        [HttpCommand("/api/aquacontroller/controller/list/dashboard")]
+        [HttpCommand("/api/management/controller/list/dashboard")]
         private object apiGetControllersForDashboard(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Controller>()
-                    .Where(controller => controller.IsVisible)
                     .OrderBy(controller => controller.Name)
                     .Select(monitor => new
                     {
