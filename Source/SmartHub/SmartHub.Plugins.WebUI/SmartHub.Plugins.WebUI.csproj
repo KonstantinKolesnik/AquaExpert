@@ -226,9 +226,6 @@
     <EmbeddedResource Include="Resources\Vendor\js\messages\kendo.messages.ru-RU.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Vendor\js\messages\kendo.messages.en-US.min.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Vendor\js\cultures\kendo.culture.ru-RU.min.js" />
   </ItemGroup>
   <ItemGroup>
