@@ -11,6 +11,8 @@ namespace SmartHub.Plugins.Management.Data
         public virtual string MonitorsList { get; set; }
         public virtual string ControllersList { get; set; }
 
+
+
         //public virtual List<Guid> GetMonitorsList()
         //{
         //    var json = string.IsNullOrWhiteSpace(MonitorsList) ? "[]" : MonitorsList;

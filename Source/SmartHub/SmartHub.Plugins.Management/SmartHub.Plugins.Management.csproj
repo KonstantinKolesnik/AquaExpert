@@ -59,6 +59,7 @@
     <Compile Include="Core\HeaterController.cs" />
     <Compile Include="Core\SwitchController.cs" />
     <Compile Include="Data\Controller.cs" />
+    <Compile Include="Data\Graph.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="Data\Monitor.cs" />
     <Compile Include="Data\Zone.cs" />

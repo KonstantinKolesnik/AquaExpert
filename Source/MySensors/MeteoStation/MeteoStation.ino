@@ -14,7 +14,7 @@
 #include <DHT.h>
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
-#include <eeprom.h>
+//#include <eeprom.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_INNER_SENSOR_ID	0
 MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);

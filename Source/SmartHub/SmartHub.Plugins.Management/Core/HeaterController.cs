@@ -38,8 +38,8 @@ namespace SmartHub.Plugins.Management.Core
                         TemperatureMax = 26.0f,
                         TemperatureAlarmMin = 22.0f,
                         TemperatureAlarmMax = 28.0f,
-                        TemperatureAlarmMinText = "Критически холодная вода в аквариуме",
-                        TemperatureAlarmMaxText = "Критически горячая вода в аквариуме"
+                        TemperatureAlarmMinText = "Критически низкая температура",
+                        TemperatureAlarmMaxText = "Критически высокая температура"
                     };
                 }
             }
