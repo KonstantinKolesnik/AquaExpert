@@ -174,8 +174,8 @@ namespace SmartHub.Plugins.Management
             {
                 Id = zone.Id,
                 Name = zone.Name,
-                MonitorsList = zone.MonitorsList,
-                ControllersList = zone.ControllersList
+                MonitorsList = zone.MonitorsList ?? "[]",
+                ControllersList = zone.ControllersList ?? "[]"
             };
         }
         #endregion

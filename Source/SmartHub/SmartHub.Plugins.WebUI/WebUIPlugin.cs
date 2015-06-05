@@ -63,12 +63,20 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/site.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.site.css")]
     [CssResource("/vendor/css/codemirror.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.codemirror.css", AutoLoad = true)]
 
+
+
     // kendo
     [CssResource("/vendor/css/kendo.common.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
-    
+
+    [HttpResource("/vendor/css/images/back.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.back.png")]
+    [HttpResource("/vendor/css/images/kendoui.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.kendoui.svg")]
+    [HttpResource("/vendor/css/images/kendoui.ttf", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.kendoui.ttf")]
+    [HttpResource("/vendor/css/images/kendoui.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.kendoui.woff")]
+    [HttpResource("/vendor/css/images/wp8_icons.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.wp8_icons.png")]
+    [HttpResource("/vendor/css/images/wp8_inverseicons.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.wp8_inverseicons.png")]
+
     [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
-    [CssResource("/vendor/css/kendo.dataviz.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.default.min.css")]
     [HttpResource("/vendor/css/Default/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.editor.png")]
     [HttpResource("/vendor/css/Default/imagebrowser.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.imagebrowser.png")]
     [HttpResource("/vendor/css/Default/indeterminate.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.indeterminate.gif")]
@@ -85,7 +93,6 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/vendor/css/Default/sprite_kpi_2x.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.sprite_kpi_2x.png")]
 
     [CssResource("/vendor/css/kendo.black.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.black.min.css")]
-    [CssResource("/vendor/css/kendo.dataviz.black.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.black.min.css")]
     [HttpResource("/vendor/css/Black/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.editor.png")]
     [HttpResource("/vendor/css/Black/imagebrowser.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.imagebrowser.png")]
     [HttpResource("/vendor/css/Black/indeterminate.gif", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Black.indeterminate.gif")]

@@ -8,6 +8,7 @@ define(['jquery'],
                         if (data) {
                             data.MonitorsList = JSON.parse(data.MonitorsList);
                             data.ControllersList = JSON.parse(data.ControllersList);
+                            //data.GraphsList = JSON.parse(data.GraphsList);
                         }
 
                         if (onComplete)
@@ -21,7 +22,8 @@ define(['jquery'],
                 $.post('/api/management/zone/setconfiguration', {
                     id: id,
                     monitorsList: JSON.stringify(monitorsList),
-                    controllersList: JSON.stringify(controllersList)
+                    controllersList: JSON.stringify(controllersList),
+                    //graphsList: JSON.stringify(graphsList)
                 })
             	.done(function (data) {
             		if (onComplete)
