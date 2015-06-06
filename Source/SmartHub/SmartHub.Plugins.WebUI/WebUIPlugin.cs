@@ -66,7 +66,10 @@ namespace SmartHub.Plugins.WebUI
 
 
     // kendo
+    [JavaScriptResource("/vendor/js/kendo.all.min.intellisense.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.intellisense.js")]
+
     [CssResource("/vendor/css/kendo.common.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common.min.css")]
+    [CssResource("/vendor/css/kendo.common-bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common-bootstrap.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
 
     [HttpResource("/vendor/css/images/back.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.back.png")]
@@ -75,6 +78,9 @@ namespace SmartHub.Plugins.WebUI
     [HttpResource("/vendor/css/images/kendoui.woff", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.kendoui.woff")]
     [HttpResource("/vendor/css/images/wp8_icons.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.wp8_icons.png")]
     [HttpResource("/vendor/css/images/wp8_inverseicons.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.wp8_inverseicons.png")]
+
+    // themes
+    [CssResource("/vendor/css/kendo.bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.bootstrap.min.css")]
 
     [CssResource("/vendor/css/kendo.default.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.default.min.css")]
     [HttpResource("/vendor/css/Default/editor.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.Default.editor.png")]

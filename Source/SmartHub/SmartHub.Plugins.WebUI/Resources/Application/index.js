@@ -26,6 +26,7 @@
 		settings:			'application/sections/system',
 
 		kendo: 'vendor/js/kendo.all.min',
+		kendoIntellisense: 'vendor/js/kendo.all.min.intellisense',
 		cultureRU: 'vendor/js/cultures/kendo.culture.ru-RU.min',
 		messagesRU: 'vendor/js/messages/kendo.messages.ru-RU.min',
 

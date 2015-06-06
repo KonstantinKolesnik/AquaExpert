@@ -18,3 +18,9 @@
 {
     width:500px;
 }
+
+.form-control.k-widget
+{
+    padding: 0;
+    width: 100%;
+}

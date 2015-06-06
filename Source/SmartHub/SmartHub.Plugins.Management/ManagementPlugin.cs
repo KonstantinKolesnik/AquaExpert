@@ -136,6 +136,13 @@ namespace SmartHub.Plugins.Management
             }
         }
 
+        private List<Monitor> GetMonitors()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>()
+                    .OrderBy(monitor => monitor.Name)
+                    .ToList();
+        }
         private List<Controller> GetControllers()
         {
             using (var session = Context.OpenSession())
@@ -151,7 +158,46 @@ namespace SmartHub.Plugins.Management
                     .ToList();
         }
 
+        private object BuildMonitorWebModel(Monitor monitor)
+        {
+            if (monitor == null)
+                return null;
+
+            return new
+            {
+                Id = monitor.Id,
+                Name = monitor.Name,
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
+            };
+        }
+        private object BuildMonitorRichWebModel(Monitor monitor)
+        {
+            if (monitor == null)
+                return null;
+
+            return new
+            {
+                Id = monitor.Id,
+                Name = monitor.Name,
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray()
+            };
+        }
         private object BuildControllerWebModel(Controller controller)
+        {
+            if (controller == null)
+                return null;
+
+            return new
+            {
+                Id = controller.Id,
+                Name = controller.Name,
+                Type = (int)controller.Type,
+                TypeName = GetEnumDescription(controller.Type),
+                Configuration = controller.Configuration
+            };
+        }
+        private object BuildControllerRichWebModel(Controller controller)
         {
             if (controller == null)
                 return null;
@@ -220,16 +266,18 @@ namespace SmartHub.Plugins.Management
         [HttpCommand("/api/management/monitor/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
-            using (var session = Context.OpenSession())
-                return session.Query<Monitor>()
-                    .OrderBy(monitor => monitor.Name)
-                    .Select(monitor => new
-                    {
-                        Id = monitor.Id,
-                        Name = monitor.Name,
-                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
-                    })
-                    .ToArray();
+            return GetMonitors()
+                .Select(BuildMonitorWebModel)
+                .Where(x => x != null)
+                .ToArray();
+        }
+        [HttpCommand("/api/management/monitor/list/dashboard")]
+        private object apiGetMonitorsForDashboard(HttpRequestParams request)
+        {
+            return GetMonitors()
+                .Select(BuildMonitorRichWebModel)
+                .Where(x => x != null)
+                .ToArray();
         }
         [HttpCommand("/api/management/monitor/add")]
         private object apiAddMonitor(HttpRequestParams request)
@@ -320,6 +368,14 @@ namespace SmartHub.Plugins.Management
         {
             return GetControllers()
                 .Select(BuildControllerWebModel)
+                .Where(x => x != null)
+                .ToArray();
+        }
+        [HttpCommand("/api/management/controller/list/dashboard")]
+        private object apiGetControllersForDashboard(HttpRequestParams request)
+        {
+            return GetControllers()
+                .Select(BuildControllerRichWebModel)
                 .Where(x => x != null)
                 .ToArray();
         }
@@ -511,38 +567,6 @@ namespace SmartHub.Plugins.Management
             //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
 
             return null;
-        }
-
-
-        [HttpCommand("/api/management/monitor/list/dashboard")]
-        private object apiGetMonitorsForDashboard(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Monitor>()
-                    .OrderBy(monitor => monitor.Name)
-                    .Select(monitor => new
-                    {
-                        Id = monitor.Id,
-                        Name = monitor.Name,
-                        Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray()
-                    })
-                    .ToArray();
-        }
-        [HttpCommand("/api/management/controller/list/dashboard")]
-        private object apiGetControllersForDashboard(HttpRequestParams request)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Controller>()
-                    .OrderBy(controller => controller.Name)
-                    .Select(monitor => new
-                    {
-                        Id = monitor.Id,
-                        Name = monitor.Name,
-                        //Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                        //SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 48).ToArray()
-                    })
-                    .ToArray();
         }
         #endregion
     }

@@ -11,6 +11,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
     {
         #region Fields
         private SerialPort serialPort;
+        private bool isPortValid = false;
         private Thread thread;
         //private System.Timers.Timer timer;
         #endregion
@@ -18,7 +19,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #region Properties
         public bool IsStarted
         {
-            get { return serialPort.IsOpen; }
+            get { return serialPort.IsOpen && isPortValid; }
         }
         #endregion
 
@@ -77,6 +78,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                 serialPort.DataReceived -= serialPort_DataReceived;
                 serialPort.Close();
 
+                isPortValid = false;
+
                 if (Disconnected != null)
                     Disconnected(this, EventArgs.Empty);
             }
@@ -130,7 +133,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                     {
                         serialPort.Open();
 
-                        if (IsStarted)
+                        if (serialPort.IsOpen)
                         {
                             Thread.Sleep(3000); // let hardware gateway initialize
 
@@ -141,6 +144,8 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                                 if (msg != null && msg.Type == SensorMessageType.Internal && (InternalValueType)msg.SubType == InternalValueType.GatewayReady)
                                 {
                                     serialPort.DataReceived += serialPort_DataReceived;
+
+                                    isPortValid = true;
 
                                     if (MessageReceived != null)
                                         MessageReceived(this, new SensorMessageEventArgs(msg));
