@@ -83,8 +83,7 @@ namespace SmartHub.Plugins.Management.Core
         #region Private methods
         private static bool IsInRange(DateTime dt, Period range)
         {
-            return (dt.Hour >= range.From.Hour && dt.Minute >= range.From.Minute) &&
-                   (dt.Hour <= range.To.Hour && dt.Minute <= range.To.Minute);
+            return dt.TimeOfDay >= range.From.TimeOfDay && dt.TimeOfDay <= range.To.TimeOfDay;
         }
 
         protected override void Process(float? value)
