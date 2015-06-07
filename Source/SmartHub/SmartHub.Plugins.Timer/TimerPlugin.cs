@@ -1,8 +1,10 @@
-﻿using SmartHub.Core.Plugins;
+﻿using Microsoft.Win32;
+using SmartHub.Core.Plugins;
 using SmartHub.Plugins.Timer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Timers;
 
 namespace SmartHub.Plugins.Timer
@@ -41,6 +43,9 @@ namespace SmartHub.Plugins.Timer
         #region Plugin ovverrides
         public override void InitPlugin()
         {
+            CultureInfo.CurrentCulture.ClearCachedData();
+            SystemEvents.TimeChanged += (sender, args) => CultureInfo.CurrentCulture.ClearCachedData();
+
             timer_3_sec = new System.Timers.Timer(TIMER_INTERVAL_3_SEC);
             timer_3_sec.Elapsed += timer_3_sec_Elapsed;
 

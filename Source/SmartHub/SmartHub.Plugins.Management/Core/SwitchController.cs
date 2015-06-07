@@ -83,7 +83,14 @@ namespace SmartHub.Plugins.Management.Core
         #region Private methods
         private static bool IsInRange(DateTime dt, Period range)
         {
-            return dt.TimeOfDay >= range.From.TimeOfDay && dt.TimeOfDay <= range.To.TimeOfDay;
+            TimeSpan start = range.From.ToLocalTime().TimeOfDay;
+            TimeSpan end = range.To.ToLocalTime().TimeOfDay;
+            TimeSpan now = dt.TimeOfDay;
+
+            if (start < end)
+                return start <= now && now <= end;
+            else
+                return !(end < now && now < start);
         }
 
         protected override void Process(float? value)
@@ -91,7 +98,7 @@ namespace SmartHub.Plugins.Management.Core
             if (configuration.IsAutoMode)
             {
                 bool isActive = false;
-                DateTime now = DateTime.UtcNow;
+                DateTime now = DateTime.Now;
 
                 foreach (var range in configuration.ActivePeriods)
                     isActive |= (range.IsActive && IsInRange(now, range));
