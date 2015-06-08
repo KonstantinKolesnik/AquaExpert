@@ -81,7 +81,7 @@ define(
                     }
                     function createMonitorsGrid() {
                         gridMonitors = $("#gridMonitors").kendoGrid({
-                            height: 350,
+                            height: 500,
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
@@ -160,7 +160,7 @@ define(
                     }
                     function createControllersGrid() {
                         gridControllers = $("#gridControllers").kendoGrid({
-                            height: 350,
+                            height: 500,
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {
@@ -234,7 +234,7 @@ define(
 
                     function createZonesGrid() {
                         gridZones = $("#gridZones").kendoGrid({
-                            height: 350,
+                            height: 500,
                             dataSource: new kendo.data.DataSource({
                                 transport: {
                                     read: {

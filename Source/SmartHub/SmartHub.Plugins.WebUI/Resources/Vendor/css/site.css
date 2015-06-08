@@ -286,3 +286,21 @@ a.list-group-item:hover {
 }
 
 /*#endregion */
+
+
+.inline-control
+{
+    margin-left:10px;
+    margin-right:20px;
+}
+
+.form-inline
+{
+    padding:10px !important;
+    margin-bottom:20px;
+}
+
+.add-button
+{
+    float:right;
+}
