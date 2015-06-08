@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartHub.Plugins.Management.Data
+namespace SmartHub.Plugins.Monitors.Data
 {
     public class Monitor
     {

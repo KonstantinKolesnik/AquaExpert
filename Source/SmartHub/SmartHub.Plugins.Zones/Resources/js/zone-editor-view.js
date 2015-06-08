@@ -1,14 +1,14 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/management/zone-editor.html'],
+	['common', 'lib', 'text!webapp/zones/zone-editor.html'],
     function (common, lib, templates) {
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             onShow: function () {
-                createMultiSelector($("#msMonitors"), "monitor");
-                createMultiSelector($("#msControllers"), "controller");
-                //createMultiSelector($("#msGraphs"), "graph");
+                createMultiSelector($("#msMonitors"), "monitors");
+                createMultiSelector($("#msControllers"), "controllers");
+                //createMultiSelector($("#msGraphs"), "graphs");
 
                 //$("#sparkline").kendoSparkline([1, 2, 3, 2, 1]);
                 //$("#sparkline").kendoSparkline([200, 450, 300, 125]);
@@ -31,7 +31,7 @@ define(
                         dataSource: {
                             transport: {
                                 read: {
-                                    url: function () { return document.location.origin + "/api/management/" + entity + "/list"; }
+                                    url: function () { return document.location.origin + "/api/" + entity + "/list"; }
                                 }
                             },
                         },

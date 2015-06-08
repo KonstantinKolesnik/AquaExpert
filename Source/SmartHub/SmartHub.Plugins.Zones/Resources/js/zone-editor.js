@@ -1,6 +1,6 @@
 ﻿
 define(
-    ['app', 'webapp/management/zone-editor-model', 'webapp/management/zone-editor-view'],
+    ['app', 'webapp/zones/zone-editor-model', 'webapp/zones/zone-editor-view'],
     function (application, models, views) {
         var module = {
             reload: function (id) {

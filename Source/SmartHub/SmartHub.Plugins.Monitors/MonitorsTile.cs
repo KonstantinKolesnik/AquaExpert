@@ -2,20 +2,18 @@
 using SmartHub.Plugins.WebUI.Tiles;
 using System;
 
-namespace SmartHub.Plugins.Management
+namespace SmartHub.Plugins.Monitors
 {
     [Tile]
-    public class ManagementTile : TileBase
+    public class MonitorsTile : TileBase
     {
         public override void PopulateWebModel(TileWebModel tileWebModel, dynamic options)
         {
             try
             {
-                tileWebModel.title = "Менеджмент";
-                tileWebModel.url = "webapp/management/settings";
+                tileWebModel.title = "Мониторы";
+                tileWebModel.url = "webapp/monitors/settings";
                 tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-gear";
-                tileWebModel.content = Context.GetPlugin<ManagementPlugin>().BuildTileContent();
-                tileWebModel.SignalRReceiveHandler = Context.GetPlugin<ManagementPlugin>().BuildSignalRReceiveHandler();
             }
             catch (Exception ex)
             {

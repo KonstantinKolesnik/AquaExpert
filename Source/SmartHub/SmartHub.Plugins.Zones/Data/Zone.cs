@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SmartHub.Plugins.Management.Data
+namespace SmartHub.Plugins.Zones.Data
 {
     public class Zone
     {
@@ -11,7 +11,7 @@ namespace SmartHub.Plugins.Management.Data
         public virtual string MonitorsList { get; set; }
         public virtual string ControllersList { get; set; }
         public virtual string ScriptsList { get; set; }
-        public virtual string GrapsList { get; set; }
+        public virtual string GraphsList { get; set; }
 
 
 

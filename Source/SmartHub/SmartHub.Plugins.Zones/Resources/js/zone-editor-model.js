@@ -3,7 +3,7 @@ define(['jquery'],
     function ($) {
         var api = {
             getZone: function (id, onComplete) {
-                $.getJSON('/api/management/zone', { id: id })
+                $.getJSON('/api/zones/get', { id: id })
                     .done(function (data) {
                         if (data) {
                             data.MonitorsList = JSON.parse(data.MonitorsList);
@@ -19,7 +19,7 @@ define(['jquery'],
                     });
             },
             setZoneConfiguration: function (id, monitorsList, controllersList, onComplete) {
-                $.post('/api/management/zone/setconfiguration', {
+                $.post('/api/zones/setconfiguration', {
                     id: id,
                     monitorsList: JSON.stringify(monitorsList),
                     controllersList: JSON.stringify(controllersList),
