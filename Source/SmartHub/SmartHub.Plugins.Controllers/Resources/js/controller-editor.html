@@ -66,27 +66,25 @@
         </div>
     </form>
 
-    <form class="form-inline">
-        <div class="form-group">
-            <label for="ddlNewPeriodFrom">С</label>
-            <input id="ddlNewPeriodFrom" />
-        </div>
-        <div class="form-group">
-            <label for="ddlNewPeriodTo">По</label>
-            <input id="ddlNewPeriodTo" />
-        </div>
-        <div class="form-group">
-            <label for="chbNewPeriodIsActive">Активный</label>
-            <input type="checkbox" id="chbNewPeriodIsActive" checked="checked" />
-        </div>
-        <button id="btnAddPeriod" class="k-button">Добавить период</button>
-    </form>
+    <div class="col-md-5">
+        <form class="form-inline k-block">
+            <div class="form-group">
+                <label for="ddlNewPeriodFrom">С</label>
+                <input id="ddlNewPeriodFrom" class="inline-control" />
+            </div>
+            <div class="form-group">
+                <label for="ddlNewPeriodTo">По</label>
+                <input id="ddlNewPeriodTo" class="inline-control" />
+            </div>
+            <div class="form-group">
+                <label for="chbNewPeriodIsActive">Активный</label>
+                <input type="checkbox" id="chbNewPeriodIsActive" class="inline-control" checked="checked" />
+            </div>
+            <button id="btnAddPeriod" class="k-button k-primary add-button">Добавить период</button>
+        </form>
 
-    <form class="form-horizontal" style="margin-top:15px;">
-        <div class="col-xs-12 col-md-4">
-            <div id="gridPeriods" data-bind="source: Controller.Configuration.ActivePeriods"></div>
-        </div>
-    </form>
+        <div id="gridPeriods" data-bind="source: Controller.Configuration.ActivePeriods"></div>
+    </div>
 
     <script id="tmplIsActive" type="text/x-kendo-template">
         # if (data.IsActive) { #

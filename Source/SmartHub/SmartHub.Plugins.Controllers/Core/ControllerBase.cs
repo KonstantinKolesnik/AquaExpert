@@ -1,10 +1,10 @@
 ﻿using SmartHub.Core.Plugins;
-using SmartHub.Plugins.Management.Data;
+using SmartHub.Plugins.Controllers.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using System;
 
-namespace SmartHub.Plugins.Management.Core
+namespace SmartHub.Plugins.Controllers.Core
 {
     public abstract class ControllerBase
     {

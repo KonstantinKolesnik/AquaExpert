@@ -3,7 +3,7 @@ define(['jquery'],
     function ($) {
         var api = {
             getController: function (id, onComplete) {
-                $.getJSON('/api/management/controller', { id: id })
+                $.getJSON('/api/controllers/get', { id: id })
                     .done(function (data) {
                         if (data)
                             data.Configuration = JSON.parse(data.Configuration);
@@ -16,7 +16,7 @@ define(['jquery'],
                     });
             },
             setControllerConfiguration: function (id, config, onComplete) {
-                $.post('/api/management/controller/setconfiguration', { id: id, config: JSON.stringify(config) })
+                $.post('/api/controllers/setconfiguration', { id: id, config: JSON.stringify(config) })
             		.done(function (data) {
             		    if (onComplete)
             		        onComplete(data);

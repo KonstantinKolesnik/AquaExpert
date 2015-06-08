@@ -1,8 +1,8 @@
 ﻿using SmartHub.Core.Plugins.Utils;
-using SmartHub.Plugins.Management.Core;
+using SmartHub.Plugins.Controllers.Core;
 using System;
 
-namespace SmartHub.Plugins.Management.Data
+namespace SmartHub.Plugins.Controllers.Data
 {
     public class Controller
     {

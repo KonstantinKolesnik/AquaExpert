@@ -288,6 +288,17 @@ a.list-group-item:hover {
 /*#endregion */
 
 
+
+.k-grid .k-dirty
+{
+  display:none;
+}
+.form-control.k-widget
+{
+    padding: 0;
+    width: 100%;
+}
+
 .inline-control
 {
     margin-left:10px;

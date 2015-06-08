@@ -1,6 +1,6 @@
 ﻿
 define(
-    ['app', 'webapp/management/controller-editor-model', 'webapp/management/controller-editor-view'],
+    ['app', 'webapp/controllers/controller-editor-model', 'webapp/controllers/controller-editor-view'],
     function (application, models, views) {
         var module = {
             reload: function (id) {

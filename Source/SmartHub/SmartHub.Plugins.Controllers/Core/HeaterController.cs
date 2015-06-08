@@ -1,11 +1,11 @@
 ﻿using SmartHub.Core.Plugins.Utils;
-using SmartHub.Plugins.Management.Data;
+using SmartHub.Plugins.Controllers.Data;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Speech;
 using System;
 
-namespace SmartHub.Plugins.Management.Core
+namespace SmartHub.Plugins.Controllers.Core
 {
     public class HeaterController : ControllerBase
     {

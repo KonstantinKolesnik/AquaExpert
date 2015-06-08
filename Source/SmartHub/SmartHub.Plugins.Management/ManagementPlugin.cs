@@ -3,7 +3,6 @@ using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
-using SmartHub.Plugins.Management.Core;
 using SmartHub.Plugins.Management.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Attributes;
@@ -20,21 +19,16 @@ using System.Text;
 
 namespace SmartHub.Plugins.Management
 {
-    [AppSection("Менеджмент", SectionType.Common, "/webapp/management/dashboard.js", "SmartHub.Plugins.Management.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.Management.ManagementTile")]
+    //[AppSection("Менеджмент", SectionType.Common, "/webapp/management/dashboard.js", "SmartHub.Plugins.Management.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.Management.ManagementTile")]
     [JavaScriptResource("/webapp/management/dashboard-view.js", "SmartHub.Plugins.Management.Resources.js.dashboard-view.js")]
     [JavaScriptResource("/webapp/management/dashboard-model.js", "SmartHub.Plugins.Management.Resources.js.dashboard-model.js")]
     [HttpResource("/webapp/management/dashboard.html", "SmartHub.Plugins.Management.Resources.js.dashboard.html")]
 
-    [AppSection("Менеджмент", SectionType.System, "/webapp/management/settings.js", "SmartHub.Plugins.Management.Resources.js.settings.js")]
+    //[AppSection("Менеджмент", SectionType.System, "/webapp/management/settings.js", "SmartHub.Plugins.Management.Resources.js.settings.js")]
+    [AppSection("Менеджмент", SectionType.System, "/webapp/management/settings.js", "SmartHub.Plugins.Management.Resources.js.settings.js", TileTypeFullName = "SmartHub.Plugins.Management.ManagementTile")]
     [JavaScriptResource("/webapp/management/settings-view.js", "SmartHub.Plugins.Management.Resources.js.settings-view.js")]
     [JavaScriptResource("/webapp/management/settings-model.js", "SmartHub.Plugins.Management.Resources.js.settings-model.js")]
     [HttpResource("/webapp/management/settings.html", "SmartHub.Plugins.Management.Resources.js.settings.html")]
-
-    // controller editor
-    [JavaScriptResource("/webapp/management/controller-editor.js", "SmartHub.Plugins.Management.Resources.js.controller-editor.js")]
-    [JavaScriptResource("/webapp/management/controller-editor-view.js", "SmartHub.Plugins.Management.Resources.js.controller-editor-view.js")]
-    [JavaScriptResource("/webapp/management/controller-editor-model.js", "SmartHub.Plugins.Management.Resources.js.controller-editor-model.js")]
-    [HttpResource("/webapp/management/controller-editor.html", "SmartHub.Plugins.Management.Resources.js.controller-editor.html")]
 
     // zone editor
     [JavaScriptResource("/webapp/management/zone-editor.js", "SmartHub.Plugins.Management.Resources.js.zone-editor.js")]
@@ -49,7 +43,6 @@ namespace SmartHub.Plugins.Management
     {
         #region Fields
         private MySensorsPlugin mySensors;
-        private List<ControllerBase> controllers = new List<ControllerBase>();
         #endregion
 
         #region SignalR events
@@ -62,24 +55,12 @@ namespace SmartHub.Plugins.Management
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            mapper.Class<Zone>(cfg => cfg.Table("Management_Zones"));
+            //mapper.Class<Zone>(cfg => cfg.Table("Management_Zones"));
             //mapper.Class<Monitor>(cfg => cfg.Table("Management_Monitors"));
-            mapper.Class<Controller>(cfg => cfg.Table("Management_Controllers"));
         }
         public override void InitPlugin()
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
-
-            var ctrls = GetControllers();
-            foreach (var ctrl in ctrls)
-            {
-                ControllerBase controller = ConvertController(ctrl);
-                if (controller != null)
-                    controllers.Add(controller);
-            }
-
-            foreach (ControllerBase controller in controllers)
-                controller.Init(Context);
         }
         #endregion
 
@@ -115,39 +96,11 @@ namespace SmartHub.Plugins.Management
         #endregion
 
         #region Private methods
-        private static string GetEnumDescription(Enum value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            if (attributes != null && attributes.Length > 0)
-                return attributes[0].Description;
-            else
-                return value.ToString();
-        }
-        private static ControllerBase ConvertController(Controller controller)
-        {
-            switch (controller.Type)
-            {
-                case ControllerType.Heater: return new HeaterController(controller);
-                case ControllerType.Switch: return new SwitchController(controller);
-
-                default: return null;
-            }
-        }
-
         private List<Monitor> GetMonitors()
         {
             using (var session = Context.OpenSession())
                 return session.Query<Monitor>()
                     .OrderBy(monitor => monitor.Name)
-                    .ToList();
-        }
-        private List<Controller> GetControllers()
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Controller>()
-                    .OrderBy(controller => controller.Name)
                     .ToList();
         }
         private List<Zone> GetZones()
@@ -183,34 +136,6 @@ namespace SmartHub.Plugins.Management
                 SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray()
             };
         }
-        private object BuildControllerWebModel(Controller controller)
-        {
-            if (controller == null)
-                return null;
-
-            return new
-            {
-                Id = controller.Id,
-                Name = controller.Name,
-                Type = (int)controller.Type,
-                TypeName = GetEnumDescription(controller.Type),
-                Configuration = controller.Configuration
-            };
-        }
-        private object BuildControllerRichWebModel(Controller controller)
-        {
-            if (controller == null)
-                return null;
-
-            return new
-            {
-                Id = controller.Id,
-                Name = controller.Name,
-                Type = (int)controller.Type,
-                TypeName = GetEnumDescription(controller.Type),
-                Configuration = controller.Configuration
-            };
-        }
         private object BuildZoneWebModel(Zone zone)
         {
             if (zone == null)
@@ -230,35 +155,22 @@ namespace SmartHub.Plugins.Management
         [MySensorsConnected]
         private void Connected()
         {
-            foreach (ControllerBase controller in controllers)
-                controller.RequestSensorsValues();
         }
 
         [MySensorsMessageCalibration]
         private void MessageCalibration(SensorMessage message)
         {
-            foreach (ControllerBase controller in controllers)
-                controller.MessageCalibration(message);
         }
 
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
-            foreach (ControllerBase controller in controllers)
-            {
-                controller.MessageReceived(message);
-
-                if (controller.IsMyMessage(message))
-                    NotifyForSignalR(new { MsgId = "ManagementTileContent", Data = BuildTileContent() });
-            }
         }
 
         //[RunPeriodically(1)]
         [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
-            foreach (ControllerBase controller in controllers)
-                controller.TimerElapsed(now);
         }
         #endregion
 
@@ -348,117 +260,6 @@ namespace SmartHub.Plugins.Management
             }
 
             //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
-
-            return null;
-        }
-
-        [HttpCommand("/api/management/controllertype/list")]
-        private object apiGetControllerTypes(HttpRequestParams request)
-        {
-            return Enum.GetValues(typeof(ControllerType))
-                .Cast<ControllerType>()
-                .Select(v => new
-                {
-                    Id = v,
-                    Name = GetEnumDescription(v)
-                }).ToArray();
-        }
-        [HttpCommand("/api/management/controller/list")]
-        private object apiGetControllers(HttpRequestParams request)
-        {
-            return GetControllers()
-                .Select(BuildControllerWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        [HttpCommand("/api/management/controller/list/dashboard")]
-        private object apiGetControllersForDashboard(HttpRequestParams request)
-        {
-            return GetControllers()
-                .Select(BuildControllerRichWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        [HttpCommand("/api/management/controller")]
-        private object apiGetController(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-
-            using (var session = Context.OpenSession())
-                return BuildControllerWebModel(session.Get<Controller>(id));
-        }
-        [HttpCommand("/api/management/controller/add")]
-        private object apiAddController(HttpRequestParams request)
-        {
-            var name = request.GetRequiredString("name");
-            var type = (ControllerType)request.GetRequiredInt32("type");
-
-            var ctrl = new Controller()
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Type = type
-            };
-
-            ControllerBase controller = ConvertController(ctrl);
-            if (controller != null)
-            {
-                controller.Init(Context);
-                controller.SaveToDB();
-                controllers.Add(controller);
-
-                NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
-            }
-
-            return null;
-        }
-        [HttpCommand("/api/management/controller/setname")]
-        private object apiSetControllerName(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            var name = request.GetRequiredString("name");
-
-            using (var session = Context.OpenSession())
-            {
-                var ctrl = session.Load<Controller>(id);
-                ctrl.Name = name;
-                session.Flush();
-
-                NotifyForSignalR(new { MsgId = "ControllerNameChanged", Data = BuildControllerWebModel(ctrl) });
-            }
-
-            return null;
-        }
-        [HttpCommand("/api/management/controller/setconfiguration")]
-        private object apiSetControllerConfiguration(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-            var conf = request.GetRequiredString("config");
-
-            foreach (ControllerBase controller in controllers)
-                if (controller.ControllerID == id)
-                {
-                    controller.SetConfiguration(conf);
-                    break;
-                }
-
-            //NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
-
-            return null;
-        }
-        [HttpCommand("/api/management/controller/delete")]
-        private object apiDeleteController(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("Id");
-
-            using (var session = Context.OpenSession())
-            {
-                var ctrl = session.Load<Controller>(id);
-                session.Delete(ctrl);
-                session.Flush();
-
-                NotifyForSignalR(new { MsgId = "ControllerDeleted", Data = new { Id = id } });
-            }
 
             return null;
         }

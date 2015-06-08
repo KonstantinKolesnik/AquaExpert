@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SmartHub.Plugins.Management.Core
+namespace SmartHub.Plugins.Controllers.Core
 {
     public enum ControllerType
     {

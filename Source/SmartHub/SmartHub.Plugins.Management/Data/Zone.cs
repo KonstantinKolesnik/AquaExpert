@@ -10,6 +10,9 @@ namespace SmartHub.Plugins.Management.Data
         public virtual string Name { get; set; }
         public virtual string MonitorsList { get; set; }
         public virtual string ControllersList { get; set; }
+        public virtual string ScriptsList { get; set; }
+        public virtual string GrapsList { get; set; }
+
 
 
 

@@ -74,6 +74,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.MeteoStati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Management", "SmartHub.Plugins.Management\SmartHub.Plugins.Management.csproj", "{9B2DD9BE-77F9-455E-B219-7E4110A6AA16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.NetworkManager", "SmartHub.Plugins.NetworkManager\SmartHub.Plugins.NetworkManager.csproj", "{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Controllers", "SmartHub.Plugins.Controllers\SmartHub.Plugins.Controllers.csproj", "{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -390,6 +394,38 @@ Global
 		{9B2DD9BE-77F9-455E-B219-7E4110A6AA16}.Release|Win32.ActiveCfg = Release|Any CPU
 		{9B2DD9BE-77F9-455E-B219-7E4110A6AA16}.Release|x64.ActiveCfg = Release|Any CPU
 		{9B2DD9BE-77F9-455E-B219-7E4110A6AA16}.Release|x86.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|x64.ActiveCfg = Release|Any CPU
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09}.Release|x86.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -417,5 +453,7 @@ Global
 		{158E3A55-1FC7-4996-972B-8AD738A018B8} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 		{A82CCE04-0E15-4913-B959-E3F3CB58AE7F} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{9B2DD9BE-77F9-455E-B219-7E4110A6AA16} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
+		{BC2A1A15-4B08-48AD-84FC-758A0EFB7B09} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
+		{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC} = {67217112-CE31-4E8F-AAF5-1E8163C76A7E}
 	EndGlobalSection
 EndGlobal
