@@ -17,9 +17,7 @@ namespace SmartHub.Plugins.Speech.Data
                 new Column("UserScriptId", DbType.Guid, ColumnProperty.NotNull)
             );
 
-            Database.AddForeignKey("FK_Speech_VoiceCommand_UserScriptId",
-                "Speech_VoiceCommand", "UserScriptId",
-                "Scripts_UserScript", "Id", ForeignKeyConstraint.Cascade);
+            Database.AddForeignKey("FK_Speech_VoiceCommand_UserScriptId", "Speech_VoiceCommand", "UserScriptId", "Scripts_UserScript", "Id", ForeignKeyConstraint.Cascade);
         }
 
         public override void Revert()

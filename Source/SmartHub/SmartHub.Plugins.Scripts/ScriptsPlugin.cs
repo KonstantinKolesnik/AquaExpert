@@ -94,6 +94,11 @@ namespace SmartHub.Plugins.Scripts
         {
             get { return scriptEvents.ToList().AsReadOnly(); }
         }
+        public UserScript GetScript(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<UserScript>().FirstOrDefault(x => x.Id == id);
+        }
 
         /// <summary>
         /// Запуск скриптов (для плагинов)
@@ -218,13 +223,10 @@ namespace SmartHub.Plugins.Scripts
 
             using (var session = Context.OpenSession())
             {
-
-                var script = id.HasValue
-                    ? session.Get<UserScript>(id.Value)
-                    : new UserScript { Id = Guid.NewGuid() };
-
+                var script = id.HasValue ? session.Get<UserScript>(id.Value) : new UserScript { Id = Guid.NewGuid() };
                 script.Name = name;
                 script.Body = body;
+
                 session.SaveOrUpdate(script);
                 session.Flush();
             }
@@ -255,7 +257,7 @@ namespace SmartHub.Plugins.Scripts
             using (var session = Context.OpenSession())
             {
                 var script = session.Get<UserScript>(scriptId);
-                /*Context.GetPlugin<ScriptsPlugin>().*/ExecuteScript(script, new object[0]);
+                ExecuteScript(script, new object[0]);
             }
 
             return null;
