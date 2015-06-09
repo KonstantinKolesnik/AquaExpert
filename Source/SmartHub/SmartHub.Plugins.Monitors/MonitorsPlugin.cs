@@ -31,6 +31,9 @@ namespace SmartHub.Plugins.Monitors
     [JavaScriptResource("/webapp/monitors/monitor-editor-model.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor-model.js")]
     [HttpResource("/webapp/monitors/monitor-editor.html", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor.html")]
 
+    [JavaScriptResource("/webapp/monitors/jquery.jsoneditor.min.js", "SmartHub.Plugins.Monitors.Resources.js.jquery.jsoneditor.min.js")]
+    [CssResource("/webapp/monitors/jsoneditor.css", "SmartHub.Plugins.Monitors.Resources.css.jsoneditor.css", AutoLoad = true)]
+
     [JavaScriptResource("/webapp/monitors/utils.js", "SmartHub.Plugins.Monitors.Resources.js.utils.js")]
     [HttpResource("/webapp/monitors/utils.html", "SmartHub.Plugins.Monitors.Resources.js.utils.html")]
 

@@ -5,9 +5,6 @@ define(['jquery'],
             getMonitor: function (id, onComplete) {
                 $.getJSON('/api/monitors/get/dashboard', { id: id })
                     .done(function (data) {
-                        if (data)
-                            data.Configuration = JSON.parse(data.Configuration);
-
                         if (onComplete)
                             onComplete(data);
                     })
@@ -16,7 +13,8 @@ define(['jquery'],
                     });
             },
             setMonitorConfiguration: function (id, config, onComplete) {
-                $.post('/api/monitors/setconfiguration', { id: id, config: JSON.stringify(config) })
+                //$.post('/api/monitors/setconfiguration', { id: id, config: JSON.stringify(config) })
+                $.post('/api/monitors/setconfiguration', { id: id, config: config })
             		.done(function (data) {
             		    if (onComplete)
             		        onComplete(data);

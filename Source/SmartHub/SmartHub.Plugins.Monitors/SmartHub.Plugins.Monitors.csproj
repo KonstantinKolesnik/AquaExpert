@@ -130,6 +130,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\js\utils.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\css\jsoneditor.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\jquery.jsoneditor.min.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

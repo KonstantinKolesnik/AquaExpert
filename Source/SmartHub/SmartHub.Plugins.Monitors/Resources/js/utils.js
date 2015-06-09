@@ -8,6 +8,13 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
 
                 if (!config)
                     config = this.getDefaultConfiguration();
+                else
+                    //try {
+                        config = JSON.parse(config);
+                    //}
+                    //catch(e) {
+                    //    config = this.getDefaultConfiguration();
+                    //}
 
                 return selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
             },
@@ -16,12 +23,47 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                     series: [
                         {
                             field: "Value",
-                            type: "line",
-                            style: "smooth",
-                            color: "cornflowerblue",
                             axis: "axisValue",
+
+                            type: "line",
+                            /*
+                            area
+                            bar
+                            bubble
+                            bullet
+                            candlestick
+                            column
+                            donut
+                            funnel
+                            horizontalWaterfall
+                            line
+                            ohlc
+                            pie
+                            polarArea
+                            polarLine
+                            polarScatter
+                            radarArea
+                            radarColumn
+                            radarLine
+                            rangeBar
+                            rangeColumn
+                            scatter
+                            scatterLine
+                            verticalArea
+                            verticalBullet
+                            verticalLine
+                            waterfall
+                            */
+
+                            style: "smooth",
+                                //"normal" - The values will be connected with straight line.
+                                //"step" - The values will be connected with a line with right angle.
+                                //"smooth" - The values will be connected with a smooth line.
+
+                            color: "cornflowerblue",
                             tooltip: {
                                 visible: true,
+                                template: "#= kendo.toString(data.value, 'n1') #",
                                 //template: function (data) {
                                 //    switch (type) {
                                 //        case "T": return kendo.toString(data.value, 'n1') + "&nbsp;°C";
@@ -53,6 +95,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                             //max: 104000,
                             labels: {
                                 //format: "{0} °C",
+                                template: "#= kendo.toString(data.value, 'n1') #",
                                 //template: function (data) {
                                 //    switch (type) {
                                 //        case "T": return kendo.toString(data.value, 'n1') + "&nbsp;°C";
@@ -83,7 +126,9 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                         field: "TimeStamp",
 
                         //type: "date",
-                        //baseUnit: "fit",
+                        type: "category",
+
+                        baseUnit: "fit",
                         //baseUnit: "seconds",
                         //baseUnit: "minutes",
                         //baseUnit: "hours",
