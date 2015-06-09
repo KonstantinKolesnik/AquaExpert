@@ -15,7 +15,6 @@ namespace SmartHub.Plugins.Monitors.Data
                 new Column("Id", DbType.Guid, ColumnProperty.PrimaryKey, "newid()"),
                 new Column("Name", DbType.String, ColumnProperty.NotNull),
                 new Column("SensorId", DbType.Guid, ColumnProperty.NotNull),
-                new Column("Type", DbType.Byte, ColumnProperty.NotNull),
                 new Column("Configuration", DbType.String.WithSize(int.MaxValue), ColumnProperty.NotNull)
             );
             Database.AddUniqueConstraint("UK_Monitors_Monitors_Name", "Monitors_Monitors", "Name");

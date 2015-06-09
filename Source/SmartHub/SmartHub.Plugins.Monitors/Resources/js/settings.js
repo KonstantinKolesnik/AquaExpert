@@ -4,7 +4,7 @@
 	    var view;
 
 	    var module = {
-	        addMonitor: function (name, sensorId, type) {
+	        addMonitor: function (name, sensorId) {
 	            if (!name) {
 	                alert("Не указано имя монитора!");
 	                return;
@@ -13,12 +13,8 @@
 	                alert("Не указан сенсор монитора!");
 	                return;
 	            }
-	            if (!type) {
-	                alert("Не указан тип монитора!");
-	                return;
-	            }
 
-	            models.addMonitor(name, sensorId, type, function () { view.refreshMonitorsGrid(); });
+	            models.addMonitor(name, sensorId, function () { view.refreshMonitorsGrid(); });
 	        },
 	        setMonitorName: function (id, name) {
 	            if (!name) {

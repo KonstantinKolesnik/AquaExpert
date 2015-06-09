@@ -1,8 +1,8 @@
 ﻿
 define(['jquery'], function ($) {
     var api = {
-        addMonitor: function (name, sensorId, type, onComplete) {
-            $.post('/api/monitors/add', { name: name, sensorId: sensorId, type: type })
+        addMonitor: function (name, sensorId, onComplete) {
+            $.post('/api/monitors/add', { name: name, sensorId: sensorId })
 				.done(function (data) {
 				    if (onComplete)
 				        onComplete(data);

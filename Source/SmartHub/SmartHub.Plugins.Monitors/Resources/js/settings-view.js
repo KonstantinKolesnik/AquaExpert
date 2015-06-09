@@ -3,7 +3,6 @@ define(
 	['common', 'lib', 'text!webapp/monitors/settings.html'],
     function (common, lib, templates) {
         var ddlNewMonitorSensor;
-        var ddlNewMonitorType;
         var gridMonitors;
 
         var layoutView = lib.marionette.LayoutView.extend({
@@ -13,7 +12,7 @@ define(
             },
             addMonitor: function (e) {
                 e.preventDefault();
-                this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value(), ddlNewMonitorType.value());
+                this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value());
             },
             refreshMonitorsGrid: function () {
                 gridMonitors.dataSource.read();
@@ -40,19 +39,6 @@ define(
                         dataValueField: "Id",
                         dataTextField: "Name",
                         optionLabel: "Выберите сенсор..."
-                    }).data("kendoDropDownList");
-
-                    ddlNewMonitorType = $("#ddlNewMonitorType").kendoDropDownList({
-                        dataSource: new kendo.data.DataSource({
-                            transport: {
-                                read: {
-                                    url: function () { return document.location.origin + "/api/monitors/monitortype/list" },
-                                }
-                            }
-                        }),
-                        dataValueField: "Id",
-                        dataTextField: "Name",
-                        optionLabel: "Выберите тип графика..."
                     }).data("kendoDropDownList");
                 }
                 function createMonitorsGrid() {

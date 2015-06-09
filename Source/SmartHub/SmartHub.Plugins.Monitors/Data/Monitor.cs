@@ -1,5 +1,4 @@
 ﻿using SmartHub.Core.Plugins.Utils;
-using SmartHub.Plugins.Monitors.Core;
 using System;
 
 namespace SmartHub.Plugins.Monitors.Data
@@ -9,7 +8,6 @@ namespace SmartHub.Plugins.Monitors.Data
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
         public virtual Guid SensorId { get; set; }
-        public virtual MonitorType Type { get; set; }
         public virtual string Configuration { get; set; }
 
         public virtual dynamic GetConfiguration(Type type)

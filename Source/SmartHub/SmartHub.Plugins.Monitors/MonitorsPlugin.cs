@@ -4,7 +4,6 @@ using SmartHub.Core.Plugins;
 using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
-using SmartHub.Plugins.Monitors.Core;
 using SmartHub.Plugins.Monitors.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.SignalR;
@@ -19,6 +18,19 @@ namespace SmartHub.Plugins.Monitors
     [JavaScriptResource("/webapp/monitors/settings-view.js", "SmartHub.Plugins.Monitors.Resources.js.settings-view.js")]
     [JavaScriptResource("/webapp/monitors/settings-model.js", "SmartHub.Plugins.Monitors.Resources.js.settings-model.js")]
     [HttpResource("/webapp/monitors/settings.html", "SmartHub.Plugins.Monitors.Resources.js.settings.html")]
+
+    //[CssResource("/webapp/monitors/css/style.css", "SmartHub.Plugins.Monitors.Resources.css.style.css", AutoLoad = true)]
+    [CssResource("/webapp/monitors/css/weather-icons.min.css", "SmartHub.Plugins.Monitors.Resources.css.weather-icons.min.css", AutoLoad = true)]
+    [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.eot", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.eot", "application/vnd.ms-fontobject")]
+    [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.svg", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.svg", "image/svg+xml")]
+    [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.ttf", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.ttf", "application/x-font-truetype")]
+    [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.woff", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.woff", "application/font-woff")]
+
+    // monitor editor
+    [JavaScriptResource("/webapp/monitors/monitor-editor.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor.js")]
+    [JavaScriptResource("/webapp/monitors/monitor-editor-view.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor-view.js")]
+    [JavaScriptResource("/webapp/monitors/monitor-editor-model.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor-model.js")]
+    [HttpResource("/webapp/monitors/monitor-editor.html", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor.html")]
 
     [Plugin]
     public class ManagementPlugin : PluginBase
@@ -67,8 +79,6 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Type = (int)monitor.Type,
-                TypeName = monitor.Type.GetEnumDescription(),
                 Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
                 Configuration = monitor.Configuration
             };
@@ -82,8 +92,6 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Type = (int)monitor.Type,
-                TypeName = monitor.Type.GetEnumDescription(),
                 Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
                 SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray(),
                 Configuration = monitor.Configuration
@@ -92,17 +100,6 @@ namespace SmartHub.Plugins.Monitors
         #endregion
 
         #region Web API
-        [HttpCommand("/api/monitors/monitortype/list")]
-        private object apiGetMonitorTypes(HttpRequestParams request)
-        {
-            return Enum.GetValues(typeof(MonitorType))
-                .Cast<MonitorType>()
-                .Select(v => new
-                {
-                    Id = v,
-                    Name = v.GetEnumDescription(),
-                }).ToArray();
-        }
         [HttpCommand("/api/monitors/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
@@ -132,7 +129,6 @@ namespace SmartHub.Plugins.Monitors
         {
             var name = request.GetRequiredString("name");
             var sensorId = request.GetRequiredGuid("sensorId");
-            var type = (MonitorType)request.GetRequiredInt32("type");
 
             using (var session = Context.OpenSession())
             {
@@ -141,7 +137,6 @@ namespace SmartHub.Plugins.Monitors
                     Id = Guid.NewGuid(),
                     Name = name,
                     SensorId = sensorId,
-                    Type = type,
                     Configuration = "{}" // ?????????????
                 };
 
