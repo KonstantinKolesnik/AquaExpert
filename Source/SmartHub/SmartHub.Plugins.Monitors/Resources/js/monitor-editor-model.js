@@ -3,7 +3,7 @@ define(['jquery'],
     function ($) {
         var api = {
             getMonitor: function (id, onComplete) {
-                $.getJSON('/api/monitors/get', { id: id })
+                $.getJSON('/api/monitors/get/dashboard', { id: id })
                     .done(function (data) {
                         if (data)
                             data.Configuration = JSON.parse(data.Configuration);

@@ -62,7 +62,6 @@ define(
                         columns: [
                             { field: "Name", title: "Имя", editor: getEditor },
                             { field: "Sensor.Name", title: "Сенсор", editor: getEditor },
-                            { field: "TypeName", title: "Тип", editor: getEditor },
                             {
                                 title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                 command: [

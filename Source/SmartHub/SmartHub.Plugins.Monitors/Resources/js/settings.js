@@ -1,6 +1,6 @@
 ﻿define(
-	['app', 'webapp/monitors/settings-model', 'webapp/monitors/settings-view'],
-	function (application, models, views) {
+	['app', 'webapp/monitors/settings-model', 'webapp/monitors/settings-view', 'webapp/monitors/utils'],
+	function (application, models, views, utils) {
 	    var view;
 
 	    var module = {
@@ -14,7 +14,7 @@
 	                return;
 	            }
 
-	            models.addMonitor(name, sensorId, function () { view.refreshMonitorsGrid(); });
+	            models.addMonitor(name, sensorId, utils.getDefaultConfiguration(), function () { view.refreshMonitorsGrid(); });
 	        },
 	        setMonitorName: function (id, name) {
 	            if (!name) {

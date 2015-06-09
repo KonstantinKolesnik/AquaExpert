@@ -1,7 +1,6 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
-using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Monitors.Data;
@@ -31,6 +30,9 @@ namespace SmartHub.Plugins.Monitors
     [JavaScriptResource("/webapp/monitors/monitor-editor-view.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor-view.js")]
     [JavaScriptResource("/webapp/monitors/monitor-editor-model.js", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor-model.js")]
     [HttpResource("/webapp/monitors/monitor-editor.html", "SmartHub.Plugins.Monitors.Resources.js.monitor-editor.html")]
+
+    [JavaScriptResource("/webapp/monitors/utils.js", "SmartHub.Plugins.Monitors.Resources.js.utils.js")]
+    [HttpResource("/webapp/monitors/utils.html", "SmartHub.Plugins.Monitors.Resources.js.utils.html")]
 
     [Plugin]
     public class ManagementPlugin : PluginBase
@@ -79,8 +81,7 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                Configuration = monitor.Configuration
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
             };
         }
         private object BuildMonitorRichWebModel(Monitor monitor)
@@ -124,11 +125,20 @@ namespace SmartHub.Plugins.Monitors
             using (var session = Context.OpenSession())
                 return BuildMonitorWebModel(session.Get<Monitor>(id));
         }
+        [HttpCommand("/api/monitors/get/dashboard")]
+        private object apiGetMonitorForDashboard(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+
+            using (var session = Context.OpenSession())
+                return BuildMonitorRichWebModel(session.Get<Monitor>(id));
+        }
         [HttpCommand("/api/monitors/add")]
         private object apiAddMonitor(HttpRequestParams request)
         {
             var name = request.GetRequiredString("name");
             var sensorId = request.GetRequiredGuid("sensorId");
+            var configuration = request.GetRequiredString("config");
 
             using (var session = Context.OpenSession())
             {
@@ -137,22 +147,12 @@ namespace SmartHub.Plugins.Monitors
                     Id = Guid.NewGuid(),
                     Name = name,
                     SensorId = sensorId,
-                    Configuration = "{}" // ?????????????
+                    Configuration = configuration
                 };
 
                 session.Save(monitor);
                 session.Flush();
             }
-
-            //ControllerBase controller = ConvertController(ctrl);
-            //if (controller != null)
-            //{
-            //    controller.Init(Context);
-            //    controller.SaveToDB();
-            //    controllers.Add(controller);
-
-            //    NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
-            //}
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
@@ -180,6 +180,23 @@ namespace SmartHub.Plugins.Monitors
             //        Name = name
             //    }
             //});
+
+            return null;
+        }
+        [HttpCommand("/api/monitors/setconfiguration")]
+        private object apiSetControllerConfiguration(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var configuration = request.GetRequiredString("config");
+
+            using (var session = Context.OpenSession())
+            {
+                var sensor = session.Load<Monitor>(id);
+                sensor.Configuration = configuration;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new { MsgId = "ControllerIsVisibleChanged", Data = BuildControllerWebModel(ctrl) });
 
             return null;
         }

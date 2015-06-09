@@ -1,93 +1,15 @@
 ﻿
 <div id="content" class="container-fluid">
-    <h2 data-bind="text: Monitor.Name"></h2>
-    <div id="container"></div>
-</div>
+    <h2 data-bind="text: Name"></h2>
 
-
-<script id="tmpl0" type="text/x-kendo-tmpl">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-2" for="ddlHeaterSensorTemperature">Сенсор температуры</label>
-            <select class="ddlSensorSelector" id="ddlHeaterSensorTemperature" data-bind="value: Controller.Configuration.SensorTemperatureID"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="ddlHeaterSensorSwitch">Розетка обогревателя</label>
-            <select class="ddlSensorSelector" id="ddlHeaterSensorSwitch" data-bind="value: Controller.Configuration.SensorSwitchID"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="ntbHeaterTemperatureCalibration">Калибровка температуры, &deg;C</label>
-            <input class="ddlSensorSelector" id="ntbHeaterTemperatureCalibration" data-bind="value: Controller.Configuration.TemperatureCalibration" />
-        </div>
-
-        <hr />
-
-        <div class="form-group">
-            <label class="col-sm-2" for="ntbHeaterTemperatureMax">Макс. температура, &deg;C</label>
-            <input type="text" class="ddlSensorSelector" id="ntbHeaterTemperatureMax" data-bind="value: Controller.Configuration.TemperatureMax" />
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="ntbHeaterTemperatureMin">Мин. температура, &deg;C</label>
-            <input class="ddlSensorSelector" id="ntbHeaterTemperatureMin" data-bind="value: Controller.Configuration.TemperatureMin" />
-        </div>
-
-        <hr />
-
-        <div class="form-group">
-            <label class="col-sm-2" for="ntbHeaterTemperatureAlarmMax">Макс. критич. температура, &deg;C</label>
-            <input class="ddlSensorSelector" id="ntbHeaterTemperatureAlarmMax" data-bind="value: Controller.Configuration.TemperatureAlarmMax" />
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="tbHeaterTemperatureAlarmMaxText">Оповещение при макс. критич. темп.</label>
-            <input type='text' class="ddlSensorSelector k-textbox" id="tbHeaterTemperatureAlarmMaxText" data-bind="value: Controller.Configuration.TemperatureAlarmMaxText" />
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="ntbHeaterTemperatureAlarmMin">Мин. критич. температура, &deg;C</label>
-            <input class="ddlSensorSelector" id="ntbHeaterTemperatureAlarmMin" data-bind="value: Controller.Configuration.TemperatureAlarmMin" />
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="tbHeaterTemperatureAlarmMinText">Оповещение при мин. критич. темп.</label>
-            <input type='text' class="ddlSensorSelector k-textbox" id="tbHeaterTemperatureAlarmMinText" data-bind="value: Controller.Configuration.TemperatureAlarmMinText" />
-        </div>
-    </form>
-</script>
-<script id="tmpl1" type="text/x-kendo-tmpl">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-2" for="ddlSwitchSensorSwitch">Розетка</label>
-            <select class="ddlSensorSelector" id="ddlSwitchSensorSwitch" data-bind="value: Controller.Configuration.SensorSwitchID"></select>
-        </div>
-        <hr />
-        <div class="form-group">
-            <label class="col-sm-12">Активные периоды</label>
-        </div>
-    </form>
-
-    <div class="col-md-5">
-        <form class="form-inline k-block">
-            <div class="form-group">
-                <label for="ddlNewPeriodFrom">С</label>
-                <input id="ddlNewPeriodFrom" class="inline-control" />
-            </div>
-            <div class="form-group">
-                <label for="ddlNewPeriodTo">По</label>
-                <input id="ddlNewPeriodTo" class="inline-control" />
-            </div>
-            <div class="form-group">
-                <label for="chbNewPeriodIsActive">Активный</label>
-                <input type="checkbox" id="chbNewPeriodIsActive" class="inline-control" checked="checked" />
-            </div>
-            <button id="btnAddPeriod" class="k-button k-primary add-button">Добавить период</button>
-        </form>
-
-        <div id="gridPeriods" data-bind="source: Controller.Configuration.ActivePeriods"></div>
+    <div class="row">
+        <div id="monitor" class="col-md-6"></div>
     </div>
 
-    <script id="tmplIsActive" type="text/x-kendo-template">
-        # if (data.IsActive) { #
-        <span class="k-icon k-i-tick"></span>
-        # } else { #
-        <span class="k-icon k-i-close"></span>
-        # } #
-    </script>
-</script>
+    <div class="row">
+        <button class="k-button">Конфигурация по умолчанию</button>
+
+    </div>
+
+
+</div>
