@@ -2,22 +2,6 @@
 <div id="content" class="container-fluid">
     <h2 data-bind="text: Zone.Name"></h2>
 
-    <!--<form class="form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-2" for="msMonitors">Мониторы</label>
-            <select class="msSelector" id="msMonitors" data-bind="value: Zone.MonitorsList"></select>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2" for="msControllers">Контроллеры</label>
-            <select class="msSelector" id="msControllers" data-bind="value: Zone.ControllersList"></select>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2" for="msGraphs">Графы</label>
-            <select class="msSelector" id="msGraphs" data-bind="value: Zone.GraphsList"></select>
-        </div>
-    </form>-->
-
     <p>
         <label for="msMonitors">Мониторы</label>
         <select class="msSelector" id="msMonitors" data-bind="value: Zone.MonitorsList"></select>
@@ -27,10 +11,13 @@
         <select class="msSelector" id="msControllers" data-bind="value: Zone.ControllersList"></select>
     </p>
     <p>
-        <!--<label for="msGraphs">Графы</label>
-        <select class="msSelector" id="msGraphs" data-bind="value: Zone.GraphsList"></select>-->
+        <label for="msControllers">Скрипты</label>
+        <select class="msSelector" id="msScripts" data-bind="value: Zone.ScriptsList"></select>
     </p>
-
+    <p>
+        <label for="msGraphs">Графы</label>
+        <select class="msSelector" id="msGraphs" data-bind="value: Zone.GraphsList"></select>
+    </p>
 
     <!--<span id="sparkline" style="line-height: 60px"></span>-->
 </div>

@@ -1,5 +1,5 @@
 ﻿define(
-	['app', 'webapp/management/dashboard-model', 'webapp/management/dashboard-view'],
+	['app', 'webapp/zones/dashboard-model', 'webapp/zones/dashboard-view'],
 	function (application, models, views) {
 	    var module = {
 	        reload: function () {
@@ -8,6 +8,9 @@
 
 	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView({ viewModel: models.ViewModel });
+	                view.on('zone:select', function (item) {
+	                    models.ViewModel.set("Zone", item);
+	                });
 	                //view.on('graphs:show', function () {
 	                //    application.navigate('webapp/management/graphs'/*, param1*/);
 	                //});

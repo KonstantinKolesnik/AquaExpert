@@ -1,38 +1,27 @@
 ﻿
 <div id="content" class="container-fluid">
-    <h2>Менеджмент</h2>
+    <h2>Зоны</h2>
 
-    <div class="row" style="margin-bottom:15px;">
-        <button type="button" class="btn btn-primary active js-btn-dashboard">Дашборд</button>
-        <button type="button" class="btn btn-default js-btn-graphs">Графики</button>
+    <!--<div class="row" style="margin-bottom:15px;">-->
+        <!--<button type="button" class="btn btn-primary active js-btn-dashboard">Дашборд</button>-->
+        <!--<button type="button" class="btn btn-default js-btn-graphs">Графики</button>-->
+    <!--</div>-->
 
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 col-xs-6">
-            <div id="listMonitors" style="background-color:transparent; border-width:0;" data-bind="source: Monitors" data-template="tmplMonitorsListItem"></div>
-            <!--<div id="listMonitorsPager" class="k-pager-wrap"></div>-->
+    <div class="row list-holder">
+        <div class="col-xs-2">
+            <div id="listZones" style="background-color:transparent; border-width:0;" data-bind="source: Zones" data-template="tmplZonesListItem"></div>
+            <!--<div id="listZonesPager" class="k-pager-wrap"></div>-->
         </div>
-        <div class="col-md-6 col-xs-6"></div>
+        <div class="col-xs-8">
+            <div style="background-color:red;"></div>
+
+
+        </div>
     </div>
 </div>
 
-<script id="tmplMonitorsListItem" type="text/x-kendo-template">
-    <div class="monitor k-block" style="margin: 0 15px 15px 0;">
-        <table style="width:100%" cellpadding="2" cellspacing="2">
-            <tr>
-                <td>
-                    <div class="monitor-chart" style="height:150px;" data-bind="source: SensorValues"></div>
-                </td>
-                <td style="width:20%;">
-                    <!--border-left:1px solid \#cccccc;-->
-                    <div class="text-center text-nowrap"><h6>#:Name#</h6></div>
-                    <div class="text-center lead" data-bind="source: Sensor.SensorValueValue" data-template="tmplLastSensorValue"></div>
-                </td>
-            </tr>
-        </table>
+<script id="tmplZonesListItem" type="text/x-kendo-template">
+    <div class="zone k-block">
+        <h3>#:Name#</h3>
     </div>
-</script>
-<script id="tmplLastSensorValue" type="text/x-kendo-template">
-    #= data == null ? "-" : data  #
 </script>

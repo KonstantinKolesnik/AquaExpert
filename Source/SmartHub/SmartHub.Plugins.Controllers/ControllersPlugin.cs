@@ -1,6 +1,7 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.Controllers.Core;
 using SmartHub.Plugins.Controllers.Data;
 using SmartHub.Plugins.HttpListener.Api;
@@ -13,9 +14,7 @@ using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 
 namespace SmartHub.Plugins.Controllers
 {
@@ -73,16 +72,6 @@ namespace SmartHub.Plugins.Controllers
         #endregion
 
         #region Private methods
-        private static string GetEnumDescription(Enum value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            if (attributes != null && attributes.Length > 0)
-                return attributes[0].Description;
-            else
-                return value.ToString();
-        }
         private static ControllerBase ConvertController(Controller controller)
         {
             switch (controller.Type)
@@ -93,7 +82,6 @@ namespace SmartHub.Plugins.Controllers
                 default: return null;
             }
         }
-
         private List<Controller> GetControllers()
         {
             using (var session = Context.OpenSession())
@@ -112,7 +100,7 @@ namespace SmartHub.Plugins.Controllers
                 Id = controller.Id,
                 Name = controller.Name,
                 Type = (int)controller.Type,
-                TypeName = GetEnumDescription(controller.Type),
+                TypeName = controller.Type.GetEnumDescription(),
                 Configuration = controller.Configuration
             };
         }
@@ -126,7 +114,7 @@ namespace SmartHub.Plugins.Controllers
                 Id = controller.Id,
                 Name = controller.Name,
                 Type = (int)controller.Type,
-                TypeName = GetEnumDescription(controller.Type),
+                TypeName = controller.Type.GetEnumDescription(),
                 Configuration = controller.Configuration
             };
         }
@@ -172,7 +160,7 @@ namespace SmartHub.Plugins.Controllers
                 .Select(v => new
                 {
                     Id = v,
-                    Name = GetEnumDescription(v)
+                    Name = v.GetEnumDescription(),
                 }).ToArray();
         }
         [HttpCommand("/api/controllers/list")]

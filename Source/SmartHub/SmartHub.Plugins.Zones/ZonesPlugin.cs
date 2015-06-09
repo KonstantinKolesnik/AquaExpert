@@ -140,7 +140,6 @@ namespace SmartHub.Plugins.Zones
         #endregion
 
         #region Web API
-
         [HttpCommand("/api/zones/list")]
         private object apiGetZones(HttpRequestParams request)
         {

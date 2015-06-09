@@ -1,8 +1,10 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
+using SmartHub.Plugins.Monitors.Core;
 using SmartHub.Plugins.Monitors.Data;
 using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.SignalR;
@@ -35,7 +37,7 @@ namespace SmartHub.Plugins.Monitors
         #region Plugin overrides
         public override void InitDbModel(ModelMapper mapper)
         {
-            //mapper.Class<Monitor>(cfg => cfg.Table("Monitors_Monitors"));
+            mapper.Class<Monitor>(cfg => cfg.Table("Monitors_Monitors"));
         }
         public override void InitPlugin()
         {
@@ -65,7 +67,10 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
+                Type = (int)monitor.Type,
+                TypeName = monitor.Type.GetEnumDescription(),
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                Configuration = monitor.Configuration
             };
         }
         private object BuildMonitorRichWebModel(Monitor monitor)
@@ -77,13 +82,27 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
+                Type = (int)monitor.Type,
+                TypeName = monitor.Type.GetEnumDescription(),
                 Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray()
+                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray(),
+                Configuration = monitor.Configuration
             };
         }
         #endregion
 
         #region Web API
+        [HttpCommand("/api/monitors/monitortype/list")]
+        private object apiGetMonitorTypes(HttpRequestParams request)
+        {
+            return Enum.GetValues(typeof(MonitorType))
+                .Cast<MonitorType>()
+                .Select(v => new
+                {
+                    Id = v,
+                    Name = v.GetEnumDescription(),
+                }).ToArray();
+        }
         [HttpCommand("/api/monitors/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
@@ -100,11 +119,20 @@ namespace SmartHub.Plugins.Monitors
                 .Where(x => x != null)
                 .ToArray();
         }
+        [HttpCommand("/api/monitors/get")]
+        private object apiGetMonitor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+
+            using (var session = Context.OpenSession())
+                return BuildMonitorWebModel(session.Get<Monitor>(id));
+        }
         [HttpCommand("/api/monitors/add")]
         private object apiAddMonitor(HttpRequestParams request)
         {
             var name = request.GetRequiredString("name");
             var sensorId = request.GetRequiredGuid("sensorId");
+            var type = (MonitorType)request.GetRequiredInt32("type");
 
             using (var session = Context.OpenSession())
             {
@@ -112,22 +140,26 @@ namespace SmartHub.Plugins.Monitors
                 {
                     Id = Guid.NewGuid(),
                     Name = name,
-                    SensorId = sensorId
+                    SensorId = sensorId,
+                    Type = type,
+                    Configuration = "{}" // ?????????????
                 };
 
                 session.Save(monitor);
                 session.Flush();
             }
 
-            //NotifyForSignalR(new
+            //ControllerBase controller = ConvertController(ctrl);
+            //if (controller != null)
             //{
-            //    MsgId = "SensorNameChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
+            //    controller.Init(Context);
+            //    controller.SaveToDB();
+            //    controllers.Add(controller);
+
+            //    NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
+            //}
+
+            //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
             return null;
         }

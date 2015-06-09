@@ -102,16 +102,16 @@ define(
                                 //baseUnit: "months",
                                 //baseUnit: "years",
 
-                                axisCrossingValues: [0],
+                                //axisCrossingValues: [0],
                                 labels: {
-                                    dateFormats: {
-                                        //minutes: "mm:ss",
-                                        hours: "d.MM HH:mm",
-                                        days: "MMM d",
-                                        weeks: "MMM d",
-                                        months: "yyyy MMM",
-                                        years: "yyyy"
-                                    },
+                                    //dateFormats: {
+                                    //    //minutes: "mm:ss",
+                                    //    hours: "d.MM HH:mm",
+                                    //    days: "MMM d",
+                                    //    weeks: "MMM d",
+                                    //    months: "yyyy MMM",
+                                    //    years: "yyyy"
+                                    //},
                                     visible: true,
                                     rotation: 270,
                                     font: "9px sans-serif",

@@ -1,6 +1,6 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/management/dashboard.html'],
+	['common', 'lib', 'text!webapp/zones/dashboard.html'],
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
@@ -21,14 +21,14 @@ define(
 
             onShow: function () {
                 var me = this;
+                var listZones = null;
                 
-                createMonitorsList();
-                //createCheckBox($("#chbHeaterAutoMode"));
+                createZonesList();
                 //createHeaterChart($("#heaterChart"));
 
                 kendo.bind($("#content"), this.options.viewModel);
 
-                function createMonitorsList() {
+                function createZonesList() {
                     //var dataSource = new kendo.data.DataSource({
                     //    transport: {
                     //        read: {
@@ -39,36 +39,46 @@ define(
                     //    pageSize: 20
                     //});
 
-                    //$("#listMonitorsPager").kendoPager({
+                    //$("#listZonesPager").kendoPager({
                     //    dataSource: dataSource
                     //});
 
-                    $("#listMonitors").kendoListView({
-                        dataBound: function () {
-                            $.each($(".monitor-chart"), function (idx, selector) { createMonitorChart($(selector)); });
-                        }
-                    });
-
-                    $("#listMonitors").kendoSortable({
-                        filter: ">div.monitor",
-                        cursor: "move",
-                        placeholder: function (element) {
-                            return element.clone().css("opacity", 0.1);
-                        },
-                        hint: function (element) {
-                            return element.clone().removeClass("k-state-selected");
-                        },
+                    listZones = $("#listZones").kendoListView({
+                        selectable: "single",
                         change: function (e) {
-                            //var skip = dataSource.skip(),
-                            //    oldIndex = e.oldIndex + skip,
-                            //    newIndex = e.newIndex + skip,
-                            //    data = dataSource.data(),
-                            //    dataItem = dataSource.getByUid(e.item.data("uid"));
+                            var item = listZones.dataItems()[this.select().index()];
+                            me.trigger('zone:select', item);
 
-                            //dataSource.remove(dataItem);
-                            //dataSource.insert(newIndex, dataItem);
-                        }
-                    });
+                            //var data = dataSource.view(),
+                            //    selected = $.map(this.select(), function (item) {
+                            //        return data[$(item).index()].Name;
+                            //    });
+                        },
+                        //dataBound: function () {
+                        //    $.each($(".monitor-chart"), function (idx, selector) { createMonitorChart($(selector)); });
+                        //}
+                    }).data("kendoListView");
+
+                    //$("#listZones").kendoSortable({
+                    //    filter: ">div.monitor",
+                    //    cursor: "move",
+                    //    placeholder: function (element) {
+                    //        return element.clone().css("opacity", 0.1);
+                    //    },
+                    //    hint: function (element) {
+                    //        return element.clone().removeClass("k-state-selected");
+                    //    },
+                    //    change: function (e) {
+                    //        //var skip = dataSource.skip(),
+                    //        //    oldIndex = e.oldIndex + skip,
+                    //        //    newIndex = e.newIndex + skip,
+                    //        //    data = dataSource.data(),
+                    //        //    dataItem = dataSource.getByUid(e.item.data("uid"));
+
+                    //        //dataSource.remove(dataItem);
+                    //        //dataSource.insert(newIndex, dataItem);
+                    //    }
+                    //});
 
                     function createMonitorChart(selector) {
                         selector.kendoChart({
@@ -148,12 +158,8 @@ define(
                         return color;
                     }
                 }
-                //function createCheckBox(selector) {
-                //    selector.change(function () {
-                //        debugger;
-                //        me.trigger("heaterControllerConfiguration:set");
-                //    });
-                //}
+
+
                 function createHeaterChart(selector) {
                     selector.kendoChart({
                         theme: "MaterialBlack",
