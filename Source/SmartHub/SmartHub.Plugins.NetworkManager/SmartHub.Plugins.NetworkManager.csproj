@@ -50,6 +50,11 @@
       <Name>SmartHub.Core.Plugins</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Speech\SmartHub.Plugins.Speech.csproj">
+      <Project>{74ee7ae8-c021-48b5-8c2d-e1f45c8bfbd8}</Project>
+      <Name>SmartHub.Plugins.Speech</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

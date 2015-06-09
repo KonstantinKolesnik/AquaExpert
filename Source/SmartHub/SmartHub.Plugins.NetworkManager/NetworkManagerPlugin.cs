@@ -1,4 +1,5 @@
 ﻿using SmartHub.Core.Plugins;
+using SmartHub.Plugins.Speech;
 using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -20,6 +21,8 @@ namespace SmartHub.Plugins.NetworkManager
 
         private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
+            Context.GetPlugin<SpeechPlugin>().Say(e.IsAvailable ? "Интернет соединение восстановлено" : "Потеряно интернет соединение");
+
             if (!e.IsAvailable)
             {
                 ProcessStartInfo pInfo = new ProcessStartInfo();

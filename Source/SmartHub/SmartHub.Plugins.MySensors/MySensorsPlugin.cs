@@ -127,7 +127,6 @@ namespace SmartHub.Plugins.MySensors
             if (!gatewayProxy.IsStarted)
             {
                 Logger.Info("Connecting to gateway...");
-                Debug.WriteLine("Connecting to gateway...");
 
                 try
                 {
@@ -401,7 +400,7 @@ namespace SmartHub.Plugins.MySensors
         {
             SensorMessage message = args.Message;
 
-            Debug.WriteLine(message.ToString());
+            //Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeNo == 0 || message.SensorNo == 255;
             Node node = GetNode(message.NodeNo);

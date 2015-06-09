@@ -16,6 +16,27 @@
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
     var val = data.Sensor.SensorValueValue;
+    if (!val) { #
+        <span>-</span>
+    # } else {
+        var config = JSON.parse(data.Configuration);
+        var templ = config.valueAxes[0].labels.template;
+        if (templ) {
+            var template = kendo.template(templ);
+            var result = template({ value: val });
+        #
+            <span>#= result #</span>
+        # } else { #
+            <span>#= val #</span>
+        # }} #
+</script>
+
+
+
+
+
+    <!--
+    var val = data.Sensor.SensorValueValue;
     switch (data.Type) {
         case "T": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;&deg;C</span> #; break;
         case "H": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;%</span> #; break;
@@ -33,5 +54,4 @@
             <span class="${icon}" style="font-size:52px;"></span> #; break;
         default: # <span>#= val == null ? "-" : val #</span> #; break;
     }
-    #
-</script>
+    #-->
