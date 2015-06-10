@@ -18,7 +18,6 @@ namespace SmartHub.Plugins.Monitors
     [JavaScriptResource("/webapp/monitors/settings-model.js", "SmartHub.Plugins.Monitors.Resources.js.settings-model.js")]
     [HttpResource("/webapp/monitors/settings.html", "SmartHub.Plugins.Monitors.Resources.js.settings.html")]
 
-    //[CssResource("/webapp/monitors/css/style.css", "SmartHub.Plugins.Monitors.Resources.css.style.css", AutoLoad = true)]
     [CssResource("/webapp/monitors/css/weather-icons.min.css", "SmartHub.Plugins.Monitors.Resources.css.weather-icons.min.css", AutoLoad = true)]
     [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.eot", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.eot", "application/vnd.ms-fontobject")]
     [HttpResource("/webapp/monitors/fonts/weathericons-regular-webfont.svg", "SmartHub.Plugins.Monitors.Resources.fonts.weathericons-regular-webfont.svg", "image/svg+xml")]

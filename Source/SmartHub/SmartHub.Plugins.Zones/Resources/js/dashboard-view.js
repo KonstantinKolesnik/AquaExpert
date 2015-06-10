@@ -4,140 +4,38 @@ define(
     function (common, lib, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
-            //regions: {
-            //    filter: '#region-dashboard',
-            //    list: '#region-graphs'
-            //},
-            //events: {
-            //    'click .js-btn-add-monitor': 'addMonitor'
-            //},
-            //addMonitor: function (e) {
-            //    e.preventDefault();
-            //    this.trigger('monitor:add', $("#tbNewMonitorName").val(), ddlNewMonitorSensor.value());
-            //},
-            triggers: {
-                'click .js-btn-graphs': 'graphs:show'
+            events: {
+                'click .zone': 'showZone'
+            },
+            showZone: function (e) {
+                e.preventDefault();
+                var id = e.currentTarget.kendoBindingTarget.source.Id;
+                this.trigger('zone:show', id);
             },
 
             onShow: function () {
                 var me = this;
-                var listZones = null;
                 
                 createZonesList();
-                //createHeaterChart($("#heaterChart"));
-
                 kendo.bind($("#content"), this.options.viewModel);
 
                 function createZonesList() {
-                    //var dataSource = new kendo.data.DataSource({
-                    //    transport: {
-                    //        read: {
-                    //            url: function () { return document.location.origin + "/api/aquacontroller/monitor/list" },
-                    //            //dataType: "jsonp"
-                    //        }
-                    //    },
-                    //    pageSize: 20
-                    //});
+                    $("#listZones").kendoListView({
+                        //change: function (e) {
+                        //    var item = listZones.dataItems()[this.select().index()];
+                        //    me.trigger('zone:select', item);
 
-                    //$("#listZonesPager").kendoPager({
-                    //    dataSource: dataSource
-                    //});
-
-                    listZones = $("#listZones").kendoListView({
-                        selectable: "single",
-                        change: function (e) {
-                            var item = listZones.dataItems()[this.select().index()];
-                            me.trigger('zone:select', item);
-
-                            //var data = dataSource.view(),
-                            //    selected = $.map(this.select(), function (item) {
-                            //        return data[$(item).index()].Name;
-                            //    });
-                        },
+                        //    //var data = dataSource.view(),
+                        //    //    selected = $.map(this.select(), function (item) {
+                        //    //        return data[$(item).index()].Name;
+                        //    //    });
+                        //},
                         //dataBound: function () {
                         //    $.each($(".monitor-chart"), function (idx, selector) { createMonitorChart($(selector)); });
                         //}
                     }).data("kendoListView");
 
-                    function createMonitorChart(selector) {
-                        selector.kendoChart({
-                            series: [
-                                {
-                                    type: "line",
-                                    style: "smooth",
-                                    field: "Value",
-                                    color: "cornflowerblue",//getRandomColor(),
-                                    //axis: "axisValue",
-                                    tooltip: {
-                                        visible: true,
-                                        //template: "#= kendo.toString(value, 'n1') #&nbsp;°C"
-                                        //template: "#= kendo.toString(category, 'MMM d, HH:mm:ss') + " - " + kendo.toString(value, 'n1') #"
-                                        //template: "#= category + " - " + kendo.toString(value, 'n1') #"
-                                    },
-                                    //aggregate: "avg",
-                                },
-                            ],
-                            //valueAxes: [
-                            //    {
-                            //        name: "axisValue",
-                            //        //majorUnit: 1,
-                            //        //majorTicks: {
-                            //        //    step: 1
-                            //        //},
-                            //        //minorTicks: {
-                            //        //    size: 3,
-                            //        //    //color: "red",
-                            //        //    width: 2,
-                            //        //    visible: true
-                            //        //},
-                            //        labels: {
-                            //            //format: "{0} °C",
-                            //        }
-                            //    },
-                            //],
-                            categoryAxis: {
-                                field: "TimeStamp",
-                                //type: "date",
-
-                                //baseUnit: "fit",
-                                //baseUnit: "seconds",
-                                //baseUnit: "minutes",
-                                //baseUnit: "hours",
-                                //baseUnit: "days",
-                                //baseUnit: "weeks",
-                                //baseUnit: "months",
-                                //baseUnit: "years",
-
-                                axisCrossingValues: [0],
-                                labels: {
-                                    dateFormats: {
-                                        //minutes: "mm:ss",
-                                        hours: "d.MM HH:mm",
-                                        days: "MMM d",
-                                        weeks: "MMM d",
-                                        months: "yyyy MMM",
-                                        years: "yyyy"
-                                    },
-                                    visible: true,
-                                    rotation: 270,
-                                    font: "9px sans-serif",
-                                    template: "#: kendo.toString(new Date(value), 'd.MM HH:mm') #"
-                                },
-                                line: { visible: true },
-                                majorGridLines: { visible: true }
-                            }
-                        });
-                    }
-                    function getRandomColor() {
-                        var letters = '0123456789ABCDEF'.split('');
-                        var color = '#';
-                        for (var i = 0; i < 6; i++) {
-                            color += letters[Math.floor(Math.random() * 16)];
-                        }
-                        return color;
-                    }
                 }
-
                 function createHeaterChart(selector) {
                     selector.kendoChart({
                         theme: "MaterialBlack",

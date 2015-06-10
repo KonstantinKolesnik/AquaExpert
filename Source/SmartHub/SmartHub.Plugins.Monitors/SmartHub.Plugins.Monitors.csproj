@@ -119,9 +119,6 @@
     <EmbeddedResource Include="Resources\fonts\weathericons-regular-webfont.svg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\css\style.css" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\css\weather-icons.min.css" />
   </ItemGroup>
   <ItemGroup>

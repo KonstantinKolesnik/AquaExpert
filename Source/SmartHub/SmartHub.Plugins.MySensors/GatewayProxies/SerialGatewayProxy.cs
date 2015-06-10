@@ -7,9 +7,10 @@ using System.Threading;
 
 namespace SmartHub.Plugins.MySensors.GatewayProxies
 {
-    class SerialGatewayProxy : IGatewayProxy
+    class SerialGatewayProxy : IGatewayProxy, IDisposable
     {
         #region Fields
+        private bool disposed = false;
         private SerialPort serialPort;
         private bool isPortValid = false;
         private Thread thread;
@@ -77,6 +78,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             {
                 serialPort.DataReceived -= serialPort_DataReceived;
                 serialPort.Close();
+                serialPort.Dispose();
 
                 isPortValid = false;
 
@@ -96,6 +98,12 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
                 }
                 catch (Exception) { }
             }
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -173,6 +181,17 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             }
             else
                 return true;
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                    if (serialPort != null)
+                        serialPort.Dispose();
+
+                disposed = true;
+            }
         }
         #endregion
     }

@@ -2,18 +2,13 @@
 	['app', 'webapp/zones/dashboard-model', 'webapp/zones/dashboard-view'],
 	function (application, models, views) {
 	    var module = {
+	        showZone: function (id) {
+	            application.navigate('webapp/zones/zone', id);
+	        },
 	        reload: function () {
-	            if (application.SignalRReceivers.indexOf(models.ViewModel) == -1)
-	                application.SignalRReceivers.push(models.ViewModel);
-
 	            models.ViewModel.update(function () {
 	                var view = new views.LayoutView({ viewModel: models.ViewModel });
-	                view.on('zone:select', function (item) {
-	                    models.ViewModel.set("Zone", item);
-	                });
-	                //view.on('graphs:show', function () {
-	                //    application.navigate('webapp/management/graphs'/*, param1*/);
-	                //});
+	                view.on('zone:show', module.showZone);
 	                application.setContentView(view);
 	            });
 	        }

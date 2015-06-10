@@ -26,9 +26,10 @@ namespace SmartHub.Plugins.Speech
     [HttpResource("/webapp/speech/settings.html", "SmartHub.Plugins.Speech.Resources.js.settings.html")]
 
     [Plugin]
-    public class SpeechPlugin : PluginBase
+    public class SpeechPlugin : PluginBase, IDisposable
     {
         #region Fields
+        private bool disposed = false;
         private SpeechSynthesizer speechSynthesizer;
         private SpeechRecognitionEngine recognitionEngine;
 
@@ -158,6 +159,22 @@ namespace SmartHub.Plugins.Speech
             if (recognitionEngine != null)
                 recognitionEngine.Dispose();
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    if (speechSynthesizer != null)
+                        speechSynthesizer.Dispose();
+                    if (recognitionEngine != null)
+                        recognitionEngine.Dispose();
+                }
+
+                disposed = true;
+            }
+        }
         #endregion
 
         #region Event handlers
@@ -221,6 +238,12 @@ namespace SmartHub.Plugins.Speech
                 speechSynthesizer.SpeakAsync(text);
         }
         #endregion
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         #region Web API
         [HttpCommand("/api/speech/voicecommand/list")]

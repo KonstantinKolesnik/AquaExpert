@@ -4,38 +4,34 @@
     width:500px;
 }
 
-
-.list-holder {
-    /*padding: 15px;*/
-    width: 692px;
-}
-/*.list-holder h2 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}*/
 .zone
 {
     float: left;
-    width: 220px;
-    /*width: 110px;*/
-    height: 110px;
+    width: 160px;
+    height: 130px;
     margin: 10px;
     padding: 5px;
     cursor: pointer;
+    border-radius: 4px;
 }
-/*.zone img
-{
-    float: left;
-    width: 110px;
-    height: 110px;
-}*/
+/*
+    phones, < 768px
+    tablets, 768px +
+    desktops, 992px +
+    large desktops, 1200px +
+*/
+@media (max-width: 800px) {
+	.zone {
+		width: 210px;
+	}
+}
+
 .zone h3
 {
     float: left;
     margin: 0;
     padding: 10px 0 0 10px;
-    font-size: .9em;
+    font-size: 1.1em;
     overflow: hidden;
     font-weight: normal;
     max-width: 100px;

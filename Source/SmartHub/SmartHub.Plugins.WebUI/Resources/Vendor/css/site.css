@@ -145,31 +145,27 @@ a.list-group-item:hover {
 	position: relative;
 	cursor: pointer;
 }
-
-	.th-tile, .th-tile:hover, .th-tile:focus {
-		text-decoration: none;
-	}
-
+.th-tile,
+.th-tile:hover,
+.th-tile:focus {
+	text-decoration: none;
+}
 .th-tile-double {
 	width: 330px;
 }
-
 .th-tile-actions {
 	text-align: right;
 }
-
 .th-tile-content {
 	position: absolute;
 	white-space: pre-wrap;
 }
-
 .th-tile-title {
 	bottom: 2px;
 	position: absolute;
 	white-space: nowrap;
 	font-size: 120%;
 }
-
 .th-tile-icon:before {
 	bottom: 0;
 	font-size: 32px;
@@ -178,7 +174,6 @@ a.list-group-item:hover {
 	font-style: normal;
 	font-weight: normal;
 }
-
 .th-tile-icon-fa:before {
 	font-family: FontAwesome;
 }
@@ -225,19 +220,19 @@ a.list-group-item:hover {
 	cursor: move;
 }
 
-	.sortable-view > .sortable-view-item > .sortable-view-position-marker {
-		border-left: 2px dashed gray;
-		display: none;
-		float: left;
-		height: 100%;
-		left: -12px;
-		position: relative;
-		width: 1px;
-	}
+.sortable-view > .sortable-view-item > .sortable-view-position-marker {
+	border-left: 2px dashed gray;
+	display: none;
+	float: left;
+	height: 100%;
+	left: -12px;
+	position: relative;
+	width: 1px;
+}
 
-	.sortable-view > .sortable-view-item.over > .sortable-view-position-marker {
-		display: block;
-	}
+.sortable-view > .sortable-view-item.over > .sortable-view-position-marker {
+	display: block;
+}
 
 /*#endregion */
 
@@ -308,7 +303,7 @@ a.list-group-item:hover {
 .form-inline
 {
     padding:10px !important;
-    margin-bottom:20px;
+    /*margin-bottom:20px;*/
 }
 
 .add-button

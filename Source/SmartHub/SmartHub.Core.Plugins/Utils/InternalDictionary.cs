@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SmartHub.Core.Plugins.Utils
 {
+    [Serializable]
     public class InternalDictionary<T> : Dictionary<string, T> where T : class
     {
         private readonly object lockObject = new object();

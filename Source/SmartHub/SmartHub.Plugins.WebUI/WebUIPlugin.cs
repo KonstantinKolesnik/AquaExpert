@@ -71,6 +71,7 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/kendo.common.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common.min.css")]
     [CssResource("/vendor/css/kendo.common-bootstrap.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.common-bootstrap.min.css")]
     [CssResource("/vendor/css/kendo.dataviz.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.dataviz.min.css")]
+    [CssResource("/vendor/css/kendo.mobile.all.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.kendo.mobile.all.min.css")]
 
     [HttpResource("/vendor/css/images/back.png", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.back.png")]
     [HttpResource("/vendor/css/images/kendoui.svg", "SmartHub.Plugins.WebUI.Resources.Vendor.css.images.kendoui.svg")]

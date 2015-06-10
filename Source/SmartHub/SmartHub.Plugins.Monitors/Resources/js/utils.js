@@ -2,15 +2,15 @@
 define(['jquery', 'text!webapp/monitors/utils.html'],
     function ($, templates) {
         var api = {
-            createMonitorChart: function (selector, config) {
+            createMonitorChart: function (selector, stringConfig) {
                 selector.empty();
                 selector.html($(templates));
 
-                if (!config)
-                    config = this.getDefaultConfiguration();
-                else
+                debugger;
+                var config = this.getDefaultConfiguration();
+                if (stringConfig)
                     //try {
-                        config = JSON.parse(config);
+                    config = JSON.parse(stringConfig);
                     //}
                     //catch(e) {
                     //    config = this.getDefaultConfiguration();
