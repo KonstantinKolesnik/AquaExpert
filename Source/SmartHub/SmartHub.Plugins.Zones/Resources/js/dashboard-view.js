@@ -59,27 +59,6 @@ define(
                         //}
                     }).data("kendoListView");
 
-                    //$("#listZones").kendoSortable({
-                    //    filter: ">div.monitor",
-                    //    cursor: "move",
-                    //    placeholder: function (element) {
-                    //        return element.clone().css("opacity", 0.1);
-                    //    },
-                    //    hint: function (element) {
-                    //        return element.clone().removeClass("k-state-selected");
-                    //    },
-                    //    change: function (e) {
-                    //        //var skip = dataSource.skip(),
-                    //        //    oldIndex = e.oldIndex + skip,
-                    //        //    newIndex = e.newIndex + skip,
-                    //        //    data = dataSource.data(),
-                    //        //    dataItem = dataSource.getByUid(e.item.data("uid"));
-
-                    //        //dataSource.remove(dataItem);
-                    //        //dataSource.insert(newIndex, dataItem);
-                    //    }
-                    //});
-
                     function createMonitorChart(selector) {
                         selector.kendoChart({
                             series: [
@@ -158,7 +137,6 @@ define(
                         return color;
                     }
                 }
-
 
                 function createHeaterChart(selector) {
                     selector.kendoChart({

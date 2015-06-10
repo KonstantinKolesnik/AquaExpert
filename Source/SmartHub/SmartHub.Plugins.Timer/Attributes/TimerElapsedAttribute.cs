@@ -3,23 +3,23 @@ using System.ComponentModel.Composition;
 
 namespace SmartHub.Plugins.Timer.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class Timer_3_sec_ElapsedAttribute : ExportAttribute
-    {
-        public Timer_3_sec_ElapsedAttribute()
-            : base("7A16BD3C-EBDB-48DC-9A0A-B0E4B9FB1A93", typeof(Action<DateTime>))
-        {
-        }
-    }
+    //[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    //public class Timer_3_sec_ElapsedAttribute : ExportAttribute
+    //{
+    //    public Timer_3_sec_ElapsedAttribute()
+    //        : base("7A16BD3C-EBDB-48DC-9A0A-B0E4B9FB1A93", typeof(Action<DateTime>))
+    //    {
+    //    }
+    //}
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class Timer_5_sec_ElapsedAttribute : ExportAttribute
-    {
-        public Timer_5_sec_ElapsedAttribute()
-            : base("D69180B5-11BE-42F8-B3B4-630449613B42", typeof(Action<DateTime>))
-        {
-        }
-    }
+    //[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    //public class Timer_5_sec_ElapsedAttribute : ExportAttribute
+    //{
+    //    public Timer_5_sec_ElapsedAttribute()
+    //        : base("D69180B5-11BE-42F8-B3B4-630449613B42", typeof(Action<DateTime>))
+    //    {
+    //    }
+    //}
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class Timer_10_sec_ElapsedAttribute : ExportAttribute
