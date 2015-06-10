@@ -122,10 +122,10 @@ namespace SmartHub.Plugins.Zones
             var ids = Extensions.FromJson(typeof(List<Guid>), zone.MonitorsList) as List<Guid>;
             var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.GetMonitor(id))).ToArray();
 
-            var pluginControllers = Context.GetPlugin<ControllersPlugin>();
-            zone.ControllersList = zone.ControllersList ?? "[]";
-            ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
-            var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
+            //var pluginControllers = Context.GetPlugin<ControllersPlugin>();
+            //zone.ControllersList = zone.ControllersList ?? "[]";
+            //ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
+            //var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
 
 
 
