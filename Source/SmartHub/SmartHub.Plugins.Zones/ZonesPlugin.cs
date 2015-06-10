@@ -1,13 +1,13 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Utils;
+using SmartHub.Plugins.Controllers;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
-using SmartHub.Plugins.MySensors;
-using SmartHub.Plugins.MySensors.Attributes;
-using SmartHub.Plugins.MySensors.Core;
+using SmartHub.Plugins.Monitors;
+using SmartHub.Plugins.Monitors.Data;
 using SmartHub.Plugins.SignalR;
-using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.Zones.Data;
 using System;
@@ -17,12 +17,12 @@ using System.Text;
 
 namespace SmartHub.Plugins.Zones
 {
-    [AppSection("Зоны", SectionType.Common, "/webapp/zones/dashboard.js", "SmartHub.Plugins.Zones.Resources.js.dashboard.js")]
+    [AppSection("Зоны", SectionType.Common, "/webapp/zones/dashboard.js", "SmartHub.Plugins.Zones.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.Zones.ZonesTile")]
     [JavaScriptResource("/webapp/zones/dashboard-view.js", "SmartHub.Plugins.Zones.Resources.js.dashboard-view.js")]
     [JavaScriptResource("/webapp/zones/dashboard-model.js", "SmartHub.Plugins.Zones.Resources.js.dashboard-model.js")]
     [HttpResource("/webapp/zones/dashboard.html", "SmartHub.Plugins.Zones.Resources.js.dashboard.html")]
 
-    [AppSection("Зоны", SectionType.System, "/webapp/zones/settings.js", "SmartHub.Plugins.Zones.Resources.js.settings.js", TileTypeFullName = "SmartHub.Plugins.Zones.ZonesTile")]
+    [AppSection("Зоны", SectionType.System, "/webapp/zones/settings.js", "SmartHub.Plugins.Zones.Resources.js.settings.js")]
     [JavaScriptResource("/webapp/zones/settings-view.js", "SmartHub.Plugins.Zones.Resources.js.settings-view.js")]
     [JavaScriptResource("/webapp/zones/settings-model.js", "SmartHub.Plugins.Zones.Resources.js.settings-model.js")]
     [HttpResource("/webapp/zones/settings.html", "SmartHub.Plugins.Zones.Resources.js.settings.html")]
@@ -35,13 +35,15 @@ namespace SmartHub.Plugins.Zones
     [JavaScriptResource("/webapp/zones/zone-editor-model.js", "SmartHub.Plugins.Zones.Resources.js.zone-editor-model.js")]
     [HttpResource("/webapp/zones/zone-editor.html", "SmartHub.Plugins.Zones.Resources.js.zone-editor.html")]
 
+    // zone viewer
+    [JavaScriptResource("/webapp/zones/zone.js", "SmartHub.Plugins.Zones.Resources.js.zone.js")]
+    [JavaScriptResource("/webapp/zones/zone-view.js", "SmartHub.Plugins.Zones.Resources.js.zone-view.js")]
+    [JavaScriptResource("/webapp/zones/zone-model.js", "SmartHub.Plugins.Zones.Resources.js.zone-model.js")]
+    [HttpResource("/webapp/zones/zone.html", "SmartHub.Plugins.Zones.Resources.js.zone.html")]
+
     [Plugin]
     public class ZonesPlugin : PluginBase
     {
-        #region Fields
-        private MySensorsPlugin mySensors;
-        #endregion
-
         #region SignalR events
         private void NotifyForSignalR(object msg)
         {
@@ -53,10 +55,6 @@ namespace SmartHub.Plugins.Zones
         public override void InitDbModel(ModelMapper mapper)
         {
             mapper.Class<Zone>(cfg => cfg.Table("Zones_Zones"));
-        }
-        public override void InitPlugin()
-        {
-            mySensors = Context.GetPlugin<MySensorsPlugin>();
         }
         #endregion
 
@@ -114,28 +112,33 @@ namespace SmartHub.Plugins.Zones
                 GraphsList = zone.GraphsList ?? "[]"
             };
         }
-        #endregion
-
-        #region Event handlers
-        [MySensorsConnected]
-        private void Connected()
+        private object BuildZoneRichWebModel(Zone zone)
         {
-        }
+            if (zone == null)
+                return null;
 
-        [MySensorsMessageCalibration]
-        private void MessageCalibration(SensorMessage message)
-        {
-        }
+            var pluginMonitors = Context.GetPlugin<MonitorsPlugin>();
+            zone.MonitorsList = zone.MonitorsList ?? "[]";
+            var ids = Extensions.FromJson(typeof(List<Guid>), zone.MonitorsList) as List<Guid>;
+            var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.GetMonitor(id))).ToArray();
 
-        [MySensorsMessage]
-        private void MessageReceived(SensorMessage message)
-        {
-        }
+            var pluginControllers = Context.GetPlugin<ControllersPlugin>();
+            zone.ControllersList = zone.ControllersList ?? "[]";
+            ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
+            var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
 
-        //[RunPeriodically(1)]
-        [Timer_10_sec_Elapsed]
-        private void timer_Elapsed(DateTime now)
-        {
+
+
+
+            return new
+            {
+                Id = zone.Id,
+                Name = zone.Name,
+                MonitorsList = monitors,
+                ControllersList = controllers,
+                ScriptsList = zone.ScriptsList ?? "[]",
+                GraphsList = zone.GraphsList ?? "[]"
+            };
         }
         #endregion
 
@@ -155,6 +158,14 @@ namespace SmartHub.Plugins.Zones
 
             using (var session = Context.OpenSession())
                 return BuildZoneWebModel(session.Get<Zone>(id));
+        }
+        [HttpCommand("/api/zones/get/dashboard")]
+        private object apiGetZoneForDashboard(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+
+            using (var session = Context.OpenSession())
+                return BuildZoneRichWebModel(session.Get<Zone>(id));
         }
         [HttpCommand("/api/zones/add")]
         private object apiAddZone(HttpRequestParams request)

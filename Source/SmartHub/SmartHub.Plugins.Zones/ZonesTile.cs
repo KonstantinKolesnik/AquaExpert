@@ -11,9 +11,9 @@ namespace SmartHub.Plugins.Zones
         {
             try
             {
-                tileWebModel.title = "Менеджмент";
-                tileWebModel.url = "webapp/management/settings";
-                tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-gear";
+                tileWebModel.title = "Зоны";
+                tileWebModel.url = "webapp/zones/dashboard";
+                tileWebModel.className = "btn-info th-tile-icon th-tile-icon-fa fa-th";
             }
             catch (Exception ex)
             {

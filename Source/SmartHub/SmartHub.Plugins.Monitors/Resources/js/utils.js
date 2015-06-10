@@ -2,19 +2,20 @@
 define(['jquery', 'text!webapp/monitors/utils.html'],
     function ($, templates) {
         var api = {
-            createMonitorChart: function (selector, stringConfig) {
+            createMonitorChart: function (selector, monitor) {
                 selector.empty();
                 selector.html($(templates));
 
-                debugger;
                 var config = this.getDefaultConfiguration();
-                if (stringConfig)
+                if (monitor && monitor.Configuration)
                     //try {
-                    config = JSON.parse(stringConfig);
+                    config = JSON.parse(monitor.Configuration);
                     //}
                     //catch(e) {
                     //    config = this.getDefaultConfiguration();
                     //}
+
+                kendo.bind(selector.find(".monitor-view"), monitor);
 
                 return selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
             },

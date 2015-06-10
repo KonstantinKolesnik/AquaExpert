@@ -37,7 +37,7 @@ namespace SmartHub.Plugins.Monitors
     [HttpResource("/webapp/monitors/utils.html", "SmartHub.Plugins.Monitors.Resources.js.utils.html")]
 
     [Plugin]
-    public class ManagementPlugin : PluginBase
+    public class MonitorsPlugin : PluginBase
     {
         #region Fields
         private MySensorsPlugin mySensors;
@@ -62,7 +62,25 @@ namespace SmartHub.Plugins.Monitors
         #endregion
 
         #region Public methods
+        public Monitor GetMonitor(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Get<Monitor>(id);
+        }
+        public object BuildMonitorRichWebModel(Monitor monitor)
+        {
+            if (monitor == null)
+                return null;
 
+            return new
+            {
+                Id = monitor.Id,
+                Name = monitor.Name,
+                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
+                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray(),
+                Configuration = monitor.Configuration
+            };
+        }
         #endregion
 
         #region Private methods
@@ -84,20 +102,6 @@ namespace SmartHub.Plugins.Monitors
                 Id = monitor.Id,
                 Name = monitor.Name,
                 Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
-            };
-        }
-        private object BuildMonitorRichWebModel(Monitor monitor)
-        {
-            if (monitor == null)
-                return null;
-
-            return new
-            {
-                Id = monitor.Id,
-                Name = monitor.Name,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray(),
-                Configuration = monitor.Configuration
             };
         }
         #endregion
@@ -186,7 +190,7 @@ namespace SmartHub.Plugins.Monitors
             return null;
         }
         [HttpCommand("/api/monitors/setconfiguration")]
-        private object apiSetControllerConfiguration(HttpRequestParams request)
+        private object apiSetMonitorConfiguration(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
             var configuration = request.GetRequiredString("config");

@@ -67,8 +67,20 @@ namespace SmartHub.Plugins.Controllers
         #endregion
 
         #region Public methods
+        public object BuildControllerRichWebModel(Controller controller)
+        {
+            if (controller == null)
+                return null;
 
-
+            return new
+            {
+                Id = controller.Id,
+                Name = controller.Name,
+                Type = (int)controller.Type,
+                TypeName = controller.Type.GetEnumDescription(),
+                Configuration = controller.Configuration
+            };
+        }
         #endregion
 
         #region Private methods
@@ -91,20 +103,6 @@ namespace SmartHub.Plugins.Controllers
         }
 
         private object BuildControllerWebModel(Controller controller)
-        {
-            if (controller == null)
-                return null;
-
-            return new
-            {
-                Id = controller.Id,
-                Name = controller.Name,
-                Type = (int)controller.Type,
-                TypeName = controller.Type.GetEnumDescription(),
-                Configuration = controller.Configuration
-            };
-        }
-        private object BuildControllerRichWebModel(Controller controller)
         {
             if (controller == null)
                 return null;

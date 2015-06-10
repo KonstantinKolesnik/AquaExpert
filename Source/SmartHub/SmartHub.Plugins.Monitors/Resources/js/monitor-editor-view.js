@@ -21,8 +21,7 @@ define(
             },
 
             refreshChart: function () {
-                utils.createMonitorChart($("#monitor"), viewModel.Monitor.Configuration);
-                kendo.bind($("#content"), viewModel.Monitor);
+                utils.createMonitorChart($("#monitor"), viewModel.Monitor);
             },
             refreshJsonEditor: function () {
                 var me = this;

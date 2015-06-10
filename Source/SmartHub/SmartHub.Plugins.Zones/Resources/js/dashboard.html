@@ -1,11 +1,11 @@
 ﻿
 <div id="content">
     <h2>Зоны</h2>
-    <div id="listZones" style="background-color:transparent; border-width:0;" data-template="tmplZonesListItem"></div>
+    <div id="lvZones" style="background-color:transparent; border-width:0;" data-template="tmplZonesListItem"></div>
 </div>
 
 <script id="tmplZonesListItem" type="text/x-kendo-template">
-    <div class="zone k-primary" data-bind="value: this">
+    <div class="zone k-primary" zoneId="${data.Id}" data-bind="value: this">
         <div class="clearfix">
             <h3>#:Name#</h3>
             <span class="glyphicon glyphicon-th pull-right" style="font-size:35px;"></span>
