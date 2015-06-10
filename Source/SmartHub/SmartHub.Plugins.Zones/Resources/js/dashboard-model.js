@@ -1,32 +1,6 @@
 ﻿
 define(['jquery'], function ($) {
-    var api = {
-        getZones: function (onComplete) {
-            $.getJSON('/api/zones/list')
-				.done(function (data) {
-				    if (onComplete)
-				        onComplete(data);
-				})
-	            .fail(function (data) {
-	                onError(data);
-	            });
-        }
-    };
-
-    var viewModel = kendo.observable({
-        Zones: [],
-        update: function (onComplete) {
-            var me = this;
-
-            me.Zones = [];
-
-            api.getZones(function (data) {
-                me.set("Zones", data);
-
-                if (onComplete)
-                    onComplete();
-            });
-        }
+    var viewModel = kendo.observable({ });
         //SignalRReceiveHandler: function (model, data) {
         //    if (data.MsgId == "SensorValue") {
         //        data.Data.TimeStamp = new Date(data.Data.TimeStamp);
@@ -46,11 +20,6 @@ define(['jquery'], function ($) {
         //        }
         //    }
         //}
-    });
-
-    function onError(data) {
-        alert(data.statusText);
-    }
 
     return {
         ViewModel: viewModel

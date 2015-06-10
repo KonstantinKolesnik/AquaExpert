@@ -26,7 +26,6 @@ define(
 
                 function createZonesGrid() {
                     gridZones = $("#gridZones").kendoGrid({
-                        height: 500,
                         dataSource: new kendo.data.DataSource({
                             transport: {
                                 read: {

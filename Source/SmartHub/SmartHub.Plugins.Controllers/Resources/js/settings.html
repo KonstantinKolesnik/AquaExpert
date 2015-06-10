@@ -1,20 +1,18 @@
 ﻿
-<div id="content" class="container-fluid">
+<div id="content">
     <h2>Контроллеры</h2>
 
-    <div class="col-md-5">
-        <form class="form-inline k-block">
-            <div class="form-group">
-                <label for="tbNewControllerName">Имя</label>
-                <input type="text" class="k-textbox inline-control" id="tbNewControllerName" />
-            </div>
-            <div class="form-group">
-                <label for="ddlNewControllerType">Тип</label>
-                <select id="ddlNewControllerType" class="inline-control"></select>
-            </div>
-            <button class="k-button k-primary add-button js-btn-add-controller">Добавить контроллер</button>
-        </form>
+    <form class="form-inline k-block" role="form">
+        <div class="form-group">
+            <label for="tbNewControllerName">Имя</label>
+            <input type="text" id="tbNewControllerName" class="k-textbox inline-control" placeholder="Укажите имя контроллера" />
+        </div>
+        <div class="form-group">
+            <label for="ddlNewControllerType">Тип</label>
+            <select id="ddlNewControllerType" class="inline-control"></select>
+        </div>
+        <button class="k-button k-primary js-btn-add-controller">Добавить контроллер</button>
+    </form>
 
-        <div id="gridControllers"></div>
-    </div>
+    <div id="gridControllers" class="entities-grid"></div>
 </div>

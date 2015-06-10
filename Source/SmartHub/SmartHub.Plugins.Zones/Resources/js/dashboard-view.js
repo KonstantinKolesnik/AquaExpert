@@ -21,6 +21,14 @@ define(
 
                 function createZonesList() {
                     $("#listZones").kendoListView({
+                        dataSource: new kendo.data.DataSource({
+                            transport: {
+                                read: {
+                                    url: function () { return document.location.origin + "/api/zones/list" },
+                                }
+                            },
+                            pageSize: 20
+                        }),
                         //change: function (e) {
                         //    var item = listZones.dataItems()[this.select().index()];
                         //    me.trigger('zone:select', item);
@@ -36,7 +44,7 @@ define(
                     }).data("kendoListView");
 
                 }
-                function createHeaterChart(selector) {
+                function createHeaterChart_ForExample(selector) {
                     selector.kendoChart({
                         theme: "MaterialBlack",
                         title: {

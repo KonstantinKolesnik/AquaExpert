@@ -6,11 +6,9 @@
 	            application.navigate('webapp/zones/zone', id);
 	        },
 	        reload: function () {
-	            models.ViewModel.update(function () {
-	                var view = new views.LayoutView({ viewModel: models.ViewModel });
-	                view.on('zone:show', module.showZone);
-	                application.setContentView(view);
-	            });
+	            var view = new views.LayoutView({ viewModel: models.ViewModel });
+	            view.on('zone:show', module.showZone);
+	            application.setContentView(view);
 	        }
 	    };
 

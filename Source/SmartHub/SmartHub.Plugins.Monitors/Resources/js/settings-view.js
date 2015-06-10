@@ -43,7 +43,6 @@ define(
                 }
                 function createMonitorsGrid() {
                     gridMonitors = $("#gridMonitors").kendoGrid({
-                        height: 500,
                         dataSource: new kendo.data.DataSource({
                             transport: {
                                 read: {
