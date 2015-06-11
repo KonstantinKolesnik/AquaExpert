@@ -76,8 +76,8 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId)),
-                SensorValues = mySensors.GetSensorValuesByID(monitor.SensorId, 24, 30).ToArray(),
+                Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(monitor.SensorId)),
+                SensorValues = mySensors.GetSensorValues(monitor.SensorId, 24, 20).ToArray(),
                 Configuration = monitor.Configuration
             };
         }
@@ -101,7 +101,7 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(monitor.SensorId))
+                Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(monitor.SensorId))
             };
         }
         #endregion
@@ -128,17 +128,16 @@ namespace SmartHub.Plugins.Monitors
         {
             var id = request.GetRequiredGuid("id");
 
-            using (var session = Context.OpenSession())
-                return BuildMonitorWebModel(session.Get<Monitor>(id));
+            return BuildMonitorWebModel(GetMonitor(id));
         }
         [HttpCommand("/api/monitors/get/dashboard")]
         private object apiGetMonitorForDashboard(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
 
-            using (var session = Context.OpenSession())
-                return BuildMonitorRichWebModel(session.Get<Monitor>(id));
+            return BuildMonitorRichWebModel(GetMonitor(id));
         }
+
         [HttpCommand("/api/monitors/add")]
         private object apiAddMonitor(HttpRequestParams request)
         {

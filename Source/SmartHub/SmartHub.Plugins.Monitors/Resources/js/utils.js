@@ -96,6 +96,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                             //max: 104000,
                             labels: {
                                 //format: "{0} °C",
+                                font: "10px Segoe UI",
                                 template: "#= kendo.toString(data.value, 'n1') #",
                                 //template: function (data) {
                                 //    switch (type) {

@@ -16,19 +16,20 @@
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
     var val = data.Sensor.SensorValueValue;
-    if (!val) { #
-        <span>-</span>
+    if (val == null) { #
+        <h4>-</h4>
     # } else {
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
         if (templ) {
-            var template = kendo.template(templ);
-            var result = template({ value: val });
+            //var template = kendo.template(templ);
+            var result = kendo.template(templ)({ value: val });
         #
-            <span>#= result #</span>
+            <h4>#= result #</h4>
         # } else { #
-            <span>#= val #</span>
-        # }} #
+            <h4>#= val #</h4>
+        # }
+    } #
 </script>
 
 

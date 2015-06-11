@@ -8,7 +8,6 @@
 		        onRender: function () {
 		            var className = this.model.get('className') || "btn-primary";
 		            this.$el.addClass(className);
-
 		            if (this.model.get('wide'))
 		                this.$el.addClass('th-tile-double');
 		        },

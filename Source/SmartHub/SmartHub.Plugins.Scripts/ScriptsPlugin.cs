@@ -100,6 +100,18 @@ namespace SmartHub.Plugins.Scripts
                 return session.Query<UserScript>().FirstOrDefault(x => x.Id == id);
         }
 
+        public object BuildScriptRichWebModel(UserScript script)
+        {
+            if (script == null)
+                return null;
+
+            return new {
+                Id = script.Id,
+                Name = script.Name,
+                Body = script.Body
+            };
+        }
+
         /// <summary>
         /// Запуск скриптов (для плагинов)
         /// </summary>

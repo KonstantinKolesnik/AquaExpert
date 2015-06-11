@@ -26,15 +26,15 @@
 	}
 }
 
-.zone h3
+.zone-name
 {
     float: left;
     margin: 0;
-    padding: 10px 0 0 10px;
+    padding: 65px 5px 0 5px;
     font-size: 1.1em;
     overflow: hidden;
     font-weight: normal;
-    max-width: 100px;
+    max-width: 150px;
     text-transform: uppercase;
 }
 

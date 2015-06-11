@@ -7,6 +7,7 @@ using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Monitors;
 using SmartHub.Plugins.Monitors.Data;
+using SmartHub.Plugins.Scripts;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.WebUI.Attributes;
 using SmartHub.Plugins.Zones.Data;
@@ -108,8 +109,7 @@ namespace SmartHub.Plugins.Zones
                 Name = zone.Name,
                 MonitorsList = zone.MonitorsList ?? "[]",
                 ControllersList = zone.ControllersList ?? "[]",
-                ScriptsList = zone.ScriptsList ?? "[]",
-                GraphsList = zone.GraphsList ?? "[]"
+                ScriptsList = zone.ScriptsList ?? "[]"
             };
         }
         private object BuildZoneRichWebModel(Zone zone)
@@ -118,17 +118,19 @@ namespace SmartHub.Plugins.Zones
                 return null;
 
             var pluginMonitors = Context.GetPlugin<MonitorsPlugin>();
-            zone.MonitorsList = zone.MonitorsList ?? "[]";
+            //zone.MonitorsList = zone.MonitorsList ?? "[]";
             var ids = Extensions.FromJson(typeof(List<Guid>), zone.MonitorsList) as List<Guid>;
             var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.GetMonitor(id))).ToArray();
 
-            //var pluginControllers = Context.GetPlugin<ControllersPlugin>();
+            var pluginControllers = Context.GetPlugin<ControllersPlugin>();
             //zone.ControllersList = zone.ControllersList ?? "[]";
-            //ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
-            //var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
+            ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
+            var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
 
-
-
+            var pluginScripts = Context.GetPlugin<ScriptsPlugin>();
+            //zone.ScriptsList = zone.ScriptsList ?? "[]";
+            ids = Extensions.FromJson(typeof(List<Guid>), zone.ScriptsList) as List<Guid>;
+            var scripts = ids.Select(id => pluginScripts.BuildScriptRichWebModel(pluginScripts.GetScript(id))).ToArray();
 
             return new
             {
@@ -136,8 +138,7 @@ namespace SmartHub.Plugins.Zones
                 Name = zone.Name,
                 MonitorsList = monitors,
                 ControllersList = controllers,
-                ScriptsList = zone.ScriptsList ?? "[]",
-                GraphsList = zone.GraphsList ?? "[]"
+                ScriptsList = scripts
             };
         }
         #endregion
@@ -177,22 +178,18 @@ namespace SmartHub.Plugins.Zones
                 Zone zone = new Zone()
                 {
                     Id = Guid.NewGuid(),
-                    Name = name
+                    Name = name,
+                    MonitorsList = "[]",
+                    ControllersList = "[]",
+                    ScriptsList = "[]",
+                    GraphsList = "[]"
                 };
 
                 session.Save(zone);
                 session.Flush();
             }
 
-            //NotifyForSignalR(new
-            //{
-            //    MsgId = "SensorNameChanged",
-            //    Data = new
-            //    {
-            //        Id = id,
-            //        Name = name
-            //    }
-            //});
+            //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
             return null;
         }

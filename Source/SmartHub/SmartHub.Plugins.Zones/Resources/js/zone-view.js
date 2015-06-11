@@ -5,66 +5,62 @@ define(
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
+            events: {
+                'click .script-view': 'scriptClick'
+            },
+            scriptClick: function (e) {
+                e.preventDefault();
+                var id = $(e.currentTarget).attr("scriptId");
+                this.trigger('script:run', id);
+            },
+
             onShow: function () {
                 var me = this;
 
                 createListView($("#lvMonitors"), "monitors");
-                createListView($("#lvControllers"));
-                createListView($("#lvScripts"));
-
-                //createMultiSelector($("#msGraphs"), "graphs", "Id", "Name");
-
-                //$("#sparkline").kendoSparkline([1, 2, 3, 2, 1]);
-                //$("#sparkline").kendoSparkline([200, 450, 300, 125]);
-                //$("#sparkline").kendoSparkline({
-                //    series: [
-                //        {
-                //            name: "World",
-                //            data: [15.7, 16.7, 20, 23.5, 26.6]
-                //        }
-                //    ],
-                //    categoryAxis: {
-                //        categories: [2005, 2006, 2007, 2008, 2009]
-                //    }
-                //});
+                createListView($("#lvControllers"), "controllers");
+                createListView($("#lvScripts"), "scripts");
 
                 kendo.bind($("#content"), me.options.viewModel);
 
                 function createListView(selector, type) {
-                    var res = selector.kendoListView({
+                    selector.kendoListView({
                         dataBound: function (e) {
-                            $.each($(".monitor-view-holder"), function (idx, selector) {
-                                var monitor = null;
-                                $.each(me.options.viewModel.Zone.MonitorsList, function (idx, item) {
-                                    if (item.Id == $(selector).attr("monitorId")) {
-                                        monitor = item;
+                            if (type == "scripts")
+                                return;
+
+                            $.each($(".entity-view-holder"), function (idx, selectorEntity) {
+                                var entity = null;
+
+                                $.each(getEntitiesList(type), function (idx, item) {
+                                    if (item.Id == $(selectorEntity).attr("entityId")) {
+                                        entity = item;
                                         return false;
                                     }
                                 });
 
-                                if (monitor)
-                                    monitorUtils.createMonitorChart($(selector), monitor);
+                                processEntity(entity, type, selectorEntity);
                             });
                         }
-                    }).data("kendoListView");
-                }
+                    });
 
-                function createMultiSelector(selector, entity, valueFieldName, textFieldName) {
-                    return selector.kendoMultiSelect({
-                        dataSource: {
-                            transport: {
-                                read: {
-                                    url: function () { return document.location.origin + "/api/" + entity + "/list"; }
-                                }
-                            },
-                        },
-                        dataValueField: valueFieldName,
-                        dataTextField: textFieldName,
-                        valuePrimitive: true,
-                        autoClose: false,
-                        filter: "contains",
-                        placeholder: "Выберите элементы...",
-                    }).data("kendoMultiSelect");
+                    function getEntitiesList(type) {
+                        switch (type) {
+                            case "monitors": return me.options.viewModel.Zone.MonitorsList;
+                            case "controllers": return me.options.viewModel.Zone.ControllersList;
+                            case "scripts": return me.options.viewModel.Zone.ScriptsList;
+                            default: return [];
+                        }
+                    }
+                    function processEntity(entity, type, selectorEntity) {
+                        if (entity) {
+                            switch (type) {
+                                case "monitors": monitorUtils.createMonitorChart($(selectorEntity), entity); break;
+                                case "controllers": $(selectorEntity).html("controller"); break;
+                                default: break;
+                            }
+                        }
+                    }
                 }
                 function createHeaterChart_ForExample(selector) {
                     selector.kendoChart({
@@ -182,3 +178,20 @@ define(
             LayoutView: layoutView
         };
     });
+
+
+
+
+//$("#sparkline").kendoSparkline([1, 2, 3, 2, 1]);
+//$("#sparkline").kendoSparkline([200, 450, 300, 125]);
+//$("#sparkline").kendoSparkline({
+//    series: [
+//        {
+//            name: "World",
+//            data: [15.7, 16.7, 20, 23.5, 26.6]
+//        }
+//    ],
+//    categoryAxis: {
+//        categories: [2005, 2006, 2007, 2008, 2009]
+//    }
+//});

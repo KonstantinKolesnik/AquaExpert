@@ -9,7 +9,7 @@ define(
                 createMultiSelector($("#msMonitors"), "monitors", "Id", "Name");
                 createMultiSelector($("#msControllers"), "controllers", "Id", "Name");
                 createMultiSelector($("#msScripts"), "scripts", "id", "name");
-                createMultiSelector($("#msGraphs"), "graphs", "Id", "Name");
+                //createMultiSelector($("#msGraphs"), "graphs", "Id", "Name");
 
                 kendo.bind($("#content"), this.options.viewModel);
 

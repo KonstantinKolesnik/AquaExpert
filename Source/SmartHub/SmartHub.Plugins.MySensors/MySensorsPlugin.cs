@@ -13,7 +13,6 @@ using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -168,11 +167,13 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
         }
+        
         public List<Sensor> GetSensorsByType(SensorType type)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().Where(s => s.Type == type).ToList();
         }
+        
         public SensorValue GetLastSensorValue(Sensor sensor)
         {
             if (sensor == null)
@@ -184,6 +185,7 @@ namespace SmartHub.Plugins.MySensors
                     .OrderByDescending(sv => sv.TimeStamp)
                     .FirstOrDefault();
         }
+        
         public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours, int count)
         {
             DateTime dt = DateTime.UtcNow.AddHours(-hours);
@@ -196,16 +198,32 @@ namespace SmartHub.Plugins.MySensors
                     .OrderBy(x => x.TimeStamp)
                     .ToList();
         }
-        public List<SensorValue> GetSensorValuesByID(Guid id, int hours, int count)
+        public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int count)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>()
+                    .Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo)
+                    .OrderByDescending(x => x.TimeStamp)
+                    .Take(count)
+                    .OrderBy(x => x.TimeStamp)
+                    .ToList();
+        }
+        public List<SensorValue> GetSensorValues(Guid id, int hours, int count)
         {
             var sensor = GetSensor(id);
             return GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours, count);
         }
-        public bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
+        public List<SensorValue> GetSensorValues(Guid id, int count)
+        {
+            var sensor = GetSensor(id);
+            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, count);
+        }
+
+        public static bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
         }
-        public object BuildSensorWebModel(Sensor sensor)
+        public object BuildSensorRichWebModel(Sensor sensor)
         {
             if (sensor == null)
                 return null;
@@ -299,7 +317,8 @@ namespace SmartHub.Plugins.MySensors
             TimeSpan result = dtNow.Subtract(unixEpoch);
             return Convert.ToInt32(result.TotalSeconds);
         }
-        private object BuildNodeWebModel(Node node)
+
+        private object BuildNodeRichWebModel(Node node)
         {
             if (node == null)
                 return null;
@@ -321,7 +340,7 @@ namespace SmartHub.Plugins.MySensors
                 BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
             };
         }
-        private object BuildSensorSummaryWebModel(Sensor sensor)
+        private static object BuildSensorWebModel(Sensor sensor)
         {
             if (sensor == null)
                 return null;
@@ -332,6 +351,7 @@ namespace SmartHub.Plugins.MySensors
                 Name = sensor.Name
             };
         }
+        
         private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
             var dtDB = DateTime.UtcNow;
@@ -434,7 +454,7 @@ namespace SmartHub.Plugins.MySensors
 
                         NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
-                        NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeWebModel(node) });
+                        NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
                     }
                     else // sensor message
                     {
@@ -463,7 +483,7 @@ namespace SmartHub.Plugins.MySensors
 
                             NotifyMessageReceivedForPlugins(message);
                             NotifyMessageReceivedForScripts(message);
-                            NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorWebModel(sensor) });
+                            NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorRichWebModel(sensor) });
                         }
                     }
                     break;
@@ -554,7 +574,7 @@ namespace SmartHub.Plugins.MySensors
 
                                 NotifyMessageReceivedForPlugins(message);
                                 NotifyMessageReceivedForScripts(message);
-                                NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeWebModel(node) });
+                                NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
                             }
                             break;
                         case InternalValueType.Reboot:
@@ -609,7 +629,7 @@ namespace SmartHub.Plugins.MySensors
         private object apiGetNodes(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Node>().Select(BuildNodeWebModel).Where(x => x != null).ToArray();
+                return session.Query<Node>().Select(BuildNodeRichWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/nodes/setname")]
         private object apiSetNodeName(HttpRequestParams request)
@@ -649,20 +669,20 @@ namespace SmartHub.Plugins.MySensors
         private object apiGetSensors(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Sensor>().Select(BuildSensorWebModel).Where(x => x != null).ToArray();
+                return session.Query<Sensor>().Select(BuildSensorRichWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensorsByType")]
         private object apiGetSensorsByType(HttpRequestParams request)
         {
             var type = (SensorType)request.GetRequiredInt32("type");
 
-            return GetSensorsByType(type).Select(BuildSensorSummaryWebModel).Where(x => x != null).ToArray();
+            return GetSensorsByType(type).Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensor")]
         private object apiGetSensor(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            return BuildSensorWebModel(GetSensor(id));
+            return BuildSensorRichWebModel(GetSensor(id));
         }
         [HttpCommand("/api/mysensors/sensors/setname")]
         private object apiSetSensorName(HttpRequestParams request)
@@ -744,16 +764,6 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
-        }
-        [HttpCommand("/api/mysensors/sensorvalues/customlist")]
-        private object apiGetCustomSensorValues(HttpRequestParams request)
-        {
-            var nodeNo = request.GetRequiredInt32("nodeNo");
-            var sensorNo = request.GetRequiredInt32("sensorNo");
-            var hours = request.GetRequiredInt32("hours");
-            var count = request.GetRequiredInt32("count");
-
-            return GetSensorValues(nodeNo, sensorNo, hours, count).ToArray();
         }
         #endregion
     }

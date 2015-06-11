@@ -67,6 +67,11 @@ namespace SmartHub.Plugins.Controllers
         #endregion
 
         #region Public methods
+        public Controller GetController(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Get<Controller>(id);
+        }
         public object BuildControllerRichWebModel(Controller controller)
         {
             if (controller == null)
@@ -101,6 +106,7 @@ namespace SmartHub.Plugins.Controllers
                     .OrderBy(controller => controller.Name)
                     .ToList();
         }
+
 
         private object BuildControllerWebModel(Controller controller)
         {
@@ -182,8 +188,14 @@ namespace SmartHub.Plugins.Controllers
         {
             var id = request.GetRequiredGuid("id");
 
-            using (var session = Context.OpenSession())
-                return BuildControllerWebModel(session.Get<Controller>(id));
+            return BuildControllerWebModel(GetController(id));
+        }
+        [HttpCommand("/api/controllers/get/dashboard")]
+        private object apiGetControllerForDashboard(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+
+            return BuildControllerRichWebModel(GetController(id));
         }
         [HttpCommand("/api/controllers/add")]
         private object apiAddController(HttpRequestParams request)

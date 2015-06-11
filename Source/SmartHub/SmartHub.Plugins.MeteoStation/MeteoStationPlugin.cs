@@ -18,7 +18,7 @@ using System.Text;
 
 namespace SmartHub.Plugins.MeteoStation
 {
-    [AppSection("Метеостанция", SectionType.Common, "/webapp/meteostation/dashboard.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.MeteoStation.MeteoStationTile")]
+    //[AppSection("Метеостанция", SectionType.Common, "/webapp/meteostation/dashboard.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.js", TileTypeFullName = "SmartHub.Plugins.MeteoStation.MeteoStationTile")]
     [JavaScriptResource("/webapp/meteostation/dashboard-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard-view.js")]
     [JavaScriptResource("/webapp/meteostation/dashboard-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard-model.js")]
     [HttpResource("/webapp/meteostation/dashboard.html", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.html")]
@@ -173,8 +173,8 @@ namespace SmartHub.Plugins.MeteoStation
             {
                 Name = name,
                 Type = type,
-                Sensor = mySensors.BuildSensorWebModel(mySensors.GetSensor(sensorID)),
-                SensorValues = mySensors.GetSensorValuesByID(sensorID, 24, 30).ToArray()
+                Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(sensorID)),
+                SensorValues = mySensors.GetSensorValues(sensorID, 24, 30).ToArray()
             };
         }
         #endregion
@@ -189,13 +189,13 @@ namespace SmartHub.Plugins.MeteoStation
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
-            if (mySensors.IsMessageFromSensor(message, SensorTemperatureInner) ||
-                mySensors.IsMessageFromSensor(message, SensorHumidityInner) ||
-                mySensors.IsMessageFromSensor(message, SensorTemperatureOuter) ||
-                mySensors.IsMessageFromSensor(message, SensorHumidityOuter) ||
-                mySensors.IsMessageFromSensor(message, SensorAtmospherePressure) ||
-                mySensors.IsMessageFromSensor(message, SensorForecast))
-                NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
+            //if (mySensors.IsMessageFromSensor(message, SensorTemperatureInner) ||
+            //    mySensors.IsMessageFromSensor(message, SensorHumidityInner) ||
+            //    mySensors.IsMessageFromSensor(message, SensorTemperatureOuter) ||
+            //    mySensors.IsMessageFromSensor(message, SensorHumidityOuter) ||
+            //    mySensors.IsMessageFromSensor(message, SensorAtmospherePressure) ||
+            //    mySensors.IsMessageFromSensor(message, SensorForecast))
+            //    NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
         }
         #endregion
 

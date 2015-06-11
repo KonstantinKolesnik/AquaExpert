@@ -1,5 +1,6 @@
 ﻿using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.Controllers.Data;
+using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Speech;
@@ -84,8 +85,8 @@ namespace SmartHub.Plugins.Controllers.Core
         public override bool IsMyMessage(SensorMessage message)
         {
             return
-                mySensors.IsMessageFromSensor(message, SensorTemperature) ||
-                mySensors.IsMessageFromSensor(message, SensorSwitch);
+                MySensorsPlugin.IsMessageFromSensor(message, SensorTemperature) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorSwitch);
         }
         public override void RequestSensorsValues()
         {
@@ -117,12 +118,12 @@ namespace SmartHub.Plugins.Controllers.Core
         #region Event handlers
         public override void MessageCalibration(SensorMessage message)
         {
-            if (mySensors.IsMessageFromSensor(message, SensorTemperature))
+            if (MySensorsPlugin.IsMessageFromSensor(message, SensorTemperature))
                 message.PayloadFloat += configuration.TemperatureCalibration;
         }
         public override void MessageReceived(SensorMessage message)
         {
-            if (mySensors.IsMessageFromSensor(message, SensorTemperature))
+            if (MySensorsPlugin.IsMessageFromSensor(message, SensorTemperature))
                 Process(message.PayloadFloat);
         }
         public override void TimerElapsed(DateTime now)

@@ -19,8 +19,8 @@ define(
 		    },
 		    loadRoute: function (route, args) {
 			    if (route) {
-				    require([route], function (obj) {
-					    obj.start.apply(obj, args);
+			        require([route], function (obj) {
+			            obj.start.apply(obj, args);
 
 					    if (args && args.length) {
 						    var encoded = [];

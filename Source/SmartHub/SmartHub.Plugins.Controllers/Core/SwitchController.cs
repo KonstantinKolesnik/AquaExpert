@@ -1,5 +1,6 @@
 ﻿using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.Controllers.Data;
+using SmartHub.Plugins.MySensors;
 using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using System;
@@ -72,7 +73,7 @@ namespace SmartHub.Plugins.Controllers.Core
         }
         public override bool IsMyMessage(SensorMessage message)
         {
-            return mySensors.IsMessageFromSensor(message, SensorSwitch);
+            return MySensorsPlugin.IsMessageFromSensor(message, SensorSwitch);
         }
         public override void RequestSensorsValues()
         {

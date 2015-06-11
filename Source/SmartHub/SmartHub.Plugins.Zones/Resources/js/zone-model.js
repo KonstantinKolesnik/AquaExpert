@@ -11,6 +11,16 @@ define(['jquery'],
                     .fail(function (data) {
                         onError(data);
                     });
+            },
+            runScript: function (scriptId, onComplete) {
+                $.post('/api/scripts/run', { scriptId: scriptId })
+                    .done(function (data) {
+                        if (onComplete)
+                            onComplete(data);
+                    })
+                    .fail(function (data) {
+                        onError(data);
+                    });
             }
         };
 
@@ -54,6 +64,8 @@ define(['jquery'],
         }
 
         return {
-            ViewModel: viewModel
+            ViewModel: viewModel,
+
+            runScript: api.runScript
         }
     });

@@ -11,9 +11,11 @@ define(
                 'change .js-editor': 'editorChange'
             },
             btnDefaultClick: function () {
-                viewModel.Monitor.set("Configuration", JSON.stringify(utils.getDefaultConfiguration()));
-                this.refreshChart();
-                this.refreshJsonEditor();
+                if (common.utils.confirm('Применить конфигурацию по умолчанию?')) {
+                    viewModel.Monitor.set("Configuration", JSON.stringify(utils.getDefaultConfiguration()));
+                    this.refreshChart();
+                    this.refreshJsonEditor();
+                }
             },
             editorChange: function () {
                 this.refreshChart();
@@ -22,6 +24,7 @@ define(
 
             refreshChart: function () {
                 utils.createMonitorChart($("#monitor"), viewModel.Monitor);
+                kendo.bind($("#content"), viewModel.Monitor);
             },
             refreshJsonEditor: function () {
                 var me = this;
