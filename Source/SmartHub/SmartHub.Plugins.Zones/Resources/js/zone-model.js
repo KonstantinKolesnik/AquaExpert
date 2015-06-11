@@ -53,6 +53,7 @@ define(['jquery'],
                         });
 
                         $.each(model.Zone.ControllersList, function (idx, monitor) {
+                            // if ismymessage
                         });
                     }
                 }
