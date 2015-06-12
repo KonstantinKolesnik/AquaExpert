@@ -22,8 +22,6 @@ namespace SmartHub.Plugins.Controllers.Core
             public Guid SensorSwitchID { get; set; }
             public List<Period> ActivePeriods { get; set; }
 
-            public bool IsAutoMode { get; set; }
-
             public static ControllerConfiguration Default
             {
                 get
@@ -31,9 +29,7 @@ namespace SmartHub.Plugins.Controllers.Core
                     return new ControllerConfiguration()
                     {
                         SensorSwitchID = Guid.Empty,
-                        ActivePeriods = new List<Period>(),
-                        
-                        IsAutoMode = true
+                        ActivePeriods = new List<Period>()
                     };
                 }
             }
@@ -96,7 +92,7 @@ namespace SmartHub.Plugins.Controllers.Core
 
         protected override void Process(float? value)
         {
-            if (configuration.IsAutoMode)
+            if (IsAutoMode)
             {
                 bool isActive = false;
                 DateTime now = DateTime.Now;

@@ -24,6 +24,9 @@
 
 	            models.setControllerName(id, name, function () { view.refreshControllersGrid(); });
 	        },
+	        setControllerIsAutoMode: function (id, isAutoMode) {
+	            models.setControllerIsAutoMode(id, isAutoMode, function () { view.refreshControllersGrid(); });
+	        },
 	        editController: function (id) {
 	            application.navigate('webapp/controllers/controller-editor', id);
 	        },
@@ -35,6 +38,7 @@
 	            view = new views.LayoutView({ viewModel: models.ViewModel });
 	            view.on('controller:add', module.addController);
 	            view.on('controller:setName', module.setControllerName);
+	            view.on('controller:setIsAutoMode', module.setControllerIsAutoMode);
 	            view.on('controller:edit', module.editController);
 	            view.on('controller:delete', module.deleteController);
 	            application.setContentView(view);

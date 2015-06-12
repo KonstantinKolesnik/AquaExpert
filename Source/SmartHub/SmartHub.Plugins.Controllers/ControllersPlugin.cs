@@ -83,6 +83,7 @@ namespace SmartHub.Plugins.Controllers
                 Name = controller.Name,
                 Type = (int)controller.Type,
                 TypeName = controller.Type.GetEnumDescription(),
+                IsAutoMode = controller.IsAutoMode,
                 Configuration = controller.Configuration
             };
         }
@@ -107,7 +108,6 @@ namespace SmartHub.Plugins.Controllers
                     .ToList();
         }
 
-
         private object BuildControllerWebModel(Controller controller)
         {
             if (controller == null)
@@ -119,6 +119,7 @@ namespace SmartHub.Plugins.Controllers
                 Name = controller.Name,
                 Type = (int)controller.Type,
                 TypeName = controller.Type.GetEnumDescription(),
+                IsAutoMode = controller.IsAutoMode,
                 Configuration = controller.Configuration
             };
         }
@@ -129,7 +130,10 @@ namespace SmartHub.Plugins.Controllers
         private void Connected()
         {
             foreach (ControllerBase controller in controllers)
-                controller.RequestSensorsValues();
+            {
+                controller.RequestSensorsValues(); // force sensors to report their current values
+                controller.SendSensorsValues(); // e.g. to nodes with display
+            }
         }
 
         [MySensorsMessageCalibration]
@@ -167,6 +171,7 @@ namespace SmartHub.Plugins.Controllers
                     Name = v.GetEnumDescription(),
                 }).ToArray();
         }
+        
         [HttpCommand("/api/controllers/list")]
         private object apiGetControllers(HttpRequestParams request)
         {
@@ -183,6 +188,7 @@ namespace SmartHub.Plugins.Controllers
                 .Where(x => x != null)
                 .ToArray();
         }
+        
         [HttpCommand("/api/controllers/get")]
         private object apiGetController(HttpRequestParams request)
         {
@@ -197,6 +203,7 @@ namespace SmartHub.Plugins.Controllers
 
             return BuildControllerRichWebModel(GetController(id));
         }
+        
         [HttpCommand("/api/controllers/add")]
         private object apiAddController(HttpRequestParams request)
         {
@@ -207,7 +214,8 @@ namespace SmartHub.Plugins.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = name,
-                Type = type
+                Type = type,
+                IsAutoMode = true
             };
 
             ControllerBase controller = ConvertController(ctrl);
@@ -239,6 +247,23 @@ namespace SmartHub.Plugins.Controllers
 
             return null;
         }
+        [HttpCommand("/api/controllers/setisautomode")]
+        private object apiSetControllerIsAutoMode(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var isAutoMode = request.GetRequiredBool("isAutoMode");
+
+            using (var session = Context.OpenSession())
+            {
+                var ctrl = session.Load<Controller>(id);
+                ctrl.IsAutoMode = isAutoMode;
+                session.Flush();
+
+                NotifyForSignalR(new { MsgId = "ControllerIsAutoModeChanged", Data = BuildControllerWebModel(ctrl) });
+            }
+
+            return null;
+        }
         [HttpCommand("/api/controllers/setconfiguration")]
         private object apiSetControllerConfiguration(HttpRequestParams request)
         {
@@ -246,7 +271,7 @@ namespace SmartHub.Plugins.Controllers
             var conf = request.GetRequiredString("config");
 
             foreach (ControllerBase controller in controllers)
-                if (controller.ControllerID == id)
+                if (controller.ID == id)
                 {
                     controller.SetConfiguration(conf);
                     break;

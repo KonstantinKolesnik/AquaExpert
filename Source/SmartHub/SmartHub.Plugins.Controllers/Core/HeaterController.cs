@@ -16,7 +16,6 @@ namespace SmartHub.Plugins.Controllers.Core
             public Guid SensorSwitchID { get; set; }
             public float TemperatureCalibration { get; set; }
 
-            public bool IsAutoMode { get; set; }
             public float TemperatureMin { get; set; }
             public float TemperatureMax { get; set; }
             public float TemperatureAlarmMin { get; set; }
@@ -34,7 +33,6 @@ namespace SmartHub.Plugins.Controllers.Core
                         SensorSwitchID = Guid.Empty,
                         TemperatureCalibration = 0.0f,
 
-                        IsAutoMode = true,
                         TemperatureMin = 25.0f,
                         TemperatureMax = 26.0f,
                         TemperatureAlarmMin = 22.0f,
@@ -98,7 +96,7 @@ namespace SmartHub.Plugins.Controllers.Core
         #region Private methods
         protected override void Process(float? value)
         {
-            if (configuration.IsAutoMode)
+            if (IsAutoMode)
             {
                 //var switchValue = mySensors.GetLastSensorValue(SensorSwitchHeater);
 

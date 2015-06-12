@@ -60,6 +60,7 @@ define(
                         columns: [
                             { field: "Name", title: "Имя", editor: getEditor },
                             { field: "TypeName", title: "Тип", editor: getEditor },
+                            { field: "IsAutoMode", title: "Авто-режим", width: 90, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsAutoMode").html()) },
                             {
                                 title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                 command: [
@@ -106,6 +107,21 @@ define(
                                     me.trigger('controller:setName', options.model.Id, newValue);
                             });
                     }
+                    else if (options.field == "IsAutoMode") {
+                        var oldValue = options.model[options.field];
+
+                        var editor = $("<input type='checkbox' style='width:100%;'/>");
+                        editor.appendTo(container)
+                            .show().focus()
+                            .unbind("keydown").keydown(preventEnter)
+                            .prop("checked", oldValue)
+                            .change(function () {
+                                var newValue = editor.prop("checked");
+                                if (newValue != oldValue)
+                                    me.trigger('controller:setIsAutoMode', options.model.Id, newValue);
+                            });
+                    }
+
                     else
                         grid.closeCell();
                 }

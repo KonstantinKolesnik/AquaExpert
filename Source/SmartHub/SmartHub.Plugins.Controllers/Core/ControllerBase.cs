@@ -22,9 +22,21 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Properties
-        public Guid ControllerID
+        public Guid ID
         {
             get { return controller.Id; }
+        }
+        public bool IsAutoMode
+        {
+            get { return controller.IsAutoMode; }
+            set
+            {
+                if (controller.IsAutoMode != value)
+                {
+                    controller.IsAutoMode = value;
+                    SaveToDB();
+                }
+            }
         }
         #endregion
 
@@ -46,6 +58,10 @@ namespace SmartHub.Plugins.Controllers.Core
         public abstract void SetConfiguration(string configuration);
         public abstract bool IsMyMessage(SensorMessage message);
         public abstract void RequestSensorsValues();
+
+        public virtual void SendSensorsValues()
+        {
+        }
         #endregion
 
         #region Private methods

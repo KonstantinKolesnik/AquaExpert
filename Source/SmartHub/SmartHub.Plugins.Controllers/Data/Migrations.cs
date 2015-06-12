@@ -26,4 +26,18 @@ namespace SmartHub.Plugins.Controllers.Data
             Database.RemoveTable("Controllers_Controllers");
         }
     }
+
+    [Migration(2)]
+    public class Migration02 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddColumn("Controllers_Controllers", new Column("IsAutoMode", DbType.Boolean, ColumnProperty.NotNull, true));
+        }
+
+        public override void Revert()
+        {
+            Database.RemoveColumn("Controllers_Controllers", "IsAutoMode");
+        }
+    }
 }

@@ -21,6 +21,16 @@ define(['jquery'], function ($) {
                     onError(data);
                 });
         },
+        setControllerIsAutoMode: function (id, isAutoMode, onComplete) {
+            $.post('/api/controllers/setisautomode', { id: id, isAutoMode: isAutoMode })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
         deleteController: function (id, onComplete) {
             $.post('/api/controllers/delete', { id: id })
                 .done(function (data) {
@@ -44,6 +54,7 @@ define(['jquery'], function ($) {
 
         addController: api.addController,
         setControllerName: api.setControllerName,
+        setControllerIsAutoMode: api.setControllerIsAutoMode,
         deleteController: api.deleteController
     };
 });
