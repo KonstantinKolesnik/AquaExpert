@@ -1,0 +1,33 @@
+﻿
+<div class="monitor-view k-block">
+    <table style="width:100%" cellpadding="2" cellspacing="2">
+        <tr>
+            <td>
+                <div class="monitor-chart" style="height:150px;" data-bind="source: SensorValues"></div>
+            </td>
+            <td style="width:25%; min-width:25%;">
+                <div class="text-center text-nowrap"><h6 data-bind="html: Name"></h6></div>
+                <div class="text-center lead" data-bind="source: this" data-template="tmplLastSensorValue"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script id="tmplLastSensorValue" type="text/x-kendo-template">
+    #
+    var val = data.Sensor.SensorValueValue;
+    if (val == null) { #
+        <h4>-</h4>
+    # } else {
+        var config = JSON.parse(data.Configuration);
+        var templ = config.valueAxes[0].labels.template;
+        if (templ) {
+            //var template = kendo.template(templ);
+            var result = kendo.template(templ)({ value: val });
+        #
+            <h4>#= result #</h4>
+        # } else { #
+            <h4>#= val #</h4>
+        # }
+    } #
+</script>

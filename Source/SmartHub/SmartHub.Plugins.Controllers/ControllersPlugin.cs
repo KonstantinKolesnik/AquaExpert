@@ -29,6 +29,9 @@ namespace SmartHub.Plugins.Controllers
     [JavaScriptResource("/webapp/controllers/controller-editor-model.js", "SmartHub.Plugins.Controllers.Resources.js.controller-editor-model.js")]
     [HttpResource("/webapp/controllers/controller-editor.html", "SmartHub.Plugins.Controllers.Resources.js.controller-editor.html")]
 
+    [JavaScriptResource("/webapp/controllers/utils.js", "SmartHub.Plugins.Controllers.Resources.js.utils.js")]
+    [HttpResource("/webapp/controllers/utils.html", "SmartHub.Plugins.Controllers.Resources.js.utils.html")]
+
     [Plugin]
     public class ControllersPlugin : PluginBase
     {

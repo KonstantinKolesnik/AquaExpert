@@ -1,8 +1,7 @@
 ﻿
 define(
-	['common', 'lib', 'webapp/monitors/utils', 'text!webapp/zones/zone.html'],
-    function (common, lib, monitorUtils, templates) {
-
+	['common', 'lib', 'webapp/monitors/utils', 'webapp/controllers/utils', 'text!webapp/zones/zone.html'],
+    function (common, lib, monitorUtils, controllerUtils, templates) {
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
@@ -16,12 +15,20 @@ define(
 
             onShow: function () {
                 var me = this;
+                var viewModel = me.options.viewModel;
 
-                createListView($("#lvMonitors"), "monitors");
-                createListView($("#lvControllers"), "controllers");
-                createListView($("#lvScripts"), "scripts");
+                $("#monitorsHolder").toggle(viewModel.Zone.MonitorsList.length > 0);
+                $("#controllersHolder").toggle(viewModel.Zone.ControllersList.length > 0);
+                $("#scriptsHolder").toggle(viewModel.Zone.ScriptsList.length > 0);
 
-                kendo.bind($("#content"), me.options.viewModel);
+                if (viewModel.Zone.MonitorsList.length > 0)
+                    createListView($("#lvMonitors"), "monitors");
+                if (viewModel.Zone.ControllersList.length > 0)
+                    createListView($("#lvControllers"), "controllers");
+                if (viewModel.Zone.ScriptsList.length > 0)
+                    createListView($("#lvScripts"), "scripts");
+
+                kendo.bind($("#content"), viewModel);
 
                 function createListView(selector, type) {
                     selector.kendoListView({
@@ -56,7 +63,7 @@ define(
                         if (entity) {
                             switch (type) {
                                 case "monitors": monitorUtils.createMonitorChart($(selectorEntity), entity); break;
-                                case "controllers": $(selectorEntity).html("controller"); break;
+                                case "controllers": controllerUtils.createControllerWidget($(selectorEntity), entity); break;
                                 default: break;
                             }
                         }

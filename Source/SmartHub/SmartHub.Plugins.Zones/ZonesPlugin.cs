@@ -107,9 +107,9 @@ namespace SmartHub.Plugins.Zones
             {
                 Id = zone.Id,
                 Name = zone.Name,
-                MonitorsList = zone.MonitorsList ?? "[]",
-                ControllersList = zone.ControllersList ?? "[]",
-                ScriptsList = zone.ScriptsList ?? "[]"
+                MonitorsList = zone.MonitorsList,
+                ControllersList = zone.ControllersList,
+                ScriptsList = zone.ScriptsList
             };
         }
         private object BuildZoneRichWebModel(Zone zone)
@@ -118,17 +118,14 @@ namespace SmartHub.Plugins.Zones
                 return null;
 
             var pluginMonitors = Context.GetPlugin<MonitorsPlugin>();
-            //zone.MonitorsList = zone.MonitorsList ?? "[]";
             var ids = Extensions.FromJson(typeof(List<Guid>), zone.MonitorsList) as List<Guid>;
             var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.GetMonitor(id))).ToArray();
 
             var pluginControllers = Context.GetPlugin<ControllersPlugin>();
-            //zone.ControllersList = zone.ControllersList ?? "[]";
             ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
             var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
 
             var pluginScripts = Context.GetPlugin<ScriptsPlugin>();
-            //zone.ScriptsList = zone.ScriptsList ?? "[]";
             ids = Extensions.FromJson(typeof(List<Guid>), zone.ScriptsList) as List<Guid>;
             var scripts = ids.Select(id => pluginScripts.BuildScriptRichWebModel(pluginScripts.GetScript(id))).ToArray();
 
