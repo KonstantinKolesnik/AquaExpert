@@ -282,6 +282,13 @@ a.list-group-item:hover {
 
 /*#endregion */
 
+/*---------------------------------------------------------------------------*/
+
+.ddlSensorSelector
+{
+    width:250px !important;
+}
+
 
 
 .k-grid .k-dirty
