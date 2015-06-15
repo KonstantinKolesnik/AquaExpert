@@ -9,6 +9,7 @@ using SmartHub.Plugins.MySensors.GatewayProxies;
 using SmartHub.Plugins.Scripts;
 using SmartHub.Plugins.Scripts.Attributes;
 using SmartHub.Plugins.SignalR;
+using SmartHub.Plugins.Speech;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ using System.Text;
 
 namespace SmartHub.Plugins.MySensors
 {
-    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/module.js", "SmartHub.Plugins.MySensors.Resources.js.module.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
-    [JavaScriptResource("/webapp/mysensors/module-model.js", "SmartHub.Plugins.MySensors.Resources.js.module-model.js")]
-    [JavaScriptResource("/webapp/mysensors/module-view.js", "SmartHub.Plugins.MySensors.Resources.js.module-view.js")]
-    [HttpResource("/webapp/mysensors/module.html", "SmartHub.Plugins.MySensors.Resources.js.module.html")]
+    [AppSection("Сеть MySensors", SectionType.System, "/webapp/mysensors/settings.js", "SmartHub.Plugins.MySensors.Resources.js.settings.js", TileTypeFullName = "SmartHub.Plugins.MySensors.MySensorsTile")]
+    [JavaScriptResource("/webapp/mysensors/settings-model.js", "SmartHub.Plugins.MySensors.Resources.js.settings-model.js")]
+    [JavaScriptResource("/webapp/mysensors/settings-view.js", "SmartHub.Plugins.MySensors.Resources.js.settings-view.js")]
+    [HttpResource("/webapp/mysensors/settings.html", "SmartHub.Plugins.MySensors.Resources.js.settings.html")]
     [CssResource("/webapp/mysensors/css/style.css", "SmartHub.Plugins.MySensors.Resources.css.style.css", AutoLoad = true)]
 
     [Plugin]
@@ -413,6 +414,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
             Logger.Info("Connected.");
+            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
             NotifyConnectedForPlugins();
             NotifyConnectedForScripts();
         }
@@ -619,6 +621,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_Disconnected(object sender, EventArgs e)
         {
             Logger.Info("Disconnected.");
+            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
             NotifyDisconnectedForPlugins();
             NotifyDisconnectedForScripts();
         }

@@ -1,6 +1,6 @@
 ﻿
 define(
-	['app', 'webapp/mysensors/module-model', 'webapp/mysensors/module-view'],
+	['app', 'webapp/mysensors/settings-model', 'webapp/mysensors/settings-view'],
 	function (application, models, views) {
 	    var module = {
 	        setNodeName: function (id, name) {

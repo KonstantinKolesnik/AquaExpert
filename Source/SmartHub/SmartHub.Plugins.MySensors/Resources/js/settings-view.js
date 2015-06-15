@@ -1,6 +1,6 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/mysensors/module.html'],
+	['common', 'lib', 'text!webapp/mysensors/settings.html'],
     function (common, lib, templates) {
         var ctrlNodesGrid;
         var ctrlSensorsGrid;

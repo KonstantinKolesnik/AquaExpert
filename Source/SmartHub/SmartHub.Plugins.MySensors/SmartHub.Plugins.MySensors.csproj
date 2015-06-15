@@ -101,6 +101,11 @@
       <Name>SmartHub.Plugins.SignalR</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Speech\SmartHub.Plugins.Speech.csproj">
+      <Project>{74ee7ae8-c021-48b5-8c2d-e1f45c8bfbd8}</Project>
+      <Name>SmartHub.Plugins.Speech</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
       <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
       <Name>SmartHub.Plugins.WebUI</Name>
@@ -109,19 +114,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\js\module.html" />
+    <EmbeddedResource Include="Resources\js\settings.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-view.js" />
+    <EmbeddedResource Include="Resources\js\settings-view.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module.js" />
+    <EmbeddedResource Include="Resources\js\settings.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\css\style.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\js\module-model.js" />
+    <EmbeddedResource Include="Resources\js\settings-model.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
