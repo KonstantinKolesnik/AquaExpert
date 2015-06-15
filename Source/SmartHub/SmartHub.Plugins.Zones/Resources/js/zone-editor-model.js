@@ -9,7 +9,6 @@ define(['jquery'],
                             data.MonitorsList = JSON.parse(data.MonitorsList);
                             data.ControllersList = JSON.parse(data.ControllersList);
                             data.ScriptsList = JSON.parse(data.ScriptsList);
-                            data.GraphsList = JSON.parse(data.GraphsList);
                         }
 
                         if (onComplete)
@@ -19,13 +18,13 @@ define(['jquery'],
                         onError(data);
                     });
             },
-            setZoneConfiguration: function (id, monitorsList, controllersList, scriptsList, graphsList, onComplete) {
+            setZoneConfiguration: function (id, monitorsList, controllersList, scriptsList, /*graphsList,*/ onComplete) {
                 $.post('/api/zones/setconfiguration', {
                     id: id,
                     monitorsList: JSON.stringify(monitorsList),
                     controllersList: JSON.stringify(controllersList),
                     scriptsList: JSON.stringify(scriptsList),
-                    graphsList: JSON.stringify(graphsList)
+                    //graphsList: JSON.stringify(graphsList)
                 })
             	.done(function (data) {
             		if (onComplete)
@@ -56,8 +55,9 @@ define(['jquery'],
                     e.sender.Zone.Id,
                     e.sender.Zone.MonitorsList,
                     e.sender.Zone.ControllersList,
-                    e.sender.Zone.ScriptsList,
-                    e.sender.Zone.GraphsList);
+                    e.sender.Zone.ScriptsList
+                    //e.sender.Zone.GraphsList
+                    );
         });
 
         function onError(data) {

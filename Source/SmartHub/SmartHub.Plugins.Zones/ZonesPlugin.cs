@@ -179,6 +179,7 @@ namespace SmartHub.Plugins.Zones
                     MonitorsList = "[]",
                     ControllersList = "[]",
                     ScriptsList = "[]",
+
                     GraphsList = "[]"
                 };
 
@@ -222,7 +223,7 @@ namespace SmartHub.Plugins.Zones
             var monitorsList = request.GetRequiredString("monitorsList");
             var controllersList = request.GetRequiredString("controllersList");
             var scriptsList = request.GetRequiredString("scriptsList");
-            var graphsList = request.GetRequiredString("graphsList");
+            //var graphsList = request.GetRequiredString("graphsList");
 
             using (var session = Context.OpenSession())
             {
@@ -230,7 +231,7 @@ namespace SmartHub.Plugins.Zones
                 zone.MonitorsList = monitorsList;
                 zone.ControllersList = controllersList;
                 zone.ScriptsList = scriptsList;
-                zone.GraphsList = graphsList;
+                //zone.GraphsList = graphsList;
 
                 session.Flush();
             }
