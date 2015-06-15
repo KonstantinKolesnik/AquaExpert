@@ -3,7 +3,7 @@
     <h2 data-bind="text: Zone.Name"></h2>
 
     <div class="row">
-        <div id="monitorsHolder" class="col-xs-12 col-md-4">
+        <div id="monitorsHolder" class="col-xs-12 col-md-6">
             <h4>Мониторы</h4>
             <div id="lvMonitors" style="background-color:transparent; border-width:0;" data-bind="source: Zone.MonitorsList" data-template="tmplEntityListItem"></div>
         </div>
@@ -11,7 +11,7 @@
             <h4>Контроллеры</h4>
             <div id="lvControllers" style="background-color:transparent; border-width:0;" data-bind="source: Zone.ControllersList" data-template="tmplEntityListItem"></div>
         </div>
-        <div id="scriptsHolder" class="col-xs-12 col-md-4">
+        <div id="scriptsHolder" class="col-xs-12 col-md-2">
             <h4>Скрипты</h4>
             <div id="lvScripts" style="background-color:transparent; border-width:0;" data-bind="source: Zone.ScriptsList" data-template="tmplScriptView"></div>
         </div>
@@ -23,20 +23,26 @@
     <div class="entity-view-holder" entityId="${data.Id}" style="margin:0 15px 15px 0;"></div>
 </script>
 
-<script id="tmplScriptView" type="text/x-kendo-template">
+
+
+<!--<script id="tmplScriptView" type="text/x-kendo-template">
     <button class="script-view k-button" scriptId="${data.Id}" data-bind="value: this">
         <span class="glyphicon glyphicon-flash" ></span>#: Name #
     </button>
+</script>-->
+<script id="tmplScriptView" type="text/x-kendo-template">
+    <button class="script-view k-button" style="margin-bottom:10px;" scriptid="${data.Id}" data-bind="value: this">
+        <div class="clearfix">
+            <span class="glyphicon glyphicon-flash pull-right" style="font-size:35px; padding:5px;"></span>
+        </div>
+        <h4 class="zone-name">#: Name #</h4>
+</button>
 </script>
-
-<!--<button class="script-view k-button" scriptid="${data.Id}" data-bind="value: this">
-    <span class="glyphicon glyphicon-flash pull-right" style="font-size:35px; padding:5px;"></span>
-    <h3 class="zone-name">#: Name #</h3>
-</button>-->
-
-<!--<div class="script-view zone k-primary" scriptid="${data.Id}" data-bind="value: this">
-    <div class="clearfix">
-        <span class="glyphicon glyphicon-flash pull-right" style="font-size:35px; padding:5px;"></span>
+<!--<script id="tmplScriptView" type="text/x-kendo-template">
+    <div class="script-view zone k-primary" scriptid="${data.Id}" data-bind="value: this">
+        <div class="clearfix">
+            <span class="glyphicon glyphicon-flash pull-right" style="font-size:35px; padding:5px;"></span>
+        </div>
+        <h4 class="zone-name">#: Name #</h4>
     </div>
-    <h3 class="zone-name">#: Name #</h3>
-</div>-->
+</script>-->

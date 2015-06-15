@@ -2,7 +2,7 @@
 define(['jquery', 'text!webapp/controllers/utils.html'],
     function ($, templates) {
         var api = {
-            createControllerWidget: function (selector, monitor) {
+            createControllerWidget: function (selector, controller) {
                 $(selector).html("controller");
                 return;
 
@@ -10,17 +10,17 @@ define(['jquery', 'text!webapp/controllers/utils.html'],
                 selector.html($(templates));
 
                 var config = this.getDefaultConfiguration();
-                if (monitor && monitor.Configuration)
+                if (controller && controller.Configuration)
                     //try {
-                    config = JSON.parse(monitor.Configuration);
+                    config = JSON.parse(controller.Configuration);
                     //}
                     //catch(e) {
                     //    config = this.getDefaultConfiguration();
                     //}
 
-                kendo.bind(selector.find(".monitor-view"), monitor);
+                kendo.bind(selector.find(".controller-view"), controller);
 
-                return selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
+                return selector.find(".controller-chart").kendoChart(config).data("kendoChart");
             }
         };
 
