@@ -150,7 +150,11 @@ namespace SmartHub.Plugins.MySensors
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
         {
             if (gatewayProxy != null && sensor != null)
-                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value));
+            {
+                var lastSV = GetLastSensorValue(sensor);
+                if (lastSV == null || (lastSV.Value != value))
+                    gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value));
+            }
         }
         
         public Node GetNode(byte nodeNo)

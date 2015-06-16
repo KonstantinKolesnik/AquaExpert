@@ -64,18 +64,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                             color: "cornflowerblue",
                             tooltip: {
                                 visible: true,
-                                template: "#= kendo.toString(data.value, 'n1') #",
-                                //template: function (data) {
-                                //    switch (type) {
-                                //        case "T": return kendo.toString(data.value, 'n1') + "&nbsp;°C";
-                                //        case "H": return kendo.toString(data.value, 'n1') + "&nbsp;%";
-                                //        case "P": return kendo.toString(data.value / 133.3, 'n2') + "&nbsp;mmHg";
-                                //        case "F":
-                                //            var weather = ["Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-"];
-                                //            return weather[data.value];
-                                //        default: return data.value;
-                                //    }
-                                //}
+                                template: "#= kendo.toString(data.value, 'n1') #"
                             }
                         },
                     ],

@@ -94,21 +94,12 @@ namespace SmartHub.Plugins.Controllers.Core
         {
             if (IsAutoMode)
             {
-                bool isActiveNew = false;
                 DateTime now = DateTime.Now;
-
+                bool isActiveNew = false;
                 foreach (var range in configuration.ActivePeriods)
                     isActiveNew |= (range.IsActive && IsInRange(now, range));
 
-                if (value.HasValue)
-                {
-                    bool isActiveCurrent = value.Value == 1;
-
-                    if (isActiveNew != isActiveCurrent)
-                        mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActiveNew ? 1 : 0);
-                }
-                else
-                    mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActiveNew ? 1 : 0);
+                mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActiveNew ? 1 : 0);
             }
         }
         #endregion
@@ -116,8 +107,7 @@ namespace SmartHub.Plugins.Controllers.Core
         #region Event handlers
         public override void TimerElapsed(DateTime now)
         {
-            var lastSV = mySensors.GetLastSensorValue(SensorSwitch);
-            Process(lastSV != null ? lastSV.Value : (float?)null);
+            Process(null);
         }
         #endregion
     }

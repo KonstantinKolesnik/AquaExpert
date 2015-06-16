@@ -1,11 +1,11 @@
 ﻿
 <div class="monitor-view k-block">
-    <table style="width:100%" cellpadding="2" cellspacing="2">
+    <table style="width:100%" cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <div class="monitor-chart" style="height:150px;" data-bind="source: SensorValues"></div>
+                <div class="monitor-chart" style="height:120px;" data-bind="source: SensorValues"></div>
             </td>
-            <td style="width:25%; min-width:25%;">
+            <td style="width:33%; min-width:33%;">
                 <div class="text-center text-nowrap"><h6 data-bind="html: Name"></h6></div>
                 <div class="text-center lead" data-bind="source: this" data-template="tmplLastSensorValue"></div>
             </td>
@@ -17,7 +17,7 @@
     #
     var val = data.Sensor.SensorValueValue;
     if (val == null) { #
-        <h4>-</h4>
+        <h5>-</h5>
     # } else {
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
@@ -25,9 +25,9 @@
             //var template = kendo.template(templ);
             var result = kendo.template(templ)({ value: val });
         #
-            <h4>#= result #</h4>
+            <h5>#= result #</h5>
         # } else { #
-            <h4>#= val #</h4>
+            <h5>#= val #</h5>
         # }
     } #
 </script>

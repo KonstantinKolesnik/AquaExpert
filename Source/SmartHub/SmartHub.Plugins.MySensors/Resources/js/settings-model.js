@@ -356,6 +356,7 @@ define(['jquery'], function ($) {
 
 	            me.BatteryLevels.push(data.Data);
 	        }
+
 	        function onSensorPresentation(data) {
 	            for (var i = 0; i < me.Sensors.length; i++) {
 	                if (me.Sensors[i].Id == data.Data.Id) {
@@ -402,6 +403,7 @@ define(['jquery'], function ($) {
 
 	            me.SensorValues.push(data.Data);
 	        }
+
 	        function onUnitSystemChanged(data) {
 	            me.set("UnitSystem", data.Data);
 	        }

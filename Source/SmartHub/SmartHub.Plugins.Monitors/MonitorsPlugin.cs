@@ -77,7 +77,7 @@ namespace SmartHub.Plugins.Monitors
                 Id = monitor.Id,
                 Name = monitor.Name,
                 Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(monitor.SensorId)),
-                SensorValues = mySensors.GetSensorValues(monitor.SensorId, 24, 20).ToArray(),
+                SensorValues = mySensors.GetSensorValues(monitor.SensorId, 24, 10).ToArray(),
                 Configuration = monitor.Configuration
             };
         }

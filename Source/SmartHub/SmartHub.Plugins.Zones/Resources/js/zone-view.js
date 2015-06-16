@@ -5,7 +5,7 @@ define(
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
-                'click .script-view': 'scriptClick'
+                'click .script': 'scriptClick'
             },
             scriptClick: function (e) {
                 e.preventDefault();
@@ -48,28 +48,28 @@ define(
 
                                 processEntity(entity, type, selectorEntity);
                             });
-                        }
-                    });
 
-                    function getEntitiesList(type) {
-                        switch (type) {
-                            case "monitors": return me.options.viewModel.Zone.MonitorsList;
-                            case "controllers": return me.options.viewModel.Zone.ControllersList;
-                            case "scripts": return me.options.viewModel.Zone.ScriptsList;
-                            default: return [];
-                        }
-                    }
-                    function processEntity(entity, type, selectorEntity) {
-                        if (entity) {
-                            switch (type) {
-                                case "monitors": monitorUtils.createMonitorChart($(selectorEntity), entity); break;
-                                case "controllers": controllerUtils.createControllerWidget($(selectorEntity), entity); break;
-                                default: break;
+                            function getEntitiesList(type) {
+                                switch (type) {
+                                    case "monitors": return me.options.viewModel.Zone.MonitorsList;
+                                    case "controllers": return me.options.viewModel.Zone.ControllersList;
+                                    case "scripts": return me.options.viewModel.Zone.ScriptsList;
+                                    default: return [];
+                                }
+                            }
+                            function processEntity(entity, type, selectorEntity) {
+                                if (entity) {
+                                    switch (type) {
+                                        case "monitors": monitorUtils.createMonitorChart($(selectorEntity), entity); break;
+                                        case "controllers": controllerUtils.createControllerWidget($(selectorEntity), entity); break;
+                                        default: break;
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
                 }
-                function createHeaterChart_ForExample(selector) {
+                function createGraphChart_ForExample(selector) {
                     selector.kendoChart({
                         theme: "MaterialBlack",
                         title: {
@@ -185,20 +185,3 @@ define(
             LayoutView: layoutView
         };
     });
-
-
-
-
-//$("#sparkline").kendoSparkline([1, 2, 3, 2, 1]);
-//$("#sparkline").kendoSparkline([200, 450, 300, 125]);
-//$("#sparkline").kendoSparkline({
-//    series: [
-//        {
-//            name: "World",
-//            data: [15.7, 16.7, 20, 23.5, 26.6]
-//        }
-//    ],
-//    categoryAxis: {
-//        categories: [2005, 2006, 2007, 2008, 2009]
-//    }
-//});
