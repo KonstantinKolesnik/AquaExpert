@@ -2,7 +2,8 @@
 #include <SPI.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define NUMBER_OF_RELAYS		8  // Total number of attached relays
-uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 }; // A6 and A7 don't support digitalWrite!!!!
+//uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 }; // A6 and A7 don't support digitalWrite!!!!
+uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 2, 3 }; // A6 and A7 don't support digitalWrite!!!!
 #define RELAY_ON				0  // GPIO value to write to turn on attached relay
 #define RELAY_OFF				1  // GPIO value to write to turn off attached relay
 MyMessage msgRelay(0, V_LIGHT);
