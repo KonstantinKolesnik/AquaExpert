@@ -14,6 +14,9 @@ define(
                 function createMonitorsList() {
                     $("#listMonitors").kendoListView({
                         dataBound: function (e) {
+                            if (this.dataSource.total() == 0)
+                                return;
+
                             $.each($(".monitor-chart"), function (idx, selector) {
                                 var type = viewModel.Monitors[idx].Type;
                                 createMonitorChart($(selector), type);

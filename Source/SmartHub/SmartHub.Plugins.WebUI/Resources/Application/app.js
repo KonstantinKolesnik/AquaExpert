@@ -82,7 +82,9 @@ define(
 	                console.log(data);
 	                if (receiver && receiver.SignalRReceiveHandler) {
 	                    try {
-	                        receiver.SignalRReceiveHandler(receiver, data);
+	                        setTimeout(function () {
+	                            receiver.SignalRReceiveHandler(receiver, data);
+	                        }, 0);
 	                    }
 	                    catch (ex) {
                             // most likely it's a tile's handler and we aren't at the main page

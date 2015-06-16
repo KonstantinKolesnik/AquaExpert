@@ -33,27 +33,32 @@ define(
                 function createListView(selector, type) {
                     selector.kendoListView({
                         dataBound: function (e) {
+                            if (this.dataSource.total() == 0)
+                                return;
+
                             if (type == "scripts")
                                 return;
+
+                            var entities = getEntitiesList(type);
 
                             $.each($(".entity-view-holder"), function (idx, selectorEntity) {
                                 var entity = null;
 
-                                $.each(getEntitiesList(type), function (idx, item) {
+                                $.each(entities, function (idx, item) {
                                     if (item.Id == $(selectorEntity).attr("entityId")) {
                                         entity = item;
                                         return false;
                                     }
                                 });
 
-                                processEntity(entity, type, selectorEntity);
+                                setTimeout(function () { processEntity(entity, type, selectorEntity); }, 0);
                             });
 
                             function getEntitiesList(type) {
                                 switch (type) {
-                                    case "monitors": return me.options.viewModel.Zone.MonitorsList;
-                                    case "controllers": return me.options.viewModel.Zone.ControllersList;
-                                    case "scripts": return me.options.viewModel.Zone.ScriptsList;
+                                    case "monitors": return viewModel.Zone.MonitorsList;
+                                    case "controllers": return viewModel.Zone.ControllersList;
+                                    case "scripts": return viewModel.Zone.ScriptsList;
                                     default: return [];
                                 }
                             }
