@@ -5,19 +5,14 @@
 #include <MySensor.h>
 #include <SPI.h>
 
-MySensor gw;
+MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 
 void setup()  
 {  
-  // The third argument enables repeater mode.
-  gw.begin(NULL, AUTO, true);
-
-  //Send the sensor node sketch version information to the gateway
-  gw.sendSketchInfo("Repeater", "1.0");
+	gw.begin(NULL, AUTO, true); // The third argument enables repeater mode.
+	gw.sendSketchInfo("Repeater", "1.0");
 }
-
 void loop() 
 {
-  // By calling process() you route messages in the background
-  gw.process();
+	gw.process(); // by calling process() you route messages in the background
 }

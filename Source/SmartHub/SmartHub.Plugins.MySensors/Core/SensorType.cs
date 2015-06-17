@@ -22,7 +22,7 @@ namespace SmartHub.Plugins.MySensors.Core
         Distance = 15,          // Distance sensor
         LightLevel = 16,        // Light sensor
         ArduinoNode = 17,       // Arduino node device
-        ArduinoRelay = 18,      // Arduino repeating node device
+        ArduinoRepeater = 18,   // Arduino repeating node device
         Lock = 19,              // Lock device
         IR = 20,                // IR sender/receiver device
         Water = 21,             // Water meter

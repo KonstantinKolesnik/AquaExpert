@@ -2,8 +2,8 @@
 #include <SPI.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define NUMBER_OF_RELAYS		8  // Total number of attached relays
-//uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 }; // A6 and A7 don't support digitalWrite!!!!
-uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 2, 3 }; // A6 and A7 don't support digitalWrite!!!!
+//uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 }; // A6 and A7 don't support digitalWrite!!!! (for my PCB)
+uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 2, 3 }; // A6 and A7 don't support digitalWrite!!!! (for Nano IO Shield)
 #define RELAY_ON				0  // GPIO value to write to turn on attached relay
 #define RELAY_OFF				1  // GPIO value to write to turn off attached relay
 MyMessage msgRelay(0, V_LIGHT);
@@ -12,8 +12,7 @@ MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 void setup()
 {
 	gw.begin(onMessageReceived);
-	String sketchName = "Power switch 8";
-	gw.sendSketchInfo(sketchName.c_str(), "1.0");
+	gw.sendSketchInfo("Power switch 8", "1.0");
 
 	// (sensorID = 0...7)
 	for (int sensorID = 0; sensorID < NUMBER_OF_RELAYS; sensorID++)

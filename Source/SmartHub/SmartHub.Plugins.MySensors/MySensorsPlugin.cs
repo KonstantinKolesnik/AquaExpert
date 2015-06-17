@@ -14,6 +14,7 @@ using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -426,7 +427,7 @@ namespace SmartHub.Plugins.MySensors
         {
             SensorMessage message = args.Message;
 
-            //Debug.WriteLine(message.ToString());
+            Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeNo == 0 || message.SensorNo == 255;
             Node node = GetNode(message.NodeNo);

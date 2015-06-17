@@ -256,14 +256,14 @@ namespace SmartHub.Plugins.Controllers
             var id = request.GetRequiredGuid("id");
             var isAutoMode = request.GetRequiredBool("isAutoMode");
 
-            using (var session = Context.OpenSession())
-            {
-                var ctrl = session.Load<Controller>(id);
-                ctrl.IsAutoMode = isAutoMode;
-                session.Flush();
+            foreach (ControllerBase controller in controllers)
+                if (controller.ID == id)
+                {
+                    controller.IsAutoMode = isAutoMode;
+                    break;
+                }
 
-                NotifyForSignalR(new { MsgId = "ControllerIsAutoModeChanged", Data = BuildControllerWebModel(ctrl) });
-            }
+            //NotifyForSignalR(new { MsgId = "ControllerIsAutoModeChanged", Data = BuildControllerWebModel(ctrl) });
 
             return null;
         }
