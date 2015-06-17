@@ -41,7 +41,6 @@ namespace SmartHub.Plugins.HttpListener
                 logger.Info("Execute action: {0};", path);
 
                 IListenerHandler handler;
-
                 if (handlers.TryGetValue(path, out handler))
                 {
                     //var message = string.Format("handler for url '{0}' is not found", localPath);

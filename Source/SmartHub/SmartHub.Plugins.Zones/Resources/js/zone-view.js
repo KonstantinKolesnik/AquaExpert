@@ -5,7 +5,7 @@ define(
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
-                'click .script': 'scriptClick'
+                'click .script-button': 'scriptClick'
             },
             scriptClick: function (e) {
                 e.preventDefault();
@@ -74,7 +74,7 @@ define(
                         }
                     });
                 }
-                function createGraphChart_ForExample(selector) {
+                function createGraph_ForExample(selector) {
                     selector.kendoChart({
                         theme: "MaterialBlack",
                         title: {

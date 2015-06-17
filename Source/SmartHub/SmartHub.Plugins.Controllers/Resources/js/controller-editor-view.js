@@ -69,7 +69,7 @@ define(
                         gridPeriods.dataSource.add({
                             From: ddlNewPeriodFrom.value(),//.toUTCString(),
                             To: ddlNewPeriodTo.value(),//.toLocaleString(),
-                            IsActive: $("#chbNewPeriodIsActive").prop("checked")
+                            IsEnabled: $("#chbNewPeriodIsEnabled").prop("checked")
                         });
                     });
 
@@ -86,7 +86,7 @@ define(
                             columns: [
                                 { field: "From", title: "С", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: "#: kendo.toString(new Date(From), 'HH:mm') #" },
                                 { field: "To", title: "По", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: "#: kendo.toString(new Date(To), 'HH:mm') #" },
-                                { field: "IsActive", title: "Активный", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsActive").html()) },
+                                { field: "IsEnabled", title: "Разрешен", width: 80, editor: getEditor, attributes: { "class": "text-center" }, template: kendo.template($("#tmplIsEnabled").html()) },
                                 {
                                     title: "&nbsp;", width: 100, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
                                     command: [
@@ -125,7 +125,7 @@ define(
                                 grid.closeCell();
                             });
                         }
-                        else if (options.field == "IsActive") {
+                        else if (options.field == "IsEnabled") {
                             var oldValue = options.model[options.field];
 
                             var editor = $("<input type='checkbox' style='width:100%;'/>");
@@ -136,7 +136,7 @@ define(
                                 .change(function () {
                                     var newValue = editor.prop("checked");
                                     if (newValue != oldValue)
-                                        options.model.set("IsActive", newValue);
+                                        options.model.set("IsEnabled", newValue);
 
                                     grid.closeCell();
                                 });

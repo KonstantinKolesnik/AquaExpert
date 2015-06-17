@@ -502,11 +502,12 @@ namespace SmartHub.Plugins.MySensors
                     {
                         NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
                         var sv = SaveSensorValueToDB(message);
-                        NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() });
+                        
+                        NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
                         
                         NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
-                        NotifyForSignalR(new { MsgId = "SensorValue", Data = sv });
+                        NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
                     }
                     break;
                 #endregion

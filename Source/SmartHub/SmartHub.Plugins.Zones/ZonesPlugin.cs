@@ -6,7 +6,6 @@ using SmartHub.Plugins.Controllers;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Monitors;
-using SmartHub.Plugins.Monitors.Data;
 using SmartHub.Plugins.Scripts;
 using SmartHub.Plugins.SignalR;
 using SmartHub.Plugins.WebUI.Attributes;

@@ -1,20 +1,18 @@
 ﻿
-<div id="content" class="container-fluid">
+<div id="content">
     <h2>Голосовые команды</h2>
 
-    <div class="col-md-5">
-        <form class="form-inline k-block">
-            <div class="form-group">
-                <label for="tbNewVoiceCommandText">Текст</label>
-                <input type="text" class="k-textbox inline-control" id="tbNewVoiceCommandText" />
-            </div>
-            <div class="form-group">
-                <label for="ddlNewVoiceCommandScript">Скрипт</label>
-                <select id="ddlNewVoiceCommandScript" class="inline-control"></select>
-            </div>
-            <button class="k-button k-primary js-btn-add-monitor">Добавить команду</button>
-        </form>
+    <form class="form-inline k-block" role="form">
+        <div class="form-group">
+            <label for="tbNewVoiceCommandText">Текст</label>
+            <input type="text" id="tbNewVoiceCommandText" class="k-textbox inline-control" placeholder="Укажите текст команды" />
+        </div>
+        <div class="form-group">
+            <label for="ddlNewVoiceCommandScript">Скрипт</label>
+            <select id="ddlNewVoiceCommandScript" class="inline-control"></select>
+        </div>
+        <button class="k-button k-primary js-btn-add-voice-command">Добавить команду</button>
+    </form>
 
-        <div id="gridVoiceCommands"></div>
-    </div>
+    <div id="gridVoiceCommands" class="entities-grid"></div>
 </div>

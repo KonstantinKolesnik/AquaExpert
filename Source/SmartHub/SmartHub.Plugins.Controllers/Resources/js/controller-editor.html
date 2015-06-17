@@ -97,16 +97,16 @@
             <input id="ddlNewPeriodTo" class="inline-control" />
         </div>
         <div class="form-group">
-            <label for="chbNewPeriodIsActive">Активный</label>
-            <input type="checkbox" id="chbNewPeriodIsActive" class="inline-control" checked="checked" />
+            <label for="chbNewPeriodIsEnabled">Разрешен</label>
+            <input type="checkbox" id="chbNewPeriodIsEnabled" class="inline-control" checked="checked" />
         </div>
         <button id="btnAddPeriod" class="k-button k-primary">Добавить период</button>
     </form>
 
     <div id="gridPeriods" data-bind="source: Controller.Configuration.ActivePeriods"></div>
 
-    <script id="tmplIsActive" type="text/x-kendo-template">
-        # if (data.IsActive) { #
+    <script id="tmplIsEnabled" type="text/x-kendo-template">
+        # if (data.IsEnabled) { #
         <span class="k-icon k-i-tick"></span>
         # } else { #
         <span class="k-icon k-i-close"></span>

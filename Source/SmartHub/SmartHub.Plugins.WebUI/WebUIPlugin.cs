@@ -166,24 +166,6 @@ namespace SmartHub.Plugins.WebUI
         }
         #endregion
 
-        #region Web API
-        [HttpCommand("/api/webui/sections/common")]
-        public object GetCommonSectionItems(HttpRequestParams request)
-        {
-            return GetSectionItems(SectionType.Common);
-        }
-        [HttpCommand("/api/webui/sections/system")]
-        public object GetSystemSectionItems(HttpRequestParams request)
-        {
-            return GetSectionItems(SectionType.System);
-        }
-        [HttpCommand("/api/webui/styles.json")]
-        public object GetStylesBundle(HttpRequestParams request)
-        {
-            return cssFiles;
-        }
-        #endregion
-
         #region Private methods
         private object GetSectionItems(SectionType sectionType)
         {
@@ -200,6 +182,24 @@ namespace SmartHub.Plugins.WebUI
                     }
                 )
                 .ToArray();
+        }
+        #endregion
+
+        #region Web API
+        [HttpCommand("/api/webui/sections/common")]
+        private object GetCommonSectionItems(HttpRequestParams request)
+        {
+            return GetSectionItems(SectionType.Common);
+        }
+        [HttpCommand("/api/webui/sections/system")]
+        private object GetSystemSectionItems(HttpRequestParams request)
+        {
+            return GetSectionItems(SectionType.System);
+        }
+        [HttpCommand("/api/webui/styles.json")]
+        private object GetStylesBundle(HttpRequestParams request)
+        {
+            return cssFiles;
         }
         #endregion
     }

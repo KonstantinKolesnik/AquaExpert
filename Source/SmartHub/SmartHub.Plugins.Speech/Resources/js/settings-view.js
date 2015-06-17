@@ -8,7 +8,7 @@ define(
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             events: {
-                'click .js-btn-add-monitor': 'addVoiceCommand',
+                'click .js-btn-add-voice-command': 'addVoiceCommand',
             },
             addVoiceCommand: function (e) {
                 e.preventDefault();

@@ -6,7 +6,6 @@
 	'application/common/sortable-view',
 	'application/common/utils'],
 	function (application, cssFiles, complexView, formView, sortableView, utils) {
-
 	    var common = {
 	        ComplexView: complexView,
 	        FormView: formView,

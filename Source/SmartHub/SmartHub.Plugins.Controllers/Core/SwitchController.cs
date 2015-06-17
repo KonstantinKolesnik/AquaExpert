@@ -12,7 +12,7 @@ namespace SmartHub.Plugins.Controllers.Core
     {
         public DateTime From;
         public DateTime To;
-        public bool IsActive;
+        public bool IsEnabled;
     }
 
     public class SwitchController : ControllerBase
@@ -97,7 +97,7 @@ namespace SmartHub.Plugins.Controllers.Core
                 DateTime now = DateTime.Now;
                 bool isActiveNew = false;
                 foreach (var range in configuration.ActivePeriods)
-                    isActiveNew |= (range.IsActive && IsInRange(now, range));
+                    isActiveNew |= (range.IsEnabled && IsInRange(now, range));
 
                 mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActiveNew ? 1 : 0);
             }
@@ -105,6 +105,11 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Event handlers
+        public override void MessageReceived(SensorMessage message)
+        {
+            if (MySensorsPlugin.IsMessageFromSensor(message, SensorSwitch))
+                Process(null);
+        }
         public override void TimerElapsed(DateTime now)
         {
             Process(null);
