@@ -33,15 +33,13 @@ define(['jquery', 'text!webapp/controllers/utils.html'],
 
                 selector.html($(templates));
 
-                var type = this.options.viewModel.Controller.Type;
-
-                var tmpl = selector.find("#tmpl" + type);
+                var tmpl = selector.find("#tmpl" + controller.Type);
                 if (!tmpl.length)
                     tmpl = selector.find("#tmplError");
                 selector.find("#controller-body").html(tmpl.html());
 
                 var fn = null;
-                switch (type) {
+                switch (controller.Type) {
                     case 0: fn = initHeaterController; break;
                     case 1: fn = initSwitchController; break;
 
