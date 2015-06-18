@@ -62,11 +62,19 @@ namespace SmartHub.Plugins.Monitors
         #endregion
 
         #region Public methods
+        public List<Monitor> GetMonitors()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>()
+                    .OrderBy(monitor => monitor.Name)
+                    .ToList();
+        }
         public Monitor GetMonitor(Guid id)
         {
             using (var session = Context.OpenSession())
                 return session.Get<Monitor>(id);
         }
+        
         public object BuildMonitorRichWebModel(Monitor monitor)
         {
             if (monitor == null)
@@ -84,14 +92,6 @@ namespace SmartHub.Plugins.Monitors
         #endregion
 
         #region Private methods
-        private List<Monitor> GetMonitors()
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Monitor>()
-                    .OrderBy(monitor => monitor.Name)
-                    .ToList();
-        }
-
         private object BuildMonitorWebModel(Monitor monitor)
         {
             if (monitor == null)
@@ -101,7 +101,7 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(monitor.SensorId))
+                SensorName = mySensors.GetSensor(monitor.SensorId).Name
             };
         }
         #endregion
@@ -123,18 +123,10 @@ namespace SmartHub.Plugins.Monitors
                 .Where(x => x != null)
                 .ToArray();
         }
-        [HttpCommand("/api/monitors/get")]
-        private object apiGetMonitor(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-
-            return BuildMonitorWebModel(GetMonitor(id));
-        }
         [HttpCommand("/api/monitors/get/dashboard")]
         private object apiGetMonitorForDashboard(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-
             return BuildMonitorRichWebModel(GetMonitor(id));
         }
 

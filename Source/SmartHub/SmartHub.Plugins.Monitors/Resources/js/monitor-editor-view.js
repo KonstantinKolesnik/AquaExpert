@@ -23,7 +23,7 @@ define(
             },
 
             refreshChart: function () {
-                utils.createMonitorChart($("#monitor"), viewModel.Monitor);
+                utils.createMonitorWidget($("#monitor"), viewModel.Monitor);
                 kendo.bind($("#content"), viewModel.Monitor);
             },
             refreshJsonEditor: function () {

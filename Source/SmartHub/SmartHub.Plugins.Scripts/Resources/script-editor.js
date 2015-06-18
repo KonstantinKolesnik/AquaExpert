@@ -22,7 +22,7 @@
 			add: function () {
 				var name = window.prompt('Введите имя скрипта:', '');
 				if (name) {
-					var model = new models.ScriptData({ name: name });
+					var model = new models.ScriptData({ Name: name });
 					api.createEditor(model);
 				}
 			}

@@ -489,14 +489,14 @@ float MQCalibration(int mq_pin)
 {
 	float val = 0;
 
+	// take multiple samples
 	for (int i = 0; i < CALIBARAION_SAMPLE_TIMES; i++)
 	{
-		//take multiple samples
 		val += MQResistanceCalculation(analogRead(mq_pin));
 		delay(CALIBRATION_SAMPLE_INTERVAL);
 	}
 
-	val = val / CALIBARAION_SAMPLE_TIMES; // calculate the average value
+	val = val / CALIBARAION_SAMPLE_TIMES; // average value
 	val = val / RO_CLEAN_AIR_FACTOR; // divided by RO_CLEAN_AIR_FACTOR yields the Ro according to the chart in the datasheet 
 
 	return val;

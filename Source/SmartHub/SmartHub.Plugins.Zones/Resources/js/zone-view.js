@@ -33,10 +33,10 @@ define(
                 function createListView(selector, type) {
                     selector.kendoListView({
                         dataBound: function (e) {
-                            if (this.dataSource.total() == 0)
+                            if (type == "scripts")
                                 return;
 
-                            if (type == "scripts")
+                            if (this.dataSource.total() == 0)
                                 return;
 
                             var entities = getEntitiesList(type);
@@ -65,7 +65,7 @@ define(
                             function processEntity(entity, type, selectorEntity) {
                                 if (entity) {
                                     switch (type) {
-                                        case "monitors": monitorUtils.createMonitorChart($(selectorEntity), entity); break;
+                                        case "monitors": monitorUtils.createMonitorWidget($(selectorEntity), entity); break;
                                         case "controllers": controllerUtils.createControllerWidget($(selectorEntity), entity); break;
                                         default: break;
                                     }

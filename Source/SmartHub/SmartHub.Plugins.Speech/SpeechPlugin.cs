@@ -126,6 +126,7 @@ namespace SmartHub.Plugins.Speech
             return;
 
             var cultureInfo = new CultureInfo("ru-RU");
+            //var cultureInfo = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
 
@@ -145,7 +146,7 @@ namespace SmartHub.Plugins.Speech
             var builder = new GrammarBuilder(choices);
             builder.Culture = cultureInfo;
 
-            recognitionEngine = new SpeechRecognitionEngine(cultureInfo);
+            recognitionEngine = new SpeechRecognitionEngine();// (cultureInfo);
             recognitionEngine.SetInputToDefaultAudioDevice();
             recognitionEngine.UnloadAllGrammars();
             recognitionEngine.LoadGrammar(new Grammar(builder));

@@ -234,9 +234,7 @@ namespace SmartHub.Plugins.MySensors
             if (sensor == null)
                 return null;
 
-            SensorValue lastSV = null;
-            using (var session = Context.OpenSession())
-                lastSV = session.Query<SensorValue>().Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo).OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+            SensorValue lastSV = GetLastSensorValue(sensor);
 
             return new
             {
@@ -419,7 +417,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
             Logger.Info("Connected.");
-            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
+            //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
             NotifyConnectedForPlugins();
             NotifyConnectedForScripts();
         }

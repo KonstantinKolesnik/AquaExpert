@@ -1,6 +1,6 @@
-﻿<!--<hr/>-->
+﻿
 <h4>
-  <%= name %> <small><sup><a href="#" title="Добавить виджет на стартовую страницу" class="fa fa-external-link-square th-no-text-decoration js-btn-add-tile"></a></sup></small>
+  <%= Name %> <small><sup><a href="#" title="Добавить виджет на стартовую страницу" class="fa fa-external-link-square th-no-text-decoration js-btn-add-tile"></a></sup></small>
 </h4>
 <p>
 	<button type="button" class="btn btn-default btn-xs js-btn-run">Выполнить</button>&nbsp;

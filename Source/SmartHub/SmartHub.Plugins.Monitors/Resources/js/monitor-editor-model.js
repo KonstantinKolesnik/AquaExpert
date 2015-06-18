@@ -12,9 +12,8 @@ define(['jquery'],
                         onError(data);
                     });
             },
-            setMonitorConfiguration: function (id, config, onComplete) {
-                //$.post('/api/monitors/setconfiguration', { id: id, config: JSON.stringify(config) })
-                $.post('/api/monitors/setconfiguration', { id: id, config: config })
+            setMonitorConfiguration: function (monitor, onComplete) {
+                $.post('/api/monitors/setconfiguration', { id: monitor.Id, config: monitor.Configuration })
             		.done(function (data) {
             		    if (onComplete)
             		        onComplete(data);
@@ -57,7 +56,7 @@ define(['jquery'],
         });
         viewModel.bind("change", function (e) {
             if (e.field.indexOf("Monitor.Configuration") > -1)
-                api.setMonitorConfiguration(e.sender.Monitor.Id, e.sender.Monitor.Configuration);
+                api.setMonitorConfiguration(e.sender.Monitor);
         });
 
         function onError(data) {

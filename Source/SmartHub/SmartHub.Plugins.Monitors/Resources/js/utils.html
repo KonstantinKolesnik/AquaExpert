@@ -22,7 +22,6 @@
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
         if (templ) {
-            //var template = kendo.template(templ);
             var result = kendo.template(templ)({ value: val });
         #
             <h5>#= result #</h5>
@@ -32,7 +31,7 @@
     } #
 </script>
 
-
+<!--var val = data.SensorValues[data.SensorValues.length - 1].Value;-->
 
 
 

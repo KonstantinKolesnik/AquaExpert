@@ -5,7 +5,6 @@
 
 		var api = {
 			createEditor: function (model) {
-
 				var view = new views.AlarmEditorView({ model: model });
 
 				view.on('alarm-clock:editor:save', api.save);
@@ -14,14 +13,10 @@
 
 				application.setContentView(view);
 			},
-
 			edit: function (id) {
-
 				models.loadEditorData(id).done(api.createEditor);
 			},
-
 			save: function () {
-
 				var model = this.model;
 				models.saveAlarm(model).done(api.redirectToList);
 			},

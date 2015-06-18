@@ -6,10 +6,10 @@ define(
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
             onShow: function () {
-                createMultiSelector($("#msMonitors"), "monitors", "Id", "Name");
-                createMultiSelector($("#msControllers"), "controllers", "Id", "Name");
-                createMultiSelector($("#msScripts"), "scripts", "id", "name");
-                //createMultiSelector($("#msGraphs"), "graphs", "Id", "Name");
+                createMultiSelector($("#msMonitors"), "monitors");
+                createMultiSelector($("#msControllers"), "controllers");
+                createMultiSelector($("#msScripts"), "scripts");
+                //createMultiSelector($("#msGraphs"), "graphs");
 
                 kendo.bind($("#content"), this.options.viewModel);
 
@@ -22,8 +22,8 @@ define(
                                 }
                             },
                         },
-                        dataValueField: valueFieldName,
-                        dataTextField: textFieldName,
+                        dataValueField: "Id",
+                        dataTextField: "Name",
                         valuePrimitive: true,
                         autoClose: false,
                         filter: "contains",

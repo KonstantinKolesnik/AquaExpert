@@ -18,13 +18,13 @@ define(['jquery'],
                         onError(data);
                     });
             },
-            setZoneConfiguration: function (id, monitorsList, controllersList, scriptsList, /*graphsList,*/ onComplete) {
+            setZoneConfiguration: function (zone, onComplete) {
                 $.post('/api/zones/setconfiguration', {
-                    id: id,
-                    monitorsList: JSON.stringify(monitorsList),
-                    controllersList: JSON.stringify(controllersList),
-                    scriptsList: JSON.stringify(scriptsList),
-                    //graphsList: JSON.stringify(graphsList)
+                    id: zone.Id,
+                    monitorsList: JSON.stringify(zone.MonitorsList),
+                    controllersList: JSON.stringify(zone.ControllersList),
+                    scriptsList: JSON.stringify(zone.ScriptsList),
+                    //graphsList: JSON.stringify(zone.GraphsList)
                 })
             	.done(function (data) {
             		if (onComplete)
@@ -51,13 +51,7 @@ define(['jquery'],
         });
         viewModel.bind("change", function (e) {
             if (e.field.indexOf("Zone.") > -1)
-                api.setZoneConfiguration(
-                    e.sender.Zone.Id,
-                    e.sender.Zone.MonitorsList,
-                    e.sender.Zone.ControllersList,
-                    e.sender.Zone.ScriptsList
-                    //e.sender.Zone.GraphsList
-                    );
+                api.setZoneConfiguration(e.sender.Zone);
         });
 
         function onError(data) {

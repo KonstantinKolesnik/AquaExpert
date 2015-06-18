@@ -1,12 +1,9 @@
 ﻿define(
 	['lib', 'common', 'text!webapp/alarm-clock/editor.tpl'],
 	function (lib, common, editorTemplate) {
-
 		var alarmEditorView = common.FormView.extend({
-
 			template: lib._.template(editorTemplate),
 			onShow: function() {
-
 				var hasId = !!this.model.get("id");
 				this.$(".js-btn-delete").toggle(hasId);
 			},
@@ -17,7 +14,6 @@
 			},
 			btnSaveClick: function (e) {
 				e.preventDefault();
-
 				this.updateModel();
 				this.trigger('alarm-clock:editor:save');
 			},

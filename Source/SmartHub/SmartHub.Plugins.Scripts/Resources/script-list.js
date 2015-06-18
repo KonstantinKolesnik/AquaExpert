@@ -3,30 +3,30 @@
 	function (application, common, models, views) {
 		var api = {
 			runScript: function (view) {
-				var scriptId = view.model.get('id');
+				var scriptId = view.model.get('Id');
 
 				models.runScript(scriptId).done(function () {
-					var name = view.model.get('name');
+					var name = view.model.get('Name');
 					common.utils.alert('Скрипт "{0}" выполнен.', name);
 				});
 			},
 			deleteScript: function (view) {
-				var scriptName = view.model.get('name');
+				var scriptName = view.model.get('Name');
 
 				if (common.utils.confirm('Удалить скрипт "{0}"?', scriptName)) {
-					var scriptId = view.model.get('id');
+					var scriptId = view.model.get('Id');
 					models.deleteScript(scriptId).done(api.reload);
 				}
 			},
 			addScriptTile: function (view) {
-				var scriptId = view.model.get('id');
+				var scriptId = view.model.get('Id');
 				application.addTile('SmartHub.Plugins.Scripts.ScriptsTile', { id: scriptId });
 			},
 			addScript: function () {
 				application.navigate('webapp/scripts/script-editor');
 			},
 			editScript: function (childView) {
-				var scriptId = childView.model.get('id');
+				var scriptId = childView.model.get('Id');
 				application.navigate('webapp/scripts/script-editor', scriptId);
 			},
 			reload: function () {

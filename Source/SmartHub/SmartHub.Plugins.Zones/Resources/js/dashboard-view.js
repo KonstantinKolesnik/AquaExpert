@@ -24,8 +24,7 @@ define(
                                 read: {
                                     url: function () { return document.location.origin + "/api/zones/list" },
                                 }
-                            },
-                            pageSize: 20
+                            }
                         })
                     }).data("kendoListView");
                 }

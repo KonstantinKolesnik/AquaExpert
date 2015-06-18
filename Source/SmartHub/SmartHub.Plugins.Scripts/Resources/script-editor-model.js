@@ -3,15 +3,14 @@
 	// entities
 	var scriptData = lib.backbone.Model.extend({
 		defaults: {
-			id: null,
-			body: null
+			Id: null,
+			Body: null
 		}
 	});
 
 	// api
 	var api = {
 		loadScript: function (scriptId) {
-
 			var defer = lib.$.Deferred();
 
 			lib.$.getJSON('/api/scripts/get', { id: scriptId })
@@ -26,10 +25,9 @@
 			return defer.promise();
 		},
 		saveScript: function (model) {
-
-			var scriptId = model.get('id');
-			var scriptName = model.get('name');
-			var scriptBody = model.get('body');
+			var scriptId = model.get('Id');
+			var scriptName = model.get('Name');
+			var scriptBody = model.get('Body');
 
 			var rq = lib.$.post('/api/scripts/save', {
 				id: scriptId,

@@ -19,12 +19,12 @@ define(
 
                             $.each($(".monitor-chart"), function (idx, selector) {
                                 var type = viewModel.Monitors[idx].Type;
-                                createMonitorChart($(selector), type);
+                                createMonitorWidget($(selector), type);
                             });
                         }
                     });
 
-                    function createMonitorChart(selector, type) {
+                    function createMonitorWidget(selector, type) {
                         selector.kendoChart({
                             series: [
                                 {

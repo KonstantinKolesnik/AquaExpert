@@ -94,6 +94,12 @@ namespace SmartHub.Plugins.Scripts
         {
             get { return scriptEvents.ToList().AsReadOnly(); }
         }
+        
+        public List<UserScript> GetScripts()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<UserScript>().ToList();
+        }
         public UserScript GetScript(Guid id)
         {
             using (var session = Context.OpenSession())
@@ -198,36 +204,40 @@ namespace SmartHub.Plugins.Scripts
                 logger.ErrorException(messge, ex);
             }
         }
+
+        private object BuildScriptWebModel(UserScript script)
+        {
+            if (script == null)
+                return null;
+
+            return new
+            {
+                Id = script.Id,
+                Name = script.Name
+            };
+        }
         #endregion
 
         #region Web API
-        #region http scripts
+        #region Scripts
         [HttpCommand("/api/scripts/list")]
-        public object GetScriptList(HttpRequestParams request)
+        private object apiGetScripts(HttpRequestParams request)
         {
             using (var session = Context.OpenSession())
             {
-                return session.Query<UserScript>()
-                    .Select(x => new { id = x.Id, name = x.Name })
+                return GetScripts()
+                    .Select(BuildScriptWebModel)
                     .ToArray();
             }
         }
-
         [HttpCommand("/api/scripts/get")]
-        public object LoadScript(HttpRequestParams request)
+        private object apiGetScript(HttpRequestParams request)
         {
             Guid id = request.GetRequiredGuid("id");
-
-            using (var session = Context.OpenSession())
-            {
-                return session.Query<UserScript>()
-                    .Select(x => new { id = x.Id, name = x.Name, body = x.Body })
-                    .FirstOrDefault(x => x.id == id);
-            }
+            return BuildScriptRichWebModel(GetScript(id));
         }
-
         [HttpCommand("/api/scripts/save")]
-        public object SaveScript(HttpRequestParams request)
+        private object apiSaveScript(HttpRequestParams request)
         {
             Guid? id = request.GetGuid("id");
             string name = request.GetRequiredString("name");
@@ -245,9 +255,8 @@ namespace SmartHub.Plugins.Scripts
 
             return null;
         }
-
         [HttpCommand("/api/scripts/delete")]
-        public object DeleteScript(HttpRequestParams request)
+        private object apiDeleteScript(HttpRequestParams request)
         {
             Guid scriptId = request.GetRequiredGuid("scriptId");
 
@@ -260,23 +269,18 @@ namespace SmartHub.Plugins.Scripts
 
             return null;
         }
-
         [HttpCommand("/api/scripts/run")]
-        public object RunScript(HttpRequestParams request)
+        private object apiRunScript(HttpRequestParams request)
         {
             Guid scriptId = request.GetRequiredGuid("scriptId");
 
-            using (var session = Context.OpenSession())
-            {
-                var script = session.Get<UserScript>(scriptId);
-                ExecuteScript(script, new object[0]);
-            }
+            ExecuteScript(GetScript(scriptId), new object[0]);
 
             return null;
         }
         #endregion
 
-        #region http subscriptions
+        #region Subscriptions
         [HttpCommand("/api/scripts/subscription/form")]
         public object GetSubscriptionForm(HttpRequestParams request)
         {

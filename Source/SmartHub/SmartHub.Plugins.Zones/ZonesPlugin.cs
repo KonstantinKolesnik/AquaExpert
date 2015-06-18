@@ -97,6 +97,12 @@ namespace SmartHub.Plugins.Zones
                     .OrderBy(zone => zone.Name)
                     .ToList();
         }
+        private Zone GetZone(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Get<Zone>(id);
+        }
+        
         private object BuildZoneWebModel(Zone zone)
         {
             if (zone == null)
@@ -152,18 +158,15 @@ namespace SmartHub.Plugins.Zones
         private object apiGetZone(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-
-            using (var session = Context.OpenSession())
-                return BuildZoneWebModel(session.Get<Zone>(id));
+            return BuildZoneWebModel(GetZone(id));
         }
         [HttpCommand("/api/zones/get/dashboard")]
         private object apiGetZoneForDashboard(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-
-            using (var session = Context.OpenSession())
-                return BuildZoneRichWebModel(session.Get<Zone>(id));
+            return BuildZoneRichWebModel(GetZone(id));
         }
+
         [HttpCommand("/api/zones/add")]
         private object apiAddZone(HttpRequestParams request)
         {

@@ -2,22 +2,20 @@
 define(['jquery', 'text!webapp/monitors/utils.html'],
     function ($, templates) {
         var api = {
-            createMonitorChart: function (selector, monitor) {
-                selector.empty();
-                selector.html($(templates));
-
+            createMonitorWidget: function (selector, monitor) {
                 var config = this.getDefaultConfiguration();
                 if (monitor && monitor.Configuration)
                     //try {
-                    config = JSON.parse(monitor.Configuration);
+                        config = JSON.parse(monitor.Configuration);
                     //}
                     //catch(e) {
                     //    config = this.getDefaultConfiguration();
                     //}
 
+                selector.html($(templates));
+                var ctrl = selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
                 kendo.bind(selector.find(".monitor-view"), monitor);
-
-                return selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
+                return ctrl;
             },
             getDefaultConfiguration: function () {
                 return {
@@ -150,7 +148,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
         };
 
         return {
-            createMonitorChart: api.createMonitorChart,
+            createMonitorWidget: api.createMonitorWidget,
             getDefaultConfiguration: api.getDefaultConfiguration
         };
 });
