@@ -16,21 +16,15 @@
         <ul class="list-inline">
           <li>
             <select name="hours" class="form-control">
-              <% for (var h = 0; h
-              < 24; h++) { %>
-              <option value=""
-                <%= h %>"><%= ('0' + h).slice(-2) %>
-              </option>
+              <% for (var h = 0; h < 24; h++) { %>
+              <option value="<%= h %>"><%= ('0' + h).slice(-2) %></option>
               <% } %>
             </select>
           </li>
           <li>
             <select name="minutes" class="form-control">
-              <% for (var m = 0; m
-              < 60; m++) { %>
-              <option value=""
-                <%= m %>"><%= ('0' + m).slice(-2) %>
-              </option>
+              <% for (var m = 0; m < 60; m++) { %>
+              <option value="<%= m %>"><%= ('0' + m).slice(-2) %></option>
               <% } %>
             </select>
           </li>
