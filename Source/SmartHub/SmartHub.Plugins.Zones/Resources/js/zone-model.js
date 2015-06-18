@@ -52,7 +52,7 @@ define(['jquery'],
                             }
                         });
 
-                        $.each(model.Zone.ControllersList, function (idx, monitor) {
+                        $.each(model.Zone.ControllersList, function (idx, controller) {
                             // if ismymessage
                         });
                     }

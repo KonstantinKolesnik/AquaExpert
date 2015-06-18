@@ -1,23 +1,25 @@
 ﻿
 <div class="controller-view k-block">
-    <div class="k-header clearfix">
-        <span class="text-left text-nowrap" data-bind="html: Name"></span>
-        <input type="checkbox" class="pull-right" data-bind="checked: IsAutoMode" />
-    </div>
-
-    <h3>QQQQQQQQQQQQQQQ</h3>
+    <div class="k-header" style="padding-left:5px; color:lightblue;" data-bind="html: Name"></div>
 
     <table style="width:100%" cellpadding="0" cellspacing="0">
         <tr>
             <td>
+                <div id="controller-body"></div>
                 <!--<div class="controller-chart" style="height:150px;" data-bind="source: SensorValues"></div>-->
             </td>
-            <td style="width:25%; min-width:25%;">
-                <!--<div class="text-center lead" data-bind="source: this" data-template="tmplLastSensorValue"></div>-->
+            <td>
+                <input type="checkbox" id="chbIsAutoMode" class="k-checkbox" data-bind="checked: IsAutoMode">
+                <label class="k-checkbox-label h6 pull-right" for="chbIsAutoMode">Авто-режим</label>
             </td>
         </tr>
     </table>
 </div>
+
+<script id="tmplError" type="text/x-kendo-tmpl">
+    <span class="label label-danger">Нет подходящего интерфейса для этого типа контроллера</span>
+</script>
+
 
 <!--<script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
