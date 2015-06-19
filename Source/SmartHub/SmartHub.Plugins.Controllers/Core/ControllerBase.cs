@@ -26,6 +26,18 @@ namespace SmartHub.Plugins.Controllers.Core
         {
             get { return controller.Id; }
         }
+        public string Name
+        {
+            get { return controller.Name; }
+            set
+            {
+                if (controller.Name != value)
+                {
+                    controller.Name = value;
+                    SaveToDB();
+                }
+            }
+        }
         public bool IsAutoMode
         {
             get { return controller.IsAutoMode; }

@@ -58,7 +58,22 @@ namespace SmartHub.Plugins.Zones
         }
         #endregion
 
-        #region Public methods
+        #region API
+        public List<Zone> Get()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Zone>()
+                    .OrderBy(zone => zone.Name)
+                    .ToList();
+        }
+        public Zone Get(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Get<Zone>(id);
+        }
+        #endregion
+
+        #region Web API
         public string BuildTileContent()
         {
             //SensorValue lastSVHeaterTemperature = mySensors.GetLastSensorValue(heaterController.SensorTemperature);
@@ -87,23 +102,8 @@ namespace SmartHub.Plugins.Zones
             sb.Append("}");
             return sb.ToString();
         }
-        #endregion
 
-        #region Private methods
-        private List<Zone> GetZones()
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Zone>()
-                    .OrderBy(zone => zone.Name)
-                    .ToList();
-        }
-        private Zone GetZone(Guid id)
-        {
-            using (var session = Context.OpenSession())
-                return session.Get<Zone>(id);
-        }
-        
-        private object BuildZoneWebModel(Zone zone)
+        public object BuildZoneWebModel(Zone zone)
         {
             if (zone == null)
                 return null;
@@ -112,23 +112,23 @@ namespace SmartHub.Plugins.Zones
             {
                 Id = zone.Id,
                 Name = zone.Name,
-                MonitorsList = zone.MonitorsList,
-                ControllersList = zone.ControllersList,
-                ScriptsList = zone.ScriptsList
+                MonitorsIds = zone.MonitorsList,
+                ControllersIds = zone.ControllersList,
+                ScriptsIds = zone.ScriptsList
             };
         }
-        private object BuildZoneRichWebModel(Zone zone)
+        public object BuildZoneRichWebModel(Zone zone)
         {
             if (zone == null)
                 return null;
 
             var pluginMonitors = Context.GetPlugin<MonitorsPlugin>();
             var ids = Extensions.FromJson(typeof(List<Guid>), zone.MonitorsList) as List<Guid>;
-            var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.GetMonitor(id))).ToArray();
+            var monitors = ids.Select(id => pluginMonitors.BuildMonitorRichWebModel(pluginMonitors.Get(id))).ToArray();
 
             var pluginControllers = Context.GetPlugin<ControllersPlugin>();
             ids = Extensions.FromJson(typeof(List<Guid>), zone.ControllersList) as List<Guid>;
-            var controllers = ids.Select(id => pluginControllers.BuildControllerRichWebModel(pluginControllers.GetController(id))).ToArray();
+            var controllers = ids.Select(id => pluginControllers.BuildControllerWebModel(pluginControllers.Get(id))).ToArray();
 
             var pluginScripts = Context.GetPlugin<ScriptsPlugin>();
             ids = Extensions.FromJson(typeof(List<Guid>), zone.ScriptsList) as List<Guid>;
@@ -143,13 +143,11 @@ namespace SmartHub.Plugins.Zones
                 ScriptsList = scripts
             };
         }
-        #endregion
 
-        #region Web API
         [HttpCommand("/api/zones/list")]
         private object apiGetZones(HttpRequestParams request)
         {
-            return GetZones()
+            return Get()
                 .Select(BuildZoneWebModel)
                 .Where(x => x != null)
                 .ToArray();
@@ -158,13 +156,13 @@ namespace SmartHub.Plugins.Zones
         private object apiGetZone(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            return BuildZoneWebModel(GetZone(id));
+            return BuildZoneWebModel(Get(id));
         }
-        [HttpCommand("/api/zones/get/dashboard")]
-        private object apiGetZoneForDashboard(HttpRequestParams request)
+        [HttpCommand("/api/zones/get/rich")]
+        private object apiGetZoneRich(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            return BuildZoneRichWebModel(GetZone(id));
+            return BuildZoneRichWebModel(Get(id));
         }
 
         [HttpCommand("/api/zones/add")]
@@ -222,18 +220,18 @@ namespace SmartHub.Plugins.Zones
         private object apiSetZoneConfiguration(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            var monitorsList = request.GetRequiredString("monitorsList");
-            var controllersList = request.GetRequiredString("controllersList");
-            var scriptsList = request.GetRequiredString("scriptsList");
-            //var graphsList = request.GetRequiredString("graphsList");
+            var monitorsIds = request.GetRequiredString("monitorsIds");
+            var controllersIds = request.GetRequiredString("controllersIds");
+            var scriptsIds = request.GetRequiredString("scriptsIds");
+            //var graphsIds = request.GetRequiredString("graphsIds");
 
             using (var session = Context.OpenSession())
             {
                 var zone = session.Load<Zone>(id);
-                zone.MonitorsList = monitorsList;
-                zone.ControllersList = controllersList;
-                zone.ScriptsList = scriptsList;
-                //zone.GraphsList = graphsList;
+                zone.MonitorsList = monitorsIds;
+                zone.ControllersList = controllersIds;
+                zone.ScriptsList = scriptsIds;
+                //zone.GraphsList = graphsIds;
 
                 session.Flush();
             }

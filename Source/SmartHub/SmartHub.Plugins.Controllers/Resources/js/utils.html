@@ -1,41 +1,23 @@
 ﻿
-<div class="controller-view k-block">
-    <div class="k-header" style="color:lightblue;" data-bind="html: Name"></div>
+<div class="controller-view panel panel-success">
+    <div class="panel-heading">
+        <i class="fa fa-tachometer fa-2x"></i>
+        <span class="panel-title" data-bind="html: Name"></span>
+        <strong class="panel-title pull-right">
+            <input type="checkbox" id="chbIsAutoMode" class="k-checkbox" data-bind="checked: IsAutoMode">
+            <label class="k-checkbox-label h6 pull-right" for="chbIsAutoMode">Авто-режим</label>
+        </strong>
+    </div>
 
-    <table style="width:100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                <div id="controller-body"></div>
-                <!--<div class="controller-chart" style="height:150px;" data-bind="source: SensorValues"></div>-->
-            </td>
-            <td>
-                <input type="checkbox" id="chbIsAutoMode" class="k-checkbox" data-bind="checked: IsAutoMode">
-                <label class="k-checkbox-label h6 pull-right" for="chbIsAutoMode">Авто-режим</label>
-            </td>
-        </tr>
-    </table>
+    <div class="panel-body">
+        <div id="controller-body"></div>
+    </div>
+
+    <!--<table class="table">
+    </table>-->
+    <!--<div class="panel-footer">Panel footer</div>-->
 </div>
 
 <script id="tmplError" type="text/x-kendo-tmpl">
     <span class="label label-danger">Интерфейс недоступен</span>
 </script>
-
-
-<!--<script id="tmplLastSensorValue" type="text/x-kendo-template">
-    #
-    var val = data.Sensor.SensorValueValue;
-    if (val == null) { #
-        <h4>-</h4>
-    # } else {
-        var config = JSON.parse(data.Configuration);
-        var templ = config.valueAxes[0].labels.template;
-        if (templ) {
-            //var template = kendo.template(templ);
-            var result = kendo.template(templ)({ value: val });
-        #
-            <h4>#= result #</h4>
-        # } else { #
-            <h4>#= val #</h4>
-        # }
-    } #
-</script>-->

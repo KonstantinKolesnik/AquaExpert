@@ -6,9 +6,9 @@ define(['jquery'],
                 $.getJSON('/api/zones/get', { id: id })
                     .done(function (data) {
                         if (data) {
-                            data.MonitorsList = JSON.parse(data.MonitorsList);
-                            data.ControllersList = JSON.parse(data.ControllersList);
-                            data.ScriptsList = JSON.parse(data.ScriptsList);
+                            data.MonitorsIds = JSON.parse(data.MonitorsIds);
+                            data.ControllersIds = JSON.parse(data.ControllersIds);
+                            data.ScriptsIds = JSON.parse(data.ScriptsIds);
                         }
 
                         if (onComplete)
@@ -21,10 +21,10 @@ define(['jquery'],
             setZoneConfiguration: function (zone, onComplete) {
                 $.post('/api/zones/setconfiguration', {
                     id: zone.Id,
-                    monitorsList: JSON.stringify(zone.MonitorsList),
-                    controllersList: JSON.stringify(zone.ControllersList),
-                    scriptsList: JSON.stringify(zone.ScriptsList),
-                    //graphsList: JSON.stringify(zone.GraphsList)
+                    monitorsIds: JSON.stringify(zone.MonitorsIds),
+                    controllersIds: JSON.stringify(zone.ControllersIds),
+                    scriptsIds: JSON.stringify(zone.ScriptsIds),
+                    //graphsIds: JSON.stringify(zone.GraphsIds)
                 })
             	.done(function (data) {
             		if (onComplete)

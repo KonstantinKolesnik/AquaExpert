@@ -6,8 +6,8 @@ namespace SmartHub.Plugins.Controllers.Core
     {
         [Description("Обогреватель")]
         Heater,
-        [Description("Выключатель")]
-        Switch,
+        [Description("Выключатель по расписанию")]
+        ScheduledSwitch,
 
 
 

@@ -142,7 +142,7 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        #region Public methods
+        #region API
         public void RequestSensorValue(Sensor sensor, SensorValueType type)
         {
             if (gatewayProxy != null && sensor != null)
@@ -157,11 +157,27 @@ namespace SmartHub.Plugins.MySensors
                     gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value));
             }
         }
-        
+
+        public List<Node> GetNodes()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Node>().ToList();
+        }
         public Node GetNode(byte nodeNo)
         {
             using (var session = Context.OpenSession())
                 return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
+        }
+
+        public List<Sensor> GetSensors()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().ToList();
+        }
+        public List<Sensor> GetSensorsByType(SensorType type)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Sensor>().Where(s => s.Type == type).ToList();
         }
         public Sensor GetSensor(byte nodeNo, byte sensorNo)
         {
@@ -172,12 +188,6 @@ namespace SmartHub.Plugins.MySensors
         {
             using (var session = Context.OpenSession())
                 return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
-        }
-        
-        public List<Sensor> GetSensorsByType(SensorType type)
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>().Where(s => s.Type == type).ToList();
         }
         
         public SensorValue GetLastSensorValue(Sensor sensor)
@@ -229,62 +239,10 @@ namespace SmartHub.Plugins.MySensors
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
         }
-        public object BuildSensorRichWebModel(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            SensorValue lastSV = GetLastSensorValue(sensor);
-
-            return new
-            {
-                Id = sensor.Id,
-                Name = sensor.Name,
-                NodeNo = sensor.NodeNo,
-                SensorNo = sensor.SensorNo,
-                TypeName = sensor.TypeName,
-                ProtocolVersion = sensor.ProtocolVersion,
-                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
-                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
-            };
-        }
         public void RebootNode(Node node)
         {
             if (gatewayProxy != null && node != null)
                 gatewayProxy.Send(new SensorMessage(node.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
-        }
-
-        public string BuildTileContent()
-        {
-            SensorValue lastSV = null;
-            using (var session = Context.OpenSession())
-                lastSV = session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
-
-            StringBuilder sb = new StringBuilder();
-            if (lastSV != null)
-            {
-                sb.AppendFormat("<span>{0:dd.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
-                sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.Type.ToString(), lastSV.Value);
-            }
-            return sb.ToString();
-        }
-        public string BuildSignalRReceiveHandler()
-        {
-            StringBuilder sb = new StringBuilder();
-            //sb.Append("if (data.MsgId == 'SensorValue') { ");
-            //sb.Append("var dt = kendo.toString(new Date(data.Data.TimeStamp), 'dd.MM.yyyy'); ");
-            //sb.Append("var tm = kendo.toString(new Date(data.Data.TimeStamp), 'HH:mm:ss'); ");
-            //sb.Append("var val = '[' + data.Data.NodeNo + '][' + data.Data.SensorNo + '] ' + data.Data.TypeName + ': ' + data.Data.Value; ");
-            //sb.Append("var result = '<span>' + dt + '</span>&nbsp;&nbsp;'; ");
-            //sb.Append("result += '<span style=\"font-size:0.9em; font-style:italic;\">' + tm + '</span>'; ");
-            //sb.Append("result += '<div>' + val + '</div>'; ");
-            //sb.Append("model.tileModel.set({ 'content': result }); ");
-            //sb.Append("}");
-
-            sb.Append("if (data.MsgId == 'MySensorsTileContent') { ");
-            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
-            sb.Append("}");
-            return sb.ToString();
         }
         #endregion
 
@@ -322,40 +280,6 @@ namespace SmartHub.Plugins.MySensors
             return Convert.ToInt32(result.TotalSeconds);
         }
 
-        private object BuildNodeRichWebModel(Node node)
-        {
-            if (node == null)
-                return null;
-
-            BatteryLevel lastBL = null;
-            using (var session = Context.OpenSession())
-                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
-
-            return new
-            {
-                Id = node.Id,
-                Name = node.Name,
-                NodeNo = node.NodeNo,
-                TypeName = node.TypeName,
-                ProtocolVersion = node.ProtocolVersion,
-                SketchName = node.SketchName,
-                SketchVersion = node.SketchVersion,
-                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
-                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
-            };
-        }
-        private static object BuildSensorWebModel(Sensor sensor)
-        {
-            if (sensor == null)
-                return null;
-
-            return new
-            {
-                Id = sensor.Id,
-                Name = sensor.Name
-            };
-        }
-        
         private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
             var dtDB = DateTime.UtcNow;
@@ -632,11 +556,96 @@ namespace SmartHub.Plugins.MySensors
         #endregion
 
         #region Web API
+        public object BuildNodeRichWebModel(Node node)
+        {
+            if (node == null)
+                return null;
+
+            BatteryLevel lastBL = null;
+            using (var session = Context.OpenSession())
+                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
+
+            return new
+            {
+                Id = node.Id,
+                Name = node.Name,
+                NodeNo = node.NodeNo,
+                TypeName = node.TypeName,
+                ProtocolVersion = node.ProtocolVersion,
+                SketchName = node.SketchName,
+                SketchVersion = node.SketchVersion,
+                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
+                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
+            };
+        }
+        public object BuildSensorWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name
+            };
+        }
+        public object BuildSensorRichWebModel(Sensor sensor)
+        {
+            if (sensor == null)
+                return null;
+
+            SensorValue lastSV = GetLastSensorValue(sensor);
+
+            return new
+            {
+                Id = sensor.Id,
+                Name = sensor.Name,
+                NodeNo = sensor.NodeNo,
+                SensorNo = sensor.SensorNo,
+                TypeName = sensor.TypeName,
+                ProtocolVersion = sensor.ProtocolVersion,
+                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
+                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
+            };
+        }
+
+        public string BuildTileContent()
+        {
+            SensorValue lastSV = null;
+            using (var session = Context.OpenSession())
+                lastSV = session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+
+            StringBuilder sb = new StringBuilder();
+            if (lastSV != null)
+            {
+                sb.AppendFormat("<span>{0:dd.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
+                sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.Type.ToString(), lastSV.Value);
+            }
+            return sb.ToString();
+        }
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            //sb.Append("if (data.MsgId == 'SensorValue') { ");
+            //sb.Append("var dt = kendo.toString(new Date(data.Data.TimeStamp), 'dd.MM.yyyy'); ");
+            //sb.Append("var tm = kendo.toString(new Date(data.Data.TimeStamp), 'HH:mm:ss'); ");
+            //sb.Append("var val = '[' + data.Data.NodeNo + '][' + data.Data.SensorNo + '] ' + data.Data.TypeName + ': ' + data.Data.Value; ");
+            //sb.Append("var result = '<span>' + dt + '</span>&nbsp;&nbsp;'; ");
+            //sb.Append("result += '<span style=\"font-size:0.9em; font-style:italic;\">' + tm + '</span>'; ");
+            //sb.Append("result += '<div>' + val + '</div>'; ");
+            //sb.Append("model.tileModel.set({ 'content': result }); ");
+            //sb.Append("}");
+
+            sb.Append("if (data.MsgId == 'MySensorsTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
+        }
+
         [HttpCommand("/api/mysensors/nodes")]
         private object apiGetNodes(HttpRequestParams request)
         {
-            using (var session = Context.OpenSession())
-                return session.Query<Node>().Select(BuildNodeRichWebModel).Where(x => x != null).ToArray();
+            return GetNodes().Select(BuildNodeRichWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/nodes/setname")]
         private object apiSetNodeName(HttpRequestParams request)
@@ -646,7 +655,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var node = session.Get<Node>(id);
+                var node = session.Load<Node>(id);
                 node.Name = name;
                 session.Flush();
             }
@@ -662,7 +671,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var node = session.Get<Node>(id);
+                var node = session.Load<Node>(id);
                 session.Delete(node);
                 session.Flush();
             }
@@ -675,8 +684,7 @@ namespace SmartHub.Plugins.MySensors
         [HttpCommand("/api/mysensors/sensors")]
         private object apiGetSensors(HttpRequestParams request)
         {
-            using (var session = Context.OpenSession())
-                return session.Query<Sensor>().Select(BuildSensorRichWebModel).Where(x => x != null).ToArray();
+            return GetSensors().Select(BuildSensorRichWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensorsByType")]
         private object apiGetSensorsByType(HttpRequestParams request)
@@ -685,6 +693,12 @@ namespace SmartHub.Plugins.MySensors
 
             return GetSensorsByType(type).Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
+        [HttpCommand("/api/mysensors/sensorsForSelection")]
+        private object apiGetSensorsForSelection(HttpRequestParams request)
+        {
+            return GetSensors().Select(BuildSensorWebModel).Where(x => x != null).ToArray();
+        }
+
         [HttpCommand("/api/mysensors/sensor")]
         private object apiGetSensor(HttpRequestParams request)
         {
@@ -699,20 +713,12 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Get<Sensor>(id);
+                var sensor = session.Load<Sensor>(id);
                 sensor.Name = name;
                 session.Flush();
             }
 
-            NotifyForSignalR(new
-            {
-                MsgId = "SensorNameChanged",
-                Data = new
-                {
-                    Id = id,
-                    Name = name
-                }
-            });
+            NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
             return null;
         }
@@ -723,7 +729,7 @@ namespace SmartHub.Plugins.MySensors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Get<Sensor>(id);
+                var sensor = session.Load<Sensor>(id);
                 session.Delete(sensor);
                 session.Flush();
             }

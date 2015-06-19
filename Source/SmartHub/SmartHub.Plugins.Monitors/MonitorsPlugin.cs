@@ -61,20 +61,34 @@ namespace SmartHub.Plugins.Monitors
         }
         #endregion
 
-        #region Public methods
-        public List<Monitor> GetMonitors()
+        #region API
+        public List<Monitor> Get()
         {
             using (var session = Context.OpenSession())
                 return session.Query<Monitor>()
                     .OrderBy(monitor => monitor.Name)
                     .ToList();
         }
-        public Monitor GetMonitor(Guid id)
+        public Monitor Get(Guid id)
         {
             using (var session = Context.OpenSession())
                 return session.Get<Monitor>(id);
         }
-        
+        #endregion
+
+        #region Web API
+        public object BuildMonitorWebModel(Monitor monitor)
+        {
+            if (monitor == null)
+                return null;
+
+            return new
+            {
+                Id = monitor.Id,
+                Name = monitor.Name,
+                SensorName = mySensors.GetSensor(monitor.SensorId).Name
+            };
+        }
         public object BuildMonitorRichWebModel(Monitor monitor)
         {
             if (monitor == null)
@@ -89,45 +103,20 @@ namespace SmartHub.Plugins.Monitors
                 Configuration = monitor.Configuration
             };
         }
-        #endregion
 
-        #region Private methods
-        private object BuildMonitorWebModel(Monitor monitor)
-        {
-            if (monitor == null)
-                return null;
-
-            return new
-            {
-                Id = monitor.Id,
-                Name = monitor.Name,
-                SensorName = mySensors.GetSensor(monitor.SensorId).Name
-            };
-        }
-        #endregion
-
-        #region Web API
         [HttpCommand("/api/monitors/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
-            return GetMonitors()
+            return Get()
                 .Select(BuildMonitorWebModel)
                 .Where(x => x != null)
                 .ToArray();
         }
-        [HttpCommand("/api/monitors/list/dashboard")]
-        private object apiGetMonitorsForDashboard(HttpRequestParams request)
-        {
-            return GetMonitors()
-                .Select(BuildMonitorRichWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        [HttpCommand("/api/monitors/get/dashboard")]
-        private object apiGetMonitorForDashboard(HttpRequestParams request)
+        [HttpCommand("/api/monitors/get/rich")]
+        private object apiGetMonitorRich(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
-            return BuildMonitorRichWebModel(GetMonitor(id));
+            return BuildMonitorRichWebModel(Get(id));
         }
 
         [HttpCommand("/api/monitors/add")]

@@ -56,7 +56,7 @@ namespace SmartHub.Plugins.Controllers
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
 
-            var ctrls = GetControllers();
+            var ctrls = Get();
             foreach (var ctrl in ctrls)
             {
                 ControllerBase controller = ConvertController(ctrl);
@@ -69,26 +69,18 @@ namespace SmartHub.Plugins.Controllers
         }
         #endregion
 
-        #region Public methods
-        public Controller GetController(Guid id)
+        #region API
+        public List<Controller> Get()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Controller>()
+                    .OrderBy(controller => controller.Name)
+                    .ToList();
+        }
+        public Controller Get(Guid id)
         {
             using (var session = Context.OpenSession())
                 return session.Get<Controller>(id);
-        }
-        public object BuildControllerRichWebModel(Controller controller)
-        {
-            if (controller == null)
-                return null;
-
-            return new
-            {
-                Id = controller.Id,
-                Name = controller.Name,
-                Type = (int)controller.Type,
-                TypeName = controller.Type.GetEnumDescription(),
-                IsAutoMode = controller.IsAutoMode,
-                Configuration = controller.Configuration
-            };
         }
         #endregion
 
@@ -98,33 +90,10 @@ namespace SmartHub.Plugins.Controllers
             switch (controller.Type)
             {
                 case ControllerType.Heater: return new HeaterController(controller);
-                case ControllerType.Switch: return new SwitchController(controller);
+                case ControllerType.ScheduledSwitch: return new SwitchController(controller);
 
                 default: return null;
             }
-        }
-        private List<Controller> GetControllers()
-        {
-            using (var session = Context.OpenSession())
-                return session.Query<Controller>()
-                    .OrderBy(controller => controller.Name)
-                    .ToList();
-        }
-
-        private object BuildControllerWebModel(Controller controller)
-        {
-            if (controller == null)
-                return null;
-
-            return new
-            {
-                Id = controller.Id,
-                Name = controller.Name,
-                Type = (int)controller.Type,
-                TypeName = controller.Type.GetEnumDescription(),
-                IsAutoMode = controller.IsAutoMode,
-                Configuration = controller.Configuration
-            };
         }
         #endregion
 
@@ -163,11 +132,26 @@ namespace SmartHub.Plugins.Controllers
         #endregion
 
         #region Web API
+        public object BuildControllerWebModel(Controller controller)
+        {
+            if (controller == null)
+                return null;
+
+            return new
+            {
+                Id = controller.Id,
+                Name = controller.Name,
+                Type = (int)controller.Type,
+                TypeName = controller.Type.GetEnumDescription(),
+                IsAutoMode = controller.IsAutoMode,
+                Configuration = controller.Configuration
+            };
+        }
+
         [HttpCommand("/api/controllers/controllertype/list")]
         private object apiGetControllerTypes(HttpRequestParams request)
         {
-            return Enum.GetValues(typeof(ControllerType))
-                .Cast<ControllerType>()
+            return Enum.GetValues(typeof(ControllerType)).Cast<ControllerType>()
                 .Select(v => new
                 {
                     Id = v,
@@ -178,33 +162,17 @@ namespace SmartHub.Plugins.Controllers
         [HttpCommand("/api/controllers/list")]
         private object apiGetControllers(HttpRequestParams request)
         {
-            return GetControllers()
+            return Get()
                 .Select(BuildControllerWebModel)
                 .Where(x => x != null)
                 .ToArray();
         }
-        [HttpCommand("/api/controllers/list/dashboard")]
-        private object apiGetControllersForDashboard(HttpRequestParams request)
-        {
-            return GetControllers()
-                .Select(BuildControllerRichWebModel)
-                .Where(x => x != null)
-                .ToArray();
-        }
-        
         [HttpCommand("/api/controllers/get")]
         private object apiGetController(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("id");
 
-            return BuildControllerWebModel(GetController(id));
-        }
-        [HttpCommand("/api/controllers/get/dashboard")]
-        private object apiGetControllerForDashboard(HttpRequestParams request)
-        {
-            var id = request.GetRequiredGuid("id");
-
-            return BuildControllerRichWebModel(GetController(id));
+            return BuildControllerWebModel(Get(id));
         }
         
         [HttpCommand("/api/controllers/add")]
@@ -239,14 +207,14 @@ namespace SmartHub.Plugins.Controllers
             var id = request.GetRequiredGuid("id");
             var name = request.GetRequiredString("name");
 
-            using (var session = Context.OpenSession())
-            {
-                var ctrl = session.Load<Controller>(id);
-                ctrl.Name = name;
-                session.Flush();
+            foreach (ControllerBase controller in controllers)
+                if (controller.ID == id)
+                {
+                    controller.Name = name;
+                    break;
+                }
 
-                NotifyForSignalR(new { MsgId = "ControllerNameChanged", Data = BuildControllerWebModel(ctrl) });
-            }
+            //NotifyForSignalR(new { MsgId = "ControllerNameChanged", Data = BuildControllerWebModel(ctrl) });
 
             return null;
         }
@@ -297,6 +265,13 @@ namespace SmartHub.Plugins.Controllers
 
                 NotifyForSignalR(new { MsgId = "ControllerDeleted", Data = new { Id = id } });
             }
+
+            foreach (ControllerBase controller in controllers)
+                if (controller.ID == id)
+                {
+                    controllers.Remove(controller);
+                    break;
+                }
 
             return null;
         }

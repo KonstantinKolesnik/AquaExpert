@@ -1,39 +1,39 @@
 ﻿
-<div class="monitor-view k-block">
-    <table style="width:100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                <div class="monitor-chart" style="height:120px;" data-bind="source: SensorValues"></div>
-            </td>
-            <td style="width:33%; min-width:33%;">
-                <div class="text-center text-nowrap"><h6 data-bind="html: Name"></h6></div>
-                <div class="text-center lead" data-bind="source: this" data-template="tmplLastSensorValue"></div>
-            </td>
-        </tr>
-    </table>
+<div class="monitor-view panel panel-info">
+    <div class="panel-heading">
+        <i class="fa fa-line-chart fa-2x"></i>
+        <span class="panel-title" data-bind="html: Name"></span>
+        <strong class="panel-title pull-right" data-bind="source: this" data-template="tmplLastSensorValue"></strong>
+    </div>
+
+    <div class="panel-body" style="background-color:white;">
+        <div class="monitor-chart" style="height:120px;" data-bind="source: SensorValues"></div>
+    </div>
+    
+    <!--<table class="table">
+    </table>-->
+    
+    <!--<div class="panel-footer">Panel footer</div>-->
 </div>
 
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
     var val = data.Sensor.SensorValueValue;
     if (val == null) { #
-        <h5>-</h5>
+        -
     # } else {
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
         if (templ) {
-            var result = kendo.template(templ)({ value: val });
-        #
-            <h5>#= result #</h5>
+            var result = kendo.template(templ)({ value: val }); #
+            #= result #
         # } else { #
-            <h5>#= val #</h5>
+            #= val #
         # }
     } #
 </script>
 
 <!--var val = data.SensorValues[data.SensorValues.length - 1].Value;-->
-
-
 
     <!--
     var val = data.Sensor.SensorValueValue;

@@ -31,7 +31,7 @@ define(
                         dataSource: new kendo.data.DataSource({
                             transport: {
                                 read: {
-                                    url: function () { return document.location.origin + "/api/mysensors/sensors" },
+                                    url: function () { return document.location.origin + "/api/mysensors/sensorsForSelection" },
                                     //dataType: "jsonp"
                                 }
                             }

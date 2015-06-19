@@ -3,7 +3,7 @@ define(['jquery'],
     function ($) {
         var api = {
             getZone: function (id, onComplete) {
-                $.getJSON('/api/zones/get/dashboard', { id: id })
+                $.getJSON('/api/zones/get/rich', { id: id })
                     .done(function (data) {
                         if (onComplete)
                             onComplete(data);

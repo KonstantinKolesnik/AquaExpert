@@ -25,7 +25,7 @@ namespace SmartHub.Plugins.Audio
         }
         #endregion
 
-        #region Public methods
+        #region API
         public IPlayback Play(Stream stream, int loop = 0)
         {
             lock (lockObject)
