@@ -27,9 +27,9 @@
 {
     float: left;
     width: 160px;
-    /*height: 130px;*/
+    height: 130px;
     margin: 10px;
-    /*padding: 5px;*/
+    padding: 5px;
     cursor: pointer;
     border-radius: 4px;
 }
