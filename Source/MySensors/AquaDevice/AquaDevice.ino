@@ -11,8 +11,16 @@ It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
 //#include <Time.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define TEMPERATURE_SENSOR_ID	0
-#define ONE_WIRE_PIN			A5
+#define NUMBER_OF_RELAYS		8  // Total number of attached relays
+#define RELAY_ON				0  // GPIO value to write to turn on attached relay
+#define RELAY_OFF				1  // GPIO value to write to turn off attached relay
+uint8_t RELAY_SENSOR_ID = 0;	// 0...7
+uint8_t pins[NUMBER_OF_RELAYS] = { 2, 3, 4, 5, 6, 7, 8, A0 };
+MyMessage msgRelay(RELAY_SENSOR_ID, V_LIGHT);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
+#define TEMPERATURE_SENSOR_ID	8
+#define ONE_WIRE_PIN			A1
 OneWire oneWire(ONE_WIRE_PIN);
 DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
@@ -21,8 +29,8 @@ unsigned long prevMsTemperature = -1000000;
 const long intervalTemperature = 30000;	// interval at which to measure (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define PH_SENSOR_ID			1
-#define PH_PIN					A4
+#define PH_SENSOR_ID			9
+#define PH_PIN					A2
 #define PH_OFFSET				0.2f//-0.12
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh = -1000;
@@ -30,7 +38,7 @@ unsigned long prevMsPh = -1000000;
 const long intervalPh = 30000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define WATER_SENSOR_ID			2
+#define WATER_SENSOR_ID			10
 #define WATER_PIN				A3
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
@@ -38,9 +46,9 @@ unsigned long prevMsWater = -1000000;
 const long intervalWater = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define DISTANCE_SENSOR_ID		3
-#define TRIGGER_PIN				A2  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
-#define ECHO_PIN				A1  // Arduino pin tied to Echo pin on the ultrasonic sensor.
+#define DISTANCE_SENSOR_ID		11
+#define TRIGGER_PIN				A5  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
+#define ECHO_PIN				A4  // Arduino pin tied to Echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
@@ -56,12 +64,21 @@ unsigned long SLEEP_TIME = 0; //3000;	// sleep time between reads (in millisecon
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-	Serial.begin(115200);
-
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("Aquarium Controller", "1.0");
 
 	isMetric = gw.getConfig().isMetric;
+
+	for (RELAY_SENSOR_ID = 0; RELAY_SENSOR_ID < NUMBER_OF_RELAYS; RELAY_SENSOR_ID++)
+	{
+		uint8_t pin = pins[RELAY_SENSOR_ID];
+		pinMode(pin, OUTPUT);
+		uint8_t lastState = gw.loadState(RELAY_SENSOR_ID);
+		digitalWrite(pin, lastState ? RELAY_ON : RELAY_OFF);
+
+		gw.present(RELAY_SENSOR_ID, S_LIGHT);
+		gw.send(msgRelay.setSensor(RELAY_SENSOR_ID).set(lastState ? 1 : 0));
+	}
 
 	dallas.begin();
 	pinMode(WATER_PIN, INPUT);
@@ -189,7 +206,9 @@ void onMessageReceived(const MyMessage &message)
 
 	if (cmd == C_REQ)
 	{
-		if (message.sensor == TEMPERATURE_SENSOR_ID && message.type == V_TEMP)
+		if (message.type == V_LIGHT)
+			gw.send(msgRelay.setSensor(message.sensor).set(gw.loadState(message.sensor)));
+		else if (message.sensor == TEMPERATURE_SENSOR_ID && message.type == V_TEMP)
 			gw.send(msgTemperature.set(lastTemperature, 1));
 		else if (message.sensor == PH_SENSOR_ID && message.type == V_PH)
 			gw.send(msgPh.set(lastPh, 1));
@@ -197,6 +216,22 @@ void onMessageReceived(const MyMessage &message)
 			gw.send(msgWater.set(lastWater ? 1 : 0));
 		else if (message.sensor == DISTANCE_SENSOR_ID && message.type == V_DISTANCE)
 			gw.send(msgDistance.set(lastDistance));
+	}
+	else if (cmd == C_SET)
+	{
+		if (message.type == V_LIGHT)
+		{
+			uint8_t lastState = gw.loadState(message.sensor);
+			uint8_t newState = message.getByte();
+
+			if (newState != lastState)
+			{
+				digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
+				gw.saveState(message.sensor, newState);
+
+				gw.send(msgRelay.setSensor(message.sensor).set(newState));
+			}
+		}
 	}
 }
 void onTimeReceived(unsigned long time) // incoming argument is seconds since 1970.

@@ -5,10 +5,38 @@
 </div>
 
 <script id="tmplZonesListItem" type="text/x-kendo-template">
-    <div class="zone k-primary" zoneId="${data.Id}" data-bind="value: this">
-        <div class="clearfix">
+    <div class="zone panel panel-primary" zoneId="${data.Id}" data-bind="value: this">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-th fa-3x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                    <!--<div class="huge">26</div>-->
+                    <!--<div data-bind="html: Name"></div>-->
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="panel-body">
+            <p class="h6">#: Name #</p>
+        </div>-->
+
+        <!--<a href="##">-->
+            <div class="panel-footer">
+                <span class="pull-left h6">#: Name #</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right fa-3x"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        <!--</a>-->
+
+
+
+
+
+        <!--<div class="clearfix">
             <span class="glyphicon glyphicon-th pull-right" style="font-size:35px; padding:5px;"></span>
         </div>
-        <h3 class="zone-name">#:Name#</h3>
+        <h3 class="zone-name">#:Name#</h3>-->
     </div>
 </script>

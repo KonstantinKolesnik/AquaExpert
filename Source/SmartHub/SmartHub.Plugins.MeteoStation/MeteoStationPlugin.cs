@@ -23,7 +23,7 @@ namespace SmartHub.Plugins.MeteoStation
     [JavaScriptResource("/webapp/meteostation/dashboard-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard-model.js")]
     [HttpResource("/webapp/meteostation/dashboard.html", "SmartHub.Plugins.MeteoStation.Resources.js.dashboard.html")]
 
-    [AppSection("Метеостанция", SectionType.System, "/webapp/meteostation/settings.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings.js")]
+    //[AppSection("Метеостанция", SectionType.System, "/webapp/meteostation/settings.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings.js")]
     [JavaScriptResource("/webapp/meteostation/settings-view.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings-view.js")]
     [JavaScriptResource("/webapp/meteostation/settings-model.js", "SmartHub.Plugins.MeteoStation.Resources.js.settings-model.js")]
     [HttpResource("/webapp/meteostation/settings.html", "SmartHub.Plugins.MeteoStation.Resources.js.settings.html")]
@@ -107,37 +107,6 @@ namespace SmartHub.Plugins.MeteoStation
         }
         #endregion
 
-        #region Public methods
-        public string BuildTileContent()
-        {
-            SensorValue lastSVTemperatureInner = mySensors.GetLastSensorValue(SensorTemperatureInner);
-            SensorValue lastSVHumidityInner = mySensors.GetLastSensorValue(SensorHumidityInner);
-            SensorValue lastSVTemperatureOuter = mySensors.GetLastSensorValue(SensorTemperatureOuter);
-            SensorValue lastSVHumidityOuter = mySensors.GetLastSensorValue(SensorHumidityOuter);
-            SensorValue lastSVAtmospherePressure = mySensors.GetLastSensorValue(SensorAtmospherePressure);
-            SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<div>Т <sub>in</sub>:  " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Hum <sub>in</sub>:  " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>T <sub>out</sub>:  " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>Hum <sub>out</sub>:  " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
-            sb.Append("<div>P: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
-            
-            string[] weather = { "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" };
-            sb.Append("<div>Прогноз: " + (lastSVForecast != null ? weather[(int)lastSVForecast.Value] : "&lt;нет данных&gt;") + "</div>");
-            return sb.ToString();
-        }
-        public string BuildSignalRReceiveHandler()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("if (data.MsgId == 'MeteoStationTileContent') { ");
-            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
-            sb.Append("}");
-            return sb.ToString();
-        }
-        #endregion
-
         #region Private methods
         private MeteoStationSetting GetSetting(string name)
         {
@@ -189,17 +158,46 @@ namespace SmartHub.Plugins.MeteoStation
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
-            //if (mySensors.IsMessageFromSensor(message, SensorTemperatureInner) ||
-            //    mySensors.IsMessageFromSensor(message, SensorHumidityInner) ||
-            //    mySensors.IsMessageFromSensor(message, SensorTemperatureOuter) ||
-            //    mySensors.IsMessageFromSensor(message, SensorHumidityOuter) ||
-            //    mySensors.IsMessageFromSensor(message, SensorAtmospherePressure) ||
-            //    mySensors.IsMessageFromSensor(message, SensorForecast))
-            //    NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
+            if (MySensorsPlugin.IsMessageFromSensor(message, SensorTemperatureInner) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorHumidityInner) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorTemperatureOuter) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorHumidityOuter) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorAtmospherePressure) ||
+                MySensorsPlugin.IsMessageFromSensor(message, SensorForecast))
+                NotifyForSignalR(new { MsgId = "MeteoStationTileContent", Data = BuildTileContent() });
         }
         #endregion
 
         #region Web API
+        public string BuildTileContent()
+        {
+            SensorValue lastSVTemperatureInner = mySensors.GetLastSensorValue(SensorTemperatureInner);
+            SensorValue lastSVHumidityInner = mySensors.GetLastSensorValue(SensorHumidityInner);
+            SensorValue lastSVTemperatureOuter = mySensors.GetLastSensorValue(SensorTemperatureOuter);
+            SensorValue lastSVHumidityOuter = mySensors.GetLastSensorValue(SensorHumidityOuter);
+            SensorValue lastSVAtmospherePressure = mySensors.GetLastSensorValue(SensorAtmospherePressure);
+            SensorValue lastSVForecast = mySensors.GetLastSensorValue(SensorForecast);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>Т <sub>in</sub>:  " + (lastSVTemperatureInner != null ? lastSVTemperatureInner.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Hum <sub>in</sub>:  " + (lastSVHumidityInner != null ? lastSVHumidityInner.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>T <sub>out</sub>:  " + (lastSVTemperatureOuter != null ? lastSVTemperatureOuter.Value + " °C" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>Hum <sub>out</sub>:  " + (lastSVHumidityOuter != null ? lastSVHumidityOuter.Value + " %" : "&lt;нет данных&gt;") + "</div>");
+            sb.Append("<div>P: " + (lastSVAtmospherePressure != null ? (int)(lastSVAtmospherePressure.Value / 133.3f) + " mmHg" : "&lt;нет данных&gt;") + "</div>");
+            
+            string[] weather = { "Ясно", "Солнечно", "Облачно", "К дождю", "Дождь", "-" };
+            sb.Append("<div>Прогноз: " + (lastSVForecast != null ? weather[(int)lastSVForecast.Value] : "&lt;нет данных&gt;") + "</div>");
+            return sb.ToString();
+        }
+        public string BuildSignalRReceiveHandler()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("if (data.MsgId == 'MeteoStationTileContent') { ");
+            sb.Append("model.tileModel.set({ 'content': data.Data }); ");
+            sb.Append("}");
+            return sb.ToString();
+        }
+
         [HttpCommand("/api/meteostation/monitor/list")]
         private object apiGetMonitors(HttpRequestParams request)
         {
@@ -223,8 +221,9 @@ namespace SmartHub.Plugins.MeteoStation
         [HttpCommand("/api/meteostation/configuration/set")]
         public object apiSetConfiguration(HttpRequestParams request)
         {
-            var json = request.GetRequiredString("conf");
-            configuration = (Configuration)Extensions.FromJson(typeof(Configuration), json);
+            var conf = request.GetRequiredString("conf");
+
+            configuration = (Configuration)Extensions.FromJson(typeof(Configuration), conf);
             configurationSetting.SetValue(configuration);
             SaveOrUpdate(configurationSetting);
 

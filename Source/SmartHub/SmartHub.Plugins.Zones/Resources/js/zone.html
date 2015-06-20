@@ -3,15 +3,15 @@
     <h2 data-bind="text: Zone.Name"></h2>
 
     <div class="row">
-        <div id="monitorsHolder" class="col-xs-12 col-md-5">
+        <div id="monitorsHolder" class="col-xs-12 col-md-4">
             <h4>Мониторы</h4>
             <div id="lvMonitors" style="background-color:transparent; border-width:0;" data-bind="source: Zone.MonitorsList" data-template="tmplEntityListItem"></div>
         </div>
-        <div id="controllersHolder" class="col-xs-12 col-md-5">
+        <div id="controllersHolder" class="col-xs-12 col-md-4">
             <h4>Контроллеры</h4>
             <div id="lvControllers" style="background-color:transparent; border-width:0;" data-bind="source: Zone.ControllersList" data-template="tmplEntityListItem"></div>
         </div>
-        <div id="scriptsHolder" class="col-xs-12 col-md-2">
+        <div id="scriptsHolder" class="col-xs-12 col-md-3">
             <h4>Скрипты</h4>
             <div id="lvScripts" style="background-color:transparent; border-width:0;" data-bind="source: Zone.ScriptsList" data-template="tmplScriptView"></div>
         </div>

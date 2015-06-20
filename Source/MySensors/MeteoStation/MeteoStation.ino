@@ -90,6 +90,12 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 }; // two points are taken from the cur
 //data format: {x, y, slope}; point1: (lg200, 0.53), point2: (lg10000,-0.22)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+//S_LIGHT_LEVEL
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
 bool isMetric = true;
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 DHT dhtOuter, dhtInner;
@@ -99,12 +105,9 @@ Adafruit_BMP085 bmp = Adafruit_BMP085();
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-//#ifdef DEBUG
-	Serial.begin(115200);
-//#endif
-
 	//for (int i = 0; i < 512; i++)
 	//	EEPROM.write(i, 255);
+	//return;
 
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("Meteo Station", "1.0");

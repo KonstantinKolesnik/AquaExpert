@@ -187,9 +187,14 @@ namespace SmartHub.Plugins.MySensors
         public Sensor GetSensor(Guid sensorID)
         {
             using (var session = Context.OpenSession())
-                return session.Query<Sensor>().FirstOrDefault(sensor => sensor.Id == sensorID);
+                return session.Get<Sensor>(sensorID);
         }
-        
+
+        public SensorValue GetLastSensorValue()
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+        }
         public SensorValue GetLastSensorValue(Sensor sensor)
         {
             if (sensor == null)
@@ -611,15 +616,13 @@ namespace SmartHub.Plugins.MySensors
 
         public string BuildTileContent()
         {
-            SensorValue lastSV = null;
-            using (var session = Context.OpenSession())
-                lastSV = session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
+            SensorValue lastSV = GetLastSensorValue();
 
             StringBuilder sb = new StringBuilder();
             if (lastSV != null)
             {
-                sb.AppendFormat("<span>{0:dd.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
-                sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.Type.ToString(), lastSV.Value);
+                sb.AppendFormat("<span>{0:d.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
+                sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.TypeName, lastSV.Value);
             }
             return sb.ToString();
         }
@@ -696,7 +699,7 @@ namespace SmartHub.Plugins.MySensors
         [HttpCommand("/api/mysensors/sensorsForSelection")]
         private object apiGetSensorsForSelection(HttpRequestParams request)
         {
-            return GetSensors().Select(BuildSensorWebModel).Where(x => x != null).ToArray();
+            return GetSensors().OrderBy(s => s.Name).Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
 
         [HttpCommand("/api/mysensors/sensor")]

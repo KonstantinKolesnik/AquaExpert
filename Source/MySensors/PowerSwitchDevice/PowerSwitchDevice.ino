@@ -3,7 +3,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define NUMBER_OF_RELAYS		8  // Total number of attached relays
 //uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 4, 2 }; // A6 and A7 don't support digitalWrite!!!! (for my PCB)
-uint8_t pins[NUMBER_OF_RELAYS] = { A0, A1, A2, A3, A4, A5, 2, 3 }; // A6 and A7 don't support digitalWrite!!!! (for Nano IO Shield)
+uint8_t pins[NUMBER_OF_RELAYS] = { 2, 3, 4, 5, 6, 7, 8, A0 }; // A6 and A7 don't support digitalWrite!!!! (for Nano IO Shield)
 #define RELAY_ON				0  // GPIO value to write to turn on attached relay
 #define RELAY_OFF				1  // GPIO value to write to turn off attached relay
 MyMessage msgRelay(0, V_LIGHT);
