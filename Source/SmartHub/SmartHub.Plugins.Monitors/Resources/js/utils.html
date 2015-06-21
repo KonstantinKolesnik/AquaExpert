@@ -18,7 +18,8 @@
 
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
-    var val = data.Sensor.SensorValueValue;
+    var val = data.SensorValues.length ? data.SensorValues[data.SensorValues.length - 1].Value : null;
+
     if (val == null) { #
         -
     # } else {
@@ -32,8 +33,6 @@
         # }
     } #
 </script>
-
-<!--var val = data.SensorValues[data.SensorValues.length - 1].Value;-->
 
     <!--
     var val = data.Sensor.SensorValueValue;
@@ -54,4 +53,5 @@
             <span class="${icon}" style="font-size:52px;"></span> #; break;
         default: # <span>#= val == null ? "-" : val #</span> #; break;
     }
-    #-->
+    #
+        -->

@@ -94,12 +94,15 @@ namespace SmartHub.Plugins.Monitors
             if (monitor == null)
                 return null;
 
+            var sensor = mySensors.GetSensor(monitor.SensorId);
+            if (sensor == null)
+                return null;
+
             return new
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
-                Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(monitor.SensorId)),
-                SensorValues = mySensors.GetSensorValues(monitor.SensorId, 24, 10).ToArray(),
+                SensorValues = mySensors.GetSensorValues(sensor, 24, 10).ToArray(),
                 Configuration = monitor.Configuration
             };
         }

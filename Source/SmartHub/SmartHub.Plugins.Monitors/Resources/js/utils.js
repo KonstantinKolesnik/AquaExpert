@@ -5,12 +5,12 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
             createMonitorWidget: function (selector, monitor) {
                 var config = this.getDefaultConfiguration();
                 if (monitor && monitor.Configuration)
-                    //try {
+                    try {
                         config = JSON.parse(monitor.Configuration);
-                    //}
-                    //catch(e) {
-                    //    config = this.getDefaultConfiguration();
-                    //}
+                    }
+                    catch(e) {
+                        config = this.getDefaultConfiguration();
+                    }
 
                 selector.html($(templates));
                 var ctrl = selector.find(".monitor-chart").kendoChart(config).data("kendoChart");

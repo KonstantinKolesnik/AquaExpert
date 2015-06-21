@@ -71,3 +71,9 @@
     min-width: 690px;
     min-height: 360px;
 }
+
+.entity-list-view
+{
+    background-color:transparent;
+    border-width:0;
+}

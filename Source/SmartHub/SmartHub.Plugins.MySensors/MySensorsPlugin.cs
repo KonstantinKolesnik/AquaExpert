@@ -168,6 +168,11 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
         }
+        public Node GetNode(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Get<Node>(id);
+        }
 
         public List<Sensor> GetSensors()
         {
@@ -190,6 +195,22 @@ namespace SmartHub.Plugins.MySensors
                 return session.Get<Sensor>(sensorID);
         }
 
+        public BatteryLevel GetLastBatteryLevel(Node node)
+        {
+            if (node == null)
+                return null;
+
+            using (var session = Context.OpenSession())
+                return session.Query<BatteryLevel>()
+                    .Where(bl => bl.NodeNo == node.NodeNo)
+                    .OrderByDescending(bl => bl.TimeStamp)
+                    .FirstOrDefault();
+        }
+        public BatteryLevel GetLastBatteryLevel(Guid id)
+        {
+            return GetLastBatteryLevel(GetNode(id));
+        }
+
         public SensorValue GetLastSensorValue()
         {
             using (var session = Context.OpenSession())
@@ -205,6 +226,10 @@ namespace SmartHub.Plugins.MySensors
                     .Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo)
                     .OrderByDescending(sv => sv.TimeStamp)
                     .FirstOrDefault();
+        }
+        public SensorValue GetLastSensorValue(Guid id)
+        {
+            return GetLastSensorValue(GetSensor(id));
         }
         
         public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours, int count)
@@ -229,15 +254,21 @@ namespace SmartHub.Plugins.MySensors
                     .OrderBy(x => x.TimeStamp)
                     .ToList();
         }
+        public List<SensorValue> GetSensorValues(Sensor sensor, int hours, int count)
+        {
+            return sensor != null ? GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours, count) : new List<SensorValue>();
+        }
+        public List<SensorValue> GetSensorValues(Sensor sensor, int count)
+        {
+            return sensor != null ? GetSensorValues(sensor.NodeNo, sensor.SensorNo, count) : new List<SensorValue>();
+        }
         public List<SensorValue> GetSensorValues(Guid id, int hours, int count)
         {
-            var sensor = GetSensor(id);
-            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, hours, count);
+            return GetSensorValues(GetSensor(id), hours, count);
         }
         public List<SensorValue> GetSensorValues(Guid id, int count)
         {
-            var sensor = GetSensor(id);
-            return GetSensorValues(sensor.NodeNo, sensor.SensorNo, count);
+            return GetSensorValues(GetSensor(id), count);
         }
 
         public static bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
@@ -566,9 +597,7 @@ namespace SmartHub.Plugins.MySensors
             if (node == null)
                 return null;
 
-            BatteryLevel lastBL = null;
-            using (var session = Context.OpenSession())
-                lastBL = session.Query<BatteryLevel>().Where(bl => bl.NodeNo == node.NodeNo).OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
+            BatteryLevel lastBL = GetLastBatteryLevel(node);
 
             return new
             {
