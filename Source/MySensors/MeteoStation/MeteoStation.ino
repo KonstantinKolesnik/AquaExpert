@@ -62,13 +62,13 @@ int minuteCount = 0;
 bool firstRound = true;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// MQ2 sensor: LPG, i-butane, propane, methane ,alcohol, Hydrogen, smoke
+// MQ2 sensor: LPG, i-butane, CO, Hydrogen (H2), methane (CH4), alcohol, smoke, propane
 
 #define GAS_SENSOR_ID				6
 MyMessage msgGas(GAS_SENSOR_ID, V_VAR1);
 uint16_t lastGas = -1000000;
 unsigned long prevMsGas = -1000000;
-const long intervalGas = 2000;
+const long intervalGas = 30000;
 
 #define GAS_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
 #define RO_CLEAN_AIR_FACTOR         9.83	// RO_CLEAR_AIR_FACTOR=(Sensor resistance in clean air)/RO, which is derived from the chart in datasheet
@@ -90,7 +90,20 @@ float LPGCurve[3] = { 2.3, 0.21, -0.47 };	// point1: (lg200, 0.21), point2: (lg1
 float COCurve[3] = { 2.3, 0.72, -0.34 };	// point1: (lg200, 0.72), point2: (lg10000,  0.15)
 float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (lg10000, -0.22)
 //--------------------------------------------------------------------------------------------------------------------------------------------
+#define RAIN_SENSOR_ID				7
+#define RAIN_SENSOR_ANALOG_PIN		A1
+MyMessage msgRain(RAIN_SENSOR_ID, V_RAIN); //V_RAINRATE
+uint16_t lastRain = -1000000;
+unsigned long prevMsRain = -1000000;
+const long intervalRain = 2000;
 
+//--------------------------------------------------------------------------------------------------------------------------------------------
+#define LIGHT_SENSOR_ID				8
+#define LIGHT_SENSOR_ANALOG_PIN		A2
+MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
+uint16_t lastLight = -1000000;
+unsigned long prevMsLight = -1000000;
+const long intervalLight = 2000;
 
 //S_LIGHT_LEVEL
 
@@ -127,6 +140,9 @@ void setup()
 
 	Ro = getGasSensorRo(); // calibrating the sensor; please make sure the sensor is in clean air when you perform the calibration
 
+	pinMode(RAIN_SENSOR_ANALOG_PIN, INPUT);
+	pinMode(LIGHT_SENSOR_ANALOG_PIN, INPUT);
+
 	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
 	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
 	gw.present(TEMPERATURE_OUTER_SENSOR_ID, S_TEMP);
@@ -134,8 +150,8 @@ void setup()
 	gw.present(PRESSURE_SENSOR_ID, S_BARO);
 	gw.present(FORECAST_SENSOR_ID, S_BARO);
 	gw.present(GAS_SENSOR_ID, S_AIR_QUALITY);
-
-
+	gw.present(RAIN_SENSOR_ID, S_RAIN);
+	gw.present(LIGHT_SENSOR_ID, S_LIGHT_LEVEL);
 
 }
 void loop()
@@ -146,6 +162,8 @@ void loop()
 	processHumidity(true);
 	processPressure();
 	processGas();
+	processRain();
+	processLight();
 
 	gw.process();
 }
@@ -176,7 +194,10 @@ void onMessageReceived(const MyMessage &message)
 			gw.send(msgForecast.set(lastForecast));
 		else if (message.sensor == GAS_SENSOR_ID && message.type == V_VAR1)
 			gw.send(msgGas.set(lastGas, 0));
-
+		else if (message.sensor == RAIN_SENSOR_ID && message.type == V_RAIN)
+			gw.send(msgRain.set(lastRain, 0));
+		else if (message.sensor == LIGHT_SENSOR_ID && message.type == V_LIGHT_LEVEL)
+			gw.send(msgLight.set(lastLight, 0));
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -323,29 +344,89 @@ void processGas()
 		prevMsGas = ms;
 
 		float Rs_Ro = getGasSensorRatio();
-		Serial.print("Rs_Ro: ");
-		Serial.println(Rs_Ro);
+		//Serial.print("Rs_Ro: ");
+		//Serial.println(Rs_Ro);
 
 		uint16_t val = getGasPercentage(Rs_Ro, GAS_CO);
 
-		Serial.print("LPG: ");
-		Serial.print(getGasPercentage(Rs_Ro, GAS_LPG));
-		Serial.println(" ppm");
+		//Serial.print("LPG: ");
+		//Serial.print(getGasPercentage(Rs_Ro, GAS_LPG));
+		//Serial.println(" ppm");
 
-		Serial.print("CO: ");
-		Serial.print(getGasPercentage(Rs_Ro, GAS_CO));
-		Serial.println(" ppm");
+		//Serial.print("CO: ");
+		//Serial.print(getGasPercentage(Rs_Ro, GAS_CO));
+		//Serial.println(" ppm");
 
-		Serial.print("SMOKE: ");
-		Serial.print(getGasPercentage(Rs_Ro, GAS_SMOKE));
-		Serial.println(" ppm");
+		//Serial.print("SMOKE: ");
+		//Serial.print(getGasPercentage(Rs_Ro, GAS_SMOKE));
+		//Serial.println(" ppm");
 
-		Serial.println();
+		//Serial.println();
 
 		if (val != lastGas)
 		{
 			lastGas = val;
 			gw.send(msgGas.set((int)val));
+		}
+	}
+}
+void processRain()
+{
+	unsigned long ms = millis();
+
+	if (ms - prevMsRain >= intervalRain)
+	{
+		prevMsRain = ms;
+
+		int val = analogRead(RAIN_SENSOR_ANALOG_PIN);
+
+		//Serial.print("Rain: ");
+		//Serial.println(val);
+
+		////greater than 1000, probably not touching anything
+		//if (s >= 1000)
+		//{
+		//	Serial.println("I think your prong's come loose.");
+		//}
+		//if (s < 1000 && s >= 650)
+		//	//less than 1000, greater than 650, dry soil
+		//{
+		//	Serial.println("Soil's rather dry, really.");
+		//}
+		//if (s < 650 && s >= 400)
+		//	//less than 650, greater than 400, somewhat moist
+		//{
+		//	Serial.println("Soil's a bit damp.");
+		//}
+		//if (s < 400)
+		//	//less than 400, quite moist
+		//	Serial.println("Soil is quite most, thank you very much.");
+
+		if (val != lastRain)
+		{
+			lastRain = val;
+			gw.send(msgGas.set(val));
+		}
+	}
+}
+void processLight()
+{
+	unsigned long ms = millis();
+
+	if (ms - prevMsLight >= intervalLight)
+	{
+		prevMsLight = ms;
+
+		int val = analogRead(LIGHT_SENSOR_ANALOG_PIN);
+
+		Serial.print("Light: ");
+		Serial.println(val);
+
+
+		if (val != lastLight)
+		{
+			lastLight = val;
+			gw.send(msgLight.set(val));
 		}
 	}
 }
@@ -478,7 +559,6 @@ int samplePressure(float pressure)
 	else
 		return 5; // Unknown
 }
-
 
 float getGasSensorRo()
 {
