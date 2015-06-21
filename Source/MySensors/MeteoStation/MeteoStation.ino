@@ -62,33 +62,33 @@ int minuteCount = 0;
 bool firstRound = true;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
+// MQ2 sensor: LPG, i-butane, propane, methane ,alcohol, Hydrogen, smoke
+
 #define GAS_SENSOR_ID				6
 MyMessage msgGas(GAS_SENSOR_ID, V_VAR1);
-float lastGas = -1000000;
+uint16_t lastGas = -1000000;
 unsigned long prevMsGas = -1000000;
-const long intervalGas = 30000;
+const long intervalGas = 2000;
 
-#define MQ_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
-#define RL_VALUE                    5		// define the load resistance on the board, in kilo ohms
+#define GAS_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
 #define RO_CLEAN_AIR_FACTOR         9.83	// RO_CLEAR_AIR_FACTOR=(Sensor resistance in clean air)/RO, which is derived from the chart in datasheet
 
-#define CALIBARAION_SAMPLE_TIMES    50		// define how many samples you are going to take in the calibration phase
+#define CALIBARAION_SAMPLE_COUNT    50		// define how many samples you are going to take in the calibration phase
 #define CALIBRATION_SAMPLE_INTERVAL 500		// define the time interal (in milisecond) between each samples in the cablibration phase
-#define READ_SAMPLE_TIMES           5		// define how many samples you are going to take in normal operation
+#define READ_SAMPLE_COUNT           5		// define how many samples you are going to take in normal operation
 #define READ_SAMPLE_INTERVAL        50		// define the time interal (in milisecond) between each samples in normal operation
 
 #define GAS_LPG                     0
 #define GAS_CO                      1
 #define GAS_SMOKE                   2
 
-float Ro = 10000.0;    // this has to be tuned 10K Ohm
-float LPGCurve[3] = { 2.3, 0.21, -0.47 };	// two points are taken from the curve; with these two points, a line is formed which is "approximately equivalent" to the original curve. 
-//data format: {x, y, slope}; point1: (lg200, 0.21), point2: (lg10000, -0.59) 
-float COCurve[3] = { 2.3, 0.72, -0.34 };    // two points are taken from the curve; with these two points, a line is formed which is "approximately equivalent" to the original curve.
-//data format: {x, y, slope}; point1: (lg200, 0.72), point2: (lg10000,  0.15) 
-float SmokeCurve[3] = { 2.3, 0.53, -0.44 }; // two points are taken from the curve; with these two points, a line is formed which is "approximately equivalent" to the original curve.
-//data format: {x, y, slope}; point1: (lg200, 0.53), point2: (lg10000,-0.22)
+float Ro;
 
+// two points are taken from the curve; with these two points, a line is formed which is "approximately equivalent" to the original curve.
+// data format: {x, y, slope}; 
+float LPGCurve[3] = { 2.3, 0.21, -0.47 };	// point1: (lg200, 0.21), point2: (lg10000, -0.59)
+float COCurve[3] = { 2.3, 0.72, -0.34 };	// point1: (lg200, 0.72), point2: (lg10000,  0.15)
+float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (lg10000, -0.22)
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -125,8 +125,7 @@ void setup()
 		while (1) {}
 	}
 
-	Ro = MQCalibration(MQ_SENSOR_ANALOG_PIN); // calibrating the sensor; please make sure the sensor is in clean air when you perform the calibration
-	//Serial.println(Ro);
+	Ro = getGasSensorRo(); // calibrating the sensor; please make sure the sensor is in clean air when you perform the calibration
 
 	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
 	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
@@ -135,6 +134,9 @@ void setup()
 	gw.present(PRESSURE_SENSOR_ID, S_BARO);
 	gw.present(FORECAST_SENSOR_ID, S_BARO);
 	gw.present(GAS_SENSOR_ID, S_AIR_QUALITY);
+
+
+
 }
 void loop()
 {
@@ -170,8 +172,11 @@ void onMessageReceived(const MyMessage &message)
 			gw.send(msgHumidityInner.set(lastHumidityInner, 1));
 		else if (message.sensor == PRESSURE_SENSOR_ID && message.type == V_PRESSURE)
 			gw.send(msgPressure.set(lastPressure));
-		else if (message.sensor == PRESSURE_SENSOR_ID && message.type == V_FORECAST)
+		else if (message.sensor == FORECAST_SENSOR_ID && message.type == V_FORECAST)
 			gw.send(msgForecast.set(lastForecast));
+		else if (message.sensor == GAS_SENSOR_ID && message.type == V_VAR1)
+			gw.send(msgGas.set(lastGas, 0));
+
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -215,7 +220,6 @@ void processTemperature(bool isOuter)
 #endif
 	}
 }
-
 void processHumidity(bool isOuter)
 {
 	MyMessage* msg = isOuter ? &msgHumidityOuter : &msgHumidityInner;
@@ -253,7 +257,6 @@ void processHumidity(bool isOuter)
 #endif
 	}
 }
-
 void processPressure()
 {
 	unsigned long ms = millis();
@@ -263,7 +266,7 @@ void processPressure()
 		prevMsPressure = ms;
 
 		//int32_t pressure = bmp.readSealevelPressure(190) / 1000; // 205 meters above sealevel
-		//int forecast = sample(pressure);
+		//int forecast = samplePressure(pressure);
 
 		//float altitude = bmp.readAltitude();
 
@@ -292,7 +295,7 @@ void processPressure()
 #endif
 			}
 
-			int forecast = sample(pressure / 1000); // in kPa
+			int forecast = samplePressure(pressure / 1000); // in kPa
 			if (lastForecast != forecast)
 			{
 				lastForecast = forecast;
@@ -311,7 +314,43 @@ void processPressure()
 #endif
 	}
 }
-int sample(float pressure)
+void processGas()
+{
+	unsigned long ms = millis();
+
+	if (ms - prevMsGas >= intervalGas)
+	{
+		prevMsGas = ms;
+
+		float Rs_Ro = getGasSensorRatio();
+		Serial.print("Rs_Ro: ");
+		Serial.println(Rs_Ro);
+
+		uint16_t val = getGasPercentage(Rs_Ro, GAS_CO);
+
+		Serial.print("LPG: ");
+		Serial.print(getGasPercentage(Rs_Ro, GAS_LPG));
+		Serial.println(" ppm");
+
+		Serial.print("CO: ");
+		Serial.print(getGasPercentage(Rs_Ro, GAS_CO));
+		Serial.println(" ppm");
+
+		Serial.print("SMOKE: ");
+		Serial.print(getGasPercentage(Rs_Ro, GAS_SMOKE));
+		Serial.println(" ppm");
+
+		Serial.println();
+
+		if (val != lastGas)
+		{
+			lastGas = val;
+			gw.send(msgGas.set((int)val));
+		}
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------
+int samplePressure(float pressure)
 {
 	// Algorithm found here
 	// http://www.freescale.com/files/sensors/doc/app_note/AN3914.pdf
@@ -440,119 +479,66 @@ int sample(float pressure)
 		return 5; // Unknown
 }
 
-void processGas()
-{
-	unsigned long ms = millis();
 
-	if (ms - prevMsGas >= intervalGas)
+float getGasSensorRo()
+{
+	float adc = 0;
+	for (int i = 0; i < CALIBARAION_SAMPLE_COUNT; i++)
 	{
-		prevMsGas = ms;
-
-		uint16_t val = MQGetGasPercentage(MQRead(MQ_SENSOR_ANALOG_PIN) / Ro, GAS_CO);
-		Serial.println(val);
-
-		Serial.print("LPG: ");
-		Serial.print(MQGetGasPercentage(MQRead(MQ_SENSOR_ANALOG_PIN) / Ro, GAS_LPG));
-		Serial.println(" ppm");
-
-		Serial.print("CO: ");
-		Serial.print(MQGetGasPercentage(MQRead(MQ_SENSOR_ANALOG_PIN) / Ro, GAS_CO));
-		Serial.println(" ppm");
-
-		Serial.print("SMOKE:");
-		Serial.print(MQGetGasPercentage(MQRead(MQ_SENSOR_ANALOG_PIN) / Ro, GAS_SMOKE));
-		Serial.println(" ppm");
-
-		if (val != lastGas)
-		{
-			lastGas = ceil(val);
-			gw.send(msgGas.set((int)ceil(val)));
-		}
-	}
-}
-/****************** MQResistanceCalculation ****************************************
-Input:   raw_adc - raw value read from adc, which represents the voltage
-Output:  the calculated sensor resistance
-Remarks: The sensor and the load resistor forms a voltage divider. Given the voltage
-         across the load resistor and its resistance, the resistance of the sensor could be derived.
-************************************************************************************/
-float MQResistanceCalculation(int raw_adc)
-{
-	return (((float)RL_VALUE * (1023 - raw_adc) / raw_adc));
-}
-/***************************** MQCalibration ****************************************
-Input:   mq_pin - analog channel
-Output:  Ro of the sensor
-Remarks: This function assumes that the sensor is in clean air. It use
-MQResistanceCalculation to calculates the sensor resistance in clean air
-and then divides it with RO_CLEAN_AIR_FACTOR. RO_CLEAN_AIR_FACTOR is about
-10, which differs slightly between different sensors.
-************************************************************************************/
-float MQCalibration(int mq_pin)
-{
-	float val = 0;
-
-	// take multiple samples
-	for (int i = 0; i < CALIBARAION_SAMPLE_TIMES; i++)
-	{
-		val += MQResistanceCalculation(analogRead(mq_pin));
+		adc += analogRead(GAS_SENSOR_ANALOG_PIN);
 		delay(CALIBRATION_SAMPLE_INTERVAL);
 	}
+	adc /= CALIBARAION_SAMPLE_COUNT;
 
-	val = val / CALIBARAION_SAMPLE_TIMES; // average value
-	val = val / RO_CLEAN_AIR_FACTOR; // divided by RO_CLEAN_AIR_FACTOR yields the Ro according to the chart in the datasheet 
+	float Rs = (1024 - adc) / adc; // omit *Rl
+	float Ro = Rs / RO_CLEAN_AIR_FACTOR; // The ratio of Rs/Ro is ~10 in a clear air
 
-	return val;
+	return Ro;
 }
-/*****************************  MQRead *********************************************
-Input:   mq_pin - analog channel
-Output:  Rs of the sensor
-Remarks: This function use MQResistanceCalculation to caculate the sensor resistenc (Rs).
-The Rs changes as the sensor is in the different consentration of the target
-gas. The sample times and the time interval between samples could be configured
-by changing the definition of the macros.
-************************************************************************************/
-float MQRead(int mq_pin)
+float getGasSensorRatio()
 {
-	float rs = 0;
-
-	for (int i = 0; i < READ_SAMPLE_TIMES; i++)
+	float adc = 0;
+	for (int i = 0; i < READ_SAMPLE_COUNT; i++)
 	{
-		rs += MQResistanceCalculation(analogRead(mq_pin));
+		adc += analogRead(GAS_SENSOR_ANALOG_PIN);
 		delay(READ_SAMPLE_INTERVAL);
 	}
+	adc /= READ_SAMPLE_COUNT;
 
-	rs = rs / READ_SAMPLE_TIMES;
+	float Rs = (1024 - adc) / adc; // omit *Rl
+	float RsRoRatio = Rs / Ro;
 
-	return rs;
+	return RsRoRatio;
 }
-/*****************************  MQGetGasPercentage **********************************
-Input:   rs_ro_ratio - Rs divided by Ro
-gas_id      - target gas type
+/*****************************  getGasPercentage **********************************
 Output:  ppm of the target gas
-Remarks: This function passes different curves to the MQGetPercentage function which
-calculates the ppm (parts per million) of the target gas.
+Remarks: This function calculates the ppm (parts per million) of the target gas.
+		By using the slope and a point of the line, the x(logarithmic value of ppm)
+		of the line could be derived if y(rs_ro_ratio) is provided. As it is a
+		logarithmic coordinate, power of 10 is used to convert the result to non-logarithmic value.
 ************************************************************************************/
-int MQGetGasPercentage(float rs_ro_ratio, int gas_id)
+float getGasPercentage(float rs_ro_ratio, int gasType)
 {
-	if (gas_id == GAS_LPG)
-		return MQGetPercentage(rs_ro_ratio, LPGCurve);
-	else if (gas_id == GAS_CO)
-		return MQGetPercentage(rs_ro_ratio, COCurve);
-	else if (gas_id == GAS_SMOKE)
-		return MQGetPercentage(rs_ro_ratio, SmokeCurve);
+	float *pCurve = NULL;
+	switch (gasType)
+	{
+		case GAS_LPG: pCurve = LPGCurve; break;
+		case GAS_CO: pCurve = COCurve; break;
+		case GAS_SMOKE: pCurve = SmokeCurve; break;
 
-	return 0;
-}
-/*****************************  MQGetPercentage **********************************
-Input:   rs_ro_ratio - Rs divided by Ro
-pcurve      - pointer to the curve of the target gas
-Output:  ppm of the target gas
-Remarks: By using the slope and a point of the line. The x(logarithmic value of ppm)
-of the line could be derived if y(rs_ro_ratio) is provided. As it is a
-logarithmic coordinate, power of 10 is used to convert the result to non-logarithmic value.
-************************************************************************************/
-int MQGetPercentage(float rs_ro_ratio, float *pcurve)
-{
-	return (pow(10, (((log(rs_ro_ratio) - pcurve[1]) / pcurve[2]) + pcurve[0])));
+
+
+		default: return 0;
+	}
+
+	//100ppm ... 10000ppm, i.e. 0.01% ... 1%
+
+	float x0 = pCurve[0];
+	float y0 = pCurve[1];
+	float k = pCurve[2];
+
+	float y = log(rs_ro_ratio);
+	float x = (y - y0) / k + x0;
+
+	return pow(10, x);
 }

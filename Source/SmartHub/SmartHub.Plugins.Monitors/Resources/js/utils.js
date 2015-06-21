@@ -138,7 +138,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                                 months: "yyyy MMM",
                                 years: "yyyy"
                             },
-                            template: "#: kendo.toString(new Date(value), 'd.MM - HH:mm') #"
+                            template: "#: kendo.toString(new Date(value), 'HH:mm') #" //"#: kendo.toString(new Date(value), 'd.MM - HH:mm') #"
                         },
                         line: { visible: true },
                         majorGridLines: { visible: true }

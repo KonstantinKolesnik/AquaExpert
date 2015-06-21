@@ -86,7 +86,7 @@ void onMessageReceived(const MyMessage &message)
 
 	if (cmd == C_SET && message.type == V_IR_SEND)
 	{
-		irsend.send(NEC, message.getULong(), 32);
+		//irsend.send(NEC, message.getULong(), 32);
 
 
 		//int incomingRelayStatus = message.getInt();

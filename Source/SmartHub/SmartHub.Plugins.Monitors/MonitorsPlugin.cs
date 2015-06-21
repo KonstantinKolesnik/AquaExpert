@@ -102,6 +102,7 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
+                Sensor = sensor,
                 SensorValues = mySensors.GetSensorValues(sensor, 24, 10).ToArray(),
                 Configuration = monitor.Configuration
             };
