@@ -95,7 +95,7 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (l
 MyMessage msgRain(RAIN_SENSOR_ID, V_RAIN); //V_RAINRATE
 uint16_t lastRain = -1000000;
 unsigned long prevMsRain = -1000000;
-const long intervalRain = 2000;
+const long intervalRain = 30000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define LIGHT_SENSOR_ID				8
@@ -103,10 +103,7 @@ const long intervalRain = 2000;
 MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
 uint16_t lastLight = -1000000;
 unsigned long prevMsLight = -1000000;
-const long intervalLight = 2000;
-
-//S_LIGHT_LEVEL
-
+const long intervalLight = 30000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 bool isMetric = true;
@@ -383,29 +380,31 @@ void processRain()
 		//Serial.print("Rain: ");
 		//Serial.println(val);
 
+		//int range = map(val, 0, 1024, 1, 4);
+
 		////greater than 1000, probably not touching anything
-		//if (s >= 1000)
+		//if (val >= 1000)
 		//{
 		//	Serial.println("I think your prong's come loose.");
 		//}
-		//if (s < 1000 && s >= 650)
+		//if (val < 1000 && val >= 650)
 		//	//less than 1000, greater than 650, dry soil
 		//{
 		//	Serial.println("Soil's rather dry, really.");
 		//}
-		//if (s < 650 && s >= 400)
+		//if (val < 650 && val >= 400)
 		//	//less than 650, greater than 400, somewhat moist
 		//{
 		//	Serial.println("Soil's a bit damp.");
 		//}
-		//if (s < 400)
+		//if (val < 400)
 		//	//less than 400, quite moist
 		//	Serial.println("Soil is quite most, thank you very much.");
 
 		if (val != lastRain)
 		{
 			lastRain = val;
-			gw.send(msgGas.set(val));
+			//gw.send(msgRain.set(val));
 		}
 	}
 }
@@ -419,14 +418,14 @@ void processLight()
 
 		int val = analogRead(LIGHT_SENSOR_ANALOG_PIN);
 
-		Serial.print("Light: ");
-		Serial.println(val);
+		//Serial.print("Light: ");
+		//Serial.println(val);
 
 
 		if (val != lastLight)
 		{
 			lastLight = val;
-			gw.send(msgLight.set(val));
+			//gw.send(msgLight.set(val));
 		}
 	}
 }
@@ -593,8 +592,8 @@ float getGasSensorRatio()
 /*****************************  getGasPercentage **********************************
 Output:  ppm of the target gas
 Remarks: This function calculates the ppm (parts per million) of the target gas.
-		By using the slope and a point of the line, the x(logarithmic value of ppm)
-		of the line could be derived if y(rs_ro_ratio) is provided. As it is a
+		By using the slope and a point of the line, the X (logarithmic value of ppm)
+		of the line could be derived if Y (rs_ro_ratio) is provided. As it is a
 		logarithmic coordinate, power of 10 is used to convert the result to non-logarithmic value.
 ************************************************************************************/
 float getGasPercentage(float rs_ro_ratio, int gasType)
