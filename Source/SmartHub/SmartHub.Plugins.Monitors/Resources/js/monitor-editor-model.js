@@ -42,14 +42,9 @@ define(['jquery'],
                     var sv = data.Data;
                     var monitor = model.Monitor;
 
-                    if (monitor) {
-                        if (monitor.Sensor.NodeNo == sv.NodeNo && monitor.Sensor.SensorNo == sv.SensorNo) {
-                            monitor.Sensor.set("SensorValueValue", sv.Value);
-                            monitor.Sensor.set("SensorValueTimeStamp", sv.TimeStamp);
-
-                            monitor.SensorValues.splice(0, 1);
-                            monitor.SensorValues.push(sv);
-                        }
+                    if (monitor && monitor.SensorNodeNo == sv.NodeNo && monitor.SensorSensorNo == sv.SensorNo) {
+                        monitor.SensorValues.splice(0, 1);
+                        monitor.SensorValues.push(sv);
                     }
                 }
             }

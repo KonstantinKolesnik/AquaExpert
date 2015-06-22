@@ -43,10 +43,7 @@ define(['jquery'],
 
                     if (model.Zone) {
                         $.each(model.Zone.MonitorsList, function (idx, monitor) {
-                            if (monitor.Sensor.NodeNo == sv.NodeNo && monitor.Sensor.SensorNo == sv.SensorNo) {
-                                monitor.Sensor.set("SensorValueValue", sv.Value);
-                                monitor.Sensor.set("SensorValueTimeStamp", sv.TimeStamp);
-
+                            if (monitor.SensorNodeNo == sv.NodeNo && monitor.SensorSensorNo == sv.SensorNo) {
                                 monitor.SensorValues.splice(0, 1);
                                 monitor.SensorValues.push(sv);
                             }

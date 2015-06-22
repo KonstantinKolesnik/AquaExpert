@@ -3,7 +3,7 @@
     <div class="panel-heading">
         <i class="fa fa-line-chart fa-2x"></i>
         <span class="panel-title" data-bind="html: Name"></span>
-        <strong class="panel-title pull-right" data-bind="source: this" data-template="tmplLastSensorValue"></strong>
+        <!--<strong class="panel-title pull-right" data-bind="source: this" data-template="tmplLastSensorValue"></strong>-->
     </div>
 
     <div class="panel-body" style="background-color:white;">
@@ -15,43 +15,41 @@
     
     <!--<div class="panel-footer">Panel footer</div>-->
 </div>
+<script>
+    function getWeatherIconCssClass(val) {
+        var icon = "wi-cloud-refresh";
+        switch (val) {
+            case 0: icon = 'wi-day-cloudy'; break;
+            case 1: icon = "wi-day-sunny"; break;
+            case 2: icon = "wi-cloudy"; break;
+            case 3: icon = "wi-day-rain-mix"; break;
+            case 4: icon = "wi-storm-showers"; break;
+            case 5: icon = ""; break;
+        }
+
+        //"#=  (['Ясно', 'Солнечно', 'Облачно', 'К дождю', 'Дождь', '?'])[value] #"
+        //"#=  (['wi-day-cloudy', 'wi-day-sunny', 'wi-cloudy', 'wi-day-rain-mix', 'wi-storm-showers', 'wi-cloud-refresh'])[value] #"
+        return '<span class="' + icon + '" style="font-size:22px;"></span>';
+        //"<span class='${([\"wi-day-cloudy\", \"wi-day-sunny\", \"wi-cloudy\", \"wi-day-rain-mix\", \"wi-storm-showers\", \"wi-cloud-refresh\"])[value]}' style='font-size:52px;'></span>"
+
+        //return icon;
+    }
+</script>
 
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
     var val = data.SensorValues.length ? data.SensorValues[data.SensorValues.length - 1].Value : null;
 
     if (val == null) { #
-        -
+        --
     # } else {
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
         if (templ) {
-            var result = kendo.template(templ)({ value: val }); #
-            #= result #
+            //var result = kendo.template(templ)({ value: val }); #
+            #= AAA #
         # } else { #
             #= val #
         # }
     } #
 </script>
-
-    <!--
-    var val = data.Sensor.SensorValueValue;
-    switch (data.Type) {
-        case "T": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;&deg;C</span> #; break;
-        case "H": # <span>#= val == null ? "-" : kendo.toString(val, "n1") #&nbsp;%</span> #; break;
-        case "P": # <span>#= val == null ? "-" : kendo.toString(val / 133.3, "n0") #&nbsp;mmHg</span> #; break;
-        case "F":
-            var icon = "wi-cloud-refresh";
-            switch (data) {
-                case 0: icon = "wi-day-cloudy"; break;
-                case 1: icon = "wi-day-sunny"; break;
-                case 2: icon = "wi-cloudy"; break;
-                case 3: icon = "wi-day-rain-mix"; break;
-                case 4: icon = "wi-storm-showers"; break;
-                case 5: icon = ""; break;
-            } #
-            <span class="${icon}" style="font-size:52px;"></span> #; break;
-        default: # <span>#= val == null ? "-" : val #</span> #; break;
-    }
-    #
-        -->
