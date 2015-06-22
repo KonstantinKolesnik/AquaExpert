@@ -54,7 +54,7 @@ namespace SmartHub.Core.Infrastructure
             }
             catch (Exception ex)
             {
-                logger.Error("Error on plugins initialization", ex);
+                logger.Error(ex, "Error on plugins initialization");
                 throw;
             }
         }
@@ -73,7 +73,7 @@ namespace SmartHub.Core.Infrastructure
             }
             catch (Exception ex)
             {
-                logger.Error("Error on start plugins", ex);
+                logger.Error(ex,"Error on start plugins");
                 throw;
             }
         }
@@ -91,7 +91,7 @@ namespace SmartHub.Core.Infrastructure
             }
             catch (Exception ex)
             {
-                logger.Error("Error on stop plugins", ex);
+                logger.Error(ex, "Error on stop plugins");
             }
         }
         #endregion

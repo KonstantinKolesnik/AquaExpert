@@ -59,38 +59,38 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                                 //"step" - The values will be connected with a line with right angle.
                                 //"smooth" - The values will be connected with a smooth line.
 
-                            markers: {
-                                visible: true,
-                                size: 32,
-                                visual: function (e) {
-                                    //var src = kendo.format("../content/dataviz/chart/images/{0}.png", e.dataItem.weather);
-                                    //var image = new kendo.drawing.Image(src, e.rect);
-                                    //return image;
+                            //markers: {
+                            //    visible: true,
+                            //    size: 32,
+                            //    visual: function (e) {
+                            //        //var src = kendo.format("../content/dataviz/chart/images/{0}.png", e.dataItem.weather);
+                            //        //var image = new kendo.drawing.Image(src, e.rect);
+                            //        //return image;
 
-                                    return '<span class="wi-day-cloudy" style="font-size:22px;">AAA</span>';
-                                }
-                            },
-                            highlight: {
-                                //border: {
-                                //    opacity: 1,
-                                //    width: 5,
-                                //    color: "black"
-                                //},
-                                toggle: function (e) {
-                                    // Don't create a highlight overlay, we'll modify the existing visual instead
-                                    e.preventDefault();
+                            //        return '<span class="wi-day-cloudy" style="font-size:22px;">AAA</span>';
+                            //    }
+                            //},
+                            //highlight: {
+                            //    //border: {
+                            //    //    opacity: 1,
+                            //    //    width: 5,
+                            //    //    color: "black"
+                            //    //},
+                            //    toggle: function (e) {
+                            //        // Don't create a highlight overlay, we'll modify the existing visual instead
+                            //        e.preventDefault();
 
-                                    var visual = e.visual;
-                                    var transform = null;
-                                    if (e.show) {
-                                        var center = visual.rect().center();
-                                        // Uniform 1.5x scale with the center as origin
-                                        transform = kendo.geometry.transform().scale(1.5, 1.5, center);
-                                    }
+                            //        var visual = e.visual;
+                            //        var transform = null;
+                            //        if (e.show) {
+                            //            var center = visual.rect().center();
+                            //            // Uniform 1.5x scale with the center as origin
+                            //            transform = kendo.geometry.transform().scale(1.5, 1.5, center);
+                            //        }
 
-                                    visual.transform(transform);
-                                }
-                            },
+                            //        visual.transform(transform);
+                            //    }
+                            //},
 
                             color: "cornflowerblue",
                             tooltip: {

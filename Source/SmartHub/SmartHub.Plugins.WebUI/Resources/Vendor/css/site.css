@@ -32,22 +32,18 @@ body {
 	background-color: #79a6cb;
 	color: white;
 }
-
-	.form-control:focus::-webkit-input-placeholder {
-		color: #aac7de;
-	}
-
-	.form-control:focus:-moz-placeholder {
-		color: #aac7de;
-	}
-
-	.form-control:focus::-moz-placeholder {
-		color: #aac7de;
-	}
-
-	.form-control:focus:-ms-input-placeholder {
-		color: #aac7de;
-	}
+.form-control:focus::-webkit-input-placeholder {
+	color: #aac7de;
+}
+.form-control:focus:-moz-placeholder {
+	color: #aac7de;
+}
+.form-control:focus::-moz-placeholder {
+	color: #aac7de;
+}
+.form-control:focus:-ms-input-placeholder {
+	color: #aac7de;
+}
 
 a.list-group-item:hover .list-group-item-heading {
 	color: #294C69;

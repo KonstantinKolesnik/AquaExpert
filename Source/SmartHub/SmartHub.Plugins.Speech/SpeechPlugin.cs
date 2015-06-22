@@ -218,7 +218,7 @@ namespace SmartHub.Plugins.Speech
                     catch (Exception ex)
                     {
                         var msg = string.Format("Voice command error: '{0}'", commandText);
-                        Logger.ErrorException(msg, ex);
+                        Logger.Error(ex, msg);
                     }
                 }
             }

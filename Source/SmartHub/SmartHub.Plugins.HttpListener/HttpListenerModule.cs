@@ -51,7 +51,7 @@ namespace SmartHub.Plugins.HttpListener
             {
                 var tcs = new TaskCompletionSource<object>();
                 tcs.SetException(ex);
-                logger.ErrorException("", ex);
+                logger.Error(ex, "");
                 return tcs.Task;
             }
 

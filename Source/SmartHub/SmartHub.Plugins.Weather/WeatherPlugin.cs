@@ -134,7 +134,7 @@ namespace SmartHub.Plugins.Weather
             catch (Exception ex)
             {
                 string msg = string.Format("loading error (location {0})", location);
-                Logger.ErrorException(msg, ex);
+                Logger.Error(ex, msg);
             }
         }
 

@@ -3,7 +3,7 @@
     <div class="panel-heading">
         <i class="fa fa-line-chart fa-2x"></i>
         <span class="panel-title" data-bind="html: Name"></span>
-        <!--<strong class="panel-title pull-right" data-bind="source: this" data-template="tmplLastSensorValue"></strong>-->
+        <strong class="panel-title pull-right" data-bind="source: this" data-template="tmplLastSensorValue"></strong>
     </div>
 
     <div class="panel-body" style="background-color:white;">
@@ -46,8 +46,8 @@
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
         if (templ) {
-            //var result = kendo.template(templ)({ value: val }); #
-            #= AAA #
+            var result = kendo.template(templ)({ value: val }); #
+            #= result #
         # } else { #
             #= val #
         # }

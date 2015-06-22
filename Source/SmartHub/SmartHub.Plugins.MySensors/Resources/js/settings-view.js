@@ -7,6 +7,7 @@ define(
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
+
             onShow: function () {
                 var me = this;
 
@@ -14,12 +15,12 @@ define(
 
                 createTabStrip($("#tabstrip"));
                 ctrlNodesGrid = createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
-                ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
+                //ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
                 createUnitSystemSelector();
 
-                $(window).bind("resize", adjustSizes);
-                $(window).resize(adjustSizes);
-                adjustSizes();
+                //$(window).bind("resize", adjustSizes);
+                //$(window).resize(adjustSizes);
+                //adjustSizes();
 
                 kendo.bind($("#content"), this.options.viewModel);
 
@@ -58,10 +59,10 @@ define(
                         animation: {
                             open: { effects: "fadeIn" }
                         },
-                        activate: function () {
-                            if (selector = $("#tabstrip"))
-                                adjustSizes();
-                        }
+                        //activate: function () {
+                        //    if (selector = $("#tabstrip"))
+                        //        adjustSizes();
+                        //}
                     });
                 }
                 function createNodesGrid(selector, filter, sort) {
@@ -72,7 +73,7 @@ define(
                         sortable: {
                             mode: "multiple"
                         },
-                        reorderable: true,
+                        //reorderable: true,
                         resizable: true,
                         editable: true,
                         pageable: {
@@ -92,23 +93,6 @@ define(
                             );
 
                             lib.kendo.bind(e.detailRow, e.data);
-                        },
-                        detailExpand: function (e) {
-                            //me.gridNodesStateManager.onDetailExpand(e);
-                        },
-                        detailCollapse: function (e) {
-                            //me.gridNodesStateManager.onDetailCollapse(e);
-                        },
-                        dataBinding: function (e) {
-                            //if (ctrlNodesGrid)
-                            //    localStorage["kendo-grid-options"] = lib.kendo.stringify(ctrlNodesGrid.getOptions());
-                        },
-                        dataBound: function (e) {
-                            //me.gridNodesStateManager.onDataBound();
-
-                            //var options = localStorage["kendo-grid-options"];
-                            //if (options && ctrlNodesGrid)
-                            //    ctrlNodesGrid.setOptions(JSON.parse(options));
                         }
                     }).data("kendoGrid");
 

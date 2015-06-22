@@ -55,7 +55,7 @@ namespace SmartHub.Plugins.Timer
                             catch (Exception ex)
                             {
                                 var msg = string.Format("Error when running periodical task {0}", taskInfo);
-                                logger.ErrorException(msg, ex);
+                                logger.Error(ex, msg);
                             }
                         });
                     }

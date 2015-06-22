@@ -201,7 +201,7 @@ namespace SmartHub.Plugins.Scripts
             catch (Exception ex)
             {
                 var messge = string.Format("Error in user script {0}", script.Name);
-                logger.ErrorException(messge, ex);
+                logger.Error(ex, messge);
             }
         }
 

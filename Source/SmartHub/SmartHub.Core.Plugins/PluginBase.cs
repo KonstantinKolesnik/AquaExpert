@@ -59,7 +59,7 @@ namespace SmartHub.Core.Plugins
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error(ex.Message, ex);
+                        Logger.Error(ex, ex.Message);
                     }
                 }
         }
