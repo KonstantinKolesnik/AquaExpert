@@ -317,6 +317,34 @@ namespace SmartHub.Plugins.MySensors
             return GetSensorValues(GetSensor(id), count);
         }
 
+        public int DeleteSensorValues(DateTime dateTo)
+        {
+            int result = 0;
+
+            if (dateTo != null)
+            {
+                using (var session = Context.OpenSession())
+                {
+                    int bulkSize = 2500;
+
+                    while (true)
+                    {
+                        var ids = session.Query<SensorValue>().Where(sv => sv.TimeStamp < dateTo).Take(bulkSize).Select(sv => sv.Id).ToList();
+                        result += ids.Count;
+
+                        if (ids.Count > 0)
+                            session.CreateQuery("DELETE SensorValue sv WHERE sv.id IN (:ids)")
+                                .SetParameterList("ids", ids)
+                                .ExecuteUpdate();
+                        else
+                            break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
@@ -866,27 +894,7 @@ namespace SmartHub.Plugins.MySensors
         private object apiDeleteSensorValues(HttpRequestParams request)
         {
             var dateTo = DateTime.Parse(request.GetRequiredString("dateTo")).Date.AddDays(1);
-            
-            int result = 0;
-            int bulkSize = 2500;
-
-            using (var session = Context.OpenSession())
-            {
-                while (true)
-                {
-                    var ids = session.Query<SensorValue>().Where(sv => sv.TimeStamp < dateTo).Take(bulkSize).Select(sv => sv.Id).ToList();
-                    result += ids.Count;
-
-                    if (ids.Count > 0)
-                        session.CreateQuery("DELETE SensorValue sv WHERE sv.id IN (:ids)")
-                            .SetParameterList("ids", ids)
-                            .ExecuteUpdate();
-                    else
-                        break;
-                }
-            }
-
-            return result;
+            return DeleteSensorValues(dateTo);
         }
         #endregion
     }
