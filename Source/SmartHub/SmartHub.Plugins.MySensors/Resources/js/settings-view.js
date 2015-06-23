@@ -15,7 +15,7 @@ define(
 
                 createTabStrip($("#tabstrip"));
                 ctrlNodesGrid = createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
-                //ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
+                ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
                 createUnitSystemSelector();
 
                 //$(window).bind("resize", adjustSizes);
@@ -66,14 +66,12 @@ define(
                     });
                 }
                 function createNodesGrid(selector, filter, sort) {
-                    //me.gridNodesStateManager = new GridStateManager("gridNodes");
                     return selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
                         sortable: {
                             mode: "multiple"
                         },
-                        //reorderable: true,
                         resizable: true,
                         editable: true,
                         pageable: {
@@ -138,14 +136,12 @@ define(
                     }
                 }
                 function createSensorsGrid(selector, filter, sort) {
-                    //me.gridSensorsStateManager = new GridStateManager("gridSensors");
                     return selector.kendoGrid({
                         dataSource: { filter: filter, sort: sort },
                         groupable: true,
                         sortable: {
                             mode: "multiple"
                         },
-                        reorderable: true,
                         resizable: true,
                         editable: true,
                         pageable: {
@@ -269,12 +265,6 @@ define(
                                 });
                             }
                         },
-                        detailExpand: function (e) {
-                            //me.gridSensorsStateManager.onDetailExpand(e);
-                        },
-                        detailCollapse: function (e) {
-                            //me.gridSensorsStateManager.onDetailCollapse(e);
-                        },
                         dataBinding: function (e) {
                             //if (e.action == "itemchange") {
                             //    e.preventDefault();
@@ -300,9 +290,6 @@ define(
                             //        $(tds[i]).html(item[columnNames[i]]);
                             //    }
                             //}
-                        },
-                        dataBound: function (e) {
-                            //me.gridSensorsStateManager.onDataBound();
                         }
                     }).data("kendoGrid");
 
@@ -347,8 +334,8 @@ define(
                             { value: "M", text: "Метрическая" },
                             { value: "I", text: "Эмпирическая" }
                         ],
-                        dataTextField: "text",
                         dataValueField: "value",
+                        dataTextField: "text",
                         valuePrimitive: true,
                         change: function (e) {
                             me.trigger('unitSystem:set', e.sender.value());
@@ -358,72 +345,60 @@ define(
                 function createBatteryLevelsChart(selector, filter, sort) {
                     selector.kendoChart({
                         dataSource: { filter: filter, sort: sort },
-                        transitions: true,
-                        style: "smooth",
-                        //title: { text: "Internet Users in United States" },
-                        legend: { visible: true, position: "bottom" },
-                        //seriesDefaults: {
-                        //    type: "line",
-                        //    labels: {
-                        //        visible: true,
-                        //        format: "{0}%",
-                        //        background: "transparent"
-                        //    }
-                        //},
                         series: [
                             {
-                                //name: "Levels",
-                                categoryField: "TimeStamp",
                                 field: "Level",
-                                //axis: "levels",
+                                axis: "axisValue",
                                 type: "area",//"line",
-                                labels: {
+                                style: "smooth",
+                                color: "red",
+                                tooltip: {
                                     visible: true,
-                                    format: "{0}%",
-                                    background: "transparent"
+                                    template: "#= data.value #%"
                                 }
                             }
                         ],
                         valueAxis: {
-                            //name: "levels",
-                            labels: { format: "{0}%", visible: true },
-                            line: { visible: true },
-                            majorGridLines: { visible: true },
+                            name: "axisValue",
+                            labels: {
+                                font: "10px Segoe UI",
+                                template: "#= kendo.toString(data.value, 'n0') #"
+                            },
                             min: 0,
-                            max: 120,
-                            color: "#000000"
+                            max: 100,
+                            majorUnit: 20
                         },
                         categoryAxis: {
-                            //field: "TimeStamp",
-                            // or
-                            //categories: [2005, 2006, 2007, 2008, 2009],
+                            field: "TimeStamp",
 
-                            //name: "levels",
+                            //type: "date",
+                            type: "category",
 
-                            //axisCrossingValue: [0, 3],
-
-                            type: "date",
-                            baseUnit: "hours",
+                            baseUnit: "fit",
+                            //baseUnit: "seconds",
+                            //baseUnit: "minutes",
+                            //baseUnit: "hours",
                             //baseUnit: "days",
-                            //baseUnit: "months",
                             //baseUnit: "weeks",
+                            //baseUnit: "months",
                             //baseUnit: "years",
 
                             labels: {
+                                rotation: 315,
+                                font: "9px Segoe UI",
                                 dateFormats: {
-                                    hours: "HH:mm",
-                                    days: "MMM, d",
-                                    months: "MMM-yy",
-                                    weeks: "M-d",
+                                    minutes: "mm:ss",
+                                    hours: "d.MM HH:mm",
+                                    days: "MMM d",
+                                    weeks: "MMM d",
+                                    months: "yyyy MMM",
                                     years: "yyyy"
                                 },
-                                //format: "{0} aa}",
-                                visible: true
+                                template: "#: kendo.toString(new Date(value), 'HH:mm') #" //"#: kendo.toString(new Date(value), 'd.MM - HH:mm') #"
                             },
 
                             line: { visible: true },
-                            majorGridLines: { visible: true },
-                            color: "#000000"
+                            majorGridLines: { visible: true }
                         }
                     });
                 }

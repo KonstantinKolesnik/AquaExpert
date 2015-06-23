@@ -650,7 +650,7 @@ namespace SmartHub.Plugins.MySensors
             StringBuilder sb = new StringBuilder();
             if (lastSV != null)
             {
-                sb.AppendFormat("<span>{0:d.MM.yyyy}</span>&nbsp;&nbsp;<span style='font-size:0.9em; font-style:italic;'>{0:HH:mm:ss}</span>", lastSV.TimeStamp);
+                sb.AppendFormat("<span>{0:d.MM.yyyy}&nbsp;&nbsp;<small>{0:HH:mm:ss}</small></span>", lastSV.TimeStamp);
                 sb.AppendFormat("<div>[{0}][{1}] {2}: {3}</div>", lastSV.NodeNo, lastSV.SensorNo, lastSV.TypeName, lastSV.Value);
             }
             return sb.ToString();
@@ -722,7 +722,6 @@ namespace SmartHub.Plugins.MySensors
         private object apiGetSensorsByType(HttpRequestParams request)
         {
             var type = (SensorType)request.GetRequiredInt32("type");
-
             return GetSensorsByType(type).Select(BuildSensorWebModel).Where(x => x != null).ToArray();
         }
         [HttpCommand("/api/mysensors/sensorsForSelection")]

@@ -1,5 +1,5 @@
 ﻿
-<div id="content" class="container-fluid">
+<div id="content">
     <h2>Сеть MySensors</h2>
 
     <div id="tabstrip">
@@ -15,11 +15,13 @@
             <div id="gridSensors" class="entities-grid" data-bind="source: Sensors"></div>
         </div>
         <div>
-            <div id="pnlSettings">
-                <form class="form-inline">
+            <div id="pnlSettings" class="entities-grid">
+                <form class="form-horizontal" role="form">
                     <div class="form-group">
-                        <label for="ddlUnitSystem">Система единиц измерения</label>
-                        <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
+                        <label class="col-xs-12 col-sm-3 col-md-2" for="ddlUnitSystem">Система единиц измерения</label>
+                        <div class="col-xs-12 col-sm-9 col-md-8">
+                            <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -38,7 +40,7 @@
             <div class="nodeDetailsSensors" style="height:300px;" data-bind="source: Sensors"></div>
         </div>
         <div>
-            <div>filter</div>
+            <!--<div>filter</div>-->
             <div class="nodeDetailsBatteryLevels" style="height:300px;" data-bind="source: BatteryLevels"></div>
         </div>
     </div>
@@ -106,28 +108,33 @@
 </script>
 
 <script id="batteryLevelLevelCellTemplate" type="text/x-kendo-tmpl">
-    <div>#: data.BatteryLevelLevel == null ? "-" : data.BatteryLevelLevel #</div>
+    <div>#: data.BatteryLevelLevel == null ? "--" : data.BatteryLevelLevel #</div>
 </script>
 <script id="batteryLevelTimeStampCellTemplate" type="text/x-kendo-tmpl">
     # if (data.BatteryLevelTimeStamp == null) { #
-        <div>-</div>
+        --
     # } else { #
         <div>
-            <span>#: kendo.toString(data.BatteryLevelTimeStamp, "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.BatteryLevelTimeStamp, "HH:mm:ss") #</span>
+            <span>
+                #: kendo.toString(data.BatteryLevelTimeStamp, "dd.MM.yyyy") #
+                <small>#: kendo.toString(data.BatteryLevelTimeStamp, "HH:mm:ss") #</small>
+            </span>
         </div>
     # } #
 </script>
 <script id="sensorValueValueCellTemplate" type="text/x-kendo-tmpl">
-    <div>#: data.SensorValueValue == null ? "-" : data.SensorValueValue #</div>
+    <div>#: data.SensorValueValue == null ? "--" : data.SensorValueValue #</div>
 </script>
 <script id="sensorValueTimeStampCellTemplate" type="text/x-kendo-tmpl">
     # if (data.SensorValueTimeStamp == null) { #
-        <div>-</div>
+        --
     # } else { #
         <div>
-            <span>#: kendo.toString(data.SensorValueTimeStamp, "dd.MM.yyyy") #</span>
-            <span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</span>
+            <span>
+                #: kendo.toString(data.SensorValueTimeStamp, "dd.MM.yyyy") #
+                <!--<span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</span>-->
+                <small>#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</small>
+            </span>
         </div>
     # } #
 </script>

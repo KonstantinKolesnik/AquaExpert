@@ -270,16 +270,16 @@ define(['jquery'], function ($) {
 	                api.getSensors(function (data) {
 	                    me.set("Sensors", data);
 
-	                    api.getBatteryLevels(function (data) {
-	                        me.set("BatteryLevels", data);
+	                //    api.getBatteryLevels(function (data) {
+	                //        me.set("BatteryLevels", data);
 
-	                        api.getSensorValues(function (data) {
-	                            me.set("SensorValues", data);
+	                //        api.getSensorValues(function (data) {
+	                //            me.set("SensorValues", data);
 
 	                            if (onComplete)
 	                                onComplete();
-	                        });
-	                    });
+	                //        });
+	                //    });
                     });
                 });
 	        });
@@ -303,13 +303,14 @@ define(['jquery'], function ($) {
 	        function onNodePresentation(data) {
 	            for (var i = 0; i < me.Nodes.length; i++) {
 	                if (me.Nodes[i].Id == data.Data.Id) {
+	                    me.Nodes[i].set("Name", data.Data.Name);
 	                    me.Nodes[i].set("NodeNo", data.Data.NodeNo);
 	                    me.Nodes[i].set("TypeName", data.Data.TypeName);
 	                    me.Nodes[i].set("ProtocolVersion", data.Data.ProtocolVersion);
 	                    me.Nodes[i].set("SketchName", data.Data.SketchName);
 	                    me.Nodes[i].set("SketchVersion", data.Data.SketchVersion);
-	                    me.Nodes[i].set("Name", data.Data.Name);
-	                    me.Nodes[i].set("BatteryLevel", data.Data.BatteryLevel);
+	                    me.Nodes[i].set("BatteryLevelLevel", data.Data.BatteryLevelLevel);
+	                    me.Nodes[i].set("BatteryLevelTimeStamp", new Date(data.Data.BatteryLevelTimeStamp));
 	                    return;
 	                }
 	            }
@@ -360,12 +361,13 @@ define(['jquery'], function ($) {
 	        function onSensorPresentation(data) {
 	            for (var i = 0; i < me.Sensors.length; i++) {
 	                if (me.Sensors[i].Id == data.Data.Id) {
+	                    me.Sensors[i].set("Name", data.Data.Name);
 	                    me.Sensors[i].set("NodeNo", data.Data.NodeNo);
 	                    me.Sensors[i].set("SensorNo", data.Data.SensorNo);
 	                    me.Sensors[i].set("TypeName", data.Data.TypeName);
 	                    me.Sensors[i].set("ProtocolVersion", data.Data.ProtocolVersion);
-	                    me.Sensors[i].set("Name", data.Data.Name);
-	                    me.Sensors[i].set("SensorValue", data.Data.SensorValue);
+	                    me.Sensors[i].set("SensorValueValue", data.Data.SensorValueValue);
+	                    me.Sensors[i].set("SensorValueTimeStamp", new Date(data.Data.SensorValueTimeStamp));
 	                    return;
 	                }
 	            }
@@ -389,8 +391,6 @@ define(['jquery'], function ($) {
 	            }
 	        }
 	        function onSensorValue(data) {
-	            //console.log("["+data.Data.NodeNo+"]["+data.Data.SensorNo+"] "+ data.Data.TypeName + ": " + data.Data.Value);
-
 	            data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
 	            for (var i = 0; i < me.Sensors.length; i++) {

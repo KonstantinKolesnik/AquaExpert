@@ -99,7 +99,8 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                             }
                         },
                     ],
-                    valueAxes: [
+                    //valueAxes: [
+                    valueAxis:
                         {
                             name: "axisValue",
                             //type: "log",
@@ -144,7 +145,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                                 //}
                             }
                         },
-                    ],
+                    //],
                     categoryAxis: {
                         field: "TimeStamp",
 
