@@ -1,7 +1,7 @@
 ﻿
 define(
-	['app', 'webapp/mysensors/settings-model', 'webapp/mysensors/settings-view'],
-	function (application, models, views) {
+	['app', 'common', 'webapp/mysensors/settings-model', 'webapp/mysensors/settings-view'],
+	function (application, common, models, views) {
 	    var module = {
 	        setNodeName: function (id, name) {
 	            models.setNodeName(id, name);
@@ -18,6 +18,15 @@ define(
 	        setUnitSystem: function (us) {
 	            models.setUnitSystem(us);
 	        },
+	        deleteValues: function (dateTo) {
+	            if (!dateTo) {
+	                alert("Не указана дата по!");
+	                return;
+	            }
+
+	            if (common.utils.confirm('Удалить значения?'))
+                    models.deleteValues(dateTo);
+	        },
 
 	        reload: function () {
 	            if (application.SignalRReceivers.indexOf(models.ViewModel) == -1)
@@ -30,6 +39,7 @@ define(
 	                view.on('node:delete', module.deleteNode);
 	                view.on('sensor:delete', module.deleteSensor);
 	                view.on('unitSystem:set', module.setUnitSystem);
+	                view.on('values:delete', module.deleteValues);
 	                view.on('node:test', function (view) {
 	                    //debugger;
 

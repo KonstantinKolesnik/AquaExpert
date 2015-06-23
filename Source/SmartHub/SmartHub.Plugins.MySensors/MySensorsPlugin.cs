@@ -861,6 +861,33 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().ToArray();
         }
+
+        [HttpCommand("/api/mysensors/sensorvalues/delete")]
+        private object apiDeleteSensorValues(HttpRequestParams request)
+        {
+            var dateTo = DateTime.Parse(request.GetRequiredString("dateTo")).Date.AddDays(1);
+            
+            int result = 0;
+            int bulkSize = 2500;
+
+            using (var session = Context.OpenSession())
+            {
+                while (true)
+                {
+                    var ids = session.Query<SensorValue>().Where(sv => sv.TimeStamp < dateTo).Take(bulkSize).Select(sv => sv.Id).ToList();
+                    result += ids.Count;
+
+                    if (ids.Count > 0)
+                        session.CreateQuery("DELETE SensorValue sv WHERE sv.id IN (:ids)")
+                            .SetParameterList("ids", ids)
+                            .ExecuteUpdate();
+                    else
+                        break;
+                }
+            }
+
+            return result;
+        }
         #endregion
     }
 }

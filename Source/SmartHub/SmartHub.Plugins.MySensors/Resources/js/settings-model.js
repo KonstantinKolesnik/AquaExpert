@@ -105,6 +105,19 @@ define(['jquery'], function ($) {
 	            });
 	    },
 
+	    deleteValues: function (dateTo, onComplete) {
+	        $.post('/api/mysensors/sensorvalues/delete', { dateTo: dateTo.toUTCString() })
+				.done(function (data) {
+				    alert("Удалено " + data + " записей.");
+
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+	    },
+
 	    getBatteryLevels: function (onComplete) {
 	        $.getJSON('/api/mysensors/batterylevels/list')
 				.done(function (data) {
@@ -433,6 +446,7 @@ define(['jquery'], function ($) {
 	    deleteSensor: api.deleteSensor,
 	    getUnitSystem: api.getUnitSystem,
 	    setUnitSystem: api.setUnitSystem,
+	    deleteValues: api.deleteValues,
 	    getBatteryLevels: api.getBatteryLevels,
 	    getSensorValues: api.getSensorValues
 	};

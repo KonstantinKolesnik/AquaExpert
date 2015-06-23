@@ -4,9 +4,17 @@ define(
     function (common, lib, monitorUtils, templates) {
         var ctrlNodesGrid;
         var ctrlSensorsGrid;
+        var ctrlDateTo;
 
         var layoutView = lib.marionette.LayoutView.extend({
             template: lib._.template(templates),
+            events: {
+                'click .js-btn-clear': 'deleteValues'
+            },
+            deleteValues: function (e) {
+                e.preventDefault();
+                this.trigger('values:delete', ctrlDateTo.value());
+            },
 
             onShow: function () {
                 var me = this;
@@ -18,6 +26,7 @@ define(
                 ctrlNodesGrid = createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
                 ctrlSensorsGrid = createSensorsGrid($("#gridSensors"), null, [{ field: "NodeNo", dir: "asc" }, { field: "SensorNo", dir: "asc" }]);
                 createUnitSystemSelector();
+                createDatePicker();
 
                 //$(window).bind("resize", adjustSizes);
                 //$(window).resize(adjustSizes);
@@ -357,6 +366,12 @@ define(
                             me.trigger('unitSystem:set', e.sender.value());
                         }
                     });
+                }
+                function createDatePicker() {
+                    ctrlDateTo = $("#dpTo").kendoDatePicker({
+                        format: "dd MMM yyyy",
+                        value: new Date()
+                    }).data("kendoDatePicker");
                 }
                 function createBatteryLevelsChart(selector, filter, sort) {
                     selector.kendoChart({
