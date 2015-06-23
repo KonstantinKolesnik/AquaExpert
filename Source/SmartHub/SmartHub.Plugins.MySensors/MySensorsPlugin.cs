@@ -195,20 +195,65 @@ namespace SmartHub.Plugins.MySensors
                 return session.Get<Sensor>(sensorID);
         }
 
-        public BatteryLevel GetLastBatteryLevel(Node node)
+        public BatteryLevel GetLastBatteryLevel()
         {
-            if (node == null)
-                return null;
-
+            using (var session = Context.OpenSession())
+                return session.Query<BatteryLevel>().OrderByDescending(bl => bl.TimeStamp).FirstOrDefault();
+        }
+        public BatteryLevel GetLastBatteryLevel(byte nodeNo)
+        {
             using (var session = Context.OpenSession())
                 return session.Query<BatteryLevel>()
-                    .Where(bl => bl.NodeNo == node.NodeNo)
+                    .Where(bl => bl.NodeNo == nodeNo)
                     .OrderByDescending(bl => bl.TimeStamp)
                     .FirstOrDefault();
+        }
+        public BatteryLevel GetLastBatteryLevel(Node node)
+        {
+            return node != null ? GetLastBatteryLevel(node.NodeNo) : null;
         }
         public BatteryLevel GetLastBatteryLevel(Guid id)
         {
             return GetLastBatteryLevel(GetNode(id));
+        }
+
+        public List<BatteryLevel> GetBatteryLevels(int nodeNo, int hours, int count)
+        {
+            DateTime dt = DateTime.UtcNow.AddHours(-hours);
+
+            using (var session = Context.OpenSession())
+                return session.Query<BatteryLevel>()
+                    .Where(bl => bl.NodeNo == nodeNo && bl.TimeStamp >= dt)
+                    .OrderByDescending(bl => bl.TimeStamp)
+                    .Take(count)
+                    .OrderBy(bl => bl.TimeStamp)
+                    .ToList();
+        }
+        public List<BatteryLevel> GetBatteryLevels(int nodeNo, int count)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<BatteryLevel>()
+                    .Where(bl => bl.NodeNo == nodeNo)
+                    .OrderByDescending(bl => bl.TimeStamp)
+                    .Take(count)
+                    .OrderBy(bl => bl.TimeStamp)
+                    .ToList();
+        }
+        public List<BatteryLevel> GetBatteryLevels(Node node, int hours, int count)
+        {
+            return node != null ? GetBatteryLevels(node.NodeNo, hours, count) : new List<BatteryLevel>();
+        }
+        public List<BatteryLevel> GetBatteryLevels(Node node, int count)
+        {
+            return node != null ? GetBatteryLevels(node.NodeNo, count) : new List<BatteryLevel>();
+        }
+        public List<BatteryLevel> GetBatteryLevels(Guid id, int hours, int count)
+        {
+            return GetBatteryLevels(GetNode(id), hours, count);
+        }
+        public List<BatteryLevel> GetBatteryLevels(Guid id, int count)
+        {
+            return GetBatteryLevels(GetNode(id), count);
         }
 
         public SensorValue GetLastSensorValue()
@@ -216,16 +261,17 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>().OrderByDescending(sv => sv.TimeStamp).FirstOrDefault();
         }
-        public SensorValue GetLastSensorValue(Sensor sensor)
+        public SensorValue GetLastSensorValue(byte nodeNo, byte sensorNo)
         {
-            if (sensor == null)
-                return null;
-
             using (var session = Context.OpenSession())
                 return session.Query<SensorValue>()
-                    .Where(sv => sv.NodeNo == sensor.NodeNo && sv.SensorNo == sensor.SensorNo)
+                    .Where(sv => sv.NodeNo == nodeNo && sv.SensorNo == sensorNo)
                     .OrderByDescending(sv => sv.TimeStamp)
                     .FirstOrDefault();
+        }
+        public SensorValue GetLastSensorValue(Sensor sensor)
+        {
+            return sensor != null ? GetLastSensorValue(sensor.NodeNo, sensor.SensorNo) : null;
         }
         public SensorValue GetLastSensorValue(Guid id)
         {
@@ -318,6 +364,10 @@ namespace SmartHub.Plugins.MySensors
 
         private SensorValue SaveSensorValueToDB(SensorMessage message)
         {
+            //SensorValue lastSV = GetLastSensorValue(message.NodeNo, message.SensorNo);
+            //if (lastSV != null && lastSV.Type == (SensorValueType)message.SubType && lastSV.Value == message.PayloadFloat)
+            //    return lastSV;
+
             var dtDB = DateTime.UtcNow;
             var dt = DateTime.Now;
 
@@ -597,7 +647,7 @@ namespace SmartHub.Plugins.MySensors
             if (node == null)
                 return null;
 
-            BatteryLevel lastBL = GetLastBatteryLevel(node);
+            List<BatteryLevel> bls = GetBatteryLevels(node, 24, 10);
 
             return new
             {
@@ -608,8 +658,9 @@ namespace SmartHub.Plugins.MySensors
                 ProtocolVersion = node.ProtocolVersion,
                 SketchName = node.SketchName,
                 SketchVersion = node.SketchVersion,
-                BatteryLevelLevel = lastBL == null ? (byte?)null : lastBL.Level,
-                BatteryLevelTimeStamp = lastBL == null ? (DateTime?)null : lastBL.TimeStamp
+                BatteryLevels = bls.ToArray(),
+                BatteryLevelLevel = bls.Count == 0 ? (byte?)null : bls.Last().Level,
+                BatteryLevelTimeStamp = bls.Count == 0 ? (DateTime?)null : bls.Last().TimeStamp
             };
         }
         public object BuildSensorWebModel(Sensor sensor)
@@ -628,7 +679,7 @@ namespace SmartHub.Plugins.MySensors
             if (sensor == null)
                 return null;
 
-            SensorValue lastSV = GetLastSensorValue(sensor);
+            List<SensorValue> svs = GetSensorValues(sensor, 24, 10);
 
             return new
             {
@@ -638,8 +689,9 @@ namespace SmartHub.Plugins.MySensors
                 SensorNo = sensor.SensorNo,
                 TypeName = sensor.TypeName,
                 ProtocolVersion = sensor.ProtocolVersion,
-                SensorValueValue = lastSV == null ? (float?)null : lastSV.Value,
-                SensorValueTimeStamp = lastSV == null ? (DateTime?)null : lastSV.TimeStamp
+                SensorValues = svs.ToArray(),
+                SensorValueValue = svs.Count == 0 ? (float?)null : svs.Last().Value,
+                SensorValueTimeStamp = svs.Count == 0 ? (DateTime?)null : svs.Last().TimeStamp
             };
         }
 

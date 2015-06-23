@@ -74,6 +74,11 @@ namespace SmartHub.Plugins.Monitors
             using (var session = Context.OpenSession())
                 return session.Get<Monitor>(id);
         }
+        public Monitor GetBySensor(Guid id)
+        {
+            using (var session = Context.OpenSession())
+                return session.Query<Monitor>().Where(m => m.SensorId == id).FirstOrDefault();
+        }
         #endregion
 
         #region Web API
@@ -123,6 +128,12 @@ namespace SmartHub.Plugins.Monitors
             var id = request.GetRequiredGuid("id");
             return BuildMonitorRichWebModel(Get(id));
         }
+        [HttpCommand("/api/monitors/getBySensor")]
+        private object apiGetMonitorBySensor(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            return BuildMonitorRichWebModel(GetBySensor(id));
+        }
 
         [HttpCommand("/api/monitors/add")]
         private object apiAddMonitor(HttpRequestParams request)
@@ -157,8 +168,8 @@ namespace SmartHub.Plugins.Monitors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Load<Monitor>(id);
-                sensor.Name = name;
+                var monitor = session.Load<Monitor>(id);
+                monitor.Name = name;
                 session.Flush();
             }
 
@@ -182,8 +193,8 @@ namespace SmartHub.Plugins.Monitors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Load<Monitor>(id);
-                sensor.Configuration = configuration;
+                var monitor = session.Load<Monitor>(id);
+                monitor.Configuration = configuration;
                 session.Flush();
             }
 
@@ -198,8 +209,8 @@ namespace SmartHub.Plugins.Monitors
 
             using (var session = Context.OpenSession())
             {
-                var sensor = session.Load<Monitor>(id);
-                session.Delete(sensor);
+                var monitor = session.Load<Monitor>(id);
+                session.Delete(monitor);
                 session.Flush();
             }
 

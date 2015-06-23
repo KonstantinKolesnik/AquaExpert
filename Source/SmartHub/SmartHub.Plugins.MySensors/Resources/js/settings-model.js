@@ -73,6 +73,17 @@ define(['jquery'], function ($) {
 	            });
 	    },
 
+	    getSensorMonitor: function (id, onComplete) {
+	        $.getJSON('/api/monitors/getBySensor', { Id: id })
+				.done(function (data) {
+				    if (onComplete)
+				        onComplete(data);
+				})
+	            .fail(function (data) {
+	                onError(data);
+	            });
+	    },
+
 	    getUnitSystem: function (onComplete) {
 	        $.getJSON('/api/mysensors/unitsystem')
 				.done(function (data) {
@@ -201,8 +212,6 @@ define(['jquery'], function ($) {
 	    UnitSystem: "M",
 	    Nodes: [],
 	    Sensors: [],
-	    BatteryLevels: [],
-	    SensorValues: [],
 
 	    getSensorValueUnit: function (type) {
 	        //$.each(SensorValueType, function (idx, t) {
@@ -257,6 +266,9 @@ define(['jquery'], function ($) {
 	            default: return "";
 	        }
 	    },
+	    getSensorMonitor: function (id, onComplete) {
+	        api.getSensorMonitor(id, onComplete);
+	    },
 
         update: function (onComplete) {
             var me = this;
@@ -270,16 +282,8 @@ define(['jquery'], function ($) {
 	                api.getSensors(function (data) {
 	                    me.set("Sensors", data);
 
-	                //    api.getBatteryLevels(function (data) {
-	                //        me.set("BatteryLevels", data);
-
-	                //        api.getSensorValues(function (data) {
-	                //            me.set("SensorValues", data);
-
-	                            if (onComplete)
-	                                onComplete();
-	                //        });
-	                //    });
+	                    if (onComplete)
+	                        onComplete();
                     });
                 });
 	        });
@@ -347,15 +351,17 @@ define(['jquery'], function ($) {
 	        function onBatteryLevel(data) {
 	            data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
-	            for (var i = 0; i < me.Nodes.length; i++) {
-	                if (me.Nodes[i].NodeNo == data.Data.NodeNo) {
-	                    me.Nodes[i].set("BatteryLevelLevel", data.Data.Level);
-	                    me.Nodes[i].set("BatteryLevelTimeStamp", data.Data.TimeStamp);
-	                    break;
-	                }
-	            }
+	            $.each(me.Nodes, function (idx, node) {
+	                if (node.NodeNo == data.Data.NodeNo) {
+	                    node.set("BatteryLevelLevel", data.Data.Level);
+	                    node.set("BatteryLevelTimeStamp", data.Data.TimeStamp);
 
-	            me.BatteryLevels.push(data.Data);
+	                    node.BatteryLevels.splice(0, 1);
+	                    node.BatteryLevels.push(data.Data);
+
+	                    return false;
+	                }
+	            });
 	        }
 
 	        function onSensorPresentation(data) {
@@ -393,15 +399,17 @@ define(['jquery'], function ($) {
 	        function onSensorValue(data) {
 	            data.Data.TimeStamp = new Date(data.Data.TimeStamp);
 
-	            for (var i = 0; i < me.Sensors.length; i++) {
-	                if (me.Sensors[i].NodeNo == data.Data.NodeNo && me.Sensors[i].SensorNo == data.Data.SensorNo) {
-	                    me.Sensors[i].set("SensorValueValue", data.Data.Value);
-	                    me.Sensors[i].set("SensorValueTimeStamp", data.Data.TimeStamp);
-	                    break;
-	                }
-	            }
+	            $.each(me.Sensors, function (idx, sensor) {
+	                if (sensor.NodeNo == data.Data.NodeNo && sensor.SensorNo == data.Data.SensorNo) {
+	                    sensor.set("SensorValueValue", data.Data.Value);
+	                    sensor.set("SensorValueTimeStamp", data.Data.TimeStamp);
 
-	            me.SensorValues.push(data.Data);
+	                    sensor.SensorValues.splice(0, 1);
+	                    sensor.SensorValues.push(data.Data);
+
+	                    return false;
+	                }
+	            });
 	        }
 
 	        function onUnitSystemChanged(data) {

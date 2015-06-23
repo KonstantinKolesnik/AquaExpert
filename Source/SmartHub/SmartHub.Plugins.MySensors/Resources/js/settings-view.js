@@ -1,7 +1,7 @@
 ﻿
 define(
-	['common', 'lib', 'text!webapp/mysensors/settings.html'],
-    function (common, lib, templates) {
+	['common', 'lib', 'webapp/monitors/utils', 'text!webapp/mysensors/settings.html'],
+    function (common, lib, monitorUtils, templates) {
         var ctrlNodesGrid;
         var ctrlSensorsGrid;
 
@@ -10,8 +10,9 @@ define(
 
             onShow: function () {
                 var me = this;
+                var viewModel = me.options.viewModel;
 
-                initKendoCustomGrid();
+                //initKendoCustomGrid();
 
                 createTabStrip($("#tabstrip"));
                 ctrlNodesGrid = createNodesGrid($("#gridNodes"), null, { field: "NodeNo", dir: "asc" });
@@ -22,7 +23,7 @@ define(
                 //$(window).resize(adjustSizes);
                 //adjustSizes();
 
-                kendo.bind($("#content"), this.options.viewModel);
+                kendo.bind($("#content"), viewModel);
 
                 function initKendoCustomGrid() {
                     // add "beforeEdit" event:
@@ -155,6 +156,21 @@ define(
                             lib.kendo.bind(e.detailRow, e.data);
 
                             function createSensorValuesChart() {
+                                viewModel.getSensorMonitor(e.data.Id, function (data) {
+                                    if (data)
+                                        setTimeout(function () { monitorUtils.createMonitorWidget(e.detailRow.find(".sensorDetailsValues"), data); }, 0);
+                                });
+
+
+                                return;
+
+
+
+
+
+
+
+
                                 e.detailRow.find(".sensorDetailsOptions").bind("change", function () {
                                     var chart = e.detailRow.find(".sensorDetailsValues").data("kendoChart"),
                                         series = chart.options.series,
