@@ -149,7 +149,7 @@ namespace SmartHub.Plugins.Controllers.Core
                                 mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
                         }
 
-                        Debug.WriteLine();
+                        //Debug.WriteLine();
                     }
                 }
                 else

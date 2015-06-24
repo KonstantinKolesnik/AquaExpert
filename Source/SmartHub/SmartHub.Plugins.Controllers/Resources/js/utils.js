@@ -38,11 +38,9 @@ define(['jquery', 'bootstrapSwitch', 'text!webapp/controllers/utils.html'],
                     tmpl = selector.find("#tmplError");
                 selector.find("#controller-body").html(tmpl.html());
 
-                $("[name='chbIsAutoMode']").bootstrapSwitch();
-                $('input[name="chbIsAutoMode"]').bootstrapSwitch('state', true, true);
-                $('input[name="chbIsAutoMode"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                    controller.set("IsAutoMode", state);
-                });
+                var swIsAutoMode = selector.find('input[name="chbIsAutoMode"]');
+                swIsAutoMode.bootstrapSwitch('state', controller.IsAutoMode, true);
+                swIsAutoMode.on('switchChange.bootstrapSwitch', function (event, state) { controller.set("IsAutoMode", state); });
 
                 var fn = null;
                 switch (controller.Type) {

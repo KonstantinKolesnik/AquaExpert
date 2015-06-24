@@ -307,7 +307,7 @@ float readPh()
 }
 uint16_t readDistance()
 {
-	// 1)
+	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
 	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
 	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
 	//Serial.print("Distance: ");

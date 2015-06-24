@@ -8,19 +8,19 @@ namespace SmartHub.Plugins.Controllers.Core
         Heater,
         [Description("Выключатель по расписанию")]
         ScheduledSwitch,
+        [Description("Уровень воды")]
+        WaterLevel,
 
 
 
         [Description("Освещение")]
         Light,
-        [Description("Уровень воды")]
-        WaterLevel,
         [Description("PH")]
         PH,
-        [Description("ORP")]
-        ORP,
         [Description("CO2")]
         CO2,
+        [Description("ORP")]
+        ORP,
         [Description("Кормление")]
         Feeder,
         [Description("Другой")]
