@@ -3,12 +3,15 @@
     <div class="panel-heading">
         <i class="fa fa-tachometer fa-2x"></i>
         <span class="panel-title" data-bind="html: Name"></span>
-        <strong class="panel-title pull-right">
+        <!--<strong class="panel-title pull-right">
             <label class="label"><input type="checkbox" data-bind="checked: IsAutoMode" /> Авто-режим</label>
-        </strong>
+        </strong>-->
     </div>
 
     <div class="panel-body">
+        <strong class="panel-title">
+            <label class="label"><input type="checkbox" data-bind="checked: IsAutoMode" /> Авто-режим</label>
+        </strong>
         <div id="controller-body"></div>
     </div>
 

@@ -3,15 +3,15 @@
     <h2 data-bind="text: Zone.Name"></h2>
 
     <div class="row">
-        <div id="monitorsHolder" class="col-xs-12 col-md-4">
+        <div id="monitorsHolder" class="col-xs-12 col-md-5">
             <h4>Мониторы</h4>
             <div id="lvMonitors" class="entity-list-view" data-bind="source: Zone.MonitorsList" data-template="tmplEntityListItem"></div>
         </div>
-        <div id="controllersHolder" class="col-xs-12 col-md-4">
+        <div id="controllersHolder" class="col-xs-12 col-md-6">
             <h4>Контроллеры</h4>
             <div id="lvControllers" class="entity-list-view" data-bind="source: Zone.ControllersList" data-template="tmplEntityListItem"></div>
         </div>
-        <div id="scriptsHolder" class="col-xs-12 col-md-4">
+        <div id="scriptsHolder" class="col-xs-12 col-md-3">
             <h4>Скрипты</h4>
             <div id="lvScripts" class="entity-list-view" data-bind="source: Zone.ScriptsList" data-template="tmplScriptView"></div>
         </div>
@@ -24,9 +24,7 @@
 
 <script id="tmplScriptView" type="text/x-kendo-template">
     <button class="k-button script-button" scriptid="${data.Id}" data-bind="value: this">
-        <div class="clearfix">
-            <span class="glyphicon glyphicon-flash pull-right" style="font-size:18px; padding:5px;"></span>
-        </div>
+        <i class="fa fa-flash fa-2x" style="margin:0 5px;"></i>
         <span class="script-button-title">#:Name#</span>
     </button>
 </script>
