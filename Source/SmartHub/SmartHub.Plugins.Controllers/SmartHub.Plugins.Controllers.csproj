@@ -59,6 +59,7 @@
     <Compile Include="Core\ControllerType.cs" />
     <Compile Include="Core\HeaterController.cs" />
     <Compile Include="Core\SwitchController.cs" />
+    <Compile Include="Core\WaterLevelController.cs" />
     <Compile Include="Data\Controller.cs" />
     <Compile Include="Data\Migrations.cs" />
     <Compile Include="ControllersPlugin.cs" />
