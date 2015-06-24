@@ -10,8 +10,18 @@
         'kendo',
         'signalR'
 	],
-	function (marionette, backbone, underscore, jquery, json2, chartjs, chartscatter, kendo, signalR) {
-		return {
+	function (
+        marionette,
+        backbone,
+        underscore,
+        jquery,
+        json2,
+        chartjs,
+        chartscatter,
+        kendo,
+        signalR) {
+
+	    return {
 			marionette: marionette,
 			backbone: backbone,
 			_: underscore,

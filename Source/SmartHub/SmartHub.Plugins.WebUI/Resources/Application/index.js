@@ -19,6 +19,8 @@
 		codemirror: 'vendor/js/codemirror-all',
 		chart: 'vendor/js/chart.min',
 		'chart.scatter': 'vendor/js/chart.scatter.min',
+		bootstrapToggle: 'vendor/js/bootstrap-toggle.min',
+		bootstrapSwitch: 'vendor/js/bootstrap-switch.min',
 
 		tiles:				'application/tiles/tiles',
 		'tiles-edit-mode':	'application/tiles/tiles-edit-mode',
@@ -62,6 +64,8 @@
 	}
 });
 
-require(['app', 'common', 'bootstrap'], function (app) {
-    app.start();
-});
+require(
+    ['app', 'common', 'bootstrap'],
+    function (app) {
+        app.start();
+    });

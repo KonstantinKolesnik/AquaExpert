@@ -29,6 +29,8 @@ namespace SmartHub.Plugins.WebUI
     [JavaScriptResource("/vendor/js/backbone.syphon.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.backbone.syphon.js")]
     [JavaScriptResource("/vendor/js/bootstrap.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.bootstrap.min.js")]
     [JavaScriptResource("/vendor/js/moment.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.moment.min.js")]
+    [JavaScriptResource("/vendor/js/bootstrap-toggle.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.bootstrap-toggle.min.js")]
+    [JavaScriptResource("/vendor/js/bootstrap-switch.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.bootstrap-switch.min.js")]
 
     [JavaScriptResource("/vendor/js/codemirror-all.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror-all.js")]
     [JavaScriptResource("/vendor/js/codemirror.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.codemirror.js")]
@@ -44,6 +46,7 @@ namespace SmartHub.Plugins.WebUI
 
     [JavaScriptResource("/vendor/js/kendo.all.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.js")]
     [JavaScriptResource("/vendor/js/jquery.signalR-2.1.2.min.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.jquery.signalR-2.1.2.min.js")]
+
 
     // fonts
     [HttpResource("/vendor/fonts/glyphicons-halflings-regular.eot", "SmartHub.Plugins.WebUI.Resources.Vendor.fonts.glyphicons-halflings-regular.eot", "application/vnd.ms-fontobject")]
@@ -62,8 +65,8 @@ namespace SmartHub.Plugins.WebUI
     [CssResource("/vendor/css/font-awesome.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.font-awesome.min.css")]
     [CssResource("/vendor/css/site.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.site.css")]
     [CssResource("/vendor/css/codemirror.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.codemirror.css", AutoLoad = true)]
-
-
+    [CssResource("/vendor/css/bootstrap-toggle.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.bootstrap-toggle.min.css", AutoLoad = true)]
+    [CssResource("/vendor/css/bootstrap-switch.min.css", "SmartHub.Plugins.WebUI.Resources.Vendor.css.bootstrap-switch.min.css", AutoLoad = true)]
 
     // kendo
     [JavaScriptResource("/vendor/js/kendo.all.min.intellisense.js", "SmartHub.Plugins.WebUI.Resources.Vendor.js.kendo.all.min.intellisense.js")]

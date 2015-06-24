@@ -1,6 +1,6 @@
 ﻿
-define(['jquery', 'text!webapp/controllers/utils.html'],
-    function ($, templates) {
+define(['jquery', 'bootstrapSwitch', 'text!webapp/controllers/utils.html'],
+    function ($, bootstrapSwitch, templates) {
         var api = {
             setControllerIsAutoMode: function (controller, onComplete) {
                 $.post('/api/controllers/setisautomode', { id: controller.Id, isAutoMode: controller.IsAutoMode })
@@ -37,6 +37,12 @@ define(['jquery', 'text!webapp/controllers/utils.html'],
                 if (!tmpl.length)
                     tmpl = selector.find("#tmplError");
                 selector.find("#controller-body").html(tmpl.html());
+
+                $("[name='chbIsAutoMode']").bootstrapSwitch();
+                $('input[name="chbIsAutoMode"]').bootstrapSwitch('state', true, true);
+                $('input[name="chbIsAutoMode"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                    controller.set("IsAutoMode", state);
+                });
 
                 var fn = null;
                 switch (controller.Type) {
