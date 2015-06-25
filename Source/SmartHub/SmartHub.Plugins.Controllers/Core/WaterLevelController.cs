@@ -23,9 +23,10 @@ namespace SmartHub.Plugins.Controllers.Core
             public int DistanceAlarmMin { get; set; }
             public string DistanceAlarmMinText { get; set; }
 
+            public DayOfWeek ExchangeWeekDay { get; set; }
+            public DateTime ExchangeTime { get; set; }
 
             public bool IsExchangeMode { get; set; }
-
 
             public static ControllerConfiguration Default
             {
@@ -38,11 +39,14 @@ namespace SmartHub.Plugins.Controllers.Core
                         SensorDistanceID = Guid.Empty,
 
                         DistanceMin = 3,
-                        DistanceMax = 5,
-                        DistanceExchangeMax = 15,
+                        DistanceMax = 4,
+                        DistanceExchangeMax = 20,
 
                         DistanceAlarmMin = 1,
                         DistanceAlarmMinText = "Критически высокий уровень воды",
+
+                        ExchangeWeekDay = DayOfWeek.Saturday,
+                        ExchangeTime = new DateTime(1970, 1, 1, 14, 0, 0, DateTimeKind.Local),
 
                         IsExchangeMode = false
                     };
@@ -106,6 +110,20 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Private methods
+        private bool CheckForStartExchange()
+        {
+            DateTime now = DateTime.Now;
+
+            if (!configuration.IsExchangeMode && now.DayOfWeek == configuration.ExchangeWeekDay)
+            {
+
+
+                TimeSpan start = configuration.ExchangeTime.ToLocalTime().TimeOfDay;
+            }
+
+            return false;
+        }
+
         protected override void Process(float? value)
         {
             if (IsAutoMode)
@@ -117,6 +135,9 @@ namespace SmartHub.Plugins.Controllers.Core
 
                     //var svOutSwitch = mySensors.GetLastSensorValue(SensorOutSwitch);
                     //var vOutSwitch = svOutSwitch != null ? svOutSwitch.Value : (float?)null;
+
+
+
 
                     if (configuration.IsExchangeMode)
                     {

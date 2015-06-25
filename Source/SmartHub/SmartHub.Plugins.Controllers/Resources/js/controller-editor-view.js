@@ -6,8 +6,9 @@ define(
             template: lib._.template(templates),
             onShow: function () {
                 var me = this;
+                var viewModel = this.options.viewModel;
 
-                var type = this.options.viewModel.Controller.Type;
+                var type = viewModel.Controller.Type;
 
                 var tmpl = $("#tmpl" + type);
                 if (!tmpl.length)
@@ -24,7 +25,7 @@ define(
                 if (fn)
                     fn();
 
-                kendo.bind($("#content"), this.options.viewModel);
+                kendo.bind($("#content"), viewModel);
 
                 function initHeaterController() {
                     //Switch = 3,             // Switch Actuator (on/off)
@@ -146,9 +147,10 @@ define(
                     }
                 }
                 function initWaterLevelController() {
+                    viewModel.Controller.Configuration.ExchangeTime = new Date(viewModel.Controller.Configuration.ExchangeTime);
+
                     //Switch = 3,             // Switch Actuator (on/off)
                     //Distance = 15,          // Distance sensor
-
                     createSensorSelector($("#ddlWaterLevelSensorDistance"), 15);
                     createSensorSelector($("#ddlWaterLevelSensorInSwitch"), 3);
                     createSensorSelector($("#ddlWaterLevelSensorOutSwitch"), 3);
@@ -156,7 +158,8 @@ define(
                     createNumericTextBox($("#ntbWaterLevelDistanceMax"), 4, 20, "n0", 0);
                     createNumericTextBox($("#ntbWaterLevelDistanceAlarmMin"), 0, 22, "n0", 0);
                     createTextBox($("#tbWaterLevelDistanceAlarmMinText"));
-
+                    createWeekDaySelector($("#ddlWaterLevelExchangeWeekDay"));
+                    createDatePointSelector($("#ddlWaterLevelExchangeTime"));
                 }
 
                 function createSensorSelector(selector, type) {
@@ -184,6 +187,22 @@ define(
                         step: 1,
                         format: format,
                         decimals: decimals
+                    });
+                }
+                function createWeekDaySelector(selector) {
+                    selector.kendoDropDownList({
+                        dataSource: [
+                            { value: "1", text: "Понедельник" },
+                            { value: "2", text: "Вторник" },
+                            { value: "3", text: "Среда" },
+                            { value: "4", text: "Четверг" },
+                            { value: "5", text: "Пятница" },
+                            { value: "6", text: "Суббота" },
+                            { value: "0", text: "Воскресенье" }
+                        ],
+                        dataValueField: "value",
+                        dataTextField: "text",
+                        valuePrimitive: true
                     });
                 }
                 function createDatePointSelector(selector) {
