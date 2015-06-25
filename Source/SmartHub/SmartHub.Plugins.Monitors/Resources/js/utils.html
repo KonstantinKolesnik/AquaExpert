@@ -33,10 +33,10 @@
 
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
-    var val = data.SensorValues.length ? data.SensorValues[data.SensorValues.length - 1].Value : null;
+    var val = (data.SensorValues && data.SensorValues.length) ? (data.SensorValues[data.SensorValues.length - 1].Value) : null;
 
     if (val == null) { #
-        --
+        #= "--" #
     # } else {
         var config = JSON.parse(data.Configuration);
         var templ = config.valueAxes[0].labels.template;
