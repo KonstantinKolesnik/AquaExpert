@@ -91,6 +91,7 @@ namespace SmartHub.Plugins.Controllers
             {
                 case ControllerType.Heater: return new HeaterController(controller);
                 case ControllerType.ScheduledSwitch: return new SwitchController(controller);
+                case ControllerType.WaterLevel: return new WaterLevelController(controller);
 
                 default: return null;
             }
@@ -186,7 +187,7 @@ namespace SmartHub.Plugins.Controllers
                 Id = Guid.NewGuid(),
                 Name = name,
                 Type = type,
-                IsAutoMode = true
+                IsAutoMode = false
             };
 
             ControllerBase controller = ConvertController(ctrl);

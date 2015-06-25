@@ -5,11 +5,6 @@ using SmartHub.Plugins.MySensors.Core;
 using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Speech;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.Plugins.Controllers.Core
 {
@@ -44,9 +39,9 @@ namespace SmartHub.Plugins.Controllers.Core
 
                         DistanceMin = 3,
                         DistanceMax = 5,
-                        DistanceExchangeMax = 12,
+                        DistanceExchangeMax = 15,
 
-                        DistanceAlarmMin = 2,
+                        DistanceAlarmMin = 1,
                         DistanceAlarmMinText = "Критически высокий уровень воды",
 
                         IsExchangeMode = false
@@ -57,8 +52,6 @@ namespace SmartHub.Plugins.Controllers.Core
 
         #region Fields
         private ControllerConfiguration configuration = null;
-
-        private float distance = 20;
         #endregion
 
         #region Properties
@@ -119,13 +112,11 @@ namespace SmartHub.Plugins.Controllers.Core
             {
                 if (value.HasValue) // distance
                 {
-                    //var distance = value.Value;
+                    //var svInSwitch = mySensors.GetLastSensorValue(SensorInSwitch);
+                    //var vInSwitch = svInSwitch != null ? svInSwitch.Value : (float?)null;
 
-                    var svInSwitch = mySensors.GetLastSensorValue(SensorInSwitch);
-                    var vInSwitch = svInSwitch != null ? svInSwitch.Value : (float?)null;
-
-                    var svOutSwitch = mySensors.GetLastSensorValue(SensorOutSwitch);
-                    var vOutSwitch = svOutSwitch != null ? svOutSwitch.Value : (float?)null;
+                    //var svOutSwitch = mySensors.GetLastSensorValue(SensorOutSwitch);
+                    //var vOutSwitch = svOutSwitch != null ? svOutSwitch.Value : (float?)null;
 
                     if (configuration.IsExchangeMode)
                     {
@@ -134,22 +125,10 @@ namespace SmartHub.Plugins.Controllers.Core
                     }
                     else
                     {
-                        if (distance <= configuration.DistanceMin) // overflow
-                        {
-                            if (vInSwitch == 1)
-                                mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 0); // stop In
-                            else
-                                mySensors.SetSensorValue(SensorOutSwitch, SensorValueType.Switch, 1); // start Out
-                        }
-                        else // insufficient level
-                        {
-                            if (vOutSwitch == 1)
-                                mySensors.SetSensorValue(SensorOutSwitch, SensorValueType.Switch, 0); // stop Out
-                            else
-                                mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
-                        }
-
-                        //Debug.WriteLine();
+                        if (value.Value <= configuration.DistanceMin) // overflow
+                            mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 0); // stop In
+                        else if (value.Value > configuration.DistanceMax)// insufficient level
+                            mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
                     }
                 }
                 else
@@ -180,10 +159,8 @@ namespace SmartHub.Plugins.Controllers.Core
         }
         public override void TimerElapsed(DateTime now)
         {
-            //var lastSV = mySensors.GetLastSensorValue(SensorDistance);
-            //Process(lastSV != null ? lastSV.Value : (float?)null);
-
-            Process(distance);
+            var lastSV = mySensors.GetLastSensorValue(SensorDistance);
+            Process(lastSV != null ? lastSV.Value : (float?)null);
         }
         #endregion
     }

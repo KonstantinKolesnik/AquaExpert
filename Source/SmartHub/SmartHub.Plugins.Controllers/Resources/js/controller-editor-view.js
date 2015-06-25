@@ -18,7 +18,7 @@ define(
                 switch (type) {
                     case 0: fn = initHeaterController; break;
                     case 1: fn = initSwitchController; break;
-
+                    case 2: fn = initWaterLevelController; break;
 
                 }
                 if (fn)
@@ -144,6 +144,19 @@ define(
                         else
                             grid.closeCell();
                     }
+                }
+                function initWaterLevelController() {
+                    //Switch = 3,             // Switch Actuator (on/off)
+                    //Distance = 15,          // Distance sensor
+
+                    createSensorSelector($("#ddlWaterLevelSensorDistance"), 15);
+                    createSensorSelector($("#ddlWaterLevelSensorInSwitch"), 3);
+                    createSensorSelector($("#ddlWaterLevelSensorOutSwitch"), 3);
+                    createNumericTextBox($("#ntbWaterLevelDistanceMin"), 2, 10, "n0", 0);
+                    createNumericTextBox($("#ntbWaterLevelDistanceMax"), 4, 20, "n0", 0);
+                    createNumericTextBox($("#ntbWaterLevelDistanceAlarmMin"), 0, 22, "n0", 0);
+                    createTextBox($("#tbWaterLevelDistanceAlarmMinText"));
+
                 }
 
                 function createSensorSelector(selector, type) {

@@ -70,7 +70,6 @@ namespace SmartHub.Plugins.Controllers.Core
         public abstract void SetConfiguration(string configuration);
         public abstract bool IsMyMessage(SensorMessage message);
         public abstract void RequestSensorsValues();
-
         public virtual void SendSensorsValues()
         {
         }
