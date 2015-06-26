@@ -33,18 +33,20 @@
 
 <script id="tmplLastSensorValue" type="text/x-kendo-template">
     #
-    var val = (data.SensorValues && data.SensorValues.length) ? (data.SensorValues[data.SensorValues.length - 1].Value) : null;
+    var lastValue = (data.SensorValues && data.SensorValues.length) ? (data.SensorValues[data.SensorValues.length - 1].Value) : null;
 
-    if (val == null) { #
-        #= "--" #
+    if (lastValue == null) { #
+        --
     # } else {
         var config = JSON.parse(data.Configuration);
-        var templ = config.valueAxes[0].labels.template;
+        var axis = config.valueAxis ? config.valueAxis : config.valueAxes[0];
+        var templ = axis.labels.template;
+        
         if (templ) {
-            var result = kendo.template(templ)({ value: val }); #
+            var result = kendo.template(templ)({ value: lastValue }); #
             #= result #
         # } else { #
-            #= val #
+            #= lastValue #
         # }
     } #
 </script>
