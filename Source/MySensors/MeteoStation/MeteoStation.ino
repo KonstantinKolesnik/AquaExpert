@@ -380,7 +380,9 @@ void processRain()
 		//Serial.print("Rain: ");
 		//Serial.println(val);
 
-		//int range = map(val, 0, 1024, 1, 4);
+		//1010 - dry
+		//250 - wet
+
 
 		////greater than 1000, probably not touching anything
 		//if (val >= 1000)
@@ -401,10 +403,15 @@ void processRain()
 		//	//less than 400, quite moist
 		//	Serial.println("Soil is quite most, thank you very much.");
 
-		if (val != lastRain)
+		int range = map(val, 1023, 0, 0, 3);
+
+		//Serial.print("Rain: ");
+		//Serial.println(range);
+
+		if (range != lastRain)
 		{
-			lastRain = val;
-			//gw.send(msgRain.set(val));
+			lastRain = range;
+			gw.send(msgRain.set(range));
 		}
 	}
 }
