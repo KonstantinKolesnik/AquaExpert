@@ -32,5 +32,6 @@ namespace SmartHub.Plugins.MySensors.Core
         SceneController = 25,   // Scene controller device
         Ph = 26,                // Ph sensor
         ORP = 27,               // ORP sensor
+        Informer = 28,          // Display device
     }
 }

@@ -148,14 +148,28 @@ namespace SmartHub.Plugins.MySensors
             if (gatewayProxy != null && sensor != null)
                 gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Request, false, (byte)type, ""));
         }
+        
         public void SetSensorValue(Sensor sensor, SensorValueType type, float value)
+        {
+            SetSensorValue(sensor, (byte)type, value);
+        }
+        public void SetSensorValue(Sensor sensor, byte type, float value)
         {
             if (gatewayProxy != null && sensor != null)
             {
                 var lastSV = GetLastSensorValue(sensor);
                 if (lastSV == null || (lastSV.Value != value))
-                    gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, (byte)type, value));
+                    gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, type, value));
             }
+        }
+        public void SetSensorValue(Sensor sensor, SensorValueType type, string value)
+        {
+            SetSensorValue(sensor, (byte)type, value);
+        }
+        public void SetSensorValue(Sensor sensor, byte type, string value)
+        {
+            if (gatewayProxy != null && sensor != null)
+                gatewayProxy.Send(new SensorMessage(sensor.NodeNo, sensor.SensorNo, SensorMessageType.Set, false, type, value));
         }
 
         public List<Node> GetNodes()

@@ -103,10 +103,7 @@ namespace SmartHub.Plugins.Controllers
         private void Connected()
         {
             foreach (ControllerBase controller in controllers)
-            {
                 controller.RequestSensorsValues(); // force sensors to report their current values
-                controller.SendSensorsValues(); // e.g. to nodes with display
-            }
         }
 
         [MySensorsMessageCalibration]
@@ -123,7 +120,6 @@ namespace SmartHub.Plugins.Controllers
                 controller.MessageReceived(message);
         }
 
-        //[RunPeriodically(1)]
         [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {

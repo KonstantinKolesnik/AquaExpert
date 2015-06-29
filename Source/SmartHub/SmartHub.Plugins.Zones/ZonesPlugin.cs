@@ -71,6 +71,15 @@ namespace SmartHub.Plugins.Zones
             using (var session = Context.OpenSession())
                 return session.Get<Zone>(id);
         }
+        public void Delete(Guid id)
+        {
+            using (var session = Context.OpenSession())
+            {
+                var zone = session.Load<Zone>(id);
+                session.Delete(zone);
+                session.Flush();
+            }
+        }
         #endregion
 
         #region Web API
@@ -244,16 +253,8 @@ namespace SmartHub.Plugins.Zones
         private object apiDeleteZone(HttpRequestParams request)
         {
             var id = request.GetRequiredGuid("Id");
-
-            using (var session = Context.OpenSession())
-            {
-                var zone = session.Load<Zone>(id);
-                session.Delete(zone);
-                session.Flush();
-            }
-
+            Delete(id);
             //NotifyForSignalR(new { MsgId = "SensorDeleted", Data = new { Id = id } });
-
             return null;
         }
         #endregion
