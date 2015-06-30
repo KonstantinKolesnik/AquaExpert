@@ -29,4 +29,17 @@ namespace SmartHub.Plugins.Monitors.Data
             Database.RemoveTable("Monitors_Monitors");
         }
     }
+
+    [Migration(2)]
+    public class Migration02 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddColumn("Monitors_Monitors", new Column("NameForInformer", DbType.String, ColumnProperty.Null));
+        }
+        public override void Revert()
+        {
+            Database.RemoveColumn("Monitors_Monitors", "NameForInformer");
+        }
+    }
 }

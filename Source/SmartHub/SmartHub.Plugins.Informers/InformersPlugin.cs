@@ -1,6 +1,7 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
+using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Informers.Data;
@@ -22,7 +23,7 @@ namespace SmartHub.Plugins.Informers
 
     [CssResource("/webapp/informers/css/style.css", "SmartHub.Plugins.Informers.Resources.css.style.css", AutoLoad = true)]
 
-    // zone editor
+    // informer editor
     [JavaScriptResource("/webapp/informers/informer-editor.js", "SmartHub.Plugins.Informers.Resources.js.informer-editor.js")]
     [JavaScriptResource("/webapp/informers/informer-editor-view.js", "SmartHub.Plugins.Informers.Resources.js.informer-editor-view.js")]
     [JavaScriptResource("/webapp/informers/informer-editor-model.js", "SmartHub.Plugins.Informers.Resources.js.informer-editor-model.js")]
@@ -92,13 +93,45 @@ namespace SmartHub.Plugins.Informers
                             var sensor = mySensors.GetSensor(monitor.SensorId);
                             if (sensor != null)
                             {
+                                var lineNo = (byte)monitorsIds.IndexOf(monitorId);
+
+                                string property = string.IsNullOrEmpty(monitor.NameForInformer) ? monitor.Name : monitor.NameForInformer;
+
                                 var lastSV = mySensors.GetLastSensorValue(sensor);
                                 string value = lastSV != null ? lastSV.Value.ToString() : "--";
 
-                                var lineNo = (byte)monitorsIds.IndexOf(monitorId);
+                                var json = string.IsNullOrWhiteSpace(monitor.Configuration) ? "{}" : monitor.Configuration;
+                                dynamic config = Extensions.FromJson(json);
+                                string valueTemplate = config["series"][0]["tooltip"]["template"];
+                                //"#= kendo.toString(data.value, 'n1') # °C"
+                                //"#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
+
+
+
+
+
+                                //JObject obj = JObject.Parse(json);
+                                //MyJsonObject[] objArr = JsonConvert.DeserializeObject<MyJsonObject[]>(obj["json"][0]["zayavki"].ToString());
+                                //foreach (MyJsonObject myJsonObj in objArr)
+                                //{
+                                //    Console.WriteLine("Uuid: {0}", myJsonObj.Uuid);
+                                //    Console.WriteLine("Date: {0}", myJsonObj.Date.ToString("dd/MM/yyyy"));
+                                //    Console.WriteLine("Comment: {0}", myJsonObj.Comment);
+                                //    Console.WriteLine("FirmID: {0}", myJsonObj.FirmID);
+                                //    Console.WriteLine(new string('-', 10));
+                                //}
+
+
+
+
+
+
+
+
+
 
                                 StringBuilder sb = new StringBuilder();
-                                sb.AppendFormat("{0}: {1}", monitor.Name, value);
+                                sb.AppendFormat("{0}: {1}", property, value);
 
                                 mySensors.SetSensorValue(sensorDisplay, lineNo, sb.ToString());
                             }

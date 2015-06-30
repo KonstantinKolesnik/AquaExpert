@@ -7,6 +7,7 @@ namespace SmartHub.Plugins.Monitors.Data
     {
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
+        public virtual string NameForInformer { get; set; }
         public virtual Guid SensorId { get; set; }
         public virtual string Configuration { get; set; }
 

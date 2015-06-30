@@ -21,6 +21,16 @@ define(['jquery'], function ($) {
                     onError(data);
                 });
         },
+        setMonitorNameForInformer: function (id, name, onComplete) {
+            $.post('/api/monitors/setnameforinformer', { id: id, name: name })
+                .done(function (data) {
+                    if (onComplete)
+                        onComplete(data);
+                })
+                .fail(function (data) {
+                    onError(data);
+                });
+        },
         deleteMonitor: function (id, onComplete) {
             $.post('/api/monitors/delete', { id: id })
                 .done(function (data) {
@@ -44,6 +54,7 @@ define(['jquery'], function ($) {
 
         addMonitor: api.addMonitor,
         setMonitorName: api.setMonitorName,
+        setMonitorNameForInformer: api.setMonitorNameForInformer,
         deleteMonitor: api.deleteMonitor
     };
 });

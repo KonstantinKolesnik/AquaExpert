@@ -60,6 +60,7 @@ define(
                         },
                         columns: [
                             { field: "Name", title: "Имя", editor: getEditor },
+                            { field: "NameForInformer", title: "Имя для информера", editor: getEditor },
                             { field: "SensorName", title: "Сенсор", editor: getEditor },
                             {
                                 title: "&nbsp;", width: 220, reorderable: false, sortable: false, editor: getEditor, attributes: { "class": "text-center" },
@@ -105,6 +106,20 @@ define(
                                 var newValue = editor.val();
                                 if (newValue != oldValue)
                                     me.trigger('monitor:setName', options.model.Id, newValue);
+                            });
+                    }
+                    else if (options.field == "NameForInformer") {
+                        var oldValue = options.model[options.field];
+
+                        var editor = $("<input type='text' class='k-textbox' style='width:100%;'/>");
+                        editor.appendTo(container)
+                            .show().focus()
+                            .unbind("keydown").keydown(preventEnter)
+                            .val(oldValue)
+                            .blur(function () {
+                                var newValue = editor.val();
+                                if (newValue != oldValue)
+                                    me.trigger('monitor:setNameForInformer', options.model.Id, newValue);
                             });
                     }
                     else

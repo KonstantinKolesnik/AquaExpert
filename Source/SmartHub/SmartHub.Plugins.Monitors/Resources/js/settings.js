@@ -24,6 +24,9 @@
 
 	            models.setMonitorName(id, name, function () { view.refreshMonitorsGrid(); });
 	        },
+	        setMonitorNameForInformer: function (id, name) {
+	            models.setMonitorNameForInformer(id, name, function () { view.refreshMonitorsGrid(); });
+	        },
 	        editMonitor: function (id) {
 	            application.navigate('webapp/monitors/monitor-editor', id);
 	        },
@@ -35,6 +38,7 @@
 	            view = new views.LayoutView({ viewModel: models.ViewModel });
 	            view.on('monitor:add', module.addMonitor);
 	            view.on('monitor:setName', module.setMonitorName);
+	            view.on('monitor:setNameForInformer', module.setMonitorNameForInformer);
 	            view.on('monitor:edit', module.editMonitor);
 	            view.on('monitor:delete', module.deleteMonitor);
 	            application.setContentView(view);

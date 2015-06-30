@@ -91,6 +91,7 @@ namespace SmartHub.Plugins.Monitors
             {
                 Id = monitor.Id,
                 Name = monitor.Name,
+                NameForInformer = monitor.NameForInformer,
                 SensorName = mySensors.GetSensor(monitor.SensorId).Name
             };
         }
@@ -170,6 +171,31 @@ namespace SmartHub.Plugins.Monitors
             {
                 var monitor = session.Load<Monitor>(id);
                 monitor.Name = name;
+                session.Flush();
+            }
+
+            //NotifyForSignalR(new
+            //{
+            //    MsgId = "SensorNameChanged",
+            //    Data = new
+            //    {
+            //        Id = id,
+            //        Name = name
+            //    }
+            //});
+
+            return null;
+        }
+        [HttpCommand("/api/monitors/setnameforinformer")]
+        private object apiSetMonitorNameForInformer(HttpRequestParams request)
+        {
+            var id = request.GetRequiredGuid("id");
+            var name = request.GetString("name");
+
+            using (var session = Context.OpenSession())
+            {
+                var monitor = session.Load<Monitor>(id);
+                monitor.NameForInformer = name;
                 session.Flush();
             }
 
