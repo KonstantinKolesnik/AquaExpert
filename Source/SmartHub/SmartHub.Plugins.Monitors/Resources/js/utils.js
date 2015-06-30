@@ -163,7 +163,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
 
                         //axisCrossingValues: [0],
                         labels: {
-                            rotation: 315,
+                            rotation: 335,//315
                             font: "9px Segoe UI",
                             dateFormats: {
                                 minutes: "mm:ss",
@@ -173,7 +173,7 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                                 months: "yyyy MMM",
                                 years: "yyyy"
                             },
-                            template: "#: kendo.toString(new Date(value), 'HH:mm') #" //"#: kendo.toString(new Date(value), 'd.MM - HH:mm') #"
+                            template: "#: kendo.toString(new Date(value), 'd.MM-HH:mm') #"
                         },
                         line: { visible: true },
                         majorGridLines: { visible: true }
