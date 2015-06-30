@@ -104,7 +104,7 @@ namespace SmartHub.Plugins.Informers
                                 dynamic config = Extensions.FromJson(json);
                                 string valueTemplate = config["series"][0]["tooltip"]["template"];
                                 //"#= kendo.toString(data.value, 'n1') # °C"
-                                //"#= kendo.toString(value / 133.3, 'n2') #&nbsp;mmHg"
+                                //"#= kendo.toString(value / 133.3, 'n2') # mmHg"
 
 
 
