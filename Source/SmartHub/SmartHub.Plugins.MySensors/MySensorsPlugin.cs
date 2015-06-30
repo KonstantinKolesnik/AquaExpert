@@ -182,10 +182,15 @@ namespace SmartHub.Plugins.MySensors
             using (var session = Context.OpenSession())
                 return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
         }
-        public Node GetNode(Guid id)
+        public Node GetNode(Guid nodeId)
         {
             using (var session = Context.OpenSession())
-                return session.Get<Node>(id);
+                return session.Get<Node>(nodeId);
+        }
+        public void RebootNode(Node node)
+        {
+            if (gatewayProxy != null && node != null)
+                gatewayProxy.Send(new SensorMessage(node.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
 
         public List<Sensor> GetSensors()
@@ -226,9 +231,9 @@ namespace SmartHub.Plugins.MySensors
         {
             return node != null ? GetLastBatteryLevel(node.NodeNo) : null;
         }
-        public BatteryLevel GetLastBatteryLevel(Guid id)
+        public BatteryLevel GetLastBatteryLevel(Guid nodeId)
         {
-            return GetLastBatteryLevel(GetNode(id));
+            return GetLastBatteryLevel(GetNode(nodeId));
         }
 
         public List<BatteryLevel> GetBatteryLevels(int nodeNo, int hours, int count)
@@ -261,13 +266,13 @@ namespace SmartHub.Plugins.MySensors
         {
             return node != null ? GetBatteryLevels(node.NodeNo, count) : new List<BatteryLevel>();
         }
-        public List<BatteryLevel> GetBatteryLevels(Guid id, int hours, int count)
+        public List<BatteryLevel> GetBatteryLevels(Guid nodeId, int hours, int count)
         {
-            return GetBatteryLevels(GetNode(id), hours, count);
+            return GetBatteryLevels(GetNode(nodeId), hours, count);
         }
-        public List<BatteryLevel> GetBatteryLevels(Guid id, int count)
+        public List<BatteryLevel> GetBatteryLevels(Guid nodeId, int count)
         {
-            return GetBatteryLevels(GetNode(id), count);
+            return GetBatteryLevels(GetNode(nodeId), count);
         }
 
         public SensorValue GetLastSensorValue()
@@ -287,9 +292,9 @@ namespace SmartHub.Plugins.MySensors
         {
             return sensor != null ? GetLastSensorValue(sensor.NodeNo, sensor.SensorNo) : null;
         }
-        public SensorValue GetLastSensorValue(Guid id)
+        public SensorValue GetLastSensorValue(Guid sensorId)
         {
-            return GetLastSensorValue(GetSensor(id));
+            return GetLastSensorValue(GetSensor(sensorId));
         }
         
         public List<SensorValue> GetSensorValues(int nodeNo, int sensorNo, int hours, int count)
@@ -322,13 +327,13 @@ namespace SmartHub.Plugins.MySensors
         {
             return sensor != null ? GetSensorValues(sensor.NodeNo, sensor.SensorNo, count) : new List<SensorValue>();
         }
-        public List<SensorValue> GetSensorValues(Guid id, int hours, int count)
+        public List<SensorValue> GetSensorValues(Guid sensorId, int hours, int count)
         {
-            return GetSensorValues(GetSensor(id), hours, count);
+            return GetSensorValues(GetSensor(sensorId), hours, count);
         }
-        public List<SensorValue> GetSensorValues(Guid id, int count)
+        public List<SensorValue> GetSensorValues(Guid sensorId, int count)
         {
-            return GetSensorValues(GetSensor(id), count);
+            return GetSensorValues(GetSensor(sensorId), count);
         }
 
         public int DeleteSensorValues(DateTime dateTo)
@@ -362,11 +367,6 @@ namespace SmartHub.Plugins.MySensors
         public static bool IsMessageFromSensor(SensorMessage msg, Sensor sensor)
         {
             return msg != null && sensor != null && sensor.NodeNo == msg.NodeNo && sensor.SensorNo == msg.SensorNo;
-        }
-        public void RebootNode(Node node)
-        {
-            if (gatewayProxy != null && node != null)
-                gatewayProxy.Send(new SensorMessage(node.NodeNo, 255, SensorMessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
         }
         #endregion
 
@@ -402,6 +402,11 @@ namespace SmartHub.Plugins.MySensors
 
             TimeSpan result = dtNow.Subtract(unixEpoch);
             return Convert.ToInt32(result.TotalSeconds);
+        }
+        private void CheckRebootRequest(Node node)
+        {
+            if (node != null && node.Reboot)
+                RebootNode(node);
         }
 
         private SensorValue SaveSensorValueToDB(SensorMessage message)
@@ -671,13 +676,12 @@ namespace SmartHub.Plugins.MySensors
                 #endregion
             }
 
-            //if (node != null && node.Reboot)
-            //    gatewayProxy.Send(new Message(node.NodeID, 255, MessageType.Internal, false, (byte)InternalValueType.Reboot, ""));
+            CheckRebootRequest(node);
         }
         private void gatewayProxy_Disconnected(object sender, EventArgs e)
         {
             Logger.Info("Disconnected.");
-            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
+            //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
             NotifyDisconnectedForPlugins();
             NotifyDisconnectedForScripts();
         }

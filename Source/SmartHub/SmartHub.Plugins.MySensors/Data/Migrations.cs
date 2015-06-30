@@ -93,4 +93,17 @@ namespace SmartHub.Plugins.MySensors.Data
             Database.RemoveTable("MySensors_Settings");
         }
     }
+
+    [Migration(2)]
+    public class Migration02 : Migration
+    {
+        public override void Apply()
+        {
+            Database.AddColumn("MySensors_Nodes", new Column("Reboot", DbType.Boolean, ColumnProperty.NotNull, "'false'"));
+        }
+        public override void Revert()
+        {
+            Database.RemoveColumn("MySensors_Nodes", "Reboot");
+        }
+    }
 }
