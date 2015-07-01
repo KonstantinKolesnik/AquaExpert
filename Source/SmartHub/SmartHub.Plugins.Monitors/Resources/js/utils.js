@@ -1,6 +1,6 @@
 ﻿
-define(['jquery', 'text!webapp/monitors/utils.html'],
-    function ($, templates) {
+define(['jquery', 'app', 'text!webapp/monitors/utils.html'],
+    function ($, application, templates) {
         var api = {
             createMonitorWidget: function (selector, monitor) {
                 var config = this.getDefaultConfiguration();
@@ -13,6 +13,13 @@ define(['jquery', 'text!webapp/monitors/utils.html'],
                     }
 
                 selector.html($(templates));
+
+                selector.find(".js-btn-settings").bind("click", function (e) {
+                    e.preventDefault();
+                    var id = $(e.currentTarget).attr("monitorid");
+                    application.navigate('webapp/monitors/monitor-editor', id);
+                });
+
                 var ctrl = selector.find(".monitor-chart").kendoChart(config).data("kendoChart");
                 kendo.bind(selector.find(".monitor-view"), monitor);
                 return ctrl;
