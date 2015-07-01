@@ -7,7 +7,8 @@ It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 #include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
-#include <NewPing.h>
+//#include <NewPing.h>
+#include <Ultrasonic.h>
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
 //#include <Time.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,12 +50,13 @@ const long intervalWater = 5000;
 #define DISTANCE_SENSOR_ID		11
 #define TRIGGER_PIN				A5  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
 #define ECHO_PIN				A4  // Arduino pin tied to Echo pin on the ultrasonic sensor.
-#define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+//#define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+//NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
-uint16_t lastDistance = -1;
+float lastDistance = -1;
 unsigned long prevMsDistance = -1000000;
-const long intervalDistance = 5000;
+const long intervalDistance = 3000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
@@ -181,18 +183,20 @@ void processDistance()
 	{
 		prevMsDistance = ms;
 
-		uint16_t distance = readDistance();
+		//uint16_t distance = readDistance();
+		float distance = readDistanceUltrasonic();
 
 		if (distance > 0)
 		{
 			if (distance != lastDistance)
 			{
 				lastDistance = distance;
-				gw.send(msgDistance.set(distance));
+				//gw.send(msgDistance.set(distance));
+				gw.send(msgDistance.set(distance, 1));
 
 #ifdef DEBUG
 				Serial.print("Distance: ");
-				Serial.print(distance); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+				Serial.print(distance, 1);
 				Serial.println(isMetric ? " cm" : " in");
 #endif
 			}
@@ -324,6 +328,7 @@ uint16_t readDistance()
 	for (int i = 0; i < 10; i++)
 	{
 		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
+		ultrasonic.Ranging(CM)
 		delay(50);
 	}
 
@@ -347,6 +352,35 @@ uint16_t readDistance()
 		avgValue += buf[i];
 
 	uint16_t distance = avgValue / 6;
+	return distance;
+}
+float readDistanceUltrasonic()
+{
+	// get 10 sample value from the sensor for smooth the value:
+	float buf[10];
+	for (int i = 0; i < 10; i++)
+		buf[i] = isMetric ? ultrasonic.Ranging(CM) : ultrasonic.Ranging(INC);
+
+	// sort the analog from small to large:
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = i + 1; j < 10; j++)
+		{
+			if (buf[i] > buf[j])
+			{
+				float temp = buf[i];
+				buf[i] = buf[j];
+				buf[j] = temp;
+			}
+		}
+	}
+
+	// store the average value:
+	float avgValue = 0;
+	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
+		avgValue += buf[i];
+
+	float distance = avgValue / 6;
 	return distance;
 }
 bool readWater()
