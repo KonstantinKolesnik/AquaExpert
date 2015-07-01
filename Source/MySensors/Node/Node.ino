@@ -20,19 +20,19 @@ void setup()
  
 void msgCallback(const MyMessage & msg)
 {
-
 }
 
 void loop()
 {
-	//process(); // call if this is repeater or actuator
+	//gw.process(); // call if this is repeater or actuator
 
-	//sendBatteryLevel(67); // in %
+	//gw.sendBatteryLevel(67); // in %
 	//gw.send(msg.set(OPEN));
 
 	//delay(10000); // Wait 10 seconds
 
 	Serial.print("12;6;1;0;0;36.5");
 	Serial.print('\n');
+	
 	delay(1000);
 }

@@ -20,7 +20,7 @@
 #include <MySensor.h>
 #include <SPI.h>
 #include <Adafruit_GFX.h>
-#include "SWTFT.h"
+#include <SWTFT.h>
 //#include <eeprom.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISPLAY_SENSOR_ID	0
