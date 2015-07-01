@@ -7,10 +7,13 @@ using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Informers.Data;
 using SmartHub.Plugins.Monitors;
 using SmartHub.Plugins.MySensors;
+using SmartHub.Plugins.MySensors.Core;
+using SmartHub.Plugins.MySensors.Data;
 using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -47,7 +50,6 @@ namespace SmartHub.Plugins.Informers
         {
             mySensors = Context.GetPlugin<MySensorsPlugin>();
             monitors = Context.GetPlugin<MonitorsPlugin>();
-            informers = Get();
         }
         #endregion
 
@@ -76,6 +78,26 @@ namespace SmartHub.Plugins.Informers
         #endregion
 
         #region Private methods
+        private string FormatSensorValue(SensorValue sv)
+        {
+            if (sv != null)
+                switch (sv.Type)
+                {
+                    case SensorValueType.Temperature: return sv.Value.ToString("N1") + " C"; ;// " °C";
+                    case SensorValueType.Humidity: return sv.Value.ToString("N1") + "%";
+                    case SensorValueType.Pressure: return (sv.Value / 133.3).ToString("N0") + " mmHg";
+
+
+
+
+
+
+                    default:
+                        return sv.Value.ToString();
+                }
+
+            return "--";
+        }
         private void UpdateInformer(Informer informer)
         {
             if (informer != null)
@@ -86,7 +108,6 @@ namespace SmartHub.Plugins.Informers
                     var monitorsIds = informer.GetMonitorsIds();
                     foreach (var monitorId in monitorsIds)
                     {
-
                         var monitor = monitors.Get(monitorId);
                         if (monitor != null)
                         {
@@ -94,41 +115,37 @@ namespace SmartHub.Plugins.Informers
                             if (sensor != null)
                             {
                                 var lineNo = (byte)monitorsIds.IndexOf(monitorId);
-
                                 string property = string.IsNullOrEmpty(monitor.NameForInformer) ? monitor.Name : monitor.NameForInformer;
-
                                 var lastSV = mySensors.GetLastSensorValue(sensor);
-                                string value = lastSV != null ? lastSV.Value.ToString() : "--";
-
-                                var json = string.IsNullOrWhiteSpace(monitor.Configuration) ? "{}" : monitor.Configuration;
-                                dynamic config = Extensions.FromJson(json);
-                                string valueTemplate = config["series"][0]["tooltip"]["template"];
-                                //"#= kendo.toString(data.value, 'n1') # °C"
-                                //"#= kendo.toString(value / 133.3, 'n2') # mmHg"
-
-
-
-
-
-                                //JObject obj = JObject.Parse(json);
-                                //MyJsonObject[] objArr = JsonConvert.DeserializeObject<MyJsonObject[]>(obj["json"][0]["zayavki"].ToString());
-                                //foreach (MyJsonObject myJsonObj in objArr)
+                                
+                                string value = FormatSensorValue(lastSV);
+                                
+                                //string value = "--";
+                                //if (lastSV != null)
                                 //{
-                                //    Console.WriteLine("Uuid: {0}", myJsonObj.Uuid);
-                                //    Console.WriteLine("Date: {0}", myJsonObj.Date.ToString("dd/MM/yyyy"));
-                                //    Console.WriteLine("Comment: {0}", myJsonObj.Comment);
-                                //    Console.WriteLine("FirmID: {0}", myJsonObj.FirmID);
-                                //    Console.WriteLine(new string('-', 10));
+                                //    value = lastSV.Value.ToString();
+
+                                //    //var json = string.IsNullOrWhiteSpace(monitor.Configuration) ? "{}" : monitor.Configuration;
+                                //    //dynamic config = Extensions.FromJson(json);
+                                //    //string valueTemplate = config["series"][0]["tooltip"]["template"];
+                                //    //"#= kendo.toString(data.value, 'n1') # °C"
+                                //    //"#= kendo.toString(value / 133.3, 'n2') # mmHg"
+
+
+                                //    //Debug.WriteLine(lineNo + ": " + property);
+
+
+                                //    //JObject obj = JObject.Parse(json);
+                                //    //MyJsonObject[] objArr = JsonConvert.DeserializeObject<MyJsonObject[]>(obj["json"][0]["zayavki"].ToString());
+                                //    //foreach (MyJsonObject myJsonObj in objArr)
+                                //    //{
+                                //    //    Console.WriteLine("Uuid: {0}", myJsonObj.Uuid);
+                                //    //    Console.WriteLine("Date: {0}", myJsonObj.Date.ToString("dd/MM/yyyy"));
+                                //    //    Console.WriteLine("Comment: {0}", myJsonObj.Comment);
+                                //    //    Console.WriteLine("FirmID: {0}", myJsonObj.FirmID);
+                                //    //    Console.WriteLine(new string('-', 10));
+                                //    //}
                                 //}
-
-
-
-
-
-
-
-
-
 
                                 StringBuilder sb = new StringBuilder();
                                 sb.AppendFormat("{0}: {1}", property, value);
@@ -147,6 +164,8 @@ namespace SmartHub.Plugins.Informers
         [Timer_10_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
+            informers = Get();
+
             foreach (Informer informer in informers)
                 UpdateInformer(informer);
         }

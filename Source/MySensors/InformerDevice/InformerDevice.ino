@@ -41,7 +41,6 @@ bool isMetric = true;
 MySensor gw(A5, DEFAULT_CS_PIN);
 
 #define	LINE_COUNT	10
-//char* lines[LINE_COUNT];
 String lines[LINE_COUNT];
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
@@ -70,6 +69,9 @@ void setup()
 	tft.fillScreen(BLACK);
 	tft.setTextColor(WHITE);
 	tft.setTextSize(2);
+	tft.setTextWrap(true);
+	tft.setCursor(0, 0);
+
 	tft.println("Waiting for data...");
 }
 void loop()
@@ -98,13 +100,12 @@ void displayText()
 {
 	tft.fillScreen(BLACK);
 	tft.setCursor(0, 0);
-	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
 
 	for (uint8_t lineNo = 0; lineNo < LINE_COUNT; lineNo++)
 	{
 		String txt = lines[lineNo];
-		const char* pTxt = txt.length() > 0 ? txt.c_str() : "--";
+		const char* pTxt = txt.length() > 0 ? txt.c_str() : "";
+		
 		Serial.println(pTxt);
 		tft.println(pTxt);
 	}

@@ -161,7 +161,7 @@
     </div>
 
     <div class="panel panel-info">
-        <div class="panel-heading">Контроль уровня</div>
+        <div class="panel-heading">Контроль регулярного уровня</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form">
                 <div class="form-group">
@@ -206,6 +206,18 @@
                     <label class="col-xs-12 col-sm-3 col-md-2" for="ddlWaterLevelExchangeTime">Время</label>
                     <div class="col-xs-12 col-sm-9 col-md-10">
                         <input id="ddlWaterLevelExchangeTime" class="inline-control555" data-bind="value: Controller.Configuration.ExchangeTime" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2" for="ntbWaterLevelDistanceExchangeMax">Макс. расстояние слива, см</label>
+                    <div class="col-xs-12 col-sm-9 col-md-10">
+                        <input id="ntbWaterLevelDistanceExchangeMax" data-bind="value: Controller.Configuration.DistanceExchangeMax" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2" for="tbWaterLevelDistanceAlarmMaxText">Оповещение при превыш. макс. расст. слива</label>
+                    <div class="col-xs-12 col-sm-9 col-md-10">
+                        <input type="text" id="tbWaterLevelDistanceAlarmMaxText" class="ddlSensorSelector k-textbox" data-bind="value: Controller.Configuration.DistanceAlarmMaxText" />
                     </div>
                 </div>
             </form>

@@ -16,12 +16,14 @@ namespace SmartHub.Plugins.Controllers.Core
             public Guid SensorOutSwitchID { get; set; }
             public Guid SensorDistanceID { get; set; }
 
+            // regular distance:
             public int DistanceMin { get; set; }
             public int DistanceMax { get; set; }
             public int DistanceAlarmMin { get; set; }
             public string DistanceAlarmMinText { get; set; }
 
-            public int DistanceExchangeMax { get; set; }
+            // water exchange:
+            public int DistanceExchangeMax { get; set; } // water out max distance
             public string DistanceAlarmMaxText { get; set; }
             public DayOfWeek ExchangeWeekDay { get; set; }
             public DateTime ExchangeTime { get; set; }
@@ -37,16 +39,15 @@ namespace SmartHub.Plugins.Controllers.Core
                         SensorOutSwitchID = Guid.Empty,
                         SensorDistanceID = Guid.Empty,
 
-                        DistanceMin = 3,
-                        DistanceMax = 4,
-                        DistanceExchangeMax = 20,
-                        DistanceAlarmMaxText = "Критически низкий уровень воды",
-
-                        DistanceAlarmMin = 1,
+                        DistanceMin = 15,
+                        DistanceMax = 17,
+                        DistanceAlarmMin = 14,
                         DistanceAlarmMinText = "Критически высокий уровень воды",
 
                         ExchangeWeekDay = DayOfWeek.Saturday,
                         ExchangeTime = new DateTime(1970, 1, 1, 14, 0, 0, DateTimeKind.Local),
+                        DistanceExchangeMax = 25,
+                        DistanceAlarmMaxText = "Критически низкий уровень воды",
 
                         IsExchangeMode = false
                     };
@@ -133,17 +134,11 @@ namespace SmartHub.Plugins.Controllers.Core
             if (!configuration.IsExchangeMode)
             {
                 DateTime now = DateTime.Now;
-                if (now.DayOfWeek == configuration.ExchangeWeekDay)
+                if (now.DayOfWeek == configuration.ExchangeWeekDay && CheckTime(configuration.ExchangeTime, now, lastExchangeTime))
                 {
-                    //TimeSpan now1 = now.TimeOfDay; ;
-                    //TimeSpan start = configuration.ExchangeTime.ToLocalTime().TimeOfDay;
-
-                    if (CheckTime(configuration.ExchangeTime, now, lastExchangeTime))
-                    {
-                        lastExchangeTime = now;
-                        configuration.IsExchangeMode = false;
-                        SaveToDB();
-                    }
+                    lastExchangeTime = now;
+                    configuration.IsExchangeMode = true;
+                    SaveToDB();
                 }
             }
         }
@@ -177,7 +172,7 @@ namespace SmartHub.Plugins.Controllers.Core
                     {
                         if (value.Value <= configuration.DistanceMin) // overflow
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 0); // stop In
-                        else if (value.Value > configuration.DistanceMax)// insufficient level
+                        else if (value.Value > configuration.DistanceMax) // insufficient level
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
                     }
                 }
@@ -190,7 +185,7 @@ namespace SmartHub.Plugins.Controllers.Core
             {
                 if (value.Value <= configuration.DistanceAlarmMin)
                     Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, value.Value));
-                else if (value.Value >= configuration.DistanceExchangeMax)
+                else if (value.Value > configuration.DistanceExchangeMax)
                     Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, value.Value));
             }
         }

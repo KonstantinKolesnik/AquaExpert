@@ -39,8 +39,11 @@
         --
     # } else {
         var config = JSON.parse(data.Configuration);
-        var axis = config.valueAxis ? config.valueAxis : config.valueAxes[0];
-        var templ = axis.labels.template;
+        
+        //var axis = config.valueAxis ? config.valueAxis : config.valueAxes[0];
+        //var templ = axis.labels.template;
+
+        var templ = config.series[0].tooltip.template;
         
         if (templ) {
             var result = kendo.template(templ)({ value: lastValue }); #

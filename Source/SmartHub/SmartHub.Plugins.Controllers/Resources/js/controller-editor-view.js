@@ -154,12 +154,16 @@ define(
                     createSensorSelector($("#ddlWaterLevelSensorDistance"), 15);
                     createSensorSelector($("#ddlWaterLevelSensorInSwitch"), 3);
                     createSensorSelector($("#ddlWaterLevelSensorOutSwitch"), 3);
-                    createNumericTextBox($("#ntbWaterLevelDistanceMin"), 2, 10, "n0", 0);
-                    createNumericTextBox($("#ntbWaterLevelDistanceMax"), 4, 20, "n0", 0);
-                    createNumericTextBox($("#ntbWaterLevelDistanceAlarmMin"), 0, 22, "n0", 0);
+
+                    createNumericTextBox($("#ntbWaterLevelDistanceMin"), 1, 100, "n0", 0);
+                    createNumericTextBox($("#ntbWaterLevelDistanceMax"), 1, 100, "n0", 0);
+                    createNumericTextBox($("#ntbWaterLevelDistanceAlarmMin"), 1, 100, "n0", 0);
                     createTextBox($("#tbWaterLevelDistanceAlarmMinText"));
+
                     createWeekDaySelector($("#ddlWaterLevelExchangeWeekDay"));
                     createDatePointSelector($("#ddlWaterLevelExchangeTime"));
+                    createNumericTextBox($("#ntbWaterLevelDistanceExchangeMax"), 1, 100, "n0", 0);
+                    createTextBox($("#tbWaterLevelDistanceAlarmMaxText"));
                 }
 
                 function createSensorSelector(selector, type) {
