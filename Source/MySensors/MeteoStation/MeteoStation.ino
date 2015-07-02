@@ -190,11 +190,11 @@ void onMessageReceived(const MyMessage &message)
 		else if (message.sensor == FORECAST_SENSOR_ID && message.type == V_FORECAST)
 			gw.send(msgForecast.set(lastForecast));
 		else if (message.sensor == GAS_SENSOR_ID && message.type == V_VAR1)
-			gw.send(msgGas.set(lastGas, 0));
+			gw.send(msgGas.set(lastGas));
 		else if (message.sensor == RAIN_SENSOR_ID && message.type == V_RAIN)
-			gw.send(msgRain.set(lastRain, 0));
+			gw.send(msgRain.set(lastRain));
 		else if (message.sensor == LIGHT_SENSOR_ID && message.type == V_LIGHT_LEVEL)
-			gw.send(msgLight.set(lastLight, 0));
+			gw.send(msgLight.set(lastLight));
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
