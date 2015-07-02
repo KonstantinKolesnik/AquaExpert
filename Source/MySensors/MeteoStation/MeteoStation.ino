@@ -68,7 +68,7 @@ bool firstRound = true;
 MyMessage msgGas(GAS_SENSOR_ID, V_VAR1);
 uint16_t lastGas = -1000000;
 unsigned long prevMsGas = -1000000;
-const long intervalGas = 30000;
+const long intervalGas = 60000;
 
 #define GAS_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
 #define RO_CLEAN_AIR_FACTOR         9.83	// RO_CLEAR_AIR_FACTOR=(Sensor resistance in clean air)/RO, which is derived from the chart in datasheet
@@ -95,7 +95,7 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (l
 MyMessage msgRain(RAIN_SENSOR_ID, V_RAINRATE); //V_RAIN
 uint16_t lastRain = -1000000;
 unsigned long prevMsRain = -1000000;
-const long intervalRain = 30000;
+const long intervalRain = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define LIGHT_SENSOR_ID				8
@@ -103,7 +103,7 @@ const long intervalRain = 30000;
 MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
 uint16_t lastLight = -1000000;
 unsigned long prevMsLight = -1000000;
-const long intervalLight = 30000;
+const long intervalLight = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 bool isMetric = true;
@@ -213,11 +213,12 @@ void processTemperature(bool isOuter)
 		*prevMsTemperature = ms;
 
 		delay(pDht->getMinimumSamplingPeriod());
-		float temperature = pDht->getTemperature();
+
+		float temperature = roundFloat(pDht->getTemperature(), 1);
 
 		if (!isnan(temperature))
 		{
-			if (!isFloatEqual(*lastTemperature, temperature))
+			if (*lastTemperature != temperature)
 			{
 				*lastTemperature = temperature;
 
@@ -254,10 +255,11 @@ void processHumidity(bool isOuter)
 
 		delay(pDht->getMinimumSamplingPeriod());
 
-		float humidity = pDht->getHumidity();
+		float humidity = roundFloat(pDht->getHumidity(), 1);
+
 		if (!isnan(humidity))
 		{
-			if (!isFloatEqual(*lastHumidity, humidity))
+			if (*lastHumidity != humidity)
 			{
 				*lastHumidity = humidity;
 				gw.send(msg->set(humidity, 1));
@@ -313,7 +315,7 @@ void processPressure()
 #endif
 			}
 
-			int forecast = samplePressure(pressure / 1000); // in kPa
+			int forecast = samplePressure((float)pressure / 1000.0f); // in kPa
 			if (lastForecast != forecast)
 			{
 				lastForecast = forecast;
@@ -628,7 +630,8 @@ float getGasPercentage(float rs_ro_ratio, int gasType)
 	return pow(10, x);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-bool isFloatEqual(float f1, float f2)
+float roundFloat(float val, uint8_t dec)
 {
-	return floor(f1 * 10) == floor(f2 * 10);
+	double k = pow(10, dec);
+	return (float)(round(val * k) / k);
 }

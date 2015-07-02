@@ -27,7 +27,7 @@ DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
 float lastTemperature = -1000;
 unsigned long prevMsTemperature = -1000000;
-const long intervalTemperature = 30000;	// interval at which to measure (milliseconds)
+const long intervalTemperature = 60000;	// interval at which to measure (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PH_SENSOR_ID			9
@@ -36,7 +36,7 @@ const long intervalTemperature = 30000;	// interval at which to measure (millise
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh = -1000;
 unsigned long prevMsPh = -1000000;
-const long intervalPh = 30000;
+const long intervalPh = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define WATER_SENSOR_ID			10
@@ -113,11 +113,11 @@ void processTemperature()
 	{
 		prevMsTemperature = ms;
 
-		float temperature = readTemperature();
+		float temperature = roundFloat(readTemperature(), 1);
 
 		if (temperature != -127.00)
 		{
-			if (!isFloatEqual(lastTemperature, temperature))
+			if (lastTemperature != temperature)
 			{
 				lastTemperature = temperature;
 				gw.send(msgTemperature.set(temperature, 1));
@@ -139,9 +139,9 @@ void processPH()
 	{
 		prevMsPh = ms;
 
-		float ph = readPh();
+		float ph = roundFloat(readPh(), 1);
 
-		if (!isFloatEqual(ph, lastPh))
+		if (ph != lastPh)
 		{
 			lastPh = ph;
 			gw.send(msgPh.set(ph, 1));
@@ -184,12 +184,11 @@ void processDistance()
 		prevMsDistance = ms;
 
 		//uint16_t distance = readDistance();
-		float distance = readDistanceUltrasonic();
+		float distance = roundFloat(readDistanceUltrasonic(), 1);
 
 		if (distance > 0)
 		{
-			//if (distance != lastDistance)
-			if (!isFloatEqual(distance, lastDistance))
+			if (distance != lastDistance)
 			{
 				lastDistance = distance;
 				//gw.send(msgDistance.set(distance));
@@ -397,7 +396,8 @@ bool readWater()
 	return v > 500;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-bool isFloatEqual(float f1, float f2)
+float roundFloat(float val, uint8_t dec)
 {
-	return floor(f1 * 10) == floor(f2 * 10);
+	double k = pow(10, dec);
+	return (float)(round(val * k) / k);
 }
