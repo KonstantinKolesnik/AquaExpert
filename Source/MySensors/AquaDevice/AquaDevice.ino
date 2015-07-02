@@ -117,7 +117,7 @@ void processTemperature()
 
 		if (temperature != -127.00)
 		{
-			if (abs(lastTemperature - temperature) >= 0.1f)
+			if (!isFloatEqual(lastTemperature, temperature))
 			{
 				lastTemperature = temperature;
 				gw.send(msgTemperature.set(temperature, 1));
@@ -141,7 +141,7 @@ void processPH()
 
 		float ph = readPh();
 
-		if (abs(ph - lastPh) >= 0.1f)
+		if (!isFloatEqual(ph, lastPh))
 		{
 			lastPh = ph;
 			gw.send(msgPh.set(ph, 1));
@@ -188,7 +188,8 @@ void processDistance()
 
 		if (distance > 0)
 		{
-			if (distance != lastDistance)
+			//if (distance != lastDistance)
+			if (!isFloatEqual(distance, lastDistance))
 			{
 				lastDistance = distance;
 				//gw.send(msgDistance.set(distance));
@@ -219,7 +220,7 @@ void onMessageReceived(const MyMessage &message)
 		else if (message.sensor == WATER_SENSOR_ID && message.type == V_TRIPPED)
 			gw.send(msgWater.set(lastWater ? 1 : 0));
 		else if (message.sensor == DISTANCE_SENSOR_ID && message.type == V_DISTANCE)
-			gw.send(msgDistance.set(lastDistance));
+			gw.send(msgDistance.set(lastDistance, 1));
 	}
 	else if (cmd == C_SET)
 	{
@@ -309,57 +310,59 @@ float readPh()
 
 	return phValue;
 }
-uint16_t readDistance()
-{
-	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
-	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
-	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
-	//Serial.print("Distance: ");
-	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-	//Serial.println("cm");
-
-	// 2)
-	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
-	//return distance;
-
-	// 3)
-	// get 10 sample value from the sensor for smooth the value:
-	unsigned int buf[10];
-	for (int i = 0; i < 10; i++)
-	{
-		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
-		ultrasonic.Ranging(CM)
-		delay(50);
-	}
-
-	// sort the analog from small to large:
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = i + 1; j < 10; j++)
-		{
-			if (buf[i] > buf[j])
-			{
-				unsigned int temp = buf[i];
-				buf[i] = buf[j];
-				buf[j] = temp;
-			}
-		}
-	}
-
-	// store the average value:
-	unsigned long int avgValue = 0;
-	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
-		avgValue += buf[i];
-
-	uint16_t distance = avgValue / 6;
-	return distance;
-}
+//uint16_t readDistance()
+//{
+//	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
+//	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+//	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+//	//Serial.print("Distance: ");
+//	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+//	//Serial.println("cm");
+//
+//	// 2)
+//	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
+//	//return distance;
+//
+//	// 3)
+//	// get 10 sample value from the sensor for smooth the value:
+//	unsigned int buf[10];
+//	for (int i = 0; i < 10; i++)
+//	{
+//		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
+//		delay(50);
+//	}
+//
+//	// sort the analog from small to large:
+//	for (int i = 0; i < 9; i++)
+//	{
+//		for (int j = i + 1; j < 10; j++)
+//		{
+//			if (buf[i] > buf[j])
+//			{
+//				unsigned int temp = buf[i];
+//				buf[i] = buf[j];
+//				buf[j] = temp;
+//			}
+//		}
+//	}
+//
+//	// store the average value:
+//	unsigned long int avgValue = 0;
+//	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
+//		avgValue += buf[i];
+//
+//	uint16_t distance = avgValue / 6;
+//	return distance;
+//}
 float readDistanceUltrasonic()
 {
 	// get 10 sample value from the sensor for smooth the value:
 	float buf[10];
 	for (int i = 0; i < 10; i++)
+	{
 		buf[i] = isMetric ? ultrasonic.Ranging(CM) : ultrasonic.Ranging(INC);
+		delay(50);
+	}
 
 	// sort the analog from small to large:
 	for (int i = 0; i < 9; i++)
@@ -381,6 +384,7 @@ float readDistanceUltrasonic()
 		avgValue += buf[i];
 
 	float distance = avgValue / 6;
+
 	return distance;
 }
 bool readWater()
@@ -391,4 +395,9 @@ bool readWater()
 
 	int v = analogRead(WATER_PIN);
 	return v > 500;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------
+bool isFloatEqual(float f1, float f2)
+{
+	return floor(f1 * 10) == floor(f2 * 10);
 }

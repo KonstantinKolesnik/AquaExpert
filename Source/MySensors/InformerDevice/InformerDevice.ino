@@ -25,6 +25,9 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISPLAY_SENSOR_ID	0
 //MyMessage msgDisplay(DISPLAY_SENSOR_ID, 0);
+//unsigned long prevMs = -1000000;
+//const long interval = 10000;
+
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // Assign human-readable names to some common 16-bit color values:
 #define	BLACK   0x0000
@@ -77,6 +80,13 @@ void setup()
 void loop()
 {
 	gw.process();
+
+	//unsigned long ms = millis();
+	//if (ms - prevMs >= interval)
+	//{
+	//	prevMs = ms;
+	//	displayText();
+	//}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
@@ -110,6 +120,13 @@ void displayText()
 		tft.println(pTxt);
 	}
 }
+
+
+
+
+
+
+
 void testText()
 {
 	tft.fillScreen(BLACK);

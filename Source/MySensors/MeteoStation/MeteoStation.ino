@@ -92,7 +92,7 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (l
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define RAIN_SENSOR_ID				7
 #define RAIN_SENSOR_ANALOG_PIN		A1
-MyMessage msgRain(RAIN_SENSOR_ID, V_RAIN); //V_RAINRATE
+MyMessage msgRain(RAIN_SENSOR_ID, V_RAINRATE); //V_RAIN
 uint16_t lastRain = -1000000;
 unsigned long prevMsRain = -1000000;
 const long intervalRain = 30000;
@@ -217,7 +217,7 @@ void processTemperature(bool isOuter)
 
 		if (!isnan(temperature))
 		{
-			if (*lastTemperature != temperature)
+			if (!isFloatEqual(*lastTemperature, temperature))
 			{
 				*lastTemperature = temperature;
 
@@ -257,7 +257,7 @@ void processHumidity(bool isOuter)
 		float humidity = pDht->getHumidity();
 		if (!isnan(humidity))
 		{
-			if (*lastHumidity != humidity)
+			if (!isFloatEqual(*lastHumidity, humidity))
 			{
 				*lastHumidity = humidity;
 				gw.send(msg->set(humidity, 1));
@@ -427,7 +427,6 @@ void processLight()
 
 		//Serial.print("Light: ");
 		//Serial.println(val);
-
 
 		if (val != lastLight)
 		{
@@ -627,4 +626,9 @@ float getGasPercentage(float rs_ro_ratio, int gasType)
 	float x = (y - y0) / k + x0;
 
 	return pow(10, x);
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------
+bool isFloatEqual(float f1, float f2)
+{
+	return floor(f1 * 10) == floor(f2 * 10);
 }

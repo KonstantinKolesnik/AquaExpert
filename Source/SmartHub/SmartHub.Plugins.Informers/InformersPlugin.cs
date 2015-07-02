@@ -83,14 +83,16 @@ namespace SmartHub.Plugins.Informers
             if (sv != null)
                 switch (sv.Type)
                 {
-                    case SensorValueType.Temperature: return sv.Value.ToString("N1") + " C"; ;// " °C";
+                    case SensorValueType.Temperature: return sv.Value.ToString("N1") + " C"; // " °C";
                     case SensorValueType.Humidity: return sv.Value.ToString("N1") + "%";
                     case SensorValueType.Pressure: return (sv.Value / 133.3).ToString("N0") + " mmHg";
                     case SensorValueType.Tripped:
+                    case SensorValueType.Armed:
                     case SensorValueType.Switch: return sv.Value == 1 ? "On" : "Off";
                     case SensorValueType.Distance: return sv.Value.ToString("N0") + " cm";
                     case SensorValueType.Forecast: return (new string[] {"Clear", "Sunny", "Cloudy", "Rain", "Thunderstorm", "Unknown"})[(int)sv.Value];
-                    case SensorValueType.Rain: return (new string[] { "Dry", "Wet", "Rain", "Thunderstorm" })[(int)sv.Value];
+                    case SensorValueType.RainRate: return (new string[] { "Dry", "Wet", "Rain", "Thunderstorm" })[(int)sv.Value];
+                    //case SensorValueType.: return sv.Value.ToString("N1") + "%";
                     default:
                         return sv.Value.ToString("N1");
                 }
