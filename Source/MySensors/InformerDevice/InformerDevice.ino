@@ -75,7 +75,27 @@ void setup()
 	tft.setTextWrap(true);
 	tft.setCursor(0, 0);
 
-	tft.println("Waiting for data...");
+
+	//tft.setTextSize(1);
+	//tft.println("Waiting for data...");
+	//tft.println("0123456789");
+	//tft.println("!\"#$^&*()_-=+.,\\|/`~?<>[]{}");
+	//tft.println("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghigklmnopqrstuvwxyz");
+	//tft.println("юабцде╗фгхийклмнопярстужвьызшэщчъ");
+
+	//Serial.println('ю');
+	//Serial.println(128);
+	////tft.write(128);
+
+	//String a = "юаб";
+	//Serial.println(a);
+	//tft.print(a);
+
+	//for (uint8_t i = 0; i < 255; i++)
+	//{
+	//	tft.write(i);
+	//	//Serial.println(i);
+	//}
 }
 void loop()
 {
