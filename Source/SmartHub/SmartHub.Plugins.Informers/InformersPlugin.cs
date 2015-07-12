@@ -118,12 +118,6 @@ namespace SmartHub.Plugins.Informers
                                 var lineNo = (byte)monitorsIds.IndexOf(monitorId);
                                 string property = string.IsNullOrEmpty(monitor.NameForInformer) ? monitor.Name : monitor.NameForInformer;
 
-                                var fromEncodind = Encoding.UTF8;//из какой кодировки
-                                var buf = fromEncodind.GetBytes(property);
-                                var toEncoding = Encoding.GetEncoding(866);//в какую кодировку
-                                var buf2 = Encoding.Convert(fromEncodind, toEncoding, buf);
-                                property = toEncoding.GetString(buf2);
-
                                 var lastSV = mySensors.GetLastSensorValue(sensor);
                                 string value = FormatSensorValue(lastSV);
                                 
@@ -156,6 +150,13 @@ namespace SmartHub.Plugins.Informers
 
                                 StringBuilder sb = new StringBuilder();
                                 sb.AppendFormat("{0}: {1}", property, value);
+
+                                //string str = sb.ToString();
+                                //var fromEncodind = Encoding.UTF8;//из какой кодировки
+                                //var buf = fromEncodind.GetBytes(str);
+                                //var toEncoding = Encoding.GetEncoding(866);//в какую кодировку
+                                //var buf2 = Encoding.Convert(fromEncodind, toEncoding, buf);
+                                //str = toEncoding.GetString(buf2);
 
                                 mySensors.SetSensorValue(sensorDisplay, lineNo, sb.ToString());
                             }
