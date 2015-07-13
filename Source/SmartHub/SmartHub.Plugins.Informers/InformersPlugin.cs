@@ -1,7 +1,6 @@
 ﻿using NHibernate.Linq;
 using NHibernate.Mapping.ByCode;
 using SmartHub.Core.Plugins;
-using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.Informers.Data;
@@ -13,7 +12,6 @@ using SmartHub.Plugins.Timer.Attributes;
 using SmartHub.Plugins.WebUI.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -38,7 +36,6 @@ namespace SmartHub.Plugins.Informers
         #region Fields
         private MySensorsPlugin mySensors;
         private MonitorsPlugin monitors;
-        private List<Informer> informers = new List<Informer>();
         #endregion
 
         #region Plugin overrides
@@ -132,9 +129,7 @@ namespace SmartHub.Plugins.Informers
                                 //    //"#= kendo.toString(data.value, 'n1') # °C"
                                 //    //"#= kendo.toString(value / 133.3, 'n2') # mmHg"
 
-
                                 //    //Debug.WriteLine(lineNo + ": " + property);
-
 
                                 //    //JObject obj = JObject.Parse(json);
                                 //    //MyJsonObject[] objArr = JsonConvert.DeserializeObject<MyJsonObject[]>(obj["json"][0]["zayavki"].ToString());
@@ -151,14 +146,14 @@ namespace SmartHub.Plugins.Informers
                                 StringBuilder sb = new StringBuilder();
                                 sb.AppendFormat("{0}: {1}", property, value);
 
-                                //string str = sb.ToString();
-                                //var fromEncodind = Encoding.UTF8;//из какой кодировки
-                                //var buf = fromEncodind.GetBytes(str);
-                                //var toEncoding = Encoding.GetEncoding(866);//в какую кодировку
-                                //var buf2 = Encoding.Convert(fromEncodind, toEncoding, buf);
-                                //str = toEncoding.GetString(buf2);
+                                string str = sb.ToString();
+                                var fromEncodind = Encoding.UTF8; //из какой кодировки
+                                var buf = fromEncodind.GetBytes(str);
+                                var toEncoding = Encoding.GetEncoding(866); //в какую кодировку
+                                var buf2 = Encoding.Convert(fromEncodind, toEncoding, buf);
+                                str = toEncoding.GetString(buf2);
 
-                                mySensors.SetSensorValue(sensorDisplay, lineNo, sb.ToString());
+                                mySensors.SetSensorValue(sensorDisplay, lineNo, str);
                             }
                         }
                     }
@@ -169,12 +164,10 @@ namespace SmartHub.Plugins.Informers
 
         #region Event handlers
         //[RunPeriodically(1)]
-        [Timer_10_sec_Elapsed]
+        [Timer_30_sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
-            informers = Get();
-
-            foreach (Informer informer in informers)
+            foreach (var informer in Get())
                 UpdateInformer(informer);
         }
         #endregion

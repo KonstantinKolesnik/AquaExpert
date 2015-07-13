@@ -1,5 +1,6 @@
 ﻿using SmartHub.Core.Plugins;
 using SmartHub.Plugins.Speech;
+using SmartHub.Plugins.Timer.Attributes;
 using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -9,19 +10,25 @@ namespace SmartHub.Plugins.NetworkManager
     [Plugin]
     public class NetworkManagerPlugin : PluginBase
     {
+        #region Fields
+        private bool isInternetAvailable = false;
+        #endregion
+
         #region Plugin overrides
         public override void InitPlugin()
         {
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
             NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
 
-            bool connection = NetworkInterface.GetIsNetworkAvailable();
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                Context.GetPlugin<SpeechPlugin>().Say("Сетевое соединение недоступно");
         }
         #endregion
 
+        #region Event handlers
         private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
-            Context.GetPlugin<SpeechPlugin>().Say(e.IsAvailable ? "Интернет соединение восстановлено" : "Потеряно интернет соединение");
+            Context.GetPlugin<SpeechPlugin>().Say(e.IsAvailable ? "Сетевое соединение восстановлено" : "Потеряно сетевое соединение");
 
             if (!e.IsAvailable)
             {
@@ -42,12 +49,34 @@ namespace SmartHub.Plugins.NetworkManager
             //        Console.WriteLine(" - {0} (lease expires {1})", addr.Address, DateTime.Now + new TimeSpan(0, 0, (int)addr.DhcpLeaseLifetime));
         }
 
+        [Timer_30_sec_Elapsed]
+        private void timer_Elapsed(DateTime now)
+        {
+            CheckForInternetConnection();
+        }
+        #endregion
 
-        public static bool CheckForInternetConnection()
+        #region Public methods
+        public void CheckForInternetConnection()
+        {
+            bool result = IsInternetAvailable();
+
+            if (result)
+            {
+                if (!isInternetAvailable)
+                    Context.GetPlugin<SpeechPlugin>().Say("Интернет соединение восстановлено");
+            }
+            else
+            {
+                if (isInternetAvailable)
+                    Context.GetPlugin<SpeechPlugin>().Say("Потеряно интернет соединение");
+            }
+
+            isInternetAvailable = result;
+        }
+        public static bool IsInternetAvailable()
         {
             return new Ping().Send("www.google.com.mx").Status == IPStatus.Success;
-
-
 
 
             //try
@@ -81,5 +110,6 @@ namespace SmartHub.Plugins.NetworkManager
             //    return false;
             //}
         }
+        #endregion
     }
 }

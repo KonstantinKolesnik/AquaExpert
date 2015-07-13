@@ -55,6 +55,11 @@
       <Name>SmartHub.Plugins.Speech</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
+      <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
+      <Name>SmartHub.Plugins.Timer</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
