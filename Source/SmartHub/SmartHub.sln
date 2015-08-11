@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old", "Old", "{6B21D9F5-65D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{B2119192-B2D5-4E28-934E-6B0933E4EAAB}"
 	ProjectSection(SolutionItems) = preProject
-		Plugin creation manual.txt = Plugin creation manual.txt
+		Plugin creation guide.txt = Plugin creation guide.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A04F4475-C957-4AA8-AB17-D28C2A505AD6}"

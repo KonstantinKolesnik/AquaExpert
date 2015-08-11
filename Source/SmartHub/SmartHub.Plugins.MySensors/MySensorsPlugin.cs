@@ -73,6 +73,13 @@ namespace SmartHub.Plugins.MySensors
                 gatewayProxy.Send(new SensorMessage((byte)nodeNo, (byte)sensorNo, (SensorMessageType)commandType, false, (byte)valueType, value));
         }
 
+        [ScriptCommand("mySensorsClearSensorValuesCommand")]
+        public void ClearSensorValuesCommand(int lastDayToPreserve)
+        {
+            DeleteSensorValues(DateTime.Now.AddDays(-lastDayToPreserve));
+        }
+
+
         [ScriptEvent("mySensors.connected")]
         public ScriptEventHandlerDelegate[] OnConnectedForScripts { get; set; }
         private void NotifyConnectedForScripts()

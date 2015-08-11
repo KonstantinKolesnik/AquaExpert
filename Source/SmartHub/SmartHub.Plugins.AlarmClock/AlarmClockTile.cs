@@ -11,7 +11,7 @@ namespace SmartHub.Plugins.AlarmClock
         {
             try
             {
-                tileWebModel.title = "Оповещения";
+                tileWebModel.title = "Периодические задачи";
                 tileWebModel.url = "webapp/alarm-clock/list";
                 tileWebModel.className = "btn-warning th-tile-icon th-tile-icon-fa fa-bell";
                 tileWebModel.wide = true;

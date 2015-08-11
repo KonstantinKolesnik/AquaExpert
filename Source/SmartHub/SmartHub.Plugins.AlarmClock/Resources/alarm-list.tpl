@@ -1,5 +1,5 @@
 ﻿<div>
-  <h2>Оповещения</h2>
+  <h2>Периодические задачи</h2>
   <div>
     <a href="#" class="btn btn-primary js-btn-add">Добавить</a>&nbsp;
     <a href="#" class="btn btn-default js-btn-stop">Выключить все звуки</a>

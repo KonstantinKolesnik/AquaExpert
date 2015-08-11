@@ -76,7 +76,7 @@ namespace SmartHub.Plugins.NetworkManager
         }
         public static bool IsInternetAvailable()
         {
-            return new Ping().Send("www.google.com.mx").Status == IPStatus.Success;
+            return new Ping().Send("www.google.com.mx", 5000).Status == IPStatus.Success;
 
 
             //try

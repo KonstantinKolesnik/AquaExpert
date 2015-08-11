@@ -22,7 +22,7 @@ using System.Text;
 namespace SmartHub.Plugins.AlarmClock
 {
     // list
-    [AppSection("Оповещения", SectionType.Common, "/webapp/alarm-clock/list.js", "SmartHub.Plugins.AlarmClock.Resources.alarm-list.js", TileTypeFullName = "SmartHub.Plugins.AlarmClock.AlarmClockTile")]
+    [AppSection("Периодические задачи", SectionType.Common, "/webapp/alarm-clock/list.js", "SmartHub.Plugins.AlarmClock.Resources.alarm-list.js", TileTypeFullName = "SmartHub.Plugins.AlarmClock.AlarmClockTile")]
     [JavaScriptResource("/webapp/alarm-clock/list-model.js", "SmartHub.Plugins.AlarmClock.Resources.alarm-list-model.js")]
     [JavaScriptResource("/webapp/alarm-clock/list-view.js", "SmartHub.Plugins.AlarmClock.Resources.alarm-list-view.js")]
     [HttpResource("/webapp/alarm-clock/list.tpl", "SmartHub.Plugins.AlarmClock.Resources.alarm-list.tpl")]

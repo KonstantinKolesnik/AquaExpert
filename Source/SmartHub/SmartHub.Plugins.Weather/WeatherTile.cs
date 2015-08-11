@@ -11,7 +11,7 @@ namespace SmartHub.Plugins.Weather
     {
         public override void PopulateWebModel(TileWebModel tileWebModel, dynamic parameters)
         {
-            tileWebModel.title = "Погода";
+            tileWebModel.title = "Интернет-погода";
             tileWebModel.url = "webapp/weather/forecast";
 
             string strCityId = parameters.cityId;

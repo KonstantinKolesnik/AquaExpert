@@ -19,7 +19,7 @@ using System.Net;
 namespace SmartHub.Plugins.Weather
 {
     // forecast
-    [AppSection("Погода", SectionType.Common, "/webapp/weather/forecast.js", "SmartHub.Plugins.Weather.Resources.js.forecast.forecast.js")]
+    [AppSection("Интернет-погода", SectionType.Common, "/webapp/weather/forecast.js", "SmartHub.Plugins.Weather.Resources.js.forecast.forecast.js")]
     [JavaScriptResource("/webapp/weather/forecast-model.js", "SmartHub.Plugins.Weather.Resources.js.forecast.forecast-model.js")]
     [JavaScriptResource("/webapp/weather/forecast-view.js", "SmartHub.Plugins.Weather.Resources.js.forecast.forecast-view.js")]
 
@@ -29,7 +29,7 @@ namespace SmartHub.Plugins.Weather
     [HttpResource("/webapp/weather/forecast-item-value-now.tpl", "SmartHub.Plugins.Weather.Resources.js.forecast.forecast-item-value-now.tpl")]
 
     // settings
-    [AppSection("Погодные локации", SectionType.System, "/webapp/weather/locations.js", "SmartHub.Plugins.Weather.Resources.js.settings.locations.js")]
+    [AppSection("Интернет-погода: локации", SectionType.System, "/webapp/weather/locations.js", "SmartHub.Plugins.Weather.Resources.js.settings.locations.js")]
     [JavaScriptResource("/webapp/weather/locations-model.js", "SmartHub.Plugins.Weather.Resources.js.settings.locations-model.js")]
     [JavaScriptResource("/webapp/weather/locations-view.js", "SmartHub.Plugins.Weather.Resources.js.settings.locations-view.js")]
 
@@ -52,7 +52,7 @@ namespace SmartHub.Plugins.Weather
     public class WeatherPlugin : PluginBase
     {
         #region Fields
-        private const int UPDATE_PERIOD = 20;
+        private const int UPDATE_PERIOD = 15; // minutes
         private readonly object lockObject = new object();
 
         private const string SERVICE_URL_FORMAT = "http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&APPID=9948774b7ea6673661f1bd773a48d23c";

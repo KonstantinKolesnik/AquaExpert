@@ -1,7 +1,7 @@
 ﻿<form>
   <div class="row">
     <div class="col-md-4">
-      <h2>Редактирование оповещения</h2>
+      <h2>Редактирование периодической задачи</h2>
       <p>
         <input type="button" value="Сохранить" class="btn btn-primary js-btn-save" />&nbsp;
         <input type="button" value="Отмена" class="btn btn-default js-btn-cancel" />
