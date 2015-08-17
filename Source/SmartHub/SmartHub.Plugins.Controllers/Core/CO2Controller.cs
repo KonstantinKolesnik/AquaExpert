@@ -89,7 +89,7 @@ namespace SmartHub.Plugins.Controllers.Core
         {
             if (IsAutoMode)
             {
-                bool isActiveNew = false;
+                //bool isActiveNew = false;
 
 
 
