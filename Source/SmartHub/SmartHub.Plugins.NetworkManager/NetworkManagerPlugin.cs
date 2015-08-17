@@ -49,7 +49,7 @@ namespace SmartHub.Plugins.NetworkManager
             //        Console.WriteLine(" - {0} (lease expires {1})", addr.Address, DateTime.Now + new TimeSpan(0, 0, (int)addr.DhcpLeaseLifetime));
         }
 
-        [Timer_30_sec_Elapsed]
+        [RunPeriodically(1)]
         private void timer_Elapsed(DateTime now)
         {
             CheckForInternetConnection();

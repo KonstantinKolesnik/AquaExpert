@@ -178,15 +178,15 @@ namespace SmartHub.Plugins.Controllers.Core
                 }
                 else
                     RequestSensorsValues();
-            }
 
-            // voice alarm:
-            if (value.HasValue)
-            {
-                if (value.Value <= configuration.DistanceAlarmMin)
-                    Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, value.Value));
-                else if (value.Value > configuration.DistanceExchangeMax)
-                    Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, value.Value));
+                // voice alarm:
+                if (value.HasValue)
+                {
+                    if (value.Value <= configuration.DistanceAlarmMin)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, value.Value));
+                    else if (value.Value > configuration.DistanceExchangeMax)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, value.Value));
+                }
             }
         }
         #endregion

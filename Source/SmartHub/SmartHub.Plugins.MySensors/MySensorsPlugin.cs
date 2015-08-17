@@ -502,7 +502,7 @@ namespace SmartHub.Plugins.MySensors
         #region Event handlers
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
-            Logger.Info("Connected.");
+            Logger.Info("MySensors gateway connected.");
             //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
             NotifyConnectedForPlugins();
             NotifyConnectedForScripts();
@@ -709,7 +709,7 @@ namespace SmartHub.Plugins.MySensors
         }
         private void gatewayProxy_Disconnected(object sender, EventArgs e)
         {
-            Logger.Info("Disconnected.");
+            Logger.Info("MySensors gateway disconnected.");
             //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
             NotifyDisconnectedForPlugins();
             NotifyDisconnectedForScripts();

@@ -163,8 +163,7 @@ namespace SmartHub.Plugins.Informers
         #endregion
 
         #region Event handlers
-        //[RunPeriodically(1)]
-        [Timer_30_sec_Elapsed]
+        [RunPeriodically(1)]
         private void timer_Elapsed(DateTime now)
         {
             foreach (var informer in Get())

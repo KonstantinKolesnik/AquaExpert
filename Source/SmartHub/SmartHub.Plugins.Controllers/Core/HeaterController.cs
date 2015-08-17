@@ -107,15 +107,15 @@ namespace SmartHub.Plugins.Controllers.Core
                 }
                 else
                     RequestSensorsValues();
-            }
 
-            // voice alarm:
-            if (value.HasValue)
-            {
-                if (value.Value <= configuration.TemperatureAlarmMin)
-                    Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMinText, value.Value));
-                else if (value.Value >= configuration.TemperatureAlarmMax)
-                    Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMaxText, value.Value));
+                // voice alarm:
+                if (value.HasValue)
+                {
+                    if (value.Value <= configuration.TemperatureAlarmMin)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMinText, value.Value));
+                    else if (value.Value >= configuration.TemperatureAlarmMax)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMaxText, value.Value));
+                }
             }
         }
         #endregion
