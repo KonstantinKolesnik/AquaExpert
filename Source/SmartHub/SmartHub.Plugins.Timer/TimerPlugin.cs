@@ -52,6 +52,10 @@ namespace SmartHub.Plugins.Timer
         {
             var now = DateTime.Now;
 
+            // periodical actions
+            foreach (var handler in periodicalHandlers)
+                handler.TryToExecute(now);
+
             //timer.Enabled = false;
             Run(Timer_ElapsedEventHandlers, handler => handler(now));
             //timer.Enabled = true;
