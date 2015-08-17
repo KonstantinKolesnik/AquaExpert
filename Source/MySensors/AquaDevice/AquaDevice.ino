@@ -44,7 +44,7 @@ const long intervalPh = 60000;
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = -1000000;
-const long intervalWater = 5000;
+const long intervalWater = 10000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISTANCE_SENSOR_ID		11
@@ -56,7 +56,7 @@ Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
 float lastDistance = -1;
 unsigned long prevMsDistance = -1000000;
-const long intervalDistance = 3000;
+const long intervalDistance = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
@@ -184,15 +184,17 @@ void processDistance()
 		prevMsDistance = ms;
 
 		//uint16_t distance = readDistance();
-		float distance = roundFloat(readDistanceUltrasonic(), 1);
+		
+		//float distance = roundFloat(readDistanceUltrasonic(), 1);
+		uint8_t distance = ceil(readDistanceUltrasonic());
 
 		if (distance > 0)
 		{
 			if (distance != lastDistance)
 			{
 				lastDistance = distance;
-				//gw.send(msgDistance.set(distance));
-				gw.send(msgDistance.set(distance, 1));
+				gw.send(msgDistance.set(distance));
+				//gw.send(msgDistance.set(distance, 1));
 
 #ifdef DEBUG
 				Serial.print("Distance: ");
