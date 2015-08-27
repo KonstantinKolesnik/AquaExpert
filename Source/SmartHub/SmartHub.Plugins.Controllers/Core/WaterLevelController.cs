@@ -39,14 +39,14 @@ namespace SmartHub.Plugins.Controllers.Core
                         SensorOutSwitchID = Guid.Empty,
                         SensorDistanceID = Guid.Empty,
 
-                        DistanceMin = 15,
-                        DistanceMax = 17,
-                        DistanceAlarmMin = 14,
+                        DistanceMin = 2,
+                        DistanceMax = 3,
+                        DistanceAlarmMin = 1,
                         DistanceAlarmMinText = "Критически высокий уровень воды",
 
                         ExchangeWeekDay = DayOfWeek.Saturday,
                         ExchangeTime = new DateTime(1970, 1, 1, 14, 0, 0, DateTimeKind.Local),
-                        DistanceExchangeMax = 25,
+                        DistanceExchangeMax = 15,
                         DistanceAlarmMaxText = "Критически низкий уровень воды",
 
                         IsExchangeMode = false
