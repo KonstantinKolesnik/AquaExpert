@@ -154,14 +154,12 @@ namespace SmartHub.Core.Infrastructure
             if (shadowedPlugins.Exists)
                 shadowedPlugins.Delete(true);
 
-            shadowedPlugins.Create();
-
             // Shadow copy plugins to avoid the CLR blocking DLLs
             var plugins = new DirectoryInfo(AppSettings.PluginsFullPath);
-
             if (!plugins.Exists)
                 plugins.Create();
 
+            shadowedPlugins.Create();
             CopyTo(plugins, shadowedPlugins);
         }
         private static void CopyTo(DirectoryInfo from, DirectoryInfo to)
@@ -198,20 +196,20 @@ namespace SmartHub.Core.Infrastructure
             new CompositionContainer(catalog).SatisfyImportsOnce(this);
         }
         
-        private void WatchPlugins()
-        {
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = AppSettings.PluginsFullPath;
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Filter = "*.*";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
-        }
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            int a = 0;
-            int b = a;
-        }
+        //private void WatchPlugins()
+        //{
+        //    FileSystemWatcher watcher = new FileSystemWatcher();
+        //    watcher.Path = AppSettings.PluginsFullPath;
+        //    watcher.NotifyFilter = NotifyFilters.LastWrite;
+        //    watcher.Filter = "*.*";
+        //    watcher.Changed += new FileSystemEventHandler(OnChanged);
+        //    watcher.EnableRaisingEvents = true;
+        //}
+        //private void OnChanged(object source, FileSystemEventArgs e)
+        //{
+        //    int a = 0;
+        //    int b = a;
+        //}
         #endregion
     }
 }

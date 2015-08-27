@@ -143,7 +143,7 @@ namespace SmartHub.Plugins.MeteoStation
                 Name = name,
                 Type = type,
                 Sensor = mySensors.BuildSensorRichWebModel(mySensors.GetSensor(sensorID)),
-                SensorValues = mySensors.GetSensorValues(sensorID, 24, 30).ToArray()
+                SensorValues = mySensors.GetSensorValues(sensorID, 30).ToArray()
             };
         }
         #endregion

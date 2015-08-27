@@ -20,7 +20,6 @@ namespace SmartHub.Core.Infrastructure
         {
             return new ReadOnlyCollection<PluginBase>(Plugins.ToList());
         }
-
         public T GetPlugin<T>() where T : PluginBase
         {
             return Plugins.FirstOrDefault(p => p is T) as T;
@@ -40,6 +39,10 @@ namespace SmartHub.Core.Infrastructure
         public ISession OpenSession()
         {
             return sessionFactory.OpenSession();
+        }
+        public IStatelessSession OpenStatelessSession()
+        {
+            return sessionFactory.OpenStatelessSession();
         }
         #endregion
     }
