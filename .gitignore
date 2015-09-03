@@ -152,3 +152,4 @@ $RECYCLE.BIN/
 *.atsuo
 
 packages/
+/Source/SmartHub/.vs/config/applicationhost.config
