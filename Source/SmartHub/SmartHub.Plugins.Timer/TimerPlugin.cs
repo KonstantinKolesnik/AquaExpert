@@ -50,14 +50,16 @@ namespace SmartHub.Plugins.Timer
         #region Event handlers
         private void timer_Elapsed(object source, ElapsedEventArgs e)
         {
+            //timer.Enabled = false;
+
             var now = DateTime.Now;
 
             // periodical actions
             foreach (var handler in periodicalHandlers)
                 handler.TryToExecute(now);
 
-            //timer.Enabled = false;
             Run(Timer_ElapsedEventHandlers, handler => handler(now));
+
             //timer.Enabled = true;
         }
         #endregion

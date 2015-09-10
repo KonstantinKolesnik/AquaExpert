@@ -94,27 +94,32 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Private methods
-        protected override void Process(float? value)
+        protected override void InitLastValues()
+        {
+            var lastSV = mySensors.GetLastSensorValue(SensorTemperature);
+            lastSensorValue = lastSV != null ? lastSV.Value : (float?)null;
+        }
+        protected override void Process()
         {
             if (IsAutoMode)
             {
-                if (value.HasValue)
+                if (lastSensorValue.HasValue)
                 {
-                    if (value.Value < configuration.TemperatureMin)
+                    if (lastSensorValue.Value < configuration.TemperatureMin)
                         mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 1);
-                    else if (value.Value > configuration.TemperatureMax)
+                    else if (lastSensorValue.Value > configuration.TemperatureMax)
                         mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, 0);
                 }
                 else
                     RequestSensorsValues();
 
                 // voice alarm:
-                if (value.HasValue)
+                if (lastSensorValue.HasValue)
                 {
-                    if (value.Value <= configuration.TemperatureAlarmMin)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMinText, value.Value));
-                    else if (value.Value >= configuration.TemperatureAlarmMax)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMaxText, value.Value));
+                    if (lastSensorValue.Value <= configuration.TemperatureAlarmMin)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMinText, lastSensorValue.Value));
+                    else if (lastSensorValue.Value >= configuration.TemperatureAlarmMax)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMaxText, lastSensorValue.Value));
                 }
             }
         }
@@ -129,17 +134,9 @@ namespace SmartHub.Plugins.Controllers.Core
         public override void MessageReceived(SensorMessage message)
         {
             if (MySensorsPlugin.IsMessageFromSensor(message, SensorTemperature))
-                Process(message.PayloadFloat);
-            else if (MySensorsPlugin.IsMessageFromSensor(message, SensorSwitch))
-            {
-                var lastSV = mySensors.GetLastSensorValue(SensorTemperature);
-                Process(lastSV != null ? lastSV.Value : (float?)null);
-            }
-        }
-        public override void TimerElapsed(DateTime now)
-        {
-            var lastSV = mySensors.GetLastSensorValue(SensorTemperature);
-            Process(lastSV != null ? lastSV.Value : (float?)null);
+                lastSensorValue = message.PayloadFloat;
+
+            base.MessageReceived(message);
         }
         #endregion
     }

@@ -143,11 +143,16 @@ namespace SmartHub.Plugins.Controllers.Core
             }
         }
 
-        protected override void Process(float? value)
+        protected override void InitLastValues()
+        {
+            var lastSV = mySensors.GetLastSensorValue(SensorDistance);
+            lastSensorValue = lastSV != null ? lastSV.Value : (float?)null;
+        }
+        protected override void Process()
         {
             if (IsAutoMode)
             {
-                if (value.HasValue) // distance
+                if (lastSensorValue.HasValue) // distance
                 {
                     //var svInSwitch = mySensors.GetLastSensorValue(SensorInSwitch);
                     //var vInSwitch = svInSwitch != null ? svInSwitch.Value : (float?)null;
@@ -159,7 +164,7 @@ namespace SmartHub.Plugins.Controllers.Core
 
                     if (configuration.IsExchangeMode)
                     {
-                        if (value.Value < configuration.DistanceExchangeMax)
+                        if (lastSensorValue.Value < configuration.DistanceExchangeMax)
                             mySensors.SetSensorValue(SensorOutSwitch, SensorValueType.Switch, 1);
                         else
                         {
@@ -170,9 +175,9 @@ namespace SmartHub.Plugins.Controllers.Core
                     }
                     else
                     {
-                        if (value.Value <= configuration.DistanceMin) // overflow
+                        if (lastSensorValue.Value <= configuration.DistanceMin) // overflow
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 0); // stop In
-                        else if (value.Value > configuration.DistanceMax) // insufficient level
+                        else if (lastSensorValue.Value > configuration.DistanceMax) // insufficient level
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
                     }
                 }
@@ -180,12 +185,12 @@ namespace SmartHub.Plugins.Controllers.Core
                     RequestSensorsValues();
 
                 // voice alarm:
-                if (value.HasValue)
+                if (lastSensorValue.HasValue)
                 {
-                    if (value.Value <= configuration.DistanceAlarmMin)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, value.Value));
-                    else if (value.Value > configuration.DistanceExchangeMax)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, value.Value));
+                    if (lastSensorValue.Value <= configuration.DistanceAlarmMin)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, lastSensorValue.Value));
+                    else if (lastSensorValue.Value > configuration.DistanceExchangeMax)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, lastSensorValue.Value));
                 }
             }
         }
@@ -195,17 +200,9 @@ namespace SmartHub.Plugins.Controllers.Core
         public override void MessageReceived(SensorMessage message)
         {
             if (MySensorsPlugin.IsMessageFromSensor(message, SensorDistance))
-                Process(message.PayloadFloat);
-            else if (MySensorsPlugin.IsMessageFromSensor(message, SensorInSwitch) || MySensorsPlugin.IsMessageFromSensor(message, SensorOutSwitch))
-            {
-                var lastSV = mySensors.GetLastSensorValue(SensorDistance);
-                Process(lastSV != null ? lastSV.Value : (float?)null);
-            }
-        }
-        public override void TimerElapsed(DateTime now)
-        {
-            var lastSV = mySensors.GetLastSensorValue(SensorDistance);
-            Process(lastSV != null ? lastSV.Value : (float?)null);
+                lastSensorValue = message.PayloadFloat;
+
+            base.MessageReceived(message);
         }
         #endregion
     }

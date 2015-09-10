@@ -12,6 +12,7 @@ namespace SmartHub.Plugins.Controllers.Core
         protected Controller controller;
         protected MySensorsPlugin mySensors;
         protected IServiceContext Context;
+        protected float? lastSensorValue;
         #endregion
 
         #region Constructor
@@ -57,6 +58,7 @@ namespace SmartHub.Plugins.Controllers.Core
         {
             Context = context;
             mySensors = context.GetPlugin<MySensorsPlugin>();
+            InitLastValues();
         }
         public void SaveToDB()
         {
@@ -73,7 +75,10 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Private methods
-        abstract protected void Process(float? value);
+        protected virtual void InitLastValues()
+        {
+        }
+        abstract protected void Process();
         #endregion
 
         #region Event handlers
@@ -82,9 +87,11 @@ namespace SmartHub.Plugins.Controllers.Core
         }
         public virtual void MessageReceived(SensorMessage message)
         {
+            Process();
         }
-        public virtual void TimerElapsed(DateTime now)
+        public void TimerElapsed(DateTime now)
         {
+            Process();
         }
         #endregion
     }

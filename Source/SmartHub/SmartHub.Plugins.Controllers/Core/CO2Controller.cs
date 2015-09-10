@@ -85,7 +85,7 @@ namespace SmartHub.Plugins.Controllers.Core
         #endregion
 
         #region Private methods
-        protected override void Process(float? value)
+        protected override void Process()
         {
             if (IsAutoMode)
             {
@@ -98,18 +98,6 @@ namespace SmartHub.Plugins.Controllers.Core
 
                 //mySensors.SetSensorValue(SensorSwitch, SensorValueType.Switch, isActiveNew ? 1 : 0);
             }
-        }
-        #endregion
-
-        #region Event handlers
-        public override void MessageReceived(SensorMessage message)
-        {
-            if (MySensorsPlugin.IsMessageFromSensor(message, SensorSwitch))
-                Process(null);
-        }
-        public override void TimerElapsed(DateTime now)
-        {
-            Process(null);
         }
         #endregion
     }

@@ -59,7 +59,7 @@ namespace SmartHub.Plugins.Controllers
             var ctrls = Get();
             foreach (var ctrl in ctrls)
             {
-                ControllerBase controller = ConvertController(ctrl);
+                ControllerBase controller = CastController(ctrl);
                 if (controller != null)
                     controllers.Add(controller);
             }
@@ -85,7 +85,7 @@ namespace SmartHub.Plugins.Controllers
         #endregion
 
         #region Private methods
-        private static ControllerBase ConvertController(Controller controller)
+        private static ControllerBase CastController(Controller controller)
         {
             switch (controller.Type)
             {
@@ -110,14 +110,19 @@ namespace SmartHub.Plugins.Controllers
         private void MessageCalibration(SensorMessage message)
         {
             foreach (ControllerBase controller in controllers)
-                controller.MessageCalibration(message);
+                if (controller.IsMyMessage(message))
+                {
+                    controller.MessageCalibration(message);
+                    break;
+                }
         }
 
         [MySensorsMessage]
         private void MessageReceived(SensorMessage message)
         {
             foreach (ControllerBase controller in controllers)
-                controller.MessageReceived(message);
+                if (controller.IsMyMessage(message))
+                    controller.MessageReceived(message);
         }
 
         [Timer_10_sec_Elapsed]
@@ -186,7 +191,7 @@ namespace SmartHub.Plugins.Controllers
                 IsAutoMode = false
             };
 
-            ControllerBase controller = ConvertController(ctrl);
+            ControllerBase controller = CastController(ctrl);
             if (controller != null)
             {
                 controller.Init(Context);
