@@ -43,6 +43,8 @@ SWTFT tft;
 bool isMetric = true;
 MySensor gw(A5, DEFAULT_CS_PIN);
 
+#define bgColor	BLUE
+#define fgColor	WHITE
 #define	LINE_COUNT	10
 String lines[LINE_COUNT];
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -69,8 +71,8 @@ void setup()
 	tft.begin(identifier);
 	
 	tft.setRotation(3);
-	tft.fillScreen(BLACK);
-	tft.setTextColor(WHITE);
+	tft.fillScreen(bgColor);
+	tft.setTextColor(fgColor);
 	tft.setTextSize(2);
 	tft.setTextWrap(true);
 	tft.setCursor(0, 0);
@@ -128,7 +130,7 @@ void onMessageReceived(const MyMessage &message)
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void displayText()
 {
-	tft.fillScreen(BLACK);
+	tft.fillScreen(bgColor);
 	tft.setCursor(0, 0);
 
 	for (uint8_t lineNo = 0; lineNo < LINE_COUNT; lineNo++)

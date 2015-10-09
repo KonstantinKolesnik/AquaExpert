@@ -18,7 +18,7 @@
     <None Include="InformerDevice.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.InformerDevice.vsarduino.h">
+    <ClInclude Include="__vm\.InformerDevice.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

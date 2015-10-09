@@ -18,7 +18,7 @@
     <None Include="MeteoStation.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.MeteoStation.vsarduino.h">
+    <ClInclude Include="__vm\.MeteoStation.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

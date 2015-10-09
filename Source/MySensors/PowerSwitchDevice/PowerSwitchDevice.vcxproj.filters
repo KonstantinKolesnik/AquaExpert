@@ -18,7 +18,7 @@
     <None Include="PowerSwitchDevice.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.PowerSwitchDevice.vsarduino.h">
+    <ClInclude Include="__vm\.PowerSwitchDevice.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

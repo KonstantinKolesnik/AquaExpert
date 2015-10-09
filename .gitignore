@@ -153,3 +153,5 @@ $RECYCLE.BIN/
 
 packages/
 /Source/SmartHub/.vs/config/applicationhost.config
+__vm
+Visual Micro
