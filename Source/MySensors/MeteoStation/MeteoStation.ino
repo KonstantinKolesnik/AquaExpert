@@ -20,37 +20,37 @@
 #define TEMPERATURE_INNER_SENSOR_ID	0
 MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);
 float lastTemperatureInner;
-unsigned long prevMsTemperatureInner = -1000000;
+unsigned long prevMsTemperatureInner = 0;
 const long intervalTemperatureInner = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_INNER_SENSOR_ID	1
 MyMessage msgHumidityInner(HUMIDITY_INNER_SENSOR_ID, V_HUM);
 float lastHumidityInner;
-unsigned long prevMsHumidityInner = -1000000;
-const long intervalHumidityInner = 60000;
+unsigned long prevMsHumidityInner = 0;
+const unsigned long intervalHumidityInner = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_OUTER_SENSOR_ID	2
 MyMessage msgTemperatureOuter(TEMPERATURE_OUTER_SENSOR_ID, V_TEMP);
 float lastTemperatureOuter;
-unsigned long prevMsTemperatureOuter = -1000000;
-const long intervalTemperatureOuter = 60000;
+unsigned long prevMsTemperatureOuter = 0;
+const unsigned long intervalTemperatureOuter = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_OUTER_SENSOR_ID	3
 MyMessage msgHumidityOuter(HUMIDITY_OUTER_SENSOR_ID, V_HUM);
 float lastHumidityOuter;
-unsigned long prevMsHumidityOuter = -1000000;
-const long intervalHumidityOuter = 60000;
+unsigned long prevMsHumidityOuter = 0;
+const unsigned long intervalHumidityOuter = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PRESSURE_SENSOR_ID			4
 const float ALTITUDE = 200; // sea level, meters
 MyMessage msgPressure(PRESSURE_SENSOR_ID, V_PRESSURE);
 int32_t lastPressure;
-unsigned long prevMsPressure = -1000000;
-const long intervalPressure = 60000;
+unsigned long prevMsPressure = 0;
+const unsigned long intervalPressure = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define FORECAST_SENSOR_ID			5
@@ -82,9 +82,9 @@ float pressureAvg2; // average after 2 hours is used as reference value for the 
 
 #define GAS_SENSOR_ID				6
 MyMessage msgGas(GAS_SENSOR_ID, V_VAR1);
-uint16_t lastGas = -1000000;
-unsigned long prevMsGas = -1000000;
-const long intervalGas = 60000;
+uint16_t lastGas = 0;
+unsigned long prevMsGas = 0;
+const unsigned long intervalGas = 60000;
 
 #define GAS_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
 #define RO_CLEAN_AIR_FACTOR         9.83	// RO_CLEAR_AIR_FACTOR=(Sensor resistance in clean air)/RO, which is derived from the chart in datasheet
@@ -109,16 +109,16 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (l
 #define RAIN_SENSOR_ID				7
 #define RAIN_SENSOR_ANALOG_PIN		A1
 MyMessage msgRain(RAIN_SENSOR_ID, V_RAINRATE); //V_RAIN
-uint16_t lastRain = -1000000;
-unsigned long prevMsRain = -1000000;
-const long intervalRain = 60000;
+uint8_t lastRain = 0;
+unsigned long prevMsRain = 0;
+const unsigned long intervalRain = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define LIGHT_SENSOR_ID				8
 #define LIGHT_SENSOR_ANALOG_PIN		A2
 MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
-uint16_t lastLight = -1000000;
-unsigned long prevMsLight = -1000000;
+uint16_t lastLight = 0;
+unsigned long prevMsLight = 0;
 const long intervalLight = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -165,19 +165,31 @@ void setup()
 	gw.present(GAS_SENSOR_ID, S_AIR_QUALITY);
 	gw.present(RAIN_SENSOR_ID, S_RAIN);
 	gw.present(LIGHT_SENSOR_ID, S_LIGHT_LEVEL);
-
 }
 void loop()
 {
 	processTemperature(false);
-	processHumidity(false);
-	processTemperature(true);
-	processHumidity(true);
-	processPressure();
-	processGas();
-	processRain();
-	processLight();
+	gw.process();
 
+	processHumidity(false);
+	gw.process();
+
+	processTemperature(true);
+	gw.process();
+
+	processHumidity(true);
+	gw.process();
+
+	processPressure();
+	gw.process();
+
+	processGas();
+	gw.process();
+
+	processRain();
+	gw.process();
+
+	processLight();
 	gw.process();
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -222,12 +234,8 @@ void processTemperature(bool isOuter)
 	long intervalTemperature = isOuter ? intervalTemperatureOuter : intervalTemperatureInner;
 	float* lastTemperature = isOuter ? &lastTemperatureOuter : &lastTemperatureInner;
 
-	unsigned long ms = millis();
-
-	if (ms - *prevMsTemperature >= intervalTemperature)
+	if (hasIntervalElapsed(prevMsTemperature, intervalTemperature))
 	{
-		*prevMsTemperature = ms;
-
 		delay(pDht->getMinimumSamplingPeriod());
 
 		float temperature = roundFloat(pDht->getTemperature(), 1);
@@ -263,12 +271,8 @@ void processHumidity(bool isOuter)
 	long intervalHumidity = isOuter ? intervalHumidityOuter : intervalHumidityInner;
 	float* lastHumidity = isOuter ? &lastHumidityOuter : &lastHumidityInner;
 
-	unsigned long ms = millis();
-
-	if (ms - *prevMsHumidity >= intervalHumidity)
+	if (hasIntervalElapsed(prevMsHumidity, intervalHumidity))
 	{
-		*prevMsHumidity = ms;
-
 		delay(pDht->getMinimumSamplingPeriod());
 
 		float humidity = roundFloat(pDht->getHumidity(), 1);
@@ -295,12 +299,8 @@ void processHumidity(bool isOuter)
 }
 void processPressure()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsPressure >= intervalPressure)
+	if (hasIntervalElapsed(&prevMsPressure, intervalPressure))
 	{
-		prevMsPressure = ms;
-
 		//int32_t pressure = bmp.readSealevelPressure(190) / 1000; // 205 meters above sealevel
 		//int forecast = samplePressure(pressure);
 
@@ -355,12 +355,8 @@ void processPressure()
 }
 void processGas()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsGas >= intervalGas)
+	if (hasIntervalElapsed(&prevMsGas, intervalGas))
 	{
-		prevMsGas = ms;
-
 		float Rs_Ro = getGasSensorRatio();
 		//Serial.print("Rs_Ro: ");
 		//Serial.println(Rs_Ro);
@@ -390,12 +386,8 @@ void processGas()
 }
 void processRain()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsRain >= intervalRain)
+	if (hasIntervalElapsed(&prevMsRain, intervalRain))
 	{
-		prevMsRain = ms;
-
 		int val = analogRead(RAIN_SENSOR_ANALOG_PIN);
 
 		//Serial.print("Rain: ");
@@ -424,7 +416,7 @@ void processRain()
 		//	//less than 400, quite moist
 		//	Serial.println("Soil is quite most, thank you very much.");
 
-		int range = map(val, 1023, 0, 0, 3);
+		uint8_t range = map(val, 1023, 0, 0, 3);
 
 		//Serial.print("Rain: ");
 		//Serial.println(range);
@@ -438,12 +430,8 @@ void processRain()
 }
 void processLight()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsLight >= intervalLight)
+	if (hasIntervalElapsed(&prevMsLight, intervalLight))
 	{
-		prevMsLight = ms;
-
 		int val = analogRead(LIGHT_SENSOR_ANALOG_PIN);
 
 		//Serial.print("Light: ");
@@ -456,17 +444,17 @@ void processLight()
 		}
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
 float getLastPressureSamplesAverage()
 {
-	float lastPressureSamplesAverage = 0;
+	float average = 0;
 
 	for (int i = 0; i < LAST_SAMPLES_COUNT; i++)
-		lastPressureSamplesAverage += lastPressureSamples[i];
+		average += lastPressureSamples[i];
 
-	lastPressureSamplesAverage /= LAST_SAMPLES_COUNT;
+	average /= LAST_SAMPLES_COUNT;
 
-	return lastPressureSamplesAverage;
+	return average;
 }
 int samplePressure(float pressure /* in hPa */)
 {
@@ -570,7 +558,7 @@ int samplePressure(float pressure /* in hPa */)
 
 	return forecast;
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
 float getGasSensorRo()
 {
 	float adc = 0;
@@ -638,4 +626,16 @@ float roundFloat(float val, uint8_t dec)
 {
 	double k = pow(10, dec);
 	return (float)(round(val * k) / k);
+}
+bool hasIntervalElapsed(unsigned long* prevMs, const unsigned long interval)
+{
+	unsigned long ms = millis();
+
+	if ((unsigned long)(ms - *prevMs) >= interval)
+	{
+		*prevMs = ms;
+		return true;
+	}
+
+	return false;
 }

@@ -7,8 +7,8 @@ It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 #include <SPI.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
-//#include <NewPing.h>
-#include <Ultrasonic.h>
+#include <NewPing.h>
+//#include <Ultrasonic.h>
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
 //#include <Time.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,8 +26,8 @@ OneWire oneWire(ONE_WIRE_PIN);
 DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
 float lastTemperature = -1000;
-unsigned long prevMsTemperature = -1000000;
-const long intervalTemperature = 60000;	// interval at which to measure (milliseconds)
+unsigned long prevMsTemperature = 0;
+const unsigned long intervalTemperature = 60000;	// interval at which to measure (milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PH_SENSOR_ID			9
@@ -35,33 +35,34 @@ const long intervalTemperature = 60000;	// interval at which to measure (millise
 #define PH_OFFSET				0.2f//-0.12
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
 float lastPh = -1000;
-unsigned long prevMsPh = -1000000;
-const long intervalPh = 60000;
+unsigned long prevMsPh = 0;
+const unsigned long intervalPh = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define WATER_SENSOR_ID			10
 #define WATER_PIN				A3
 MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
 bool lastWater;
-unsigned long prevMsWater = -1000000;
-const long intervalWater = 10000;
+unsigned long prevMsWater = 0;
+const unsigned long intervalWater = 10000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISTANCE_SENSOR_ID		11
 #define TRIGGER_PIN				A5  // Arduino pin tied to Trigger pin on the ultrasonic sensor.
 #define ECHO_PIN				A4  // Arduino pin tied to Echo pin on the ultrasonic sensor.
-//#define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
-//NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
-Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
+#define MAX_DISTANCE			200 // Maximum distance to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+//Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
-float lastDistance = -1;
-unsigned long prevMsDistance = -1000000;
-const long intervalDistance = 5000;
+//float lastDistance = -1;
+uint16_t lastDistance = 0;
+unsigned long prevMsDistance = 0;
+const unsigned long intervalDistance = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
 bool isMetric = true;
-unsigned long SLEEP_TIME = 0; //3000;	// sleep time between reads (in milliseconds)
+//unsigned long SLEEP_TIME = 0; //3000;	// sleep time between reads (in milliseconds)
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
@@ -93,26 +94,27 @@ void setup()
 void loop()
 {
 	processTemperature();
-	processPH();
-	processWater();
-	processDistance();
+	gw.process();
 
+	processPH();
+	gw.process();
+
+	processWater();
+	gw.process();
+
+	processDistance();
 	gw.process();
 
 	//gw.requestTime(onTimeReceived);
 
-	if (SLEEP_TIME > 0)
-		gw.sleep(SLEEP_TIME);
+	//if (SLEEP_TIME > 0)
+	//	gw.sleep(SLEEP_TIME);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void processTemperature()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsTemperature >= intervalTemperature)
+	if (hasIntervalElapsed(&prevMsTemperature, intervalTemperature))
 	{
-		prevMsTemperature = ms;
-
 		float temperature = roundFloat(readTemperature(), 1);
 
 		if (temperature != -127.00)
@@ -133,12 +135,8 @@ void processTemperature()
 }
 void processPH()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsPh >= intervalPh)
+	if (hasIntervalElapsed(&prevMsPh, intervalPh))
 	{
-		prevMsPh = ms;
-
 		float ph = roundFloat(readPh(), 1);
 
 		if (ph != lastPh)
@@ -155,12 +153,8 @@ void processPH()
 }
 void processWater()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsWater >= intervalWater)
+	if (hasIntervalElapsed(&prevMsWater, intervalWater))
 	{
-		prevMsWater = ms;
-
 		bool water = readWater();
 
 		if (water != lastWater)
@@ -177,16 +171,12 @@ void processWater()
 }
 void processDistance()
 {
-	unsigned long ms = millis();
-
-	if (ms - prevMsDistance >= intervalDistance)
+	if (hasIntervalElapsed(&prevMsDistance, intervalDistance))
 	{
-		prevMsDistance = ms;
-
-		//uint16_t distance = readDistance();
+		uint16_t distance = ceil(readDistance());
 		
 		//float distance = roundFloat(readDistanceUltrasonic(), 1);
-		uint8_t distance = ceil(readDistanceUltrasonic());
+		//uint16_t distance = ceil(readDistanceUltrasonic());
 
 		if (distance > 0)
 		{
@@ -311,25 +301,31 @@ float readPh()
 
 	return phValue;
 }
-//uint16_t readDistance()
+float readDistance()
+{
+	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
+	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+	//unsigned int us = sonar.ping(); // Send ping, get ping time in microseconds (uS).
+	//Serial.print("Distance: ");
+	//Serial.print(us / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+	//Serial.println("cm");
+
+	// 2)
+	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
+	//return distance;
+
+	// 3)
+	unsigned long us = sonar.ping_median(10); // get 10 sample value from the sensor for smooth the value
+	float distance = (us / (isMetric ? US_ROUNDTRIP_CM : US_ROUNDTRIP_IN)); // Convert ping time to distance
+	return distance;
+}
+//float readDistanceUltrasonic()
 //{
-//	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
-//	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
-//	//unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
-//	//Serial.print("Distance: ");
-//	//Serial.print(uS / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-//	//Serial.println("cm");
-//
-//	// 2)
-//	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
-//	//return distance;
-//
-//	// 3)
 //	// get 10 sample value from the sensor for smooth the value:
-//	unsigned int buf[10];
+//	float buf[10];
 //	for (int i = 0; i < 10; i++)
 //	{
-//		buf[i] = isMetric ? sonar.ping_cm() : sonar.ping_in();
+//		buf[i] = isMetric ? ultrasonic.Ranging(CM) : ultrasonic.Ranging(INC);
 //		delay(50);
 //	}
 //
@@ -340,7 +336,7 @@ float readPh()
 //		{
 //			if (buf[i] > buf[j])
 //			{
-//				unsigned int temp = buf[i];
+//				float temp = buf[i];
 //				buf[i] = buf[j];
 //				buf[j] = temp;
 //			}
@@ -348,46 +344,14 @@ float readPh()
 //	}
 //
 //	// store the average value:
-//	unsigned long int avgValue = 0;
+//	float avgValue = 0;
 //	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
 //		avgValue += buf[i];
 //
-//	uint16_t distance = avgValue / 6;
+//	float distance = avgValue / 6;
+//
 //	return distance;
 //}
-float readDistanceUltrasonic()
-{
-	// get 10 sample value from the sensor for smooth the value:
-	float buf[10];
-	for (int i = 0; i < 10; i++)
-	{
-		buf[i] = isMetric ? ultrasonic.Ranging(CM) : ultrasonic.Ranging(INC);
-		delay(50);
-	}
-
-	// sort the analog from small to large:
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = i + 1; j < 10; j++)
-		{
-			if (buf[i] > buf[j])
-			{
-				float temp = buf[i];
-				buf[i] = buf[j];
-				buf[j] = temp;
-			}
-		}
-	}
-
-	// store the average value:
-	float avgValue = 0;
-	for (int i = 2; i < 8; i++) // take the average value of 6 center samples
-		avgValue += buf[i];
-
-	float distance = avgValue / 6;
-
-	return distance;
-}
 bool readWater()
 {
 	// analogRead: moisture sensor:
@@ -402,4 +366,16 @@ float roundFloat(float val, uint8_t dec)
 {
 	double k = pow(10, dec);
 	return (float)(round(val * k) / k);
+}
+bool hasIntervalElapsed(unsigned long* prevMs, const unsigned long interval)
+{
+	unsigned long ms = millis();
+
+	if ((unsigned long)(ms - *prevMs) >= interval)
+	{
+		*prevMs = ms;
+		return true;
+	}
+
+	return false;
 }

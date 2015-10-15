@@ -154,6 +154,8 @@ namespace SmartHub.Plugins.Controllers.Core
             {
                 if (lastSensorValue.HasValue) // distance
                 {
+                    float value = lastSensorValue.Value;
+
                     //var svInSwitch = mySensors.GetLastSensorValue(SensorInSwitch);
                     //var vInSwitch = svInSwitch != null ? svInSwitch.Value : (float?)null;
 
@@ -164,7 +166,7 @@ namespace SmartHub.Plugins.Controllers.Core
 
                     if (configuration.IsExchangeMode)
                     {
-                        if (lastSensorValue.Value < configuration.DistanceExchangeMax)
+                        if (value < configuration.DistanceExchangeMax)
                             mySensors.SetSensorValue(SensorOutSwitch, SensorValueType.Switch, 1);
                         else
                         {
@@ -175,23 +177,20 @@ namespace SmartHub.Plugins.Controllers.Core
                     }
                     else
                     {
-                        if (lastSensorValue.Value <= configuration.DistanceMin) // overflow
+                        if (value <= configuration.DistanceMin) // overflow
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 0); // stop In
-                        else if (lastSensorValue.Value > configuration.DistanceMax) // insufficient level
+                        else if (value > configuration.DistanceMax) // insufficient level
                             mySensors.SetSensorValue(SensorInSwitch, SensorValueType.Switch, 1); // start In
                     }
+
+                    // voice alarm:
+                    if (value <= configuration.DistanceAlarmMin)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, value));
+                    else if (value > configuration.DistanceExchangeMax)
+                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, value));
                 }
                 else
                     RequestSensorsValues();
-
-                // voice alarm:
-                if (lastSensorValue.HasValue)
-                {
-                    if (lastSensorValue.Value <= configuration.DistanceAlarmMin)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMinText, lastSensorValue.Value));
-                    else if (lastSensorValue.Value > configuration.DistanceExchangeMax)
-                        Context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} сантиметров.", configuration.DistanceAlarmMaxText, lastSensorValue.Value));
-                }
             }
         }
         #endregion
