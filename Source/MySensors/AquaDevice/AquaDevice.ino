@@ -39,9 +39,9 @@ unsigned long prevMsPh = 0;
 const unsigned long intervalPh = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#define WATER_SENSOR_ID			10
+#define WATERLEAK_SENSOR_ID		10
 #define WATER_PIN				A3
-MyMessage msgWater(WATER_SENSOR_ID, V_TRIPPED);
+MyMessage msgWater(WATERLEAK_SENSOR_ID, V_TRIPPED);
 bool lastWater;
 unsigned long prevMsWater = 0;
 const unsigned long intervalWater = 10000;
@@ -60,7 +60,17 @@ unsigned long prevMsDistance = 0;
 const unsigned long intervalDistance = 5000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
-MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
+MySensor gw;
+
+//MyTransportNRF24 transport(RF24_CE_PIN, RF24_CS_PIN);
+//MySensor gw(transport);
+
+//MyHwATMega328 hw;
+//MySensor gw(transport,
+//	hw,
+//	//signer, /* if MY_SIGNING_FEATURE is enabled */
+//	DEFAULT_RX_LED_PIN, DEFAULT_TX_LED_PIN, DEFAULT_ERR_LED_PIN /* if WITH_LEDS_BLINKING is enabled */
+//	);
 bool isMetric = true;
 //unsigned long SLEEP_TIME = 0; //3000;	// sleep time between reads (in milliseconds)
 
@@ -88,7 +98,7 @@ void setup()
 
 	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
 	gw.present(PH_SENSOR_ID, S_PH);
-	gw.present(WATER_SENSOR_ID, S_WATER);
+	gw.present(WATERLEAK_SENSOR_ID, S_WATER_LEAK);
 	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE);
 }
 void loop()
@@ -99,7 +109,7 @@ void loop()
 	processPH();
 	gw.process();
 
-	processWater();
+	processWaterLeak();
 	gw.process();
 
 	processDistance();
@@ -151,7 +161,7 @@ void processPH()
 		}
 	}
 }
-void processWater()
+void processWaterLeak()
 {
 	if (hasIntervalElapsed(&prevMsWater, intervalWater))
 	{
@@ -183,8 +193,8 @@ void processDistance()
 			if (distance != lastDistance)
 			{
 				lastDistance = distance;
-				gw.send(msgDistance.set(distance));
 				//gw.send(msgDistance.set(distance, 1));
+				gw.send(msgDistance.set(distance));
 
 #ifdef DEBUG
 				Serial.print("Distance: ");
@@ -208,10 +218,11 @@ void onMessageReceived(const MyMessage &message)
 			gw.send(msgTemperature.set(lastTemperature, 1));
 		else if (message.sensor == PH_SENSOR_ID && message.type == V_PH)
 			gw.send(msgPh.set(lastPh, 1));
-		else if (message.sensor == WATER_SENSOR_ID && message.type == V_TRIPPED)
+		else if (message.sensor == WATERLEAK_SENSOR_ID && message.type == V_TRIPPED)
 			gw.send(msgWater.set(lastWater ? 1 : 0));
 		else if (message.sensor == DISTANCE_SENSOR_ID && message.type == V_DISTANCE)
-			gw.send(msgDistance.set(lastDistance, 1));
+			//gw.send(msgDistance.set(lastDistance, 1));
+			gw.send(msgDistance.set(lastDistance));
 	}
 	else if (cmd == C_SET)
 	{

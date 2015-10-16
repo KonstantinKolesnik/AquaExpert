@@ -92,7 +92,7 @@ namespace SmartHub.Plugins.Controllers.Core
         #region Public methods
         public override void SetConfiguration(string config)
         {
-            configuration = (WaterLevelController.ControllerConfiguration)Extensions.FromJson(typeof(WaterLevelController.ControllerConfiguration), config);
+            configuration = (ControllerConfiguration)Extensions.FromJson(typeof(ControllerConfiguration), config);
             controller.SetConfiguration(configuration);
             SaveToDB();
         }

@@ -39,13 +39,16 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-SWTFT tft;
-bool isMetric = true;
-MySensor gw(A5, DEFAULT_CS_PIN);
-
 #define bgColor	BLUE
 #define fgColor	WHITE
+
+MyTransportNRF24 transport(A5, RF24_CS_PIN, RF24_PA_LEVEL);
+MyHwATMega328 hw;
+MySensor gw(transport, hw);
+bool isMetric = true;
+
 #define	LINE_COUNT	10
+SWTFT tft;
 String lines[LINE_COUNT];
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
@@ -59,7 +62,7 @@ void setup()
 	isMetric = gw.getConfig().isMetric;
 	gw.present(DISPLAY_SENSOR_ID, S_DISPLAY);
 
-	Serial.begin(115200);
+	//Serial.begin(115200);
 
 	tft.reset();
 

@@ -6,8 +6,8 @@ namespace SmartHub.Plugins.MySensors.Core
         Door = 0,               // Door and window sensors
         Motion = 1,             // Motion sensors
         Smoke = 2,              // Smoke sensor
-        //Light = 3,            // Light Actuator (on/off)
-        Switch = 3,             // Switch Actuator (on/off)
+        Light = 3,              // Light Actuator (on/off)
+        Binary = 3,             // Binary light or relay, V_STATUS (or V_LIGHT), V_WATT (same as S_LIGHT)
         Dimmer = 4,             // Dimmable device of some kind
         Cover = 5,              // Window covers or shades
         Temperature = 6,        // Temperature sensor
@@ -30,8 +30,20 @@ namespace SmartHub.Plugins.MySensors.Core
         Custom = 23,            // Use this for custom sensors where no other fits.
         Dust = 24,              // Dust level sensor
         SceneController = 25,   // Scene controller device
-        Ph = 26,                // Ph sensor
-        ORP = 27,               // ORP sensor
-        Informer = 28,          // Display device
+        RGBLight,               // RGB light. Send color component data using V_RGB. Also supports V_WATT 
+        RGBWLight,              // RGB light with an additional White component. Send data using V_RGBW. Also supports V_WATT
+        ColorSensor,            // Color sensor, send color information using V_RGB
+        HVAC,                   // Thermostat/HVAC device. V_HVAC_SETPOINT_HEAT, V_HVAC_SETPOINT_COLD, V_HVAC_FLOW_STATE, V_HVAC_FLOW_MODE, V_TEMP
+        Multimeter,             // Multimeter device, V_VOLTAGE, V_CURRENT, V_IMPEDANCE 
+        Sprinkler,              // Sprinkler, V_STATUS (turn on/off), V_TRIPPED (if fire detecting device)
+        WaterLeak,              // Water leak sensor, V_TRIPPED, V_ARMED
+        Sound,                  // Sound sensor, V_TRIPPED, V_ARMED, V_LEVEL (sound level in dB)
+        Vibration,              // Vibration sensor, V_TRIPPED, V_ARMED, V_LEVEL (vibration in Hz)
+        Moisture,               // Moisture sensor, V_TRIPPED, V_ARMED, V_LEVEL (water content or moisture in percentage?) 
+
+
+        Ph = 200,               // Ph sensor
+        ORP,                    // ORP sensor
+        Informer,               // Display device
     }
 }

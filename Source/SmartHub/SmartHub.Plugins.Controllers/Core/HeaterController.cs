@@ -35,8 +35,8 @@ namespace SmartHub.Plugins.Controllers.Core
 
                         TemperatureMin = 25.0f,
                         TemperatureMax = 26.0f,
-                        TemperatureAlarmMin = 22.0f,
-                        TemperatureAlarmMax = 28.0f,
+                        TemperatureAlarmMin = 20.0f,
+                        TemperatureAlarmMax = 30.0f,
                         TemperatureAlarmMinText = "Критически низкая температура",
                         TemperatureAlarmMaxText = "Критически высокая температура"
                     };
@@ -76,7 +76,7 @@ namespace SmartHub.Plugins.Controllers.Core
         #region Public methods
         public override void SetConfiguration(string config)
         {
-            configuration = (HeaterController.ControllerConfiguration)Extensions.FromJson(typeof(HeaterController.ControllerConfiguration), config);
+            configuration = (ControllerConfiguration)Extensions.FromJson(typeof(ControllerConfiguration), config);
             controller.SetConfiguration(configuration);
             SaveToDB();
         }

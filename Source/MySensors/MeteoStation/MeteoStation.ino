@@ -9,8 +9,8 @@
 * 7   Baro CE pin
 */
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#include <MySensor.h>
 #include <SPI.h>
+#include <MySensor.h>
 #include <DHT.h>
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
@@ -50,7 +50,7 @@ const float ALTITUDE = 200; // sea level, meters
 MyMessage msgPressure(PRESSURE_SENSOR_ID, V_PRESSURE);
 int32_t lastPressure;
 unsigned long prevMsPressure = 0;
-const unsigned long intervalPressure = 60000;
+const unsigned long intervalPressure = 60000; // must be 1 minute!!!
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define FORECAST_SENSOR_ID			5
@@ -122,8 +122,11 @@ unsigned long prevMsLight = 0;
 const long intervalLight = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
+MyTransportNRF24 transport(RF24_CE_PIN, RF24_CS_PIN, RF24_PA_LEVEL);
+MyHwATMega328 hw;
+MySensor gw(transport, hw);
 bool isMetric = true;
-MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
+
 DHT dhtOuter, dhtInner;
 #define DHT_INNER_PIN	2
 #define DHT_OUTER_PIN	3
@@ -236,7 +239,7 @@ void processTemperature(bool isOuter)
 
 	if (hasIntervalElapsed(prevMsTemperature, intervalTemperature))
 	{
-		delay(pDht->getMinimumSamplingPeriod());
+		gw.wait(pDht->getMinimumSamplingPeriod());
 
 		float temperature = roundFloat(pDht->getTemperature(), 1);
 
@@ -273,7 +276,7 @@ void processHumidity(bool isOuter)
 
 	if (hasIntervalElapsed(prevMsHumidity, intervalHumidity))
 	{
-		delay(pDht->getMinimumSamplingPeriod());
+		gw.wait(pDht->getMinimumSamplingPeriod());
 
 		float humidity = roundFloat(pDht->getHumidity(), 1);
 
@@ -565,7 +568,7 @@ float getGasSensorRo()
 	for (int i = 0; i < CALIBARAION_SAMPLE_COUNT; i++)
 	{
 		adc += analogRead(GAS_SENSOR_ANALOG_PIN);
-		delay(CALIBRATION_SAMPLE_INTERVAL);
+		gw.wait(CALIBRATION_SAMPLE_INTERVAL);
 	}
 	adc /= CALIBARAION_SAMPLE_COUNT;
 
@@ -580,7 +583,7 @@ float getGasSensorRatio()
 	for (int i = 0; i < READ_SAMPLE_COUNT; i++)
 	{
 		adc += analogRead(GAS_SENSOR_ANALOG_PIN);
-		delay(READ_SAMPLE_INTERVAL);
+		gw.wait(READ_SAMPLE_INTERVAL);
 	}
 	adc /= READ_SAMPLE_COUNT;
 

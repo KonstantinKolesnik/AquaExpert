@@ -1,5 +1,6 @@
 ﻿using SmartHub.Plugins.MySensors.Core;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
@@ -93,10 +94,14 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             {
                 try
                 {
+                    Debug.WriteLine("Send: " + message.ToRawMessage());
                     serialPort.WriteLine(message.ToRawMessage());
                     Thread.Sleep(1);
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    Debug.WriteLine("Error send: " + message.ToRawMessage());
+                }
             }
         }
         

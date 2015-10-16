@@ -553,7 +553,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_Connected(object sender, EventArgs e)
         {
             Logger.Info("MySensors gateway connected.");
-            //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
+            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
             NotifyConnectedForPlugins();
             NotifyConnectedForScripts();
         }
@@ -636,9 +636,9 @@ namespace SmartHub.Plugins.MySensors
                     {
                         NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
                         var sv = SaveSensorValueToDB(message);
-                        
+
                         NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
-                        
+
                         NotifyMessageReceivedForPlugins(message);
                         NotifyMessageReceivedForScripts(message);
                         NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
@@ -760,7 +760,7 @@ namespace SmartHub.Plugins.MySensors
         private void gatewayProxy_Disconnected(object sender, EventArgs e)
         {
             Logger.Info("MySensors gateway disconnected.");
-            //Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
+            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
             NotifyDisconnectedForPlugins();
             NotifyDisconnectedForScripts();
         }

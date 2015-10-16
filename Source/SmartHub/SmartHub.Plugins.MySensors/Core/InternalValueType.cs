@@ -18,5 +18,8 @@ namespace SmartHub.Plugins.MySensors.Core
         SketchVersion = 12,         // Optional sketch version that can be reported to keep track of the version of sensor in the Controller GUI.
         Reboot = 13,                // Used by OTA firmware updates. Request for node to reboot.
         GatewayReady = 14,          // Send by gateway to controller when startup is complete.
+        RequestSigning,
+        GetNonce,
+        GetNonceResponse
     }
 }
