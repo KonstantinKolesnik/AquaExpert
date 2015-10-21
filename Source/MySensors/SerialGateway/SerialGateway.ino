@@ -167,30 +167,35 @@ void parseAndSend(char *commandBuffer)
 
 		if (msg.destination == GATEWAY_ADDRESS && command == C_INTERNAL) // message to gateway
 		{
-			// Handle messages directed to gateway
-			if (msg.type == I_VERSION)
-			{
-				// Request for version
+			if (msg.type == I_VERSION) // request for version
 				serial(PSTR("0;0;%d;0;%d;%s\n"), C_INTERNAL, I_VERSION, LIBRARY_VERSION);
-			}
-			else if (msg.type == I_INCLUSION_MODE)
-			{
-				// Request to change inclusion mode
+			else if (msg.type == I_INCLUSION_MODE) // request to change inclusion mode
 				setInclusionMode(atoi(msg.data) == 1);
-			}
 		}
 		else // message to node
 		{
 #ifdef WITH_LEDS_BLINKING
 			gw.txBlink(1);
 #endif
-			ok = gw.sendRoute(msg);
-			if (!ok)
+			// approach 1 -------------------------------------------
+			for (uint8_t i = 0; i < 5; i++)
 			{
-#ifdef WITH_LEDS_BLINKING
-				gw.errBlink(1);
-#endif
+				ok = gw.sendRoute(msg);
+				if (ok)
+					return;
 			}
+#ifdef WITH_LEDS_BLINKING
+			gw.errBlink(1);
+#endif
+			// approach 2 -------------------------------------------
+//			ok = gw.sendRoute(msg);
+//			if (!ok)
+//			{
+//#ifdef WITH_LEDS_BLINKING
+//				gw.errBlink(1);
+//#endif
+//			}
+			//-------------------------------------------
 		}
 	}
 }

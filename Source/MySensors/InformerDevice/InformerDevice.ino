@@ -25,7 +25,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define DISPLAY_SENSOR_ID	0
 //MyMessage msgDisplay(DISPLAY_SENSOR_ID, 0);
-//unsigned long prevMs = -1000000;
+//unsigned long prevMs = 0;
 //const long interval = 10000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -141,14 +141,14 @@ void displayText()
 		String str = lines[lineNo];
 		const char* pTxt = str.length() > 0 ? str.c_str() : "";
 		
-		Serial.println(pTxt);
+		//Serial.println(pTxt);
 		tft.println(pTxt);
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void testText()
 {
-	tft.fillScreen(BLACK);
+	tft.fillScreen(bgColor);
 
 	tft.setCursor(0, 0);
 	tft.setTextColor(WHITE);

@@ -87,6 +87,11 @@ void setup()
 		uint8_t pin = pins[RELAY_SENSOR_ID];
 		pinMode(pin, OUTPUT);
 		uint8_t lastState = gw.loadState(RELAY_SENSOR_ID);
+		if (lastState == 255)
+		{
+			lastState = 0;
+			gw.saveState(RELAY_SENSOR_ID, lastState);
+		}
 		digitalWrite(pin, lastState ? RELAY_ON : RELAY_OFF);
 
 		gw.present(RELAY_SENSOR_ID, S_LIGHT);
@@ -235,7 +240,7 @@ void onMessageReceived(const MyMessage &message)
 			{
 				digitalWrite(pins[message.sensor], newState ? RELAY_ON : RELAY_OFF);
 				gw.saveState(message.sensor, newState);
-
+				delay(10);
 				gw.send(msgRelay.setSensor(message.sensor).set(newState));
 			}
 		}
