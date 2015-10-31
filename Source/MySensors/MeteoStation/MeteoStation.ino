@@ -1,5 +1,5 @@
 /*
-*  ---------- - Connection guide-------------------------------------------------------------------------- -
+----------- Connection guide---------------------------------------------------------------------------
 * 13  Radio & Baro SPI SCK
 * 12  Radio & Baro SPI MISO(SO)
 * 11  Radio & Baro SPI MOSI(SI)
@@ -7,6 +7,13 @@
 * 9   Radio CE pin
 * 8   Baro CS pin
 * 7   Baro CE pin
+
+BH1750 (Light) Connection:
+VCC-5v
+GND-GND
+SCL-SCL(A5)
+SDA-SDA(A4)
+ADD-NC or GND
 */
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #include <SPI.h>
@@ -14,35 +21,24 @@
 #include <DHT.h>
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
+#include <BH1750.h>
 #include <math.h>
 //#include <eeprom.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_INNER_SENSOR_ID	0
-MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);
-float lastTemperatureInner;
-unsigned long prevMsTemperatureInner = 0;
-const long intervalTemperatureInner = 60000;
-
-//--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_INNER_SENSOR_ID	1
-MyMessage msgHumidityInner(HUMIDITY_INNER_SENSOR_ID, V_HUM);
-float lastHumidityInner;
-unsigned long prevMsHumidityInner = 0;
-const unsigned long intervalHumidityInner = 60000;
-
-//--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_OUTER_SENSOR_ID	2
-MyMessage msgTemperatureOuter(TEMPERATURE_OUTER_SENSOR_ID, V_TEMP);
-float lastTemperatureOuter;
-unsigned long prevMsTemperatureOuter = 0;
-const unsigned long intervalTemperatureOuter = 60000;
-
-//--------------------------------------------------------------------------------------------------------------------------------------------
 #define HUMIDITY_OUTER_SENSOR_ID	3
+MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);
+MyMessage msgHumidityInner(HUMIDITY_INNER_SENSOR_ID, V_HUM);
+MyMessage msgTemperatureOuter(TEMPERATURE_OUTER_SENSOR_ID, V_TEMP);
 MyMessage msgHumidityOuter(HUMIDITY_OUTER_SENSOR_ID, V_HUM);
-float lastHumidityOuter;
-unsigned long prevMsHumidityOuter = 0;
-const unsigned long intervalHumidityOuter = 60000;
+float lastTemperatureInner = -100;
+float lastHumidityInner = 0;
+float lastTemperatureOuter = -100;
+float lastHumidityOuter = 0;
+unsigned long prevMsDHT = 0;
+const long intervalDHT = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PRESSURE_SENSOR_ID			4
@@ -115,7 +111,6 @@ const unsigned long intervalRain = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define LIGHT_SENSOR_ID				8
-#define LIGHT_SENSOR_ANALOG_PIN		A2
 MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
 uint16_t lastLight = 0;
 unsigned long prevMsLight = 0;
@@ -131,6 +126,7 @@ DHT dhtOuter, dhtInner;
 #define DHT_INNER_PIN	2
 #define DHT_OUTER_PIN	3
 Adafruit_BMP085 bmp = Adafruit_BMP085();
+BH1750 lightMeter;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -154,34 +150,25 @@ void setup()
 		while (1) {}
 	}
 
+	//lightMeter.begin();
+
 	Ro = getGasSensorRo(); // calibrating the sensor; please make sure the sensor is in clean air when you perform the calibration
 
 	pinMode(RAIN_SENSOR_ANALOG_PIN, INPUT);
-	pinMode(LIGHT_SENSOR_ANALOG_PIN, INPUT);
 
-	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP);
-	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM);
-	gw.present(TEMPERATURE_OUTER_SENSOR_ID, S_TEMP);
-	gw.present(HUMIDITY_OUTER_SENSOR_ID, S_HUM);
-	gw.present(PRESSURE_SENSOR_ID, S_BARO);
-	gw.present(FORECAST_SENSOR_ID, S_BARO);
-	gw.present(GAS_SENSOR_ID, S_AIR_QUALITY);
-	gw.present(RAIN_SENSOR_ID, S_RAIN);
-	gw.present(LIGHT_SENSOR_ID, S_LIGHT_LEVEL);
+	gw.present(TEMPERATURE_INNER_SENSOR_ID, S_TEMP, "Temperature in");
+	gw.present(HUMIDITY_INNER_SENSOR_ID, S_HUM, "Humidity in");
+	gw.present(TEMPERATURE_OUTER_SENSOR_ID, S_TEMP, "Temperature out");
+	gw.present(HUMIDITY_OUTER_SENSOR_ID, S_HUM, "Humidity out");
+	gw.present(PRESSURE_SENSOR_ID, S_BARO, "Atmosphere pressure");
+	gw.present(FORECAST_SENSOR_ID, S_BARO, "Forecast");
+	gw.present(GAS_SENSOR_ID, S_AIR_QUALITY, "Gases level");
+	gw.present(RAIN_SENSOR_ID, S_RAIN, "Rain rate");
+	gw.present(LIGHT_SENSOR_ID, S_LIGHT_LEVEL, "Light level");
 }
 void loop()
 {
-	processTemperature(false);
-	gw.process();
-
-	processHumidity(false);
-	gw.process();
-
-	processTemperature(true);
-	gw.process();
-
-	processHumidity(true);
-	gw.process();
+	processDHTs();
 
 	processPressure();
 	gw.process();
@@ -192,8 +179,8 @@ void loop()
 	processRain();
 	gw.process();
 
-	processLight();
-	gw.process();
+	//processLight();
+	//gw.process();
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void onMessageReceived(const MyMessage &message)
@@ -229,76 +216,71 @@ void onMessageReceived(const MyMessage &message)
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
-void processTemperature(bool isOuter)
+void processDHTs()
 {
-	MyMessage* msg = isOuter ? &msgTemperatureOuter : &msgTemperatureInner;
-	DHT* pDht = isOuter ? &dhtOuter : &dhtInner;
-	unsigned long* prevMsTemperature = isOuter ? &prevMsTemperatureOuter : &prevMsTemperatureInner;
-	long intervalTemperature = isOuter ? intervalTemperatureOuter : intervalTemperatureInner;
-	float* lastTemperature = isOuter ? &lastTemperatureOuter : &lastTemperatureInner;
-
-	if (hasIntervalElapsed(prevMsTemperature, intervalTemperature))
+	if (hasIntervalElapsed(&prevMsDHT, intervalDHT))
 	{
-		gw.wait(pDht->getMinimumSamplingPeriod());
+		processDHT(false);
+		gw.process();
 
-		float temperature = roundFloat(pDht->getTemperature(), 1);
-
-		if (!isnan(temperature))
-		{
-			if (*lastTemperature != temperature)
-			{
-				*lastTemperature = temperature;
-
-				if (!isMetric)
-					temperature = pDht->toFahrenheit(temperature);
-				gw.send(msg->set(temperature, 1));
-
-#ifdef DEBUG
-				Serial.print(isOuter ? "Temperature Outer: " : "Temperature Inner: ");
-				Serial.print(temperature, 1);
-				Serial.println(isMetric ? " C" : " F");
-#endif
-			}
-		}
-#ifdef DEBUG
-		else
-			Serial.println(isOuter ? "Failed reading Temperature Outer" : "Failed reading Temperature Inner");
-#endif
+		processDHT(true);
+		gw.process();
 	}
 }
-void processHumidity(bool isOuter)
+void processDHT(bool isOuter)
 {
-	MyMessage* msg = isOuter ? &msgHumidityOuter : &msgHumidityInner;
 	DHT* pDht = isOuter ? &dhtOuter : &dhtInner;
-	unsigned long* prevMsHumidity = isOuter ? &prevMsHumidityOuter : &prevMsHumidityInner;
-	long intervalHumidity = isOuter ? intervalHumidityOuter : intervalHumidityInner;
+	MyMessage* msgTemperature = isOuter ? &msgTemperatureOuter : &msgTemperatureInner;
+	MyMessage* msgHumidity = isOuter ? &msgHumidityOuter : &msgHumidityInner;
+	float* lastTemperature = isOuter ? &lastTemperatureOuter : &lastTemperatureInner;
 	float* lastHumidity = isOuter ? &lastHumidityOuter : &lastHumidityInner;
 
-	if (hasIntervalElapsed(prevMsHumidity, intervalHumidity))
+	gw.wait(pDht->getMinimumSamplingPeriod());
+
+	float temperature = roundFloat(pDht->getTemperature(), 1);
+	float humidity = roundFloat(pDht->getHumidity(), 1);
+
+	if (!isnan(temperature))
 	{
-		gw.wait(pDht->getMinimumSamplingPeriod());
-
-		float humidity = roundFloat(pDht->getHumidity(), 1);
-
-		if (!isnan(humidity))
+		if (*lastTemperature != temperature)
 		{
-			if (*lastHumidity != humidity)
-			{
-				*lastHumidity = humidity;
-				gw.send(msg->set(humidity, 1));
+			*lastTemperature = temperature;
+
+			if (!isMetric)
+				temperature = pDht->toFahrenheit(temperature);
+			gw.send(msgTemperature->set(temperature, 1));
 
 #ifdef DEBUG
-				Serial.print(isOuter ? "Humidity Outer: " : "Humidity Inner: ");
-				Serial.print(humidity, 1);
-				Serial.println("%");
+			Serial.print(isOuter ? "Temperature Outer: " : "Temperature Inner: ");
+			Serial.print(temperature, 1);
+			Serial.println(isMetric ? " C" : " F");
 #endif
-			}
 		}
-#ifdef DEBUG
-		else
-			Serial.println(isOuter ? "Failed reading Humidity Outer" : "Failed reading Humidity Inner");
-#endif
 	}
+#ifdef DEBUG
+	else
+		Serial.println(isOuter ? "Failed reading Temperature Outer" : "Failed reading Temperature Inner");
+#endif
+
+
+	if (!isnan(humidity))
+	{
+		if (*lastHumidity != humidity)
+		{
+			*lastHumidity = humidity;
+			gw.send(msgHumidity->set(humidity, 1));
+
+#ifdef DEBUG
+			Serial.print(isOuter ? "Humidity Outer: " : "Humidity Inner: ");
+			Serial.print(humidity, 1);
+			Serial.println("%");
+#endif
+		}
+	}
+#ifdef DEBUG
+	else
+		Serial.println(isOuter ? "Failed reading Humidity Outer" : "Failed reading Humidity Inner");
+#endif
 }
 void processPressure()
 {
@@ -435,15 +417,15 @@ void processLight()
 {
 	if (hasIntervalElapsed(&prevMsLight, intervalLight))
 	{
-		int val = analogRead(LIGHT_SENSOR_ANALOG_PIN);
+		uint16_t lux = lightMeter.readLightLevel();
 
 		//Serial.print("Light: ");
-		//Serial.println(val);
+		//Serial.println(lux);
 
-		if (val != lastLight)
+		if (lux != lastLight)
 		{
-			lastLight = val;
-			//gw.send(msgLight.set(val));
+			lastLight = lux;
+			gw.send(msgLight.set(lux));
 		}
 	}
 }

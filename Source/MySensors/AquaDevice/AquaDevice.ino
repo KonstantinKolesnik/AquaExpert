@@ -3,10 +3,10 @@ We use Arduino Nano IO shield.
 It uses DEFAULT_CE_PIN and DEFAULT_CS_PIN for connection
 */
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#include <MySensor.h>
-#include <SPI.h>
-#include <DallasTemperature.h>
 #include <OneWire.h>
+#include <SPI.h>
+#include <MySensor.h>
+#include <DallasTemperature.h>
 #include <NewPing.h>
 //#include <Ultrasonic.h>
 //#include <DS3232RTC.h>  // DS3231/DS3232 library
@@ -25,7 +25,7 @@ MyMessage msgRelay(RELAY_SENSOR_ID, V_LIGHT);
 OneWire oneWire(ONE_WIRE_PIN);
 DallasTemperature dallas(&oneWire);
 MyMessage msgTemperature(TEMPERATURE_SENSOR_ID, V_TEMP);
-float lastTemperature = -1000;
+float lastTemperature = 0;
 unsigned long prevMsTemperature = 0;
 const unsigned long intervalTemperature = 60000;	// interval at which to measure (milliseconds)
 
@@ -34,7 +34,7 @@ const unsigned long intervalTemperature = 60000;	// interval at which to measure
 #define PH_PIN					A2
 #define PH_OFFSET				0.2f//-0.12
 MyMessage msgPh(PH_SENSOR_ID, V_PH);
-float lastPh = -1000;
+float lastPh = 0;
 unsigned long prevMsPh = 0;
 const unsigned long intervalPh = 60000;
 
@@ -42,7 +42,7 @@ const unsigned long intervalPh = 60000;
 #define WATERLEAK_SENSOR_ID		10
 #define WATER_PIN				A3
 MyMessage msgWater(WATERLEAK_SENSOR_ID, V_TRIPPED);
-bool lastWater;
+bool lastWater = false;
 unsigned long prevMsWater = 0;
 const unsigned long intervalWater = 10000;
 
@@ -57,7 +57,7 @@ MyMessage msgDistance(DISTANCE_SENSOR_ID, V_DISTANCE);
 //float lastDistance = -1;
 uint16_t lastDistance = 0;
 unsigned long prevMsDistance = 0;
-const unsigned long intervalDistance = 5000;
+const unsigned long intervalDistance = 10000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 MySensor gw;
@@ -101,10 +101,10 @@ void setup()
 	dallas.begin();
 	pinMode(WATER_PIN, INPUT);
 
-	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP);
-	gw.present(PH_SENSOR_ID, S_PH);
-	gw.present(WATERLEAK_SENSOR_ID, S_WATER_LEAK);
-	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE);
+	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP, "Water temperature");
+	gw.present(PH_SENSOR_ID, S_PH, "Water PH level");
+	gw.present(WATERLEAK_SENSOR_ID, S_WATER_LEAK, "Water leak");
+	gw.present(DISTANCE_SENSOR_ID, S_DISTANCE, "Water distance");
 }
 void loop()
 {
@@ -170,15 +170,15 @@ void processWaterLeak()
 {
 	if (hasIntervalElapsed(&prevMsWater, intervalWater))
 	{
-		bool water = readWater();
+		bool leak = readWater();
 
-		if (water != lastWater)
+		if (leak != lastWater)
 		{
-			lastWater = water;
-			gw.send(msgWater.set(water ? 1 : 0));
+			lastWater = leak;
+			gw.send(msgWater.set(leak ? 1 : 0));
 
 #ifdef DEBUG
-			Serial.print("Water: ");
+			Serial.print("Water leak: ");
 			Serial.println(water ? "Yes" : "No");
 #endif
 		}
@@ -193,7 +193,7 @@ void processDistance()
 		//float distance = roundFloat(readDistanceUltrasonic(), 1);
 		//uint16_t distance = ceil(readDistanceUltrasonic());
 
-		if (distance > 0)
+		if (distance > 0) // (0 = outside distance range)
 		{
 			if (distance != lastDistance)
 			{
@@ -262,8 +262,7 @@ void printTime()
 float readTemperature()
 {
 	dallas.requestTemperatures();
-	float t = isMetric ? dallas.getTempCByIndex(0) : dallas.getTempFByIndex(0);
-	float temperature = static_cast<float>(static_cast<int>(t * 10.)) / 10.;
+	float temperature = isMetric ? dallas.getTempCByIndex(0) : dallas.getTempFByIndex(0);
 	return temperature;
 }
 float readPh()
@@ -322,17 +321,16 @@ float readDistance()
 	// 1) Arduino pin tied to both trigger and echo pins on the ultrasonic sensor.
 	//delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
 	//unsigned int us = sonar.ping(); // Send ping, get ping time in microseconds (uS).
-	//Serial.print("Distance: ");
-	//Serial.print(us / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-	//Serial.println("cm");
+	//float distance = (us / (isMetric ? US_ROUNDTRIP_CM : US_ROUNDTRIP_IN)); // convert ping time to distance
 
 	// 2)
 	//uint16_t distance = isMetric ? sonar.ping_cm() : sonar.ping_in();
-	//return distance;
 
 	// 3)
 	unsigned long us = sonar.ping_median(10); // get 10 sample value from the sensor for smooth the value
-	float distance = (us / (isMetric ? US_ROUNDTRIP_CM : US_ROUNDTRIP_IN)); // Convert ping time to distance
+	float distance = (us / (isMetric ? US_ROUNDTRIP_CM : US_ROUNDTRIP_IN)); // convert ping time to distance
+
+
 	return distance;
 }
 //float readDistanceUltrasonic()
@@ -371,7 +369,7 @@ float readDistance()
 bool readWater()
 {
 	// analogRead: moisture sensor:
-	// transistor:			524 for water;  838 for short circuit; (100/100/KT3102)
+	// with transistor:		524 for water;  838 for short circuit; (100/100/KT3102)
 	// Yusupov (resistors): ~650 for water; ~1000 for short circuit; ~1 for air; (2k / 100k)
 
 	int v = analogRead(WATER_PIN);
