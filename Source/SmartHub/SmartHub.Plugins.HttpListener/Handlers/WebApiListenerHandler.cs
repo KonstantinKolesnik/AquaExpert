@@ -21,18 +21,17 @@ namespace SmartHub.Plugins.HttpListener.Handlers
 
         public Task ProcessRequest(OwinRequest request)
         {
-            var parameters = GetRequestParams(request);
-            var result = action(parameters);
+            var result = action(GetRequestParams(request));
             var json = JsonConvert.SerializeObject(result);
             var jsonBytes = Encoding.UTF8.GetBytes(json);
 
             var response = new OwinResponse(request.Environment)
             {
                 Headers =
-				{
-					{"Cache-Control", new []{"no-store", "no-cache"}},
-					{"Pragma", new []{"no-cache"}}
-				},
+                {
+                    {"Cache-Control", new []{"no-store", "no-cache"}},
+                    {"Pragma", new []{"no-cache"}}
+                },
                 ContentType = "application/json;charset=utf-8",
                 ContentLength = jsonBytes.Length
             };

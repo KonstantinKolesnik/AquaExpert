@@ -24,7 +24,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
 
         public Task ProcessRequest(OwinRequest request)
         {
-            byte[] resource = PrepareResource();
+            byte[] resource = GetResource();
 
             var response = new OwinResponse(request.Environment)
             {
@@ -35,7 +35,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
             return response.WriteAsync(resource);
         }
 
-        private byte[] PrepareResource()
+        private byte[] GetResource()
         {
             byte[] result;
 
@@ -63,10 +63,7 @@ namespace SmartHub.Plugins.HttpListener.Handlers
                     stream.Read(result, 0, result.Length);
                 }
                 else
-                {
-                    var message = string.Format("Resource {0} is not found", path);
-                    throw new FileNotFoundException(message);
-                }
+                    throw new FileNotFoundException(string.Format("Resource {0} is not found", path));
             }
 
             return result;

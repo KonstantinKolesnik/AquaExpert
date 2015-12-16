@@ -5,6 +5,7 @@ using SmartHub.Core.Plugins.Utils;
 using SmartHub.Plugins.HttpListener.Api;
 using SmartHub.Plugins.HttpListener.Attributes;
 using SmartHub.Plugins.HttpListener.Handlers;
+using SmartHub.Plugins.HttpListener.Modules;
 using System;
 using System.ComponentModel.Composition;
 using System.Reflection;
@@ -22,7 +23,7 @@ namespace SmartHub.Plugins.HttpListener
         #endregion
 
         #region Import
-        [ImportMany("5D358D8E-2310-49FE-A660-FB3ED7003B4C")]
+        [ImportMany(HttpCommandAttribute.CLSID)]
         public Lazy<Func<HttpRequestParams, object>, IHttpCommandAttribute>[] HttpCommandHandlers { get; set; }
         #endregion
 
@@ -33,7 +34,13 @@ namespace SmartHub.Plugins.HttpListener
         }
         public override void StartPlugin()
         {
-            server = WebApp.Start(BASE_URL_HTTP, ConfigureModules);
+            // see http://benfoster.io/blog/how-to-write-owin-middleware-in-5-different-steps
+
+            server = WebApp.Start(BASE_URL_HTTP, (IAppBuilder appBuilder) => {
+                appBuilder
+                    .Use<HttpListenerModule>(registeredHandlers, Logger)
+                    .Use<Error404Module>();//.UseErrorPage();
+            });
         }
         public override void StopPlugin()
         {
@@ -50,14 +57,14 @@ namespace SmartHub.Plugins.HttpListener
         {
             var result = new InternalDictionary<IListenerHandler>();
 
-            // регистрируем обработчики для методов плагинов
+            // register WebApi handlers
             foreach (var action in HttpCommandHandlers)
             {
                 Logger.Info("Register WebApi command handler '{0}'", action.Metadata.Url);
                 result.Register(action.Metadata.Url, new WebApiListenerHandler(action.Value));
             }
 
-            // регистрируем обработчики для ресурсов
+            // register resource handlers
             foreach (var plugin in Context.GetAllPlugins())
             {
                 Type type = plugin.GetType();
@@ -71,12 +78,6 @@ namespace SmartHub.Plugins.HttpListener
             }
 
             return result;
-        }
-        private void ConfigureModules(IAppBuilder appBuilder)
-        {
-            appBuilder
-                .Use<HttpListenerModule>(registeredHandlers, Logger)
-                .Use<Error404Module>();//.UseErrorPage();
         }
         #endregion
     }

@@ -19,10 +19,10 @@ namespace SmartHub.Plugins.Timer
         #endregion
 
         #region Import
-        [ImportMany("E65DEB15-50B3-4C0F-954E-014298979874")]
+        [ImportMany(Timer_10sec_ElapsedAttribute.CLSID)]
         public Action<DateTime>[] Timer_ElapsedEventHandlers { get; set; }
 
-        [ImportMany("38A9F1A7-63A4-4688-8089-31F4ED4A9A61")]
+        [ImportMany(RunPeriodicallyAttribute.CLSID)]
         public Lazy<Action<DateTime>, IRunPeriodicallyAttribute>[] PeriodicalActions { get; set; }
         #endregion
 
@@ -72,10 +72,7 @@ namespace SmartHub.Plugins.Timer
             Logger.Info("Register periodical actions at {0:yyyy.MM.dd, HH:mm:ss}", now);
 
             foreach (var action in PeriodicalActions)
-            {
-                var handler = new PeriodicalActionState(action.Value, action.Metadata.Interval, now, Logger);
-                periodicalHandlers.Add(handler);
-            }
+                periodicalHandlers.Add(new PeriodicalActionState(action.Value, action.Metadata.Interval, now, Logger));
         }
         #endregion
     }

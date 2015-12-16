@@ -21,10 +21,7 @@ namespace SmartHub.Core.Plugins.Utils
             lock (lockObject)
             {
                 if (ContainsKey(key))
-                {
-                    var msg = string.Format("duplicated key {0} ({1})", key, obj);
-                    throw new Exception(msg);
-                }
+                    throw new Exception(string.Format("Duplicated key {0} ({1})", key, obj));
 
                 Add(key, obj);
             }

@@ -74,8 +74,8 @@
     <Compile Include="Attributes\HttpCommandAttribute.cs" />
     <Compile Include="Attributes\HttpResourceAttribute.cs" />
     <Compile Include="Attributes\IHttpCommandAttribute.cs" />
-    <Compile Include="Error404Module.cs" />
-    <Compile Include="HttpListenerModule.cs" />
+    <Compile Include="Modules\Error404Module.cs" />
+    <Compile Include="Modules\HttpListenerModule.cs" />
     <Compile Include="Handlers\IListenerHandler.cs" />
     <Compile Include="Handlers\WebApiListenerHandler.cs" />
     <Compile Include="Handlers\ResourceListenerHandler.cs" />
@@ -92,6 +92,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

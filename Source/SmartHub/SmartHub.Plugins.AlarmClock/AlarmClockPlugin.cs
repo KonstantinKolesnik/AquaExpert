@@ -203,7 +203,7 @@ namespace SmartHub.Plugins.AlarmClock
         #endregion
 
         #region Event handlers
-        [Timer_10_sec_Elapsed]
+        [Timer_10sec_Elapsed]
         public void OnTimerElapsed(DateTime now)
         {
             lock (lockObject)

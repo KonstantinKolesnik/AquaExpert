@@ -3,8 +3,8 @@
 // An IR receiver can be connected to PWM pin 8.
 // All receied IR signals will be sent to gateway device stored in V_IR_RECEIVE.
 //--------------------------------------------------------------------------------------------------------------------------------------------
-#include <MySensor.h>
 #include <SPI.h>
+#include <MySensor.h>
 #include <IRLib.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define IR_RECEIVER_SENSOR_ID		0
@@ -21,7 +21,7 @@ MyMessage msgReceive(IR_RECEIVER_SENSOR_ID, V_IR_RECEIVE);
 
 IRsend irsend;
 //--------------------------------------------------------------------------------------------------------------------------------------------
-MySensor gw(DEFAULT_CE_PIN, DEFAULT_CS_PIN);
+MySensor gw;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -35,8 +35,8 @@ void setup()
 	gw.begin(onMessageReceived);
 	gw.sendSketchInfo("IR Transceiver", "1.0");
 
-	gw.present(IR_RECEIVER_SENSOR_ID, S_IR);
-	gw.present(IR_TRANSMITTER_SENSOR_ID, S_IR);
+	gw.present(IR_RECEIVER_SENSOR_ID, S_IR, "IR receiver");
+	gw.present(IR_TRANSMITTER_SENSOR_ID, S_IR, "IR transmitter");
 }
 void loop()
 {
@@ -54,7 +54,7 @@ void loop()
 			sprintf(buffer, "%08lx", decoder.value);
 			Serial.println(buffer);
 
-			//Serial.println(decoder.value, HEX);
+			Serial.println(decoder.value, HEX);
 
 			//gw.send(msg.set(buffer));
 		}

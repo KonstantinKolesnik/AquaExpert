@@ -99,6 +99,9 @@ void setup()
 	}
 
 	dallas.begin();
+	// requestTemperatures() will not block current thread
+	//dallas.setWaitForConversion(false);
+
 	pinMode(WATER_PIN, INPUT);
 
 	gw.present(TEMPERATURE_SENSOR_ID, S_TEMP, "Water temperature");

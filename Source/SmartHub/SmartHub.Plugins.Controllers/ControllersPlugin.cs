@@ -125,7 +125,7 @@ namespace SmartHub.Plugins.Controllers
                     controller.MessageReceived(message);
         }
 
-        [Timer_10_sec_Elapsed]
+        [Timer_10sec_Elapsed]
         private void timer_Elapsed(DateTime now)
         {
             foreach (ControllerBase controller in controllers)

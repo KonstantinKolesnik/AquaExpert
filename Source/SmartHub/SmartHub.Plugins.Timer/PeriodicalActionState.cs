@@ -6,19 +6,19 @@ namespace SmartHub.Plugins.Timer
 {
     class PeriodicalActionState
     {
-        private static readonly Random random = new Random();
-        private DateTime lastRun;
         private readonly Logger logger;
-        private readonly object lockObject = new object();
         private readonly Action<DateTime> action;
         private readonly int interval;
+        private DateTime lastRun;
+        private static readonly Random random = new Random();
+        private readonly object lockObject = new object();
 
         public PeriodicalActionState(Action<DateTime> action, int interval, DateTime now, Logger logger)
         {
             logger.Info("Register periodical action: {0} ({1})", action.Method, action.Method.DeclaringType);
 
             if (interval < 1)
-                throw new Exception(string.Format("wrong interval: {0} min", interval));
+                throw new Exception(string.Format("Wrong interval: {0} min", interval));
 
             // offset
             int offset = random.Next(interval);
@@ -54,8 +54,7 @@ namespace SmartHub.Plugins.Timer
                             }
                             catch (Exception ex)
                             {
-                                var msg = string.Format("Error when running periodical task {0}", taskInfo);
-                                logger.Error(ex, msg);
+                                logger.Error(ex, string.Format("Error when running periodical task {0}", taskInfo));
                             }
                         });
                     }

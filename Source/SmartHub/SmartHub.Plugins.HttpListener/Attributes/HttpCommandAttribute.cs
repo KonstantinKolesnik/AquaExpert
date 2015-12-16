@@ -8,6 +8,8 @@ namespace SmartHub.Plugins.HttpListener.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class HttpCommandAttribute : ExportAttribute, IHttpCommandAttribute
     {
+        public const string CLSID = "5D358D8E-2310-49FE-A660-FB3ED7003B4C";
+
         public string Url
         {
             get;
@@ -15,7 +17,7 @@ namespace SmartHub.Plugins.HttpListener.Attributes
         }
 
         public HttpCommandAttribute(string url)
-            : base("5D358D8E-2310-49FE-A660-FB3ED7003B4C", typeof(Func<HttpRequestParams, object>))
+            : base(CLSID, typeof(Func<HttpRequestParams, object>))
         {
             Url = url;
         }

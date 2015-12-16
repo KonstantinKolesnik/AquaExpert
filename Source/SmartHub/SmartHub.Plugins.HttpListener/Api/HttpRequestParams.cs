@@ -20,22 +20,18 @@ namespace SmartHub.Plugins.HttpListener.Api
             var formValue = FormData.Get(name);
 
             if (string.IsNullOrWhiteSpace(urlValue))
-            {
                 return formValue;
-            }
 
             if (string.IsNullOrWhiteSpace(formValue))
-            {
                 return urlValue;
-            }
 
             return string.Format("{0},{1}", urlValue, formValue);
         }
         public int? GetInt32(string name)
         {
             var stringValue = GetString(name);
-            int result;
 
+            int result;
             if (int.TryParse(stringValue, out result))
                 return result;
 
@@ -44,8 +40,8 @@ namespace SmartHub.Plugins.HttpListener.Api
         public Guid? GetGuid(string name)
         {
             var stringValue = GetString(name);
-            Guid result;
 
+            Guid result;
             if (Guid.TryParse(stringValue, out result))
                 return result;
 
@@ -54,8 +50,8 @@ namespace SmartHub.Plugins.HttpListener.Api
         public bool? GetBool(string name)
         {
             var stringValue = GetString(name);
-            bool result;
 
+            bool result;
             if (bool.TryParse(stringValue, out result))
                 return result;
 
@@ -67,10 +63,7 @@ namespace SmartHub.Plugins.HttpListener.Api
             var value = GetString(name);
 
             if (string.IsNullOrEmpty(value))
-            {
-                string message = string.Format("parameter {0} is required", name);
-                throw new NullReferenceException(message);
-            }
+                throw new NullReferenceException(string.Format("Parameter {0} is required", name));
 
             return value;
         }
@@ -79,10 +72,7 @@ namespace SmartHub.Plugins.HttpListener.Api
             var value = GetInt32(name);
 
             if (!value.HasValue)
-            {
-                string message = string.Format("parameter {0} is required", name);
-                throw new NullReferenceException(message);
-            }
+                throw new NullReferenceException(string.Format("Parameter {0} is required", name));
 
             return value.Value;
         }
@@ -91,10 +81,7 @@ namespace SmartHub.Plugins.HttpListener.Api
             var value = GetGuid(name);
 
             if (!value.HasValue)
-            {
-                string message = string.Format("parameter {0} is required", name);
-                throw new NullReferenceException(message);
-            }
+                throw new NullReferenceException(string.Format("Parameter {0} is required", name));
 
             return value.Value;
         }
@@ -103,10 +90,7 @@ namespace SmartHub.Plugins.HttpListener.Api
             var value = GetBool(name);
 
             if (!value.HasValue)
-            {
-                string message = string.Format("parameter {0} is required", name);
-                throw new NullReferenceException(message);
-            }
+                throw new NullReferenceException(string.Format("Parameter {0} is required", name));
 
             return value.Value;
         }
