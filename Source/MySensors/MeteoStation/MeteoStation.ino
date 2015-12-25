@@ -25,6 +25,8 @@ ADD-NC or GND
 #include <math.h>
 //#include <eeprom.h>
 //--------------------------------------------------------------------------------------------------------------------------------------------
+#define LAST_MS						-100000
+//--------------------------------------------------------------------------------------------------------------------------------------------
 #define TEMPERATURE_INNER_SENSOR_ID	0
 #define HUMIDITY_INNER_SENSOR_ID	1
 #define TEMPERATURE_OUTER_SENSOR_ID	2
@@ -33,26 +35,31 @@ MyMessage msgTemperatureInner(TEMPERATURE_INNER_SENSOR_ID, V_TEMP);
 MyMessage msgHumidityInner(HUMIDITY_INNER_SENSOR_ID, V_HUM);
 MyMessage msgTemperatureOuter(TEMPERATURE_OUTER_SENSOR_ID, V_TEMP);
 MyMessage msgHumidityOuter(HUMIDITY_OUTER_SENSOR_ID, V_HUM);
-float lastTemperatureInner = -100;
+float lastTemperatureInner = -1000;
 float lastHumidityInner = 0;
-float lastTemperatureOuter = -100;
+float lastTemperatureOuter = -1000;
 float lastHumidityOuter = 0;
-unsigned long prevMsDHT = 0;
+unsigned long prevMsDHT = LAST_MS;
 const long intervalDHT = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define PRESSURE_SENSOR_ID			4
 const float ALTITUDE = 200; // sea level, meters
 MyMessage msgPressure(PRESSURE_SENSOR_ID, V_PRESSURE);
-int32_t lastPressure;
-unsigned long prevMsPressure = 0;
+int32_t lastPressure = 0;
+unsigned long prevMsPressure = LAST_MS;
 const unsigned long intervalPressure = 60000; // must be 1 minute!!!
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define FORECAST_SENSOR_ID			5
 MyMessage msgForecast(FORECAST_SENSOR_ID, V_FORECAST);
-int lastForecast = 5;
-const char *weather[] = { "stable", "sunny", "cloudy", "unstable", "thunderstorm", "unknown" };
+const int LAST_SAMPLES_COUNT = 5;
+float lastPressureSamples[LAST_SAMPLES_COUNT]; // in kPa
+//float dP_dt;
+int minuteCount = 0;
+bool firstRound = true;
+float pressureAvg; // average value is used in forecast algorithm
+float pressureAvg2; // average after 2 hours is used as reference value for the next iteration
 enum FORECAST
 {
 	STABLE = 0,			// "Stable Weather Pattern"
@@ -62,24 +69,16 @@ enum FORECAST
 	THUNDERSTORM = 4,	// "Quickly falling L-Press",    "Thunderstorm"
 	UNKNOWN = 5			// "Unknown (More Time needed)
 };
-const int LAST_SAMPLES_COUNT = 5;
-float lastPressureSamples[LAST_SAMPLES_COUNT];
-float dP_dt;
-int minuteCount = 0;
-bool firstRound = true;
-// this CONVERSION_FACTOR is used to convert from Pa to kPa in forecast algorithm
-// get kPa/h by dividing hPa by 10 
-#define CONVERSION_FACTOR (1.0 / 10.0)
-float pressureAvg; // average value is used in forecast algorithm
-float pressureAvg2; // average after 2 hours is used as reference value for the next iteration
+int lastForecast = -1;
+const char *weather[] = { "Stable", "Sunny", "Cloudy", "Unstable", "Thunderstorm", "Unknown" };
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 // MQ2 sensor: LPG, i-butane, CO, Hydrogen (H2), methane (CH4), alcohol, smoke, propane
 
 #define GAS_SENSOR_ID				6
 MyMessage msgGas(GAS_SENSOR_ID, V_VAR1);
-uint16_t lastGas = 0;
-unsigned long prevMsGas = 0;
+int lastGas = -10;
+unsigned long prevMsGas = LAST_MS;
 const unsigned long intervalGas = 60000;
 
 #define GAS_SENSOR_ANALOG_PIN		A0		// define which analog input channel you are going to use
@@ -90,11 +89,18 @@ const unsigned long intervalGas = 60000;
 #define READ_SAMPLE_COUNT           5		// define how many samples you are going to take in normal operation
 #define READ_SAMPLE_INTERVAL        50		// define the time interal (in milisecond) between each samples in normal operation
 
-#define GAS_LPG                     0
-#define GAS_CO                      1
-#define GAS_SMOKE                   2
-
 float Ro;
+
+typedef enum
+{
+	GAS_LPG = 0,
+	GAS_CO = 1,
+	GAS_SMOKE = 2
+} GasType;
+
+//#define GAS_LPG                     0
+//#define GAS_CO                      1
+//#define GAS_SMOKE                   2
 
 // two points are taken from the curve; with these two points, a line is formed which is "approximately equivalent" to the original curve.
 // data format: {x, y, slope}; 
@@ -106,14 +112,14 @@ float SmokeCurve[3] = { 2.3, 0.53, -0.44 };	// point1: (lg200, 0.53), point2: (l
 #define RAIN_SENSOR_ANALOG_PIN		A1
 MyMessage msgRain(RAIN_SENSOR_ID, V_RAINRATE); //V_RAIN
 uint8_t lastRain = 0;
-unsigned long prevMsRain = 0;
+unsigned long prevMsRain = LAST_MS;
 const unsigned long intervalRain = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 #define LIGHT_SENSOR_ID				8
 MyMessage msgLight(LIGHT_SENSOR_ID, V_LIGHT_LEVEL);
 uint16_t lastLight = 0;
-unsigned long prevMsLight = 0;
+unsigned long prevMsLight = LAST_MS;
 const long intervalLight = 60000;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -139,14 +145,14 @@ void setup()
 
 	isMetric = gw.getConfig().isMetric;
 
-	dhtOuter.setup(DHT_OUTER_PIN);
 	dhtInner.setup(DHT_INNER_PIN);
+	gw.wait(1000);
+	dhtOuter.setup(DHT_OUTER_PIN);
+	gw.wait(1000);
 
 	if (!bmp.begin())
 	{
-#ifdef DEBUG
-		Serial.println("Could not find a valid BMP085/BMP180 sensor, check wiring!");
-#endif
+		Serial.println("Could not find a valid BMP085/BMP180 sensor!");
 		while (1) {}
 	}
 
@@ -250,17 +256,17 @@ void processDHT(bool isOuter)
 				temperature = pDht->toFahrenheit(temperature);
 			gw.send(msgTemperature->set(temperature, 1));
 
-#ifdef DEBUG
+//#ifdef DEBUG
 			Serial.print(isOuter ? "Temperature Outer: " : "Temperature Inner: ");
 			Serial.print(temperature, 1);
 			Serial.println(isMetric ? " C" : " F");
-#endif
+//#endif
 		}
 	}
-#ifdef DEBUG
+//#ifdef DEBUG
 	else
 		Serial.println(isOuter ? "Failed reading Temperature Outer" : "Failed reading Temperature Inner");
-#endif
+//#endif
 
 
 	if (!isnan(humidity))
@@ -270,38 +276,24 @@ void processDHT(bool isOuter)
 			*lastHumidity = humidity;
 			gw.send(msgHumidity->set(humidity, 1));
 
-#ifdef DEBUG
+//#ifdef DEBUG
 			Serial.print(isOuter ? "Humidity Outer: " : "Humidity Inner: ");
 			Serial.print(humidity, 1);
 			Serial.println("%");
-#endif
+//#endif
 		}
 	}
-#ifdef DEBUG
+//#ifdef DEBUG
 	else
 		Serial.println(isOuter ? "Failed reading Humidity Outer" : "Failed reading Humidity Inner");
-#endif
+//#endif
 }
 void processPressure()
 {
 	if (hasIntervalElapsed(&prevMsPressure, intervalPressure))
 	{
-		//int32_t pressure = bmp.readSealevelPressure(190) / 1000; // 205 meters above sealevel
-		//int forecast = samplePressure(pressure);
-
-		//float altitude = bmp.readAltitude();
-
-		//Serial.println(bmp.readSealevelPressure(altitude));
-		//Serial.println(bmp.readPressure());
-		//Serial.println(bmp.readSealevelPressure(altitude) / 133.3);
-		//Serial.println(bmp.readPressure() / 133.3);
-		//Serial.println(weather[forecast]);
-		//Serial.println(bmp.readTemperature());
-		//Serial.println((int16_t)altitude);
-		//Serial.println("-------------------------");
-
 		int32_t pressure = bmp.readPressure(); // in Pa
-		//int32_t pressure = bmp.readSealevelPressure(ALTITUDE);
+		//int32_t pressure = bmp.readSealevelPressure(ALTITUDE); // in Pa
 
 		if (!isnan(pressure))
 		{
@@ -310,32 +302,30 @@ void processPressure()
 				lastPressure = pressure;
 				gw.send(msgPressure.set(pressure));
 
-#ifdef DEBUG
+//#ifdef DEBUG
 				Serial.print("Pressure: ");
 				Serial.print(pressure);
 				Serial.println(" Pa");
-#endif
+//#endif
 			}
 
-			//int forecast = samplePressure((float)pressure / 1000.0f); // in kPa
-			int forecast = samplePressure((float)pressure / 100.0f); // in hPa
+			int forecast = samplePressure((float)pressure / 1000.0f); // in kPa!!!
 
-			if (lastForecast != forecast)
+			if (lastForecast != forecast) // && forecast != UNKNOWN
 			{
 				lastForecast = forecast;
-				//gw.send(msgForecast.set(weather[forecast]));
 				gw.send(msgForecast.set(forecast));
 
-#ifdef DEBUG
+//#ifdef DEBUG
 				Serial.print("Forecast: ");
 				Serial.println(weather[forecast]);
-#endif
+//#endif
 			}
 		}
-#ifdef DEBUG
+//#ifdef DEBUG
 		else
 			Serial.println("Failed reading Pressure");
-#endif
+//#endif
 	}
 }
 void processGas()
@@ -346,7 +336,7 @@ void processGas()
 		//Serial.print("Rs_Ro: ");
 		//Serial.println(Rs_Ro);
 
-		uint16_t val = getGasPercentage(Rs_Ro, GAS_CO);
+		int val = getGasPercentage(Rs_Ro, GAS_CO);
 
 		//Serial.print("LPG: ");
 		//Serial.print(getGasPercentage(Rs_Ro, GAS_LPG));
@@ -365,7 +355,11 @@ void processGas()
 		if (val != lastGas)
 		{
 			lastGas = val;
-			gw.send(msgGas.set((int)val));
+			gw.send(msgGas.set(val));
+
+			Serial.print("Gas: ");
+			Serial.print(val);
+			Serial.println(" ppm");
 		}
 	}
 }
@@ -441,15 +435,16 @@ float getLastPressureSamplesAverage()
 
 	return average;
 }
-int samplePressure(float pressure /* in hPa */)
+int samplePressure(float pressure /* in kPa */)
 {
 	// Algorithm found here
 	// http://www.freescale.com/files/sensors/doc/app_note/AN3914.pdf
-	// Pressure in hPa -->  forecast done by calculating kPa/h
 
 	// Calculate the average of the last n minutes.
 	int index = minuteCount % LAST_SAMPLES_COUNT;
 	lastPressureSamples[index] = pressure;
+
+	float dP_dt;
 
 	minuteCount++;
 	if (minuteCount > 185)
@@ -460,7 +455,7 @@ int samplePressure(float pressure /* in hPa */)
 	else if (minuteCount == 35)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) // first time initial 3 hour
 			dP_dt = change * 2; // note this is for t = 0.5hour
 		else
@@ -469,7 +464,7 @@ int samplePressure(float pressure /* in hPa */)
 	else if (minuteCount == 65)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) //first time initial 3 hour
 			dP_dt = change; //note this is for t = 1 hour
 		else
@@ -478,7 +473,7 @@ int samplePressure(float pressure /* in hPa */)
 	else if (minuteCount == 95)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) // first time initial 3 hour
 			dP_dt = change / 1.5; // note this is for t = 1.5 hour
 		else
@@ -488,7 +483,7 @@ int samplePressure(float pressure /* in hPa */)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
 		pressureAvg2 = lastPressureAvg; // store for later use.
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) // first time initial 3 hour
 			dP_dt = change / 2; // note this is for t = 2 hour
 		else
@@ -497,7 +492,7 @@ int samplePressure(float pressure /* in hPa */)
 	else if (minuteCount == 155)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) // first time initial 3 hour
 			dP_dt = change / 2.5; // note this is for t = 2.5 hour
 		else
@@ -506,7 +501,7 @@ int samplePressure(float pressure /* in hPa */)
 	else if (minuteCount == 185)
 	{
 		float lastPressureAvg = getLastPressureSamplesAverage();
-		float change = (lastPressureAvg - pressureAvg) * CONVERSION_FACTOR;
+		float change = lastPressureAvg - pressureAvg;
 		if (firstRound) // first time initial 3 hour
 			dP_dt = change / 3; // note this is for t = 3 hour
 		else
@@ -533,14 +528,6 @@ int samplePressure(float pressure /* in hPa */)
 	else
 		forecast = UNKNOWN;
 
-	// uncomment when debugging
-	//Serial.print(F("Forecast at minute "));
-	//Serial.print(minuteCount);
-	//Serial.print(F(" dP/dt = "));
-	//Serial.print(dP_dt);
-	//Serial.print(F("kPa/h --> "));
-	//Serial.println(weather[forecast]);
-
 	return forecast;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -554,7 +541,7 @@ float getGasSensorRo()
 	}
 	adc /= CALIBARAION_SAMPLE_COUNT;
 
-	float Rs = (1024 - adc) / adc; // omit *Rl
+	float Rs = (1024.0f - adc) / adc; // omit *Rl
 	float Ro = Rs / RO_CLEAN_AIR_FACTOR; // The ratio of Rs/Ro is ~10 in a clear air
 
 	return Ro;
@@ -569,7 +556,7 @@ float getGasSensorRatio()
 	}
 	adc /= READ_SAMPLE_COUNT;
 
-	float Rs = (1024 - adc) / adc; // omit *Rl
+	float Rs = (1024.0f - adc) / adc; // omit *Rl
 	float RsRoRatio = Rs / Ro;
 
 	return RsRoRatio;
@@ -589,9 +576,6 @@ float getGasPercentage(float rs_ro_ratio, int gasType)
 		case GAS_LPG: pCurve = LPGCurve; break;
 		case GAS_CO: pCurve = COCurve; break;
 		case GAS_SMOKE: pCurve = SmokeCurve; break;
-
-
-
 		default: return 0;
 	}
 
