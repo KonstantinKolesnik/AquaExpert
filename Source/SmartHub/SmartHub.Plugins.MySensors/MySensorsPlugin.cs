@@ -126,9 +126,24 @@ namespace SmartHub.Plugins.MySensors
             //    Save(new Setting() { Id = Guid.NewGuid(), Name = "SerialPortName", Value = "" });
 
             gatewayProxy = isSerialGateway ? (IGatewayProxy)new SerialGatewayProxy() : (IGatewayProxy)new EthernetGatewayProxy();
-            gatewayProxy.Connected += gatewayProxy_Connected;
-            gatewayProxy.MessageReceived += gatewayProxy_MessageReceived;
-            gatewayProxy.Disconnected += gatewayProxy_Disconnected;
+            gatewayProxy.Connected += (sender, args) =>
+            {
+                Logger.Info("MySensors gateway connected.");
+                Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
+                NotifyConnectedForPlugins();
+                NotifyConnectedForScripts();
+            };
+            gatewayProxy.MessageReceived += (sender, args) =>
+            {
+                ProcessSensorMessage(args.Message);
+            };
+            gatewayProxy.Disconnected += (sender, args) =>
+            {
+                Logger.Info("MySensors gateway disconnected.");
+                Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
+                NotifyDisconnectedForPlugins();
+                NotifyDisconnectedForScripts();
+            };
         }
         public override void StartPlugin()
         {
@@ -547,20 +562,9 @@ namespace SmartHub.Plugins.MySensors
                 session.Flush();
             }
         }
-        #endregion
 
-        #region Event handlers
-        private void gatewayProxy_Connected(object sender, EventArgs e)
+        private void ProcessSensorMessage(SensorMessage message)
         {
-            Logger.Info("MySensors gateway connected.");
-            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом установлено");
-            NotifyConnectedForPlugins();
-            NotifyConnectedForScripts();
-        }
-        private void gatewayProxy_MessageReceived(IGatewayProxy sender, SensorMessageEventArgs args)
-        {
-            SensorMessage message = args.Message;
-
             Debug.WriteLine(message.ToString());
 
             bool isNodeMessage = message.NodeNo == 0 || message.SensorNo == 255;
@@ -756,13 +760,6 @@ namespace SmartHub.Plugins.MySensors
             }
 
             CheckRebootRequest(node);
-        }
-        private void gatewayProxy_Disconnected(object sender, EventArgs e)
-        {
-            Logger.Info("MySensors gateway disconnected.");
-            Context.GetPlugin<SpeechPlugin>().Say("Соединение со шлюзом прервано");
-            NotifyDisconnectedForPlugins();
-            NotifyDisconnectedForScripts();
         }
         #endregion
 
