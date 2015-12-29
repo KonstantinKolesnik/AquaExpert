@@ -14,7 +14,10 @@ namespace SmartHub.Core.Infrastructure
             InitCurrentDirectory();
             InitApplicationCulture();
 
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) =>
+            {
+                return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().FullName == args.Name);
+            };
         }
 
         private static void InitCurrentDirectory()
@@ -33,11 +36,6 @@ namespace SmartHub.Core.Infrastructure
             Thread.CurrentThread.CurrentUICulture =
             CultureInfo.DefaultThreadCurrentCulture =
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-        }
-
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().FullName == args.Name);
         }
     }
 }

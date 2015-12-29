@@ -5,7 +5,7 @@ namespace SmartHub.ApplicationService
 {
     public partial class SmartHubService : ServiceBase
     {
-        private readonly Hub app;
+        private readonly Hub hub;
 
         public SmartHubService()
         {
@@ -13,18 +13,18 @@ namespace SmartHub.ApplicationService
 
             HubEnvironment.Init();
 
-            app = new Hub();
-            app.Init();
+            hub = new Hub();
+            hub.Init();
         }
 
         protected override void OnStart(string[] args)
         {
-            app.StartServices();
+            hub.StartServices();
         }
 
         protected override void OnStop()
         {
-            app.StopServices();
+            hub.StopServices();
         }
     }
 }
