@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Controllers", "MySensors.Controllers\MySensors.Controllers.csproj", "{A86171C5-EDF7-4342-8F4D-76D6A02B9CBB}"
 EndProject
@@ -83,6 +83,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Plugins.Informers", "SmartHub.Plugins.Informers\SmartHub.Plugins.Informers.csproj", "{70D45967-C3D1-4C5B-87B0-16748F46A324}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MySensors", "MySensors", "{E19CC1DD-42D5-4E43-A12B-285228AA214A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Core.IoT", "SmartHub.Core.IoT\SmartHub.Core.IoT.csproj", "{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -464,6 +466,30 @@ Global
 		{70D45967-C3D1-4C5B-87B0-16748F46A324}.Release|Win32.ActiveCfg = Release|Any CPU
 		{70D45967-C3D1-4C5B-87B0-16748F46A324}.Release|x64.ActiveCfg = Release|Any CPU
 		{70D45967-C3D1-4C5B-87B0-16748F46A324}.Release|x86.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|Win32.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|x64.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Debug|x86.Build.0 = Debug|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|ARM.Build.0 = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Win32.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|Win32.Build.0 = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|x64.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|x64.Build.0 = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|x86.ActiveCfg = Release|Any CPU
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -496,5 +522,6 @@ Global
 		{9B2DD9BE-77F9-455E-B219-7E4110A6AA16} = {E19CC1DD-42D5-4E43-A12B-285228AA214A}
 		{70D45967-C3D1-4C5B-87B0-16748F46A324} = {E19CC1DD-42D5-4E43-A12B-285228AA214A}
 		{E19CC1DD-42D5-4E43-A12B-285228AA214A} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
+		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
 	EndGlobalSection
 EndGlobal

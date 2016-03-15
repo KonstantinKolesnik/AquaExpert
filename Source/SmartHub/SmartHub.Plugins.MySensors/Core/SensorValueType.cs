@@ -62,6 +62,6 @@ namespace SmartHub.Plugins.MySensors.Core
 
 
         Ph = 200,           // Ph level
-        ORP,           // ORP level, V/mV
+        ORP,                // ORP level, V/mV
     }
 }

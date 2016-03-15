@@ -11,7 +11,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
         #region Fields
         private int port;
         private string key;
-        private int receiveTimeout = 2000;
+        private int receiveTimeout = 5000;
         private IPEndPoint remoteEP;
         private bool isConnected = false;
         #endregion
@@ -74,7 +74,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
             {
                 byte[] receiveBytes = client.Receive(ref remoteEP);
                 string response = Encoding.UTF8.GetString(receiveBytes);
-                if (String.Equals(response, responseExpected))
+                if (string.Equals(response, responseExpected))
                     //SyncList(remoteEP);
 
                     isConnected = true;
