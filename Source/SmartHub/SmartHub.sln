@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Controllers", "MySensors.Controllers\MySensors.Controllers.csproj", "{A86171C5-EDF7-4342-8F4D-76D6A02B9CBB}"
 EndProject
@@ -523,5 +523,8 @@ Global
 		{70D45967-C3D1-4C5B-87B0-16748F46A324} = {E19CC1DD-42D5-4E43-A12B-285228AA214A}
 		{E19CC1DD-42D5-4E43-A12B-285228AA214A} = {B2119192-B2D5-4E28-934E-6B0933E4EAAB}
 		{5241F1E5-C5E0-438C-8BE7-2D7624B7D527} = {31D77FDB-69FF-4788-9DD0-4EC84EBEB7D4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 	EndGlobalSection
 EndGlobal
