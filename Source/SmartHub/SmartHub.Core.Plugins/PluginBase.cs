@@ -11,7 +11,6 @@ namespace SmartHub.Core.Plugins
         #region Fields
         [Import(typeof(IServiceContext))]
         private IServiceContext context;
-        private readonly Logger logger;
         #endregion
 
         #region Properties
@@ -21,14 +20,14 @@ namespace SmartHub.Core.Plugins
         }
         protected Logger Logger
         {
-            get { return logger; }
+            get; private set;
         }
         #endregion
 
         #region Constructor
         protected PluginBase()
         {
-            logger = LogManager.GetLogger(GetType().FullName);
+            Logger = LogManager.GetLogger(GetType().FullName);
         }
         #endregion
 
