@@ -1,4 +1,4 @@
-﻿namespace RPI.Drivers.MPU6050
+﻿namespace IoT.Drivers.MPU6050
 {
     public class MpuSensorEventArgs
     {

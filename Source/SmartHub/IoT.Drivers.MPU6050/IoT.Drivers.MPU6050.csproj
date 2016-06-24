@@ -7,8 +7,8 @@
     <ProjectGuid>{5B160449-E2EF-4B2B-8971-B0967E71EE7B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RPI.Drivers.MPU6050</RootNamespace>
-    <AssemblyName>RPI.Drivers.MPU6050</AssemblyName>
+    <RootNamespace>IoT.Drivers.MPU6050</RootNamespace>
+    <AssemblyName>IoT.Drivers.MPU6050</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>

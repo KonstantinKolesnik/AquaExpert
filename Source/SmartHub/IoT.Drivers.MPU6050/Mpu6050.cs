@@ -6,7 +6,7 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Gpio;
 using Windows.Devices.I2c;
 
-namespace RPI.Drivers.MPU6050
+namespace IoT.Drivers.MPU6050
 {
     public class Mpu6050 : IDisposable
     {
@@ -91,11 +91,13 @@ namespace RPI.Drivers.MPU6050
 
             if ((interruptStatus & 0x1) == 0)
                 return;
+
             var ea = new MpuSensorEventArgs
             {
                 Status = (byte)interruptStatus,
                 SamplePeriod = 0.02f
             };
+
             var l = new List<MpuSensorValue>();
 
             int count = readWriteHelper.ReadWord(Constants.FifoCount);
@@ -122,8 +124,10 @@ namespace RPI.Drivers.MPU6050
                     GyroY = yg / (float)131,
                     GyroZ = zg / (float)131
                 };
+
                 l.Add(sv);
             }
+
             ea.Values = l.ToArray();
 
             if (SensorInterruptEvent == null)
