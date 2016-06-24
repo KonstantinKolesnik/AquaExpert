@@ -1,2 +1,2 @@
-SmartNetwork
+SmartHub
 ==========
