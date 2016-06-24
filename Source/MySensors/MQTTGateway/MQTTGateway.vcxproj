@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DD57413F-118D-453B-98C7-04433952D2F4}</ProjectGuid>
     <RootNamespace>MQTTGateway</RootNamespace>
-    <ProjectName>MQTTGateway</ProjectName>
+    <ProjectName>MySensors.MQTTGateway</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

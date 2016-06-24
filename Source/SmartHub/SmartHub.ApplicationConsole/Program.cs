@@ -8,7 +8,7 @@ namespace SmartHub.ApplicationConsole
         static void Main(string[] args)
         {
             Console.Title = "Smart Hub";
-            Console.WriteLine("Starting Hub... ");
+            Console.WriteLine("Starting Hub...");
 
             HubEnvironment.Init();
 

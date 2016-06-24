@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1148402D-B54C-4938-A5D7-71139A9098D3}</ProjectGuid>
     <RootNamespace>MeteoStation</RootNamespace>
+    <ProjectName>MySensors.MeteoStation</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

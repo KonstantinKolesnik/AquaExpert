@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FC87FC6D-FEED-4BFC-8873-D222FE7E0FD7}</ProjectGuid>
     <RootNamespace>InformerDevice</RootNamespace>
+    <ProjectName>MySensors.InformerDevice</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -1,23 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{B19DD1D2-F45E-433E-934E-888699F58C87}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Node", "Node\Node.vcxproj", "{26C89EF5-CCAD-4731-B150-79BFF3CDB4B9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySensors.Node", "Node\Node.vcxproj", "{26C89EF5-CCAD-4731-B150-79BFF3CDB4B9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Repeater", "Repeater\Repeater.vcxproj", "{7E703E9A-2864-4DC6-8CD5-AA4767678E46}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySensors.Repeater", "Repeater\Repeater.vcxproj", "{7E703E9A-2864-4DC6-8CD5-AA4767678E46}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EthernetGateway", "EthernetGateway\EthernetGateway.vcxproj", "{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySensors.EthernetGateway", "EthernetGateway\EthernetGateway.vcxproj", "{7C340A0D-80A0-4ED5-AF90-E3C988CD87CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQTTGateway", "MQTTGateway\MQTTGateway.vcxproj", "{DD57413F-118D-453B-98C7-04433952D2F4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySensors.MQTTGateway", "MQTTGateway\MQTTGateway.vcxproj", "{DD57413F-118D-453B-98C7-04433952D2F4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGateway", "SerialGateway\SerialGateway.vcxproj", "{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySensors.SerialGateway", "SerialGateway\SerialGateway.vcxproj", "{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CFF70962-DBEF-42E8-ACBD-AC240D964714}"
 	ProjectSection(SolutionItems) = preProject
-		API.txt = API.txt
+		MySensors.API.txt = MySensors.API.txt
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AquaDevice", "AquaDevice\AquaDevice.vcxproj", "{C4460590-79DB-4E46-AC47-2A3C1912CF18}"

@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{26C89EF5-CCAD-4731-B150-79BFF3CDB4B9}</ProjectGuid>
     <RootNamespace>Node</RootNamespace>
-    <ProjectName>Node</ProjectName>
+    <ProjectName>MySensors.Node</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

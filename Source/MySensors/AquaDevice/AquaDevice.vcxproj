@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C4460590-79DB-4E46-AC47-2A3C1912CF18}</ProjectGuid>
     <RootNamespace>AquaDevice</RootNamespace>
+    <ProjectName>MySensors.AquaDevice</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4C0821A7-EC6E-4B2E-BEAE-E807DA531BBE}</ProjectGuid>
     <RootNamespace>SerialGateway</RootNamespace>
-    <ProjectName>SerialGateway</ProjectName>
+    <ProjectName>MySensors.SerialGateway</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

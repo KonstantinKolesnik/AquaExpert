@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7E703E9A-2864-4DC6-8CD5-AA4767678E46}</ProjectGuid>
     <RootNamespace>Repeater</RootNamespace>
-    <ProjectName>Repeater</ProjectName>
+    <ProjectName>MySensors.Repeater</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
