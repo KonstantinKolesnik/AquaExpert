@@ -180,15 +180,14 @@ namespace SmartHub.Core.Infrastructure
         {
             logger.Info("Load plugins");
 
+            var folders = new HashSet<string>();
             var catalog = new AggregateCatalog(new ApplicationCatalog());
             var spDir = new DirectoryInfo(AppSettings.ShadowedPluginsFullPath);
-            var folders = new HashSet<string>();
 
             foreach (var dir in spDir.GetDirectories())
             {
                 folders.Add(dir.FullName);
-                var subCatalog = new DirectoryCatalog(dir.FullName);
-                catalog.Catalogs.Add(subCatalog);
+                catalog.Catalogs.Add(new DirectoryCatalog(dir.FullName));
             }
 
             AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = string.Join(";", folders);
