@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Composition.Hosting;
 using System.Reflection;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using System.Linq;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
@@ -18,12 +21,12 @@ namespace SmartHub.UWP.Core.Infrastructure
         //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
-        //[OnImportsSatisfied]
-        //public void OnImportsSatisfied()
-        //{
-        //    var a = 0;
-        //    var b = a;
-        //}
+        [OnImportsSatisfied]
+        public void OnImportsSatisfied()
+        {
+            var a = 0;
+            var b = a;
+        }
 
         #region Public methods
         public void Init(List<Assembly> assemblies = null)
@@ -86,9 +89,11 @@ namespace SmartHub.UWP.Core.Infrastructure
         #region Private methods
         private void LoadPlugins(List<Assembly> assemblies = null)
         {
-            assemblies = assemblies ?? new List<Assembly>();
-            assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
-            assemblies.Add(GetType().GetTypeInfo().Assembly);
+            //assemblies = assemblies ?? new List<Assembly>();
+            //assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
+            //assemblies.Add(GetType().GetTypeInfo().Assembly);
+
+            assemblies = GetAssembliesAsync().Result;
 
             //var conventions = new ConventionBuilder();
             //conventions
@@ -109,5 +114,30 @@ namespace SmartHub.UWP.Core.Infrastructure
                 container.SatisfyImports(this);
         }
         #endregion
+
+        public async Task<List<Assembly>> GetAssembliesAsync()
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+
+            var files = await Package.Current.InstalledLocation.GetFilesAsync();
+            if (files != null)
+                foreach (var file in files.Where(
+                    //file => file.FileType == ".dll" /*|| file.FileType == ".exe"*/
+                    file => file.DisplayName.StartsWith("SmartHub")
+                    ))
+                {
+                    try
+                    {
+                        assemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
+
+            return assemblies;
+        }
+
     }
 }

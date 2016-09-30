@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.UI.Popups;
 
 namespace SmartHub.UWP.Core
@@ -121,6 +126,39 @@ namespace SmartHub.UWP.Core
         //        return value.ToString();
         //}
 
+        public static async Task<List<Assembly>> GetAssembliesAsync()
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+
+            var files = await Package.Current.InstalledLocation.GetFilesAsync();
+            if (files != null)
+                foreach (var file in files.Where(
+                    //file => file.FileType == ".dll" /*|| file.FileType == ".exe"*/
+                    file => file.DisplayName.StartsWith("SmartHub")
+                    ))
+                {
+                    try
+                    {
+                        assemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
+
+            return assemblies;
+        }
+        public static List<Assembly> GetAssemblies(string path)
+        {
+            var assemblies = new List<Assembly>();
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path, "*.dll");
+            foreach (var file in files)
+                assemblies.Add(Assembly.Load(new AssemblyName(file)));
+
+            return assemblies;
+        }
 
 
         public static async Task<string> GETRequest(string uri)
@@ -153,28 +191,16 @@ namespace SmartHub.UWP.Core
 
 
 
-        //public static IEnumerable<Assembly> GetAssemblies(string path)
-        //{
-        //    IEnumerable<string> files = Directory.EnumerateFiles(path, "*.dll");
-        //    var assemblies = new List<Assembly>();
-        //    foreach (var file in files)
-        //    {
-        //        Assembly assembly = Assembly.LoadFile(file);
-        //        assemblies.Add(assembly);
-        //    }
-        //    return assemblies;
-        //}
 
 
-        //public static string ExecutablePath
-        //{
-        //    get
-        //    {
-        //        var exePath = Package.Current.InstalledLocation.Path;
-        //        return Path.GetDirectoryName(exePath);
-        //    }
-        //}
-
+        public static string ExecutablePath
+        {
+            get
+            {
+                var exePath = Package.Current.InstalledLocation.Path;
+                return Path.GetDirectoryName(exePath);
+            }
+        }
         //public static string ShadowedPluginsFolder
         //{
         //    get { return "ShadowedPlugins"; }
