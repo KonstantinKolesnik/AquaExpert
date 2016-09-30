@@ -1,0 +1,16 @@
+﻿<Application
+    x:Class="SmartHub.UWP.Applications.RCHub.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:SmartHub.UWP.Core"
+    RequestedTheme="Dark">
+
+    <Application.Resources>
+        <!-- App common entities -->
+        <core:AppManager x:Key="AppManager"/>
+        
+        
+        
+        
+    </Application.Resources>
+</Application>
