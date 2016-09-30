@@ -123,6 +123,7 @@ namespace SmartHub.Plugins.Speech
 
         private void InitRecognitionEngine()
         {
+            //using (SpeechRecognizer recognizer = new System.Windows.Media.SpeechRecognition.SpeechRecognizer())
             return;
 
             var cultureInfo = new CultureInfo("ru-RU");

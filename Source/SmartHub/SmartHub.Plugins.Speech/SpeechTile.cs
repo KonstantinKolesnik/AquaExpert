@@ -20,6 +20,5 @@ namespace SmartHub.Plugins.Speech
                 tileWebModel.content = ex.Message;
             }
         }
-
     }
 }
