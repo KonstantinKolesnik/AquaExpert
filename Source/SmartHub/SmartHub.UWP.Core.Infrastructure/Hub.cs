@@ -1,11 +1,7 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Composition.Hosting;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
