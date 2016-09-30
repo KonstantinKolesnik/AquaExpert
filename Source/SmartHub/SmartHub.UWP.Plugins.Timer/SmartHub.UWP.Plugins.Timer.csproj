@@ -7,8 +7,8 @@
     <ProjectGuid>{2254A4F7-B66F-4068-8B9F-54AC550D5B32}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.UWP.Pligins.Timer</RootNamespace>
-    <AssemblyName>SmartHub.UWP.Pligins.Timer</AssemblyName>
+    <RootNamespace>SmartHub.UWP.Plugins.Timer</RootNamespace>
+    <AssemblyName>SmartHub.UWP.Plugins.Timer</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>

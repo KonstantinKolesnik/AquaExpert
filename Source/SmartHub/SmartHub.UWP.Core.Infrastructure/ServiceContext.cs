@@ -2,35 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Composition;
-using System.Composition.Hosting;
 using System.Linq;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
     [Export(typeof(IServiceContext))]
+    [Shared]
     public class ServiceContext : IServiceContext
     {
         #region Plugins
         [ImportMany]
-        protected IEnumerable<PluginBase> Plugins
+        public IEnumerable<PluginBase> Plugins
         {
             get; set;
-        }
-
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            var a = 0;
-            var b = a;
-        }
-
-        public ServiceContext()
-        {
-            var configuration = new ContainerConfiguration()
-                .WithPart<PluginBase>();
-
-            using (CompositionHost host = configuration.CreateContainer())
-                host.SatisfyImports(this);
         }
 
         public IReadOnlyCollection<PluginBase> GetAllPlugins()
@@ -42,10 +26,6 @@ namespace SmartHub.UWP.Core.Infrastructure
             return Plugins.FirstOrDefault(p => p is T) as T;
         }
         #endregion
-
-
-
-
 
         //[Import(typeof(IHubPackageManager))]
         //public IHubPackageManager PackageManager { get; protected set; }

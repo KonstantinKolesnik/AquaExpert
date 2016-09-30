@@ -1,5 +1,8 @@
 ﻿using Microsoft.ApplicationInsights;
 using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Infrastructure;
+using System.Collections.Generic;
+using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI;
@@ -48,6 +51,18 @@ namespace SmartHub.UWP.Applications.RCHub
             view.BackRequested += View_BackRequested;
 
             AppManager.Init();
+
+            var assemblies = new List<Assembly>()
+            {
+                Assembly.Load(new AssemblyName("SmartHub.UWP.Plugins.Timer")),
+                //GetType().GetTypeInfo().Assembly
+            };
+            //GetType().GetTypeInfo().Assembly.GetReferencedAssemblies()
+
+            HubEnvironment.Init();
+            var hub = new Core.Infrastructure.Hub();
+            hub.Init(assemblies);
+            hub.StartServices();
 
             Frame rootFrame = Window.Current.Content as Frame;
 

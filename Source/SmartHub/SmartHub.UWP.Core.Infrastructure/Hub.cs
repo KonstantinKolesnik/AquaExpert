@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Reflection;
 
@@ -12,44 +11,27 @@ namespace SmartHub.UWP.Core.Infrastructure
     {
         #region Fields
         [Import]
-        public IServiceContext context
+        private IServiceContext context
         {
             get; set;
         }
         //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            var a = 0;
-            var b = a;
-        }
-
+        //[OnImportsSatisfied]
+        //public void OnImportsSatisfied()
+        //{
+        //    var a = 0;
+        //    var b = a;
+        //}
 
         #region Public methods
-        public void Init(List<Assembly> assemblies)
+        public void Init(List<Assembly> assemblies = null)
         {
             //var a = ApplicationData.Current.LocalFolder;
             //StorageFolder appInstalledFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             //StorageFolder assets = await appInstalledFolder.GetFolderAsync("Assets");
             //var files = await assets.GetFilesAsync();
-
-
-            //GetType().GetTypeInfo().Assembly.GetReferencedAssemblies()
-
-            //List<Assembly> assemblies = new List<Assembly>()
-            //{
-            //    //GetType().GetTypeInfo().Assembly,
-            //    typeof(IPlugin).GetTypeInfo().Assembly,
-
-            //    Assembly.Load(new AssemblyName("Plugin1")),
-            //    Assembly.Load(new AssemblyName("Plugin2")),
-            //};
-
-            assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
-            assemblies.Add(GetType().GetTypeInfo().Assembly);
-            //assemblies.Add(Assembly.Load(new AssemblyName("Plugin1")));
 
             try
             {
@@ -102,32 +84,29 @@ namespace SmartHub.UWP.Core.Infrastructure
         #endregion
 
         #region Private methods
-        private void LoadPlugins(List<Assembly> assemblies)
+        private void LoadPlugins(List<Assembly> assemblies = null)
         {
-            var conventions = new ConventionBuilder();
-            conventions
-                .ForTypesDerivedFrom<PluginBase>()
-                .Export<PluginBase>()
-                //.Export()
-                //.ExportInterfaces()
-                //.Shared()
-                ;
+            assemblies = assemblies ?? new List<Assembly>();
+            assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
+            assemblies.Add(GetType().GetTypeInfo().Assembly);
+
+            //var conventions = new ConventionBuilder();
+            //conventions
+            //    .ForTypesDerivedFrom<PluginBase>()
+            //    .Export<PluginBase>()
+            //    //.Export()
+            //    //.ExportInterfaces()
+            //    //.Shared()
+            //    ;
             //conventions.ForTypesDerivedFrom<IServiceContext>().Export<IServiceContext>().Shared();
             //conventions.ForType(GetType()).ImportProperty<IServiceContext>(p => p.context);
 
-            //typeof(ServiceContext).GetTypeInfo().Assembly
             var configuration = new ContainerConfiguration()
                 //.WithDefaultConventions(conventions)
                 .WithAssemblies(assemblies);
 
             using (var container = configuration.CreateContainer())
-            {
-                //context = container.GetExport<IServiceContext>();
-                //var a = container.GetExports<PluginBase>();
-                //var b = a;
-
                 container.SatisfyImports(this);
-            }
         }
         #endregion
     }

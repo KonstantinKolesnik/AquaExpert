@@ -4,12 +4,11 @@ using System.Linq;
 
 namespace SmartHub.UWP.Core.Plugins
 {
-    [Plugin]
-    public /*abstract*/ class PluginBase
+    public abstract class PluginBase
     {
         #region Properties
         [Import]
-        protected IServiceContext Context
+        public IServiceContext Context
         {
             get; set;
         }
@@ -19,28 +18,10 @@ namespace SmartHub.UWP.Core.Plugins
         //}
         #endregion
 
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            var a = 0;
-            var b = a;
-        }
-
-
         #region Constructor
-        //[ImportingConstructor]
-
-        //protected PluginBase()
-        public PluginBase()
+        protected PluginBase()
         {
             //Logger = LogManager.GetLogger(GetType().FullName);
-
-            //var configuration = new ContainerConfiguration().WithPart<IServiceContext>();
-            //using (CompositionHost host = configuration.CreateContainer())
-            //    host.SatisfyImports(this);
-
-            var a = 0;
-            var b = a;
         }
         #endregion
 
