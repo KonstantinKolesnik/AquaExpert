@@ -25,7 +25,7 @@ namespace SmartHub.Plugins.SignalR
 
         #region Import
         [ImportMany("ADD7FADD-D706-4D5A-9103-09B26FD2FD9C")]
-        public Action<string, string>[] OnClientSignal { get; set; }
+        public Action<string, string>[] OnClientMessage { get; set; }
         #endregion
 
         #region Plugin overrides
@@ -89,7 +89,7 @@ namespace SmartHub.Plugins.SignalR
                 //Data chatData = JsonConvert.DeserializeObject<Data>(data);
                 //return Connection.Broadcast(chatData);
 
-                //Run(OnClientSignal, x => x(connectionId, data));
+                //Run(OnClientMessage, x => x(connectionId, data));
 
                 return null;
             }
@@ -111,7 +111,7 @@ namespace SmartHub.Plugins.SignalR
     //    public void onClientMessage(string name, string message)
     //    {
     //        Clients.All.onServerMessage("server 1", "success");
-    //        //Run(OnClientSignal, x => x(name, message));
+    //        //Run(OnClientMessage, x => x(name, message));
     //    }
     //}
     #endregion
