@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.Popups;
 
 namespace SmartHub.UWP.Core
@@ -128,14 +130,17 @@ namespace SmartHub.UWP.Core
 
         public static async Task<List<Assembly>> GetAssembliesAsync()
         {
+            //var files = await Package.Current.InstalledLocation.GetFilesAsync();
+            //return files
+            //    .Where(f => f.DisplayName.StartsWith("SmartHub"))
+            //    .Select(f => Assembly.Load(new AssemblyName(f.DisplayName))).ToList();
+
+
             List<Assembly> assemblies = new List<Assembly>();
 
             var files = await Package.Current.InstalledLocation.GetFilesAsync();
             if (files != null)
-                foreach (var file in files.Where(
-                    //file => file.FileType == ".dll" /*|| file.FileType == ".exe"*/
-                    file => file.DisplayName.StartsWith("SmartHub")
-                    ))
+                foreach (var file in files.Where(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub")))
                 {
                     try
                     {
@@ -149,16 +154,43 @@ namespace SmartHub.UWP.Core
 
             return assemblies;
         }
-        public static List<Assembly> GetAssemblies(string path)
+        public static List<Assembly> GetAssembliesSync()
         {
-            var assemblies = new List<Assembly>();
+            //var files = await Package.Current.InstalledLocation.GetFilesAsync();
+            //return files
+            //    .Where(f => f.DisplayName.StartsWith("SmartHub"))
+            //    .Select(f => Assembly.Load(new AssemblyName(f.DisplayName))).ToList();
 
-            IEnumerable<string> files = Directory.EnumerateFiles(path, "*.dll");
-            foreach (var file in files)
-                assemblies.Add(Assembly.Load(new AssemblyName(file)));
+
+            List<Assembly> assemblies = new List<Assembly>();
+
+            var files = Package.Current.InstalledLocation.GetFilesAsync();
+            files.AsTask().Wait();
+            if (files != null)
+                foreach (var file in files.GetResults().Where(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub")))
+                {
+                    try
+                    {
+                        assemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
 
             return assemblies;
         }
+        //public static List<Assembly> GetAssemblies(string path)
+        //{
+        //    var assemblies = new List<Assembly>();
+
+        //    IEnumerable<string> files = Directory.EnumerateFiles(path, "*.dll");
+        //    foreach (var file in files)
+        //        assemblies.Add(Assembly.Load(new AssemblyName(file)));
+
+        //    return assemblies;
+        //}
 
 
         public static async Task<string> GETRequest(string uri)

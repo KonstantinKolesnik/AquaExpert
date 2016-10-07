@@ -93,7 +93,7 @@ namespace SmartHub.UWP.Core.Infrastructure
             //assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
             //assemblies.Add(GetType().GetTypeInfo().Assembly);
 
-            assemblies = GetAssembliesAsync().Result;
+            assemblies = GetAssembliesSync();
 
             //var conventions = new ConventionBuilder();
             //conventions
@@ -117,14 +117,40 @@ namespace SmartHub.UWP.Core.Infrastructure
 
         public async Task<List<Assembly>> GetAssembliesAsync()
         {
+            //var files = await Package.Current.InstalledLocation.GetFilesAsync();
+            //return files
+            //    .Where(f => f.DisplayName.StartsWith("SmartHub"))
+            //    .Select(f => Assembly.Load(new AssemblyName(f.DisplayName))).ToList();
+
+
             List<Assembly> assemblies = new List<Assembly>();
 
             var files = await Package.Current.InstalledLocation.GetFilesAsync();
             if (files != null)
-                foreach (var file in files.Where(
-                    //file => file.FileType == ".dll" /*|| file.FileType == ".exe"*/
-                    file => file.DisplayName.StartsWith("SmartHub")
-                    ))
+                foreach (var file in files.Where(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub")))
+                {
+                    try
+                    {
+                        assemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
+
+            return assemblies;
+        }
+        public List<Assembly> GetAssembliesSync()
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+
+            var method = Package.Current.InstalledLocation.GetFilesAsync();
+            method.AsTask().Wait();
+
+            var files = method.GetResults();
+            if (files != null)
+                foreach (var file in files.Where(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub")))
                 {
                     try
                     {

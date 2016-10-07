@@ -33,18 +33,18 @@ namespace SmartHub.UWP.Applications.RCHub
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             //if (Debugger.IsAttached)
             //    DebugSettings.EnableFrameRateCounter = true;
 #endif
 
-            var appView = ApplicationView.GetForCurrentView();
-            appView.TitleBar.BackgroundColor = Colors.LightBlue;
-            appView.TitleBar.ButtonBackgroundColor = Colors.LightBlue;
-            appView.TitleBar.ForegroundColor = Colors.White;
-            appView.TitleBar.ButtonForegroundColor = Colors.White;
+            //var appView = ApplicationView.GetForCurrentView();
+            //appView.TitleBar.BackgroundColor = Colors.LightBlue;
+            //appView.TitleBar.ButtonBackgroundColor = Colors.LightBlue;
+            //appView.TitleBar.ForegroundColor = Colors.White;
+            //appView.TitleBar.ButtonForegroundColor = Colors.White;
 
             var view = SystemNavigationManager.GetForCurrentView();
             view.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
@@ -58,7 +58,7 @@ namespace SmartHub.UWP.Applications.RCHub
             //    //GetType().GetTypeInfo().Assembly
             //};
 
-            //var assemblies = await Utils.GetAssembliesAsync();
+            var assemblies = Utils.GetAssembliesSync();
 
             HubEnvironment.Init();
             var hub = new Core.Infrastructure.Hub();
