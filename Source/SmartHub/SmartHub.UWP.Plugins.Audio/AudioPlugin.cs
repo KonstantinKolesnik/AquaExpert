@@ -23,13 +23,11 @@ namespace SmartHub.UWP.Plugins.Audio
         public override void InitPlugin()
         {
             //waveOut = new WaveOut();
-            audioOutput = new WasapiOutRT(AudioClientShareMode.Shared, 200);
+            audioOutput = new WasapiOutRT(AudioClientShareMode.Shared, 100);
         }
         public override void StopPlugin()
         {
             CloseAudioOutput();
-            //waveOut.Dispose();
-            //waveOut = null;
         }
         #endregion
 
@@ -62,6 +60,24 @@ namespace SmartHub.UWP.Plugins.Audio
             //    return mixer.ToWaveProvider();
             //});
 
+            //audioOutput.Init(() =>
+            //{
+            //    var sineWaveProvider = new SineWaveProvider32();
+            //    sineWaveProvider.SetWaveFormat(16000, 1); // 16kHz mono
+            //    sineWaveProvider.Frequency = 440;
+            //    sineWaveProvider.Amplitude = 0.8f;
+
+            //    return sineWaveProvider;
+            //});
+
+
+            //audioOutput.Init(() =>
+            //{
+            //    return new RawSourceWaveStream(ms, new WaveFormat(48000, 16, 1));
+            //});
+
+
+
             //audioOutput.Play();
         }
         public void Stop()
@@ -69,6 +85,7 @@ namespace SmartHub.UWP.Plugins.Audio
             if (audioOutput != null)
                 audioOutput.Stop();
         }
+
         public void Dispose()
         {
             Dispose(true);
@@ -79,6 +96,9 @@ namespace SmartHub.UWP.Plugins.Audio
         #region Private methods
         private void CloseAudioOutput()
         {
+            //waveOut.Dispose();
+            //waveOut = null;
+
             if (audioOutput != null)
                 audioOutput.Dispose();
 

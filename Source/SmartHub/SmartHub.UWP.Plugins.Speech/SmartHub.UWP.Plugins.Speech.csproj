@@ -118,10 +118,6 @@
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Plugins.Audio\SmartHub.UWP.Plugins.Audio.csproj">
-      <Project>{0c5e60ef-07b1-4bbc-90df-35e93fd5ab71}</Project>
-      <Name>SmartHub.UWP.Plugins.Audio</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

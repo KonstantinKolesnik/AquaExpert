@@ -1,12 +1,10 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Audio;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.Globalization;
 using Windows.Media.SpeechRecognition;
 using Windows.Media.SpeechSynthesis;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Speech
@@ -22,6 +20,7 @@ namespace SmartHub.UWP.Plugins.Speech
         private bool disposed = false;
         private SpeechSynthesizer speechSynthesizer;
         private SpeechRecognizer speechRecognizer;
+        private string languageTag = Language.CurrentInputMethodLanguageTag;
 
         private DateTime? readyDate;
         private const string NAME = "эй кампьютэр";
@@ -37,6 +36,8 @@ namespace SmartHub.UWP.Plugins.Speech
         //}
         public override void InitPlugin()
         {
+            languageTag = "ru-RU"; // "en-US", "ru-RU"
+
             InitSpeechSynthesizer();
             InitRecognitionEngine();
         }
@@ -48,19 +49,21 @@ namespace SmartHub.UWP.Plugins.Speech
         #endregion
 
         #region Private methods
-        //private string[] LoadAllCommands()
-        //{
-        //    using (var session = Context.OpenSession())
-        //    {
-        //        List<string> list = session.Query<VoiceCommand>().Select(cmd => cmd.CommandText).ToList();
+        private string[] GetCommandsText()
+        {
+            //using (var session = Context.OpenSession())
+            //{
+            //    List<string> list = session.Query<VoiceCommand>().Select(cmd => cmd.CommandText).ToList();
 
-        //        Logger.Info("Loaded commands: {0}", list.ToJson("[]"));
+            //    //Logger.Info("Loaded commands: {0}", list.ToJson("[]"));
 
-        //        list.Add(NAME);
+            //    list.Add(NAME);
 
-        //        return list.ToArray();
-        //    }
-        //}
+            //    return list.ToArray();
+            //}
+
+            return new List<string>().ToArray();
+        }
         //private VoiceCommand GetCommand(string text)
         //{
         //    using (var session = Context.OpenSession())
@@ -96,7 +99,9 @@ namespace SmartHub.UWP.Plugins.Speech
         private void InitSpeechSynthesizer()
         {
             speechSynthesizer = new SpeechSynthesizer();
-            speechSynthesizer.Voice = SpeechSynthesizer.AllVoices.Where(v => v.Gender == VoiceGender.Female).FirstOrDefault() ?? SpeechSynthesizer.DefaultVoice;
+
+            var prefferedVoice = SpeechSynthesizer.AllVoices.Where(v => v.Gender == VoiceGender.Female && v.Language == languageTag).FirstOrDefault();
+            speechSynthesizer.Voice = prefferedVoice ?? SpeechSynthesizer.DefaultVoice;
         }
         private void CloseSpeechSynthesizer()
         {
@@ -106,25 +111,38 @@ namespace SmartHub.UWP.Plugins.Speech
             speechSynthesizer = null;
         }
 
-        private void InitRecognitionEngine()
+        private async void InitRecognitionEngine()
         {
-            var tag = Language.CurrentInputMethodLanguageTag; // "en-US", "ru-RU"
+            try
+            {
+                speechRecognizer = new SpeechRecognizer(new Language(languageTag));
+            }
+            catch
+            {
+                speechRecognizer = new SpeechRecognizer();
+            }
 
-            speechRecognizer = new SpeechRecognizer();
-            //speechRecognizer = new SpeechRecognizer(tag);
+            speechRecognizer.Constraints.Add(new SpeechRecognitionListConstraint(GetCommandsText(), "tag1"));
 
-            //speechRecognizer.Constraints.Add(new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.FormFilling, "Phone"));
+            //var op = speechRecognizer.CompileConstraintsAsync();
+            //op.AsTask().Wait();
+            ////var a = op.GetResults();
 
-            //speechRecognizer.Constraints.Add(new SpeechRecognitionListConstraint(new string[] { "left", "right", "up", "down" }, "tag1"));
-            //speechRecognizer.Constraints.Add(new SpeechRecognitionListConstraint(new string[] { "over", "under", "behind", "in front" }, "tag2"));
+            //var op2 = speechRecognizer.RecognizeAsync();
+            //op2.AsTask().Wait();
+            //SpeechRecognitionResult result = op2.GetResults();
+            //if (result.Status == SpeechRecognitionResultStatus.Success)
+            //{
+            //}
 
-
-
-            //await speechRecognizer.CompileConstraintsAsync();
-
-            //SpeechRecognitionResult result = await speechRecognizer.RecognizeAsync();
+            var a = await speechRecognizer.CompileConstraintsAsync();
+            var b = a;
+            SpeechRecognitionResult result = await speechRecognizer.RecognizeAsync();
             //if (result.Status == SpeechRecognitionResultStatus.Success)
             //    phoneNumber = result.Text;
+
+
+
 
 
 
@@ -145,7 +163,7 @@ namespace SmartHub.UWP.Plugins.Speech
             //    •zh-TW. Chinese (Taiwan)
             //    */
 
-            //    var commands = LoadAllCommands();
+            //    var commands = GetCommandsText();
             //    var choices = new Choices(commands);
             //    var builder = new GrammarBuilder(choices);
             //    builder.Culture = cultureInfo;
@@ -236,28 +254,15 @@ namespace SmartHub.UWP.Plugins.Speech
 
         #region Script commands
         //[ScriptCommand("say")]
-        public async void Say(string text, MediaElement mediaElement = null)
+        public async void Say(string text)
         {
             if (!string.IsNullOrEmpty(text))
             {
-                var stream = await SynthesizeTextToSpeechAsync(text);
-
-                if (mediaElement != null)
-                    await mediaElement.PlayStreamAsync(stream, true);
-                else
-                    Context.GetPlugin<AudioPlugin>()?.Play(stream);
+                var stream = await speechSynthesizer.SynthesizeTextToStreamAsync(text);
+                await new MediaElement().PlayStreamAsync(stream, true);
             }
         }
         #endregion
-        public async Task<IRandomAccessStream> SynthesizeTextToSpeechAsync(string text)
-        {
-            IRandomAccessStream stream = null;
-
-            using (var synthesizer = new SpeechSynthesizer())
-                stream = await synthesizer.SynthesizeTextToStreamAsync(text);
-
-            return stream;
-        }
 
         public void Dispose()
         {

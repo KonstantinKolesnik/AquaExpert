@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Windows.Media.SpeechSynthesis;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,14 +20,17 @@ namespace SmartHub.UWP.Plugins.Speech
                     stream.Dispose();
 
                 taskCompleted.SetResult(true);
-
             };
+
             mediaElement.MediaEnded += endOfPlayHandler;
 
-            mediaElement.SetSource(stream, string.Empty);
+            mediaElement.SetSource(stream, (stream as SpeechSynthesisStream).ContentType);
+            mediaElement.Volume = 1;
+            mediaElement.IsMuted = false;
             mediaElement.Play();
 
             await taskCompleted.Task;
+
             mediaElement.MediaEnded -= endOfPlayHandler;
         }
     }
