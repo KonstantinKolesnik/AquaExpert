@@ -21,14 +21,14 @@ namespace SmartHub.Plugins.NetworkManager
             NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
 
             if (!NetworkInterface.GetIsNetworkAvailable())
-                Context.GetPlugin<SpeechPlugin>().Say("Сетевое соединение недоступно");
+                Context.GetPlugin<SpeechPlugin>()?.Say("Сетевое соединение недоступно");
         }
         #endregion
 
         #region Event handlers
         private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
-            Context.GetPlugin<SpeechPlugin>().Say(e.IsAvailable ? "Сетевое соединение восстановлено" : "Потеряно сетевое соединение");
+            Context.GetPlugin<SpeechPlugin>()?.Say(e.IsAvailable ? "Сетевое соединение восстановлено" : "Потеряно сетевое соединение");
 
             if (!e.IsAvailable)
             {
@@ -64,12 +64,12 @@ namespace SmartHub.Plugins.NetworkManager
             if (result)
             {
                 if (!isInternetAvailable)
-                    Context.GetPlugin<SpeechPlugin>().Say("Интернет соединение восстановлено");
+                    Context.GetPlugin<SpeechPlugin>()?.Say("Интернет соединение восстановлено");
             }
             else
             {
                 if (isInternetAvailable)
-                    Context.GetPlugin<SpeechPlugin>().Say("Потеряно интернет соединение");
+                    Context.GetPlugin<SpeechPlugin>()?.Say("Потеряно интернет соединение");
             }
 
             isInternetAvailable = result;

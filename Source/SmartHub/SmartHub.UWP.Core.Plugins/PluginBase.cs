@@ -14,7 +14,7 @@ namespace SmartHub.UWP.Core.Plugins
         }
         //protected Logger Logger
         //{
-        //    get; private set;
+        //    get;
         //}
         #endregion
 

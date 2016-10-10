@@ -340,6 +340,14 @@
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "Newtonsoft.Json/9.0.1": {
         "compile": {
           "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
@@ -2392,6 +2400,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "Newtonsoft.Json/9.0.1": {
@@ -4579,6 +4595,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "Newtonsoft.Json/9.0.1": {
@@ -6809,6 +6833,14 @@
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "Newtonsoft.Json/9.0.1": {
         "compile": {
           "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
@@ -9003,6 +9035,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "Newtonsoft.Json/9.0.1": {
@@ -11238,6 +11278,14 @@
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        }
+      },
       "Newtonsoft.Json/9.0.1": {
         "compile": {
           "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll": {}
@@ -13432,6 +13480,14 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "NAudio/1.7.3": {
+        "compile": {
+          "lib/windows8/NAudio.Win8.dll": {}
+        },
+        "runtime": {
+          "lib/windows8/NAudio.Win8.dll": {}
         }
       },
       "Newtonsoft.Json/9.0.1": {
@@ -15748,6 +15804,21 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "NAudio/1.7.3": {
+      "sha512": "RfjCKqewCJ7OhVRqkVgiJv5ByPzPk5YWElyC7jLqcV2a9777HDGU00kmVzoMV9gbcNiTJn9ijVrTAgq4GeQP2w==",
+      "type": "package",
+      "path": "NAudio/1.7.3",
+      "files": [
+        "NAudio.1.7.3.nupkg.sha512",
+        "NAudio.nuspec",
+        "lib/net35/NAudio.XML",
+        "lib/net35/NAudio.dll",
+        "lib/windows8/NAudio.Win8.XML",
+        "lib/windows8/NAudio.Win8.dll",
+        "license.txt",
+        "readme.txt"
       ]
     },
     "Newtonsoft.Json/9.0.1": {
