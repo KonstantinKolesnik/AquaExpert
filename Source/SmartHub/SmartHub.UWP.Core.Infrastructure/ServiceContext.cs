@@ -27,9 +27,6 @@ namespace SmartHub.UWP.Core.Infrastructure
         }
         #endregion
 
-        //[Import(typeof(IHubPackageManager))]
-        //public IHubPackageManager PackageManager { get; protected set; }
-
         #region Data
         //private ISessionFactory sessionFactory;
 

@@ -52,17 +52,11 @@ namespace SmartHub.UWP.Applications.RCHub
 
             AppManager.Init();
 
-            //var assemblies = new List<Assembly>()
-            //{
-            //    Assembly.Load(new AssemblyName("SmartHub.UWP.Plugins.Timer")),
-            //    //GetType().GetTypeInfo().Assembly
-            //};
-
-            var assemblies = Utils.GetAssembliesSync();
+            var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
 
             HubEnvironment.Init();
             var hub = new Core.Infrastructure.Hub();
-            hub.Init();// assemblies);
+            hub.Init(assemblies);
             hub.StartServices();
 
             Frame rootFrame = Window.Current.Content as Frame;

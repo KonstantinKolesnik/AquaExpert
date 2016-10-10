@@ -38,14 +38,14 @@ namespace SmartHub.UWP.Core.Plugins
         #endregion
 
         #region Public methods
-        public void Run<T>(T[] actions, Action<T> task)
+        public void Run<T>(T[] parameters, Action<T> method)
         {
-            if (actions != null && actions.Any())
-                foreach (var action in actions)
+            if (parameters != null && parameters.Any())
+                foreach (var parameter in parameters)
                 {
                     try
                     {
-                        task(action);
+                        method(parameter);
                     }
                     catch (Exception ex)
                     {
