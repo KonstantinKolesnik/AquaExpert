@@ -26,6 +26,9 @@ namespace SmartHub.UWP.Core.Plugins
         #endregion
 
         #region Plugin virtuals
+        public virtual void InitDbModel(/*ModelMapper mapper*/)
+        {
+        }
         public virtual void InitPlugin()
         {
         }
