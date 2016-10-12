@@ -1,7 +1,9 @@
-﻿namespace SmartHub.UWP.Core.Plugins
+﻿using Windows.UI.Xaml;
+
+namespace SmartHub.UWP.Core.Plugins
 {
     public interface IPluginUI
     {
-        object UI { get; }
+        UIElement UI { get; }
     }
 }
