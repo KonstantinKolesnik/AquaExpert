@@ -19,7 +19,7 @@ namespace SmartHub.Plugins.HttpListener
         private const string BASE_URL_HTTP = "http://+:55555";
 
         private IDisposable server;
-        private InternalDictionary<IListenerHandler> registeredHandlers;
+        private InternalDictionary<IListenerHandler> listenerHandlers = new InternalDictionary<IListenerHandler>();
         #endregion
 
         #region Import
@@ -30,7 +30,7 @@ namespace SmartHub.Plugins.HttpListener
         #region Plugin overrides
         public override void InitPlugin()
         {
-            registeredHandlers = RegisterAllHandlers();
+            RegisterListenerHandlers();
         }
         public override void StartPlugin()
         {
@@ -38,7 +38,7 @@ namespace SmartHub.Plugins.HttpListener
 
             server = WebApp.Start(BASE_URL_HTTP, (IAppBuilder appBuilder) => {
                 appBuilder
-                    .Use<HttpListenerModule>(registeredHandlers, Logger)
+                    .Use<HttpListenerModule>(listenerHandlers, Logger) // listen to webapi and resource requests
                     .Use<Error404Module>();//.UseErrorPage();
             });
         }
@@ -53,18 +53,18 @@ namespace SmartHub.Plugins.HttpListener
         #endregion
 
         #region Private methods
-        private InternalDictionary<IListenerHandler> RegisterAllHandlers()
+        private void RegisterListenerHandlers()
         {
-            var result = new InternalDictionary<IListenerHandler>();
+            listenerHandlers.Clear();
 
-            // register WebApi handlers
+            // register WebApi handlers:
             foreach (var action in HttpCommandHandlers)
             {
                 Logger.Info("Register WebApi command handler '{0}'", action.Metadata.Url);
-                result.Register(action.Metadata.Url, new WebApiListenerHandler(action.Value));
+                listenerHandlers.Register(action.Metadata.Url, new WebApiListenerHandler(action.Value));
             }
 
-            // register resource handlers
+            // register resource handlers:
             foreach (var plugin in Context.GetAllPlugins())
             {
                 Type type = plugin.GetType();
@@ -73,11 +73,9 @@ namespace SmartHub.Plugins.HttpListener
                 foreach (var attribute in attributes)
                 {
                     Logger.Info("Register HTTP resource handler: '{0}'", attribute.Url);
-                    result.Register(attribute.Url, new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType));
+                    listenerHandlers.Register(attribute.Url, new ResourceListenerHandler(type.Assembly, attribute.ResourcePath, attribute.ContentType));
                 }
             }
-
-            return result;
         }
         #endregion
     }
