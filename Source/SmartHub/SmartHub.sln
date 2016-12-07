@@ -171,6 +171,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wemos.GenericNode", "Wemos.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hardware", "Hardware", "{354F3BB7-B1EA-4612-970B-50AE48C80FF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Wemos", "SmartHub.UWP.Plugins.Wemos\SmartHub.UWP.Plugins.Wemos.csproj", "{208680E0-389C-4EA4-A69C-140CE09F0AE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1031,6 +1033,30 @@ Global
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x64.ActiveCfg = Release|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|ARM.ActiveCfg = Debug|ARM
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|ARM.Build.0 = Debug|ARM
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Win32.ActiveCfg = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|Win32.Build.0 = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|x64.ActiveCfg = Debug|x64
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|x64.Build.0 = Debug|x64
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|x86.ActiveCfg = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Debug|x86.Build.0 = Debug|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|ARM.ActiveCfg = Release|ARM
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|ARM.Build.0 = Release|ARM
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Win32.ActiveCfg = Release|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|Win32.Build.0 = Release|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|x64.ActiveCfg = Release|x64
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|x64.Build.0 = Release|x64
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|x86.ActiveCfg = Release|x86
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1105,6 +1131,7 @@ Global
 		{CC29A0EE-EB42-45DC-A9A3-7248211B8D78} = {897A8020-4315-4C17-BBA2-41046480A37F}
 		{E182AB8B-AEA5-425B-83C5-EA08DB213996} = {354F3BB7-B1EA-4612-970B-50AE48C80FF1}
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88} = {E182AB8B-AEA5-425B-83C5-EA08DB213996}
+		{208680E0-389C-4EA4-A69C-140CE09F0AE6} = {897A8020-4315-4C17-BBA2-41046480A37F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8

@@ -160,8 +160,7 @@ namespace SmartHub.Plugins.MySensors.GatewayProxies
 
                                     isPortValid = true;
 
-                                    if (MessageReceived != null)
-                                        MessageReceived(this, new SensorMessageEventArgs(msg));
+                                    MessageReceived?.Invoke(this, new SensorMessageEventArgs(msg));
 
                                     if (Connected != null)
                                         Connected(this, EventArgs.Empty);
