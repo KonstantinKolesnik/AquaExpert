@@ -2,6 +2,7 @@
 using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
@@ -85,10 +86,12 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                 //while (!string.IsNullOrEmpty(str = serialPort.ReadLine()))
                 //{
-                //    WemosMessage msg = WemosMessage.FromRawMessage(str);
+                //    WemosMessage msg = WemosMessage.FromDto(str);
                 //    if (msg != null)
                 //        ProcessWemosMessage(msg);
                 //}
+
+                ProcessWemosMessage(WemosMessage.FromDto(str));
             }
             catch (Exception exception)
             {
@@ -172,8 +175,216 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         private void ProcessWemosMessage(WemosMessage message)
         {
+            if (message != null)
+            {
+                Debug.WriteLine(message.ToString());
 
+
+                /*
+
+                bool isNodeMessage = message.NodeNo == 0 || message.SensorNo == 255;
+                Node node = GetNode(message.NodeNo);
+                Sensor sensor = GetSensor(message.NodeNo, message.SensorNo); // if message.SensorID == 255 it returns null
+
+                switch (message.Type)
+                {
+                    #region Presentation
+                    case WemosMessageType.Presentation: // sent by a nodes when they present attached sensors.
+                        if (isNodeMessage)
+                        {
+                            if (node == null)
+                            {
+                                node = new Node
+                                {
+                                    Id = Guid.NewGuid(),
+                                    NodeNo = message.NodeNo,
+                                    Type = (SensorType) message.SubType,
+                                    ProtocolVersion = message.Payload
+                                };
+
+                                Save(node);
+                            }
+                            else
+                            {
+                                node.Type = (SensorType) message.SubType;
+                                node.ProtocolVersion = message.Payload;
+
+                                SaveOrUpdate(node);
+                            }
+
+                            NotifyMessageReceivedForPlugins(message);
+                            NotifyMessageReceivedForScripts(message);
+                            NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
+                        }
+                        else // sensor message
+                        {
+                            if (node != null)
+                            {
+                                if (sensor == null)
+                                {
+                                    sensor = new Sensor()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        NodeNo = node.NodeNo,
+                                        SensorNo = message.SensorNo,
+                                        Type = (SensorType) message.SubType,
+                                        ProtocolVersion = message.Payload
+                                    };
+
+                                    Save(sensor);
+                                }
+                                else
+                                {
+                                    sensor.Type = (SensorType) message.SubType;
+                                    sensor.ProtocolVersion = message.Payload;
+
+                                    SaveOrUpdate(sensor);
+                                }
+
+                                NotifyMessageReceivedForPlugins(message);
+                                NotifyMessageReceivedForScripts(message);
+                                NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorRichWebModel(sensor) });
+                            }
+                        }
+                        break;
+                    #endregion
+
+                    #region Set
+                    case WemosMessageType.Set: // sent from or to a sensor when a sensor value should be updated
+                        if (sensor != null)
+                        {
+                            NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
+                            var sv = SaveSensorValueToDB(message);
+
+                            NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
+
+                            NotifyMessageReceivedForPlugins(message);
+                            NotifyMessageReceivedForScripts(message);
+                            NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
+                        }
+                        break;
+                    #endregion
+
+                    #region Request
+                    case WemosMessageType.Request: // requests a variable value (usually from an actuator destined for controller)
+                        break;
+                    #endregion
+
+                    #region Internal
+                    case WemosMessageType.Internal: // special internal message
+                        InternalValueType ivt = (InternalValueType) message.SubType;
+
+                        switch (ivt)
+                        {
+                            case InternalValueType.BatteryLevel: // int, in %
+                                if (node != null)
+                                {
+                                    var dtDB = DateTime.UtcNow;
+                                    var dt = DateTime.Now;
+
+                                    BatteryLevel bl = new BatteryLevel()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        NodeNo = message.NodeNo,
+                                        TimeStamp = dtDB,
+                                        Level = byte.Parse(message.Payload)
+                                    };
+
+                                    Save(bl);
+
+                                    bl.TimeStamp = dt;
+
+                                    NotifyMessageReceivedForPlugins(message);
+                                    NotifyMessageReceivedForScripts(message);
+                                    NotifyForSignalR(new { MsgId = "BatteryLevel", Data = bl });
+                                }
+                                break;
+                            case InternalValueType.Time:
+                                gatewayProxy.Send(new SensorMessage(message.NodeNo, message.SensorNo, SensorMessageType.Internal, false, (byte) InternalValueType.Time, GetTimeForSensors().ToString()));
+                                break;
+                            case InternalValueType.Version:
+                                break;
+                            case InternalValueType.IDRequest:
+                                GetNextAvailableNodeID();
+                                break;
+                            case InternalValueType.IDResponse:
+                                break;
+                            case InternalValueType.InclusionMode:
+                                break;
+                            case InternalValueType.Config:
+                                gatewayProxy.Send(new SensorMessage(message.NodeNo, 255, SensorMessageType.Internal, false, (byte) InternalValueType.Config, GetSetting("UnitSystem").Value));
+                                break;
+                            case InternalValueType.FindParent:
+                                break;
+                            case InternalValueType.FindParentResponse:
+                                break;
+                            case InternalValueType.LogMessage:
+                                break;
+                            case InternalValueType.Children:
+                                break;
+                            case InternalValueType.SketchName:
+                            case InternalValueType.SketchVersion:
+                                if (node != null)
+                                {
+                                    if (ivt == InternalValueType.SketchName)
+                                        node.SketchName = message.Payload;
+                                    else
+                                        node.SketchVersion = message.Payload;
+
+                                    SaveOrUpdate(node);
+
+                                    NotifyMessageReceivedForPlugins(message);
+                                    NotifyMessageReceivedForScripts(message);
+                                    NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
+                                }
+                                break;
+                            case InternalValueType.Reboot:
+                                break;
+                            case InternalValueType.GatewayReady:
+                                break;
+                        }
+                        break;
+                    #endregion
+
+                    #region Stream
+                    case WemosMessageType.Stream: //used for OTA firmware updates
+                        switch ((StreamValueType) message.SubType)
+                        {
+                            case StreamValueType.FirmwareConfigRequest:
+                                //var fwtype = pullWord(payload, 0);
+                                //var fwversion = pullWord(payload, 2);
+                                //sendFirmwareConfigResponse(sender, fwtype, fwversion, db, gw);
+                                break;
+                            case StreamValueType.FirmwareConfigResponse:
+                                break;
+                            case StreamValueType.FirmwareRequest:
+                                break;
+                            case StreamValueType.FirmwareResponse:
+                                //var fwtype = pullWord(payload, 0);
+                                //var fwversion = pullWord(payload, 2);
+                                //var fwblock = pullWord(payload, 4);
+                                //sendFirmwareResponse(sender, fwtype, fwversion, fwblock, db, gw);
+                                break;
+                            case StreamValueType.Sound:
+                                break;
+                            case StreamValueType.Image:
+                                break;
+                        }
+                        break;
+                        #endregion
+                }
+
+                CheckRebootRequest(node);
+
+                */
+            }
         }
+        //private void CheckRebootRequest(Node node)
+        //{
+        //    if (node != null && node.Reboot)
+        //        RebootNode(node);
+        //}
+
         #endregion
     }
 }
