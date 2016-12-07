@@ -12,6 +12,7 @@ const unsigned long interval = 2000;
 void setup()
 {
 	node.begin();
+	// add shields
 }
 
 void loop()

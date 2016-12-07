@@ -39,7 +39,7 @@ namespace SmartHub.UWP.Plugins.Speech
             languageTag = "ru-RU"; // "en-US", "ru-RU"
 
             InitSpeechSynthesizer();
-            InitRecognitionEngine();
+            //InitRecognitionEngine();
         }
         public override void StopPlugin()
         {

@@ -108,7 +108,11 @@ namespace SmartHub.UWP.Core.Infrastructure
                 //.ExportInterfaces()
                 //.Shared()
                 ;
-            conventions.ForTypesDerivedFrom<IServiceContext>().Export<IServiceContext>().Shared();
+            conventions
+                .ForTypesDerivedFrom<IServiceContext>()
+                .Export<IServiceContext>()
+                .Shared();
+
             //conventions.ForType(GetType()).ImportProperty<IServiceContext>(p => p.context);
 
             var configuration = new ContainerConfiguration()
@@ -118,6 +122,7 @@ namespace SmartHub.UWP.Core.Infrastructure
             using (var container = configuration.CreateContainer())
                 container.SatisfyImports(this);
         }
+
         private static void InitSessionFactory(IServiceContext context)
         {
             //var mapper = new ConventionModelMapper();

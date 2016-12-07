@@ -6,8 +6,8 @@ using System.Linq;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
-    [Export(typeof(IServiceContext))]
-    [Shared]
+    //[Export(typeof(IServiceContext))]
+    //[Shared]
     public class ServiceContext : IServiceContext
     {
         #region Plugins

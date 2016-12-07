@@ -108,7 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hub.cs" />
-    <Compile Include="HubEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContext.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Infrastructure.rd.xml" />

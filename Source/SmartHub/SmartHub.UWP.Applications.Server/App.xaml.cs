@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Infrastructure;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -22,6 +21,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             InitializeComponent();
             Suspending += OnSuspending;
+            UnhandledException += App_UnhandledException;
         }
 
         /// <summary>
@@ -31,21 +31,12 @@ namespace SmartHub.UWP.Applications.Server
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-                DebugSettings.EnableFrameRateCounter = true;
-#endif
+//#if DEBUG
+//            if (System.Diagnostics.Debugger.IsAttached)
+//                DebugSettings.EnableFrameRateCounter = true;
+//#endif
 
             AppManager.Init();
-
-            var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
-
-            HubEnvironment.Init();
-            var hub = new Core.Infrastructure.Hub();
-            hub.Init(assemblies);
-            hub.StartServices();
-
-
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -86,11 +77,10 @@ namespace SmartHub.UWP.Applications.Server
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
-
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents
@@ -101,8 +91,16 @@ namespace SmartHub.UWP.Applications.Server
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+
             //TODO: Save application state and stop any background activity
+            AppManager.UnInit();
+
             deferral.Complete();
+        }
+        private async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            await Utils.MessageBox(e.Message);
+            e.Handled = true;
         }
     }
 }

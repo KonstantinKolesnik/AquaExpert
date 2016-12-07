@@ -1,13 +1,8 @@
 ﻿using Microsoft.ApplicationInsights;
 using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Infrastructure;
-using System.Collections.Generic;
-using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -52,13 +47,6 @@ namespace SmartHub.UWP.Applications.RCHub
 
             AppManager.Init();
 
-            var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
-
-            HubEnvironment.Init();
-            var hub = new Core.Infrastructure.Hub();
-            hub.Init(assemblies);
-            hub.StartServices();
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content, just ensure that the window is active
@@ -102,7 +90,6 @@ namespace SmartHub.UWP.Applications.RCHub
         }
         private void View_BackRequested(object sender, BackRequestedEventArgs e)
         {
-
         }
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
@@ -114,7 +101,9 @@ namespace SmartHub.UWP.Applications.RCHub
         private void App_Suspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+
             AppManager.UnInit();
+
             deferral.Complete();
         }
         private async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartHub.UWP.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace SmartHub.UWP.Core
     public class AppManager
     {
         #region Fields
-        //private static Hub hub = new Hub();
+        private static Hub hub = new Hub();
         #endregion
 
         #region Properties
@@ -67,6 +68,11 @@ namespace SmartHub.UWP.Core
             //ModelsManager.Items = AppData.Profiles;
             //ModelsManager.Items.CollectionChanged += (s, args) => { SaveProfiles(); };
 
+            var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
+            hub.Init(assemblies);
+            hub.StartServices();
+
+
             //SetLanguage(AppData.Device.Language);
             //SetLanguage("en");
             //SetLanguage("de");
@@ -89,19 +95,7 @@ namespace SmartHub.UWP.Core
         public static void SetLanguage(string id) //"en-US"
         {
             ApplicationLanguages.PrimaryLanguageOverride = id;
-
-            var context = ResourceContext.GetForCurrentView();
-            //context.Reset();
-            //context.QualifierValues["Language"] = id;
-
-            var lang = new List<string>();
-            lang.Add(id);
-            context.Languages = lang;
-
-            //LabelsManager.RefreshResources();
-
-            //var frame = Window.Current.Content as Frame;
-            //(frame.Content as BasePage).NavigationHelper.Reload();
+            ResourceContext.GetForCurrentView().Languages = new List<string>() { id };
         }
         #endregion
 
