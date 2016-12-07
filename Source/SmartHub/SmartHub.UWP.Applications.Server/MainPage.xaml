@@ -7,7 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Send" Click="ButtonSend_Click"/>
+            <Button Content="Clear" Margin="10,0" Click="ButtonCear_Click"/>
+        </StackPanel>
+        
+        <ListView Grid.Row="1" x:Name="lvMessages" ItemsSource="{Binding Messages}"/>
     </Grid>
 </Page>

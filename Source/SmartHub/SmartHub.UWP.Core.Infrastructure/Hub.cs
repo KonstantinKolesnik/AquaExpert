@@ -16,9 +16,9 @@ namespace SmartHub.UWP.Core.Infrastructure
     {
         #region Fields
         [Import]
-        private IServiceContext context
+        public IServiceContext Context
         {
-            get; set;
+            get; internal set;
         }
         //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
@@ -41,13 +41,13 @@ namespace SmartHub.UWP.Core.Infrastructure
             {
                 LoadPlugins(assemblies);
 
-                InitSessionFactory(context);
+                InitSessionFactory(Context);
                 // обновляем структуру БД
                 //using (var session = context.OpenSession())
                 //    foreach (var plugin in context.GetAllPlugins())
                 //        UpdateDatabase(session.Connection, plugin);
 
-                foreach (var plugin in context.GetAllPlugins())
+                foreach (var plugin in Context.GetAllPlugins())
                     plugin.InitPlugin();
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace SmartHub.UWP.Core.Infrastructure
         {
             try
             {
-                foreach (var plugin in context.GetAllPlugins())
+                foreach (var plugin in Context.GetAllPlugins())
                 {
                     plugin.StartPlugin();
                     //logger.Info("Start plugin {0}", plugin.GetType().FullName);
@@ -78,7 +78,7 @@ namespace SmartHub.UWP.Core.Infrastructure
         {
             try
             {
-                foreach (var plugin in context.GetAllPlugins())
+                foreach (var plugin in Context.GetAllPlugins())
                 {
                     plugin.StopPlugin();
                     //logger.Info("Stop plugin {0}", plugin.GetType().FullName);
@@ -96,7 +96,8 @@ namespace SmartHub.UWP.Core.Infrastructure
         #region Private methods
         private void LoadPlugins(List<Assembly> assemblies)
         {
-            assemblies = assemblies ?? new List<Assembly>();
+            if (assemblies == null)
+                assemblies = new List<Assembly>();
             //assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
             //assemblies.Add(GetType().GetTypeInfo().Assembly);
 

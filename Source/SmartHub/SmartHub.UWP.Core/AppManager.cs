@@ -48,10 +48,13 @@ namespace SmartHub.UWP.Core
         {
             get; private set;
         }
+
         //public static ModelsManager ModelsManager
         //{
         //    get; private set;
         //}
+
+        public static Hub Hub => hub;
         #endregion
 
         #region Public methods
