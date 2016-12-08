@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using Windows.UI.Core;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
@@ -49,7 +48,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Public methods
-        public async Task Send(string data)
+        private async Task Send(string data)
         {
             if (!string.IsNullOrEmpty(data))
                 try
@@ -92,14 +91,8 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                 //NotifyUserFromAsyncThread("Received data from remote peer (Remote Address: " + eventArguments.RemoteAddress.CanonicalName + ", Remote Port: " + eventArguments.RemotePort + "): \"" + str + "\"", NotifyType.StatusMessage);
 
-                //while (!string.IsNullOrEmpty(str = serialPort.ReadLine()))
-                //{
-                //    WemosMessage msg = WemosMessage.FromDto(str);
-                //    if (msg != null)
-                //        ProcessWemosMessage(msg);
-                //}
-
-                ProcessWemosMessage(WemosMessage.FromDto(str));
+                foreach (var msg in WemosMessage.FromDto(str))
+                    ProcessWemosMessage(msg);
             }
             catch (Exception exception)
             {

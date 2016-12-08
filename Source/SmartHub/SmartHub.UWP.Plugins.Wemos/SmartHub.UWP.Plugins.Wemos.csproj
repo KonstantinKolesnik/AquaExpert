@@ -110,6 +110,7 @@
     <Compile Include="Core\WemosMessage.cs" />
     <Compile Include="Core\WemosMessageEventArgs.cs" />
     <Compile Include="Core\WemosMessageEventHandler.cs" />
+    <Compile Include="Core\WemosMessageParser.cs" />
     <Compile Include="Core\WemosMessageType.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
