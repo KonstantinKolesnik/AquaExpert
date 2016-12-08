@@ -134,6 +134,10 @@
       <Project>{5b160449-e2ef-4b2b-8971-b0967e71ee7b}</Project>
       <Name>IoT.Drivers.MPU6050</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Infrastructure\SmartHub.UWP.Core.Infrastructure.csproj">
+      <Project>{af8e3222-a068-4e8b-b409-b03b23c523f1}</Project>
+      <Name>SmartHub.UWP.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>

@@ -9,9 +9,9 @@ const unsigned long interval = 2000;
 
 void setup()
 {
-	node.addShield();
-	node.addShield();
-	node.addShield();
+	node.addLine();
+	node.addLine();
+	node.addLine();
 
 	node.begin();
 }
