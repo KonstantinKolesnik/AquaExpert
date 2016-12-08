@@ -1,6 +1,6 @@
 ﻿namespace SmartHub.UWP.Plugins.Wemos.Core
 {
-    enum WemosLineType
+    public enum WemosLineType
     {
         Switch,
         Temperature,

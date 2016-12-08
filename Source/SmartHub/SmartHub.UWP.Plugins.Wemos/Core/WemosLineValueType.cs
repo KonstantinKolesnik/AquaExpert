@@ -1,6 +1,6 @@
 ﻿namespace SmartHub.UWP.Plugins.Wemos.Core
 {
-    enum WemosLineValueType
+    public enum WemosLineValueType
     {
         String,
         Boolean,

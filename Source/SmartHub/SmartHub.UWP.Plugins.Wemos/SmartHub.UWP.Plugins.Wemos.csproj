@@ -116,6 +116,10 @@
     <Compile Include="Core\WemosMessageType.cs" />
     <Compile Include="Core\WemosLineValueType.cs" />
     <Compile Include="Core\WemosStreamMessageType.cs" />
+    <Compile Include="Data\WemosLine.cs" />
+    <Compile Include="Data\WemosLineValue.cs" />
+    <Compile Include="Data\WemosNode.cs" />
+    <Compile Include="Data\WemosNodeBatteryValue.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
@@ -131,7 +135,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="Transport\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -7,11 +7,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
     public class WemosMessage
     {
         #region Properties
-        public int NodeNo
+        public int NodeID
         {
             get; set;
         }
-        public int SensorNo
+        public int LineID
         {
             get; set;
         }
@@ -81,18 +81,18 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         #endregion
 
         #region Constructors
-        public WemosMessage(int nodeID, int sensorID, WemosMessageType type, int subType, string payload)
+        public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType, string payload)
         {
-            NodeNo = nodeID;
-            SensorNo = sensorID;
+            NodeID = nodeID;
+            LineID = lineID;
             Type = type;
             SubType = subType;
             Payload = payload;
         }
-        public WemosMessage(int nodeID, int sensorID, WemosMessageType type, int subType, float payload)
+        public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType, float payload)
         {
-            NodeNo = nodeID;
-            SensorNo = sensorID;
+            NodeID = nodeID;
+            LineID = lineID;
             Type = type;
             SubType = subType;
             PayloadFloat = payload;
@@ -106,14 +106,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         }
         public string ToDto()
         {
-            return $"{NodeNo};{SensorNo};{(int)Type};{SubType};{Payload}\n";
+            return $"{NodeID};{LineID};{(int)Type};{SubType};{Payload}\n";
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("[{0:d3}] [{0:d3}] [{0}] ", NodeNo, SensorNo, Type);
+            sb.AppendFormat("[{0:d3}] [{0:d3}] [{0}] ", NodeID, LineID, Type);
             switch (Type)
             {
                 case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;

@@ -65,7 +65,7 @@ namespace SmartHub.Plugins.MySensors
         }
         #endregion
 
-        #region Script commands & events
+        #region Export of Script commands & events
         [ScriptCommand("mySensorsSendCommand")]
         public void SendCommand(int nodeNo, int sensorNo, int commandType, int valueType, float value)
         {
