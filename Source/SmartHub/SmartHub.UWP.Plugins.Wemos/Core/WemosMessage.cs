@@ -7,11 +7,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
     public class WemosMessage
     {
         #region Properties
-        public byte NodeNo
+        public int NodeNo
         {
             get; set;
         }
-        public byte SensorNo
+        public int SensorNo
         {
             get; set;
         }
@@ -19,15 +19,15 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         {
             get; set;
         }
-        public byte SubType
+        public int SubType
         {
             get; set;
         }
+
         public string Payload
         {
             get; private set;
         }
-
         public float PayloadFloat
         {
             get
@@ -49,39 +49,39 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
                     Payload = value.ToString();
             }
         }
-        public List<int> PayloadFirmware
-        {
-            get
-            {
-                var result = new List<int>();
+        //public List<int> PayloadFirmware
+        //{
+        //    get
+        //    {
+        //        var result = new List<int>();
 
-                if (Type == WemosMessageType.Stream)
-                    for (var i = 0; i < Payload.Length; i += 2)
-                        result.Add(int.Parse(Payload.Substring(i, 2), NumberStyles.HexNumber));
+        //        if (Type == WemosMessageType.Stream)
+        //            for (var i = 0; i < Payload.Length; i += 2)
+        //                result.Add(int.Parse(Payload.Substring(i, 2), NumberStyles.HexNumber));
 
-                return result;
-            }
-            set
-            {
-                if (Type == WemosMessageType.Stream)
-                {
-                    string result = "";
+        //        return result;
+        //    }
+        //    set
+        //    {
+        //        if (Type == WemosMessageType.Stream)
+        //        {
+        //            string result = "";
 
-                    for (var i = 0; i < value.Count; i++)
-                    {
-                        if (value[i] < 16) // ??????
-                            result += "0";
-                        result += value[i].ToString("x");
-                    }
+        //            for (var i = 0; i < value.Count; i++)
+        //            {
+        //                if (value[i] < 16) // ??????
+        //                    result += "0";
+        //                result += value[i].ToString("x");
+        //            }
 
-                    Payload = result;
-                }
-            }
-        }
+        //            Payload = result;
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Constructors
-        public WemosMessage(byte nodeID, byte sensorID, WemosMessageType type, byte subType, string payload)
+        public WemosMessage(int nodeID, int sensorID, WemosMessageType type, int subType, string payload)
         {
             NodeNo = nodeID;
             SensorNo = sensorID;
@@ -89,7 +89,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             SubType = subType;
             Payload = payload;
         }
-        public WemosMessage(byte nodeID, byte sensorID, WemosMessageType type, byte subType, float payload)
+        public WemosMessage(int nodeID, int sensorID, WemosMessageType type, int subType, float payload)
         {
             NodeNo = nodeID;
             SensorNo = sensorID;
@@ -104,33 +104,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         {
             return WemosMessageParser.Parse(str);
         }
-        //public static WemosMessage FromDto(string str)
-        //{
-        //    WemosMessage result = null;
-
-        //    if (!string.IsNullOrEmpty(str) && str.EndsWith("\n"))
-        //    {
-        //        str = str.Replace("\n", "");
-
-        //        string[] parts = str.Split(new char[] { ';' }, StringSplitOptions.None);
-        //        if (parts.Length == 5)
-        //            try
-        //            {
-        //                result = new WemosMessage(
-        //                    byte.Parse(parts[0]),
-        //                    byte.Parse(parts[1]),
-        //                    (WemosMessageType) byte.Parse(parts[2]),
-        //                    byte.Parse(parts[3]),
-        //                    parts[4].Trim());
-        //            }
-        //            catch (Exception) { }
-        //    }
-
-        //    return result;
-        //}
         public string ToDto()
         {
-            return $"{NodeNo};{SensorNo};{(byte)Type};{SubType};{Payload}\n";
+            return $"{NodeNo};{SensorNo};{(int)Type};{SubType};{Payload}\n";
         }
 
         public override string ToString()
@@ -140,22 +116,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             sb.AppendFormat("[{0:d3}] [{0:d3}] [{0}] ", NodeNo, SensorNo, Type);
             switch (Type)
             {
-                //case WemosMessageType.Presentation:
-                //    //sb.AppendFormat("[{0}] ", (SensorType) SubType);
-                //    break;
-                //case WemosMessageType.Set:
-                //case WemosMessageType.Request:
-                //    //sb.AppendFormat("[{0}] ", (SensorValueType) SubType);
-                //    break;
-                //case WemosMessageType.Internal:
-                //    //sb.AppendFormat("[{0}] ", (InternalValueType) SubType);
-                //    break;
-                //case WemosMessageType.Stream:
-                //    //sb.AppendFormat("[{0}] ", (StreamValueType) SubType);
-                //    break;
-                default:
-                    sb.AppendFormat("[{0}] ", SubType);
-                    break;
+                case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
+                case WemosMessageType.Set:
+                case WemosMessageType.Request: sb.AppendFormat("[{0}] ", (WemosLineValueType) SubType); break;
+                case WemosMessageType.Internal: sb.AppendFormat("[{0}] ", (WemosInternalMessageType) SubType); break;
+                case WemosMessageType.Stream: sb.AppendFormat("[{0}] ", (WemosStreamMessageType) SubType); break;
+                default: sb.AppendFormat("[{0}] ", SubType); break;
             }
             sb.AppendFormat("[{0}]", Payload);
 

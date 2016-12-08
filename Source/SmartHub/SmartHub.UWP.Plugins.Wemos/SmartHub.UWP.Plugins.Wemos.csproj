@@ -107,11 +107,15 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\WemosInternalMessageType.cs" />
+    <Compile Include="Core\WemosLineType.cs" />
     <Compile Include="Core\WemosMessage.cs" />
     <Compile Include="Core\WemosMessageEventArgs.cs" />
     <Compile Include="Core\WemosMessageEventHandler.cs" />
     <Compile Include="Core\WemosMessageParser.cs" />
     <Compile Include="Core\WemosMessageType.cs" />
+    <Compile Include="Core\WemosLineValueType.cs" />
+    <Compile Include="Core\WemosStreamMessageType.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />

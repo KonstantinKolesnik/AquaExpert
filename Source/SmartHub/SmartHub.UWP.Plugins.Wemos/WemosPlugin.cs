@@ -181,7 +181,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (message != null)
             {
                 Debug.WriteLine(message.ToString());
-                DataReceived?.Invoke(this, new WemosMessageEventArgs(message));
+                DataReceived?.Invoke(this, new WemosMessageEventArgs(message)); // TODO: temporary!!!
 
 
                 /*

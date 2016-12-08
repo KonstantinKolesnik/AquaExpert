@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos.Core
 {
@@ -49,10 +46,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
                     try
                     {
                         msg = new WemosMessage(
-                            byte.Parse(entry.Groups["v0"].Value),
-                            byte.Parse(entry.Groups["v1"].Value),
-                            (WemosMessageType) byte.Parse(entry.Groups["v2"].Value),
-                            byte.Parse(entry.Groups["v3"].Value),
+                            int.Parse(entry.Groups["v0"].Value),
+                            int.Parse(entry.Groups["v1"].Value),
+                            (WemosMessageType) int.Parse(entry.Groups["v2"].Value),
+                            int.Parse(entry.Groups["v3"].Value),
                             entry.Groups["v4"].Value.Trim());
                     }
                     catch (Exception) { }
