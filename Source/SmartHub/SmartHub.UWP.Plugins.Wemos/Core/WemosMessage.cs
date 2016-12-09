@@ -113,7 +113,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("[{0:d3}] [{0:d3}] [{0}] ", NodeID, LineID, Type);
+            sb.Append(string.Format("[{0:d}] ", NodeID));
+            sb.Append(string.Format("[{0:d}] ", LineID));
+            sb.Append(string.Format("[{0}] ", Type));
             switch (Type)
             {
                 case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;

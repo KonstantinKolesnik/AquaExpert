@@ -1,6 +1,7 @@
 #include <WemosNode.h>
 #include <WemosShield.h>
 
+ADC_MODE(ADC_VCC);
 WemosNode node;
 
 #define LAST_MS	-100000

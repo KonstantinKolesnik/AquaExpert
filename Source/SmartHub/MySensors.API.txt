@@ -26,103 +26,103 @@ req				2		Requests a variable value (usually from an actuator destined for contr
 internal		3		This is a special internal message. See table below for the details
 stream			4		Used for OTA firmware updates
 
-presentation:
+message-type = presentation:
 When a presentation message is sent, sub-type has to be set to one the following:
 
-Type					Value	Comment
-S_DOOR					0		Door and window sensors
-S_MOTION				1		Motion sensors
-S_SMOKE					2		Smoke sensor
-S_LIGHT					3		Light Actuator (on/off)
-S_DIMMER				4		Dimmable device of some kind
-S_COVER					5		Window covers or shades
-S_TEMP					6		Temperature sensor
-S_HUM					7		Humidity sensor
-S_BARO					8		Barometer sensor (Pressure)
-S_WIND					9		Wind sensor
-S_RAIN					10		Rain sensor
-S_UV					11		UV sensor
-S_WEIGHT				12		Weight sensor for scales etc.
-S_POWER					13		Power measuring device, like power meters
-S_HEATER				14		Heater device
-S_DISTANCE				15		Distance sensor
-S_LIGHT_LEVEL			16		Light sensor
-S_ARDUINO_NODE			17		Arduino node device
-S_ARDUINO_RELAY			18		Arduino repeating node device
-S_LOCK					19		Lock device
-S_IR					20		IR sender/receiver device
-S_WATER					21		Water meter
-S_AIR_QUALITY			22		Air quality sensor e.g. MQ-2
-S_CUSTOM				23		Use this for custom sensors where no other fits.
-S_DUST					24		Dust level sensor
-S_SCENE_CONTROLLER		25		Scene controller device
-S_PH					26		Ph sensor
+	Type					Value	Comment
+	S_DOOR					0		Door and window sensors
+	S_MOTION				1		Motion sensors
+	S_SMOKE					2		Smoke sensor
+	S_LIGHT					3		Light Actuator (on/off)
+	S_DIMMER				4		Dimmable device of some kind
+	S_COVER					5		Window covers or shades
+	S_TEMP					6		Temperature sensor
+	S_HUM					7		Humidity sensor
+	S_BARO					8		Barometer sensor (Pressure)
+	S_WIND					9		Wind sensor
+	S_RAIN					10		Rain sensor
+	S_UV					11		UV sensor
+	S_WEIGHT				12		Weight sensor for scales etc.
+	S_POWER					13		Power measuring device, like power meters
+	S_HEATER				14		Heater device
+	S_DISTANCE				15		Distance sensor
+	S_LIGHT_LEVEL			16		Light sensor
+	S_ARDUINO_NODE			17		Arduino node device
+	S_ARDUINO_RELAY			18		Arduino repeating node device
+	S_LOCK					19		Lock device
+	S_IR					20		IR sender/receiver device
+	S_WATER					21		Water meter
+	S_AIR_QUALITY			22		Air quality sensor e.g. MQ-2
+	S_CUSTOM				23		Use this for custom sensors where no other fits.
+	S_DUST					24		Dust level sensor
+	S_SCENE_CONTROLLER		25		Scene controller device
+	S_PH					26		Ph sensor
 
-set, req:
+message-type = set, req:
 When a set or request message is being sent, the sub-type has to be one of the following:
 
-Type					Value	Comment
-V_TEMP					0		Temperature
-V_HUM					1		Humidity
-V_LIGHT					2		Light status. 0=off 1=on
-V_DIMMER				3		Dimmer value. 0-100%
-V_PRESSURE				4		Atmospheric Pressure
-V_FORECAST				5		Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
-V_RAIN					6		Amount of rain
-V_RAINRATE				7		Rate of rain
-V_WIND					8		Windspeed
-V_GUST					9		Gust
-V_DIRECTION				10		Wind direction
-V_UV					11		UV light level
-V_WEIGHT				12		Weight (for scales etc)
-V_DISTANCE				13		Distance
-V_IMPEDANCE				14		Impedance value
-V_ARMED					15		Armed status of a security sensor. 1=Armed, 0=Bypassed
-V_TRIPPED				16		Tripped status of a security sensor. 1=Tripped, 0=Untripped
-V_WATT					17		Watt value for power meters
-V_KWH					18		Accumulated number of KWH for a power meter
-V_SCENE_ON				19		Turn on a scene
-V_SCENE_OFF				20		Turn of a scene
-V_HEATER				21		Mode of header. One of "Off", "HeatOn", "CoolOn", or "AutoChangeOver"
-V_HEATER_SW				22		Heater switch power. 1=On, 0=Off
-V_LIGHT_LEVEL			23		Light level. 0-100%
-V_VAR1					24		Custom value
-V_VAR2					25		Custom value
-V_VAR3					26		Custom value
-V_VAR4					27		Custom value
-V_VAR5					28		Custom value
-V_UP					29		Window covering. Up.
-V_DOWN					30		Window covering. Down.
-V_STOP					31		Window covering. Stop.
-V_IR_SEND				32		Send out an IR-command
-V_IR_RECEIVE			33		This message contains a received IR-command
-V_FLOW					34		Flow of water (in meter)
-V_VOLUME				35		Water volume
-V_LOCK_STATUS			36		Set or get lock status. 1=Locked, 0=Unlocked
-V_DUST_LEVEL			37		Dust level
-V_VOLTAGE				38		Voltage level
-V_CURRENT				39		Current level
+	Type					Value	Comment
+	V_TEMP					0		Temperature
+	V_HUM					1		Humidity
+	V_LIGHT					2		Light status. 0=off 1=on
+	V_DIMMER				3		Dimmer value. 0-100%
+	V_PRESSURE				4		Atmospheric Pressure
+	V_FORECAST				5		Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
+	V_RAIN					6		Amount of rain
+	V_RAINRATE				7		Rate of rain
+	V_WIND					8		Windspeed
+	V_GUST					9		Gust
+	V_DIRECTION				10		Wind direction
+	V_UV					11		UV light level
+	V_WEIGHT				12		Weight (for scales etc)
+	V_DISTANCE				13		Distance
+	V_IMPEDANCE				14		Impedance value
+	V_ARMED					15		Armed status of a security sensor. 1=Armed, 0=Bypassed
+	V_TRIPPED				16		Tripped status of a security sensor. 1=Tripped, 0=Untripped
+	V_WATT					17		Watt value for power meters
+	V_KWH					18		Accumulated number of KWH for a power meter
+	V_SCENE_ON				19		Turn on a scene
+	V_SCENE_OFF				20		Turn of a scene
+	V_HEATER				21		Mode of header. One of "Off", "HeatOn", "CoolOn", or "AutoChangeOver"
+	V_HEATER_SW				22		Heater switch power. 1=On, 0=Off
+	V_LIGHT_LEVEL			23		Light level. 0-100%
+	V_VAR1					24		Custom value
+	V_VAR2					25		Custom value
+	V_VAR3					26		Custom value
+	V_VAR4					27		Custom value
+	V_VAR5					28		Custom value
+	V_UP					29		Window covering. Up.
+	V_DOWN					30		Window covering. Down.
+	V_STOP					31		Window covering. Stop.
+	V_IR_SEND				32		Send out an IR-command
+	V_IR_RECEIVE			33		This message contains a received IR-command
+	V_FLOW					34		Flow of water (in meter)
+	V_VOLUME				35		Water volume
+	V_LOCK_STATUS			36		Set or get lock status. 1=Locked, 0=Unlocked
+	V_DUST_LEVEL			37		Dust level
+	V_VOLTAGE				38		Voltage level
+	V_CURRENT				39		Current level
 
-internal:
+message-type = internal:
 The internal messages are used for different tasks in the communication between sensors, the gateway to controller and between sensors and the gateway.
 When an internal messages is sent, the sub-type has to be one of the following:
 
-Type					Value	Comment
-I_BATTERY_LEVEL			0		Use this to report the battery level (in percent 0-100).
-I_TIME					1		Sensors can request the current time from the Controller using this message. The time will be reported as the seconds since 1970
-I_VERSION				2		Sensors report their library version at startup using this message type
-I_ID_REQUEST			3		Use this to request a unique node id from the controller.
-I_ID_RESPONSE			4		Id response back to sensor. Payload contains sensor id.
-I_INCLUSION_MODE		5		Start/stop inclusion mode of the Controller (1=start, 0=stop).
-I_CONFIG				6		Config request from node. Reply with (M)etric or (I)mperal back to sensor.
-I_FIND_PARENT			7		When a sensor starts up, it broadcast a search request to all neighbor nodes. They reply with a I_FIND_PARENT_RESPONSE.
-I_FIND_PARENT_RESPONSE	8		Reply message type to I_FIND_PARENT request.
-I_LOG_MESSAGE			9		Sent by the gateway to the Controller to trace-log a message
-I_CHILDREN				10		A message that can be used to transfer child sensors (from EEPROM routing table) of a repeating node.
-I_SKETCH_NAME			11		Optional sketch name that can be used to identify sensor in the Controller GUI
-I_SKETCH_VERSION		12		Optional sketch version that can be reported to keep track of the version of sensor in the Controller GUI.
-I_REBOOT				13		Used by OTA firmware updates. Request for node to reboot.
-I_GATEWAY_READY			14		Send by gateway to controller when startup is complete.
+	Type					Value	Comment
+	I_BATTERY_LEVEL			0		Use this to report the battery level (in percent 0-100).
+	I_TIME					1		Sensors can request the current time from the Controller using this message. The time will be reported as the seconds since 1970
+	I_VERSION				2		Sensors report their library version at startup using this message type
+	I_ID_REQUEST			3		Use this to request a unique node id from the controller.
+	I_ID_RESPONSE			4		Id response back to sensor. Payload contains sensor id.
+	I_INCLUSION_MODE		5		Start/stop inclusion mode of the Controller (1=start, 0=stop).
+	I_CONFIG				6		Config request from node. Reply with (M)etric or (I)mperal back to sensor.
+	I_FIND_PARENT			7		When a sensor starts up, it broadcast a search request to all neighbor nodes. They reply with a I_FIND_PARENT_RESPONSE.
+	I_FIND_PARENT_RESPONSE	8		Reply message type to I_FIND_PARENT request.
+	I_LOG_MESSAGE			9		Sent by the gateway to the Controller to trace-log a message
+	I_CHILDREN				10		A message that can be used to transfer child sensors (from EEPROM routing table) of a repeating node.
+	I_SKETCH_NAME			11		Optional sketch name that can be used to identify sensor in the Controller GUI
+	I_SKETCH_VERSION		12		Optional sketch version that can be reported to keep track of the version of sensor in the Controller GUI.
+	I_REBOOT				13		Used by OTA firmware updates. Request for node to reboot.
+	I_GATEWAY_READY			14		Send by gateway to controller when startup is complete.
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 MySensor constructor
@@ -161,138 +161,138 @@ The id received can be retrieved by calling this method.
 
 uint8_t getNodeId();
 --------------------------------------------------------------------------------------------------------------------------------------------
-Presentation
-The sensors should present themselves before they start reporting sensor data to the controller.
+Presentation:
+	The sensors should present themselves before they start reporting sensor data to the controller.
 
-void present(uint8_t childSensorId, uint8_t sensorType, bool ack);
-	childSensorId -	The unique child id you want to choose for the sensor connected to this Arduino. Range 0-254.
-	sensorType -	The sensor type you want to create.
-	ack -			Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+	void present(uint8_t childSensorId, uint8_t sensorType, bool ack);
+		childSensorId -	The unique child id you want to choose for the sensor connected to this Arduino. Range 0-254.
+		sensorType -	The sensor type you want to create.
+		ack -			Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 
 
-You can also send in some optional meta information for this sensor node.
+	You can also send in some optional meta information for this sensor node.
 
-void sendSketchInfo(const char *name, const char *version, bool ack);
-	name -		String containing a short Sketch name or NULL if not applicable. Max 25 characters.
-	version -	String containing a short Sketch version or NULL if not applicable.
-	ack -		Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+	void sendSketchInfo(const char *name, const char *version, bool ack);
+		name -		String containing a short Sketch name or NULL if not applicable. Max 25 characters.
+		version -	String containing a short Sketch version or NULL if not applicable.
+		ack -		Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 --------------------------------------------------------------------------------------------------------------------------------------------
-Sending data
-You can send data to the controller or some other sensor by using the send(msg) method.
+Sending data:
+	You can send data to the controller or some other sensor by using the send(msg) method.
 
-bool send(MyMessage &msg, bool ack);
-	msg -	The message you want to send. See MyMessage for details.
-	ack -	Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+	bool send(MyMessage &msg, bool ack);
+		msg -	The message you want to send. See MyMessage for details.
+		ack -	Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 
-If your node is running on batteries and you've implemented battery level measurements you can send the battery level back to the controller.
+	If your node is running on batteries and you've implemented battery level measurements you can send the battery level back to the controller.
 
-void sendBatteryLevel(uint8_t level, bool ack);
-	level - Battery level between 0-100(%)
-	ack -	Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
+	void sendBatteryLevel(uint8_t level, bool ack);
+		level - Battery level between 0-100(%)
+		ack -	Set this to true if you want destination node to send ack back to this node. Default is not to request any ack.
 --------------------------------------------------------------------------------------------------------------------------------------------
-Requesting data
-Requests a variable value from gateway or some other sensor in the radio network.
-Make sure to add callback-method in begin-method to handle request responses.
-If you send this request to some other sensor-node you must handle the reply message yourself in the destination node.
+Requesting data:
+	Requests a variable value from gateway or some other sensor in the radio network.
+	Make sure to add callback-method in begin-method to handle request responses.
+	If you send this request to some other sensor-node you must handle the reply message yourself in the destination node.
 
-void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination);
-	childSensorId -		The unique child id for the different sensors connected to this Arduino. 0-254.
-	variableType -		The variableType to fetch.
-	destination -		The nodeId of other node to request data from in radio network. Default is gateway.
+	void request(uint8_t childSensorId, uint8_t variableType, uint8_t destination);
+		childSensorId -		The unique child id for the different sensors connected to this Arduino. 0-254.
+		variableType -		The variableType to fetch.
+		destination -		The nodeId of other node to request data from in radio network. Default is gateway.
 --------------------------------------------------------------------------------------------------------------------------------------------
-Fetching time from controller
-Requests time from controller. Answer will be delivered to the specified callback.
+Fetching time from controller:
+	Requests time from controller. Answer will be delivered to the specified callback.
 
-void requestTime(void (* timeCallback)(unsigned long));
-	callback - Callback for time request. Incoming argument is seconds since 1970.
+	void requestTime(void (* timeCallback)(unsigned long));
+		callback - Callback for time request. Incoming argument is seconds since 1970.
 --------------------------------------------------------------------------------------------------------------------------------------------
 Controller configuration
-Your sensor is responsible for reporting data in the correct units of measure.
-The controller can give you a "hint" for which units of measure to report.
-The following returns the most recent node configuration received from controller.
+	Your sensor is responsible for reporting data in the correct units of measure.
+	The controller can give you a "hint" for which units of measure to report.
+	The following returns the most recent node configuration received from controller.
 
-ControllerConfig getConfig();
-ControllerConfig only contains the filed isMetric today which has the following meaning:
+	ControllerConfig getConfig();
+	ControllerConfig only contains the filed isMetric today which has the following meaning:
 
-true (=metric) Report sensor data in Celsius, meter, cm, gram, km/h, m/s etc..
-false (=imperial) - Fahrenheit, feet, gallon, mph etc...
+	true (=metric) Report sensor data in Celsius, meter, cm, gram, km/h, m/s etc..
+	false (=imperial) - Fahrenheit, feet, gallon, mph etc...
 --------------------------------------------------------------------------------------------------------------------------------------------
-Processing incoming radio messages
-Nodes that expects incoming messages, such as an actuator or repeating nodes, must check for new messages frequently.
-For repeater nodes this is crucial (otherwise messages will be lost on their way to gateway).
-All the magic happens in process() and this should be placed in your loop() section. Do not sleep!
+Processing incoming radio messages:
+	Nodes that expects incoming messages, such as an actuator or repeating nodes, must check for new messages frequently.
+	For repeater nodes this is crucial (otherwise messages will be lost on their way to gateway).
+	All the magic happens in process() and this should be placed in your loop() section. Do not sleep!
 
-boolean process();
+	boolean process();
 --------------------------------------------------------------------------------------------------------------------------------------------
-Saving/retrieving states in node
-You can save a state (in local EEPROM) which is good for actuators to "remember" state between power cycles.
-You have 256 bytes to play with. Note that there is a limitation on the number of writes the EEPROM can handle (~100 000 cycles).
+Saving/retrieving states in node:
+	You can save a state (in local EEPROM) which is good for actuators to "remember" state between power cycles.
+	You have 256 bytes to play with. Note that there is a limitation on the number of writes the EEPROM can handle (~100 000 cycles).
 
-void saveState(uint8_t pos, uint8_t value);
-	pos -	The position to store value in (0-255)
-	value - Value to store in position
+	void saveState(uint8_t pos, uint8_t value);
+		pos -	The position to store value in (0-255)
+		value - Value to store in position
 
-Retrieving a state (from local EEPROM).
+	Retrieving a state (from local EEPROM).
 
-uint8_t loadState(uint8_t pos);
-	pos - The position to fetch from EEPROM (0-255)
+	uint8_t loadState(uint8_t pos);
+		pos - The position to fetch from EEPROM (0-255)
 --------------------------------------------------------------------------------------------------------------------------------------------
 Sleeping:
-To save battery it is crucial to sleep you node as much as possible. The node can wake up from external interrupts or by a timer.
+	To save battery it is crucial to sleep you node as much as possible. The node can wake up from external interrupts or by a timer.
 
-The following sleep your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt.
+	The following sleep your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt.
 
-void sleep(unsigned long ms);
-	ms - Number of milliseconds to sleep.
+	void sleep(unsigned long ms);
+		ms - Number of milliseconds to sleep.
 
-The following sleeps your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt or from an external interrupt.
-See: http://arduino.cc/en/Reference/attachInterrupt for details on modes and which pin is assigned to what interrupt. On Nano/Pro Mini: 0=Pin2, 1=Pin3
-Returns true if wake up was triggered by pin change and false means timer woke it up.
+	The following sleeps your radio and Arduino (in PowerDownMode). Wakes up on timer interrupt or from an external interrupt.
+	See: http://arduino.cc/en/Reference/attachInterrupt for details on modes and which pin is assigned to what interrupt. On Nano/Pro Mini: 0=Pin2, 1=Pin3
+	Returns true if wake up was triggered by pin change and false means timer woke it up.
 
-bool sleep(int interrupt, int mode, unsigned long ms=0);
-	interrupt -	Interrupt that should trigger the wakeup.
-	mode -		RISING, FALLING, CHANGE
-	ms -		Number of milliseconds to sleep or 0 to sleep forever.
+	bool sleep(int interrupt, int mode, unsigned long ms=0);
+		interrupt -	Interrupt that should trigger the wakeup.
+		mode -		RISING, FALLING, CHANGE
+		ms -		Number of milliseconds to sleep or 0 to sleep forever.
 --------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------------------
 Message constructor:
-Create an instance of MyMessage. This class holds the message data and have some helpers for setting payload.
+	Create an instance of MyMessage. This class holds the message data and have some helpers for setting payload.
 
-MyMessage(uint8_t childSensorId, uint8_t variableType);
-	childSensorId -	The child sensor id to report data on; 0-254.
-	variableType -	Variable type.
+	MyMessage(uint8_t childSensorId, uint8_t variableType);
+		childSensorId -	The child sensor id to report data on; 0-254.
+		variableType -	Variable type.
 --------------------------------------------------------------------------------------------------------------------------------------------
 Message manipulation:
-You can manipulate your outgoing and incoming messages with the following getterS/setters.
+	You can manipulate your outgoing and incoming messages with the following getters/setters.
 
-// Setters for building message "on the fly"
-MyMessage& setType(uint8_t type);
-MyMessage& setSensor(uint8_t sensor);
-MyMessage& setDestination(uint8_t destination);
+	// Setters for building message "on the fly":
+	MyMessage& setType(uint8_t type);
+	MyMessage& setSensor(uint8_t sensor);
+	MyMessage& setDestination(uint8_t destination);
 
-// Setters for payload
-MyMessage& set(void* payload, uint8_t length);
-MyMessage& set(const char* value);
-MyMessage& set(uint8_t value);
-MyMessage& set(float value, uint8_t decimals);
-MyMessage& set(unsigned long value);
-MyMessage& set(long value);
-MyMessage& set(unsigned int value);
-MyMessage& set(int value);
+	// Setters for payload:
+	MyMessage& set(void* payload, uint8_t length);
+	MyMessage& set(const char* value);
+	MyMessage& set(uint8_t value);
+	MyMessage& set(float value, uint8_t decimals);
+	MyMessage& set(unsigned long value);
+	MyMessage& set(long value);
+	MyMessage& set(unsigned int value);
+	MyMessage& set(int value);
 
-// Getter for ack-flag. Returns true if this is an ack message.
-bool isAck() const;
+	// Getter for ack-flag. Returns true if this is an ack message.
+	bool isAck() const;
 
-// Getters for picking up payload on incoming messages
-char* getStream(char *buffer) const;
-char* getString(char *buffer) const;
-const char* getString() const;
-void* getCustom() const;
-uint8_t getByte() const;
-bool getBool() const;
-float getFloat() const;
-long getLong() const;
-unsigned long getULong() const;
-int getInt() const;
-unsigned int getUInt() const;
+	// Getters for picking up payload on incoming messages:
+	char* getStream(char *buffer) const;
+	char* getString(char *buffer) const;
+	const char* getString() const;
+	void* getCustom() const;
+	uint8_t getByte() const;
+	bool getBool() const;
+	float getFloat() const;
+	long getLong() const;
+	unsigned long getULong() const;
+	int getInt() const;
+	unsigned int getUInt() const;
 --------------------------------------------------------------------------------------------------------------------------------------------

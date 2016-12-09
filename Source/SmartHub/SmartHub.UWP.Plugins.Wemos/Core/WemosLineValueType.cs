@@ -5,7 +5,7 @@
         String,
         Boolean,
         Decimal,
-        Double,
+        Float,
         Custom
     }
 }
