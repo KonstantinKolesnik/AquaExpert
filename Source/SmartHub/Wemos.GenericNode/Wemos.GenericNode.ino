@@ -19,7 +19,7 @@ void setup()
 
 void loop()
 {
-	node.proceed();
+	node.process();
 
 	//if (node.hasIntervalElapsed(&prevMs, interval))
 	//{

@@ -390,12 +390,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                     await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot, string.Empty));
             }
         }
-        private int GetTimeForLines() // seconds since 1970
+        private ulong GetTimeForLines() // seconds since 1970
         {
             DateTime dtNow = DateTime.UtcNow;
 
             TimeSpan result = dtNow.Subtract(unixEpoch);
-            return Convert.ToInt32(result.TotalSeconds);
+            return Convert.ToUInt64(result.TotalSeconds);
         }
 
         private WemosLineValue SaveSensorValueToDB(WemosMessage message)
