@@ -30,7 +30,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         {
             List<WemosMessage> result = new List<WemosMessage>();
 
-            //string pattern = @"(?<v0>[\s\S]*?);(?<v1>[\s\S]*?);(?<v2>[\s\S]*?);(?<v3>[\s\S]*?);(?<v4>[\s\S]*?)\n";
             string pattern = @"(?<v0>[\s\S]*);(?<v1>[\s\S]*);(?<v2>[\s\S]*);(?<v3>[\s\S]*);(?<v4>[\s\S]*)\n";
 
             Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -49,8 +48,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
                             int.Parse(entry.Groups["v0"].Value),
                             int.Parse(entry.Groups["v1"].Value),
                             (WemosMessageType) int.Parse(entry.Groups["v2"].Value),
-                            int.Parse(entry.Groups["v3"].Value),
-                            entry.Groups["v4"].Value.Trim());
+                            int.Parse(entry.Groups["v3"].Value))
+                            .Set(entry.Groups["v4"].Value.Trim());
                     }
                     catch (Exception) { }
 

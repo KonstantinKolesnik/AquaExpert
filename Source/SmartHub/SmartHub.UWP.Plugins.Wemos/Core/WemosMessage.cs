@@ -6,6 +6,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
 {
     public class WemosMessage
     {
+        #region Fields
+        private string data = string.Empty;
+        #endregion
+
         #region Properties
         public int NodeID
         {
@@ -24,31 +28,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             get; set;
         }
 
-        public string Payload
-        {
-            get; private set;
-        }
-        public float PayloadFloat
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Payload))
-                {
-                    string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                    string p = Payload.Replace(",", ds).Replace(".", ds);
-
-                    float v;
-                    return float.TryParse(p, out v) ? v : float.NaN;
-                }
-
-                return float.NaN;
-            }
-            set
-            {
-                if (PayloadFloat != value)
-                    Payload = value.ToString();
-            }
-        }
         //public List<int> PayloadFirmware
         //{
         //    get
@@ -81,21 +60,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         #endregion
 
         #region Constructors
-        public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType, string payload)
+        public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType)
         {
             NodeID = nodeID;
             LineID = lineID;
             Type = type;
             SubType = subType;
-            Payload = payload;
-        }
-        public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType, float payload)
-        {
-            NodeID = nodeID;
-            LineID = lineID;
-            Type = type;
-            SubType = subType;
-            PayloadFloat = payload;
         }
         #endregion
 
@@ -106,7 +76,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         }
         public string ToDto()
         {
-            return $"{NodeID};{LineID};{(int)Type};{SubType};{Payload}\n";
+            return $"{NodeID};{LineID};{(int)Type};{SubType};{data}\n";
         }
 
         public override string ToString()
@@ -120,14 +90,71 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             {
                 case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
                 case WemosMessageType.Set:
-                case WemosMessageType.Request: sb.AppendFormat("[{0}] ", (WemosLineValueType) SubType); break;
+                case WemosMessageType.Request: sb.AppendFormat("[{0}] ", (WemosMessageDataType) SubType); break;
                 case WemosMessageType.Internal: sb.AppendFormat("[{0}] ", (WemosInternalMessageType) SubType); break;
                 case WemosMessageType.Stream: sb.AppendFormat("[{0}] ", (WemosStreamMessageType) SubType); break;
                 default: sb.AppendFormat("[{0}] ", SubType); break;
             }
-            sb.AppendFormat("[{0}]", Payload);
+            sb.AppendFormat("[{0}]", data);
 
             return sb.ToString();
+        }
+
+        public WemosMessage Set(string value)
+        {
+            data = value ?? string.Empty;
+            return this;
+        }
+        public WemosMessage Set(bool value)
+        {
+            data = value ? "1" : "0";
+            return this;
+        }
+        public WemosMessage Set(long value)
+        {
+            data = value.ToString();
+            return this;
+        }
+        public WemosMessage Set(float value)
+        {
+            data = value.ToString();
+            return this;
+        }
+
+        public string GetString()
+        {
+            return data;
+        }
+        public bool GetBool()
+        {
+            bool result = false;
+            if (bool.TryParse(data, out result))
+                return result;
+
+            return false;
+        }
+        public long GetInteger()
+        {
+            long result = 0;
+            if (long.TryParse(data, out result))
+                return result;
+
+            return 0;
+        }
+        public float GetFloat()
+        {
+            if (!string.IsNullOrEmpty(data))
+            {
+                string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                string str = data.Replace(",", ds).Replace(".", ds);
+
+                float result = 0;
+                if (float.TryParse(str, out result))
+                    return result;
+            }
+
+            //return float.NaN;
+            return 0;
         }
         #endregion
     }

@@ -32,7 +32,7 @@ namespace SmartHub.UWP.Applications.Server
 
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1, 1, WemosMessageType.Set, 0, DateTime.Now + ": Test data"));
+            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1, 1, WemosMessageType.Set, 0).Set(DateTime.Now + ": Test string"));
         }
         private void ButtonCear_Click(object sender, RoutedEventArgs e)
         {

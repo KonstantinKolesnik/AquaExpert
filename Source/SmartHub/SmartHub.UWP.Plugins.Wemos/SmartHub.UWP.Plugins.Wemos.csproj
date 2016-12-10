@@ -114,7 +114,7 @@
     <Compile Include="Core\WemosMessageEventHandler.cs" />
     <Compile Include="Core\WemosMessageParser.cs" />
     <Compile Include="Core\WemosMessageType.cs" />
-    <Compile Include="Core\WemosLineValueType.cs" />
+    <Compile Include="Core\WemosMessageDataType.cs" />
     <Compile Include="Core\WemosStreamMessageType.cs" />
     <Compile Include="Data\WemosLine.cs" />
     <Compile Include="Data\WemosLineValue.cs" />

@@ -6,6 +6,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Data
     {
         public int NodeID { get; set; }
         public DateTime TimeStamp { get; set; }
-        public int Value { get; set; }
+        public long Value { get; set; }
     }
 }
