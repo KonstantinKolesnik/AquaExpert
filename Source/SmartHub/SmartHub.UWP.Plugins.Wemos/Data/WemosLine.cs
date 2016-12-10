@@ -8,7 +8,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Data
         public int LineID { get; set; }
         public string Name { get; set; }
         public WemosLineType Type { get; set; }
-        public string ProtocolVersion { get; set; }
+        public float ProtocolVersion { get; set; }
 
         public string TypeName
         {

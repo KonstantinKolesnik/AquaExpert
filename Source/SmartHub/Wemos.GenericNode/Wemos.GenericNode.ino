@@ -1,6 +1,6 @@
 #include <WemosNode.h>
 #include <WemosLine.h>
-#include <TimeLib.h>
+#include <SFE_MicroOLED.h>
 
 //ADC_MODE(ADC_VCC);
 WemosNode node(0);
@@ -9,6 +9,10 @@ WemosNode node(0);
 unsigned long prevMsTime = LAST_MS;
 const unsigned long intervalTime = 1000;
 
+#define PIN_RESET 255  //
+#define DC_JUMPER 0  // I2C Addres: 0 - 0x3C, 1 - 0x3D
+MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
+
 void setup()
 {
 	//node.addLine();
@@ -16,6 +20,14 @@ void setup()
 	//node.addLine();
 
 	node.begin();
+
+	oled.begin();
+	oled.clear(ALL);
+	oled.setFontType(0);  // Set the text to small (10 columns, 6 rows worth of characters).
+	//oled.setFontType(1);  // Set the text to medium (6 columns, 3 rows worth of characters).
+	//oled.setFontType(2);  // Set the text to medium/7-segment (5 columns, 3 rows worth of characters).
+	//oled.setFontType(3);  // Set the text to large (5 columns, 1 row worth of characters).
+	oled.display();
 }
 
 void loop()
@@ -24,33 +36,16 @@ void loop()
 
 	if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
 	{
-		String s = node.getTimeString();
-		//if (!s.equals(""))
-		if (s != "")
-			Serial.println();
+		String t = "", d = "";
+		if (node.getDateTimeString(d, t))
+		{
+			//Serial.println(d +" " + t);
 
-		//Serial.print(hour());
-		//printDigits(minute());
-		//printDigits(second());
-
-		//Serial.print(" ");
-		//Serial.print(day());
-
-		//Serial.print("-");
-		//Serial.print(month());
-
-		//Serial.print("-");
-		//Serial.print(year());
-
-		//Serial.println();
+			oled.clear(PAGE);
+			oled.setCursor(0, 0);
+			oled.println(d);
+			oled.println(t);
+			oled.display();
+		}
 	}
-}
-
-void printDigits(int digits)
-{
-	// utility function for digital clock display: prints preceding colon and leading 0
-	Serial.print(":");
-	if (digits < 10)
-		Serial.print('0');
-	Serial.print(digits);
 }

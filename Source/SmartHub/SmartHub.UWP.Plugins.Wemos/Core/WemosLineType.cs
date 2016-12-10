@@ -2,6 +2,8 @@
 {
     public enum WemosLineType
     {
+        WemosNode,
+
         Switch,
         Temperature,
         Humidity,

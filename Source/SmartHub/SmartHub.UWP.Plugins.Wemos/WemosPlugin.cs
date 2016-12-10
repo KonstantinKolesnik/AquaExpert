@@ -226,24 +226,20 @@ namespace SmartHub.UWP.Plugins.Wemos
                 {
                     #region Presentation
                     case WemosMessageType.Presentation: // sent by a nodes when they present attached sensors.
-                        if (message.LineID == -1)
+                        if (message.LineID == -1) // node message
                         {
                             if (node == null)
                             {
                                 node = new WemosNode
                                 {
                                     NodeID = message.NodeID,
-                                    //Type = (WemosLineType) message.SubType,
-                                    //ProtocolVersion = message.Payload
+                                    ProtocolVersion = message.GetFloat()
                                 };
-
                                 Save(node);
                             }
                             else
                             {
-                                //node.Type = (WemosLineType) message.SubType;
-                                //node.ProtocolVersion = message.Payload;
-
+                                node.ProtocolVersion = message.GetFloat();
                                 SaveOrUpdate(node);
                             }
 
@@ -262,16 +258,14 @@ namespace SmartHub.UWP.Plugins.Wemos
                                         NodeID = node.NodeID,
                                         LineID = message.LineID,
                                         Type = (WemosLineType) message.SubType,
-                                        //ProtocolVersion = message.Payload
+                                        ProtocolVersion = message.GetFloat()
                                     };
-
                                     Save(line);
                                 }
                                 else
                                 {
                                     line.Type = (WemosLineType) message.SubType;
-                                    //sensor.ProtocolVersion = message.Payload;
-
+                                    line.ProtocolVersion = message.GetFloat();
                                     SaveOrUpdate(line);
                                 }
 
@@ -283,12 +277,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                         break;
                     #endregion
 
-                    #region Set
-                    case WemosMessageType.Set: // sent from or to a sensor when a sensor value should be updated
+                    #region Report
+                    case WemosMessageType.Report:
                         if (line != null)
                         {
                             //NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
-                            //var sv = SaveSensorValueToDB(message);
+                            var sv = SaveLineValueToDB(message);
 
                             //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
 
@@ -299,6 +293,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                         break;
                     #endregion
 
+                    #region Set
+                    case WemosMessageType.Set: // sent to a sensor when a sensor value should be updated
+                        break;
+                    #endregion
+
                     #region Request
                     case WemosMessageType.Request: // requests a variable value (usually from an actuator destined for controller)
                         break;
@@ -306,7 +305,8 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                     #region Internal
                     case WemosMessageType.Internal:
-                        switch ((WemosInternalMessageType) message.SubType)
+                        var imt = (WemosInternalMessageType) message.SubType;
+                        switch (imt)
                         {
                             case WemosInternalMessageType.BatteryLevel: // int, in %
                                 if (node != null)
@@ -333,13 +333,13 @@ namespace SmartHub.UWP.Plugins.Wemos
                             case WemosInternalMessageType.Time:
                                 await Send(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(GetTimeForLines()));
                                 break;
-                            case WemosInternalMessageType.Version:
+                            case WemosInternalMessageType.Version: // float!
                                 break;
                             //case WemosInternalMessageType.InclusionMode:
                             //    break;
-                            //case WemosInternalMessageType.Config:
-                            //    await Send(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
-                            //    break;
+                            case WemosInternalMessageType.Config:
+                                //await Send(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
+                                break;
                             //case WemosInternalMessageType.SketchName:
                             //case WemosInternalMessageType.SketchVersion:
                             //    if (node != null)
@@ -394,15 +394,13 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         private long GetTimeForLines() // seconds since 1970
         {
-            DateTime dtNow = DateTime.UtcNow;
-
-            TimeSpan result = dtNow.Subtract(unixEpoch);
+            TimeSpan result = DateTime.Now.Subtract(unixEpoch);
             return Convert.ToInt64(result.TotalSeconds);
         }
         #endregion
 
         #region DB
-        private WemosLineValue SaveSensorValueToDB(WemosMessage message)
+        private WemosLineValue SaveLineValueToDB(WemosMessage message)
         {
             //WemosLineValue lastSV = GetLastSensorValue(message.NodeNo, message.SensorNo);
             //if (lastSV != null && lastSV.Type == (SensorValueType)message.SubType && lastSV.Value == message.PayloadFloat)
