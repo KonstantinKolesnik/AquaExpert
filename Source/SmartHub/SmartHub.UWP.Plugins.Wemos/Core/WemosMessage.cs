@@ -28,6 +28,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             get; set;
         }
 
+        public string Data => data;
+
         //public List<int> PayloadFirmware
         //{
         //    get
