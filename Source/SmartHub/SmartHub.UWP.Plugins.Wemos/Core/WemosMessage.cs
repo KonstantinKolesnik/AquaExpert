@@ -125,7 +125,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         {
             return data;
         }
-        public bool GetBool()
+        public bool GetBoolean()
         {
             bool result = false;
             if (bool.TryParse(data, out result))

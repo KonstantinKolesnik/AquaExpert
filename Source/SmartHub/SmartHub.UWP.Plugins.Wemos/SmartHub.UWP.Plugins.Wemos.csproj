@@ -120,6 +120,7 @@
     <Compile Include="Data\WemosLineValue.cs" />
     <Compile Include="Data\WemosNode.cs" />
     <Compile Include="Data\WemosNodeBatteryValue.cs" />
+    <Compile Include="Data\WemosSetting.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />

@@ -21,6 +21,9 @@ void setup()
 
 	node.begin();
 
+	node.sendFirmwareName("Test Node");
+	node.sendFirmwareVersion(1.0);
+
 	oled.begin();
 	oled.clear(ALL);
 	oled.setFontType(0);  // Set the text to small (10 columns, 6 rows worth of characters).
