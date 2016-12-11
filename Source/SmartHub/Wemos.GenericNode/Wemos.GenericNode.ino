@@ -1,6 +1,7 @@
+//#include <SFE_MicroOLED.h>
 #include <WemosNode.h>
 #include <WemosModuleRelay.h>
-#include <SFE_MicroOLED.h>
+#include <WemosModuleDHT.h>
 
 //ADC_MODE(ADC_VCC);
 WemosNode node(2);
@@ -15,9 +16,8 @@ const unsigned long intervalTime = 1000;
 
 void setup()
 {
-	node.addModule(new WemosModuleRelay(0, "Relay 0", D1));
-	//node.addModule();
-	//node.addModule();
+	node.addModule(new WemosModuleRelay(0, D1));
+	node.addModule(new WemosModuleDHT(1, 2, 3000, DHT11));
 
 	node.begin();
 	node.sendFirmwareInfo("Test Node", 1.0);
@@ -35,7 +35,7 @@ void loop()
 {
 	node.process();
 
-	if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
+	//if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
 	{
 		//String t = "", d = "";
 		//if (node.getDateTimeString(d, t))
