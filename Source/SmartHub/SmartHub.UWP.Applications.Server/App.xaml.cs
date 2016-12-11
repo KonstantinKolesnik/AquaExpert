@@ -46,7 +46,7 @@ namespace SmartHub.UWP.Applications.Server
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (!e.PrelaunchActivated)
             {
                 if (rootFrame.Content == null)
                 {

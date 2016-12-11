@@ -1,10 +1,6 @@
 ﻿using SmartHub.UWP.Core.Infrastructure;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;
@@ -39,10 +35,10 @@ namespace SmartHub.UWP.Core
         {
             get { return "gothicmaestro@live.com"; }
         }
-        public static string AppHomePage
-        {
-            get { return "http://www.wintx.at.ua"; }
-        }
+        //public static string AppHomePage
+        //{
+        //    get { return "http://www.wintx.at.ua"; }
+        //}
 
         public static AppData AppData
         {
@@ -88,7 +84,7 @@ namespace SmartHub.UWP.Core
         }
         public static void UnInit()
         {
-            //hub.StopServices();
+            hub.StopServices();
         }
 
         //public static void SaveModels()

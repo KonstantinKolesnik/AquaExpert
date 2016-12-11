@@ -91,8 +91,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
             switch (Type)
             {
                 case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
+                case WemosMessageType.Report:
                 case WemosMessageType.Set:
-                case WemosMessageType.Request: sb.AppendFormat("[{0}] ", (WemosMessageDataType) SubType); break;
+                case WemosMessageType.Get: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
                 case WemosMessageType.Internal: sb.AppendFormat("[{0}] ", (WemosInternalMessageType) SubType); break;
                 case WemosMessageType.Stream: sb.AppendFormat("[{0}] ", (WemosStreamMessageType) SubType); break;
                 default: sb.AppendFormat("[{0}] ", SubType); break;

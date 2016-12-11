@@ -84,7 +84,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region API
         public async void RequestLineValue(WemosLine line)
         {
-            await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Request, (int) line.Type));
+            await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
         }
 
         //public async void SetLineValue(WemosLine sensor, float value)
@@ -298,7 +298,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                     #endregion
 
                     #region Request
-                    case WemosMessageType.Request: // requests a variable value (usually from an actuator destined for controller)
+                    case WemosMessageType.Get: // requests a variable value (usually from an actuator destined for controller)
                         break;
                     #endregion
 
