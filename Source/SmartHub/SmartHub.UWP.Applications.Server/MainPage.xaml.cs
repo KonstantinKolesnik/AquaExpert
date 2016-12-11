@@ -38,5 +38,15 @@ namespace SmartHub.UWP.Applications.Server
         {
             Messages.Clear();
         }
+
+        private async void ButtonOn_Click(object sender, RoutedEventArgs e)
+        {
+            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1962017, 0, WemosMessageType.Set, (int)WemosLineType.Switch).Set(true));
+        }
+        private async void ButtonOff_Click(object sender, RoutedEventArgs e)
+        {
+            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1962017, 0, WemosMessageType.Set, (int) WemosLineType.Switch).Set(false));
+        }
     }
 }
+//
