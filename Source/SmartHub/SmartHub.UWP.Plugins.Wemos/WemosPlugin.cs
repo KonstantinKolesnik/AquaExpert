@@ -1,10 +1,11 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Core;
-using SmartHub.UWP.Plugins.Wemos.Data;
+using SmartHub.UWP.Plugins.Wemos.Models;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
 using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
@@ -18,9 +19,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         private const string remoteService = "22222";
         private const string remoteMulticastAddress = "224.3.0.5";
         private const string remoteBroadcastAddress = "255.255.255.255";
+        private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private DatagramSocket listenerSocket = null;
-        private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private const string socketId = "ListenerSocket";
+        private IBackgroundTaskRegistration task = null;
         #endregion
 
         public event WemosMessageEventHandler DataReceived;
@@ -162,6 +165,8 @@ namespace SmartHub.UWP.Plugins.Wemos
                 // such as mDNS and UPnP, since it enables a DatagramSocket instance to coexist with other applications
                 // running on the system that also implement that protocol.
                 listenerSocket.Control.MulticastOnly = true;
+
+                //listenerSocket.TransferOwnership()
 
                 // Start listen operation.
                 try

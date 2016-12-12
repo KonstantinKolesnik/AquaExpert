@@ -111,7 +111,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{3C3A64FD-1
 		MySensors.Arduino-master v1.5.zip = MySensors.Arduino-master v1.5.zip
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoT", "IoT", "{0C039330-2D58-44CA-9188-B73F43ED3809}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Win10 IoT", "Win10 IoT", "{0C039330-2D58-44CA-9188-B73F43ED3809}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{F690D09B-6772-4452-B791-9B9B644ED6DB}"
 	ProjectSection(SolutionItems) = preProject

@@ -116,11 +116,11 @@
     <Compile Include="Core\WemosMessageType.cs" />
     <Compile Include="Core\WemosMessageDataType.cs" />
     <Compile Include="Core\WemosStreamMessageType.cs" />
-    <Compile Include="Data\WemosLine.cs" />
-    <Compile Include="Data\WemosLineValue.cs" />
-    <Compile Include="Data\WemosNode.cs" />
-    <Compile Include="Data\WemosNodeBatteryValue.cs" />
-    <Compile Include="Data\WemosSetting.cs" />
+    <Compile Include="Models\WemosLine.cs" />
+    <Compile Include="Models\WemosLineValue.cs" />
+    <Compile Include="Models\WemosNode.cs" />
+    <Compile Include="Models\WemosNodeBatteryValue.cs" />
+    <Compile Include="Models\WemosSetting.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />

@@ -84,33 +84,33 @@ namespace SmartHub.UWP.Core
         #endregion
 
         #region Application Data
-        //public static T GetAppData<T>(string keyName, T defaultValue, bool isRoaming = true)
-        //{
-        //    if (!string.IsNullOrEmpty(keyName))
-        //    {
-        //        var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
-        //        var setting = settings.Values[keyName];
+        public static T GetAppData<T>(string keyName, T defaultValue, bool isRoaming = true)
+        {
+            if (!string.IsNullOrEmpty(keyName))
+            {
+                var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
+                var setting = settings.Values[keyName];
 
-        //        if (setting != null)
-        //        {
-        //            try
-        //            {
-        //                return (T) (FromJson(typeof(T), (string) setting));
-        //            }
-        //            catch (InvalidCastException) { }
-        //        }
-        //    }
+                if (setting != null)
+                {
+                    try
+                    {
+                        return (T) (FromJson(typeof(T), (string) setting));
+                    }
+                    catch (InvalidCastException) { }
+                }
+            }
 
-        //    return defaultValue;
-        //}
-        //public static void SetAppData(string keyName, object value, bool isRoaming = true)
-        //{
-        //    if (!string.IsNullOrEmpty(keyName))
-        //    {
-        //        var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
-        //        settings.Values[keyName] = value.ToJson();
-        //    }
-        //}
+            return defaultValue;
+        }
+        public static void SetAppData(string keyName, object value, bool isRoaming = true)
+        {
+            if (!string.IsNullOrEmpty(keyName))
+            {
+                var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
+                settings.Values[keyName] = value.ToJson();
+            }
+        }
         #endregion
 
         public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class

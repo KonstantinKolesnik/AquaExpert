@@ -27,7 +27,7 @@ namespace SmartHub.UWP.Core.Infrastructure
         }
         #endregion
 
-        #region Data
+        #region Database
         //private ISessionFactory sessionFactory;
 
         //public void InitSessionFactory(ISessionFactory sessionFactory)

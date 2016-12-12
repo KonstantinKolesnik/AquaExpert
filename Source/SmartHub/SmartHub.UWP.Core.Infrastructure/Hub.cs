@@ -43,8 +43,8 @@ namespace SmartHub.UWP.Core.Infrastructure
 
                 InitSessionFactory(Context);
                 // обновляем структуру БД
-                //using (var session = context.OpenSession())
-                //    foreach (var plugin in context.GetAllPlugins())
+                //using (var session = Context.OpenSession())
+                //    foreach (var plugin in Context.GetAllPlugins())
                 //        UpdateDatabase(session.Connection, plugin);
 
                 foreach (var plugin in Context.GetAllPlugins())

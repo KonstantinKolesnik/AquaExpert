@@ -1,4 +1,4 @@
-#include <SFE_MicroOLED.h>
+//#include <SFE_MicroOLED.h>
 #include <WemosNode.h>
 #include <WemosModuleRelay.h>
 #include <WemosModuleDHT.h>
@@ -17,7 +17,7 @@ const unsigned long intervalTime = 1000;
 void setup()
 {
 	node.addModule(new WemosModuleRelay(0, D1));
-	node.addModule(new WemosModuleDHT(1, 2, 60000, DHT11));
+	node.addModule(new WemosModuleDHT(1, 2, 60000, WemosModuleDHTType::WMDHT11));
 
 	node.begin();
 	node.sendFirmwareInfo("Test Node", 1.0);

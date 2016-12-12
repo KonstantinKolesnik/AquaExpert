@@ -96,7 +96,7 @@ namespace SmartHub.UWP.Applications.Server
             var deferral = e.SuspendingOperation.GetDeferral();
 
             //TODO: Save application state and stop any background activity
-            AppManager.UnInit();
+            AppManager.OnSuspending(deferral);
 
             deferral.Complete();
         }

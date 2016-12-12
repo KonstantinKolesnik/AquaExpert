@@ -1,6 +1,6 @@
 ﻿using SmartHub.UWP.Plugins.Wemos.Core;
 
-namespace SmartHub.UWP.Plugins.Wemos.Data
+namespace SmartHub.UWP.Plugins.Wemos.Models
 {
     public class WemosNode
     {

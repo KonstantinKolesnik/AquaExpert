@@ -82,9 +82,9 @@ namespace SmartHub.UWP.Core
             //hub.Init();
             //hub.StartServices();
         }
-        public static void UnInit()
+        public static void OnSuspending(SuspendingDeferral defferal)
         {
-            hub.StopServices();
+            //hub.StopServices();
         }
 
         //public static void SaveModels()

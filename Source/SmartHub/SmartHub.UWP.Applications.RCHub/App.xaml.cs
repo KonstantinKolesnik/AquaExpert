@@ -102,7 +102,7 @@ namespace SmartHub.UWP.Applications.RCHub
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            AppManager.UnInit();
+            AppManager.OnSuspened();
 
             deferral.Complete();
         }

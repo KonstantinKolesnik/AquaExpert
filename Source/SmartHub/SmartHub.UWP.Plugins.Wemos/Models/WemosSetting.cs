@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Data
+namespace SmartHub.UWP.Plugins.Wemos.Models
 {
     public class WemosSetting
     {
