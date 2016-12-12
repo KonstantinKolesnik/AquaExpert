@@ -6,13 +6,16 @@ namespace SmartHub.UWP.Plugins.Timer
 {
     class PeriodicalAction
     {
+        #region Properties
         //private readonly Logger logger;
         private readonly Action<DateTime> action;
         private readonly int interval;
         private DateTime lastRun;
         private static readonly Random random = new Random();
         private readonly object lockObject = new object();
+        #endregion
 
+        #region Constructor
         public PeriodicalAction(Action<DateTime> action, int interval, DateTime now/*, Logger logger*/)
         {
             //logger.Info("Register periodical action: {0} ({1})", action.Method, action.Method.DeclaringType);
@@ -27,9 +30,11 @@ namespace SmartHub.UWP.Plugins.Timer
             // offset
             int offset = random.Next(interval);
             //logger.Info("Interval: {0} seconds, random offset: {1} seconds", interval, offset);
-            lastRun = now.AddSeconds(offset - interval);
+            lastRun = now.AddSeconds(offset - interval); // fake last run time
         }
+        #endregion
 
+        #region Public methods
         public void TryToExecute(DateTime now)
         {
             if (lastRun.AddSeconds(interval) < now)
@@ -55,5 +60,6 @@ namespace SmartHub.UWP.Plugins.Timer
                         });
                     }
         }
+        #endregion
     }
 }

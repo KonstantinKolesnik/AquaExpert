@@ -14,7 +14,7 @@ namespace SmartHub.UWP.Plugins.Timer
         private const double TIMER_INTERVAL = 10;
         private System.Threading.Timer timer;
         private bool isTimerActive = false;
-        private readonly List<PeriodicalAction> periodicalHandlers = new List<PeriodicalAction>();
+        private readonly List<PeriodicalAction> periodicalActions = new List<PeriodicalAction>();
         #endregion
 
         #region Import
@@ -35,7 +35,11 @@ namespace SmartHub.UWP.Plugins.Timer
         {
             timer = new System.Threading.Timer(timerCallback, null, TimeSpan.FromSeconds(TIMER_INTERVAL).Milliseconds, Timeout.Infinite);
 
-            RegisterPeriodicalHandlers();
+            // register periodical actions:
+            var now = DateTime.Now;
+            //Logger.Info("Register periodical actions at {0:yyyy.MM.dd, HH:mm:ss}", now);
+            foreach (var handler in PeriodicalHandlers)
+                periodicalActions.Add(new PeriodicalAction(handler.Value, handler.Metadata.Interval, now/*, Logger*/));
         }
         public override void StartPlugin()
         {
@@ -57,11 +61,10 @@ namespace SmartHub.UWP.Plugins.Timer
                 var now = DateTime.Now;
 
                 // periodical actions
-                foreach (var handler in periodicalHandlers)
+                foreach (var handler in periodicalActions)
                     handler.TryToExecute(now);
 
                 //Run(Timer_ElapsedEventHandlers, handler => handler(now));
-
 
                 // do some work not connected with UI:
                 //await Window.Current.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
@@ -71,18 +74,6 @@ namespace SmartHub.UWP.Plugins.Timer
 
                 //isTimerActive = true;
             }
-        }
-        #endregion
-
-        #region Private methods
-        private void RegisterPeriodicalHandlers()
-        {
-            var now = DateTime.Now;
-
-            //Logger.Info("Register periodical actions at {0:yyyy.MM.dd, HH:mm:ss}", now);
-
-            foreach (var handler in PeriodicalHandlers)
-                periodicalHandlers.Add(new PeriodicalAction(handler.Value, handler.Metadata.Interval, now/*, Logger*/));
         }
         #endregion
     }

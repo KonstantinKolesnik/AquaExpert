@@ -490,13 +490,6 @@ namespace SmartHub.Plugins.MySensors
                 }
             }
         }
-        private int GetTimeForSensors() // seconds since 1970
-        {
-            DateTime dtNow = DateTime.UtcNow;
-
-            TimeSpan result = dtNow.Subtract(unixEpoch);
-            return Convert.ToInt32(result.TotalSeconds);
-        }
         private void CheckRebootRequest(Node node)
         {
             if (node != null && node.Reboot)
@@ -685,7 +678,8 @@ namespace SmartHub.Plugins.MySensors
                             }
                             break;
                         case InternalValueType.Time:
-                            gatewayProxy.Send(new SensorMessage(message.NodeNo, message.SensorNo, SensorMessageType.Internal, false, (byte)InternalValueType.Time, GetTimeForSensors().ToString()));
+                            var result = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds).ToString();
+                            gatewayProxy.Send(new SensorMessage(message.NodeNo, message.SensorNo, SensorMessageType.Internal, false, (byte)InternalValueType.Time, result));
                             break;
                         case InternalValueType.Version:
                             break;
