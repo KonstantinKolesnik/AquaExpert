@@ -8,9 +8,9 @@ WemosNode node(2);
 unsigned long prevMsTime = LAST_MS;
 const unsigned long intervalTime = 1000;
 
-#define PIN_RESET 255  //
-#define DC_JUMPER 0  // I2C Addres: 0 - 0x3C, 1 - 0x3D
-MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
+//#define PIN_RESET 255  //
+//#define DC_JUMPER 0  // I2C Addres: 0 - 0x3C, 1 - 0x3D
+//MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
 
 void setup()
 {
@@ -33,18 +33,18 @@ void loop()
 {
 	node.process();
 
-	if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
-	{
-		String t = "", d = "";
-		if (node.getDateTimeString(d, t))
-		{
-			//Serial.println(d +" " + t);
+	//if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
+	//{
+	//	String t = "", d = "";
+	//	if (node.getDateTimeString(d, t))
+	//	{
+	//		Serial.println(d +" " + t);
 
-			//oled.clear(PAGE);
-			//oled.setCursor(0, 0);
-			//oled.println(d);
-			//oled.println(t);
-			//oled.display();
-		}
-	}
+	//		oled.clear(PAGE);
+	//		oled.setCursor(0, 0);
+	//		oled.println(d);
+	//		oled.println(t);
+	//		oled.display();
+	//	}
+	//}
 }
