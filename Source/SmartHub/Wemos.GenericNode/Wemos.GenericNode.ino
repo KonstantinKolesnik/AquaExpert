@@ -1,7 +1,5 @@
-//#include <SFE_MicroOLED.h>
-#include <WemosNode.h>
-#include <WemosModuleRelay.h>
-#include <WemosModuleDHT.h>
+#include <Wemos.h>
+#include <SFE_MicroOLED.h>
 
 //ADC_MODE(ADC_VCC);
 WemosNode node(2);
@@ -12,7 +10,7 @@ const unsigned long intervalTime = 1000;
 
 #define PIN_RESET 255  //
 #define DC_JUMPER 0  // I2C Addres: 0 - 0x3C, 1 - 0x3D
-//MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
+MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
 
 void setup()
 {
