@@ -27,6 +27,11 @@ namespace SmartHub.UWP.Core.Infrastructure
         }
         #endregion
 
+        public bool IsServer
+        {
+            get; set;
+        }
+
         #region Database
         //private ISessionFactory sessionFactory;
 

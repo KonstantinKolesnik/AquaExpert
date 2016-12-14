@@ -15,6 +15,8 @@ namespace SmartHub.UWP.Core.Infrastructure
     public class Hub
     {
         #region Fields
+        private bool isServer;
+
         [Import]
         public IServiceContext Context
         {
@@ -26,13 +28,15 @@ namespace SmartHub.UWP.Core.Infrastructure
         [OnImportsSatisfied]
         public void OnImportsSatisfied()
         {
-            var a = 0;
-            var b = a;
+            if (Context != null)
+                Context.IsServer = isServer;
         }
 
         #region Public methods
-        public void Init(List<Assembly> assemblies = null)
+        public void Init(bool isServer, List<Assembly> assemblies = null)
         {
+            this.isServer = isServer;
+
             //var a = ApplicationData.Current.LocalFolder;
             //StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             //var files = await assets.GetFilesAsync();

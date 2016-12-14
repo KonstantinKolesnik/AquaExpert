@@ -16,7 +16,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Transport
         private const string remoteMulticastAddress = "224.3.0.5";
         private const string remoteBroadcastAddress = "255.255.255.255";
         private DatagramSocket listenerSocket = null;
-        private const string socketId = "ListenerSocket";
+        private const string socketId = "WemosMulticastSocket";
+        private const string socketBackgroundgTaskName = "WemosMulticastActivityBackgroundTask";
         private IBackgroundTaskRegistration task = null;
         #endregion
 
@@ -27,45 +28,21 @@ namespace SmartHub.UWP.Plugins.Wemos.Transport
         #region Public methods
         public async Task Open()
         {
+            //CheckBackgroundTask();
+            //await CheckSocketAsync();
+
+            #region simple socket creation
             if (listenerSocket == null)
             {
                 listenerSocket = new DatagramSocket();
+                listenerSocket.Control.DontFragment = true;
+                listenerSocket.Control.MulticastOnly = true;
                 listenerSocket.MessageReceived += DataReceived;
 
-                listenerSocket.Control.DontFragment = true;
-
-                // DatagramSockets conduct exclusive (SO_EXCLUSIVEADDRUSE) binds by default, effectively blocking
-                // any other UDP socket on the system from binding to the same local port. This is done to prevent
-                // other applications from eavesdropping or hijacking a DatagramSocket's unicast traffic.
-                //
-                // Setting the MulticastOnly control option to 'true' enables a DatagramSocket instance to share its
-                // local port with any Win32 sockets that are bound using SO_REUSEADDR/SO_REUSE_MULTICASTPORT and
-                // with any other DatagramSocket instances that have MulticastOnly set to true. However, note that any
-                // attempt to use a multicast-only DatagramSocket instance to send or receive unicast data will result
-                // in an exception being thrown.
-                //
-                // This control option is particularly useful when implementing a well-known multicast-based protocol,
-                // such as mDNS and UPnP, since it enables a DatagramSocket instance to coexist with other applications
-                // running on the system that also implement that protocol.
-                listenerSocket.Control.MulticastOnly = true;
-
-                //listenerSocket.TransferOwnership()
-
-                // Start listen operation:
                 try
                 {
                     await listenerSocket.BindServiceNameAsync(localService);
-
-                    //if (isMulticastSocket)
-                    //{
-                    // Join the multicast group to start receiving datagrams being sent to that group.
                     listenerSocket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
-
-
-                    //rootPage.NotifyUser("Listening on port " + listenerSocket.Information.LocalPort + " and joined to multicast group", NotifyType.StatusMessage);
-                    //}
-                    //else
-                    //    rootPage.NotifyUser("Listening on port " + listenerSocket.Information.LocalPort, NotifyType.StatusMessage);
 
                     //Context.GetPlugin<SpeechPlugin>()?.Say("WEMOS UDP клиент запущен!");
                 }
@@ -80,6 +57,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transport
                     //rootPage.NotifyUser("Start listening failed with error: " + exception.Message, NotifyType.ErrorMessage);
                 }
             }
+            #endregion
         }
         public async Task Send(WemosMessage msg, bool isBrodcast)
         {
@@ -155,6 +133,62 @@ namespace SmartHub.UWP.Plugins.Wemos.Transport
                     throw;
 
                 //rootPage.NotifyUser("Error happened when receiving a datagram:" + exception.Message, NotifyType.ErrorMessage);
+            }
+        }
+        private void CheckBackgroundTask()
+        {
+            foreach (var current in BackgroundTaskRegistration.AllTasks)
+                if (current.Value.Name == socketBackgroundgTaskName)
+                {
+                    task = current.Value;
+                    break;
+                }
+
+            // if there is no task allready created, create a new one
+            if (task == null)
+            {
+                var socketTaskBuilder = new BackgroundTaskBuilder();
+                socketTaskBuilder.Name = socketBackgroundgTaskName;
+                socketTaskBuilder.TaskEntryPoint = socketBackgroundgTaskName + ".SocketActivityTask";
+
+                var trigger = new SocketActivityTrigger();
+                socketTaskBuilder.SetTrigger(trigger);
+                task = socketTaskBuilder.Register();
+            }
+        }
+        private async Task CheckSocketAsync()
+        {
+            try
+            {
+                SocketActivityInformation socketInformation;
+                if (!SocketActivityInformation.AllSockets.TryGetValue(socketId, out socketInformation))
+                {
+                    var socket = new DatagramSocket();
+                    socket.Control.DontFragment = true;
+                    socket.Control.MulticastOnly = true;
+                    socket.EnableTransferOwnership(task.TaskId, SocketActivityConnectedStandbyAction.Wake);
+
+                    await socket.BindServiceNameAsync(localService);
+                    socket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
+
+                    // To demonstrate usage of CancelIOAsync async, have a pending read on the socket and call 
+                    // cancel before transfering the socket. 
+                    //DataReader reader = new DataReader(socket.InputStream);
+                    //reader.InputStreamOptions = InputStreamOptions.Partial;
+                    //var read = reader.LoadAsync(250);
+                    //read.Completed += (info, status) =>
+                    //{
+                    //};
+                    //await socket.CancelIOAsync();
+
+                    socket.TransferOwnership(socketId);
+                    socket = null;
+                }
+                //rootPage.NotifyUser("Connected. You may close the application", NotifyType.StatusMessage);
+            }
+            catch (Exception exception)
+            {
+                //rootPage.NotifyUser(exception.Message, NotifyType.ErrorMessage);
             }
         }
         #endregion
