@@ -21,7 +21,7 @@ namespace SmartHub.UWP.Applications.Server
             InitializeComponent();
             DataContext = this;
 
-            AppManager.Hub.Context.GetPlugin<WemosPlugin>().DataReceived += MainPage_DataReceived; ;
+            AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += MainPage_DataReceived; ;
         }
 
         private async void MainPage_DataReceived(object sender, WemosMessageEventArgs args)

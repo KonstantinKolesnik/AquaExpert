@@ -121,6 +121,7 @@
     <Compile Include="Models\WemosNode.cs" />
     <Compile Include="Models\WemosNodeBatteryValue.cs" />
     <Compile Include="Models\WemosSetting.cs" />
+    <Compile Include="Transport\WemosTransport.cs" />
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
