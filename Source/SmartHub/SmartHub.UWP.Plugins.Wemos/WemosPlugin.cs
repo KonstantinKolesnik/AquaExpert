@@ -2,9 +2,7 @@
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
 using SmartHub.UWP.Plugins.Wemos.Transport;
-using SQLite.Net;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos
@@ -19,26 +17,23 @@ namespace SmartHub.UWP.Plugins.Wemos
         public event WemosMessageEventHandler MessageReceived;
 
         #region Plugin ovverrides
-
-        public override void InitDbModel()//ModelMapper mapper)
+        public override void InitDbModel()
         {
-            //mapper.Class<MySensorsSetting>(cfg => cfg.Table("MySensors_Settings"));
-            //mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
-            //mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensors"));
-            //mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevels"));
-            //mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValues"));
-
             using (var db = Context.OpenConnection())
             {
+                db.CreateTable<WemosSetting>();
                 db.CreateTable<WemosNode>();
+                db.CreateTable<WemosLine>();
+                db.CreateTable<WemosNodeBatteryValue>();
+                db.CreateTable<WemosLineValue>();
             }
         }
         public override void InitPlugin()
         {
-            transport.MessageReceived += OnMessageReceived;
+            if (GetSetting("UnitSystem") == null)
+                Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
-            //if (GetSetting("UnitSystem") == null)
-            //    Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
+            transport.MessageReceived += OnMessageReceived;
         }
         public override async void StartPlugin()
         {
@@ -77,53 +72,56 @@ namespace SmartHub.UWP.Plugins.Wemos
         //{
         //    await Send(new WemosMessage(sensor.NodeID, sensor.LineID, WemosMessageType.Set, (int) sensor.Type, value));
         //}
+        public async Task RebootNode(WemosNode node)
+        {
+            await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
+        }
+
+
         public static bool IsMessageFromLine(WemosMessage msg, WemosLine line)
         {
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
         }
 
-        public List<WemosNode> GetNodes()
-        {
-            using (var db = Context.OpenConnection())
-                //return db.Table<WemosNode>().ToList();
-                return (from p in db.Table<WemosNode>() select p).ToList();
-        }
+        //public List<WemosNode> GetNodes()
+        //{
+        //    using (var db = Context.OpenConnection())
+        //        //return db.Table<WemosNode>().ToList();
+        //        return (from p in db.Table<WemosNode>() select p).ToList();
+        //}
         public WemosNode GetNode(int nodeID)
         {
             using (var db = Context.OpenConnection())
             {
-                //db.TraceListener = new DebugTraceListener();// Activate Tracing
+                //db.TraceListener = new DebugTraceListener(); // cctivate tracing
                 return db.Table<WemosNode>().Where(n => n.NodeID == nodeID).FirstOrDefault();
-
-                //    (from p in db.Table<Person>()
-                //            where p.Id == Id
-                //            select p).FirstOrDefault();
-                //return m;
-
             }
-            //return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
         }
-
+        public WemosLine GetLine(int nodeID, int lineID)
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosLine>().Where(l => l.NodeID == nodeID && l.LineID == lineID).FirstOrDefault();
+        }
         #endregion
 
         #region Event handlers
-        private void OnMessageReceived(object sender, WemosMessageEventArgs e)
+        private async void OnMessageReceived(object sender, WemosMessageEventArgs e)
         {
             if (e.Message != null)
             {
                 //System.Diagnostics.Debug.WriteLine(e.Message.ToString());
 
                 MessageReceived?.Invoke(this, e); // TODO: temporary!!!
-                ProcessMessage(e.Message);
+                await ProcessMessage(e.Message);
             }
         }
         #endregion
 
         #region Private methods
-        private async void ProcessMessage(WemosMessage message)
+        private async Task ProcessMessage(WemosMessage message)
         {
             WemosNode node = GetNode(message.NodeID);
-            WemosLine line = null;// GetLine(message.NodeID, message.LineID); // if message.SensorID == 255 it returns null
+            WemosLine line = GetLine(message.NodeID, message.LineID);
 
             switch (message.Type)
             {
@@ -187,7 +185,16 @@ namespace SmartHub.UWP.Plugins.Wemos
                     if (line != null)
                     {
                         //NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
-                        var sv = SaveLineValueToDB(message);
+
+                        WemosLineValue sv = new WemosLineValue()
+                        {
+                            NodeID = message.NodeID,
+                            LineID = message.LineID,
+                            TimeStamp = DateTime.Now,
+                            //Type = (SensorValueType) message.SubType,
+                            Value = message.GetFloat()
+                        };
+                        Save(sv);
 
                         //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
                         //NotifyMessageReceivedForPlugins(message);
@@ -215,19 +222,14 @@ namespace SmartHub.UWP.Plugins.Wemos
                         case WemosInternalMessageType.BatteryLevel: // int, in %
                             if (node != null)
                             {
-                                var dtDB = DateTime.UtcNow;
-                                var dt = DateTime.Now;
-
                                 WemosNodeBatteryValue bl = new WemosNodeBatteryValue()
                                 {
                                     NodeID = message.NodeID,
-                                    TimeStamp = dtDB,
+                                    TimeStamp = DateTime.Now,
                                     Value = message.GetInteger()
                                 };
 
                                 Save(bl);
-
-                                bl.TimeStamp = dt;
 
                                 //NotifyMessageReceivedForPlugins(message);
                                 //NotifyMessageReceivedForScripts(message);
@@ -292,76 +294,30 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
 
             if (node != null && node.NeedsReboot)
-                await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
+                await RebootNode(node);
         }
         #endregion
 
         #region DB
-        private WemosLineValue SaveLineValueToDB(WemosMessage message)
-        {
-            //WemosLineValue lastSV = GetLastSensorValue(message.NodeNo, message.SensorNo);
-            //if (lastSV != null && lastSV.Type == (SensorValueType)message.SubType && lastSV.Value == message.PayloadFloat)
-            //    return lastSV;
-
-            var dtDB = DateTime.UtcNow;
-            var dt = DateTime.Now;
-
-            WemosLineValue sv = new WemosLineValue()
-            {
-                NodeID = message.NodeID,
-                LineID = message.LineID,
-                TimeStamp = dtDB,
-                //Type = (SensorValueType) message.SubType,
-                Value = message.GetFloat()
-            };
-
-            Save(sv);
-
-            sv.TimeStamp = dt;
-
-            return sv;
-        }
-
         private WemosSetting GetSetting(string name)
         {
-            //using (var session = Context.OpenSession())
-            //    return session.Query<WemosSetting>().FirstOrDefault(setting => setting.Name == name);
-            return null;
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
         }
         private void Save(object item)
         {
-            //using (var session = Context.OpenSession())
-            //{
-            //    try
-            //    {
-            //        session.Save(item);
-            //        session.Flush();
-            //    }
-            //    catch (Exception) { }
-            //}
-
             using (var db = Context.OpenConnection())
-            {
                 db.Insert(item);
-            }
         }
         private void SaveOrUpdate(object item)
         {
-            //using (var session = Context.OpenSession())
-            //{
-            //    session.SaveOrUpdate(item);
-            //    session.Flush();
-            //}
-
-            //InsertOrReplace
+            using (var db = Context.OpenConnection())
+                db.InsertOrReplace(item);
         }
         private void Delete(object item)
         {
-            //using (var session = Context.OpenSession())
-            //{
-            //    session.Delete(item);
-            //    session.Flush();
-            //}
+            using (var db = Context.OpenConnection())
+                db.Delete(item);
         }
         #endregion
     }
