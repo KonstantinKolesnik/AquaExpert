@@ -15,7 +15,7 @@
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Present" Click="ButtonPresent_Click"/>
-            <!--<Button Content="Send" Margin="10,0" Click="ButtonSend_Click"/>-->
+            <Button Content="Reboot" Margin="10,0" Click="ButtonReboot_Click"/>
             <Button Content="Clear" Margin="10,0" Click="ButtonCear_Click"/>
             <Button Content="On" Margin="10,0" Click="ButtonOn_Click"/>
             <Button Content="Off" Margin="10,0" Click="ButtonOff_Click"/>

@@ -68,26 +68,28 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public async Task RequestLineValue(WemosLine line)
         {
-            await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
+            if (line != null)
+                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
         }
-        //public async void SetLineValue(WemosLine sensor, float value)
+        //public async Task SetLineValue(WemosLine line, float value)
         //{
-        //    //if (sensor != null)
-        //    //{
-        //    //    var lastSV = GetLastSensorValue(sensor);
-        //    //    if (lastSV == null || (lastSV.Value != value))
-        //    //        await Send(new WemosMessage(sensor.NodeID, sensor.LineID, WemosMessageType.Set, (int) sensor.Type, value));
-        //    //}
+        //    if (line != null)
+        //    {
+        //        var lastSV = GetLastSensorValue(line);
+        //        if (lastSV == null || (lastSV.Value != value))
+        //            await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+        //    }
         //}
-        //public async void SetLineValue(WemosLine sensor, string value)
-        //{
-        //    await Send(new WemosMessage(sensor.NodeID, sensor.LineID, WemosMessageType.Set, (int) sensor.Type, value));
-        //}
+        public async Task SetLineValue(WemosLine line, string value)
+        {
+            if (line != null)
+                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+        }
         public async Task RebootNode(WemosNode node)
         {
-            await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
+            if (node != null)
+                await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
         }
-
 
         public static bool IsMessageFromLine(WemosMessage msg, WemosLine line)
         {
@@ -202,10 +204,14 @@ namespace SmartHub.UWP.Plugins.Wemos
                             NodeID = message.NodeID,
                             LineID = message.LineID,
                             TimeStamp = DateTime.Now,
-                            //Type = (SensorValueType) message.SubType,
+                            Type = (WemosLineType) message.SubType,
                             Value = message.GetFloat()
                         };
                         Save(sv);
+
+                        line.LastTimeStamp = sv.TimeStamp;
+                        line.LastValue = sv.Value;
+                        SaveOrUpdate(line);
 
                         //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
                         NotifyMessageReceivedForPlugins(message);
@@ -237,10 +243,13 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 {
                                     NodeID = message.NodeID,
                                     TimeStamp = DateTime.Now,
-                                    Value = message.GetInteger()
+                                    Value = (int)message.GetInteger()
                                 };
-
                                 Save(bl);
+
+                                node.LastTimeStamp = bl.TimeStamp;
+                                node.LastBatteryValue = bl.Value;
+                                SaveOrUpdate(node);
 
                                 //NotifyMessageReceivedForPlugins(message);
                                 //NotifyMessageReceivedForScripts(message);
@@ -251,7 +260,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                             var sec = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds);
                             await Send(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(sec));
                             break;
-                        case WemosInternalMessageType.Version: // float!
+                        case WemosInternalMessageType.Version:
+                            if (node != null)
+                            {
+                                node.ProtocolVersion = message.GetFloat();
+                                SaveOrUpdate(node);
+                            }
                             break;
                         case WemosInternalMessageType.Config:
                             await Send(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
@@ -303,9 +317,6 @@ namespace SmartHub.UWP.Plugins.Wemos
                 //    break;
                 #endregion
             }
-
-            if (node != null && node.NeedsReboot)
-                await RebootNode(node);
         }
         #endregion
 

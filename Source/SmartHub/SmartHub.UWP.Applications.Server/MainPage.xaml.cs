@@ -34,10 +34,10 @@ namespace SmartHub.UWP.Applications.Server
         {
             await AppManager.Hub.Context.GetPlugin<WemosPlugin>().RequestPresentation();
         }
-        //private async void ButtonSend_Click(object sender, RoutedEventArgs e)
-        //{
-        //    await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1, 1, WemosMessageType.Set, 0).Set(DateTime.Now + ": Test string"));
-        //}
+        private async void ButtonReboot_Click(object sender, RoutedEventArgs e)
+        {
+            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1962017, -1, WemosMessageType.Internal, (int)WemosInternalMessageType.Reboot));
+        }
         private void ButtonCear_Click(object sender, RoutedEventArgs e)
         {
             Messages.Clear();

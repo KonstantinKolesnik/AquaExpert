@@ -9,6 +9,8 @@
         Humidity,
         Barometer,
         Weight,
+        Voltage,
+        Current,
         Power,
         Rain,
         UV,
