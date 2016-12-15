@@ -256,7 +256,7 @@ namespace SmartHub.UWP.Plugins.Speech
         //[ScriptCommand("say")]
         public async void Say(string text)
         {
-            if (!string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text) && speechSynthesizer != null)
             {
                 var stream = await speechSynthesizer.SynthesizeTextToStreamAsync(text);
                 await new MediaElement().PlayStreamAsync(stream, true);
