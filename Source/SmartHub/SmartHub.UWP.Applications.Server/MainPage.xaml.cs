@@ -30,10 +30,14 @@ namespace SmartHub.UWP.Applications.Server
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
         }
 
-        private async void ButtonSend_Click(object sender, RoutedEventArgs e)
+        private async void ButtonPresent_Click(object sender, RoutedEventArgs e)
         {
-            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1, 1, WemosMessageType.Set, 0).Set(DateTime.Now + ": Test string"));
+            await AppManager.Hub.Context.GetPlugin<WemosPlugin>().RequestPresentation();
         }
+        //private async void ButtonSend_Click(object sender, RoutedEventArgs e)
+        //{
+        //    await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1, 1, WemosMessageType.Set, 0).Set(DateTime.Now + ": Test string"));
+        //}
         private void ButtonCear_Click(object sender, RoutedEventArgs e)
         {
             Messages.Clear();

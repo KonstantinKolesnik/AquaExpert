@@ -78,7 +78,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core
         }
         public string ToDto()
         {
-            return $"{NodeID};{LineID};{(int)Type};{SubType};{data}\n";
+            return $"{NodeID};{LineID};{(int)Type};{SubType};{data ?? string.Empty}\n";
         }
 
         public override string ToString()

@@ -1,8 +1,12 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SQLite.Net;
+using SQLite.Net.Platform.WinRT;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Composition;
+using System.IO;
 using System.Linq;
+using Windows.Storage;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
@@ -27,26 +31,23 @@ namespace SmartHub.UWP.Core.Infrastructure
         }
         #endregion
 
-        public bool IsServer
+        #region Database
+        private static string dbPath = string.Empty;
+        private static string DbPath
         {
-            get; set;
+            get
+            {
+                if (string.IsNullOrEmpty(dbPath))
+                    dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "SmartHubUWPDB.sqlite");
+
+                return dbPath;
+            }
         }
 
-        #region Database
-        //private ISessionFactory sessionFactory;
-
-        //public void InitSessionFactory(ISessionFactory sessionFactory)
-        //{
-        //    this.sessionFactory = sessionFactory;
-        //}
-        //public ISession OpenSession()
-        //{
-        //    return sessionFactory.OpenSession();
-        //}
-        //public IStatelessSession OpenStatelessSession()
-        //{
-        //    return sessionFactory.OpenStatelessSession();
-        //}
+        public SQLiteConnection OpenConnection()
+        {
+            return new SQLiteConnection(new SQLitePlatformWinRT(), DbPath);
+        }
         #endregion
     }
 }

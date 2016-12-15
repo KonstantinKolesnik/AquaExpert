@@ -54,7 +54,7 @@ namespace SmartHub.UWP.Core
         #endregion
 
         #region Public methods
-        public static void Init(bool isServer = true)
+        public static void Init()
         {
             AppData = new AppData(true);
             AppData.PropertyChanged += AppData_PropertyChanged;
@@ -68,7 +68,7 @@ namespace SmartHub.UWP.Core
             //ModelsManager.Items.CollectionChanged += (s, args) => { SaveProfiles(); };
 
             var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
-            hub.Init(isServer, assemblies);
+            hub.Init(assemblies);
             hub.StartServices();
 
             //SetLanguage(AppData.Device.Language);

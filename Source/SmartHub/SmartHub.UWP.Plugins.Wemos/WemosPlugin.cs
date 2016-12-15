@@ -2,7 +2,9 @@
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
 using SmartHub.UWP.Plugins.Wemos.Transport;
+using SQLite.Net;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos
@@ -17,20 +19,26 @@ namespace SmartHub.UWP.Plugins.Wemos
         public event WemosMessageEventHandler MessageReceived;
 
         #region Plugin ovverrides
-        //public override void InitDbModel(ModelMapper mapper)
-        //{
-        //    mapper.Class<MySensorsSetting>(cfg => cfg.Table("MySensors_Settings"));
-        //    mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
-        //    mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensors"));
-        //    mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevels"));
-        //    mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValues"));
-        //}
+
+        public override void InitDbModel()//ModelMapper mapper)
+        {
+            //mapper.Class<MySensorsSetting>(cfg => cfg.Table("MySensors_Settings"));
+            //mapper.Class<Node>(cfg => cfg.Table("MySensors_Nodes"));
+            //mapper.Class<Sensor>(cfg => cfg.Table("MySensors_Sensors"));
+            //mapper.Class<BatteryLevel>(cfg => cfg.Table("MySensors_BatteryLevels"));
+            //mapper.Class<SensorValue>(cfg => cfg.Table("MySensors_SensorValues"));
+
+            using (var db = Context.OpenConnection())
+            {
+                db.CreateTable<WemosNode>();
+            }
+        }
         public override void InitPlugin()
         {
             transport.MessageReceived += OnMessageReceived;
 
-            if (GetSetting("UnitSystem") == null)
-                Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
+            //if (GetSetting("UnitSystem") == null)
+            //    Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
         }
         public override async void StartPlugin()
         {
@@ -50,7 +58,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public async Task RequestPresentation(int nodeID = -1, int lineID = -1)
         {
-            await Send(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, -1));
+            await Send(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0), true);
         }
         public async Task RequestLineValue(WemosLine line)
         {
@@ -73,6 +81,29 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
         }
+
+        public List<WemosNode> GetNodes()
+        {
+            using (var db = Context.OpenConnection())
+                //return db.Table<WemosNode>().ToList();
+                return (from p in db.Table<WemosNode>() select p).ToList();
+        }
+        public WemosNode GetNode(int nodeID)
+        {
+            using (var db = Context.OpenConnection())
+            {
+                //db.TraceListener = new DebugTraceListener();// Activate Tracing
+                return db.Table<WemosNode>().Where(n => n.NodeID == nodeID).FirstOrDefault();
+
+                //    (from p in db.Table<Person>()
+                //            where p.Id == Id
+                //            select p).FirstOrDefault();
+                //return m;
+
+            }
+            //return session.Query<Node>().FirstOrDefault(node => node.NodeNo == nodeNo);
+        }
+
         #endregion
 
         #region Event handlers
@@ -91,7 +122,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Private methods
         private async void ProcessMessage(WemosMessage message)
         {
-            WemosNode node = null;// GetNode(message.NodeID);
+            WemosNode node = GetNode(message.NodeID);
             WemosLine line = null;// GetLine(message.NodeID, message.LineID); // if message.SensorID == 255 it returns null
 
             switch (message.Type)
@@ -308,6 +339,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             //    }
             //    catch (Exception) { }
             //}
+
+            using (var db = Context.OpenConnection())
+            {
+                db.Insert(item);
+            }
         }
         private void SaveOrUpdate(object item)
         {
@@ -316,6 +352,8 @@ namespace SmartHub.UWP.Plugins.Wemos
             //    session.SaveOrUpdate(item);
             //    session.Flush();
             //}
+
+            //InsertOrReplace
         }
         private void Delete(object item)
         {

@@ -1,22 +1,17 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SQLite.Net;
-using SQLite.Net.Platform.WinRT;
 using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Composition.Convention;
 using System.Composition.Hosting;
-using System.IO;
 using System.Reflection;
-using Windows.Storage;
 
 namespace SmartHub.UWP.Core.Infrastructure
 {
     public class Hub
     {
         #region Fields
-        private bool isServer;
-
         [Import]
         public IServiceContext Context
         {
@@ -28,15 +23,13 @@ namespace SmartHub.UWP.Core.Infrastructure
         [OnImportsSatisfied]
         public void OnImportsSatisfied()
         {
-            if (Context != null)
-                Context.IsServer = isServer;
+            //int a = 0;
+            //int b = a;
         }
 
         #region Public methods
-        public void Init(bool isServer, List<Assembly> assemblies = null)
+        public void Init(List<Assembly> assemblies = null)
         {
-            this.isServer = isServer;
-
             //var a = ApplicationData.Current.LocalFolder;
             //StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             //var files = await assets.GetFilesAsync();
@@ -136,11 +129,11 @@ namespace SmartHub.UWP.Core.Infrastructure
             //mapper.BeforeMapManyToOne += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName() + "Id");
 
             //var cfg = new Configuration();
-            //foreach (var plugin in context.GetAllPlugins())
-            //{
-            //    plugin.InitDbModel(mapper);
-            //    cfg.AddAssembly(plugin.GetType().Assembly);
-            //}
+            foreach (var plugin in context.GetAllPlugins())
+            {
+                plugin.InitDbModel();// mapper);
+                //cfg.AddAssembly(plugin.GetType().Assembly);
+            }
             //cfg.DataBaseIntegration(dbConfig =>
             //{
             //    dbConfig.Dialect<MsSqlCe40Dialect>();
@@ -153,16 +146,6 @@ namespace SmartHub.UWP.Core.Infrastructure
 
             //var sessionFactory = cfg.BuildSessionFactory();
             //context.InitSessionFactory(sessionFactory);
-
-
-
-
-
-            //var sqlpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Studentdb.sqlite");
-            //using (SQLiteConnection conn = new SQLiteConnection(new SQLitePlatformWinRT(), sqlpath))
-            //{
-            //    //conn.CreateTable<Students>();
-            //}
         }
         private void UpdateDatabase(SQLiteConnection connection, PluginBase plugin)
         {
