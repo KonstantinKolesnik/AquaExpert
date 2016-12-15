@@ -1,8 +1,10 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.Wemos.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
 using SmartHub.UWP.Plugins.Wemos.Transport;
 using System;
+using System.Composition;
 using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos
@@ -15,6 +17,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         public event WemosMessageEventHandler MessageReceived;
+
+        #region Imports
+        [ImportMany(WemosMessageHandlerAttribute.ContractID)]
+        public Action<WemosMessage>[] WemosMessageHandlers { get; set; }
+        private void NotifyMessageReceivedForPlugins(WemosMessage msg)
+        {
+            Run(WemosMessageHandlers, x => x(msg));
+        }
+        #endregion
 
         #region Plugin ovverrides
         public override void InitDbModel()
@@ -197,7 +208,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                         Save(sv);
 
                         //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
-                        //NotifyMessageReceivedForPlugins(message);
+                        NotifyMessageReceivedForPlugins(message);
                         //NotifyMessageReceivedForScripts(message);
                         //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
                     }

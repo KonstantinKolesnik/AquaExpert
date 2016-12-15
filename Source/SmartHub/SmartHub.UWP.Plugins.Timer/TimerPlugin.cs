@@ -17,7 +17,7 @@ namespace SmartHub.UWP.Plugins.Timer
         private readonly List<PeriodicalAction> periodicalActions = new List<PeriodicalAction>();
         #endregion
 
-        #region Import
+        #region Imports
         //[ImportMany(Timer_10sec_ElapsedAttribute.ContractID)]
         //public Action<DateTime>[] Timer_ElapsedEventHandlers
         //{

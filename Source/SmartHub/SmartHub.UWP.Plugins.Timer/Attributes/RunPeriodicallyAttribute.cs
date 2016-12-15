@@ -7,19 +7,18 @@ namespace SmartHub.UWP.Plugins.Timer.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class RunPeriodicallyAttribute : ExportAttribute, IRunPeriodicallyAttribute
     {
-        public const string ContractID = "38A9F1A7-63A4-4688-8089-31F4ED4A9A61";
+        public const string ContractID = nameof(RunPeriodicallyAttribute);
 
         /// <summary>
-        /// Time interval between run (in seconds). 0 to disable
+        /// Time interval (seconds) between runs; set to 0 to disable
         /// </summary>
         public int Interval
         {
-            get;
-            set;
+            get; set;
         }
 
         public RunPeriodicallyAttribute()
-            : base(ContractID, typeof(Action<DateTime>))
+            : this(0)
         {
         }
         public RunPeriodicallyAttribute(int interval)
