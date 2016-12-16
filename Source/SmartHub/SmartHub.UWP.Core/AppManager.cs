@@ -27,8 +27,8 @@ namespace SmartHub.UWP.Core
             get
             {
                 var version = Package.Current.Id.Version;
-                return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
-                //return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                return $"{version.Major}.{version.Minor}.{version.Build}";
+                //return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
         }
         public static string AppEmail
@@ -37,19 +37,12 @@ namespace SmartHub.UWP.Core
         }
         //public static string AppHomePage
         //{
-        //    get { return "http://www.wintx.at.ua"; }
+        //    get { return "http://www.smarthub.at.ua"; }
         //}
-
         public static AppData AppData
         {
             get; private set;
         }
-
-        //public static ModelsManager ModelsManager
-        //{
-        //    get; private set;
-        //}
-
         public static Hub Hub => hub;
         #endregion
 
@@ -59,19 +52,11 @@ namespace SmartHub.UWP.Core
             AppData = new AppData(true);
             AppData.PropertyChanged += AppData_PropertyChanged;
 
-            //var ds = AppData.Device;
-            //ds.DateTime = new DateTime(2016, 5, 10);
-            //AppData.Device = ds;
-
-            //ModelsManager = new ModelsManager();
-            //ModelsManager.Items = AppData.Profiles;
-            //ModelsManager.Items.CollectionChanged += (s, args) => { SaveProfiles(); };
-
             var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
             hub.Init(assemblies);
             hub.StartServices();
 
-            //SetLanguage(AppData.Device.Language);
+            SetLanguage(AppData.Language);
             //SetLanguage("en");
             //SetLanguage("de");
             //SetLanguage("ru");
@@ -81,12 +66,10 @@ namespace SmartHub.UWP.Core
         {
             //hub.StopServices();
         }
+        #endregion
 
-        //public static void SaveModels()
-        //{
-        //    AppData.Models = ModelsManager.Items;
-        //}
-        public static void SetLanguage(string id) //"en-US"
+        #region Private methods
+        private static void SetLanguage(string id) //"en-US"
         {
             ApplicationLanguages.PrimaryLanguageOverride = id;
             ResourceContext.GetForCurrentView().Languages = new List<string>() { id };
@@ -96,12 +79,12 @@ namespace SmartHub.UWP.Core
         #region Event handlers
         private static void AppData_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //switch (e.PropertyName)
-            //{
-            //    case AppData.LanguageKey:
-            //        SetLanguage(AppData.Language);
-            //        break;
-            //}
+            switch (e.PropertyName)
+            {
+                case nameof(AppData.Language):
+                    SetLanguage(AppData.Language);
+                    break;
+            }
         }
         #endregion
     }

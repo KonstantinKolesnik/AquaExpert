@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SmartHub.UWP.Plugins.Wemos.Models;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 

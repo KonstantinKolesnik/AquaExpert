@@ -1,11 +1,14 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Plugins.UI;
 using SmartHub.UWP.Plugins.Wemos;
 using SmartHub.UWP.Plugins.Wemos.Core;
+using SmartHub.UWP.Plugins.Wemos.Models;
 using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -23,6 +26,23 @@ namespace SmartHub.UWP.Applications.Server
 
             AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += MainPage_DataReceived; ;
         }
+
+        #region Navigation
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            holder.Content = AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
+            //AppShell.Current.SetNavigationInfo("Device", "menuDevice");
+        }
+        #endregion
+
+
+
+
+
+
+
 
         private async void MainPage_DataReceived(object sender, WemosMessageEventArgs args)
         {

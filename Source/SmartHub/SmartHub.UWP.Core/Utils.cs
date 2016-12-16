@@ -8,8 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Foundation;
 using Windows.Storage;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 
 namespace SmartHub.UWP.Core
@@ -77,9 +77,9 @@ namespace SmartHub.UWP.Core
             return JsonConvert.DeserializeObject(json);
         }
 
-        public static string ToJson(this object obj, string defaultValue = "")
+        public static string ToJson(this object obj)
         {
-            return obj == null ? defaultValue : JsonConvert.SerializeObject(obj);
+            return JsonConvert.SerializeObject(obj);
         }
         #endregion
 
@@ -89,15 +89,15 @@ namespace SmartHub.UWP.Core
             if (!string.IsNullOrEmpty(keyName))
             {
                 var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
-                var setting = settings.Values[keyName];
+                var data = settings.Values[keyName];
 
-                if (setting != null)
+                if (data != null)
                 {
-                    try
-                    {
-                        return (T) (FromJson(typeof(T), (string) setting));
-                    }
-                    catch (InvalidCastException) { }
+                    try { return (T) FromJson<T>((string) data); }
+                    catch { }
+
+                    try { return (T) data; }
+                    catch { }
                 }
             }
 
@@ -109,25 +109,14 @@ namespace SmartHub.UWP.Core
             {
                 var settings = isRoaming ? ApplicationData.Current.RoamingSettings : ApplicationData.Current.LocalSettings;
                 settings.Values[keyName] = value.ToJson();
+
+                if (isRoaming)
+                    ApplicationData.Current.SignalDataChanged();
             }
         }
         #endregion
 
-        public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class
-        {
-            return obj == null ? default(TResult) : func(obj);
-        }
-        //public static string GetEnumDescription(this Enum value)
-        //{
-        //    FieldInfo fi = value.GetType().GetField(value.ToString());
-        //    DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-        //    if (attributes != null && attributes.Length > 0)
-        //        return attributes[0].Description;
-        //    else
-        //        return value.ToString();
-        //}
-
+        #region Composition
         public static async Task<List<Assembly>> GetSatelliteAssembliesAsync(Func<StorageFile, bool> filter)
         {
             //var files = await Package.Current.InstalledLocation.GetFilesAsync();
@@ -174,6 +163,12 @@ namespace SmartHub.UWP.Core
 
             return assemblies;
         }
+        #endregion
+
+        public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class
+        {
+            return obj == null ? default(TResult) : func(obj);
+        }
 
         public static async Task<string> GETRequest(string uri)
         {
@@ -201,12 +196,6 @@ namespace SmartHub.UWP.Core
             return await respon.Content.ReadAsStringAsync();
         }
 
-
-
-
-
-
-
         public static string ExecutablePath
         {
             get
@@ -215,22 +204,22 @@ namespace SmartHub.UWP.Core
                 return Path.GetDirectoryName(exePath);
             }
         }
-        //public static string ShadowedPluginsFolder
-        //{
-        //    get { return "ShadowedPlugins"; }
-        //}
-        //public static string ShadowedPluginsFullPath
-        //{
-        //    get { return Path.Combine(ExecutablePath, ShadowedPluginsFolder); }
-        //}
 
-        //public static string PluginsFolder
-        //{
-        //    get { return "Plugins"; }
-        //}
-        //public static string PluginsFullPath
-        //{
-        //    get { return Path.IsPathRooted(PluginsFolder) ? PluginsFolder : Path.Combine(ExecutablePath, PluginsFolder); }
-        //}
+        #region Toast notification
+        public static void ShowToast(ToastTemplateType templateType, string text)
+        {
+            //var templateType = ToastTemplateType.ToastText02;
+            var xml = ToastNotificationManager.GetTemplateContent(templateType);
+            xml.DocumentElement.SetAttribute("launch", "Args");
+
+            var node = xml.CreateTextNode(text);
+            var elements = xml.GetElementsByTagName("text");
+            elements[0].AppendChild(node);
+
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+            var toast = new ToastNotification(xml);
+            notifier.Show(toast);
+        }
+        #endregion
     }
 }

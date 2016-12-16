@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartHub.UWP.Core
+﻿namespace SmartHub.UWP.Core
 {
     public class AppData : ObservableObject
     {
         #region Settings data
-        //private const string DeviceKey = "Device";
-        //private const string ModelsKey = "Models";
-
-        //public Device Device
-        //{
-        //    get { return Utils.GetAppData(DeviceKey, Device.Default, IsRoaming); }
-        //    set { Utils.SetAppData(DeviceKey, value); NotifyPropertyChanged(DeviceKey); }
-        //}
-        //public ObservableCollection<Model> Models
-        //{
-        //    get { return Utils.GetAppData(ModelsKey, new ObservableCollection<Model>(), IsRoaming); }
-        //    set { Utils.SetAppData(ModelsKey, value); NotifyPropertyChanged(ModelsKey); }
-        //}
+        public string RemoteUrl
+        {
+            get { return Utils.GetAppData(nameof(RemoteUrl), "en-US", IsRoaming); }
+            set { Utils.SetAppData(nameof(RemoteUrl), value, IsRoaming); NotifyPropertyChanged(); }
+        }
+        public string Language
+        {
+            get { return Utils.GetAppData(nameof(Language), "en-US", IsRoaming); }
+            set { Utils.SetAppData(nameof(Language), value, IsRoaming); NotifyPropertyChanged(); }
+        }
         #endregion
 
         #region Properties
-        public bool IsRoaming { get; private set; }
+        public bool IsRoaming
+        {
+            get;
+        }
         #endregion
 
         #region Constructor

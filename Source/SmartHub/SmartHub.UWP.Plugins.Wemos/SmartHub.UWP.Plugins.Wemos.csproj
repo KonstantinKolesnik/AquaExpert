@@ -109,13 +109,12 @@
   <ItemGroup>
     <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
     <Compile Include="Core\WemosInternalMessageType.cs" />
-    <Compile Include="Core\WemosLineType.cs" />
+    <Compile Include="Models\WemosLineType.cs" />
     <Compile Include="Core\WemosMessage.cs" />
     <Compile Include="Core\WemosMessageEventArgs.cs" />
     <Compile Include="Core\WemosMessageEventHandler.cs" />
     <Compile Include="Core\WemosMessageParser.cs" />
     <Compile Include="Core\WemosMessageType.cs" />
-    <Compile Include="Core\WemosMessageDataType.cs" />
     <Compile Include="Core\WemosStreamMessageType.cs" />
     <Compile Include="Models\WemosLine.cs" />
     <Compile Include="Models\WemosLineValue.cs" />

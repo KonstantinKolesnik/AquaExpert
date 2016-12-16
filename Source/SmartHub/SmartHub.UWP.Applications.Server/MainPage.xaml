@@ -10,6 +10,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -21,7 +22,11 @@
             <Button Content="Off" Margin="10,0" Click="ButtonOff_Click"/>
         </StackPanel>
 
-        <ListView Grid.Row="1" x:Name="lvMessages" ItemsSource="{Binding Messages}">
+        <ContentControl Grid.Row="1" x:Name="holder">
+            
+        </ContentControl>
+
+        <ListView Grid.Row="2" x:Name="lvMessages" ItemsSource="{Binding Messages}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
