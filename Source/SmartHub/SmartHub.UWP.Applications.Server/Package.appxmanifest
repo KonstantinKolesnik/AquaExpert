@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  IgnorableNamespaces="uap mp">
+  
   <Identity Name="07a5a158-235a-40cb-bf90-3be263fed556" Publisher="CN=gothi_000" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="07a5a158-235a-40cb-bf90-3be263fed556" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -23,6 +29,10 @@
       <Extensions>
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="smarthubuwp" />
+        </uap:Extension>
+        <uap:Extension Category="windows.appService" EntryPoint="MyAppService.GetUI">
+          <!--<uap:AppService Name="smarthub.server"/>-->
+          <uap3:AppService Name="smarthub.server" SupportsRemoteSystems="true"/>
         </uap:Extension>
       </Extensions>
     </Application>
