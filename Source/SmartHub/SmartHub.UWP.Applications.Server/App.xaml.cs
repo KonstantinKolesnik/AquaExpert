@@ -2,6 +2,9 @@
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Background;
+using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -78,6 +81,35 @@ namespace SmartHub.UWP.Applications.Server
                 rootFrame.Navigate(typeof(MainPage));
 
             Window.Current.Activate();
+        }
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        {
+            base.OnBackgroundActivated(args);
+
+            IBackgroundTaskInstance taskInstance = args.TaskInstance;
+            var appServiceDeferral = taskInstance.GetDeferral();
+            taskInstance.Canceled += (s, e) => { appServiceDeferral.Complete(); };
+
+            var appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
+            var appServiceConnection = appService.AppServiceConnection;
+            appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
+            appServiceConnection.ServiceClosed += (s, e) => { appServiceDeferral.Complete(); };
+        }
+        private async void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        {
+            AppServiceDeferral messageDeferral = args.GetDeferral();
+
+            ValueSet message = args.Request.Message;
+            //string text = message["Request"] as string;
+            //if (text == "Value")
+            //{
+            //    var returnMessage = new ValueSet();
+            //    returnMessage.Add("Response", "True");
+
+            //    await args.Request.SendResponseAsync(returnMessage);
+            //}
+
+            messageDeferral.Complete();
         }
 
         private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
