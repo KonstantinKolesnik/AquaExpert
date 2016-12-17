@@ -7,6 +7,7 @@ using System;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml.Navigation;
 using SmartHub.UWP.Plugins.UI.UI;
+using Windows.UI.Xaml;
 
 namespace SmartHub.UWP.Applications.Client
 {
@@ -27,7 +28,7 @@ namespace SmartHub.UWP.Applications.Client
         }
 
 
-        private async void ButtonConnect_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             //Is a connection already open?
             if (connection != null)
@@ -41,7 +42,8 @@ namespace SmartHub.UWP.Applications.Client
             connection.AppServiceName = "smarthubuwp.server";
             connection.PackageFamilyName = "07a5a158-235a-40cb-bf90-3be263fed556_g9kck1pvk5wcy";
             connection.ServiceClosed += Connection_ServiceClosed;
-            AppServiceConnectionStatus status = await connection.OpenAsync();
+
+            var status = await connection.OpenAsync();
 
             //If the new connection opened successfully we're done here
             if (status == AppServiceConnectionStatus.Success)
@@ -76,7 +78,7 @@ namespace SmartHub.UWP.Applications.Client
                 connection = null;
             }
         }
-        private async void ButtonDisconnect_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonDisconnect_Click(object sender, RoutedEventArgs e)
         {
             //Is there an open connection?
             if (connection == null)
@@ -106,7 +108,7 @@ namespace SmartHub.UWP.Applications.Client
             });
         }
 
-        private async void ButtonSend_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             //Is there an open connection?
             if (connection == null)

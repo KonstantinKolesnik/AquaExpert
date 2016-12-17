@@ -15,13 +15,6 @@ namespace SmartHub.UWP.Plugins.UI
         #endregion
 
         #region Plugin ovverrides
-        //public override void InitDbModel()
-        //{
-        //    using (var db = Context.OpenConnection())
-        //    {
-        //        //db.CreateTable<WemosSetting>();
-        //    }
-        //}
         public override void InitPlugin()
         {
             foreach (var plugin in Context.GetAllPlugins())
@@ -34,12 +27,6 @@ namespace SmartHub.UWP.Plugins.UI
                 //cssFiles.UnionWith(type.GetCustomAttributes<CssResourceAttribute>().Where(attr => attr.AutoLoad).Select(attr => attr.Url));
             }
         }
-        public override void StartPlugin()
-        {
-        }
-        public override void StopPlugin()
-        {
-        }
         #endregion
 
         #region Public methods
@@ -50,21 +37,20 @@ namespace SmartHub.UWP.Plugins.UI
         #endregion
 
         #region Private methods
-
-        private object GetSectionItems(AppSectionType sectionType)
-        {
-            return sectionItems
-                .Where(sectionItem => sectionItem.Type == sectionType)
-                .OrderBy(sectionItem => sectionItem.Title)
-                .Select(sectionItem => new
-                {
-                    id = Guid.NewGuid(),
-                    name = sectionItem.Title,
-                    //path = sectionItem.GetModulePath(),
-                    sortOrder = sectionItem.SortOrder,
-                    tileTypeFullName = sectionItem.TileTypeFullName
-                }).ToArray();
-        }
+        //private object GetSectionItems(AppSectionType sectionType)
+        //{
+        //    return sectionItems
+        //        .Where(sectionItem => sectionItem.Type == sectionType)
+        //        .OrderBy(sectionItem => sectionItem.Title)
+        //        .Select(sectionItem => new
+        //        {
+        //            id = Guid.NewGuid(),
+        //            name = sectionItem.Title,
+        //            //path = sectionItem.GetModulePath(),
+        //            sortOrder = sectionItem.SortOrder,
+        //            tileTypeFullName = sectionItem.TileTypeFullName
+        //        }).ToArray();
+        //}
         #endregion
 
         //#region Web API

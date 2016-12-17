@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Plugins.UI;
 using SmartHub.UWP.Plugins.Wemos;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
@@ -8,7 +7,6 @@ using System.Collections.ObjectModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -31,14 +29,15 @@ namespace SmartHub.UWP.Applications.Server
             };
         }
 
-        #region Navigation
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
+        //#region Navigation
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedTo(e);
 
-            holder.Content = AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
-        }
-        #endregion
+        //    //holder.Content = AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
+        //    //holder.Content = new ucMainUI();
+        //}
+        //#endregion
 
         #region Test buttons
         private async void ButtonPresent_Click(object sender, RoutedEventArgs e)

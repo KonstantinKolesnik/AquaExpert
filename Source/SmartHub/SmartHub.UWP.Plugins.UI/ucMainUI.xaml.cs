@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace SmartHub.UWP.Plugins.UI.UI
+namespace SmartHub.UWP.Plugins.UI
 {
     public sealed partial class ucMainUI : UserControl
     {
