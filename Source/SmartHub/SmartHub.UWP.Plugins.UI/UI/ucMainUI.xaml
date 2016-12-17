@@ -8,6 +8,9 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock Text="Main UI"/>
+        <StackPanel>
+            <TextBlock Text="Main UI" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock Text="Main root UI goes here" Style="{ThemeResource CaptionTextBlockStyle}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

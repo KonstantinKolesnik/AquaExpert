@@ -24,7 +24,11 @@ namespace SmartHub.UWP.Applications.Server
             InitializeComponent();
             DataContext = this;
 
-            AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += MainPage_DataReceived; ;
+            AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += async (s, e) =>
+            {
+                //await CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(e.Message.ToString()));
+            };
         }
 
         #region Navigation
@@ -33,23 +37,10 @@ namespace SmartHub.UWP.Applications.Server
             base.OnNavigatedTo(e);
 
             holder.Content = AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
-            //AppShell.Current.SetNavigationInfo("Device", "menuDevice");
         }
         #endregion
 
-
-
-
-
-
-
-
-        private async void MainPage_DataReceived(object sender, WemosMessageEventArgs args)
-        {
-            //await CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
-        }
-
+        #region Test buttons
         private async void ButtonPresent_Click(object sender, RoutedEventArgs e)
         {
             await AppManager.Hub.Context.GetPlugin<WemosPlugin>().RequestPresentation();
@@ -62,7 +53,6 @@ namespace SmartHub.UWP.Applications.Server
         {
             Messages.Clear();
         }
-
         private async void ButtonOn_Click(object sender, RoutedEventArgs e)
         {
             await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1962017, 0, WemosMessageType.Set, (int)WemosLineType.Switch).Set(true));
@@ -71,6 +61,6 @@ namespace SmartHub.UWP.Applications.Server
         {
             await AppManager.Hub.Context.GetPlugin<WemosPlugin>().Send(new WemosMessage(1962017, 0, WemosMessageType.Set, (int) WemosLineType.Switch).Set(false));
         }
+        #endregion
     }
 }
-//

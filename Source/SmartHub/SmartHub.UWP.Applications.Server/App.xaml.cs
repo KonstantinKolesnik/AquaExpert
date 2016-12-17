@@ -1,10 +1,13 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Plugins.UI;
+using SmartHub.UWP.Plugins.UI.UI;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -100,7 +103,7 @@ namespace SmartHub.UWP.Applications.Server
             AppServiceDeferral messageDeferral = args.GetDeferral();
 
             ValueSet message = args.Request.Message;
-            //string text = message["Request"] as string;
+            //string text = message["GetRootUI"] as string;
             //if (text == "Value")
             //{
             //    var returnMessage = new ValueSet();
@@ -108,6 +111,18 @@ namespace SmartHub.UWP.Applications.Server
 
             //    await args.Request.SendResponseAsync(returnMessage);
             //}
+
+            object ui = null;
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            () =>
+            {
+                ui =  new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
+            });
+
+
+            var returnMessage = new ValueSet();
+            returnMessage.Add("Response", ui);
+            await args.Request.SendResponseAsync(returnMessage);
 
             messageDeferral.Complete();
         }

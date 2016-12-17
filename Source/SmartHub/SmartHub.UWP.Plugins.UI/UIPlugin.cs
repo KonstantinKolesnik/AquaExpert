@@ -15,13 +15,13 @@ namespace SmartHub.UWP.Plugins.UI
         #endregion
 
         #region Plugin ovverrides
-        public override void InitDbModel()
-        {
-            using (var db = Context.OpenConnection())
-            {
-                //db.CreateTable<WemosSetting>();
-            }
-        }
+        //public override void InitDbModel()
+        //{
+        //    using (var db = Context.OpenConnection())
+        //    {
+        //        //db.CreateTable<WemosSetting>();
+        //    }
+        //}
         public override void InitPlugin()
         {
             foreach (var plugin in Context.GetAllPlugins())

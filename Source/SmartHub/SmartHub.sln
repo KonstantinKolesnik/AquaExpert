@@ -179,6 +179,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{1B138644-0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.UI", "SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj", "{4DFAA97C-AF72-4497-BFD2-B14D58AB340C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Applications.Client", "SmartHub.UWP.Applications.Client\SmartHub.UWP.Applications.Client.csproj", "{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1111,6 +1113,38 @@ Global
 		{4DFAA97C-AF72-4497-BFD2-B14D58AB340C}.Release|x64.Build.0 = Release|x64
 		{4DFAA97C-AF72-4497-BFD2-B14D58AB340C}.Release|x86.ActiveCfg = Release|x86
 		{4DFAA97C-AF72-4497-BFD2-B14D58AB340C}.Release|x86.Build.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|ARM.Build.0 = Debug|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|ARM.Deploy.0 = Debug|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Win32.ActiveCfg = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Win32.Build.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|Win32.Deploy.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x64.ActiveCfg = Debug|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x64.Build.0 = Debug|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x64.Deploy.0 = Debug|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x86.ActiveCfg = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x86.Build.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Debug|x86.Deploy.0 = Debug|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Any CPU.ActiveCfg = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|ARM.ActiveCfg = Release|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|ARM.Build.0 = Release|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|ARM.Deploy.0 = Release|ARM
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Mixed Platforms.Deploy.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Win32.ActiveCfg = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Win32.Build.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|Win32.Deploy.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x64.ActiveCfg = Release|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x64.Build.0 = Release|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x64.Deploy.0 = Release|x64
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x86.ActiveCfg = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x86.Build.0 = Release|x86
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1189,6 +1223,7 @@ Global
 		{8B9ECDA3-0FD6-408D-8B1A-DE46CDC4F05D} = {897A8020-4315-4C17-BBA2-41046480A37F}
 		{1B138644-040A-4003-8DC3-B418427FBB5F} = {B8FEA1A5-A0C9-43E6-9ED5-0E3ABD082E00}
 		{4DFAA97C-AF72-4497-BFD2-B14D58AB340C} = {897A8020-4315-4C17-BBA2-41046480A37F}
+		{7B9AAFDD-8347-486B-B9B9-113D85C5FE9A} = {0F702261-9DBE-4F34-8BA9-02C05F59EEDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8

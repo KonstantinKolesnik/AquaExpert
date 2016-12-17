@@ -31,7 +31,6 @@
           <uap:Protocol Name="smarthubuwp" />
         </uap:Extension>
         <uap:Extension Category="windows.appService" ><!--EntryPoint="MyAppService.GetUI"-->
-          <!--<uap:AppService Name="smarthub.server"/>-->
           <uap3:AppService Name="smarthubuwp.server" SupportsRemoteSystems="true"/>
         </uap:Extension>
       </Extensions>
