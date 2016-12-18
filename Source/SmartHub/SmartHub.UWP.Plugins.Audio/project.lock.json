@@ -21381,6 +21381,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "Microsoft.Composition >= 1.0.30",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2",
       "NAudio >= 1.7.3"
     ],

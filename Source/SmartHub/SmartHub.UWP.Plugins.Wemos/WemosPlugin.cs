@@ -1,14 +1,18 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
 using SmartHub.UWP.Plugins.Wemos.Transport;
+using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
 using System.Composition;
 using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
+    [Plugin]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(ucSystem))]
     public class WemosPlugin : PluginBase
     {
         #region Fields
@@ -19,7 +23,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public event WemosMessageEventHandler MessageReceived;
 
         #region Imports
-        [ImportMany(WemosMessageHandlerAttribute.ContractID)]
+        [ImportMany]
         public Action<WemosMessage>[] WemosMessageHandlers { get; set; }
         private void NotifyMessageReceivedForPlugins(WemosMessage msg)
         {

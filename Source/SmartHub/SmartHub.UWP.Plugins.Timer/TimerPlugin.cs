@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace SmartHub.UWP.Plugins.Timer
 {
-    //[Plugin]
+    [Plugin]
     public class TimerPlugin : PluginBase
     {
         #region Fields
@@ -23,12 +23,20 @@ namespace SmartHub.UWP.Plugins.Timer
         //{
         //    get; set;
         //}
-        [ImportMany(RunPeriodicallyAttribute.ContractID)]
+        [ImportMany]
         public Lazy<Action<DateTime>, RunPeriodicallyAttribute>[] PeriodicalHandlers
         {
             get; set;
         }
         #endregion
+
+        [OnImportsSatisfied]
+        public void OnImportsSatisfied()
+        {
+            int a = 0;
+            int b = a;
+        }
+
 
         #region Plugin ovverrides
         public override void InitPlugin()

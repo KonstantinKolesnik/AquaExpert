@@ -4,6 +4,7 @@ using Windows.Networking.Connectivity;
 
 namespace SmartHub.UWP.Plugins.Network
 {
+    [Plugin]
     public class NetworkPlugin : PluginBase
     {
         #region Plugin overrides

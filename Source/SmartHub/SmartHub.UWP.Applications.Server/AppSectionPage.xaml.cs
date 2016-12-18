@@ -7,6 +7,8 @@ namespace SmartHub.UWP.Applications.Server
 {
     public sealed partial class AppSectionPage : Page
     {
+        private bool isAppsSection;
+
         public AppSectionPage()
         {
             InitializeComponent();
@@ -17,9 +19,16 @@ namespace SmartHub.UWP.Applications.Server
         {
             base.OnNavigatedTo(e);
 
-            var isAppsSection = (AppSectionType) e.Parameter == AppSectionType.Applications;
-            CoreApplication.Properties["IsAppsSection"] = isAppsSection;
+            isAppsSection = (AppSectionType) (e.Parameter != null ? e.Parameter : CoreApplication.Properties[nameof(isAppsSection)]) == AppSectionType.Applications;
+            CoreApplication.Properties[nameof(isAppsSection)] = isAppsSection;
             AppShell.Current.SetNavigationInfo(isAppsSection ? "Applications" : "System", isAppsSection ? "menuApplications" : "menuSystem");
+
+            if (!CoreApplication.Properties.ContainsKey(isAppsSection ? "ApplicationItems" : "SystemItems"))
+            {
+                // request items
+            }
+
+
         }
         #endregion
 

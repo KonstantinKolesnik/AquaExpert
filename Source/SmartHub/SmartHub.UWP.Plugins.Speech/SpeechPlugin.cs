@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Speech
     //[JavaScriptResource("/webapp/speech/settings-view.js", "SmartHub.Plugins.Speech.Resources.js.settings-view.js")]
     //[JavaScriptResource("/webapp/speech/settings-model.js", "SmartHub.Plugins.Speech.Resources.js.settings-model.js")]
     //[HttpResource("/webapp/speech/settings.html", "SmartHub.Plugins.Speech.Resources.js.settings.html")]
-
+    [Plugin]
     public class SpeechPlugin : PluginBase, IDisposable
     {
         #region Fields

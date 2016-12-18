@@ -5,7 +5,7 @@ namespace SmartHub.UWP.Plugins.Timer.Attributes
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class RunPeriodicallyAttribute : ExportAttribute, IRunPeriodicallyAttribute
+    public class RunPeriodicallyAttribute : ExportAttribute//, IRunPeriodicallyAttribute
     {
         public const string ContractID = nameof(RunPeriodicallyAttribute);
 

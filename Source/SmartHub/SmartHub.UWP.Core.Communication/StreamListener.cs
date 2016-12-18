@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 
 namespace SmartHub.UWP.Core.Communication
 {
@@ -8,7 +9,7 @@ namespace SmartHub.UWP.Core.Communication
     {
         private StreamSocketListener listener;
 
-        public event EventHandler DataReceived;
+        public event EventHandler<StringEventArgs> DataReceived;
 
         public async void Start(string serviceName)
         {
@@ -63,10 +64,10 @@ namespace SmartHub.UWP.Core.Communication
                     // the text back to the UI thread.
                     //NotifyUserFromAsyncThread(String.Format("Received data: \"{0}\"", reader.ReadString(actualStringLength)), NotifyType.StatusMessage);
 
-                    //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    //{
-                    //    DataReceived?.Invoke();
-                    //});
+                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        DataReceived?.Invoke(this, new StringEventArgs(reader.ReadString(actualStringLength)));
+                    });
                 }
             }
             catch (Exception exception)
@@ -76,6 +77,5 @@ namespace SmartHub.UWP.Core.Communication
                     throw;
             }
         }
-
     }
 }

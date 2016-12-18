@@ -38,11 +38,8 @@ namespace SmartHub.UWP.Core.Infrastructure
             {
                 LoadPlugins(assemblies);
 
-                InitSessionFactory(Context);
-                // обновляем структуру БД
-                //using (var session = Context.OpenSession())
-                //    foreach (var plugin in Context.GetAllPlugins())
-                //        UpdateDatabase(session.Connection, plugin);
+                foreach (var plugin in Context.GetAllPlugins())
+                    plugin.InitDbModel();
 
                 foreach (var plugin in Context.GetAllPlugins())
                     plugin.InitPlugin();
@@ -106,68 +103,19 @@ namespace SmartHub.UWP.Core.Infrastructure
                 //.ExportInterfaces()
                 //.Shared()
                 ;
-            conventions
-                .ForTypesDerivedFrom<IServiceContext>()
-                .Export<IServiceContext>()
-                .Shared();
+            //conventions
+            //    .ForTypesDerivedFrom<IServiceContext>()
+            //    .Export<IServiceContext>()
+            //    .Shared();
 
             //conventions.ForType(GetType()).ImportProperty<IServiceContext>(p => p.context);
 
             var configuration = new ContainerConfiguration()
-                .WithDefaultConventions(conventions)
+                //.WithDefaultConventions(conventions)
                 .WithAssemblies(assemblies);
 
             using (var container = configuration.CreateContainer())
                 container.SatisfyImports(this);
-        }
-
-        private static void InitSessionFactory(IServiceContext context)
-        {
-            //var mapper = new ConventionModelMapper();
-            //mapper.BeforeMapClass += (inspector, type, map) => { var idProperty = type.GetProperty("Id"); map.Id(idProperty, idMapper => { }); };
-            //mapper.BeforeMapProperty += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName());
-            //mapper.BeforeMapManyToOne += (inspector, propertyPath, map) => map.Column(propertyPath.ToColumnName() + "Id");
-
-            //var cfg = new Configuration();
-            foreach (var plugin in context.GetAllPlugins())
-            {
-                plugin.InitDbModel();// mapper);
-                //cfg.AddAssembly(plugin.GetType().Assembly);
-            }
-            //cfg.DataBaseIntegration(dbConfig =>
-            //{
-            //    dbConfig.Dialect<MsSqlCe40Dialect>();
-            //    dbConfig.Driver<SqlServerCeDriver>();
-            //    dbConfig.ConnectionStringName = "common";
-            //});
-
-            //var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-            //cfg.AddDeserializedMapping(mapping, null);	//Loads nhibernate mappings
-
-            //var sessionFactory = cfg.BuildSessionFactory();
-            //context.InitSessionFactory(sessionFactory);
-        }
-        private void UpdateDatabase(SQLiteConnection connection, PluginBase plugin)
-        {
-            //var assembly = plugin.GetType().Assembly;
-
-            //logger.Info("Update database: {0}", assembly.FullName);
-
-            //// todo: sql
-            //var provider = ProviderFactory.Create<SqlServerCeTransformationProvider>(connection, null);
-
-            //using (var migrator = new Migrator(provider, assembly))
-            //{
-            //    // запрещаем выполнять миграции, для которых не указано "пространство имен"
-            //    if (migrator.AvailableMigrations.Any())
-            //    {
-            //        var migrationsInfo = assembly.GetCustomAttribute<MigrationAssemblyAttribute>();
-            //        if (migrationsInfo == null || string.IsNullOrWhiteSpace(migrationsInfo.Key))
-            //            logger.Error("Assembly {0} contains invalid migration info", assembly.FullName);
-            //    }
-
-            //    migrator.Migrate();
-            //}
         }
         #endregion
     }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0BC52FB7-0F4B-4715-AA90-3B564401D912}</ProjectGuid>
+    <ProjectGuid>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.UWP.Core.Plugins</RootNamespace>
-    <AssemblyName>SmartHub.UWP.Core.Plugins</AssemblyName>
+    <RootNamespace>SmartHub.UWP.Plugins.ApiListener</RootNamespace>
+    <AssemblyName>SmartHub.UWP.Plugins.ApiListener</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
@@ -107,16 +107,21 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IServiceContext.cs" />
-    <Compile Include="PluginAttribute.cs" />
-    <Compile Include="PluginBase.cs" />
+    <Compile Include="ApiListenerPlugin.cs" />
+    <Compile Include="Attributes\ApiCommandAttribute.cs" />
+    <Compile Include="Attributes\IApiCommandAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Plugins.rd.xml" />
+    <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.ApiListener.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.15.2">
-      <Name>SQLite for Universal Windows Platform</Name>
-    </SDKReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
+      <Project>{9db4329d-1705-4f7a-98fc-3901ec521599}</Project>
+      <Name>SmartHub.UWP.Core.Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
+      <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
+      <Name>SmartHub.UWP.Core.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

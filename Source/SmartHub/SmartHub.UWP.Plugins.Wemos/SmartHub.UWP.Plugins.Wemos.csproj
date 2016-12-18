@@ -123,6 +123,9 @@
     <Compile Include="Models\WemosSetting.cs" />
     <Compile Include="Transport\WemosTransport.cs" />
     <Compile Include="Transport\WemosTransportBackgroundTask.cs" />
+    <Compile Include="UI\ucSystem.xaml.cs">
+      <DependentUpon>ucSystem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
@@ -136,11 +139,22 @@
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
       <Name>SmartHub.UWP.Plugins.Speech</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj">
+      <Project>{4dfaa97c-af72-4497-bfd2-b14d58ab340c}</Project>
+      <Name>SmartHub.UWP.Plugins.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="SQLite.UWP.2015, Version=3.15.2">
       <Name>SQLite for Universal Windows Platform</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="UI\ucSystem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

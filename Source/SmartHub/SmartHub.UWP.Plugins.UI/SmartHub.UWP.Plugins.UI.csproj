@@ -119,6 +119,14 @@
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
+      <Project>{71718a41-dd1a-48e7-aa35-fa2569cae77d}</Project>
+      <Name>SmartHub.UWP.Plugins.ApiListener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Timer\SmartHub.UWP.Plugins.Timer.csproj">
+      <Project>{2254a4f7-b66f-4068-8b9f-54ac550d5b32}</Project>
+      <Name>SmartHub.UWP.Plugins.Timer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -10,6 +10,7 @@ using Windows.Storage.Streams;
 
 namespace SmartHub.UWP.Plugins.Audio
 {
+    [Plugin]
     public class AudioPlugin : PluginBase, IDisposable
     {
         #region Fields
