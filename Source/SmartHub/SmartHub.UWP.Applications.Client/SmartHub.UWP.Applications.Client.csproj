@@ -127,6 +127,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
+      <Project>{9db4329d-1705-4f7a-98fc-3901ec521599}</Project>
+      <Name>SmartHub.UWP.Core.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>

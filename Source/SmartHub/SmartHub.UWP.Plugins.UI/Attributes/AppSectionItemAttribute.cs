@@ -24,6 +24,12 @@ namespace SmartHub.UWP.Plugins.UI.Attributes
     {
         public const string ContractID = nameof(AppSectionItemAttribute);
 
+        //public int ????
+        //{
+        //    get; set;
+        //}
+
+
         public AppSectionItemAttribute()
             : base(ContractID)
         {

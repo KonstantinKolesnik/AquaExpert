@@ -1,9 +1,6 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using SmartHub.UWP.Plugins.UI.UI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SmartHub.UWP.Plugins.UI
 {

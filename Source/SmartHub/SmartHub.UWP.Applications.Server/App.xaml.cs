@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.UI;
-using SmartHub.UWP.Plugins.UI.UI;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
