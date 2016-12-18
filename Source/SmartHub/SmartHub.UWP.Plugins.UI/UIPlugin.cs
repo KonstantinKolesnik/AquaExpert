@@ -26,13 +26,6 @@ namespace SmartHub.UWP.Plugins.UI
         }
         #endregion
 
-        #region Public methods
-        public object GetUI()
-        {
-            return new ucMainUI();
-        }
-        #endregion
-
         #region Private methods
         //private object GetSectionItems(AppSectionType sectionType)
         //{

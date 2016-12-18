@@ -1,15 +1,13 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.UI;
-using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
+using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -31,16 +29,14 @@ namespace SmartHub.UWP.Applications.Server
 
             AppManager.Init();
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            var shell = Window.Current.Content as AppShell;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (shell == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                shell = new AppShell();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -48,42 +44,45 @@ namespace SmartHub.UWP.Applications.Server
                 }
 
                 // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+                Window.Current.Content = shell;
             }
 
             if (!e.PrelaunchActivated)
             {
-                if (rootFrame.Content == null)
+                if (shell.AppFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    shell.AppFrame.Navigate(typeof(DashboardPage), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
         }
-        protected override void OnActivated(IActivatedEventArgs args)
-        {
-            base.OnActivated(args);
+        //protected override void OnActivated(IActivatedEventArgs args)
+        //{
+        //    base.OnActivated(args);
 
-            AppManager.Init();
+        //    AppManager.Init();
 
-            var rootFrame = Window.Current.Content as Frame;
+        //    var rootFrame = Window.Current.Content as Frame;
 
-            if (rootFrame == null)
-            {
-                rootFrame = new Frame();
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                Window.Current.Content = rootFrame;
-            }
+        //    if (rootFrame == null)
+        //    {
+        //        rootFrame = new Frame();
+        //        rootFrame.NavigationFailed += OnNavigationFailed;
+        //        Window.Current.Content = rootFrame;
+        //    }
 
-            if (rootFrame.Content == null)
-                rootFrame.Navigate(typeof(MainPage));
+        //    if (rootFrame.Content == null)
+        //        rootFrame.Navigate(typeof(MainPage));
 
-            Window.Current.Activate();
-        }
+        //    Window.Current.Activate();
+        //}
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             base.OnBackgroundActivated(args);
@@ -111,25 +110,21 @@ namespace SmartHub.UWP.Applications.Server
             //    await args.Request.SendResponseAsync(returnMessage);
             //}
 
-            object ui = null;
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-            () =>
-            {
-                ui =  new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
-            });
+            //object ui = null;
+            //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            //() =>
+            //{
+            //    ui =  new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
+            //});
 
 
-            var returnMessage = new ValueSet();
-            returnMessage.Add("Response", ui);
-            await args.Request.SendResponseAsync(returnMessage);
+            //var returnMessage = new ValueSet();
+            //returnMessage.Add("Response", ui);
+            //await args.Request.SendResponseAsync(returnMessage);
 
             messageDeferral.Complete();
         }
 
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents

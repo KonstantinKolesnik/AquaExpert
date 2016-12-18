@@ -24,7 +24,7 @@
         </StackPanel>
 
         <ContentControl Grid.Row="1" x:Name="holder">
-            <ui:ucMainUI/>
+            
         </ContentControl>
 
         <ListView Grid.Row="2" x:Name="lvMessages" ItemsSource="{Binding Messages}">

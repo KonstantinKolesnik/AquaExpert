@@ -36,5 +36,4 @@ namespace SmartHub.UWP.Plugins.Timer.Attributes
     //    public string Description { get; set; }
     //    public string ImageUri { get; set; }
     //}
-
 }

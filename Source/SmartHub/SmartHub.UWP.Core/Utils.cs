@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Resources.Core;
 using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
@@ -164,6 +165,29 @@ namespace SmartHub.UWP.Core
             return assemblies;
         }
         #endregion
+
+        public static string GetLabelValue(string labelId)
+        {
+            var result = string.Empty;
+
+            if (!string.IsNullOrEmpty(labelId))
+            {
+                var ctx = new ResourceContext() { Languages = new string[] { AppManager.AppData.Language } };
+                ResourceMap rmap = ResourceManager.Current.MainResourceMap.GetSubtree("SmartHub.UWP.Core.StringResources.Labels/");
+                if (rmap.ContainsKey(labelId))
+                    result = rmap.GetValue(labelId, ctx).ValueAsString;
+                else
+                    result = labelId;
+            }
+
+            return result;
+        }
+
+
+
+
+
+
 
         public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class
         {

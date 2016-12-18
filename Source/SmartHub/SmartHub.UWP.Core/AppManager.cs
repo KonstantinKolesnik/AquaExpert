@@ -49,7 +49,7 @@ namespace SmartHub.UWP.Core
         #region Public methods
         public static void Init()
         {
-            AppData = new AppData(true);
+            AppData = new AppData(false);
             AppData.PropertyChanged += AppData_PropertyChanged;
 
             var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
