@@ -120,11 +120,23 @@
   <data name="About" xml:space="preserve">
     <value>О программе</value>
   </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Smart Hub - это приложение для контроля вашей системы умного дома с вашего Windows устройства.</value>
+  </data>
   <data name="Applications" xml:space="preserve">
     <value>Приложения</value>
   </data>
+  <data name="Author" xml:space="preserve">
+    <value>Константин Колесник</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Дашборд</value>
+  </data>
+  <data name="Disclaimer" xml:space="preserve">
+    <value>Гарантия</value>
+  </data>
+  <data name="DisclaimerText" xml:space="preserve">
+    <value>Приложение поставляется как есть. Разработчик не несет никакой ответственности за какой-либо ущерб, причиненный вашей системе.</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Язык</value>
@@ -134,5 +146,8 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>Система</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
   </data>
 </root>

@@ -9,7 +9,7 @@
   <Identity Name="07a5a158-235a-40cb-bf90-3be263fed556" Publisher="CN=gothi_000" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="07a5a158-235a-40cb-bf90-3be263fed556" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>SmartHub.UWP.Applications.Server</DisplayName>
+    <DisplayName>Smart Hub</DisplayName>
     <PublisherDisplayName>gothi_000</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

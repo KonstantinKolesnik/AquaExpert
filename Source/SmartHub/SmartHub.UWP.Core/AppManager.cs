@@ -43,6 +43,11 @@ namespace SmartHub.UWP.Core
         {
             get; private set;
         }
+        //public static AppCommands AppCommands
+        //{
+        //    get;
+        //} = new AppCommands();
+
         public static Hub Hub => hub;
         #endregion
 

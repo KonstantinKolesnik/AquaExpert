@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:SmartHub.UWP.Core"
     xmlns:stringResources="using:SmartHub.UWP.Core.StringResources"
     >
 
     <!-- App common entities -->
-    <!--<common:AppManager x:Key="AppManager"/>-->
+    <core:AppManager x:Key="AppManager"/>
     <stringResources:LabelsManager x:Key="LabelsManager"/>
 
     <!-- Window width adaptive snap points-->
@@ -19,6 +20,10 @@
     <SolidColorBrush x:Key="InactiveBrush" Color="{ThemeResource SystemBaseMediumColor}"/>
     <Thickness x:Key="RootContainerMargin">10,0</Thickness>
     <x:Double x:Key="MaxEditorsPanelWidth">360</x:Double>
+    <Thickness x:Key="LeftPanelMargin">0,0,80,0</Thickness>
+    <Thickness x:Key="ParagraphMargin">0,0,0,30</Thickness>
+    <GridLength x:Key="MasterColumnWidth">400</GridLength>
+    <Thickness x:Key="MasterColumnPadding">0</Thickness><!--5,0-->
 
 
 

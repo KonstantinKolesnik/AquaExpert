@@ -120,11 +120,23 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Smart Hub is an application for controlling your smart home system with your Windows device.</value>
+  </data>
   <data name="Applications" xml:space="preserve">
     <value>Applications</value>
   </data>
+  <data name="Author" xml:space="preserve">
+    <value>Konstantin Kolesnik</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="Disclaimer" xml:space="preserve">
+    <value>Disclaimer</value>
+  </data>
+  <data name="DisclaimerText" xml:space="preserve">
+    <value>This application is provided as it is. There is no warranty for any damages on your system.</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
@@ -134,5 +146,8 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
 </root>

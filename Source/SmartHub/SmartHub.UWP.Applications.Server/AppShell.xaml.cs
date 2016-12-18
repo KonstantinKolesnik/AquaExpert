@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -132,10 +133,10 @@ namespace SmartHub.UWP.Applications.Server
                 switch (rb.Name)
                 {
                     case "menuDashboard": AppFrame.Navigate(typeof(DashboardPage)); break;
-                    //case "menuApplications": AppFrame.Navigate(typeof(ApplicationsPage)); break;
-                    //case "menuSystem": AppFrame.Navigate(typeof(SystemPage)); break;
+                    case "menuApplications": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.Applications); break;
+                    case "menuSystem": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.System); break;
                     case "menuSettings": AppFrame.Navigate(typeof(SettingsPage)); break;
-                    //case "menuAbout": AppFrame.Navigate(typeof(AboutPage)); break;
+                    case "menuAbout": AppFrame.Navigate(typeof(AboutPage)); break;
                 }
             }
         }
