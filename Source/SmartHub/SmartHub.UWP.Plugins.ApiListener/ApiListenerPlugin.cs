@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Core.Communication;
+﻿using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using System;
@@ -10,7 +10,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
     [Plugin]
     public class ApiListenerPlugin : PluginBase
     {
-        public const string ServiceName = "9999";
+        public const string ServiceName = "11111";
 
         #region Fields
         private StreamListener listener;
@@ -27,9 +27,9 @@ namespace SmartHub.UWP.Plugins.ApiListener
             listener = new StreamListener();
             listener.DataReceived += Listener_DataReceived;
         }
-        public override void StartPlugin()
+        public async override void StartPlugin()
         {
-            listener.Start(ServiceName);
+            await listener.Start(ServiceName);
         }
         public override void StopPlugin()
         {
@@ -38,9 +38,10 @@ namespace SmartHub.UWP.Plugins.ApiListener
         #endregion
 
         #region Event handlers
-        private void Listener_DataReceived(object sender, EventArgs e)
+        private void Listener_DataReceived(object sender, StringEventArgs e)
         {
-            
+            int a = 0;
+            int b = a;
         }
         #endregion
 

@@ -4,7 +4,7 @@ using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
 using Windows.System.RemoteSystems;
 
-namespace SmartHub.UWP.Core.Communication
+namespace SmartHub.UWP.Core.Communication.AppService
 {
     public static class AppServiceClientRemote
     {

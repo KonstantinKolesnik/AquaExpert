@@ -12,7 +12,7 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="Wemos" Style="{ThemeResource TitleTextBlockStyle}"/>
-            <TextBlock Text="Other UI" Style="{ThemeResource CaptionTextBlockStyle}"/>
+            <TextBlock Text="Content" Style="{ThemeResource CaptionTextBlockStyle}"/>
         </StackPanel>
     </Grid>
 </UserControl>

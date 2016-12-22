@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartHub.UWP.Core.Communication
+namespace SmartHub.UWP.Core.Communication.Stream
 {
     public class StringEventArgs : EventArgs
     {

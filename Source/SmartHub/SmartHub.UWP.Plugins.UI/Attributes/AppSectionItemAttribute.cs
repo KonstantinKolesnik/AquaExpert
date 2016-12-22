@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Composition;
 
 namespace SmartHub.UWP.Plugins.UI.Attributes
 {
@@ -9,13 +8,10 @@ namespace SmartHub.UWP.Plugins.UI.Attributes
         public AppSectionType Type { get; set; }
         public string TypeFullName { get; set; }
 
-
-
         public string TileTypeFullName { get; set; }
         public int SortOrder { get; set; }
 
-        public AppSectionItemAttribute(string title, AppSectionType sectionType, Type typeFullName)//, string url, string resourcePath)
-                                                                                //: base(url, resourcePath)
+        public AppSectionItemAttribute(string title, AppSectionType sectionType, Type typeFullName)
         {
             Title = title;
             Type = sectionType;

@@ -1,22 +1,31 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
 
-namespace SmartHub.UWP.Core.Communication
+namespace SmartHub.UWP.Core.Communication.Stream
 {
     public class StreamListener
     {
+        #region Fields
         private StreamSocketListener listener;
+        private string serviceName;
+        #endregion
 
+        #region Events
         public event EventHandler<StringEventArgs> DataReceived;
+        #endregion
 
-        public async void Start(string serviceName)
+        #region Public methods
+        public async Task Start(string serviceName)
         {
-            if (listener != null)
+            if (listener == null)
             {
+                this.serviceName = serviceName;
+
                 listener = new StreamSocketListener();
-                listener.ConnectionReceived += OnConnection;
+                listener.ConnectionReceived += Listener_ConnectionReceived;
 
                 // If necessary, tweak the listener's control options before carrying out the bind operation.
                 // These options will be automatically applied to the connected StreamSockets resulting from
@@ -35,16 +44,18 @@ namespace SmartHub.UWP.Core.Communication
                 listener = null;
             }
         }
+        #endregion
 
-        private async void OnConnection(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+        private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            DataReader reader = new DataReader(args.Socket.InputStream);
+            var reader = new DataReader(args.Socket.InputStream);
+
             try
             {
                 while (true)
                 {
                     // Read first 4 bytes (length of the subsequent string).
-                    uint sizeFieldCount = await reader.LoadAsync(sizeof(uint));
+                    uint sizeFieldCount = await reader.LoadAsync(sizeof(uint)); // waits for connection
                     if (sizeFieldCount != sizeof(uint))
                     {
                         // The underlying socket was closed before we were able to read the whole data.
@@ -60,13 +71,12 @@ namespace SmartHub.UWP.Core.Communication
                         return;
                     }
 
-                    // Display the string on the screen. The event is invoked on a non-UI thread, so we need to marshal
-                    // the text back to the UI thread.
-                    //NotifyUserFromAsyncThread(String.Format("Received data: \"{0}\"", reader.ReadString(actualStringLength)), NotifyType.StatusMessage);
+                    string str = reader.ReadString(actualStringLength);
 
+                    // The event is invoked on a non-UI thread, so we need to marshal the text back to the UI thread.
                     await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        DataReceived?.Invoke(this, new StringEventArgs(reader.ReadString(actualStringLength)));
+                        DataReceived?.Invoke(this, new StringEventArgs(str));
                     });
                 }
             }
@@ -74,7 +84,10 @@ namespace SmartHub.UWP.Core.Communication
             {
                 // If this is an unknown status it means that the error is fatal and retry will likely fail.
                 if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                    throw;
+                {
+                    Stop();
+                    await Start(serviceName);
+                }
             }
         }
     }

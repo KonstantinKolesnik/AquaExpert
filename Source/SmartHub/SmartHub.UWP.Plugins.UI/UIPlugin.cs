@@ -19,7 +19,8 @@ namespace SmartHub.UWP.Plugins.UI
         #region Plugin ovverrides
         public override void InitPlugin()
         {
-            sectionItems.AddRange(Context.GetAllPlugins().SelectMany(p => p.GetType().GetTypeInfo().GetCustomAttributes<AppSectionItemAttribute>()));
+            var attrs = Context.GetAllPlugins().SelectMany(p => p.GetType().GetTypeInfo().GetCustomAttributes<AppSectionItemAttribute>());
+            sectionItems.AddRange(attrs);
         }
         #endregion
 

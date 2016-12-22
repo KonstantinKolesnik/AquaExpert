@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using SmartHub.UWP.Plugins.Wemos.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
 using SmartHub.UWP.Plugins.Wemos.Transport;

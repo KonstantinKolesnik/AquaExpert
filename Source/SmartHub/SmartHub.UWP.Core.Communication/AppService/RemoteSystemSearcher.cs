@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.System.RemoteSystems;
 
-namespace SmartHub.UWP.Core.Communication
+namespace SmartHub.UWP.Core.Communication.AppService
 {
     public class RemoteSystemSearcher
     {

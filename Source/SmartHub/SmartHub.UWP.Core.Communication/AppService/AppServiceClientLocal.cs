@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
 
-namespace SmartHub.UWP.Core.Communication
+namespace SmartHub.UWP.Core.Communication.AppService
 {
     public class AppServiceClientLocal
     {
