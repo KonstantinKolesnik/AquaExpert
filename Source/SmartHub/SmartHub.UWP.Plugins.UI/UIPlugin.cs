@@ -48,8 +48,13 @@ namespace SmartHub.UWP.Plugins.UI
         }
         #endregion
 
-        [RunPeriodically(10)]
-        public void aaa(DateTime dt)
+        [RunPeriodically (Interval = 10)]
+        [Export(typeof(Action<DateTime>))]
+        public Action<DateTime> aaa
+        {
+            get { return bbb; }
+        }
+        private void bbb(DateTime dt)
         {
 
         }

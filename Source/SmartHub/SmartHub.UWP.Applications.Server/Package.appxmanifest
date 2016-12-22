@@ -1,11 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
-  IgnorableNamespaces="uap mp">
-  
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp">
   <Identity Name="07a5a158-235a-40cb-bf90-3be263fed556" Publisher="CN=gothi_000" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="07a5a158-235a-40cb-bf90-3be263fed556" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -21,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="SmartHub.UWP.Applications.Server.App">
-      <uap:VisualElements DisplayName="SmartHub.UWP.Applications.Server" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SmartHub.UWP.Applications.Server" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="Smart Hub" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SmartHub.UWP.Applications.Server" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
@@ -30,9 +24,9 @@
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="smarthubuwp" />
         </uap:Extension>
-        <uap:Extension Category="windows.appService" ><!--EntryPoint="MyAppService.GetUI"-->
+        <!--<uap:Extension Category="windows.appService" >
           <uap3:AppService Name="smarthubuwp.server" SupportsRemoteSystems="true"/>
-        </uap:Extension>
+        </uap:Extension>-->
       </Extensions>
     </Application>
   </Applications>

@@ -107,9 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\IRunPeriodicallyAttribute.cs" />
     <Compile Include="Attributes\RunPeriodicallyAttribute.cs" />
-    <Compile Include="Attributes\TimerElapsedAttribute.cs" />
     <Compile Include="PeriodicalAction.cs" />
     <Compile Include="TimerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

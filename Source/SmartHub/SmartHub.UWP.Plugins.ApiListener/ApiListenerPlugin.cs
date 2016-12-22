@@ -29,6 +29,9 @@ namespace SmartHub.UWP.Plugins.ApiListener
             get; set;
         }
 
+        //[ImportMany("Add")]
+        //public Lazy<IBinaryOperation, SpeedMetadata>[] ApiCommands { get; set; }
+
         [OnImportsSatisfied]
         public void OnImportsSatisfied()
         {
@@ -77,5 +80,32 @@ namespace SmartHub.UWP.Plugins.ApiListener
             
         }
         #endregion
+
+        private void ExecuteApiCommand()
+        {
+
+        }
     }
 }
+
+/*
+[MetadataAttribute]
+[AttributeUsage(AttributeTargets.Class)]
+public class CalculatorExtensionMetadataAttribute: Attribute
+{
+public string Title { get; set; }
+public string Description { get; set; }
+public string ImageUri { get; set; }
+}
+
+
+[Export(typeof(ICalculatorExtension))]
+[CalculatorExtensionMetadata(Title = "Fuel Economy", Description = "Calculate fuel economy", ImageUri = "Images/Fuel.png")]
+public class FuelCalculatorExtension: ICalculatorExtension
+{
+}
+
+
+
+ 
+ */

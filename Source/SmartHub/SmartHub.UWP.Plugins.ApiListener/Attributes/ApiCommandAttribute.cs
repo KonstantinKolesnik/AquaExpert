@@ -6,6 +6,9 @@ namespace SmartHub.UWP.Plugins.ApiListener.Attributes
     //public delegate object ApiCommandMethod(params object[] parameters);
     public delegate object ApiCommandMethod(object parameters);
 
+
+
+
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ApiCommandAttribute : ExportAttribute

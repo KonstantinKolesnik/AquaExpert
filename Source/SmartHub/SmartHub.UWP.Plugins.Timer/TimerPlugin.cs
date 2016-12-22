@@ -3,7 +3,6 @@ using SmartHub.UWP.Plugins.Timer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Threading;
 
 namespace SmartHub.UWP.Plugins.Timer
 {
@@ -11,37 +10,21 @@ namespace SmartHub.UWP.Plugins.Timer
     public class TimerPlugin : PluginBase
     {
         #region Fields
-        private const double TIMER_INTERVAL = 10;
+        private const int TIMER_INTERVAL = 10; // seconds
         private System.Threading.Timer timer;
         private bool isTimerActive = false;
         private readonly List<PeriodicalAction> periodicalActions = new List<PeriodicalAction>();
         #endregion
 
         #region Imports
-        //[ImportMany(Timer_10sec_ElapsedAttribute.ContractID)]
-        //public Action<DateTime>[] Timer_ElapsedEventHandlers
-        //{
-        //    get; set;
-        //}
         [ImportMany]
-        public Lazy<Action<DateTime>, RunPeriodicallyAttribute>[] PeriodicalHandlers
-        {
-            get; set;
-        }
+        public IEnumerable<Lazy<Action<DateTime>, RunPeriodicallyAttribute>> PeriodicalHandlers { get; set; }
         #endregion
-
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            int a = 0;
-            int b = a;
-        }
-
 
         #region Plugin ovverrides
         public override void InitPlugin()
         {
-            timer = new System.Threading.Timer(timerCallback, null, TimeSpan.FromSeconds(TIMER_INTERVAL).Milliseconds, Timeout.Infinite);
+            timer = new System.Threading.Timer(timerCallback, null, 0, (int)TimeSpan.FromSeconds(TIMER_INTERVAL).TotalMilliseconds);
 
             // register periodical actions:
             var now = DateTime.Now;
@@ -71,8 +54,6 @@ namespace SmartHub.UWP.Plugins.Timer
                 // periodical actions
                 foreach (var handler in periodicalActions)
                     handler.TryToExecute(now);
-
-                //Run(Timer_ElapsedEventHandlers, handler => handler(now));
 
                 // do some work not connected with UI:
                 //await Window.Current.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,

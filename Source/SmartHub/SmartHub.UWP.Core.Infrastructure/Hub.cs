@@ -1,9 +1,7 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SQLite.Net;
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Reflection;
 
@@ -95,14 +93,14 @@ namespace SmartHub.UWP.Core.Infrastructure
             //assemblies.Add(typeof(PluginBase).GetTypeInfo().Assembly);
             //assemblies.Add(GetType().GetTypeInfo().Assembly);
 
-            var conventions = new ConventionBuilder();
-            conventions
-                .ForTypesDerivedFrom<PluginBase>()
-                .Export<PluginBase>()
-                //.Export()
-                //.ExportInterfaces()
-                //.Shared()
-                ;
+            //var conventions = new ConventionBuilder();
+            //conventions
+            //    .ForTypesDerivedFrom<PluginBase>()
+            //    .Export<PluginBase>()
+            //    //.Export()
+            //    //.ExportInterfaces()
+            //    //.Shared()
+            //    ;
             //conventions
             //    .ForTypesDerivedFrom<IServiceContext>()
             //    .Export<IServiceContext>()

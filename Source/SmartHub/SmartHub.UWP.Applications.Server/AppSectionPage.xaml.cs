@@ -31,6 +31,5 @@ namespace SmartHub.UWP.Applications.Server
 
         }
         #endregion
-
     }
 }
