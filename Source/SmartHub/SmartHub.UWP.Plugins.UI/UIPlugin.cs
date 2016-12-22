@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
-using SmartHub.UWP.Plugins.Timer.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -48,33 +47,18 @@ namespace SmartHub.UWP.Plugins.UI
         }
         #endregion
 
-        [RunPeriodically (Interval = 10)]
-        [Export(typeof(Action<DateTime>))]
-        public Action<DateTime> aaa
-        {
-            get { return bbb; }
-        }
-        private void bbb(DateTime dt)
-        {
-
-        }
-
         #region Remote API
-        [ApiCommand("/api/ui/sections/apps")]
-        public object GetCommonSectionItems(object parameters)
+        [ApiCommand(Name = @"/api/ui/sections/apps"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> GetApplicationsSectionItems => ((parameters) =>
         {
             return GetSectionItems(AppSectionType.Applications);
-        }
-        //public object GetCommonSectionItems(params object[] parameters)
-        //{
-        //    return GetSectionItems(AppSectionType.Applications);
-        //}
+        });
 
-        //[ApiCommand("/api/ui/sections/system")]
-        //public object GetSystemSectionItems(params object[] parameters)
-        //{
-        //    return GetSectionItems(AppSectionType.System);
-        //}
+        [ApiCommand(Name = @"/api/ui/sections/system"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> GetSystemSectionItems => ((parameters) =>
+        {
+            return GetSectionItems(AppSectionType.System);
+        });
         #endregion
     }
 }

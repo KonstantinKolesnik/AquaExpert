@@ -18,44 +18,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
 
         #region Imports
         [ImportMany]
-        //public Lazy<ApiCommandMethod, IApiCommandAttribute>[] ApiCommands { get; set; }
-        //public ApiCommandMethod[] ApiCommands
-        //{
-        //    get;
-        //    set;
-        //}
-        public IEnumerable<ApiCommandMethod> ApiCommands
-        {
-            get; set;
-        }
-
-        //[ImportMany("Add")]
-        //public Lazy<IBinaryOperation, SpeedMetadata>[] ApiCommands { get; set; }
-
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            int a = 0;
-            int b = a;
-        }
-
-
-        //public IEnumerable<Func<object[], object>> ApiCommands
-        //{
-        //    get;
-        //    set;
-        //}
-        //public Func<object[], object>[] ApiCommands
-        //{
-        //    get;
-        //    set;
-        //}
-        //
-
-        //private void NotifyMessageReceivedForPlugins(WemosMessage msg)
-        //{
-        //    Run(WemosMessageHandlers, x => x(msg));
-        //}
+        public IEnumerable<Lazy<Func<object[], object>, ApiCommandAttribute>> ApiCommands { get; set; }
         #endregion
 
         #region Plugin ovverrides
@@ -83,29 +46,17 @@ namespace SmartHub.UWP.Plugins.ApiListener
 
         private void ExecuteApiCommand()
         {
-
+            //switch (operation.Name)
+            //{
+            //    case "+":
+            //        foreach (var addMethod in AddMethods)
+            //        {
+            //            if (addMethod.Metadata.Speed == Speed.Fast)
+            //            {
+            //                result = addMethod.Value.Operation(operands[0], operands[1]);
+            //            }
+            //        }
+            //        break
         }
     }
 }
-
-/*
-[MetadataAttribute]
-[AttributeUsage(AttributeTargets.Class)]
-public class CalculatorExtensionMetadataAttribute: Attribute
-{
-public string Title { get; set; }
-public string Description { get; set; }
-public string ImageUri { get; set; }
-}
-
-
-[Export(typeof(ICalculatorExtension))]
-[CalculatorExtensionMetadata(Title = "Fuel Economy", Description = "Calculate fuel economy", ImageUri = "Images/Fuel.png")]
-public class FuelCalculatorExtension: ICalculatorExtension
-{
-}
-
-
-
- 
- */

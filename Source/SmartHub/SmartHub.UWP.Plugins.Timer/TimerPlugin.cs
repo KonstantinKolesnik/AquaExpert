@@ -67,3 +67,13 @@ namespace SmartHub.UWP.Plugins.Timer
         #endregion
     }
 }
+
+/*
+
+        [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 10)]
+        public Action<DateTime> aaa => ((dt) =>
+        {
+            int a = 0;
+        });
+
+*/
