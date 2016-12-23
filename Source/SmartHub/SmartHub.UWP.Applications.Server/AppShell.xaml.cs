@@ -1,4 +1,6 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using Windows.UI.Core;
@@ -13,6 +15,8 @@ namespace SmartHub.UWP.Applications.Server
         #region Fields
         private RadioButton checkedMenuItem = null;
         private EventHandler<BackRequestedEventArgs> primaryBackRequestHandler = null;
+        private StreamClient apiClient = new StreamClient();
+        private string hostName = "localhost";
         #endregion
 
         #region Properties
@@ -21,6 +25,7 @@ namespace SmartHub.UWP.Applications.Server
             get; private set;
         }
         public Frame AppFrame => appShellFrame;
+        public StreamClient ApiClient => apiClient;
         #endregion
 
         #region Constructor
@@ -28,6 +33,8 @@ namespace SmartHub.UWP.Applications.Server
         {
             InitializeComponent();
             Current = this;
+
+            AppFrame.CacheSize = 1; // TODO: change this value to a cache size that is appropriate for your application
 
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
             //DataTransferManager.GetForCurrentView().DataRequested += OnDataRequested;
@@ -128,7 +135,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             var rb = sender as RadioButton;
 
-            if (rb != null)
+            if (rb != null && rb != checkedMenuItem)
             {
                 switch (rb.Name)
                 {
@@ -169,8 +176,10 @@ namespace SmartHub.UWP.Applications.Server
         //        }
         //    }
         //}
-        private void AppFrame_Navigated(object sender, NavigationEventArgs e)
+        private async void AppFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            await apiClient.StartAsync(hostName, ApiListenerPlugin.ServiceName);
+
             if (menu.DisplayMode != SplitViewDisplayMode.CompactInline)
                 menu.IsPaneOpen = false;
 

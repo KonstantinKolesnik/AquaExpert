@@ -7,7 +7,7 @@ namespace SmartHub.UWP.Plugins.ApiListener.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class ApiCommandAttribute : Attribute
     {
-        public string Name
+        public string CommandName
         {
             get; set;
         }
