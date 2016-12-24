@@ -5,11 +5,9 @@
     xmlns:local="using:SmartHub.UWP.Plugins.Wemos.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d">
 
-    <Grid>
+    <Grid Margin="10,0">
         <StackPanel>
             <TextBlock Text="Wemos" Style="{ThemeResource TitleTextBlockStyle}"/>
             <TextBlock Text="Content" Style="{ThemeResource CaptionTextBlockStyle}"/>

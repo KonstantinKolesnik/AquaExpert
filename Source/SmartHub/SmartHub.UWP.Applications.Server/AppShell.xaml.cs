@@ -26,6 +26,11 @@ namespace SmartHub.UWP.Applications.Server
         }
         public Frame AppFrame => appShellFrame;
         public StreamClient ApiClient => apiClient;
+
+        public AppSectionItemAttribute SelectedAppSectionItem
+        {
+            get; set;
+        }
         #endregion
 
         #region Constructor

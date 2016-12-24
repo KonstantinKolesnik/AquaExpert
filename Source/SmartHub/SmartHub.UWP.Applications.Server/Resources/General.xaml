@@ -23,17 +23,48 @@
     <Thickness x:Key="LeftPanelMargin">0,0,80,0</Thickness>
     <Thickness x:Key="ParagraphMargin">0,0,0,30</Thickness>
     <GridLength x:Key="MasterColumnWidth">400</GridLength>
-    <Thickness x:Key="MasterColumnPadding">0</Thickness><!--5,0-->
+    <Style x:Key="EmptyContentTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
+        <Setter Property="Foreground" Value="{ThemeResource InactiveBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="EmptyListTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+        <Setter Property="Foreground" Value="{ThemeResource InactiveBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+
+    <!-- Hyperlink -->
+    <Style TargetType="HyperlinkButton">
+        <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
+    </Style>
 
 
 
-
-
-
-
-
-
-
+    <!-- Lists/Grids -->
+    <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    </Style>
+    <DataTemplate x:Key="ListGroupHeaderTemplate">
+        <TextBlock Text="{Binding Key}" Style="{ThemeResource SubtitleTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" FontWeight="SemiBold" />
+    </DataTemplate>
+    <SolidColorBrush x:Key="ListItemSeparatorBrush" Color="{ThemeResource SystemBaseLowColor}"/>
+    <Thickness x:Key="ListItemSeparatorThickness">0,0.5,0,0</Thickness>
+    <Style x:Key="ListItemTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="Foreground" Value="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"/>
+        <!--<Setter Property="FontWeight" Value="Bold"/>-->
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+    <Style x:Key="ListItemSubtitleStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+        <Setter Property="Foreground" Value="{ThemeResource ListViewItemOverlaySecondaryForegroundThemeBrush}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
 
 
 
