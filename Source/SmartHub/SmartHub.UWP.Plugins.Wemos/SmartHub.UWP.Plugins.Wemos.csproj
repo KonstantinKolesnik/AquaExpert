@@ -121,22 +121,34 @@
     <Compile Include="Models\WemosNode.cs" />
     <Compile Include="Models\WemosNodeBatteryValue.cs" />
     <Compile Include="Models\WemosSetting.cs" />
-    <Compile Include="Transport\WemosTransport.cs" />
-    <Compile Include="Transport\WemosTransportBackgroundTask.cs" />
+    <Compile Include="Transporting\WemosTransport.cs" />
+    <Compile Include="Transporting\WemosTransportBackgroundTask.cs" />
     <Compile Include="UI\Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\System.xaml.cs">
-      <DependentUpon>System.xaml</DependentUpon>
+    <Compile Include="UI\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
+      <Project>{9DB4329D-1705-4F7A-98FC-3901EC521599}</Project>
+      <Name>SmartHub.UWP.Core.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
+      <Project>{1345726D-287F-4561-A2DA-B29EC65C85A1}</Project>
+      <Name>SmartHub.UWP.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
+      <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
+      <Name>SmartHub.UWP.Plugins.ApiListener</Name>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.Speech\SmartHub.UWP.Plugins.Speech.csproj">
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
@@ -151,6 +163,9 @@
     <SDKReference Include="SQLite.UWP.2015, Version=3.15.2">
       <Name>SQLite for Universal Windows Platform</Name>
     </SDKReference>
+    <SDKReference Include="Telerik UI For Universal Windows Platform, Version=2016.3.1207.45">
+      <Name>Telerik UI For Universal Windows Platform</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -158,7 +173,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\System.xaml">
+    <Page Include="UI\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

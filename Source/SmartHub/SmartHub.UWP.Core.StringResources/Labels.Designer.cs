@@ -107,6 +107,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database.
+        /// </summary>
+        public static string Database {
+            get {
+                return ResourceManager.GetString("Database", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disclaimer.
         /// </summary>
         public static string Disclaimer {
@@ -125,6 +134,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home page.
+        /// </summary>
+        public static string HomePage {
+            get {
+                return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Language {
@@ -134,11 +152,92 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lines.
+        /// </summary>
+        public static string Lines {
+            get {
+                return ResourceManager.GetString("Lines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internet is constrained.
+        /// </summary>
+        public static string NetworkConnectivityLevelConstrainedInternetAccess {
+            get {
+                return ResourceManager.GetString("NetworkConnectivityLevelConstrainedInternetAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internet is fully available.
+        /// </summary>
+        public static string NetworkConnectivityLevelInternetAccess {
+            get {
+                return ResourceManager.GetString("NetworkConnectivityLevelInternetAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internet not available.
+        /// </summary>
+        public static string NetworkConnectivityLevelLocalAccess {
+            get {
+                return ResourceManager.GetString("NetworkConnectivityLevelLocalAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local network not available.
+        /// </summary>
+        public static string NetworkConnectivityLevelNone {
+            get {
+                return ResourceManager.GetString("NetworkConnectivityLevelNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No network connections available.
+        /// </summary>
+        public static string NetworkConnectivityNone {
+            get {
+                return ResourceManager.GetString("NetworkConnectivityNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No data.
         /// </summary>
         public static string NoData {
             get {
                 return ResourceManager.GetString("NoData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nodes.
+        /// </summary>
+        public static string Nodes {
+            get {
+                return ResourceManager.GetString("Nodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Privacy policy.
+        /// </summary>
+        public static string PrivacyPolicy {
+            get {
+                return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server IP Address (please specify only for clients!).
+        /// </summary>
+        public static string ServerUrl {
+            get {
+                return ResourceManager.GetString("ServerUrl", resourceCulture);
             }
         }
         

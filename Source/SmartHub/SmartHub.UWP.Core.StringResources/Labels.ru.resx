@@ -132,17 +132,50 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Дашборд</value>
   </data>
+  <data name="Database" xml:space="preserve">
+    <value>База данных</value>
+  </data>
   <data name="Disclaimer" xml:space="preserve">
     <value>Гарантия</value>
   </data>
   <data name="DisclaimerText" xml:space="preserve">
     <value>Приложение поставляется как есть. Разработчик не несет никакой ответственности за какой-либо ущерб, причиненный вашей системе.</value>
   </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Домашняя страница</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Язык</value>
   </data>
+  <data name="Lines" xml:space="preserve">
+    <value>Линии</value>
+  </data>
+  <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
+    <value>Доступен только ограниченный доступ в интернет</value>
+  </data>
+  <data name="NetworkConnectivityLevelInternetAccess" xml:space="preserve">
+    <value>Доступны локальная сеть и полный доступ в интернет</value>
+  </data>
+  <data name="NetworkConnectivityLevelLocalAccess" xml:space="preserve">
+    <value>Доступна только локальная сеть</value>
+  </data>
+  <data name="NetworkConnectivityLevelNone" xml:space="preserve">
+    <value>Локальная сеть недоступна</value>
+  </data>
+  <data name="NetworkConnectivityNone" xml:space="preserve">
+    <value>Нет доступных сетевых подключений</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>Нет данных</value>
+  </data>
+  <data name="Nodes" xml:space="preserve">
+    <value>Узлы</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Политика конфиденциальности</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>IP-адрес сервера (заполняется только для клиентов!)</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>

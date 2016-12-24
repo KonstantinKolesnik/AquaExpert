@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Plugins.Speech;
 using System;
 using Windows.ApplicationModel.Core;
@@ -27,15 +28,15 @@ namespace SmartHub.UWP.Plugins.Network
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
 
             if (connectionProfile == null)
-                Context.GetPlugin<SpeechPlugin>()?.Say("Нет доступных сетевых подключений");
+                Context.GetPlugin<SpeechPlugin>()?.Say(Labels.NetworkConnectivityNone);
             else
             {
                 switch (connectionProfile.GetNetworkConnectivityLevel())
                 {
-                    case NetworkConnectivityLevel.None: Context.GetPlugin<SpeechPlugin>()?.Say("Локальная сеть не доступна"); break;
-                    case NetworkConnectivityLevel.LocalAccess: Context.GetPlugin<SpeechPlugin>()?.Say("Доступна только локальная сеть"); break;
-                    case NetworkConnectivityLevel.ConstrainedInternetAccess: Context.GetPlugin<SpeechPlugin>()?.Say("Доступен только ограниченный доступ в интернет"); break;
-                    case NetworkConnectivityLevel.InternetAccess: Context.GetPlugin<SpeechPlugin>()?.Say("Доступна локальная сеть и полный доступ в интернет"); break;
+                    case NetworkConnectivityLevel.None: Context.GetPlugin<SpeechPlugin>()?.Say(Labels.NetworkConnectivityLevelNone); break;
+                    case NetworkConnectivityLevel.LocalAccess: Context.GetPlugin<SpeechPlugin>()?.Say(Labels.NetworkConnectivityLevelLocalAccess); break;
+                    case NetworkConnectivityLevel.ConstrainedInternetAccess: Context.GetPlugin<SpeechPlugin>()?.Say(Labels.NetworkConnectivityLevelConstrainedInternetAccess); break;
+                    case NetworkConnectivityLevel.InternetAccess: Context.GetPlugin<SpeechPlugin>()?.Say(Labels.NetworkConnectivityLevelInternetAccess); break;
                 }
             }
         }

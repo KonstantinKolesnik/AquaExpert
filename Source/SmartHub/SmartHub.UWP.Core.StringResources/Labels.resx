@@ -132,17 +132,50 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="Database" xml:space="preserve">
+    <value>Database</value>
+  </data>
   <data name="Disclaimer" xml:space="preserve">
     <value>Disclaimer</value>
   </data>
   <data name="DisclaimerText" xml:space="preserve">
     <value>This application is provided as it is. There is no warranty for any damages on your system.</value>
   </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Home page</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Lines" xml:space="preserve">
+    <value>Lines</value>
+  </data>
+  <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
+    <value>Internet is constrained</value>
+  </data>
+  <data name="NetworkConnectivityLevelInternetAccess" xml:space="preserve">
+    <value>Internet is fully available</value>
+  </data>
+  <data name="NetworkConnectivityLevelLocalAccess" xml:space="preserve">
+    <value>Internet not available</value>
+  </data>
+  <data name="NetworkConnectivityLevelNone" xml:space="preserve">
+    <value>Local network not available</value>
+  </data>
+  <data name="NetworkConnectivityNone" xml:space="preserve">
+    <value>No network connections available</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>No data</value>
+  </data>
+  <data name="Nodes" xml:space="preserve">
+    <value>Nodes</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy policy</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>Server IP Address (please specify only for clients!)</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

@@ -1,19 +1,22 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Models;
-using SmartHub.UWP.Plugins.Wemos.Transport;
+using SmartHub.UWP.Plugins.Wemos.Transporting;
 using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
+using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Networking;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini, D1 R2, ESP8266) management")]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(UI.System), "Wemos modules (D1 Mini, D1 R2, ESP8266) network")]
+    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini, D1, ESP8266) management")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules (D1 Mini, D1, ESP8266) network")]
     public class WemosPlugin : PluginBase
     {
         #region Fields
@@ -101,17 +104,21 @@ namespace SmartHub.UWP.Plugins.Wemos
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
         }
 
-        //public List<WemosNode> GetNodes()
-        //{
-        //    using (var db = Context.OpenConnection())
-        //        //return db.Table<WemosNode>().ToList();
-        //        return (from p in db.Table<WemosNode>() select p).ToList();
-        //}
+        public List<WemosNode> GetNodes()
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosNode>().ToList();
+        }
+        public List<WemosLine> GetLines()
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosLine>().ToList();
+        }
         public WemosNode GetNode(int nodeID)
         {
             using (var db = Context.OpenConnection())
             {
-                //db.TraceListener = new DebugTraceListener(); // cctivate tracing
+                //db.TraceListener = new DebugTraceListener(); // activate tracing
                 return db.Table<WemosNode>().Where(n => n.NodeID == nodeID).FirstOrDefault();
             }
         }
@@ -347,6 +354,24 @@ namespace SmartHub.UWP.Plugins.Wemos
             using (var db = Context.OpenConnection())
                 db.Delete(item);
         }
+        #endregion
+
+        #region Remote API
+        [ApiCommand(CommandName = "/api/wemos/nodes"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> apiGetNodes => ((parameters) =>
+        {
+            return Context.GetPlugin<WemosPlugin>().GetNodes();
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/lines"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> apiGetLines => ((parameters) =>
+        {
+            return Context.GetPlugin<WemosPlugin>().GetLines();
+        });
+
+
+
+
         #endregion
     }
 }

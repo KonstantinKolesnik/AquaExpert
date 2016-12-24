@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="SmartHub.UWP.Plugins.Wemos.UI.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="UserControl_Loaded">
+
+    <Grid Margin="{StaticResource RootContainerMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Wemos" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>
+        </StackPanel>
+
+        <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
+            <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
+                <telerikGrid:RadDataGrid ItemsSource="{Binding Nodes}" /><!--FontSize="12"-->
+            </PivotItem>
+            <PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
+                <telerikGrid:RadDataGrid ItemsSource="{Binding Lines}" /><!--FontSize="12"-->
+            </PivotItem>
+            <PivotItem Header="{Binding Labels.Database, Source={StaticResource LabelsManager}}">
+
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</UserControl>

@@ -6,7 +6,7 @@ using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
-namespace SmartHub.UWP.Plugins.Wemos.Transport
+namespace SmartHub.UWP.Plugins.Wemos.Transporting
 {
     class WemosTransport
     {

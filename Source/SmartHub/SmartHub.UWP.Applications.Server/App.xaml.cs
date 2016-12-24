@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Plugins.UI;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
@@ -22,20 +21,13 @@ namespace SmartHub.UWP.Applications.Server
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-//#if DEBUG
-//            if (System.Diagnostics.Debugger.IsAttached)
-//                DebugSettings.EnableFrameRateCounter = true;
-//#endif
-
             AppManager.Init();
 
             var shell = Window.Current.Content as AppShell;
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
+            // Do not repeat app initialization when the Window already has content, just ensure that the window is active
             if (shell == null)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
                 shell = new AppShell();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -43,7 +35,6 @@ namespace SmartHub.UWP.Applications.Server
                     //TODO: Load state from previously suspended application
                 }
 
-                // Place the frame in the current Window
                 Window.Current.Content = shell;
             }
 
@@ -57,7 +48,6 @@ namespace SmartHub.UWP.Applications.Server
                     shell.AppFrame.Navigate(typeof(DashboardPage), e.Arguments);
                 }
 
-                // Ensure the current window is active
                 Window.Current.Activate();
             }
 

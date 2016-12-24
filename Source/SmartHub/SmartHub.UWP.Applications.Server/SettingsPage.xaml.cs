@@ -35,10 +35,10 @@ namespace SmartHub.UWP.Applications.Server
         #region Private methods
         private void SetLabelsText()
         {
-            AppShell.Current.SetNavigationInfo("Settings", "menuSettings");
-
             for (int i = 0; i < 10; i++)
                 (Application.Current.Resources["LabelsManager"] as LabelsManager).RefreshResources();
+
+            AppShell.Current.SetNavigationInfo("Settings", "menuSettings");
         }
         private void InitLanguageList()
         {

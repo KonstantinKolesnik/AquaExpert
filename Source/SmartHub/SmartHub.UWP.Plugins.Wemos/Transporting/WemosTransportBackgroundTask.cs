@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel.Background;
 
-namespace SmartHub.UWP.Plugins.Wemos.Transport
+namespace SmartHub.UWP.Plugins.Wemos.Transporting
 {
     public sealed class WemosTransportBackgroundTask : IBackgroundTask
     {

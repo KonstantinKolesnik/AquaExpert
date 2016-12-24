@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core.Infrastructure;
+using SmartHub.UWP.Plugins.ApiListener;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Windows.ApplicationModel;
@@ -10,7 +11,8 @@ namespace SmartHub.UWP.Core
     public class AppManager
     {
         #region Fields
-        private static Hub hub = new Hub();
+        private static bool isServer = false;
+        private static Hub hub;
         #endregion
 
         #region Properties
@@ -35,10 +37,14 @@ namespace SmartHub.UWP.Core
         {
             get { return "gothicmaestro@live.com"; }
         }
-        //public static string AppHomePage
-        //{
-        //    get { return "http://www.smarthub.at.ua"; }
-        //}
+        public static string AppHomePage
+        {
+            get { return "http://www.smarthub.at.ua"; }
+        }
+        public static string AppPrivacyPolicyPage
+        {
+            get { return $"{AppHomePage}/index/privacy_policy/0-10"; }
+        }
         public static AppData AppData
         {
             get; private set;
@@ -48,7 +54,11 @@ namespace SmartHub.UWP.Core
         //    get;
         //} = new AppCommands();
 
+        public static bool IsServer => isServer;
         public static Hub Hub => hub;
+
+        public static string RemoteUrl => isServer ? "localhost" : AppData.ServerUrl;
+        public static string RemoteServiceName => ApiListenerPlugin.ServiceName;
         #endregion
 
         #region Public methods
@@ -57,9 +67,8 @@ namespace SmartHub.UWP.Core
             AppData = new AppData(false);
             AppData.PropertyChanged += AppData_PropertyChanged;
 
-            var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
-            hub.Init(assemblies);
-            hub.StartServices();
+            isServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
+            SetServerActivity();
 
             SetLanguage(AppData.Language);
             //SetLanguage("en");
@@ -79,6 +88,22 @@ namespace SmartHub.UWP.Core
             ApplicationLanguages.PrimaryLanguageOverride = id;
             ResourceContext.GetForCurrentView().Languages = new List<string>() { id };
         }
+        private static void SetServerActivity()
+        {
+            if (isServer && hub == null)
+            {
+                var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
+
+                hub = new Hub();
+                hub.Init(assemblies);
+                hub.StartServices();
+            }
+            if (!isServer && hub != null)
+            {
+                hub.StopServices();
+                hub = null;
+            }
+        }
         #endregion
 
         #region Event handlers
@@ -88,6 +113,10 @@ namespace SmartHub.UWP.Core
             {
                 case nameof(AppData.Language):
                     SetLanguage(AppData.Language);
+                    break;
+                case nameof(AppData.ServerUrl):
+                    isServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
+                    SetServerActivity();
                     break;
             }
         }

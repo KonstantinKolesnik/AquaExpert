@@ -3,20 +3,15 @@
     public class AppData : ObservableObject
     {
         #region Settings data
-        public string RemoteUrl
+        public string ServerUrl
         {
-            get { return Utils.GetAppData(nameof(RemoteUrl), "en-US", IsRoaming); }
-            set { Utils.SetAppData(nameof(RemoteUrl), value, IsRoaming); NotifyPropertyChanged(); }
+            get { return Utils.GetAppData(nameof(ServerUrl), "", IsRoaming); }
+            set { Utils.SetAppData(nameof(ServerUrl), value?.Trim(), IsRoaming); NotifyPropertyChanged(); }
         }
         public string Language
         {
             get { return Utils.GetAppData(nameof(Language), "en-US", IsRoaming); }
             set { Utils.SetAppData(nameof(Language), value, IsRoaming); NotifyPropertyChanged(); }
-        }
-        public bool IsServer
-        {
-            get { return Utils.GetAppData(nameof(IsServer), false, IsRoaming); }
-            set { Utils.SetAppData(nameof(IsServer), value, IsRoaming); NotifyPropertyChanged(); }
         }
         #endregion
 

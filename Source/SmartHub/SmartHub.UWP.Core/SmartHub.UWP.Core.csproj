@@ -119,6 +119,10 @@
       <Project>{AF8E3222-A068-4E8B-B409-B03B23C523F1}</Project>
       <Name>SmartHub.UWP.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
+      <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
+      <Name>SmartHub.UWP.Plugins.ApiListener</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

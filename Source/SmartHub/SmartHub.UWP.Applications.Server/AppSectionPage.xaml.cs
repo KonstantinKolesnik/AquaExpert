@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Applications.Server.Common;
-using SmartHub.UWP.Core.Communication.Transporting;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -20,10 +19,6 @@ namespace SmartHub.UWP.Applications.Server
         #endregion
 
         #region Properties
-        //private string ItemsKey
-        //{
-        //    get { return isAppsSection ? "ApplicationItems" : "SystemItems"; }
-        //}
         private string ApiCommandName
         {
             get { return isAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system"; }
@@ -54,10 +49,9 @@ namespace SmartHub.UWP.Applications.Server
             AppShell.Current.SetPrimaryBackRequestHandler(OnBackRequested);
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
-            //if (!CoreApplication.Properties.ContainsKey(ItemsKey))
+            //if (!CoreApplication.Properties.ContainsKey(isAppsSection ? "ApplicationItems" : "SystemItems"))
             {
-                string str = await AppShell.Current.ApiClient.RequestAsync(ApiCommandName);
-                var items = Transport.Deserialize<IEnumerable<AppSectionItemAttribute>>(str);
+                var items = await AppShell.Current.ApiClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(ApiCommandName);
 
                 Items.Clear();
                 foreach (var item in items)

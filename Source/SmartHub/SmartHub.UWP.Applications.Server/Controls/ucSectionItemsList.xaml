@@ -31,7 +31,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid x:Name="root">
+    <Grid>
         <TextBlock x:Name="tbEmptyContent" Text="{Binding Labels.NoData, Source={StaticResource LabelsManager}}" Style="{StaticResource EmptyListTextBlockStyle}"/>
 
         <ListView

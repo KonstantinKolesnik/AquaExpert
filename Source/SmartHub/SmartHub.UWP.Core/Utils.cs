@@ -12,11 +12,52 @@ using Windows.ApplicationModel.Resources.Core;
 using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace SmartHub.UWP.Core
 {
     public static class Utils
     {
+        #region UI
+        public static string GetLabelValue(string labelId)
+        {
+            var result = string.Empty;
+
+            if (!string.IsNullOrEmpty(labelId))
+            {
+                var ctx = new ResourceContext() { Languages = new string[] { AppManager.AppData.Language } };
+                ResourceMap rmap = ResourceManager.Current.MainResourceMap.GetSubtree("SmartHub.UWP.Core.StringResources.Labels/");
+                if (rmap.ContainsKey(labelId))
+                    result = rmap.GetValue(labelId, ctx).ValueAsString;
+                else
+                    result = labelId;
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                        yield return (T) child;
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                        yield return childOfChild;
+                }
+            }
+        }
+        public static T FindFirstVisualChild<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            return FindVisualChildren<T>(depObj).FirstOrDefault();
+        }
+        #endregion
+
         #region Message boxes
         public static async Task<IUICommand> MessageBox(string msg)
         {
@@ -166,22 +207,6 @@ namespace SmartHub.UWP.Core
         }
         #endregion
 
-        public static string GetLabelValue(string labelId)
-        {
-            var result = string.Empty;
-
-            if (!string.IsNullOrEmpty(labelId))
-            {
-                var ctx = new ResourceContext() { Languages = new string[] { AppManager.AppData.Language } };
-                ResourceMap rmap = ResourceManager.Current.MainResourceMap.GetSubtree("SmartHub.UWP.Core.StringResources.Labels/");
-                if (rmap.ContainsKey(labelId))
-                    result = rmap.GetValue(labelId, ctx).ValueAsString;
-                else
-                    result = labelId;
-            }
-
-            return result;
-        }
 
 
 

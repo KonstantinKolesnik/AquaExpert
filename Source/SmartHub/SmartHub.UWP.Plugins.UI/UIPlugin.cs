@@ -50,13 +50,13 @@ namespace SmartHub.UWP.Plugins.UI
 
         #region Remote API
         [ApiCommand(CommandName = "/api/ui/sections/apps"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> GetApplicationsSectionItems => ((parameters) =>
+        public Func<object[], object> apiGetApplicationsSectionItems => ((parameters) =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.Applications);
         });
 
         [ApiCommand(CommandName = "/api/ui/sections/system"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> GetSystemSectionItems => ((parameters) =>
+        public Func<object[], object> apiGetSystemSectionItems => ((parameters) =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.System);
         });

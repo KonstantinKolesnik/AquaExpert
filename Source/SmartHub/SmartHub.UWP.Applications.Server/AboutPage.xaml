@@ -37,8 +37,8 @@
             <StackPanel Grid.Row="2" Margin="{StaticResource ParagraphMargin}">
                 <!--<HyperlinkButton Content="{Binding Labels.SupportFeedback, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.SendEmailCommand, Source={StaticResource AppManager}}"/>-->
                 <!--<HyperlinkButton Content="{Binding Labels.RateApp, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.RateAppCommand, Source={StaticResource AppManager}}"/>-->
-                <!--<HyperlinkButton Content="{Binding Labels.HomePage, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppHomePage, Source={StaticResource AppManager}}"/>-->
-                <!--<HyperlinkButton Content="{Binding Labels.PrivacyPolicy, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppPrivacyPolicyPage, Source={StaticResource AppManager}}"/>-->
+                <HyperlinkButton Content="{Binding Labels.HomePage, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppHomePage, Source={StaticResource AppManager}}"/>
+                <HyperlinkButton Content="{Binding Labels.PrivacyPolicy, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppPrivacyPolicyPage, Source={StaticResource AppManager}}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Margin="{StaticResource ParagraphMargin}" VerticalAlignment="Bottom" Orientation="Horizontal">

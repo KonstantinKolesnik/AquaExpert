@@ -52,7 +52,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
             }
         }
 
-        public async Task<string> RequestAsync(string commandName, params object[] parameters)
+        public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
             var data = new ApiRequest()
             {
@@ -61,7 +61,10 @@ namespace SmartHub.UWP.Core.Communication.Stream
             };
 
             await Send(data);
-            return await Receive();
+
+            string str = await Receive();
+
+            return Transport.Deserialize<T>(str);
         }
         #endregion
 
