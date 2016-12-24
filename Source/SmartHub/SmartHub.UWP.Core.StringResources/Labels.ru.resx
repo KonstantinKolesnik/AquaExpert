@@ -129,6 +129,9 @@
   <data name="Author" xml:space="preserve">
     <value>Константин Колесник</value>
   </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Батарея</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Дашборд</value>
   </data>
@@ -141,14 +144,26 @@
   <data name="DisclaimerText" xml:space="preserve">
     <value>Приложение поставляется как есть. Разработчик не несет никакой ответственности за какой-либо ущерб, причиненный вашей системе.</value>
   </data>
+  <data name="FirmwareName" xml:space="preserve">
+    <value>Имя прошивки</value>
+  </data>
+  <data name="FirmwareVersion" xml:space="preserve">
+    <value>Версия прошивки</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Домашняя страница</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP-адрес</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Язык</value>
   </data>
   <data name="Lines" xml:space="preserve">
     <value>Линии</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Имя</value>
   </data>
   <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
     <value>Доступен только ограниченный доступ в интернет</value>
@@ -174,6 +189,9 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Политика конфиденциальности</value>
   </data>
+  <data name="ProtocolVersion" xml:space="preserve">
+    <value>Версия протокола</value>
+  </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>IP-адрес сервера (заполняется только для клиентов!)</value>
   </data>
@@ -182,6 +200,15 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>Система</value>
+  </data>
+  <data name="TimeStamp" xml:space="preserve">
+    <value>Время</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Значение</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>

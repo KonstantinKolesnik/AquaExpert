@@ -1,5 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Core;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Models
@@ -12,10 +11,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
         public int NodeID { get; set; }
         [NotNull]
         public int LineID { get; set; }
+
         public string Name { get; set; }
         [NotNull]
         public WemosLineType Type { get; set; }
         public float ProtocolVersion { get; set; }
+
         public DateTime LastTimeStamp { get; set; }
         public float LastValue { get; set; }
     }

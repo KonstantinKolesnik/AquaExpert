@@ -12,11 +12,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
         [NotNull]
         public WemosLineType Type { get; set; }
         public float ProtocolVersion { get; set; }
+        public string IPAddress { get; set; }
+
         public string FirmwareName { get; set; }
         public float FirmwareVersion { get; set; }
 
         public DateTime LastTimeStamp { get; set; }
         public int LastBatteryValue { get; set; }
-        public string IPAddress { get; set; }
     }
 }

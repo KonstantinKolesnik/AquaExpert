@@ -55,13 +55,13 @@
     <SolidColorBrush x:Key="ListItemSeparatorBrush" Color="{ThemeResource SystemBaseLowColor}"/>
     <Thickness x:Key="ListItemSeparatorThickness">0,0.5,0,0</Thickness>
     <Style x:Key="ListItemTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
-        <Setter Property="Foreground" Value="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"/>
+        <!--<Setter Property="Foreground" Value="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"/>-->
         <!--<Setter Property="FontWeight" Value="Bold"/>-->
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>
     <Style x:Key="ListItemSubtitleStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
-        <Setter Property="Foreground" Value="{ThemeResource ListViewItemOverlaySecondaryForegroundThemeBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource InactiveBrush}"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>

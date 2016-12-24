@@ -20,11 +20,42 @@
 
         <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
             <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
-                <telerikGrid:RadDataGrid ItemsSource="{Binding Nodes}" /><!--FontSize="12"-->
+                <telerikGrid:RadDataGrid
+                    ItemsSource="{Binding Nodes}"
+                    AutoGenerateColumns="False"
+                    UserEditMode="Inline"
+                    FontSize="12">
+                    <telerikGrid:RadDataGrid.Columns>
+                        <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="IPAddress" Header="{Binding Labels.IPAddress, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="FirmwareName" Header="{Binding Labels.FirmwareName, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="FirmwareVersion" Header="{Binding Labels.FirmwareVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="LastBatteryValue" Header="{Binding Labels.Battery, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0}%" CanUserEdit="False" SizeMode="Auto"/>
+                    </telerikGrid:RadDataGrid.Columns>
+                </telerikGrid:RadDataGrid>
             </PivotItem>
+            
             <PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
-                <telerikGrid:RadDataGrid ItemsSource="{Binding Lines}" /><!--FontSize="12"-->
+                <telerikGrid:RadDataGrid ItemsSource="{Binding Lines}"
+                    AutoGenerateColumns="False"
+                    UserEditMode="Inline"
+                    FontSize="12">
+                    <telerikGrid:RadDataGrid.Columns>
+                        <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="Node ID" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                        <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding Labels.Value, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                    </telerikGrid:RadDataGrid.Columns>
+                </telerikGrid:RadDataGrid>
             </PivotItem>
+            
             <PivotItem Header="{Binding Labels.Database, Source={StaticResource LabelsManager}}">
 
             </PivotItem>

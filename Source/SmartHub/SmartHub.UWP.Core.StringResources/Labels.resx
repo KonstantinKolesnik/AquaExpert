@@ -129,6 +129,9 @@
   <data name="Author" xml:space="preserve">
     <value>Konstantin Kolesnik</value>
   </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Battery</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
@@ -141,14 +144,26 @@
   <data name="DisclaimerText" xml:space="preserve">
     <value>This application is provided as it is. There is no warranty for any damages on your system.</value>
   </data>
+  <data name="FirmwareName" xml:space="preserve">
+    <value>Firmware Name</value>
+  </data>
+  <data name="FirmwareVersion" xml:space="preserve">
+    <value>Firmware Version</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home page</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP-address</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="Lines" xml:space="preserve">
     <value>Lines</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
     <value>Internet is constrained</value>
@@ -174,6 +189,9 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy policy</value>
   </data>
+  <data name="ProtocolVersion" xml:space="preserve">
+    <value>Protocol Version</value>
+  </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Server IP Address (please specify only for clients!)</value>
   </data>
@@ -182,6 +200,15 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
+  </data>
+  <data name="TimeStamp" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
