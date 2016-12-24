@@ -22,11 +22,11 @@ namespace SmartHub.UWP.Applications.Server
             InitializeComponent();
             DataContext = this;
 
-            AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += async (s, e) =>
-            {
-                //await CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(e.Message.ToString()));
-            };
+            //AppManager.Hub.Context.GetPlugin<WemosPlugin>().MessageReceived += async (s, e, ra) =>
+            //{
+            //    //await CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(args.Message.ToString()));
+            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(e.Message.ToString()));
+            //};
         }
 
         //#region Navigation

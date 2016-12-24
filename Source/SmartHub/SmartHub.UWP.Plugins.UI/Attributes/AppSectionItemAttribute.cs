@@ -2,6 +2,7 @@
 
 namespace SmartHub.UWP.Plugins.UI.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class AppSectionItemAttribute : Attribute
     {
         public string Title { get; set; }

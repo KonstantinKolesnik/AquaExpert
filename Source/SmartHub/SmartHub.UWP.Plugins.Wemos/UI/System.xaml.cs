@@ -2,9 +2,9 @@
 
 namespace SmartHub.UWP.Plugins.Wemos.UI
 {
-    public sealed partial class ucSystem : UserControl
+    public sealed partial class System : UserControl
     {
-        public ucSystem()
+        public System()
         {
             InitializeComponent();
         }

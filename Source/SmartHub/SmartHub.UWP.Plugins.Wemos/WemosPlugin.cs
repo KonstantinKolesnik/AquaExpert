@@ -7,11 +7,13 @@ using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
 using System.Composition;
 using System.Threading.Tasks;
+using Windows.Networking;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(ucSystem), "Wemos modules (D1 Mini, D1 R2, ESP8266) network")]
+    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini, D1 R2, ESP8266) management")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(UI.System), "Wemos modules (D1 Mini, D1 R2, ESP8266) network")]
     public class WemosPlugin : PluginBase
     {
         #region Fields
@@ -19,7 +21,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         private WemosTransport transport = new WemosTransport();
         #endregion
 
-        public event WemosMessageEventHandler MessageReceived;
+        //public event WemosMessageEventHandler MessageReceived;
 
         #region Imports
         [ImportMany]
@@ -121,20 +123,18 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Event handlers
-        private async void OnMessageReceived(object sender, WemosMessageEventArgs e)
+        private async void OnMessageReceived(object sender, WemosMessageEventArgs e, HostName remoteAddress)
         {
             if (e.Message != null)
             {
-                //System.Diagnostics.Debug.WriteLine(e.Message.ToString());
-
-                MessageReceived?.Invoke(this, e); // TODO: temporary!!!
-                await ProcessMessage(e.Message);
+                //MessageReceived?.Invoke(this, e, remoteAddress); // TODO: temporary!!!
+                await ProcessMessage(e.Message, remoteAddress);
             }
         }
         #endregion
 
         #region Private methods
-        private async Task ProcessMessage(WemosMessage message)
+        private async Task ProcessMessage(WemosMessage message, HostName remoteAddress)
         {
             WemosNode node = GetNode(message.NodeID);
             WemosLine line = GetLine(message.NodeID, message.LineID);
@@ -151,7 +151,8 @@ namespace SmartHub.UWP.Plugins.Wemos
                             {
                                 NodeID = message.NodeID,
                                 Type = (WemosLineType) message.SubType,
-                                ProtocolVersion = message.GetFloat()
+                                ProtocolVersion = message.GetFloat(),
+                                IPAddress = remoteAddress.CanonicalName
                             };
                             Save(node);
                         }
@@ -159,6 +160,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                         {
                             node.Type = (WemosLineType) message.SubType;
                             node.ProtocolVersion = message.GetFloat();
+                            node.IPAddress = remoteAddress.CanonicalName;
                             SaveOrUpdate(node);
                         }
 
@@ -252,6 +254,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                                 node.LastTimeStamp = bl.TimeStamp;
                                 node.LastBatteryValue = bl.Value;
+                                node.IPAddress = remoteAddress.CanonicalName;
                                 SaveOrUpdate(node);
 
                                 //NotifyMessageReceivedForPlugins(message);

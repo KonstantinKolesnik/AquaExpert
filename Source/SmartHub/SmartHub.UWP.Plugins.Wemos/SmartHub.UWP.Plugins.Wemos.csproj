@@ -123,8 +123,11 @@
     <Compile Include="Models\WemosSetting.cs" />
     <Compile Include="Transport\WemosTransport.cs" />
     <Compile Include="Transport\WemosTransportBackgroundTask.cs" />
-    <Compile Include="UI\ucSystem.xaml.cs">
-      <DependentUpon>ucSystem.xaml</DependentUpon>
+    <Compile Include="UI\Main.xaml.cs">
+      <DependentUpon>Main.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\System.xaml.cs">
+      <DependentUpon>System.xaml</DependentUpon>
     </Compile>
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -151,7 +154,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="UI\ucSystem.xaml">
+    <Page Include="UI\Main.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\System.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

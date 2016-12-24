@@ -17,5 +17,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
 
         public DateTime LastTimeStamp { get; set; }
         public int LastBatteryValue { get; set; }
+        public string IPAddress { get; set; }
     }
 }

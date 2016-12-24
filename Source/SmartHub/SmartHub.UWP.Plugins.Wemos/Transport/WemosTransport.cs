@@ -123,7 +123,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transport
                 //NotifyUserFromAsyncThread("Received data from remote peer (Remote Address: " + eventArguments.RemoteAddress.CanonicalName + ", Remote Port: " + eventArguments.RemotePort + "): \"" + str + "\"", NotifyType.StatusMessage);
 
                 foreach (var msg in WemosMessage.FromDto(str))
-                    MessageReceived?.Invoke(this, new WemosMessageEventArgs(msg));
+                    MessageReceived?.Invoke(this, new WemosMessageEventArgs(msg), eventArguments.RemoteAddress);
             }
             catch (Exception exception)
             {
