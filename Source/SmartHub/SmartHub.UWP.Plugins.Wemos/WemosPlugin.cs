@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(ucSystem))]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(ucSystem), "Wemos modules (D1 Mini, D1 R2, ESP8266) network")]
     public class WemosPlugin : PluginBase
     {
         #region Fields

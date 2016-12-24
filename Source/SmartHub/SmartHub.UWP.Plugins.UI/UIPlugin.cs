@@ -52,29 +52,13 @@ namespace SmartHub.UWP.Plugins.UI
         [ApiCommand(CommandName = "/api/ui/sections/apps"), Export(typeof(Func<object[], object>))]
         public Func<object[], object> GetApplicationsSectionItems => ((parameters) =>
         {
-            return GetSectionItems(AppSectionType.Applications);
+            return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.Applications);
         });
-
-        //[ApiCommand(CommandName = "/api/ui/sections/apps"), Export(typeof(Func<object[], object>))]
-        //public Func<object[], object> GetApplicationsSectionItems => aaa;
-
-        //private object aaa(object[] ppp)
-        //{
-        //    return GetSectionItems(AppSectionType.Applications);
-        //}
-
-
-
-
-
-
-
-
 
         [ApiCommand(CommandName = "/api/ui/sections/system"), Export(typeof(Func<object[], object>))]
         public Func<object[], object> GetSystemSectionItems => ((parameters) =>
         {
-            return GetSectionItems(AppSectionType.System);
+            return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.System);
         });
         #endregion
     }

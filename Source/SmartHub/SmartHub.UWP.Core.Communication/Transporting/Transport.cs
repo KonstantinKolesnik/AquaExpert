@@ -7,7 +7,8 @@ namespace SmartHub.UWP.Core.Communication.Transporting
         private static JsonSerializerSettings jset = new JsonSerializerSettings()
         {
             //TypeNameAssemblyFormat = FormatterAssemblyStyle.Full,
-            TypeNameHandling = TypeNameHandling.Auto,
+
+            //TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.None
         };
 

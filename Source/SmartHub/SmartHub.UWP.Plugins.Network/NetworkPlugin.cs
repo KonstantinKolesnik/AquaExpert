@@ -1,6 +1,9 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Speech;
+using System;
+using Windows.ApplicationModel.Core;
 using Windows.Networking.Connectivity;
+using Windows.UI.Core;
 
 namespace SmartHub.UWP.Plugins.Network
 {
@@ -10,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Network
         #region Plugin overrides
         public override void InitPlugin()
         {
-            NetworkInformation.NetworkStatusChanged += (s) => { CheckInternetAccess(); };
+            NetworkInformation.NetworkStatusChanged += async (s) => { await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { CheckInternetAccess(); }); };
         }
         public override void StartPlugin()
         {
@@ -22,6 +25,7 @@ namespace SmartHub.UWP.Plugins.Network
         private void CheckInternetAccess()
         {
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
+
             if (connectionProfile == null)
                 Context.GetPlugin<SpeechPlugin>()?.Say("Нет доступных сетевых подключений");
             else

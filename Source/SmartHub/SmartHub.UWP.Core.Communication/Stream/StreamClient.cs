@@ -1,16 +1,15 @@
-﻿using System;
+﻿using SmartHub.UWP.Core.Communication.Transporting;
+using System;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using SmartHub.UWP.Core.Communication.Transporting;
-using System.Threading;
-using System.Text;
-using System.IO;
 
 namespace SmartHub.UWP.Core.Communication.Stream
 {
-    public class StreamClientOld
+    public class StreamClient
     {
         #region Fields
         private StreamSocket client;
@@ -19,7 +18,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #endregion
 
         #region Public methods
-        public async Task Start(string hostName, string serviceName)
+        public async Task StartAsync(string hostName, string serviceName)
         {
             if (client == null)
             {
@@ -44,21 +43,37 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 }
             }
         }
-        public async Task Send(string commandName, params object[] parameters)
+        public void Stop()
+        {
+            if (client != null)
+            {
+                client.Dispose();
+                client = null;
+            }
+        }
+
+        public async Task<string> RequestAsync(string commandName, params object[] parameters)
+        {
+            var data = new ApiRequest()
+            {
+                CommandName = commandName,
+                Parameters = parameters
+            };
+
+            await Send(data);
+            return await Receive();
+        }
+        #endregion
+
+        #region Private methods
+        private async Task Send(ApiRequest data)
         {
             if (client != null)
                 using (var writer = new DataWriter(client.OutputStream))
                 {
-                    // Write first the length of the string as UINT32 value followed up by the string. 
-                    //string stringToSend = "Hello";
-                    //writer.WriteUInt32(writer.MeasureString(stringToSend));
-                    //writer.WriteString(stringToSend);
-
-                    //var newData = parameters.Select(p => Transport.Serialize(p)).ToArray();
-                    var newData = Transport.Serialize(parameters);
-
-                    writer.WriteUInt32(writer.MeasureString(commandName + newData));
-                    writer.WriteString(commandName + newData);
+                    var str = Transport.Serialize(data);
+                    writer.WriteUInt32(writer.MeasureString(str));
+                    writer.WriteString(str);
 
                     try
                     {
@@ -76,18 +91,33 @@ namespace SmartHub.UWP.Core.Communication.Stream
                     writer.DetachStream();
                 }
         }
-        public void Stop()
+        private async Task<string> Receive()
         {
-            if (client != null)
+            string result = null;
+
+            using (var reader = new DataReader(client.InputStream))
             {
-                client.Dispose();
-                client = null;
+                reader.InputStreamOptions = InputStreamOptions.Partial;
+
+                uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
+                if (sizeFieldLength == sizeof(uint))
+                {
+                    uint dataLength = reader.ReadUInt32();
+                    uint actualDataLength = await reader.LoadAsync(dataLength);
+                    if (dataLength == actualDataLength)
+                        result =  reader.ReadString(actualDataLength);
+                }
+
+                reader.DetachStream();
             }
+
+            return result;
         }
         #endregion
     }
 
-    public class StreamClient : IDisposable
+    // the one from Ecos:
+    public class StreamClientNew : IDisposable
     {
         #region Fields
         private const int MAX_BUFFER_SIZE = 4096; //64
@@ -103,7 +133,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         public event EventHandler<StringEventArgs> Received;
         #endregion
 
-        ~StreamClient()
+        ~StreamClientNew()
         {
             Dispose(false);
         }
@@ -140,6 +170,15 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 //Stop();
             }
         }
+        public void Stop()
+        {
+            if (socket != null)
+            {
+                socket.Dispose();
+                socket = null;
+            }
+        }
+
         public async Task SendAsync(string commandName, params object[] parameters)
         {
             if (socket != null)
@@ -148,7 +187,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 {
                     using (DataWriter writer = new DataWriter(socket.OutputStream))
                     {
-                        var data = new StreamData()
+                        var data = new ApiRequest()
                         {
                             CommandName = commandName,
                             Parameters = parameters
@@ -169,14 +208,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
                     Stop();
                 }
-            }
-        }
-        public void Stop()
-        {
-            if (socket != null)
-            {
-                socket.Dispose();
-                socket = null;
             }
         }
 

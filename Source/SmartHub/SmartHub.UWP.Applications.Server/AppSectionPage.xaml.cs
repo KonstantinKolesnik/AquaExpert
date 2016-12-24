@@ -1,4 +1,6 @@
-﻿using SmartHub.UWP.Plugins.UI.Attributes;
+﻿using SmartHub.UWP.Core.Communication.Transporting;
+using SmartHub.UWP.Plugins.UI.Attributes;
+using System.Collections.Generic;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -33,19 +35,21 @@ namespace SmartHub.UWP.Applications.Server
 
             AppShell.Current.SetNavigationInfo(isAppsSection ? "Applications" : "System", isAppsSection ? "menuApplications" : "menuSystem");
 
-            AppShell.Current.ApiClient.Received += ApiClient_Received;
+            //AppShell.Current.ApiClient.Received += ApiClient_Received;
 
             if (!CoreApplication.Properties.ContainsKey(ItemsKey))
             {
-                // request items
-                await AppShell.Current.ApiClient.SendAsync(ApiCommandName, 1, 2, 3);
+                string str = await AppShell.Current.ApiClient.RequestAsync(ApiCommandName);
+                var data = Transport.Deserialize<IEnumerable<AppSectionItemAttribute>>(str);
+
+
             }
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
 
-            AppShell.Current.ApiClient.Received -= ApiClient_Received;
+            //AppShell.Current.ApiClient.Received -= ApiClient_Received;
         }
 
 
