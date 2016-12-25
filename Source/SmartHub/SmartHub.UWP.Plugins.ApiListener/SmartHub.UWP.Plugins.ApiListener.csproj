@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiCommand.cs" />
     <Compile Include="ApiListenerPlugin.cs" />
     <Compile Include="Attributes\ApiCommandAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

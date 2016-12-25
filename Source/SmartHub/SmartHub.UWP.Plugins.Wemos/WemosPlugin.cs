@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core;
@@ -45,6 +46,8 @@ namespace SmartHub.UWP.Plugins.Wemos
                 db.CreateTable<WemosLine>();
                 db.CreateTable<WemosNodeBatteryValue>();
                 db.CreateTable<WemosLineValue>();
+
+                db.CreateTable<WemosMonitor>();
             }
         }
         public override void InitPlugin()
@@ -127,6 +130,13 @@ namespace SmartHub.UWP.Plugins.Wemos
             using (var db = Context.OpenConnection())
                 return db.Table<WemosLine>().Where(l => l.NodeID == nodeID && l.LineID == lineID).FirstOrDefault();
         }
+
+        public List<WemosMonitor> GetMonitors()
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosMonitor>().ToList();
+        }
+
         #endregion
 
         #region Event handlers
@@ -357,20 +367,20 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Remote API
-        [ApiCommand(CommandName = "/api/wemos/nodes"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiGetNodes => ((parameters) =>
+        [ApiCommand(CommandName = "/api/wemos/nodes"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetNodes => ((parameters) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetNodes();
         });
 
-        [ApiCommand(CommandName = "/api/wemos/lines"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiGetLines => ((parameters) =>
+        [ApiCommand(CommandName = "/api/wemos/lines"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetLines => ((parameters) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetLines();
         });
 
-        [ApiCommand(CommandName = "/api/wemos/nodes/setname"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiSetNodeName => ((parameters) =>
+        [ApiCommand(CommandName = "/api/wemos/nodes/setname"), Export(typeof(ApiCommand))]
+        public ApiCommand apiSetNodeName => ((parameters) =>
         {
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
@@ -384,8 +394,8 @@ namespace SmartHub.UWP.Plugins.Wemos
             return null;
         });
 
-        [ApiCommand(CommandName = "/api/wemos/lines/setname"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiSetLineName => ((parameters) =>
+        [ApiCommand(CommandName = "/api/wemos/lines/setname"), Export(typeof(ApiCommand))]
+        public ApiCommand apiSetLineName => ((parameters) =>
         {
             var nodeID = int.Parse(parameters[0].ToString());
             var lineID = int.Parse(parameters[1].ToString());
@@ -399,6 +409,19 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             return null;
         });
+
+        [ApiCommand(CommandName = "/api/wemos/monitors"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetMonitors => ((parameters) =>
+        {
+            return Context.GetPlugin<WemosPlugin>().GetMonitors();
+        });
+
+
+
+
+
+
+
 
 
 

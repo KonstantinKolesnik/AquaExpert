@@ -188,11 +188,29 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Line.
+        /// </summary>
+        public static string Line {
+            get {
+                return ResourceManager.GetString("Line", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lines.
         /// </summary>
         public static string Lines {
             get {
                 return ResourceManager.GetString("Lines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitors.
+        /// </summary>
+        public static string Monitors {
+            get {
+                return ResourceManager.GetString("Monitors", resourceCulture);
             }
         }
         
@@ -287,7 +305,7 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server IP Address (please specify only for clients!).
+        ///   Looks up a localized string similar to Server IP Address (only for clients!).
         /// </summary>
         public static string ServerUrl {
             get {

@@ -238,7 +238,11 @@
       <Name>SmartHub.UWP.Plugins.Wemos</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Telerik UI For Universal Windows Platform, Version=2016.3.1207.45">
+      <Name>Telerik UI For Universal Windows Platform</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

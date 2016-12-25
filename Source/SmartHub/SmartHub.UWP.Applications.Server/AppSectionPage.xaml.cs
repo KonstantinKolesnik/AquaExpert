@@ -1,4 +1,6 @@
 ﻿using SmartHub.UWP.Applications.Server.Common;
+using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,9 @@ namespace SmartHub.UWP.Applications.Server
         {
             InitializeComponent();
             DataContext = this;
+
+            if (!CoreApplication.Properties.ContainsKey("SelectedAppSectionItem"))
+                CoreApplication.Properties["SelectedAppSectionItem"] = null;
         }
         #endregion
 
@@ -51,15 +56,19 @@ namespace SmartHub.UWP.Applications.Server
 
             //if (!CoreApplication.Properties.ContainsKey(isAppsSection ? "ApplicationItems" : "SystemItems"))
             {
-                var items = await AppShell.Current.ApiClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(ApiCommandName);
+                var apiClient = new StreamClient();
+                await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
+                var items = await apiClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(ApiCommandName);
 
                 Items.Clear();
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                    if (AppShell.Current.SelectedAppSectionItem?.TypeFullName == item.TypeFullName)
-                        DetailContentPresenter.Content = Activator.CreateInstance(item.TypeFullName);
-                }
+                if (items != null)
+                    foreach (var item in items)
+                    {
+                        Items.Add(item);
+                        
+                        if ((CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute)?.TypeFullName == item.TypeFullName)
+                            DetailContentPresenter.Content = Activator.CreateInstance(item.TypeFullName);
+                    }
             }
         }
         #endregion
@@ -78,9 +87,9 @@ namespace SmartHub.UWP.Applications.Server
                 DetailColumn.Width = new GridLength(1, GridUnitType.Star);
             }
 
-            if (AppShell.Current.SelectedAppSectionItem != e.Item)
+            if ((CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute) != e.Item)
             {
-                AppShell.Current.SelectedAppSectionItem = e.Item;
+                CoreApplication.Properties["SelectedAppSectionItem"] = e.Item;
                 DetailContentPresenter.Content = Activator.CreateInstance(e.Item.TypeFullName);
             }
         }
@@ -92,7 +101,7 @@ namespace SmartHub.UWP.Applications.Server
                 MasterColumn.Width = new GridLength(1, GridUnitType.Star);
                 DetailColumn.Width = new GridLength(0);
 
-                AppShell.Current.SelectedAppSectionItem = null;
+                CoreApplication.Properties["SelectedAppSectionItem"] = null;
                 DetailContentPresenter.Content = null;
 
                 e.Handled = true;
@@ -103,7 +112,7 @@ namespace SmartHub.UWP.Applications.Server
         #region Private methods
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
-            var selectedItem = AppShell.Current.SelectedAppSectionItem;
+            var selectedItem = CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute;
             var isNarrow = newState == NarrowState;
 
             if (!isNarrow)

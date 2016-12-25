@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vc="using:SmartHub.UWP.Applications.Server.ValueConverters">
 
-
     <vc:StringToUpperStringConverter x:Key="StringToUpperStringConverter"/>
 
 </ResourceDictionary>

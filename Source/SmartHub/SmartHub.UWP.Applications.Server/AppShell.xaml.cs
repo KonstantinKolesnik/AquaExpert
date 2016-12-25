@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using Windows.UI.Core;
@@ -14,7 +13,6 @@ namespace SmartHub.UWP.Applications.Server
         #region Fields
         private RadioButton checkedMenuItem = null;
         private EventHandler<BackRequestedEventArgs> primaryBackRequestHandler = null;
-        private StreamClient apiClient = new StreamClient();
         #endregion
 
         #region Properties
@@ -23,12 +21,6 @@ namespace SmartHub.UWP.Applications.Server
             get; private set;
         }
         public Frame AppFrame => appShellFrame;
-        public StreamClient ApiClient => apiClient;
-
-        public AppSectionItemAttribute SelectedAppSectionItem
-        {
-            get; set;
-        }
         #endregion
 
         #region Constructor
@@ -179,10 +171,8 @@ namespace SmartHub.UWP.Applications.Server
         //        }
         //    }
         //}
-        private async void AppFrame_Navigated(object sender, NavigationEventArgs e)
+        private void AppFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
-
             if (menu.DisplayMode != SplitViewDisplayMode.CompactInline)
                 menu.IsPaneOpen = false;
 

@@ -1,7 +1,7 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -49,14 +49,14 @@ namespace SmartHub.UWP.Plugins.UI
         #endregion
 
         #region Remote API
-        [ApiCommand(CommandName = "/api/ui/sections/apps"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiGetApplicationsSectionItems => ((parameters) =>
+        [ApiCommand(CommandName = "/api/ui/sections/apps"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetApplicationsSectionItems => ((parameters) =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.Applications);
         });
 
-        [ApiCommand(CommandName = "/api/ui/sections/system"), Export(typeof(Func<object[], object>))]
-        public Func<object[], object> apiGetSystemSectionItems => ((parameters) =>
+        [ApiCommand(CommandName = "/api/ui/sections/system"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetSystemSectionItems => ((parameters) =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.System);
         });

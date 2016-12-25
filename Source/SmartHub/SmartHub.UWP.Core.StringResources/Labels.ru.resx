@@ -159,8 +159,14 @@
   <data name="Language" xml:space="preserve">
     <value>Язык</value>
   </data>
+  <data name="Line" xml:space="preserve">
+    <value>Линия</value>
+  </data>
   <data name="Lines" xml:space="preserve">
     <value>Линии</value>
+  </data>
+  <data name="Monitors" xml:space="preserve">
+    <value>Мониторы</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Имя</value>
@@ -193,7 +199,7 @@
     <value>Версия протокола</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>IP-адрес сервера (заполняется только для клиентов!)</value>
+    <value>IP-адрес сервера (только для клиентов!)</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>

@@ -4,6 +4,7 @@ using SmartHub.UWP.Plugins.UI.Attributes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -110,7 +111,7 @@ namespace SmartHub.UWP.Applications.Server.Controls
         }
         private void SetSelectedItem()
         {
-            var selectedItem = SelectionMode == ListViewSelectionMode.Single ? AppShell.Current.SelectedAppSectionItem : null;
+            var selectedItem = SelectionMode == ListViewSelectionMode.Single ? (CoreApplication.Properties.ContainsKey("SelectedAppSectionItem") ? CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute : null) : null;
             if (lvItems.SelectedItem != selectedItem)
             {
                 lvItems.SelectedItem = selectedItem;

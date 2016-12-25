@@ -159,8 +159,14 @@
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
   <data name="Lines" xml:space="preserve">
     <value>Lines</value>
+  </data>
+  <data name="Monitors" xml:space="preserve">
+    <value>Monitors</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -193,7 +199,7 @@
     <value>Protocol Version</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server IP Address (please specify only for clients!)</value>
+    <value>Server IP Address (only for clients!)</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

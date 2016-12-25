@@ -18,12 +18,12 @@ namespace SmartHub.UWP.Plugins.ApiListener
 
         #region Fields
         private StreamSocketListener listener;
-        private readonly Dictionary<string, Func<object[], object>> apiHandlers = new Dictionary<string, Func<object[], object>>();
+        private readonly Dictionary<string, ApiCommand> apiHandlers = new Dictionary<string, ApiCommand>();
         #endregion
 
         #region Imports
         [ImportMany]
-        public IEnumerable<Lazy<Func<object[], object>, ApiCommandAttribute>> ApiCommands { get; set; }
+        public IEnumerable<Lazy<ApiCommand, ApiCommandAttribute>> ApiCommands { get; set; }
         #endregion
 
         #region Plugin ovverrides

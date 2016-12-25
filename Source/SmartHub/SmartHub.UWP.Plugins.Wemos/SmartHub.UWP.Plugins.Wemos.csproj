@@ -118,6 +118,7 @@
     <Compile Include="Core\WemosStreamMessageType.cs" />
     <Compile Include="Models\WemosLine.cs" />
     <Compile Include="Models\WemosLineValue.cs" />
+    <Compile Include="Models\WemosMonitor.cs" />
     <Compile Include="Models\WemosNode.cs" />
     <Compile Include="Models\WemosNodeBatteryValue.cs" />
     <Compile Include="Models\WemosSetting.cs" />
@@ -128,6 +129,15 @@
     </Compile>
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucLines.xaml.cs">
+      <DependentUpon>ucLines.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucMonitors.xaml.cs">
+      <DependentUpon>ucMonitors.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucNodes.xaml.cs">
+      <DependentUpon>ucNodes.xaml</DependentUpon>
     </Compile>
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,13 +178,28 @@
       <Name>Telerik UI For Universal Windows Platform</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Monitors\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Main.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucLines.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucMonitors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucNodes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
