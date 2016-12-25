@@ -36,9 +36,9 @@ namespace SmartHub.UWP.Plugins.ApiListener
         {
             await Start();
         }
-        public override void StopPlugin()
+        public async override void StopPlugin()
         {
-            Stop();
+            await Stop();
         }
         #endregion
 
@@ -59,12 +59,68 @@ namespace SmartHub.UWP.Plugins.ApiListener
                 await listener.BindServiceNameAsync(ServiceName);
             }
         }
-        private void Stop()
+        private async Task Stop()
         {
             if (listener != null)
             {
+                await listener.CancelIOAsync();
                 listener.Dispose();
                 listener = null;
+            }
+        }
+
+        private static async Task<string> Receive(StreamSocket socket)
+        {
+            string result = null;
+
+            if (socket != null)
+                using (var reader = new DataReader(socket.InputStream))
+                {
+                    reader.InputStreamOptions = InputStreamOptions.Partial;
+
+                    uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
+                    if (sizeFieldLength == sizeof(uint))
+                    {
+                        uint dataLength = reader.ReadUInt32();
+                        uint actualDataLength = await reader.LoadAsync(dataLength);
+                        if (dataLength == actualDataLength)
+                            result = reader.ReadString(actualDataLength);
+                    }
+
+                    reader.DetachStream();
+                }
+
+            return result;
+        }
+        private static async Task Send(StreamSocket socket, object data)
+        {
+            if (socket != null)
+            {
+                using (var writer = new DataWriter(socket.OutputStream))
+                {
+                    var str = Transport.Serialize(data);
+                    writer.WriteUInt32(writer.MeasureString(str));
+                    writer.WriteString(str);
+
+                    try
+                    {
+                        await writer.StoreAsync();
+                        //await writer.FlushAsync();
+                    }
+                    catch (Exception exception)
+                    {
+                        // If this is an unknown status it means that the error if fatal and retry will likely fail.
+                        if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                        {
+                            throw;
+                        }
+                    }
+
+                    writer.DetachStream();
+                }
+
+                await socket.CancelIOAsync();
+                socket.Dispose();
             }
         }
         #endregion
@@ -72,45 +128,21 @@ namespace SmartHub.UWP.Plugins.ApiListener
         #region Event handlers
         private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            var reader = new DataReader(args.Socket.InputStream);
-            reader.InputStreamOptions = InputStreamOptions.Partial;
-
             try
             {
-                while (true)
-                {
-                    uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
-                    if (sizeFieldLength == sizeof(uint))
-                    {
-                        uint dataLength = reader.ReadUInt32();
-                        uint actualDataLength = await reader.LoadAsync(dataLength);
-                        if (dataLength == actualDataLength)
-                        {
-                            string str = reader.ReadString(actualDataLength);
-                            var data = Transport.Deserialize<ApiRequest>(str);
+                string str = await Receive(args.Socket);
+                var request = Transport.Deserialize<ApiRequest>(str);
 
-                            var result = apiHandlers.ContainsKey(data.CommandName) ? apiHandlers[data.CommandName](data.Parameters) : null;
+                var result = apiHandlers.ContainsKey(request.CommandName) ? apiHandlers[request.CommandName](request.Parameters) : null;
 
-                            using (DataWriter writer = new DataWriter(args.Socket.OutputStream))
-                            {
-                                str = Transport.Serialize(result);
-                                writer.WriteUInt32(writer.MeasureString(str));
-                                writer.WriteString(str);
-
-                                await writer.StoreAsync();
-                                await writer.FlushAsync();
-                                writer.DetachStream();
-                            }
-                        }
-                    }
-                }
+                await Send(args.Socket, result);
             }
             catch (Exception exception)
             {
                 // If this is an unknown status it means that the error is fatal and retry will likely fail.
                 if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
                 {
-                    Stop();
+                    await Stop();
                     await Start();
                 }
             }

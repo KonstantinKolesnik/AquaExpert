@@ -67,7 +67,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Monitors.Add(item);
         }
         #endregion
-
     }
 
     public class MonitorCommitEditCommand : DataGridCommand
@@ -88,7 +87,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             var item = context.CellInfo.Item as WemosMonitor;
             //await StreamClient.RequestAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes/setname", item.NodeID, item.Name);
 
-            Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+            //Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }
     }
 }
