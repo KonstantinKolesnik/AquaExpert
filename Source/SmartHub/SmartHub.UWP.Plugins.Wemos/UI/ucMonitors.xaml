@@ -6,7 +6,7 @@
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -36,26 +36,51 @@
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
-                Margin="0,0,0,20"/>
+                Margin="0,0,0,10"/>
 
             <ComboBox
-                x:Name="cbLine"
+                x:Name="cbLines"
+                ItemsSource="{Binding Lines}"
                 Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
                 RelativePanel.Below="tbMonitorName"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
-                Margin="0,0,0,20">
-                <!--<ComboBox.ItemTemplate>
+                Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Text}"/>
+                        <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
-                </ComboBox.ItemTemplate>-->
+                </ComboBox.ItemTemplate>
             </ComboBox>
+
+            <Button
+                RelativePanel.Below="cbLines"
+                RelativePanel.AlignLeftWithPanel="True"
+                Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
+                Width="150"
+                Margin="0,0,0,10" Click="ButtonAdd_Click"/>
         </RelativePanel>
 
-        <telerikGrid:RadDataGrid Grid.Row="1">
+        <telerikGrid:RadDataGrid
+            Grid.Row="1"
+            ItemsSource="{Binding Monitors}"
+            AutoGenerateColumns="False"
+            UserEditMode="Inline"
+            SelectionMode="Single"
+            SelectionUnit="Cell">
+            <telerikGrid:RadDataGrid.Columns>
+                <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                <telerikGrid:DataGridTextColumn PropertyName="NameForInformer" Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="Line ID" CanUserEdit="False" SizeMode="Auto"/>
 
+
+
+
+            </telerikGrid:RadDataGrid.Columns>
+            <telerikGrid:RadDataGrid.Commands>
+                <local:MonitorCommitEditCommand/>
+            </telerikGrid:RadDataGrid.Commands>
         </telerikGrid:RadDataGrid>
     </Grid>
 </UserControl>

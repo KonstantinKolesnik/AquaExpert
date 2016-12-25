@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core;
+﻿using Microsoft.ApplicationInsights;
+using SmartHub.UWP.Core;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
@@ -15,6 +16,7 @@ namespace SmartHub.UWP.Applications.Server
         public App()
         {
             InitializeComponent();
+            WindowsAppInitializer.InitializeAsync();
             Suspending += OnSuspending;
             UnhandledException += App_UnhandledException;
         }

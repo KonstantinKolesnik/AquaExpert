@@ -12,7 +12,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
     public class StreamClient
     {
         #region Fields
-        private StreamSocket client;
+        private StreamSocket socket;
         private string hostName;
         private string serviceName;
         #endregion
@@ -20,35 +20,23 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #region Public methods
         public async Task StartAsync(string hostName, string serviceName)
         {
-            if (client == null)
+            if (socket == null)
             {
                 this.hostName = hostName;
                 this.serviceName = serviceName;
 
-                client = new StreamSocket();
-                client.Control.KeepAlive = false;
+                socket = new StreamSocket();
+                socket.Control.KeepAlive = false;
 
-                try
-                {
-                    var host = new HostName(hostName);
-                    await client.ConnectAsync(host, serviceName);
-                }
-                catch (Exception exception)
-                {
-                    // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                    if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                    {
-                        throw;
-                    }
-                }
+                await Connect(socket, hostName, serviceName);
             }
         }
         public void Stop()
         {
-            if (client != null)
+            if (socket != null)
             {
-                client.Dispose();
-                client = null;
+                socket.Dispose();
+                socket = null;
             }
         }
 
@@ -60,26 +48,61 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 Parameters = parameters
             };
 
-            await Send(data);
+            await Send(socket, data);
 
-            string str = await Receive();
+            string str = await Receive(socket);
 
             return Transport.Deserialize<T>(str);
         }
         public async Task RequestAsync(string commandName, params object[] parameters)
         {
+            string result = await RequestAsync<string>(commandName, parameters);
+        }
+        #endregion
+
+        public static async Task<T> RequestAsync<T>(string hostName, string serviceName, string commandName, params object[] parameters)
+        {
+            var socket = new StreamSocket();
+            socket.Control.KeepAlive = false;
+
+            await Connect(socket, hostName, serviceName);
+
             var data = new ApiRequest()
             {
                 CommandName = commandName,
                 Parameters = parameters
             };
+            await Send(socket, data);
 
-            await Send(data);
+            string str = await Receive(socket);
+
+            socket.Dispose();
+
+            return Transport.Deserialize<T>(str);
         }
-        #endregion
+        public static async Task RequestAsync(string hostName, string serviceName, string commandName, params object[] parameters)
+        {
+            string result = await RequestAsync<string>(hostName, serviceName, commandName, parameters);
+        }
 
         #region Private methods
-        private async Task Send(ApiRequest data)
+        private static async Task Connect(StreamSocket client, string hostName, string serviceName)
+        {
+            try
+            {
+                var host = new HostName(hostName);
+                await client.ConnectAsync(host, serviceName);
+            }
+            catch (Exception exception)
+            {
+                // If this is an unknown status it means that the error is fatal and retry will likely fail.
+                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                {
+                    throw;
+                }
+            }
+        }
+        private static async Task Send(StreamSocket client, ApiRequest data)
         {
             if (client != null)
                 using (var writer = new DataWriter(client.OutputStream))
@@ -104,25 +127,26 @@ namespace SmartHub.UWP.Core.Communication.Stream
                     writer.DetachStream();
                 }
         }
-        private async Task<string> Receive()
+        private static async Task<string> Receive(StreamSocket client)
         {
             string result = null;
 
-            using (var reader = new DataReader(client.InputStream))
-            {
-                reader.InputStreamOptions = InputStreamOptions.Partial;
-
-                uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
-                if (sizeFieldLength == sizeof(uint))
+            if (client != null)
+                using (var reader = new DataReader(client.InputStream))
                 {
-                    uint dataLength = reader.ReadUInt32();
-                    uint actualDataLength = await reader.LoadAsync(dataLength);
-                    if (dataLength == actualDataLength)
-                        result =  reader.ReadString(actualDataLength);
-                }
+                    reader.InputStreamOptions = InputStreamOptions.Partial;
 
-                reader.DetachStream();
-            }
+                    uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
+                    if (sizeFieldLength == sizeof(uint))
+                    {
+                        uint dataLength = reader.ReadUInt32();
+                        uint actualDataLength = await reader.LoadAsync(dataLength);
+                        if (dataLength == actualDataLength)
+                            result = reader.ReadString(actualDataLength);
+                    }
+
+                    reader.DetachStream();
+                }
 
             return result;
         }

@@ -71,6 +71,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Smart Hub is an application for controlling your smart home system with your Windows device..
         /// </summary>
         public static string AppDescription {
@@ -220,6 +229,15 @@ namespace SmartHub.UWP.Core.StringResources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name for Informer.
+        /// </summary>
+        public static string NameForInformer {
+            get {
+                return ResourceManager.GetString("NameForInformer", resourceCulture);
             }
         }
         

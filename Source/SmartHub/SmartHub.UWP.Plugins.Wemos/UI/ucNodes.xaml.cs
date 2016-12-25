@@ -13,10 +13,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 {
     public sealed partial class ucNodes : UserControl
     {
-        #region Fields
-        private StreamClient apiClient = new StreamClient();
-        #endregion
-
         #region Properties
         public ObservableCollection<WemosNode> Nodes
         {
@@ -35,7 +31,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Event handlers
         private async void UserControl_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
             await UpdateNodesList();
         }
         #endregion
@@ -43,7 +38,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Private methods
         private async Task UpdateNodesList()
         {
-            var items = await apiClient.RequestAsync<IEnumerable<WemosNode>>("/api/wemos/nodes");
+            var items = await StreamClient.RequestAsync<IEnumerable<WemosNode>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes");
 
             Nodes.Clear();
             if (items != null)
@@ -68,11 +63,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             var context = parameter as EditContext;
 
-            var node = context.CellInfo.Item as WemosNode;
-
-            var apiClient = new StreamClient();
-            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
-            await apiClient.RequestAsync("/api/wemos/nodes/setname", node.NodeID, node.Name);
+            var item = context.CellInfo.Item as WemosNode;
+            await StreamClient.RequestAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes/setname", item.NodeID, item.Name);
 
             Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }

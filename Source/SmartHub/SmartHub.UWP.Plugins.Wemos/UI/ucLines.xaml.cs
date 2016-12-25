@@ -13,10 +13,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 {
     public sealed partial class ucLines : UserControl
     {
-        #region Fields
-        private StreamClient apiClient = new StreamClient();
-        #endregion
-
         #region Properties
         public ObservableCollection<WemosLine> Lines
         {
@@ -35,7 +31,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Event handlers
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
             await UpdateLinesList();
         }
         #endregion
@@ -43,7 +38,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var items = await apiClient.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
+            var items = await StreamClient.RequestAsync<IEnumerable<WemosLine>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/lines");
 
             Lines.Clear();
             if (items != null)
@@ -68,11 +63,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             var context = parameter as EditContext;
 
-            var line = context.CellInfo.Item as WemosLine;
-
-            var apiClient = new StreamClient();
-            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
-            await apiClient.RequestAsync("/api/wemos/lines/setname", line.NodeID, line.LineID, line.Name);
+            var item = context.CellInfo.Item as WemosLine;
+            await StreamClient.RequestAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
 
             Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }

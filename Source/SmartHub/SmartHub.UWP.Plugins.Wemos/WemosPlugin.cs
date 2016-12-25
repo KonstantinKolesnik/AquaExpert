@@ -416,10 +416,25 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.GetPlugin<WemosPlugin>().GetMonitors();
         });
 
+        [ApiCommand(CommandName = "/api/wemos/monitors/add"), Export(typeof(ApiCommand))]
+        public ApiCommand apiAddMonitor => ((parameters) =>
+        {
+            var name = parameters[0] as string;
+            var lineID = int.Parse(parameters[1].ToString());
 
+            WemosMonitor monitor = new WemosMonitor()
+            {
+                Name = name,
+                LineID = lineID,
+                Configuration = "{}"//configuration
+            };
 
+            SaveOrUpdate(monitor);
 
+            //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
+            return monitor;
+        });
 
 
 

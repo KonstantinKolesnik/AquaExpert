@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>О программе</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>Smart Hub - это приложение для контроля вашей системы умного дома с вашего Windows устройства.</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="Name" xml:space="preserve">
     <value>Имя</value>
+  </data>
+  <data name="NameForInformer" xml:space="preserve">
+    <value>Имя для информера</value>
   </data>
   <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
     <value>Доступен только ограниченный доступ в интернет</value>

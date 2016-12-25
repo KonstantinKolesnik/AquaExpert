@@ -5,6 +5,7 @@ using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -29,6 +30,13 @@ namespace SmartHub.UWP.Applications.Server
         {
             get;
         } = new ObservableCollection<AppSectionItemAttribute>();
+        public static AppSectionItemAttribute SelectedItem
+        {
+            get; set;
+        }
+        // CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute;
+            //if (!CoreApplication.Properties.ContainsKey("SelectedAppSectionItem"))
+            //    CoreApplication.Properties["SelectedAppSectionItem"] = null;
         #endregion
 
         #region Constructor
@@ -36,9 +44,6 @@ namespace SmartHub.UWP.Applications.Server
         {
             InitializeComponent();
             DataContext = this;
-
-            if (!CoreApplication.Properties.ContainsKey("SelectedAppSectionItem"))
-                CoreApplication.Properties["SelectedAppSectionItem"] = null;
         }
         #endregion
 
@@ -47,29 +52,14 @@ namespace SmartHub.UWP.Applications.Server
         {
             base.OnNavigatedTo(e);
 
-            isAppsSection = (AppSectionType) (e.Parameter != null ? e.Parameter : CoreApplication.Properties[nameof(isAppsSection)]) == AppSectionType.Applications;
+            isAppsSection = e.Parameter != null ? (AppSectionType) e.Parameter == AppSectionType.Applications : (bool)CoreApplication.Properties[nameof(isAppsSection)];
             CoreApplication.Properties[nameof(isAppsSection)] = isAppsSection;
 
             AppShell.Current.SetNavigationInfo(isAppsSection ? "Applications" : "System", isAppsSection ? "menuApplications" : "menuSystem");
             AppShell.Current.SetPrimaryBackRequestHandler(OnBackRequested);
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
-            //if (!CoreApplication.Properties.ContainsKey(isAppsSection ? "ApplicationItems" : "SystemItems"))
-            {
-                var apiClient = new StreamClient();
-                await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
-                var items = await apiClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(ApiCommandName);
-
-                Items.Clear();
-                if (items != null)
-                    foreach (var item in items)
-                    {
-                        Items.Add(item);
-                        
-                        if ((CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute)?.TypeFullName == item.TypeFullName)
-                            DetailContentPresenter.Content = Activator.CreateInstance(item.TypeFullName);
-                    }
-            }
+            await UpdateList();
         }
         #endregion
 
@@ -87,9 +77,9 @@ namespace SmartHub.UWP.Applications.Server
                 DetailColumn.Width = new GridLength(1, GridUnitType.Star);
             }
 
-            if ((CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute) != e.Item)
+            if (SelectedItem != e.Item)
             {
-                CoreApplication.Properties["SelectedAppSectionItem"] = e.Item;
+                SelectedItem = e.Item;
                 DetailContentPresenter.Content = Activator.CreateInstance(e.Item.TypeFullName);
             }
         }
@@ -112,7 +102,7 @@ namespace SmartHub.UWP.Applications.Server
         #region Private methods
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
-            var selectedItem = CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute;
+            var selectedItem = SelectedItem;
             var isNarrow = newState == NarrowState;
 
             if (!isNarrow)
@@ -129,6 +119,22 @@ namespace SmartHub.UWP.Applications.Server
             EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
             if (DetailContentPresenter != null)
                 EntranceNavigationTransitionInfo.SetIsTargetElement(DetailContentPresenter, !isNarrow);
+        }
+        private async Task UpdateList()
+        {
+            var selectedItem = SelectedItem;
+
+            var items = await StreamClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, ApiCommandName);
+
+            Items.Clear();
+            if (items != null)
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+
+                    if (selectedItem != null && selectedItem.TypeFullName == item.TypeFullName)
+                        DetailContentPresenter.Content = Activator.CreateInstance(item.TypeFullName);
+                }
         }
         #endregion
     }

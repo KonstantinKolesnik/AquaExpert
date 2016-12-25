@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>Smart Hub is an application for controlling your smart home system with your Windows device.</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="NameForInformer" xml:space="preserve">
+    <value>Name for Informer</value>
   </data>
   <data name="NetworkConnectivityLevelConstrainedInternetAccess" xml:space="preserve">
     <value>Internet is constrained</value>

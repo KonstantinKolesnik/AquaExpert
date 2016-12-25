@@ -1,4 +1,5 @@
-﻿using SQLite.Net.Attributes;
+﻿using Newtonsoft.Json;
+using SQLite.Net.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,16 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
         [NotNull]
         public string Configuration { get; set; }
 
-        //public virtual dynamic GetConfiguration(Type type)
-        //{
-        //    var json = string.IsNullOrWhiteSpace(Configuration) ? "{}" : Configuration;
-        //    return Extensions.FromJson(type, json);
-        //}
-        //public virtual void SetConfiguration(object value)
-        //{
-        //    Configuration = value.ToJson("{}");
-        //}
+        public dynamic GetConfiguration(Type type)
+        {
+            if (string.IsNullOrWhiteSpace(Configuration))
+                Configuration = "{}";
+
+            return JsonConvert.DeserializeObject(Configuration, type);
+        }
+        public void SetConfiguration(object value)
+        {
+            Configuration = JsonConvert.SerializeObject(value);
+        }
     }
 }
