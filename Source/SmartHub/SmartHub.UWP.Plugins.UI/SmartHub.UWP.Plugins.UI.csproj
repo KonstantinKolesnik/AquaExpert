@@ -110,8 +110,11 @@
     <Compile Include="Attributes\AppSectionItemAttribute.cs" />
     <Compile Include="Attributes\AppSectionType.cs" />
     <Compile Include="Attributes\TileAttribute.cs" />
+    <Compile Include="Models\TileDB.cs" />
+    <Compile Include="Tiles\TileBase.cs" />
     <Compile Include="UIPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UITilesPlugin.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.UI.rd.xml" />
   </ItemGroup>
   <ItemGroup>

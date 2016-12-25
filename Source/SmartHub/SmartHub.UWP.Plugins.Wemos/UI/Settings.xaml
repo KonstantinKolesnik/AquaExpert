@@ -2,10 +2,12 @@
     x:Class="SmartHub.UWP.Plugins.Wemos.UI.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SmartHub.UWP.Plugins.Wemos.UI"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Loaded="UserControl_Loaded">
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded">
 
     <Grid Margin="{StaticResource RootContainerMargin}">
         <Grid.RowDefinitions>
@@ -24,6 +26,8 @@
                     ItemsSource="{Binding Nodes}"
                     AutoGenerateColumns="False"
                     UserEditMode="Inline"
+                    SelectionMode="Single"
+                    SelectionUnit="Cell"
                     FontSize="12">
                     <telerikGrid:RadDataGrid.Columns>
                         <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
@@ -36,6 +40,9 @@
                         <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
                         <telerikGrid:DataGridTextColumn PropertyName="LastBatteryValue" Header="{Binding Labels.Battery, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0}%" CanUserEdit="False" SizeMode="Auto"/>
                     </telerikGrid:RadDataGrid.Columns>
+                    <telerikGrid:RadDataGrid.Commands>
+                        <local:NodeCommitEditCommand/>
+                    </telerikGrid:RadDataGrid.Commands>
                 </telerikGrid:RadDataGrid>
             </PivotItem>
             
@@ -53,6 +60,9 @@
                         <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
                         <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding Labels.Value, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
                     </telerikGrid:RadDataGrid.Columns>
+                    <telerikGrid:RadDataGrid.Commands>
+                        <local:LineCommitEditCommand/>
+                    </telerikGrid:RadDataGrid.Commands>
                 </telerikGrid:RadDataGrid>
             </PivotItem>
             

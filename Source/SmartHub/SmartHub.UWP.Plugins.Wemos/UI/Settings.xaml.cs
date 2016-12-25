@@ -4,6 +4,7 @@ using SmartHub.UWP.Plugins.Wemos.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Telerik.UI.Xaml.Controls.Grid.Commands;
 using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI
@@ -63,5 +64,54 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                 Lines.Add(item);
         }
         #endregion
+    }
+
+    public class NodeCommitEditCommand : DataGridCommand
+    {
+        public NodeCommitEditCommand()
+        {
+            Id = CommandId.CommitEdit;
+        }
+
+        public override bool CanExecute(object parameter)
+        {
+            return true;
+        }
+        public async override void Execute(object parameter)
+        {
+            var context = parameter as EditContext;
+
+            var node = context.CellInfo.Item as WemosNode;
+
+            var apiClient = new StreamClient();
+            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
+            await apiClient.RequestAsync("/api/wemos/nodes/setname", node.NodeID, node.Name);
+
+            Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+        }
+    }
+    public class LineCommitEditCommand : DataGridCommand
+    {
+        public LineCommitEditCommand()
+        {
+            Id = CommandId.CommitEdit;
+        }
+
+        public override bool CanExecute(object parameter)
+        {
+            return true;
+        }
+        public async override void Execute(object parameter)
+        {
+            var context = parameter as EditContext;
+
+            var line = context.CellInfo.Item as WemosLine;
+
+            var apiClient = new StreamClient();
+            await apiClient.StartAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName);
+            await apiClient.RequestAsync("/api/wemos/lines/setname", line.NodeID, line.LineID, line.Name);
+
+            Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+        }
     }
 }

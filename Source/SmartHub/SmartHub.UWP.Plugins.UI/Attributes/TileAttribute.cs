@@ -1,4 +1,4 @@
-﻿//using SmartHub.Plugins.WebUI.Tiles;
+﻿using SmartHub.UWP.Plugins.UI.Tiles;
 using System;
 using System.Composition;
 
@@ -9,9 +9,9 @@ namespace SmartHub.UWP.Plugins.UI.Attributes
     {
         public const string ContractID = nameof(TileAttribute);
 
-        //public TileAttribute()
-        //    : base(ContractID, typeof(TileBase))
-        //{
-        //}
+        public TileAttribute()
+            : base(ContractID, typeof(TileBase))
+        {
+        }
     }
 }

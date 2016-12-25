@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WemosTile.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
   </ItemGroup>
   <ItemGroup>

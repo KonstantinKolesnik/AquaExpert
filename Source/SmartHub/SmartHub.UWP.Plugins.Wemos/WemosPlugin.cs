@@ -215,7 +215,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                         {
                             NodeID = message.NodeID,
                             LineID = message.LineID,
-                            TimeStamp = DateTime.Now,
+                            TimeStamp = DateTime.UtcNow,
                             Type = (WemosLineType) message.SubType,
                             Value = message.GetFloat()
                         };
@@ -368,6 +368,38 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return Context.GetPlugin<WemosPlugin>().GetLines();
         });
+
+        [ApiCommand(CommandName = "/api/wemos/nodes/setname"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> apiSetNodeName => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var name = parameters[1] as string;
+
+            var node = GetNode(id);
+            node.Name = name;
+            SaveOrUpdate(node);
+
+            //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
+
+            return null;
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/lines/setname"), Export(typeof(Func<object[], object>))]
+        public Func<object[], object> apiSetLineName => ((parameters) =>
+        {
+            var nodeID = int.Parse(parameters[0].ToString());
+            var lineID = int.Parse(parameters[1].ToString());
+            var name = parameters[2] as string;
+
+            var line = GetLine(nodeID, lineID);
+            line.Name = name;
+            SaveOrUpdate(line);
+
+            //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
+
+            return null;
+        });
+
 
 
 

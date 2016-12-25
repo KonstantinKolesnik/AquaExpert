@@ -66,6 +66,16 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
             return Transport.Deserialize<T>(str);
         }
+        public async Task RequestAsync(string commandName, params object[] parameters)
+        {
+            var data = new ApiRequest()
+            {
+                CommandName = commandName,
+                Parameters = parameters
+            };
+
+            await Send(data);
+        }
         #endregion
 
         #region Private methods
