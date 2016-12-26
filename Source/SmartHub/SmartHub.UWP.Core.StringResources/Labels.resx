@@ -135,11 +135,17 @@
   <data name="Battery" xml:space="preserve">
     <value>Battery</value>
   </data>
+  <data name="confirmDeleteItem" xml:space="preserve">
+    <value>Delete item?</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
   <data name="Database" xml:space="preserve">
     <value>Database</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="Disclaimer" xml:space="preserve">
     <value>Disclaimer</value>

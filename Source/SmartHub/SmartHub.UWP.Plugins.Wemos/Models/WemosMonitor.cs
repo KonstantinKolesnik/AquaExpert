@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SQLite.Net.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos.Models
 {
@@ -15,9 +11,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
 
         [NotNull]
         public string Name { get; set; }
-        //[NotNull]
         public string NameForInformer { get; set; }
-        [NotNull, Unique]
+        [NotNull]
         public int LineID { get; set; }
         [NotNull]
         public string Configuration { get; set; }
@@ -32,6 +27,23 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
         public void SetConfiguration(object value)
         {
             Configuration = JsonConvert.SerializeObject(value);
+        }
+    }
+
+    public class WemosMonitorDto : WemosMonitor
+    {
+        public string LineName { get; set; }
+
+        public WemosMonitorDto(WemosMonitor monitor)
+        {
+            if (monitor != null)
+            {
+                ID = monitor.ID;
+                Name = monitor.Name;
+                NameForInformer = monitor.NameForInformer;
+                LineID = monitor.LineID;
+                Configuration = monitor.Configuration;
+            }
         }
     }
 }

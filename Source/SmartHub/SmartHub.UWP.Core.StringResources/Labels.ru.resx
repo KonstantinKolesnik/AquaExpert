@@ -135,11 +135,17 @@
   <data name="Battery" xml:space="preserve">
     <value>Батарея</value>
   </data>
+  <data name="confirmDeleteItem" xml:space="preserve">
+    <value>Удалить элемент?</value>
+  </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Дашборд</value>
   </data>
   <data name="Database" xml:space="preserve">
     <value>База данных</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
   </data>
   <data name="Disclaimer" xml:space="preserve">
     <value>Гарантия</value>

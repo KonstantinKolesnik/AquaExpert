@@ -153,6 +153,10 @@
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.StringResources\SmartHub.UWP.Core.StringResources.csproj">
+      <Project>{b846b4c2-22d3-46b4-8cba-cba4853d35a2}</Project>
+      <Name>SmartHub.UWP.Core.StringResources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
       <Project>{1345726D-287F-4561-A2DA-B29EC65C85A1}</Project>
       <Name>SmartHub.UWP.Core</Name>

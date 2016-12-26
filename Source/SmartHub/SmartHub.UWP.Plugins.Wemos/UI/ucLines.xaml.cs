@@ -64,9 +64,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             var context = parameter as EditContext;
 
             var item = context.CellInfo.Item as WemosLine;
-            await StreamClient.RequestAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
-
-            Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+            var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
+            if (res)
+                Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }
     }
 }

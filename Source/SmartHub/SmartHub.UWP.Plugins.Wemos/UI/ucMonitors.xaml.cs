@@ -1,10 +1,14 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Plugins.Wemos.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Telerik.UI.Xaml.Controls.Grid.Commands;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI
@@ -16,10 +20,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             get;
         } = new ObservableCollection<WemosLine>();
-        public ObservableCollection<WemosMonitor> Monitors
+        public ObservableCollection<WemosMonitorDto> Monitors
         {
             get;
-        } = new ObservableCollection<WemosMonitor>();
+        } = new ObservableCollection<WemosMonitorDto>();
         #endregion
 
         #region Constructor
@@ -31,19 +35,36 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #endregion
 
         #region Event handlers
-        private async void UserControl_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             await UpdateLinesList();
             await UpdateMonitorsList();
         }
-        private async void ButtonAdd_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(tbMonitorName.Text) && cbLines.SelectedIndex != -1)
             {
-                var monitor = await StreamClient.RequestAsync<WemosMonitor>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/add", tbMonitorName.Text.Trim(), (cbLines.SelectedItem as WemosLine).ID);
+                var monitor = await StreamClient.RequestAsync<WemosMonitorDto>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/add", tbMonitorName.Text.Trim(), (cbLines.SelectedItem as WemosLine).ID);
                 if (monitor != null)
                     Monitors.Add(monitor);
             }
+        }
+        private async void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            int id = (int) ((sender as Button).Tag);
+
+
+        }
+        private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            int id = (int)((sender as Button).Tag);
+
+            await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
+            {
+                bool res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/delete", id);
+                if (res)
+                    Monitors.Remove(Monitors.FirstOrDefault(m => m.ID == id));
+            });
         }
         #endregion
 
@@ -59,7 +80,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         }
         private async Task UpdateMonitorsList()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosMonitor>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors");
+            var items = await StreamClient.RequestAsync<IEnumerable<WemosMonitorDto>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors");
 
             Monitors.Clear();
             if (items != null)
@@ -84,10 +105,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             var context = parameter as EditContext;
 
-            var item = context.CellInfo.Item as WemosMonitor;
-            //await StreamClient.RequestAsync(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes/setname", item.NodeID, item.Name);
-
-            //Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+            var item = context.CellInfo.Item as WemosMonitorDto;
+            if (!string.IsNullOrEmpty(item.Name))
+            {
+                var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/setnames", item.ID, item.Name, item.NameForInformer);
+                if (res)
+                    Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
+            }
         }
     }
 }

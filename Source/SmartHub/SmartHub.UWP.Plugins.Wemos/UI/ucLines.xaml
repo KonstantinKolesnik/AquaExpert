@@ -16,6 +16,13 @@
         SelectionMode="Single"
         SelectionUnit="Cell">
         <telerikGrid:RadDataGrid.Columns>
+            <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                    <DataTemplate>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;" Margin="10,0" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+            </telerikGrid:DataGridTemplateColumn>
             <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="Node ID" CanUserEdit="False" SizeMode="Auto"/>
             <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
             <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>

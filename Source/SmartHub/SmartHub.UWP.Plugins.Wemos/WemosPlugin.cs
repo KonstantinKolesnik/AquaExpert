@@ -130,12 +130,25 @@ namespace SmartHub.UWP.Plugins.Wemos
             using (var db = Context.OpenConnection())
                 return db.Table<WemosLine>().Where(l => l.NodeID == nodeID && l.LineID == lineID).FirstOrDefault();
         }
+        public WemosLine GetLine(int id)
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosLine>().Where(l => l.ID == id).FirstOrDefault();
+        }
 
         public List<WemosMonitor> GetMonitors()
         {
             using (var db = Context.OpenConnection())
                 return db.Table<WemosMonitor>().ToList();
         }
+        public WemosMonitor GetMonitor(int id)
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosMonitor>().Where(m => m.ID == id).FirstOrDefault();
+        }
+
+
+
 
         #endregion
 
@@ -391,7 +404,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
-            return null;
+            return true;
         });
 
         [ApiCommand(CommandName = "/api/wemos/lines/setname"), Export(typeof(ApiCommand))]
@@ -407,13 +420,24 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
-            return null;
+            return true;
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/lines/getname"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetLineName => ((parameters) =>
+        {
+            var id = int.Parse(parameters[1].ToString());
+
+            return GetLine(id).Name;
         });
 
         [ApiCommand(CommandName = "/api/wemos/monitors"), Export(typeof(ApiCommand))]
         public ApiCommand apiGetMonitors => ((parameters) =>
         {
-            return Context.GetPlugin<WemosPlugin>().GetMonitors();
+            return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m)
+            {
+                LineName = GetLine(m.LineID).Name
+            }).ToList();
         });
 
         [ApiCommand(CommandName = "/api/wemos/monitors/add"), Export(typeof(ApiCommand))]
@@ -426,19 +450,44 @@ namespace SmartHub.UWP.Plugins.Wemos
             {
                 Name = name,
                 LineID = lineID,
-                Configuration = "{}"//configuration
+                Configuration = "{}"
             };
 
-            SaveOrUpdate(monitor);
+            Save(monitor);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
-            return monitor;
+            var m = new WemosMonitorDto(monitor);
+            m.LineName = GetLine(m.LineID).Name;
+
+            return m;
         });
 
+        [ApiCommand(CommandName = "/api/wemos/monitors/setnames"), Export(typeof(ApiCommand))]
+        public ApiCommand apiSetMonitorNames => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var name = parameters[1] as string;
+            var nameForInformer = parameters[2] as string;
 
+            var monitor = GetMonitor(id);
+            monitor.Name = name;
+            monitor.NameForInformer = nameForInformer;
+            SaveOrUpdate(monitor);
 
+            return true;
+        });
 
+        [ApiCommand(CommandName = "/api/wemos/monitors/delete"), Export(typeof(ApiCommand))]
+        public ApiCommand apiDeleteMonitor => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+
+            var monitor = GetMonitor(id);
+            Delete(monitor);
+
+            return true;
+        });
 
 
 

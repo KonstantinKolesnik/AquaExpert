@@ -6,7 +6,8 @@
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Loaded="UserControl_Loaded">
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -41,17 +42,13 @@
             <ComboBox
                 x:Name="cbLines"
                 ItemsSource="{Binding Lines}"
+                DisplayMemberPath="Name"
                 Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
                 RelativePanel.Below="tbMonitorName"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
                 Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
 
             <Button
@@ -63,6 +60,7 @@
         </RelativePanel>
 
         <telerikGrid:RadDataGrid
+            x:Name="gridMonitors"
             Grid.Row="1"
             ItemsSource="{Binding Monitors}"
             AutoGenerateColumns="False"
@@ -70,13 +68,31 @@
             SelectionMode="Single"
             SelectionUnit="Cell">
             <telerikGrid:RadDataGrid.Columns>
+                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="10,0" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                </telerikGrid:DataGridTemplateColumn>
                 <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
                 <telerikGrid:DataGridTextColumn PropertyName="NameForInformer" Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
-                <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="Line ID" CanUserEdit="False" SizeMode="Auto"/>
-
-
-
-
+                <telerikGrid:DataGridTextColumn PropertyName="LineName" Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}" CanUserSort="False" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Tag="{Binding ID}" Margin="5,0,0,0" VerticalAlignment="Center" Click="ButtonEdit_Click">
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE115;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Tag="{Binding ID}" Margin="5,0" VerticalAlignment="Center" Click="ButtonDelete_Click">
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <TextBlock Text="{Binding ID}" Visibility="Collapsed"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                </telerikGrid:DataGridTemplateColumn>
             </telerikGrid:RadDataGrid.Columns>
             <telerikGrid:RadDataGrid.Commands>
                 <local:MonitorCommitEditCommand/>
