@@ -33,6 +33,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
     public class WemosMonitorDto : WemosMonitor
     {
         public string LineName { get; set; }
+        public WemosLineType LineType { get; set; }
 
         public WemosMonitorDto(WemosMonitor monitor)
         {

@@ -10,11 +10,6 @@
     Loaded="UserControl_Loaded">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -28,75 +23,111 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+        
+        <Grid x:Name="pnlMonitorsList" Margin="{StaticResource RootContainerMargin}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <RelativePanel x:Name="rp">
-            <TextBox
-                x:Name="tbMonitorName"
-                Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
-                RelativePanel.AlignTopWithPanel="True"
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignRightWithPanel="True"
-                HorizontalAlignment="Stretch"
-                Margin="0,0,0,10"/>
+            <RelativePanel x:Name="rp">
+                <TextBox
+                    x:Name="tbMonitorName"
+                    Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,0,10"/>
 
-            <ComboBox
-                x:Name="cbLines"
-                ItemsSource="{Binding Lines}"
-                DisplayMemberPath="Name"
-                Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignRightWithPanel="True"
-                RelativePanel.Below="tbMonitorName"
-                HorizontalAlignment="Stretch"
-                Margin="0,0,0,10">
-            </ComboBox>
+                <ComboBox
+                    x:Name="cbLines"
+                    ItemsSource="{Binding Lines}"
+                    DisplayMemberPath="Name"
+                    Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.Below="tbMonitorName"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,0,10"/>
 
-            <Button
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.Below="cbLines"
-                Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
-                Width="150"
-                Margin="0,0,0,10" Click="ButtonAdd_Click"/>
-        </RelativePanel>
+                <Button
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.Below="cbLines"
+                    Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
+                    Width="150"
+                    Margin="0,0,0,10" Click="ButtonAdd_Click"/>
+            </RelativePanel>
 
-        <telerikGrid:RadDataGrid
-            x:Name="gridMonitors"
-            Grid.Row="1"
-            ItemsSource="{Binding Monitors}"
-            AutoGenerateColumns="False"
-            UserEditMode="Inline"
-            SelectionMode="Single"
-            SelectionUnit="Cell">
-            <telerikGrid:RadDataGrid.Columns>
-                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
-                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-                        <DataTemplate>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="10,0" VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-                </telerikGrid:DataGridTemplateColumn>
-                <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
-                <telerikGrid:DataGridTextColumn PropertyName="NameForInformer" Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
-                <telerikGrid:DataGridTextColumn PropertyName="LineName" Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}" CanUserSort="False" CanUserEdit="False" SizeMode="Auto"/>
-                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
-                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Tag="{Binding ID}" Margin="5,0,0,0" VerticalAlignment="Center" Click="ButtonEdit_Click">
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE115;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Tag="{Binding ID}" Margin="5,0" VerticalAlignment="Center" Click="ButtonDelete_Click">
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <TextBlock Text="{Binding ID}" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-                </telerikGrid:DataGridTemplateColumn>
-            </telerikGrid:RadDataGrid.Columns>
-            <telerikGrid:RadDataGrid.Commands>
-                <local:MonitorCommitEditCommand/>
-            </telerikGrid:RadDataGrid.Commands>
-        </telerikGrid:RadDataGrid>
+            <telerikGrid:RadDataGrid
+                x:Name="gridMonitors"
+                Grid.Row="1"
+                ItemsSource="{Binding Monitors}"
+                AutoGenerateColumns="False"
+                UserEditMode="Inline"
+                SelectionMode="Single"
+                SelectionUnit="Cell">
+                <telerikGrid:RadDataGrid.Columns>
+                    <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                        <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                            <DataTemplate>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="10,0" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                    </telerikGrid:DataGridTemplateColumn>
+                    <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                    <telerikGrid:DataGridTextColumn PropertyName="NameForInformer" Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                    <telerikGrid:DataGridTextColumn PropertyName="LineName" Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}" CanUserSort="False" CanUserEdit="False" SizeMode="Auto"/>
+                    <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                        <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Tag="{Binding ID}" Margin="5,0,0,0" VerticalAlignment="Center" Click="ButtonEdit_Click">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE115;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button Tag="{Binding ID}" Margin="5,0" VerticalAlignment="Center" Click="ButtonDelete_Click">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <TextBlock Text="{Binding ID}" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                    </telerikGrid:DataGridTemplateColumn>
+                </telerikGrid:RadDataGrid.Columns>
+                <telerikGrid:RadDataGrid.Commands>
+                    <local:MonitorCommitEditCommand/>
+                </telerikGrid:RadDataGrid.Commands>
+            </telerikGrid:RadDataGrid>
+        </Grid>
+
+        <Grid x:Name="pnlMonitorConfiguration" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <local:ucMonitor Monitor="{Binding SelectedMonitor}" Margin="{StaticResource RootContainerMargin}"/>
+           
+            <CommandBar Grid.Row="1">
+                <CommandBar.PrimaryCommands>
+                    <!--<AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator/>
+                    <AppBarButton Label="{Binding Labels.Save, Source={StaticResource LabelsManager}}" Click="ButtonSave_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>-->
+                    <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE106;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar.PrimaryCommands>
+            </CommandBar>
+        </Grid>
     </Grid>
 </UserControl>

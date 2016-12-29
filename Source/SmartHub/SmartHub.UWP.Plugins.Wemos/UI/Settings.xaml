@@ -8,23 +8,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="{StaticResource RootContainerMargin}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel>
+        <StackPanel Margin="{StaticResource RootContainerMargin}">
             <TextBlock Text="Wemos" Style="{ThemeResource SubtitleTextBlockStyle}"/>
             <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
         <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
             <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
-                <local:ucNodes/>
+                <local:ucNodes Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
-                <local:ucLines/>
+                <local:ucLines Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Database, Source={StaticResource LabelsManager}}">
                 

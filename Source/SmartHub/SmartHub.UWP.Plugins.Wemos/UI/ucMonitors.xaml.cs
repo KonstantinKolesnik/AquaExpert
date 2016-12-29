@@ -24,6 +24,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             get;
         } = new ObservableCollection<WemosMonitorDto>();
+
+        public static readonly DependencyProperty SelectedMonitorProperty = DependencyProperty.Register("SelectedMonitor", typeof(WemosMonitorDto), typeof(ucMonitors), null);
+        public WemosMonitorDto SelectedMonitor
+        {
+            get { return (WemosMonitorDto) GetValue(SelectedMonitorProperty); }
+            set { SetValue(SelectedMonitorProperty, value); }
+        }
+
+        public ObservableCollection<WemosLineValue> MonitorValues
+        {
+            get;
+        } = new ObservableCollection<WemosLineValue>();
         #endregion
 
         #region Constructor
@@ -52,8 +64,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         private async void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
             int id = (int) ((sender as Button).Tag);
+            SelectedMonitor = Monitors.FirstOrDefault(m => m.ID == id);
 
+            pnlMonitorsList.Visibility = Visibility.Collapsed;
+            pnlMonitorConfiguration.Visibility = Visibility.Visible;
 
+            //await UpdateMonitorValues();
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -66,6 +82,23 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Monitors.Remove(Monitors.FirstOrDefault(m => m.ID == id));
             });
         }
+        //private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //    pnlMonitorsList.Visibility = Visibility.Visible;
+        //    pnlMonitorConfiguration.Visibility = Visibility.Collapsed;
+        //}
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedMonitor = null;
+
+            pnlMonitorsList.Visibility = Visibility.Visible;
+            pnlMonitorConfiguration.Visibility = Visibility.Collapsed;
+        }
+        //private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        //{
+        //    await UpdateMonitorValues();
+        //}
         #endregion
 
         #region Private methods
@@ -86,6 +119,15 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             if (items != null)
                 foreach (var item in items)
                     Monitors.Add(item);
+        }
+        private async Task UpdateMonitorValues()
+        {
+            var items = await StreamClient.RequestAsync<IEnumerable<WemosLineValue>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/line/values", SelectedMonitor.LineID, 10);
+
+            MonitorValues.Clear();
+            if (items != null)
+                foreach (var item in items)
+                    MonitorValues.Add(item);
         }
         #endregion
     }

@@ -133,6 +133,9 @@
     <Compile Include="UI\ucLines.xaml.cs">
       <DependentUpon>ucLines.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ucMonitor.xaml.cs">
+      <DependentUpon>ucMonitor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ucMonitors.xaml.cs">
       <DependentUpon>ucMonitors.xaml</DependentUpon>
     </Compile>
@@ -196,6 +199,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ucLines.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucMonitor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

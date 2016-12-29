@@ -1,5 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Core;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Models
