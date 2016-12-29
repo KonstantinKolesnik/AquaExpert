@@ -17,26 +17,23 @@ namespace SmartHub.UWP.Applications.Server
 {
     public sealed partial class AppSectionPage : Page
     {
-        #region Fields
-        private bool isAppsSection;
-        #endregion
-
         #region Properties
-        private string ApiCommandName
-        {
-            get { return isAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system"; }
-        }
         public ObservableCollection<AppSectionItemAttribute> Items
         {
             get;
         } = new ObservableCollection<AppSectionItemAttribute>();
-        public static AppSectionItemAttribute SelectedItem
+        public static bool IsAppsSection
+        {
+            get; private set;
+        }
+        public static AppSectionItemAttribute SelectedItemApps
         {
             get; set;
         }
-        // CoreApplication.Properties["SelectedAppSectionItem"] as AppSectionItemAttribute;
-            //if (!CoreApplication.Properties.ContainsKey("SelectedAppSectionItem"))
-            //    CoreApplication.Properties["SelectedAppSectionItem"] = null;
+        public static AppSectionItemAttribute SelectedItemSystem
+        {
+            get; set;
+        }
         #endregion
 
         #region Constructor
@@ -52,11 +49,12 @@ namespace SmartHub.UWP.Applications.Server
         {
             base.OnNavigatedTo(e);
 
-            isAppsSection = e.Parameter != null ? (AppSectionType) e.Parameter == AppSectionType.Applications : (bool)CoreApplication.Properties[nameof(isAppsSection)];
-            CoreApplication.Properties[nameof(isAppsSection)] = isAppsSection;
+            IsAppsSection = e.Parameter != null ? (AppSectionType) e.Parameter == AppSectionType.Applications : (bool)CoreApplication.Properties[nameof(IsAppsSection)];
+            CoreApplication.Properties[nameof(IsAppsSection)] = IsAppsSection;
 
-            AppShell.Current.SetNavigationInfo(isAppsSection ? "Applications" : "System", isAppsSection ? "menuApplications" : "menuSystem");
+            AppShell.Current.SetNavigationInfo(IsAppsSection ? "Applications" : "System", IsAppsSection ? "menuApplications" : "menuSystem");
             AppShell.Current.SetPrimaryBackRequestHandler(OnBackRequested);
+
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
             await UpdateList();
@@ -77,9 +75,14 @@ namespace SmartHub.UWP.Applications.Server
                 DetailColumn.Width = new GridLength(1, GridUnitType.Star);
             }
 
-            if (SelectedItem != e.Item)
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
+            if (selectedItem != e.Item)
             {
-                SelectedItem = e.Item;
+                if (IsAppsSection)
+                    SelectedItemApps = e.Item;
+                else
+                    SelectedItemSystem = e.Item;
+
                 DetailContentPresenter.Content = Activator.CreateInstance(e.Item.TypeFullName);
             }
         }
@@ -91,7 +94,11 @@ namespace SmartHub.UWP.Applications.Server
                 MasterColumn.Width = new GridLength(1, GridUnitType.Star);
                 DetailColumn.Width = new GridLength(0);
 
-                CoreApplication.Properties["SelectedAppSectionItem"] = null;
+                if (IsAppsSection)
+                    SelectedItemApps = null;
+                else
+                    SelectedItemSystem = null;
+
                 DetailContentPresenter.Content = null;
 
                 e.Handled = true;
@@ -102,7 +109,7 @@ namespace SmartHub.UWP.Applications.Server
         #region Private methods
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
-            var selectedItem = SelectedItem;
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
             var isNarrow = newState == NarrowState;
 
             if (!isNarrow)
@@ -122,9 +129,10 @@ namespace SmartHub.UWP.Applications.Server
         }
         private async Task UpdateList()
         {
-            var selectedItem = SelectedItem;
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
 
-            var items = await StreamClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, ApiCommandName);
+            var apiCommandName = IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system";
+            var items = await StreamClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, apiCommandName);
 
             Items.Clear();
             if (items != null)

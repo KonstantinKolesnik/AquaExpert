@@ -16,7 +16,7 @@
 
         <StackPanel>
             <TextBlock Text="Wemos" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-            <TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>
+            <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
         <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">

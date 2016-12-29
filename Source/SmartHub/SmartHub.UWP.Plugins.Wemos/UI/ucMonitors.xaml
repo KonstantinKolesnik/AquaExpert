@@ -44,16 +44,16 @@
                 ItemsSource="{Binding Lines}"
                 DisplayMemberPath="Name"
                 Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
-                RelativePanel.Below="tbMonitorName"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
+                RelativePanel.Below="tbMonitorName"
                 HorizontalAlignment="Stretch"
                 Margin="0,0,0,10">
             </ComboBox>
 
             <Button
-                RelativePanel.Below="cbLines"
                 RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.Below="cbLines"
                 Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
                 Width="150"
                 Margin="0,0,0,10" Click="ButtonAdd_Click"/>

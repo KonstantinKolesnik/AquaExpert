@@ -110,7 +110,7 @@ namespace SmartHub.UWP.Applications.Server.Controls
         }
         private void SetSelectedItem()
         {
-            var selectedItem = SelectionMode == ListViewSelectionMode.Single ? AppSectionPage.SelectedItem : null;
+            var selectedItem = SelectionMode == ListViewSelectionMode.Single ? (AppSectionPage.IsAppsSection ? AppSectionPage.SelectedItemApps : AppSectionPage.SelectedItemSystem) : null;
             if (lvItems.SelectedItem != selectedItem)
             {
                 lvItems.SelectedItem = selectedItem;
