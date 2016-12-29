@@ -161,7 +161,31 @@ namespace SmartHub.UWP.Plugins.Wemos
 
 
 
+        public static string LineTypeToUnits(WemosLineType lt)
+        {
+            switch (lt)
+            {
+                case WemosLineType.Switch: return "";
+                case WemosLineType.Temperature: return "°C";
+                case WemosLineType.Humidity: return "%";
+                case WemosLineType.Barometer: return "mm Hg";
+                case WemosLineType.Weight: return "kg";
+                case WemosLineType.Voltage: return "V";
+                case WemosLineType.Current: return "A";
+                case WemosLineType.Power: return "Wt";
+                case WemosLineType.Rain: return "";
+                case WemosLineType.UV: return "";
+                case WemosLineType.Distance: return "m";
+                case WemosLineType.LightLevel: return "lux";
+                case WemosLineType.IR: return "";
+                case WemosLineType.AirQuality: return "";
+                case WemosLineType.Vibration: return "";
+                case WemosLineType.Ph: return "";
+                case WemosLineType.ORP: return "";
 
+                default: return "";
+            }
+        }
         #endregion
 
         #region Event handlers

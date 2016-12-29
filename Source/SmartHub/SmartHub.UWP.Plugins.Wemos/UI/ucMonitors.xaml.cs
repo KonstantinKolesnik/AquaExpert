@@ -61,7 +61,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Monitors.Add(monitor);
             }
         }
-        private async void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        private /*async*/ void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
             int id = (int) ((sender as Button).Tag);
             SelectedMonitor = Monitors.FirstOrDefault(m => m.ID == id);

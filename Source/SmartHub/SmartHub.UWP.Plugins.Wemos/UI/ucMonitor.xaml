@@ -12,7 +12,6 @@
         <DataTemplate x:Key="PointTemplate">
             <Rectangle Width="8" Height="8" RadiusX="8" RadiusY="8" Fill="Red"/>
         </DataTemplate>
-
     </UserControl.Resources>
 
     <Grid>

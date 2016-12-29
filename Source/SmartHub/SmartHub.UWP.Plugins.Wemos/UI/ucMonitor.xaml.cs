@@ -1,17 +1,23 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.Wemos.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using System.Linq;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI
 {
     public sealed partial class ucMonitor : UserControl
     {
+        private Timer timer;
+
         public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorDto), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
         public WemosMonitorDto Monitor
         {
@@ -40,6 +46,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             InitializeComponent();
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+
+            timer = new Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(10).TotalMilliseconds);
         }
 
         private async Task UpdateMonitorValues()
@@ -54,41 +62,20 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                 var items = await StreamClient.RequestAsync<IEnumerable<WemosLineValue>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/line/values", Monitor.LineID, 10);
 
                 if (items != null)
-                    foreach (var item in items)
+                    foreach (var item in items.OrderBy(i => i.TimeStamp))
                         MonitorValues.Add(item);
             }
 
             LastValue = MonitorValues.Any() ? MonitorValues.LastOrDefault().Value + " " + GetUnits(): "---";
         }
-
         private string GetUnits()
         {
-            if (Monitor == null)
-                return "";
+            return Monitor != null ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : "";
+        }
 
-            switch (Monitor.LineType)
-            {
-                case WemosLineType.Switch: return "";
-                case WemosLineType.Temperature: return "°C";
-                case WemosLineType.Humidity: return "%";
-                case WemosLineType.Barometer: return "mm Hg";
-                case WemosLineType.Weight: return "kg";
-                case WemosLineType.Voltage: return "V";
-                case WemosLineType.Current: return "A";
-                case WemosLineType.Power: return "Wt";
-                case WemosLineType.Rain: return "";
-                case WemosLineType.UV: return "";
-                case WemosLineType.Distance: return "m";
-                case WemosLineType.LightLevel: return "lux";
-                case WemosLineType.IR: return "";
-                case WemosLineType.AirQuality: return "";
-                case WemosLineType.Vibration: return "";
-                case WemosLineType.Ph: return "";
-                case WemosLineType.ORP: return "";
-
-
-                default: return "";
-            }
+        private async void timerCallback(object state)
+        {
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateMonitorValues(); });
         }
     }
 }
