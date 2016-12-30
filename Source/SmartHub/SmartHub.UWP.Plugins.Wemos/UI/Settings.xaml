@@ -33,7 +33,7 @@
                 <local:ucMonitors/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
-                
+                <local:ucControllers/>
             </PivotItem>
         </Pivot>
     </Grid>

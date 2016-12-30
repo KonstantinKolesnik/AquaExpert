@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
@@ -17,7 +16,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 {
     public sealed partial class ucMonitor : UserControl
     {
-        private Timer timer;
+        private System.Threading.Timer timer;
 
         public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorDto), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
         public WemosMonitorDto Monitor
@@ -48,7 +47,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             InitializeComponent();
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            timer = new Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(10).TotalMilliseconds);
+            timer = new System.Threading.Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(10).TotalMilliseconds);
         }
 
         private async Task UpdateMonitorValues()

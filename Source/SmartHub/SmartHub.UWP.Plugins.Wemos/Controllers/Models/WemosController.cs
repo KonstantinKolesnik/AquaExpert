@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SQLite.Net.Attributes;
-using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
 {
@@ -18,14 +17,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         [NotNull]
         public string Configuration { get; set; }
 
-        public dynamic GetConfiguration(Type type)
+        public T DeserializeConfiguration<T>()
         {
             if (string.IsNullOrWhiteSpace(Configuration))
                 Configuration = "{}";
 
-            return JsonConvert.DeserializeObject(Configuration, type);
+            return JsonConvert.DeserializeObject<T>(Configuration);
         }
-        public void SetConfiguration(object value)
+        public void SerializeConfiguration(object value)
         {
             Configuration = JsonConvert.SerializeObject(value);
         }

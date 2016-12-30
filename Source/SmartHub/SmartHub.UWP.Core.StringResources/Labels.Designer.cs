@@ -107,6 +107,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto mode.
+        /// </summary>
+        public static string AutoMode {
+            get {
+                return ResourceManager.GetString("AutoMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Battery.
         /// </summary>
         public static string Battery {

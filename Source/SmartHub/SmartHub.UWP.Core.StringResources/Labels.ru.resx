@@ -231,6 +231,9 @@
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
   </data>
+  <data name="AutoMode" xml:space="preserve">
+    <value>Авторежим</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>

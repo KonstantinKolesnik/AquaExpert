@@ -1,7 +1,9 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
+using SmartHub.UWP.Plugins.Timer.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
+using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
@@ -24,11 +26,9 @@ namespace SmartHub.UWP.Plugins.Wemos
     public class WemosPlugin : PluginBase
     {
         #region Fields
-        private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private WemosTransport transport = new WemosTransport();
+        private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
         #endregion
-
-        //public event WemosMessageEventHandler MessageReceived;
 
         #region Imports
         [ImportMany]
@@ -37,6 +37,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             Run(WemosMessageHandlers, x => x(msg));
         }
+        #endregion
+
+        #region Exports
+        [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 10)]
+        public Action<DateTime> TimerElapsed => ((dt) =>
+        {
+            foreach (var controller in controllers)
+                controller.TimerElapsed(dt);
+        });
         #endregion
 
         #region Plugin ovverrides
@@ -60,11 +69,24 @@ namespace SmartHub.UWP.Plugins.Wemos
                 Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
             transport.MessageReceived += OnMessageReceived;
+
+            foreach (var ctrl in GetControllers())
+            {
+                var controller = WemosControllerBase.FromController(ctrl);
+                if (controller != null)
+                {
+                    controllers.Add(controller);
+                    controller.Init(Context);
+                }
+            }
         }
         public override async void StartPlugin()
         {
             await transport.Open();
             await RequestPresentation();
+
+            foreach (var controller in controllers)
+                controller.RequestLinesValues(); // force lines to report their current values
         }
         public override void StopPlugin()
         {
@@ -73,28 +95,29 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region API
-        public async Task Send(WemosMessage data, bool isBrodcast = false)
+        public async Task Send(WemosMessage data)
         {
-            await transport.Send(data, isBrodcast);
+            await transport.Send(data);
         }
+
         public async Task RequestPresentation(int nodeID = -1, int lineID = -1)
         {
-            await Send(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0), true);
+            await Send(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
         }
         public async Task RequestLineValue(WemosLine line)
         {
             if (line != null)
                 await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
         }
-        //public async Task SetLineValue(WemosLine line, float value)
-        //{
-        //    if (line != null)
-        //    {
-        //        var lastSV = GetLastSensorValue(line);
-        //        if (lastSV == null || (lastSV.Value != value))
-        //            await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
-        //    }
-        //}
+        public async Task SetLineValue(WemosLine line, float value)
+        {
+            if (line != null)
+            {
+                //var lastSV = GetLastSensorValue(line);
+                //if (lastSV == null || (lastSV.Value != value))
+                    await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+            }
+        }
         public async Task SetLineValue(WemosLine line, string value)
         {
             if (line != null)
@@ -163,6 +186,20 @@ namespace SmartHub.UWP.Plugins.Wemos
                 return db.Table<WemosMonitor>().Where(m => m.ID == id).FirstOrDefault();
         }
 
+        public List<WemosController> GetControllers()
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosController>().ToList();
+        }
+        public WemosController GetController(int id)
+        {
+            using (var db = Context.OpenConnection())
+                return db.Table<WemosController>().Where(m => m.ID == id).FirstOrDefault();
+        }
+
+
+
+
 
 
         public static string LineTypeToUnits(WemosLineType lt)
@@ -196,10 +233,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         private async void OnMessageReceived(object sender, WemosMessageEventArgs e, HostName remoteAddress)
         {
             if (e.Message != null)
-            {
-                //MessageReceived?.Invoke(this, e, remoteAddress); // TODO: temporary!!!
                 await ProcessMessage(e.Message, remoteAddress);
-            }
         }
         #endregion
 
@@ -273,6 +307,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                     if (line != null)
                     {
                         //NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
+                        foreach (var controller in controllers)
+                            if (controller.IsMyMessage(message))
+                            {
+                                controller.MessageCalibration(message);
+                                break;
+                            }
 
                         WemosLineValue sv = new WemosLineValue()
                         {
@@ -292,6 +332,10 @@ namespace SmartHub.UWP.Plugins.Wemos
                         NotifyMessageReceivedForPlugins(message);
                         //NotifyMessageReceivedForScripts(message);
                         //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
+
+                        foreach (var controller in controllers)
+                            if (controller.IsMyMessage(message))
+                                controller.MessageReceived(message);
                     }
                     break;
                 #endregion
@@ -332,8 +376,9 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 //NotifyForSignalR(new { MsgId = "BatteryValue", Data = bl });
                             }
                             break;
-                        case WemosInternalMessageType.Time: // seconds since 1970
-                            var sec = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds);
+                        case WemosInternalMessageType.Time:
+                            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                            var sec = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds); // seconds since 1970
                             await Send(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(sec));
                             break;
                         case WemosInternalMessageType.Version:
@@ -438,9 +483,9 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var node = GetNode(id);
-            node.Name = name;
-            SaveOrUpdate(node);
+            var item = GetNode(id);
+            item.Name = name;
+            SaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
@@ -454,9 +499,9 @@ namespace SmartHub.UWP.Plugins.Wemos
             var lineID = int.Parse(parameters[1].ToString());
             var name = parameters[2] as string;
 
-            var line = GetLine(nodeID, lineID);
-            line.Name = name;
-            SaveOrUpdate(line);
+            var item = GetLine(nodeID, lineID);
+            item.Name = name;
+            SaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
@@ -495,9 +540,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var monitor = GetMonitor(id);
-            var line = GetLine(monitor.LineID);
-            return new WemosMonitorDto(monitor) { LineName = line.Name, LineType = line.Type };
+            var item = GetMonitor(id);
+            var line = GetLine(item.LineID);
+            return new WemosMonitorDto(item) { LineName = line.Name, LineType = line.Type };
         });
 
         [ApiCommand(CommandName = "/api/wemos/monitors/add"), Export(typeof(ApiCommand))]
@@ -506,19 +551,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[0] as string;
             var lineID = int.Parse(parameters[1].ToString());
 
-            WemosMonitor monitor = new WemosMonitor()
+            var item = new WemosMonitor()
             {
                 Name = name,
                 LineID = lineID,
                 Configuration = "{}"
             };
 
-            Save(monitor);
+            Save(item);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
-            var line = GetLine(monitor.LineID);
-            var m = new WemosMonitorDto(monitor);
+            var line = GetLine(item.LineID);
+            var m = new WemosMonitorDto(item);
             m.LineName = line.Name;
             m.LineType = line.Type;
 
@@ -532,10 +577,10 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[1] as string;
             var nameForInformer = parameters[2] as string;
 
-            var monitor = GetMonitor(id);
-            monitor.Name = name;
-            monitor.NameForInformer = nameForInformer;
-            SaveOrUpdate(monitor);
+            var item = GetMonitor(id);
+            item.Name = name;
+            item.NameForInformer = nameForInformer;
+            SaveOrUpdate(item);
 
             return true;
         });
@@ -545,12 +590,67 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var monitor = GetMonitor(id);
-            Delete(monitor);
+            Delete(GetMonitor(id));
 
             return true;
         });
 
+        [ApiCommand(CommandName = "/api/wemos/controllers"), Export(typeof(ApiCommand))]
+        public ApiCommand apiGetControllers => ((parameters) =>
+        {
+            return Context.GetPlugin<WemosPlugin>().GetControllers();
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/controllers/add"), Export(typeof(ApiCommand))]
+        public ApiCommand apiAddController => ((parameters) =>
+        {
+            var name = parameters[0] as string;
+            var type = (WemosControllerType)int.Parse(parameters[1].ToString());
+
+            var item = new WemosController()
+            {
+                Name = name,
+                Type = type,
+                IsAutoMode = false
+            };
+
+            var controller = WemosControllerBase.FromController(item);
+            if (controller != null)
+            {
+                controller.Init(Context);
+                controller.AddToDB();
+                controllers.Add(controller);
+
+                //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
+
+                return item;
+            }
+
+            return null;
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/controllers/setname"), Export(typeof(ApiCommand))]
+        public ApiCommand apiSetControllerName => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var name = parameters[1] as string;
+
+            var item = GetController(id);
+            item.Name = name;
+            SaveOrUpdate(item);
+
+            return true;
+        });
+
+        [ApiCommand(CommandName = "/api/wemos/controllers/delete"), Export(typeof(ApiCommand))]
+        public ApiCommand apiDeleteController => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+
+            Delete(GetController(id));
+
+            return true;
+        });
 
 
         #endregion

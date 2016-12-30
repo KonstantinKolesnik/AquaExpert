@@ -109,7 +109,9 @@
   <ItemGroup>
     <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
     <Compile Include="Controllers\Models\WemosController.cs" />
+    <Compile Include="Controllers\WemosControllerBase.cs" />
     <Compile Include="Controllers\WemosControllerType.cs" />
+    <Compile Include="Controllers\WemosSwitchController.cs" />
     <Compile Include="Core\WemosInternalMessageType.cs" />
     <Compile Include="Core\Models\WemosLineType.cs" />
     <Compile Include="Core\WemosMessage.cs" />
@@ -132,6 +134,9 @@
     </Compile>
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucControllers.xaml.cs">
+      <DependentUpon>ucControllers.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ucLines.xaml.cs">
       <DependentUpon>ucLines.xaml</DependentUpon>
@@ -175,6 +180,10 @@
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
       <Name>SmartHub.UWP.Plugins.Speech</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Timer\SmartHub.UWP.Plugins.Timer.csproj">
+      <Project>{2254a4f7-b66f-4068-8b9f-54ac550d5b32}</Project>
+      <Name>SmartHub.UWP.Plugins.Timer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj">
       <Project>{4dfaa97c-af72-4497-bfd2-b14d58ab340c}</Project>
       <Name>SmartHub.UWP.Plugins.UI</Name>
@@ -195,6 +204,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucControllers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -31,7 +31,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             //CheckBackgroundTask();
             //await CheckSocketAsync();
 
-            #region simple socket creation
+            #region Simple socket creation
             if (listenerSocket == null)
             {
                 listenerSocket = new DatagramSocket();
@@ -43,8 +43,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                 {
                     await listenerSocket.BindServiceNameAsync(localService);
                     listenerSocket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
-
-                    //Context.GetPlugin<SpeechPlugin>()?.Say("WEMOS UDP клиент запущен!");
                 }
                 catch (Exception exception)
                 {
@@ -59,16 +57,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             }
             #endregion
         }
-        public async Task Send(WemosMessage msg, bool isBrodcast)
+        public async Task Send(WemosMessage msg)
         {
             if (msg != null)
             {
-                if (isBrodcast)
-                {
-                    msg.NodeID = -1;
-                    msg.LineID = -1;
-                }
-
                 var str = msg.ToDto();
                 if (!string.IsNullOrEmpty(str))
                 {
@@ -127,14 +119,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             }
             catch (Exception exception)
             {
-                SocketErrorStatus socketError = SocketError.GetStatus(exception.HResult);
-
                 if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
                     throw;
 
                 //rootPage.NotifyUser("Error happened when receiving a datagram:" + exception.Message, NotifyType.ErrorMessage);
             }
         }
+
         private void CheckBackgroundTask()
         {
             foreach (var current in BackgroundTaskRegistration.AllTasks)
@@ -147,13 +138,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             // if there is no task allready created, create a new one
             if (task == null)
             {
-                var socketTaskBuilder = new BackgroundTaskBuilder();
-                socketTaskBuilder.Name = socketBackgroundgTaskName;
-                socketTaskBuilder.TaskEntryPoint = socketBackgroundgTaskName + ".SocketActivityTask";
+                var taskBuilder = new BackgroundTaskBuilder();
+                taskBuilder.Name = socketBackgroundgTaskName;
+                taskBuilder.TaskEntryPoint = socketBackgroundgTaskName + ".SocketActivityTask";
+                taskBuilder.SetTrigger(new SocketActivityTrigger());
 
-                var trigger = new SocketActivityTrigger();
-                socketTaskBuilder.SetTrigger(trigger);
-                task = socketTaskBuilder.Register();
+                task = taskBuilder.Register();
             }
         }
         private async Task CheckSocketAsync()
