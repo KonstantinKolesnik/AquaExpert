@@ -2,18 +2,19 @@
 using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Models
+namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
 {
-    public class WemosMonitor
+    public class WemosController
     {
         [PrimaryKey, NotNull, AutoIncrement]
         public int ID { get; set; }
 
         [NotNull]
         public string Name { get; set; }
-        public string NameForInformer { get; set; }
         [NotNull]
-        public int LineID { get; set; }
+        public WemosControllerType Type { get; set; }
+        [NotNull, Default]
+        public bool IsAutoMode { get; set; }
         [NotNull]
         public string Configuration { get; set; }
 
@@ -27,24 +28,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Models
         public void SetConfiguration(object value)
         {
             Configuration = JsonConvert.SerializeObject(value);
-        }
-    }
-
-    public class WemosMonitorDto : WemosMonitor
-    {
-        public string LineName { get; set; }
-        public WemosLineType LineType { get; set; }
-
-        public WemosMonitorDto(WemosMonitor monitor)
-        {
-            if (monitor != null)
-            {
-                ID = monitor.ID;
-                Name = monitor.Name;
-                NameForInformer = monitor.NameForInformer;
-                LineID = monitor.LineID;
-                Configuration = monitor.Configuration;
-            }
         }
     }
 }

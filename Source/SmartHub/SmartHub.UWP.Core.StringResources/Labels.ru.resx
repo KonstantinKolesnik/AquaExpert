@@ -234,6 +234,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Controllers" xml:space="preserve">
+    <value>Контроллеры</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Обновить</value>
   </data>

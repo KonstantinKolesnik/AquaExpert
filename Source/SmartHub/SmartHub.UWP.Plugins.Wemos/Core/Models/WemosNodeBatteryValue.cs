@@ -1,7 +1,7 @@
 ﻿using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Models
+namespace SmartHub.UWP.Plugins.Wemos.Core.Models
 {
     public class WemosNodeBatteryValue
     {

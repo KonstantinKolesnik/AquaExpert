@@ -32,6 +32,9 @@
             <PivotItem Header="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}">
                 <local:ucMonitors/>
             </PivotItem>
+            <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
+                
+            </PivotItem>
         </Pivot>
     </Grid>
 </UserControl>

@@ -1,7 +1,8 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Core.StringResources;
-using SmartHub.UWP.Plugins.Wemos.Models;
+using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Wemos.Monitors;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

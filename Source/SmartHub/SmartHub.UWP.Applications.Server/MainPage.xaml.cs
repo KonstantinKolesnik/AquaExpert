@@ -1,10 +1,8 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.Wemos;
 using SmartHub.UWP.Plugins.Wemos.Core;
-using SmartHub.UWP.Plugins.Wemos.Models;
-using System;
+using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System.Collections.ObjectModel;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 

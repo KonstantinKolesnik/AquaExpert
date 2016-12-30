@@ -2,8 +2,11 @@
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
+using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core;
-using SmartHub.UWP.Plugins.Wemos.Models;
+using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Wemos.Monitors;
+using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
 using SmartHub.UWP.Plugins.Wemos.Transporting;
 using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
@@ -48,6 +51,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                 db.CreateTable<WemosLineValue>();
 
                 db.CreateTable<WemosMonitor>();
+                db.CreateTable<WemosController>();
             }
         }
         public override void InitPlugin()

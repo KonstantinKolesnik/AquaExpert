@@ -108,20 +108,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
+    <Compile Include="Controllers\Models\WemosController.cs" />
+    <Compile Include="Controllers\WemosControllerType.cs" />
     <Compile Include="Core\WemosInternalMessageType.cs" />
-    <Compile Include="Models\WemosLineType.cs" />
+    <Compile Include="Core\Models\WemosLineType.cs" />
     <Compile Include="Core\WemosMessage.cs" />
     <Compile Include="Core\WemosMessageEventArgs.cs" />
     <Compile Include="Core\WemosMessageEventHandler.cs" />
     <Compile Include="Core\WemosMessageParser.cs" />
     <Compile Include="Core\WemosMessageType.cs" />
     <Compile Include="Core\WemosStreamMessageType.cs" />
-    <Compile Include="Models\WemosLine.cs" />
-    <Compile Include="Models\WemosLineValue.cs" />
-    <Compile Include="Models\WemosMonitor.cs" />
-    <Compile Include="Models\WemosNode.cs" />
-    <Compile Include="Models\WemosNodeBatteryValue.cs" />
-    <Compile Include="Models\WemosSetting.cs" />
+    <Compile Include="Core\Models\WemosLine.cs" />
+    <Compile Include="Core\Models\WemosLineValue.cs" />
+    <Compile Include="Monitors\Models\WemosMonitor.cs" />
+    <Compile Include="Core\Models\WemosNode.cs" />
+    <Compile Include="Core\Models\WemosNodeBatteryValue.cs" />
+    <Compile Include="Core\Models\WemosSetting.cs" />
+    <Compile Include="Monitors\WemosMonitorDto.cs" />
     <Compile Include="Transporting\WemosTransport.cs" />
     <Compile Include="Transporting\WemosTransportBackgroundTask.cs" />
     <Compile Include="UI\Main.xaml.cs">
@@ -185,10 +188,7 @@
       <Name>Telerik UI For Universal Windows Platform</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Monitors\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="UI\Main.xaml">
       <SubType>Designer</SubType>

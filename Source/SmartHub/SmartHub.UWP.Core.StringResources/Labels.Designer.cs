@@ -134,6 +134,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Controllers.
+        /// </summary>
+        public static string Controllers {
+            get {
+                return ResourceManager.GetString("Controllers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string Dashboard {
