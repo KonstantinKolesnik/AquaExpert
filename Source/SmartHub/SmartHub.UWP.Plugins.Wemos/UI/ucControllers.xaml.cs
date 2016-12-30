@@ -64,6 +64,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 
             pnlControllersList.Visibility = Visibility.Collapsed;
             pnlControllerConfiguration.Visibility = Visibility.Visible;
+
+            var ctrl = WemosControllerBase.FromController(SelectedController);
+            //ctrlPresenter.Content = 
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -76,15 +79,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Controllers.Remove(Controllers.FirstOrDefault(m => m.ID == id));
             });
         }
-        private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {
+        //private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        //{
 
-            pnlControllersList.Visibility = Visibility.Visible;
-            pnlControllerConfiguration.Visibility = Visibility.Collapsed;
-        }
+        //    pnlControllersList.Visibility = Visibility.Visible;
+        //    pnlControllerConfiguration.Visibility = Visibility.Collapsed;
+        //}
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             SelectedController = null;
+            ctrlPresenter.Content = null;
 
             pnlControllersList.Visibility = Visibility.Visible;
             pnlControllerConfiguration.Visibility = Visibility.Collapsed;
@@ -137,5 +141,4 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             }
         }
     }
-
 }

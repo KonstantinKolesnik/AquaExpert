@@ -105,15 +105,23 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!--<local:ucMonitor Monitor="{Binding SelectedMonitor}" Margin="{StaticResource RootContainerMargin}"/>-->
+            <!--<local:ucController Controller="{Binding SelectedController}" Margin="{StaticResource RootContainerMargin}"/>-->
+            <ContentPresenter x:Name="ctrlPresenter" Margin="{StaticResource RootContainerMargin}">
+                <ContentPresenter.ContentTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </ContentPresenter.ContentTransitions>
+
+            </ContentPresenter>
 
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
-                    <AppBarButton Label="{Binding Labels.Save, Source={StaticResource LabelsManager}}" Click="ButtonSave_Click">
+                    <!--<AppBarButton Label="{Binding Labels.Save, Source={StaticResource LabelsManager}}" Click="ButtonSave_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;"/>
                         </AppBarButton.Icon>
-                    </AppBarButton>
+                    </AppBarButton>-->
                     <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE106;"/>
