@@ -16,7 +16,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
         private const string remoteMulticastAddress = "224.3.0.5";
         private const string remoteBroadcastAddress = "255.255.255.255";
         private DatagramSocket listenerSocket = null;
-        private const string socketId = "WemosMulticastSocket";
+        private const string socketId = "WemosTransportMulticastSocket";
         private const string socketBackgroundgTaskName = "WemosMulticastActivityBackgroundTask";
         private IBackgroundTaskRegistration task = null;
         #endregion

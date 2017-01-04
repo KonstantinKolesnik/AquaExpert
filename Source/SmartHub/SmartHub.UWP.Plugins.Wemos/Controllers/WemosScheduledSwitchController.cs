@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         public bool IsEnabled;
     }
 
-    public class WemosSwitchController : WemosControllerBase
+    public class WemosScheduledSwitchController : WemosControllerBase
     {
         public class ControllerConfiguration
         {
@@ -45,7 +45,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Constructor
-        public WemosSwitchController(WemosController controller)
+        public WemosScheduledSwitchController(WemosController controller)
             : base (controller)
         {
             if (string.IsNullOrEmpty(controller.Configuration))

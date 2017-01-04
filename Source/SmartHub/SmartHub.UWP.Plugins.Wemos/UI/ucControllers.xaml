@@ -76,7 +76,16 @@
                     </telerikGrid:DataGridTemplateColumn>
                     <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
                     <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
-                    <telerikGrid:DataGridBooleanColumn PropertyName="IsAutoMode" Header="{Binding Labels.AutoMode, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                    <telerikGrid:DataGridTemplateColumn Header="{Binding Labels.AutoMode, Source={StaticResource LabelsManager}}" SizeMode="Auto">
+                        <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleSwitch IsOn="{Binding IsAutoMode}" Tag="{Binding ID}" HorizontalAlignment="Center" Toggled="ToggleSwitch_Toggled"/>
+                                    <TextBlock Text="{Binding ID}" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                    </telerikGrid:DataGridTemplateColumn>
                     <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
                         <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
                             <DataTemplate>
@@ -112,16 +121,10 @@
                         <EntranceThemeTransition/>
                     </TransitionCollection>
                 </ContentPresenter.ContentTransitions>
-
             </ContentPresenter>
 
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
-                    <!--<AppBarButton Label="{Binding Labels.Save, Source={StaticResource LabelsManager}}" Click="ButtonSave_Click">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;"/>
-                        </AppBarButton.Icon>
-                    </AppBarButton>-->
                     <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE106;"/>

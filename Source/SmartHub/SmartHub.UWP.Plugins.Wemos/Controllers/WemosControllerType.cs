@@ -3,11 +3,11 @@
     public enum WemosControllerType
     {
         //[Description("Обогреватель")]
-        Heater,
+        //Heater,
         //[Description("Выключатель по расписанию")]
         ScheduledSwitch,
         //[Description("Уровень воды")]
-        WaterLevel,
+        //WaterLevel,
 
 
 

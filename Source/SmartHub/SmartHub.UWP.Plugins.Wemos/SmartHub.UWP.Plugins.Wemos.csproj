@@ -111,7 +111,7 @@
     <Compile Include="Controllers\Models\WemosController.cs" />
     <Compile Include="Controllers\WemosControllerBase.cs" />
     <Compile Include="Controllers\WemosControllerType.cs" />
-    <Compile Include="Controllers\WemosSwitchController.cs" />
+    <Compile Include="Controllers\WemosScheduledSwitchController.cs" />
     <Compile Include="Core\WemosInternalMessageType.cs" />
     <Compile Include="Core\Models\WemosLineType.cs" />
     <Compile Include="Core\WemosMessage.cs" />
@@ -137,6 +137,9 @@
     </Compile>
     <Compile Include="UI\ucControllers.xaml.cs">
       <DependentUpon>ucControllers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucControllerScheduledSwitch.xaml.cs">
+      <DependentUpon>ucControllerScheduledSwitch.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ucLines.xaml.cs">
       <DependentUpon>ucLines.xaml</DependentUpon>
@@ -208,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ucControllers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ucControllerScheduledSwitch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

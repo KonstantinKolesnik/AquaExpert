@@ -642,6 +642,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             return true;
         });
 
+        [ApiCommand(CommandName = "/api/wemos/controllers/setautomode"), Export(typeof(ApiCommand))]
+        public ApiCommand apiSetControllerAutoMode => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var isAutoMode = (bool)parameters[1];
+
+            var item = controllers.FirstOrDefault(c => c.ID == id);
+            item.IsAutoMode = isAutoMode;
+            item.SaveToDB();
+
+            return true;
+        });
+
         [ApiCommand(CommandName = "/api/wemos/controllers/delete"), Export(typeof(ApiCommand))]
         public ApiCommand apiDeleteController => ((parameters) =>
         {
@@ -651,6 +664,10 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             return true;
         });
+
+
+
+
 
 
         #endregion

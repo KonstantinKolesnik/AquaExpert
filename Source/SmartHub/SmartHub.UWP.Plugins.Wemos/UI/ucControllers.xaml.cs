@@ -57,6 +57,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Controllers.Add(controller);
             }
         }
+        private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            int id = (int) ((sender as ToggleSwitch).Tag);
+            var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
+        }
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
             int id = (int) ((sender as Button).Tag);
@@ -66,7 +71,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             pnlControllerConfiguration.Visibility = Visibility.Visible;
 
             var ctrl = WemosControllerBase.FromController(SelectedController);
-            //ctrlPresenter.Content = 
+            switch (SelectedController.Type)
+            {
+                case WemosControllerType.ScheduledSwitch:
+                    ctrlPresenter.Content = new ucControllerScheduledSwitch();
+                    break;
+
+
+            }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -79,12 +91,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                     Controllers.Remove(Controllers.FirstOrDefault(m => m.ID == id));
             });
         }
-        //private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //    pnlControllersList.Visibility = Visibility.Visible;
-        //    pnlControllerConfiguration.Visibility = Visibility.Collapsed;
-        //}
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             SelectedController = null;
@@ -107,7 +113,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         }
         private async Task UpdateControllersList()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosController>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers");
+            var items = await StreamClient.RequestAsync<List<WemosController>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers");
 
             Controllers.Clear();
             if (items != null)
