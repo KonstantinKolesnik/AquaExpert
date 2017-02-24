@@ -5,10 +5,12 @@ namespace SmartHub.UWP.Applications.Server
 {
     public sealed partial class DashboardPage : Page
     {
+        #region Constructor
         public DashboardPage()
         {
             InitializeComponent();
         }
+        #endregion
 
         #region Navigation
         protected override void OnNavigatedTo(NavigationEventArgs e)

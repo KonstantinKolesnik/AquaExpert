@@ -21,6 +21,12 @@ namespace SmartHub.UWP.Applications.Server
             get; private set;
         }
         public Frame AppFrame => appShellFrame;
+
+        new public ElementTheme RequestedTheme
+        {
+            get { return Utils.FindFirstVisualChild<Grid>(this).RequestedTheme; }
+            set { Utils.FindFirstVisualChild<Grid>(this).RequestedTheme = value; }
+        }
         #endregion
 
         #region Constructor

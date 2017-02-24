@@ -13,8 +13,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
     {
         #region Fields
         private StreamSocket socket;
-        private string hostName;
-        private string serviceName;
         #endregion
 
         #region Public methods
@@ -22,9 +20,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
         {
             if (socket == null)
             {
-                this.hostName = hostName;
-                this.serviceName = serviceName;
-
                 socket = new StreamSocket();
                 socket.Control.KeepAlive = false;
 
@@ -42,13 +37,8 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
         public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
-            var data = new ApiRequest()
-            {
-                CommandName = commandName,
-                Parameters = parameters
-            };
-
-            await Send(socket, data);
+            var data = new ApiRequest(commandName, parameters);
+            await Send(socket, Transport.Serialize(data));
 
             string str = await Receive(socket);
 
@@ -60,6 +50,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         }
         #endregion
 
+        #region Public static methods
         public static async Task<T> RequestAsync<T>(string hostName, string serviceName, string commandName, params object[] parameters)
         {
             var socket = new StreamSocket();
@@ -67,12 +58,8 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
             await Connect(socket, hostName, serviceName);
 
-            var data = new ApiRequest()
-            {
-                CommandName = commandName,
-                Parameters = parameters
-            };
-            await Send(socket, data);
+            var data = new ApiRequest(commandName, parameters);
+            await Send(socket, Transport.Serialize(data));
 
             string str = await Receive(socket);
 
@@ -84,6 +71,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         {
             string result = await RequestAsync<string>(hostName, serviceName, commandName, parameters);
         }
+        #endregion
 
         #region Private methods
         private static async Task Connect(StreamSocket client, string hostName, string serviceName)
@@ -102,14 +90,13 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 }
             }
         }
-        private static async Task Send(StreamSocket client, ApiRequest data)
+        private static async Task Send(StreamSocket client, string data)
         {
-            if (client != null)
+            if (client != null && !string.IsNullOrEmpty(data))
                 using (var writer = new DataWriter(client.OutputStream))
                 {
-                    var str = Transport.Serialize(data);
-                    writer.WriteUInt32(writer.MeasureString(str));
-                    writer.WriteString(str);
+                    writer.WriteUInt32(writer.MeasureString(data));
+                    writer.WriteString(data);
 
                     try
                     {
