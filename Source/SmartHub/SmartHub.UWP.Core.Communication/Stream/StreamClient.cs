@@ -37,7 +37,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
         public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
-            var data = new ApiRequest(commandName, parameters);
+            var data = new CommandRequest(commandName, parameters);
             await Send(socket, Transport.Serialize(data));
 
             string str = await Receive(socket);
@@ -58,7 +58,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
             await Connect(socket, hostName, serviceName);
 
-            var data = new ApiRequest(commandName, parameters);
+            var data = new CommandRequest(commandName, parameters);
             await Send(socket, Transport.Serialize(data));
 
             string str = await Receive(socket);
@@ -211,9 +211,9 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 {
                     using (DataWriter writer = new DataWriter(socket.OutputStream))
                     {
-                        var data = new ApiRequest()
+                        var data = new CommandRequest()
                         {
-                            CommandName = commandName,
+                            Name = commandName,
                             Parameters = parameters
                         };
 

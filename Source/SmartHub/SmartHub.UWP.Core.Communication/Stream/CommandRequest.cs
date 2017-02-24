@@ -1,8 +1,8 @@
 ﻿namespace SmartHub.UWP.Core.Communication.Stream
 {
-    public class ApiRequest
+    public class CommandRequest
     {
-        public string CommandName
+        public string Name
         {
             get; set;
         }
@@ -11,12 +11,12 @@
             get; set;
         }
 
-        public ApiRequest()
+        public CommandRequest()
         {
         }
-        public ApiRequest(string commandName, object[] parameters)
+        public CommandRequest(string name, object[] parameters)
         {
-            CommandName = commandName;
+            Name = name;
             Parameters = parameters;
         }
     }
