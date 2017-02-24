@@ -54,6 +54,7 @@ namespace SmartHub.UWP.Applications.Server
             }
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
+            AppManager.SetAppTheme();
         }
         //protected override void OnActivated(IActivatedEventArgs args)
         //{

@@ -13,6 +13,11 @@
             get { return Utils.GetAppData(nameof(Language), "en-US", IsRoaming); }
             set { Utils.SetAppData(nameof(Language), value, IsRoaming); NotifyPropertyChanged(); }
         }
+        public int Theme
+        {
+            get { return Utils.GetAppData(nameof(Theme), 0); }
+            set { Utils.SetAppData(nameof(Theme), value); NotifyPropertyChanged(); }
+        }
         #endregion
 
         #region Properties

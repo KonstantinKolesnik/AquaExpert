@@ -40,7 +40,8 @@
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundAccentBrush}"/>
     </Style>
 
-
+    <!-- Property name/value -->
+    <Thickness x:Key="PropertyNameValueVerticalBlockMargin">0,0,0,10</Thickness>
 
     <!-- Lists/Grids -->
     <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">

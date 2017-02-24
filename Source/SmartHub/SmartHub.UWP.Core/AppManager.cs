@@ -5,13 +5,15 @@ using System.ComponentModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;
+using Windows.UI;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 
 namespace SmartHub.UWP.Core
 {
     public class AppManager
     {
         #region Fields
-        private static bool isServer = false;
         private static Hub hub;
         #endregion
 
@@ -54,10 +56,12 @@ namespace SmartHub.UWP.Core
         //    get;
         //} = new AppCommands();
 
-        public static bool IsServer => isServer;
-        public static Hub Hub => hub;
+        public static bool IsServer
+        {
+            get; private set;
+        }
 
-        public static string RemoteUrl => isServer ? "localhost" : AppData.ServerUrl;
+        public static string RemoteUrl => IsServer ? "localhost" : AppData.ServerUrl;
         public static string RemoteServiceName => ApiListenerPlugin.ServiceName;
         #endregion
 
@@ -67,10 +71,9 @@ namespace SmartHub.UWP.Core
             AppData = new AppData(false);
             AppData.PropertyChanged += AppData_PropertyChanged;
 
-            isServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
             SetServerActivity();
 
-            SetLanguage(AppData.Language);
+            SetLanguage();
             //SetLanguage("en");
             //SetLanguage("de");
             //SetLanguage("ru");
@@ -80,25 +83,63 @@ namespace SmartHub.UWP.Core
         {
             //hub.StopServices();
         }
+
+        public static void SetAppTheme()
+        {
+            var theme = (ElementTheme) AppData.Theme;
+
+            //AppShell.Current.RequestedTheme = theme;
+
+            // set title bar colors:
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            if (titleBar != null)
+            {
+                //(Color) Application.Current.Resources["SystemChromeMediumColor"];
+                var colorLight = Color.FromArgb(255, 230, 230, 230); // #FFE6E6E6
+                var colorDark = Color.FromArgb(255, 31, 31, 31); // #FF1F1F1F
+
+                Color color;
+                if (theme == ElementTheme.Light)
+                    color = colorLight;
+                else if (theme == ElementTheme.Dark)
+                    color = colorDark;
+                else if (theme == ElementTheme.Default)
+                    color = Application.Current.RequestedTheme == ApplicationTheme.Light ? colorLight : colorDark;
+
+                titleBar.BackgroundColor = color;
+                titleBar.ButtonBackgroundColor = color;
+            }
+        }
         #endregion
 
         #region Private methods
-        private static void SetLanguage(string id) //"en-US"
+        private static void SetLanguage()
         {
+            var id = AppData.Language;
+            //var id = "en-US";
+            //var id = "de-DE";
+            //var id = "ru-RU";
+            //var id = "uk-UA";
+
             ApplicationLanguages.PrimaryLanguageOverride = id;
             ResourceContext.GetForCurrentView().Languages = new List<string>() { id };
         }
         private static void SetServerActivity()
         {
-            if (isServer && hub == null)
-            {
-                var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
+            IsServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
 
-                hub = new Hub();
-                hub.Init(assemblies);
-                hub.StartServices();
+            if (IsServer)
+            {
+                if (hub == null)
+                {
+                    var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
+
+                    hub = new Hub();
+                    hub.Init(assemblies);
+                    hub.StartServices();
+                }
             }
-            if (!isServer && hub != null)
+            else if (hub != null)
             {
                 hub.StopServices();
                 hub = null;
@@ -112,10 +153,9 @@ namespace SmartHub.UWP.Core
             switch (e.PropertyName)
             {
                 case nameof(AppData.Language):
-                    SetLanguage(AppData.Language);
+                    SetLanguage();
                     break;
                 case nameof(AppData.ServerUrl):
-                    isServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
                     SetServerActivity();
                     break;
             }

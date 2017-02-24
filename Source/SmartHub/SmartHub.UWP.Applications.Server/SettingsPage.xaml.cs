@@ -13,6 +13,12 @@ namespace SmartHub.UWP.Applications.Server
         public string Text { get; set; }
     }
 
+    public class ThemeItem
+    {
+        public ElementTheme Value { get; set; }
+        public string Text { get; set; }
+    }
+
     public sealed partial class SettingsPage : Page
     {
         #region Constructor
@@ -20,6 +26,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             InitializeComponent();
             InitLanguageList();
+            InitThemeList();
         }
         #endregion
 
@@ -35,10 +42,12 @@ namespace SmartHub.UWP.Applications.Server
         #region Private methods
         private void SetLabelsText()
         {
+            AppShell.Current.SetNavigationInfo("Settings", "menuSettings");
+
             for (int i = 0; i < 10; i++)
                 (Application.Current.Resources["LabelsManager"] as LabelsManager).RefreshResources();
 
-            AppShell.Current.SetNavigationInfo("Settings", "menuSettings");
+            InitThemeList();
         }
         private void InitLanguageList()
         {
@@ -54,6 +63,21 @@ namespace SmartHub.UWP.Applications.Server
                     break;
                 }
         }
+        private void InitThemeList()
+        {
+            cbTheme.ItemsSource = new List<ThemeItem>() {
+                new ThemeItem() { Text = Labels.Default, Value = ElementTheme.Default },
+                new ThemeItem() { Text = Labels.Light, Value = ElementTheme.Light },
+                new ThemeItem() { Text = Labels.Dark, Value = ElementTheme.Dark }
+            };
+
+            foreach (ThemeItem li in cbTheme.Items)
+                if (li.Value == (ElementTheme) AppManager.AppData.Theme)
+                {
+                    cbTheme.SelectedItem = li;
+                    break;
+                }
+        }
         #endregion
 
         #region Event handlers
@@ -64,6 +88,18 @@ namespace SmartHub.UWP.Applications.Server
             {
                 AppManager.AppData.Language = selLang;
                 SetLabelsText();
+            }
+        }
+        private void cbTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbTheme.SelectedItem != null)
+            {
+                var selItem = (cbTheme.SelectedItem as ThemeItem).Value;
+                if (AppManager.AppData.Theme != (int) selItem)
+                {
+                    AppManager.AppData.Theme = (int) selItem;
+                    AppManager.SetAppTheme();
+                }
             }
         }
         #endregion
