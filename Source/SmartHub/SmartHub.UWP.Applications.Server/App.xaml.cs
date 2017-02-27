@@ -78,6 +78,7 @@ namespace SmartHub.UWP.Applications.Server
 
         //    Window.Current.Activate();
         //}
+
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             base.OnBackgroundActivated(args);
