@@ -1,7 +1,6 @@
-﻿using SmartHub.UWP.Plugins.UI.Attributes;
-using System;
+﻿using System;
 
-namespace SmartHub.UWP.Applications.Server.Common
+namespace SmartHub.UWP.Plugins.UI.Attributes
 {
     public class AppSectionItemEventArgs : EventArgs
     {

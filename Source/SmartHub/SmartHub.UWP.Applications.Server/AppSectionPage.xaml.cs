@@ -1,5 +1,4 @@
-﻿using SmartHub.UWP.Applications.Server.Common;
-using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;

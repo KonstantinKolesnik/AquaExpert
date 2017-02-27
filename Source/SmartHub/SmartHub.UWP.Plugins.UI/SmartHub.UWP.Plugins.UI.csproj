@@ -107,6 +107,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AppSectionItemEventArgs.cs" />
+    <Compile Include="Attributes\AppSectionItemEventHandler.cs" />
     <Compile Include="Attributes\AppSectionItemAttribute.cs" />
     <Compile Include="Attributes\AppSectionType.cs" />
     <Compile Include="Attributes\TileAttribute.cs" />
