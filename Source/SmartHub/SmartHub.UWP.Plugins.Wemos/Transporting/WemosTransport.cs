@@ -15,6 +15,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
         private const string remoteService = "22222";
         private const string remoteMulticastAddress = "224.3.0.5";
         private const string remoteBroadcastAddress = "255.255.255.255";
+
         private DatagramSocket listenerSocket = null;
         private const string socketId = "WemosTransportMulticastSocket";
         private const string socketBackgroundgTaskName = "WemosMulticastActivityBackgroundTask";
@@ -90,12 +91,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
         {
             if (listenerSocket != null)
             {
-                // DatagramSocket.Close() is exposed through the Dispose() method in C#.
-                // The call below explicitly closes the socket, freeing the UDP port that it is currently bound to.
                 listenerSocket.Dispose();
                 listenerSocket = null;
-
-                //Context.GetPlugin<SpeechPlugin>()?.Say("WEMOS UDP клиент остановлен");
             }
         }
         #endregion
@@ -142,8 +139,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                 taskBuilder.Name = socketBackgroundgTaskName;
                 taskBuilder.TaskEntryPoint = socketBackgroundgTaskName + ".SocketActivityTask";
                 taskBuilder.SetTrigger(new SocketActivityTrigger());
+                //taskBuilder.SetTrigger(new SystemTrigger(SystemTriggerType.TimeZoneChange, false));
+                //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
 
                 task = taskBuilder.Register();
+                //task.Completed += new BackgroundTaskCompletedEventHandler(OnCompleted);
             }
         }
         private async Task CheckSocketAsync()

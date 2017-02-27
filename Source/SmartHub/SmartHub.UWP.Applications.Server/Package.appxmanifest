@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="07a5a158-235a-40cb-bf90-3be263fed556" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Smart Hub</DisplayName>
-    <PublisherDisplayName>gothi_000</PublisherDisplayName>
+    <PublisherDisplayName>Konstantin Kolesnik</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
