@@ -28,22 +28,22 @@ namespace SmartHub.UWP.Plugins.UI
         //private object GetSectionItems(AppSectionType sectionType)
         //{
         //    return sectionItems
-        //        .Where(sectionItem => sectionItem.Type == sectionType)
-        //        .OrderBy(sectionItem => sectionItem.Title)
-        //        .Select(sectionItem => new
+        //        .Where(item => item.Type == sectionType)
+        //        .OrderBy(item => item.Name)
+        //        .Select(item => new
         //        {
         //            id = Guid.NewGuid(),
-        //            name = sectionItem.Title,
-        //            //path = sectionItem.GetModulePath(),
-        //            sortOrder = sectionItem.SortOrder,
-        //            tileTypeFullName = sectionItem.TileTypeFullName
+        //            name = item.Name,
+        //            //path = item.GetModulePath(),
+        //            sortOrder = item.SortOrder,
+        //            tileTypeFullName = item.TileTypeFullName
         //        }).ToArray();
         //}
         private List<AppSectionItemAttribute> GetSectionItems(AppSectionType sectionType)
         {
             return sectionItems
                 .Where(item => item.Type == sectionType)
-                .OrderBy(item => item.Title)
+                .OrderBy(item => item.Name)
                 .ToList();
         }
         #endregion

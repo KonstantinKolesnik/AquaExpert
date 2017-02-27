@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    LayoutUpdated="UserControl_LayoutUpdated">
+    LayoutUpdated="UserControl_LayoutUpdated"><!---->
 
     <UserControl.Resources>
         <CollectionViewSource x:Name="itemsViewSource"/>
@@ -23,7 +23,7 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE15E;" Margin="10,0" VerticalAlignment="Center"/>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Title}" Style="{ThemeResource ListItemTitleStyle}"/>
+                        <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTitleStyle}"/>
                         <TextBlock Text="{Binding Description}" Style="{ThemeResource ListItemSubtitleStyle}"/>
                     </StackPanel>
                 </Grid>
@@ -39,7 +39,7 @@
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
             ItemTemplate="{StaticResource ListItemTemplate}"
-            SelectionMode="{Binding SelectionMode}"
+            SelectionMode="Single"
             IsItemClickEnabled="True"
             IsSwipeEnabled="False"
             ItemClick="lvItems_ItemClick">

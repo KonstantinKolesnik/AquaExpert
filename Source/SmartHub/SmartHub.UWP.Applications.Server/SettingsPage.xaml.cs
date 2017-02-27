@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Applications.Server.Common;
+using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
@@ -98,7 +99,7 @@ namespace SmartHub.UWP.Applications.Server
                 if (AppManager.AppData.Theme != (int) selItem)
                 {
                     AppManager.AppData.Theme = (int) selItem;
-                    AppManager.SetAppTheme();
+                    LocalUtils.SetAppTheme();
                 }
             }
         }

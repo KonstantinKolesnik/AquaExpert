@@ -21,8 +21,8 @@ using Windows.Networking;
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini, D1, ESP8266) management")]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules (D1 Mini, D1, ESP8266) network")]
+    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini Pro, D1 Mini, D1, ESP8266) management")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules (D1 Mini Pro, D1 Mini, D1, ESP8266) network")]
     public class WemosPlugin : PluginBase
     {
         #region Fields

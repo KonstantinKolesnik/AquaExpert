@@ -22,20 +22,9 @@ namespace SmartHub.UWP.Applications.Server.Controls
             var uc = d as ucSectionItemsList;
             uc.UpdateItemsSource();
 
-            if (e.NewValue is ObservableCollection<AppSectionItemAttribute>)
-                (e.NewValue as ObservableCollection<AppSectionItemAttribute>).CollectionChanged += (s, args) => { uc.UpdateItemsSource(); };
-        }
-
-        public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register("SelectionMode", typeof(ListViewSelectionMode), typeof(ucSectionItemsList), new PropertyMetadata(ListViewSelectionMode.Single, new PropertyChangedCallback(OnSelectionModeChanged)));
-        public ListViewSelectionMode SelectionMode
-        {
-            get { return (ListViewSelectionMode) GetValue(SelectionModeProperty); }
-            set { SetValue(SelectionModeProperty, value); }
-        }
-        private static void OnSelectionModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var uc = d as ucSectionItemsList;
-            uc.SetSelectedItem();
+            var items = e.NewValue as ObservableCollection<AppSectionItemAttribute>;
+            if (items != null)
+                items.CollectionChanged += (s, args) => { uc.UpdateItemsSource(); };
         }
 
         public static readonly DependencyProperty IsSortedProperty = DependencyProperty.Register("IsSorted", typeof(bool), typeof(ucSectionItemsList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
@@ -95,11 +84,11 @@ namespace SmartHub.UWP.Applications.Server.Controls
             {
                 if (IsGrouped)
                     itemsViewSource.Source = ItemsSource
-                        .OrderBy(item => IsSorted ? item.Title : "")
-                        .GroupBy(item => item.Title.Substring(0, 1).ToUpper())
+                        .OrderBy(item => IsSorted ? item.Name : "")
+                        .GroupBy(item => item.Name.Substring(0, 1).ToUpper())
                         .OrderBy(item => item.Key);
                 else
-                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Title : "");
+                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Name : "");
             }
             else
                 itemsViewSource.Source = null;
@@ -109,7 +98,7 @@ namespace SmartHub.UWP.Applications.Server.Controls
         }
         private void SetSelectedItem()
         {
-            var selectedItem = SelectionMode == ListViewSelectionMode.Single ? (AppSectionPage.IsAppsSection ? AppSectionPage.SelectedItemApps : AppSectionPage.SelectedItemSystem) : null;
+            var selectedItem = AppSectionPage.IsAppsSection ? AppSectionPage.SelectedItemApps : AppSectionPage.SelectedItemSystem;
             if (lvItems.SelectedItem != selectedItem)
             {
                 lvItems.SelectedItem = selectedItem;

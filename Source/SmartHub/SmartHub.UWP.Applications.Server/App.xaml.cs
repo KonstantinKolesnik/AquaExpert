@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights;
+using SmartHub.UWP.Applications.Server.Common;
 using SmartHub.UWP.Core;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -55,7 +56,7 @@ namespace SmartHub.UWP.Applications.Server
             }
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
-            AppManager.SetAppTheme();
+            LocalUtils.SetAppTheme();
         }
         //protected override void OnActivated(IActivatedEventArgs args)
         //{

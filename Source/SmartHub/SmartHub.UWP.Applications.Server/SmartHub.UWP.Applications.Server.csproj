@@ -106,6 +106,7 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\AppCommands.cs" />
+    <Compile Include="Common\LocalUtils.cs" />
     <Compile Include="Controls\ucSectionItemsList.xaml.cs">
       <DependentUpon>ucSectionItemsList.xaml</DependentUpon>
     </Compile>
@@ -234,9 +235,7 @@
       <Name>Telerik UI For Universal Windows Platform</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

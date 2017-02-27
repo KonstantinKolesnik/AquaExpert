@@ -71,13 +71,6 @@ namespace SmartHub.UWP.Applications.Server
         }
         private void lvItems_ItemClicked(object sender, AppSectionItemEventArgs e)
         {
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                // hide master panel, show only details panel:
-                MasterColumn.Width = new GridLength(0);
-                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
-
             var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
             if (selectedItem != e.Item)
             {
@@ -86,7 +79,14 @@ namespace SmartHub.UWP.Applications.Server
                 else
                     SelectedItemSystem = e.Item;
 
-                DetailContentPresenter.Content = Activator.CreateInstance(e.Item.TypeFullName);
+                DetailContentPresenter.Content = Activator.CreateInstance(e.Item.UIModuleType);
+            }
+
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                // hide master panel, show only details panel:
+                MasterColumn.Width = new GridLength(0);
+                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
             }
         }
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -142,8 +142,8 @@ namespace SmartHub.UWP.Applications.Server
                 {
                     Items.Add(item);
 
-                    if (selectedItem != null && selectedItem.TypeFullName == item.TypeFullName)
-                        DetailContentPresenter.Content = Activator.CreateInstance(item.TypeFullName);
+                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
+                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
                 }
         }
         #endregion

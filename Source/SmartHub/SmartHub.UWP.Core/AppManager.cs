@@ -5,9 +5,6 @@ using System.ComponentModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;
-using Windows.UI;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 
 namespace SmartHub.UWP.Core
 {
@@ -82,33 +79,6 @@ namespace SmartHub.UWP.Core
         public static void OnSuspending(SuspendingDeferral defferal)
         {
             //hub.StopServices();
-        }
-
-        public static void SetAppTheme()
-        {
-            var theme = (ElementTheme) AppData.Theme;
-
-            //AppShell.Current.RequestedTheme = theme;
-
-            // set title bar colors:
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            if (titleBar != null)
-            {
-                //(Color) Application.Current.Resources["SystemChromeMediumColor"];
-                var colorLight = Color.FromArgb(255, 230, 230, 230); // #FFE6E6E6
-                var colorDark = Color.FromArgb(255, 31, 31, 31); // #FF1F1F1F
-
-                Color color;
-                if (theme == ElementTheme.Light)
-                    color = colorLight;
-                else if (theme == ElementTheme.Dark)
-                    color = colorDark;
-                else if (theme == ElementTheme.Default)
-                    color = Application.Current.RequestedTheme == ApplicationTheme.Light ? colorLight : colorDark;
-
-                titleBar.BackgroundColor = color;
-                titleBar.ButtonBackgroundColor = color;
-            }
         }
         #endregion
 

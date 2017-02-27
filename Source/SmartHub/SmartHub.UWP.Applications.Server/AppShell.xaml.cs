@@ -112,57 +112,24 @@ namespace SmartHub.UWP.Applications.Server
             }
         }
 
-        //private bool isBackFromDialog = false;
-        //private async void AppFrame_Navigating(object sender, NavigatingCancelEventArgs e)
-        //{
-        //    if (e.SourcePageType == typeof(ProfilesPage) && AppManager.EcosApp.ActiveProfile != null)
-        //    {
-        //        if (!isBackFromDialog)
-        //        {
-        //            e.Cancel = true;
-        //            await Utils.MessageBoxYesNo(Labels.confirmTerminateSession,
-        //                (onYes) =>
-        //                {
-        //                    isBackFromDialog = true;
-        //                    AppFrame.Navigate(typeof(ProfilesPage));
-        //                },
-        //                (onNo) =>
-        //                {
-        //                    if (checkedMenuItem != null)
-        //                        checkedMenuItem.IsChecked = true;
-        //                }
-        //            );
-        //        }
-        //        else
-        //        {
-        //            isBackFromDialog = false;
-        //            e.Cancel = false;
-        //        }
-        //    }
-        //}
         private void AppFrame_Navigated(object sender, NavigationEventArgs e)
         {
             if (menu.DisplayMode != SplitViewDisplayMode.CompactInline)
                 menu.IsPaneOpen = false;
 
             // clear frame stack from previous duplicates to the end
-            //if (e.NavigationMode != NavigationMode.Back)
-            {
-                int idx = -1;
-
-                foreach (var pse in AppFrame.BackStack)
-                    if (pse.SourcePageType == e.SourcePageType)
-                    {
-                        idx = AppFrame.BackStack.IndexOf(pse);
-                        break;
-                    }
-
-                if (idx != -1)
+            int idx = -1;
+            foreach (var pse in AppFrame.BackStack)
+                if (pse.SourcePageType == e.SourcePageType)
                 {
-                    int n = AppFrame.BackStack.Count - idx;
-                    for (int i = 0; i < n; i++)
-                        AppFrame.BackStack.RemoveAt(idx);
+                    idx = AppFrame.BackStack.IndexOf(pse);
+                    break;
                 }
+            if (idx != -1)
+            {
+                int n = AppFrame.BackStack.Count - idx;
+                for (int i = 0; i < n; i++)
+                    AppFrame.BackStack.RemoveAt(idx);
             }
 
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame) sender).CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
