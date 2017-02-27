@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Core.Communication;
+﻿using SmartHub.UWP.Core.Communication.AppService;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 

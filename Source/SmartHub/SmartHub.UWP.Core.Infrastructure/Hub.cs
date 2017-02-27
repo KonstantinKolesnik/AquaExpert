@@ -10,12 +10,12 @@ namespace SmartHub.UWP.Core.Infrastructure
     public class Hub
     {
         #region Fields
+        //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         [Import]
         public IServiceContext Context
         {
             get; internal set;
         }
-        //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
         [OnImportsSatisfied]
