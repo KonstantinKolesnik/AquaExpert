@@ -34,7 +34,17 @@ namespace SmartHub.UWP.Plugins.ApiListener
             foreach (var handler in ApiCommands)
                 apiHandlers.Add(handler.Metadata.CommandName, handler.Value);
 
-            server.CommandProcessor = CommandProcessor;
+            server.CommandProcessor = (name, parameters) =>
+            {
+                try
+                {
+                    return apiHandlers.ContainsKey(name) ? apiHandlers[name](parameters) : null;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            };
         }
         public async override void StartPlugin()
         {
@@ -43,20 +53,6 @@ namespace SmartHub.UWP.Plugins.ApiListener
         public async override void StopPlugin()
         {
             await server.Stop();
-        }
-        #endregion
-
-        #region Event handlers
-        private object CommandProcessor(string name, params object[] parameters)
-        {
-            try
-            {
-                return apiHandlers.ContainsKey(name) ? apiHandlers[name](parameters) : null;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
         #endregion
     }
