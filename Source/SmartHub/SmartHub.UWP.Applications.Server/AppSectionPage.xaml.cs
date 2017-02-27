@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Applications.Server.Common;
 using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -58,6 +57,11 @@ namespace SmartHub.UWP.Applications.Server
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
             await UpdateList();
+        }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            AppShell.Current.SetPrimaryBackRequestHandler(null);
+            base.OnNavigatedFrom(e);
         }
         #endregion
 
@@ -131,8 +135,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
 
-            var apiCommandName = IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system";
-            var items = await StreamClient.RequestAsync<IEnumerable<AppSectionItemAttribute>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, apiCommandName);
+            var items = await Utils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
 
             Items.Clear();
             if (items != null)

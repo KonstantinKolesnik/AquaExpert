@@ -1,7 +1,9 @@
-﻿using SmartHub.UWP.Core.Infrastructure;
+﻿using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.Infrastructure;
 using SmartHub.UWP.Plugins.ApiListener;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;

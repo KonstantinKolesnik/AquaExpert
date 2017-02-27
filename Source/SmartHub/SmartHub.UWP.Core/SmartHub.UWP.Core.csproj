@@ -115,6 +115,10 @@
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
+      <Project>{9db4329d-1705-4f7a-98fc-3901ec521599}</Project>
+      <Name>SmartHub.UWP.Core.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.Infrastructure\SmartHub.UWP.Core.Infrastructure.csproj">
       <Project>{AF8E3222-A068-4E8B-B409-B03B23C523F1}</Project>
       <Name>SmartHub.UWP.Core.Infrastructure</Name>

@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
 using System;
@@ -59,7 +58,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
-                var items = await StreamClient.RequestAsync<IEnumerable<WemosLineValue>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/line/values", Monitor.LineID, 10);
+                var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, 10);
 
                 if (items != null)
                     foreach (var item in items.OrderBy(i => i.TimeStamp))

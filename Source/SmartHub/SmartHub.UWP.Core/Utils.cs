@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core.Communication.Stream;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -207,7 +208,16 @@ namespace SmartHub.UWP.Core
         }
         #endregion
 
-
+        #region Stream Client
+        public static async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
+        {
+            return await StreamClient.RequestAsync<T>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
+        }
+        public static async Task RequestAsync(string commandName, params object[] parameters)
+        {
+            await RequestAsync<string>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
+        }
+        #endregion
 
 
 

@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
@@ -52,7 +51,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             if (!string.IsNullOrEmpty(tbControllerName.Text) && cbTypes.SelectedIndex != -1)
             {
-                var controller = await StreamClient.RequestAsync<WemosController>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers/add", tbControllerName.Text.Trim(), (WemosControllerType)cbTypes.SelectedItem);
+                var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", tbControllerName.Text.Trim(), (WemosControllerType)cbTypes.SelectedItem);
                 if (controller != null)
                     Controllers.Add(controller);
             }
@@ -60,7 +59,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             int id = (int) ((sender as ToggleSwitch).Tag);
-            var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
+            var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
         }
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
@@ -86,7 +85,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 
             await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
-                bool res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers/delete", id);
+                bool res = await Utils.RequestAsync<bool>("/api/wemos/controllers/delete", id);
                 if (res)
                     Controllers.Remove(Controllers.FirstOrDefault(m => m.ID == id));
             });
@@ -113,7 +112,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         }
         private async Task UpdateControllersList()
         {
-            var items = await StreamClient.RequestAsync<List<WemosController>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers");
+            var items = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
 
             Controllers.Clear();
             if (items != null)
@@ -141,7 +140,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             var item = context.CellInfo.Item as WemosController;
             if (!string.IsNullOrEmpty(item.Name))
             {
-                var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/controllers/setname", item.ID, item.Name);
+                var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setname", item.ID, item.Name);
                 if (res)
                     Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
             }

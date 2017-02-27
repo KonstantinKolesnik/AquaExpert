@@ -45,11 +45,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <uctrls:ucSectionItemsList
-            x:Name="lvItems"
-            Grid.Column="0"
-            ItemsSource="{Binding Items}"
-            ItemClicked="lvItems_ItemClicked"/>
+        <uctrls:ucSectionItemsList x:Name="lvItems" ItemsSource="{Binding Items}" ItemClicked="lvItems_ItemClicked"/>
 
         <ContentPresenter
             x:Name="DetailContentPresenter"
@@ -60,7 +56,6 @@
                     <EntranceThemeTransition/>
                 </TransitionCollection>
             </ContentPresenter.ContentTransitions>
-
         </ContentPresenter>
     </Grid>
 </Page>

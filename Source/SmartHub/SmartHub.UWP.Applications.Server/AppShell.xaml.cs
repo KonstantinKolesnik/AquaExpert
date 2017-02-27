@@ -91,43 +91,6 @@ namespace SmartHub.UWP.Applications.Server
 
             e.Handled = handled;
         }
-        //private async void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs e)
-        //{
-        //    if (profilesForSharing.Count > 0)
-        //    {
-        //        var deferral = e.Request.GetDeferral();
-
-        //        var file = await StorageFile.CreateStreamedFileAsync("EcosCab.ecoscabprofiles", StreamedFileDataRequestedHandler, null);
-        //        List<StorageFile> files = new List<StorageFile>() { file };
-
-        //        e.Request.Data.Properties.Title = $"{AppManager.AppName} {Labels.Profiles}";
-        //        //e.Request.Data.Properties.Description = "A demonstration on how to share";
-        //        e.Request.Data.Properties.ApplicationName = AppManager.AppName;
-        //        //e.Request.Data.Properties.ContentSourceApplicationLink = new Uri("ms-sdk-sharesourcecs:navigate?page=" + GetType().Name);
-        //        e.Request.Data.SetStorageItems(files);
-
-        //        deferral.Complete();
-        //    }
-        //    else
-        //        e.Request.FailWithDisplayText(Labels.NoData);
-        //}
-
-        //private void StreamedFileDataRequestedHandler(StreamedFileDataRequest request)
-        //{
-        //    try
-        //    {
-        //        using (var stream = request.AsStreamForWrite())
-        //        using (var streamWriter = new StreamWriter(stream))
-        //            streamWriter.Write(profilesForSharing.ToJson());
-
-        //        request.Dispose();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        request.FailAndClose(StreamedFileFailureMode.Incomplete);
-        //    }
-        //}
-
         private void btnHamburger_Click(object sender, RoutedEventArgs e)
         {
             menu.IsPaneOpen = !menu.IsPaneOpen;

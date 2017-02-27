@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
@@ -57,7 +56,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         {
             if (!string.IsNullOrEmpty(tbMonitorName.Text) && cbLines.SelectedIndex != -1)
             {
-                var monitor = await StreamClient.RequestAsync<WemosMonitorDto>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/add", tbMonitorName.Text.Trim(), (cbLines.SelectedItem as WemosLine).ID);
+                var monitor = await Utils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", tbMonitorName.Text.Trim(), (cbLines.SelectedItem as WemosLine).ID);
                 if (monitor != null)
                     Monitors.Add(monitor);
             }
@@ -78,7 +77,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
 
             await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
-                bool res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/delete", id);
+                bool res = await Utils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
                 if (res)
                     Monitors.Remove(Monitors.FirstOrDefault(m => m.ID == id));
             });
@@ -105,7 +104,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosLine>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/lines");
+            var items = await Utils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
 
             Lines.Clear();
             if (items != null)
@@ -114,7 +113,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         }
         private async Task UpdateMonitorsList()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosMonitorDto>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors");
+            var items = await Utils.RequestAsync<IEnumerable<WemosMonitorDto>>("/api/wemos/monitors");
 
             Monitors.Clear();
             if (items != null)
@@ -123,7 +122,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         }
         private async Task UpdateMonitorValues()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosLineValue>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/line/values", SelectedMonitor.LineID, 10);
+            var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", SelectedMonitor.LineID, 10);
 
             MonitorValues.Clear();
             if (items != null)
@@ -151,7 +150,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             var item = context.CellInfo.Item as WemosMonitorDto;
             if (!string.IsNullOrEmpty(item.Name))
             {
-                var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/monitors/setnames", item.ID, item.Name, item.NameForInformer);
+                var res = await Utils.RequestAsync<bool>("/api/wemos/monitors/setnames", item.ID, item.Name, item.NameForInformer);
                 if (res)
                     Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
             }

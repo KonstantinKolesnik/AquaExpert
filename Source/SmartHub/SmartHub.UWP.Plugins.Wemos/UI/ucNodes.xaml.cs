@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
         #region Private methods
         private async Task UpdateNodesList()
         {
-            var items = await StreamClient.RequestAsync<IEnumerable<WemosNode>>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes");
+            var items = await Utils.RequestAsync<IEnumerable<WemosNode>>("/api/wemos/nodes");
 
             Nodes.Clear();
             if (items != null)
@@ -64,7 +63,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI
             var context = parameter as EditContext;
 
             var item = context.CellInfo.Item as WemosNode;
-            var res = await StreamClient.RequestAsync<bool>(AppManager.RemoteUrl, AppManager.RemoteServiceName, "/api/wemos/nodes/setname", item.NodeID, item.Name);
+            var res = await Utils.RequestAsync<bool>("/api/wemos/nodes/setname", item.NodeID, item.Name);
             if (res)
                 Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }
