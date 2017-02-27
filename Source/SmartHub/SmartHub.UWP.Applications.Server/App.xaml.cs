@@ -15,8 +15,9 @@ namespace SmartHub.UWP.Applications.Server
     {
         public App()
         {
-            InitializeComponent();
             WindowsAppInitializer.InitializeAsync();
+
+            InitializeComponent();
             Suspending += OnSuspending;
             UnhandledException += App_UnhandledException;
         }
