@@ -10,57 +10,36 @@
     Loaded="UserControl_Loaded">
 
     <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="rp.HorizontalAlignment" Value="Left"/>
-                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
-        <Grid x:Name="pnlControllersList" Margin="{StaticResource RootContainerMargin}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <RelativePanel x:Name="rp">
+        <ContentDialog
+            x:Name="dlgAddController"
+            VerticalAlignment="Stretch"
+            Title=""
+            PrimaryButtonText="{Binding Labels.OK, Source={StaticResource LabelsManager}}"
+            SecondaryButtonText="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}">
+            <StackPanel>
                 <TextBox
                     x:Name="tbControllerName"
                     Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
-                    RelativePanel.AlignTopWithPanel="True"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.AlignRightWithPanel="True"
                     HorizontalAlignment="Stretch"
-                    Margin="0,0,0,10"/>
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
 
                 <ComboBox
                     x:Name="cbTypes"
-                    ItemsSource="{Binding ControllerTypes}"
                     Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.AlignRightWithPanel="True"
-                    RelativePanel.Below="tbControllerName"
+                    ItemsSource="{Binding ControllerTypes}"
                     HorizontalAlignment="Stretch"
-                    Margin="0,0,0,10"/>
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
+            </StackPanel>
+        </ContentDialog>
 
-                <Button
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.Below="cbTypes"
-                    Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
-                    Width="150"
-                    Margin="0,0,0,10" Click="ButtonAdd_Click"/>
-            </RelativePanel>
+        <Grid x:Name="pnlControllersList">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <telerikGrid:RadDataGrid
+            <telerikGrid:RadDataGrid Margin="{StaticResource RootContainerMargin}"
                 x:Name="gridControllers"
-                Grid.Row="1"
                 ItemsSource="{Binding Controllers}"
                 AutoGenerateColumns="False"
                 UserEditMode="Inline"
@@ -70,7 +49,7 @@
                     <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
                         <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
                             <DataTemplate>
-                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE951;" Margin="10,0" VerticalAlignment="Center"/>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEADF;" Margin="10,0" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
                     </telerikGrid:DataGridTemplateColumn>
@@ -106,6 +85,16 @@
                     <ctrls:ControllerCommitEditCommand/>
                 </telerikGrid:RadDataGrid.Commands>
             </telerikGrid:RadDataGrid>
+
+            <CommandBar Grid.Row="1">
+                <CommandBar.PrimaryCommands>
+                    <AppBarButton Label="{Binding Labels.Add, Source={StaticResource LabelsManager}}" Click="ButtonAdd_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE109;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar.PrimaryCommands>
+            </CommandBar>
         </Grid>
 
         <Grid x:Name="pnlControllerConfiguration" Visibility="Collapsed">

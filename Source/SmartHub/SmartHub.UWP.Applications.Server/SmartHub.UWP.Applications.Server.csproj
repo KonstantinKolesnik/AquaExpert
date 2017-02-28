@@ -197,6 +197,10 @@
       <Project>{b846b4c2-22d3-46b4-8cba-cba4853d35a2}</Project>
       <Name>SmartHub.UWP.Core.StringResources</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Xaml\SmartHub.UWP.Core.Xaml.csproj">
+      <Project>{4dbe46c4-28b7-4fd6-a9f9-c0f92c8f5693}</Project>
+      <Name>SmartHub.UWP.Core.Xaml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
       <Project>{1345726d-287f-4561-a2da-b29ec65c85a1}</Project>
       <Name>SmartHub.UWP.Core</Name>

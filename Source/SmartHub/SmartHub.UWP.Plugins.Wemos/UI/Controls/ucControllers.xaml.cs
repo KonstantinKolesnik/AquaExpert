@@ -49,17 +49,24 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(tbControllerName.Text) && cbTypes.SelectedIndex != -1)
-            {
-                var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", tbControllerName.Text.Trim(), (WemosControllerType)cbTypes.SelectedItem);
-                if (controller != null)
-                    Controllers.Add(controller);
-            }
+            ContentDialogResult result = await dlgAddController.ShowAsync();
+
+
+            //if (!string.IsNullOrEmpty(tbControllerName.Text) && cbTypes.SelectedIndex != -1)
+            //{
+            //    var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", tbControllerName.Text.Trim(), (WemosControllerType)cbTypes.SelectedItem);
+            //    if (controller != null)
+            //        Controllers.Add(controller);
+            //}
         }
         private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
-            int id = (int) ((sender as ToggleSwitch).Tag);
-            var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
+            var tag = (sender as ToggleSwitch).Tag;
+            if (tag != null)
+            {
+                int id = (int) tag;
+                var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
+            }
         }
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
@@ -109,6 +116,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (items != null)
                 foreach (var item in items)
                     ControllerTypes.Add((WemosControllerType) item);
+
+            cbTypes.SelectedIndex = 0;
         }
         private async Task UpdateControllersList()
         {

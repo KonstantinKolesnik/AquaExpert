@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{208680E0-389C-4EA4-A69C-140CE09F0AE6}</ProjectGuid>
+    <ProjectGuid>{4DBE46C4-28B7-4FD6-A9F9-C0F92C8F5693}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.UWP.Plugins.Wemos</RootNamespace>
-    <AssemblyName>SmartHub.UWP.Plugins.Wemos</AssemblyName>
+    <RootNamespace>SmartHub.UWP.Core.Xaml</RootNamespace>
+    <AssemblyName>SmartHub.UWP.Core.Xaml</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
@@ -107,136 +107,37 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
-    <Compile Include="Controllers\Models\WemosController.cs" />
-    <Compile Include="Controllers\WemosControllerBase.cs" />
-    <Compile Include="Controllers\WemosControllerType.cs" />
-    <Compile Include="Controllers\WemosScheduledSwitchController.cs" />
-    <Compile Include="Core\WemosInternalMessageType.cs" />
-    <Compile Include="Core\Models\WemosLineType.cs" />
-    <Compile Include="Core\WemosMessage.cs" />
-    <Compile Include="Core\WemosMessageEventArgs.cs" />
-    <Compile Include="Core\WemosMessageEventHandler.cs" />
-    <Compile Include="Core\WemosMessageParser.cs" />
-    <Compile Include="Core\WemosMessageType.cs" />
-    <Compile Include="Core\WemosStreamMessageType.cs" />
-    <Compile Include="Core\Models\WemosLine.cs" />
-    <Compile Include="Core\Models\WemosLineValue.cs" />
-    <Compile Include="Monitors\Models\WemosMonitor.cs" />
-    <Compile Include="Core\Models\WemosNode.cs" />
-    <Compile Include="Core\Models\WemosNodeBatteryValue.cs" />
-    <Compile Include="Core\Models\WemosSetting.cs" />
-    <Compile Include="Monitors\WemosMonitorDto.cs" />
-    <Compile Include="Transporting\WemosTransport.cs" />
-    <Compile Include="Transporting\WemosTransportBackgroundTask.cs" />
-    <Compile Include="UI\Main.xaml.cs">
-      <DependentUpon>Main.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucControllers.xaml.cs">
-      <DependentUpon>ucControllers.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucControllerScheduledSwitch.xaml.cs">
-      <DependentUpon>ucControllerScheduledSwitch.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucLines.xaml.cs">
-      <DependentUpon>ucLines.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucMonitor.xaml.cs">
-      <DependentUpon>ucMonitor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucMonitors.xaml.cs">
-      <DependentUpon>ucMonitors.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\ucNodes.xaml.cs">
-      <DependentUpon>ucNodes.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WemosPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WemosTile.cs" />
-    <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.Wemos.rd.xml" />
+    <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
+    <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Xaml.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
-      <Project>{9DB4329D-1705-4F7A-98FC-3901EC521599}</Project>
-      <Name>SmartHub.UWP.Core.Communication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
-      <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
-      <Name>SmartHub.UWP.Core.Plugins</Name>
-    </ProjectReference>
+    <Page Include="General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Main.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="SplitViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="ValueConverters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SmartHub.UWP.Core.StringResources\SmartHub.UWP.Core.StringResources.csproj">
       <Project>{b846b4c2-22d3-46b4-8cba-cba4853d35a2}</Project>
       <Name>SmartHub.UWP.Core.StringResources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Core.Xaml\SmartHub.UWP.Core.Xaml.csproj">
-      <Project>{4dbe46c4-28b7-4fd6-a9f9-c0f92c8f5693}</Project>
-      <Name>SmartHub.UWP.Core.Xaml</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
-      <Project>{1345726D-287F-4561-A2DA-B29EC65C85A1}</Project>
-      <Name>SmartHub.UWP.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
-      <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
-      <Name>SmartHub.UWP.Plugins.ApiListener</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Plugins.Speech\SmartHub.UWP.Plugins.Speech.csproj">
-      <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
-      <Name>SmartHub.UWP.Plugins.Speech</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Plugins.Timer\SmartHub.UWP.Plugins.Timer.csproj">
-      <Project>{2254a4f7-b66f-4068-8b9f-54ac550d5b32}</Project>
-      <Name>SmartHub.UWP.Plugins.Timer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj">
-      <Project>{4dfaa97c-af72-4497-bfd2-b14d58ab340c}</Project>
-      <Name>SmartHub.UWP.Plugins.UI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="Telerik UI For Universal Windows Platform, Version=2017.1.118.45">
-      <Name>Telerik UI For Universal Windows Platform</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Zones\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="UI\Main.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucControllers.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucControllerScheduledSwitch.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucLines.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucMonitor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucMonitors.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucNodes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
