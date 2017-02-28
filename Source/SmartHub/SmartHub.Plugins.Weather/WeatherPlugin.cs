@@ -76,7 +76,7 @@ namespace SmartHub.Plugins.Weather
                 {
                     var locations = session.Query<Location>().ToList();
                     foreach (var location in locations)
-                        UpdateOneLocation(location, session);
+                        UpdateLocation(location, session);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace SmartHub.Plugins.Weather
                 {
                     var location = session.Get<Location>(locationId);
                     if (location != null)
-                        UpdateOneLocation(location, session);
+                        UpdateLocation(location, session);
                 }
             }
         }
@@ -124,7 +124,7 @@ namespace SmartHub.Plugins.Weather
         #endregion
 
         #region Private methods
-        private void UpdateOneLocation(Location location, ISession session)
+        private void UpdateLocation(Location location, ISession session)
         {
             try
             {
@@ -326,6 +326,7 @@ namespace SmartHub.Plugins.Weather
                 };
         }
         #endregion
+
         #endregion
     }
 }

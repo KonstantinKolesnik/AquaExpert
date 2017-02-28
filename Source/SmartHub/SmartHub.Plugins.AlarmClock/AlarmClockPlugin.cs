@@ -222,6 +222,7 @@ namespace SmartHub.Plugins.AlarmClock
         #endregion
 
         #region Web API
+
         #region api list
         [HttpCommand("/api/alarm-clock/list")]
         public object GetAlarmList(HttpRequestParams request)
@@ -360,6 +361,7 @@ namespace SmartHub.Plugins.AlarmClock
             return new { id, name, hours, minutes, enabled, scriptId, scripts };
         }
         #endregion
+
         #endregion
     }
 }

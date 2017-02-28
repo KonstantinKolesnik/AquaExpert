@@ -219,6 +219,7 @@ namespace SmartHub.Plugins.Scripts
         #endregion
 
         #region Web API
+
         #region Scripts
         [HttpCommand("/api/scripts/list")]
         private object apiGetScripts(HttpRequestParams request)
@@ -365,6 +366,7 @@ namespace SmartHub.Plugins.Scripts
             return null;
         }
         #endregion
+
         #endregion
     }
 }

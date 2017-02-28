@@ -83,6 +83,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public override async void StartPlugin()
         {
             await transport.Open();
+
             await RequestPresentation();
 
             foreach (var controller in controllers)
