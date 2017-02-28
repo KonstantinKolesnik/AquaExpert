@@ -4,5 +4,5 @@
     xmlns:vc="using:SmartHub.UWP.Applications.Server.ValueConverters">
 
     <vc:StringToUpperStringConverter x:Key="StringToUpperStringConverter"/>
-
+    <vc:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
 </ResourceDictionary>

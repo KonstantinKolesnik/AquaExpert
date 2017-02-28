@@ -117,6 +117,7 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ValueConverters\StringToBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
   </ItemGroup>
   <ItemGroup>

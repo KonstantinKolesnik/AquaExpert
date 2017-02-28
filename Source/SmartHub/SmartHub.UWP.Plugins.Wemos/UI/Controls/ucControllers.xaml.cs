@@ -16,10 +16,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucControllers : UserControl
     {
         #region Properties
-        public ObservableCollection<WemosControllerType> ControllerTypes
-        {
-            get;
-        } = new ObservableCollection<WemosControllerType>();
         public ObservableCollection<WemosController> Controllers
         {
             get;
@@ -49,15 +45,17 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialogResult result = await dlgAddController.ShowAsync();
+            var result = await dlgAddController.ShowAsync();
 
+            if (result == ContentDialogResult.Primary)
+            {
+                var name = (dlgAddController.FindName("tbControllerName") as TextBox).Text;
+                var type = (WemosControllerType) (dlgAddController.FindName("cbTypes") as ComboBox).SelectedItem;
 
-            //if (!string.IsNullOrEmpty(tbControllerName.Text) && cbTypes.SelectedIndex != -1)
-            //{
-            //    var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", tbControllerName.Text.Trim(), (WemosControllerType)cbTypes.SelectedItem);
-            //    if (controller != null)
-            //        Controllers.Add(controller);
-            //}
+                var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name.Trim(), type);
+                if (controller != null)
+                    Controllers.Add(controller);
+            }
         }
         private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
@@ -110,14 +108,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private void UpdateTypesList()
         {
-            var items = Enum.GetValues(typeof(WemosControllerType));
+            var items = new ObservableCollection<WemosControllerType>();
+            foreach (var item in Enum.GetValues(typeof(WemosControllerType)))
+                items.Add((WemosControllerType) item);
 
-            ControllerTypes.Clear();
-            if (items != null)
-                foreach (var item in items)
-                    ControllerTypes.Add((WemosControllerType) item);
-
-            cbTypes.SelectedIndex = 0;
+            cbTypes.ItemsSource = items;
+            cbTypes.SelectedItem = items[0];
         }
         private async Task UpdateControllersList()
         {

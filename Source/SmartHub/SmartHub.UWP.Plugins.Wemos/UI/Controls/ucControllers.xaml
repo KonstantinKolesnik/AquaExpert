@@ -2,7 +2,7 @@
     x:Class="SmartHub.UWP.Plugins.Wemos.UI.Controls.ucControllers"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
+    xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,27 +10,28 @@
     Loaded="UserControl_Loaded">
 
     <Grid>
+        <!--<uctrls:dlgAddController x:Name="dlgAddController"/>-->
+
         <ContentDialog
             x:Name="dlgAddController"
             VerticalAlignment="Stretch"
-            Title=""
             PrimaryButtonText="{Binding Labels.OK, Source={StaticResource LabelsManager}}"
-            SecondaryButtonText="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}">
+            SecondaryButtonText="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}"
+            IsPrimaryButtonEnabled="{Binding Text, ElementName=tbControllerName, Mode=OneWay, Converter={StaticResource StringToBooleanConverter}}">
             <StackPanel>
                 <TextBox
                     x:Name="tbControllerName"
                     Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
-
                 <ComboBox
                     x:Name="cbTypes"
                     Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}"
-                    ItemsSource="{Binding ControllerTypes}"
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
             </StackPanel>
         </ContentDialog>
+
 
         <Grid x:Name="pnlControllersList">
             <Grid.RowDefinitions>
@@ -82,10 +83,10 @@
                     </telerikGrid:DataGridTemplateColumn>
                 </telerikGrid:RadDataGrid.Columns>
                 <telerikGrid:RadDataGrid.Commands>
-                    <ctrls:ControllerCommitEditCommand/>
+                    <uctrls:ControllerCommitEditCommand/>
                 </telerikGrid:RadDataGrid.Commands>
             </telerikGrid:RadDataGrid>
-
+            
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
                     <AppBarButton Label="{Binding Labels.Add, Source={StaticResource LabelsManager}}" Click="ButtonAdd_Click">
