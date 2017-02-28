@@ -11,7 +11,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace SmartHub.UWP.Plugins.Wemos.UI
+namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
     public sealed partial class ucMonitor : UserControl
     {

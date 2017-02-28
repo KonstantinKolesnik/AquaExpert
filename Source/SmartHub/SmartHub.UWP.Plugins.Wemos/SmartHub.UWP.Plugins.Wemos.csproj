@@ -135,22 +135,22 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucControllers.xaml.cs">
+    <Compile Include="UI\Controls\ucControllers.xaml.cs">
       <DependentUpon>ucControllers.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucControllerScheduledSwitch.xaml.cs">
+    <Compile Include="UI\Controls\ucControllerScheduledSwitch.xaml.cs">
       <DependentUpon>ucControllerScheduledSwitch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucLines.xaml.cs">
+    <Compile Include="UI\Controls\ucLines.xaml.cs">
       <DependentUpon>ucLines.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucMonitor.xaml.cs">
+    <Compile Include="UI\Controls\ucMonitor.xaml.cs">
       <DependentUpon>ucMonitor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucMonitors.xaml.cs">
+    <Compile Include="UI\Controls\ucMonitors.xaml.cs">
       <DependentUpon>ucMonitors.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucNodes.xaml.cs">
+    <Compile Include="UI\Controls\ucNodes.xaml.cs">
       <DependentUpon>ucNodes.xaml</DependentUpon>
     </Compile>
     <Compile Include="WemosPlugin.cs" />
@@ -198,7 +198,7 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Controls\" />
+    <Folder Include="Zones\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Main.xaml">
@@ -209,27 +209,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucControllers.xaml">
+    <Page Include="UI\Controls\ucControllers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucControllerScheduledSwitch.xaml">
+    <Page Include="UI\Controls\ucControllerScheduledSwitch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucLines.xaml">
+    <Page Include="UI\Controls\ucLines.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucMonitor.xaml">
+    <Page Include="UI\Controls\ucMonitor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucMonitors.xaml">
+    <Page Include="UI\Controls\ucMonitors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ucNodes.xaml">
+    <Page Include="UI\Controls\ucNodes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

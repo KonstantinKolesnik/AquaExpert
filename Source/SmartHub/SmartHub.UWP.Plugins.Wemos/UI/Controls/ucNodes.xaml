@@ -1,8 +1,8 @@
 ﻿<UserControl
-    x:Class="SmartHub.UWP.Plugins.Wemos.UI.ucNodes"
+    x:Class="SmartHub.UWP.Plugins.Wemos.UI.Controls.ucNodes"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SmartHub.UWP.Plugins.Wemos.UI"
+    xmlns:ctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -34,7 +34,7 @@
             <telerikGrid:DataGridTextColumn PropertyName="LastBatteryValue" Header="{Binding Labels.Battery, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0}%" CanUserEdit="False" SizeMode="Auto"/>
         </telerikGrid:RadDataGrid.Columns>
         <telerikGrid:RadDataGrid.Commands>
-            <local:NodeCommitEditCommand/>
+            <ctrls:NodeCommitEditCommand/>
         </telerikGrid:RadDataGrid.Commands>
     </telerikGrid:RadDataGrid>
 </UserControl>

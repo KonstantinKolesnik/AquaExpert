@@ -1,6 +1,6 @@
 ﻿namespace SmartHub.UWP.Core.Communication.Stream
 {
-    public class CommandRequest
+    class CommandRequest
     {
         public string Name
         {
