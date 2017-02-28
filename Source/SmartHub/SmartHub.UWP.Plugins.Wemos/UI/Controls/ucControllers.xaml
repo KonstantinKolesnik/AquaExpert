@@ -10,8 +10,6 @@
     Loaded="UserControl_Loaded">
 
     <Grid>
-        <!--<uctrls:dlgAddController x:Name="dlgAddController"/>-->
-
         <ContentDialog
             x:Name="dlgAddController"
             VerticalAlignment="Stretch"
@@ -32,14 +30,13 @@
             </StackPanel>
         </ContentDialog>
 
-
         <Grid x:Name="pnlControllersList">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <telerikGrid:RadDataGrid Margin="{StaticResource RootContainerMargin}"
+            <telerikGrid:RadDataGrid Margin="{StaticResource RootContainerMargin}" Visibility="Collapsed"
                 x:Name="gridControllers"
                 ItemsSource="{Binding Controllers}"
                 AutoGenerateColumns="False"
@@ -86,7 +83,51 @@
                     <uctrls:ControllerCommitEditCommand/>
                 </telerikGrid:RadDataGrid.Commands>
             </telerikGrid:RadDataGrid>
-            
+
+            <ListView
+                x:Name="lvCollections"
+                ItemsSource="{Binding Controllers}"
+                ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                SelectionMode="None"
+                IsItemClickEnabled="True"
+                IsSwipeEnabled="False"
+                Margin="{StaticResource RootContainerMargin}">
+                <ListView.GroupStyle>
+                    <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource ListGroupHeaderTemplate}"/>
+                </ListView.GroupStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,5" BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xEADF;" Margin="0,0,15,0" VerticalAlignment="Center"/>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTitleStyle}" TextTrimming="WordEllipsis" TextWrapping="NoWrap"/>
+                                    <!--<uctrls:ucPropertyNameValuePair IsSmall="True" PropertyName="{Binding Labels.Locomotives, Source={StaticResource LabelsManager}}" PropertyValue="{Binding LocomotivesIDs.Count}"/>
+                                    <uctrls:ucPropertyNameValuePair IsSmall="True" PropertyName="{Binding Labels.Accessories, Source={StaticResource LabelsManager}}" PropertyValue="{Binding AccessoriesIDs.Count}"/>-->
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+
+
+
+
+
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
                     <AppBarButton Label="{Binding Labels.Add, Source={StaticResource LabelsManager}}" Click="ButtonAdd_Click">
