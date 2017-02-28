@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.StringResources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,38 +70,20 @@ namespace SmartHub.UWP.Core
         public static async Task<IUICommand> MessageBoxOKCancel(string msg, UICommandInvokedHandler onOK = null, UICommandInvokedHandler onCancel = null)
         {
             var dlg = new MessageDialog(msg, AppManager.AppName);
+            dlg.Commands.Add(new UICommand(Labels.OK) { Id = "btnOK", Invoked = onOK });
+            dlg.Commands.Add(new UICommand(Labels.Cancel) { Id = "btnCancel", Invoked = onCancel });
             dlg.DefaultCommandIndex = 1;
-
-            //UICommand btnOK = new UICommand(Labels.OK) { Id = "btnOK" };
-            UICommand btnOK = new UICommand("OK") { Id = "btnOK" };
-            if (onOK != null)
-                btnOK.Invoked = onOK;
-            dlg.Commands.Add(btnOK);
-
-            //UICommand btnCancel = new UICommand(Labels.Cancel) { Id = "btnCancel" };
-            UICommand btnCancel = new UICommand("Cancel") { Id = "btnOK" };
-            if (onCancel != null)
-                btnCancel.Invoked = onCancel;
-            dlg.Commands.Add(btnCancel);
+            dlg.CancelCommandIndex = 0;
 
             return await dlg.ShowAsync();
         }
         public static async Task<IUICommand> MessageBoxYesNo(string msg, UICommandInvokedHandler onYes = null, UICommandInvokedHandler onNo = null)
         {
             var dlg = new MessageDialog(msg, AppManager.AppName);
+            dlg.Commands.Add(new UICommand(Labels.Yes) { Id = "btnYes", Invoked = onYes });
+            dlg.Commands.Add(new UICommand(Labels.No) { Id = "btnNo", Invoked = onNo });
             dlg.DefaultCommandIndex = 1;
-
-            //UICommand btnYes = new UICommand(Labels.Yes) { Id = "btnYes" };
-            UICommand btnYes = new UICommand("Yes") { Id = "btnYes" };
-            if (onYes != null)
-                btnYes.Invoked = onYes;
-            dlg.Commands.Add(btnYes);
-
-            //UICommand btnNo = new UICommand(Labels.No) { Id = "btnNo" };
-            UICommand btnNo = new UICommand("No") { Id = "btnNo" };
-            if (onNo != null)
-                btnNo.Invoked = onNo;
-            dlg.Commands.Add(btnNo);
+            dlg.CancelCommandIndex = 0;
 
             return await dlg.ShowAsync();
         }

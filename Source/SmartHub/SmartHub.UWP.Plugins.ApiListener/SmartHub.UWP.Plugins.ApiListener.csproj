@@ -107,9 +107,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiCommand.cs" />
+    <Compile Include="ApiMethod.cs" />
     <Compile Include="ApiListenerPlugin.cs" />
-    <Compile Include="Attributes\ApiCommandAttribute.cs" />
+    <Compile Include="Attributes\ApiMethodAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.ApiListener.rd.xml" />
   </ItemGroup>

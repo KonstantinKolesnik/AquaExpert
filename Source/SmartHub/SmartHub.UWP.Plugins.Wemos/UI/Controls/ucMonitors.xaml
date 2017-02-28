@@ -38,7 +38,7 @@
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignRightWithPanel="True"
                     HorizontalAlignment="Stretch"
-                    Margin="0,0,0,10"/>
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
 
                 <ComboBox
                     x:Name="cbLines"
@@ -49,14 +49,15 @@
                     RelativePanel.AlignRightWithPanel="True"
                     RelativePanel.Below="tbMonitorName"
                     HorizontalAlignment="Stretch"
-                    Margin="0,0,0,10"/>
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
 
                 <Button
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.Below="cbLines"
                     Content="{Binding Labels.Add, Source={StaticResource LabelsManager}}"
                     Width="150"
-                    Margin="0,0,0,10" Click="ButtonAdd_Click"/>
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                    Click="ButtonAdd_Click"/>
             </RelativePanel>
 
             <telerikGrid:RadDataGrid

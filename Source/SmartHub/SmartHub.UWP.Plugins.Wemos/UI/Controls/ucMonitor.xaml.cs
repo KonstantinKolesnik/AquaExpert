@@ -16,6 +16,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucMonitor : UserControl
     {
         private System.Threading.Timer timer;
+        private double updateIntervalSeconds = 10;
+        private double valuesDisplayCount = 10;
 
         public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorDto), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
         public WemosMonitorDto Monitor
@@ -46,7 +48,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             InitializeComponent();
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            timer = new System.Threading.Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(10).TotalMilliseconds);
+            timer = new System.Threading.Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(updateIntervalSeconds).TotalMilliseconds);
         }
 
         private async Task UpdateMonitorValues()
@@ -58,14 +60,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
-                var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, 10);
-
+                var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
                 if (items != null)
                     foreach (var item in items.OrderBy(i => i.TimeStamp))
                         MonitorValues.Add(item);
             }
 
-            LastValue = MonitorValues.Any() ? MonitorValues.LastOrDefault().Value + " " + GetUnits(): "---";
+            LastValue = MonitorValues.Any() ? $"{MonitorValues.LastOrDefault().Value} {GetUnits()}" : "---";
         }
         private string GetUnits()
         {

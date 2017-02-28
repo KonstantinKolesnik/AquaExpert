@@ -31,11 +31,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             get { return (WemosMonitorDto) GetValue(SelectedMonitorProperty); }
             set { SetValue(SelectedMonitorProperty, value); }
         }
-
-        public ObservableCollection<WemosLineValue> MonitorValues
-        {
-            get;
-        } = new ObservableCollection<WemosLineValue>();
         #endregion
 
         #region Constructor
@@ -119,15 +114,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (items != null)
                 foreach (var item in items)
                     Monitors.Add(item);
-        }
-        private async Task UpdateMonitorValues()
-        {
-            var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", SelectedMonitor.LineID, 10);
-
-            MonitorValues.Clear();
-            if (items != null)
-                foreach (var item in items)
-                    MonitorValues.Add(item);
         }
         #endregion
     }

@@ -14,15 +14,15 @@ namespace SmartHub.UWP.Plugins.ApiListener
 
         #region Fields
         private StreamServer server = new StreamServer();
-        private readonly Dictionary<string, ApiCommand> apiHandlers = new Dictionary<string, ApiCommand>();
+        private readonly Dictionary<string, ApiMethod> apiMethods = new Dictionary<string, ApiMethod>();
         #endregion
 
         #region Imports
         /// <summary>
-        /// API handlers from all plugins
+        /// API methods from all plugins
         /// </summary>
         [ImportMany]
-        public IEnumerable<Lazy<ApiCommand, ApiCommandAttribute>> ApiCommands
+        public IEnumerable<Lazy<ApiMethod, ApiMethodAttribute>> ApiMethods
         {
             get; set;
         }
@@ -31,14 +31,14 @@ namespace SmartHub.UWP.Plugins.ApiListener
         #region Plugin ovverrides
         public override void InitPlugin()
         {
-            foreach (var handler in ApiCommands)
-                apiHandlers.Add(handler.Metadata.CommandName, handler.Value);
+            foreach (var apiMethod in ApiMethods)
+                apiMethods.Add(apiMethod.Metadata.MethodName, apiMethod.Value);
 
             server.CommandProcessor = (name, parameters) =>
             {
                 try
                 {
-                    return apiHandlers.ContainsKey(name) ? apiHandlers[name](parameters) : null;
+                    return apiMethods.ContainsKey(name) ? apiMethods[name](parameters) : null;
                 }
                 catch (Exception)
                 {

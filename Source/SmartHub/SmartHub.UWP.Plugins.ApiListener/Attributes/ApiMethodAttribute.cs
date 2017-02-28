@@ -5,9 +5,9 @@ namespace SmartHub.UWP.Plugins.ApiListener.Attributes
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class ApiCommandAttribute : Attribute
+    public class ApiMethodAttribute : Attribute
     {
-        public string CommandName
+        public string MethodName
         {
             get; set;
         }

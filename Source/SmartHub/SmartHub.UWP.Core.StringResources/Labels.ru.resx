@@ -258,4 +258,13 @@
   <data name="Theme" xml:space="preserve">
     <value>Тема</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
 </root>
