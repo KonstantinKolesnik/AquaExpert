@@ -85,7 +85,6 @@
             </telerikGrid:RadDataGrid>
 
             <ListView
-                x:Name="lvCollections"
                 ItemsSource="{Binding Controllers}"
                 ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
                 SelectionMode="None"
@@ -133,12 +132,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-
-
-
-
-
 
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>

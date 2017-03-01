@@ -8,6 +8,14 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal" Margin="{StaticResource RootContainerMargin}">
+            <!--<Image Source="{Binding EcosApp.ActiveProfile.LocomotivesManager.SelectedItem.Image.BitmapImage, Source={StaticResource AppManager}}" Stretch="None"/>-->
+            <!--<TextBlock Text="{Binding Name}" Style="{StaticResource ItemDetailsTitleStyle}"/>-->
+        </StackPanel>
     </Grid>
 </UserControl>
