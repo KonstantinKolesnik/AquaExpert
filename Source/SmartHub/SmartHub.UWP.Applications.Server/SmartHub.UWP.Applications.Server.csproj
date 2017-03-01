@@ -117,8 +117,6 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ValueConverters\StringToBooleanConverter.cs" />
-    <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -162,18 +160,13 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Resources\SplitViewStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Resources\ValueConverters.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="SettingsPage.xaml">
@@ -195,7 +188,7 @@
       <Name>SmartHub.UWP.Core.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.StringResources\SmartHub.UWP.Core.StringResources.csproj">
-      <Project>{b846b4c2-22d3-46b4-8cba-cba4853d35a2}</Project>
+      <Project>{B846B4C2-22D3-46B4-8CBA-CBA4853D35A2}</Project>
       <Name>SmartHub.UWP.Core.StringResources</Name>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core.Xaml\SmartHub.UWP.Core.Xaml.csproj">

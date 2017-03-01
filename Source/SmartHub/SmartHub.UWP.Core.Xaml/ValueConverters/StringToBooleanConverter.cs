@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace SmartHub.UWP.Applications.Server.ValueConverters
+namespace SmartHub.UWP.Core.Xaml.ValueConverters
 {
     public class StringToBooleanConverter : IValueConverter
     {

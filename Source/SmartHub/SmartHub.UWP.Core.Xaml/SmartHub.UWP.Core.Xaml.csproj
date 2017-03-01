@@ -108,39 +108,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueConverters\StringToBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Xaml.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="General.xaml">
+    <Content Include="Resources\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Main.xaml">
+    </Content>
+    <Content Include="Main.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="SplitViewStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="ValueConverters.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartHub.UWP.Core.StringResources\SmartHub.UWP.Core.StringResources.csproj">
-      <Project>{b846b4c2-22d3-46b4-8cba-cba4853d35a2}</Project>
-      <Name>SmartHub.UWP.Core.StringResources</Name>
-    </ProjectReference>
+    <Folder Include="Controls\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
