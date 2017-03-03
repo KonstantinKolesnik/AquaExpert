@@ -109,6 +109,8 @@
   <ItemGroup>
     <Compile Include="AppData.cs" />
     <Compile Include="AppManager.cs" />
+    <Compile Include="ObjectEventArgs.cs" />
+    <Compile Include="ObjectEventHandler.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
