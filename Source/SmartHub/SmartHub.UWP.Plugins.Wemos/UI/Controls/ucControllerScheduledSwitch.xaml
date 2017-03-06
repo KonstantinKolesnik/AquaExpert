@@ -2,10 +2,11 @@
     x:Class="SmartHub.UWP.Plugins.Wemos.UI.Controls.ucControllerScheduledSwitch"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
+    xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,9 +14,40 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="{StaticResource RootContainerMargin}">
-            <!--<Image Source="{Binding EcosApp.ActiveProfile.LocomotivesManager.SelectedItem.Image.BitmapImage, Source={StaticResource AppManager}}" Stretch="None"/>-->
-            <!--<TextBlock Text="{Binding Name}" Style="{StaticResource ItemDetailsTitleStyle}"/>-->
-        </StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rp.HorizontalAlignment" Value="Left"/>
+                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <RelativePanel x:Name="rp">
+            <ComboBox
+                x:Name="cbLines"
+                Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                ItemsSource="{Binding Lines}"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignRightWithPanel="True"
+                HorizontalAlignment="Stretch"
+                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                SelectionChanged="cbLines_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </RelativePanel>
+        
+        
     </Grid>
 </UserControl>

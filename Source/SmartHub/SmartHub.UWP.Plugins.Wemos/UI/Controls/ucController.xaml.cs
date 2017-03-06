@@ -37,7 +37,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             else
                 switch (Controller.Type)
                 {
-                    case WemosControllerType.ScheduledSwitch: ctrlPresenter.Content = new ucControllerScheduledSwitch(); break;
+                    case WemosControllerType.ScheduledSwitch: ctrlPresenter.Content = new ucControllerScheduledSwitch(Controller); break;
 
 
                 }

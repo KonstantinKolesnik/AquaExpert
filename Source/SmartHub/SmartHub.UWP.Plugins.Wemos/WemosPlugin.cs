@@ -683,7 +683,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var model = GetController(id);
             if (model != null)
             {
-                model.SerializeConfiguration(config);
+                model.Configuration = config;
                 SaveOrUpdate(model);
                 return true;
             }
