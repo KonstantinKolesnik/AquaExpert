@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
-using SmartHub.UWP.Plugins.Wemos.Monitors;
 using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
 using System;
 using System.Collections.Generic;
@@ -16,10 +15,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
     public sealed partial class ucMonitor : UserControl
     {
+        #region Fields
         private System.Threading.Timer timer;
         private double updateIntervalSeconds = 10;
         private double valuesDisplayCount = 10;
+        #endregion
 
+        #region Properties
         public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorObservable), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
         public WemosMonitorObservable Monitor
         {
@@ -28,8 +30,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var uc = d as ucMonitor;
-            await uc.UpdateMonitorValues();
+            await (d as ucMonitor).UpdateMonitorValues();
         }
 
         public ObservableCollection<WemosLineValue> MonitorValues
@@ -43,7 +44,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             get { return (string) GetValue(LastValueProperty); }
             set { SetValue(LastValueProperty, value); }
         }
+        #endregion
 
+        #region Constructor
         public ucMonitor()
         {
             InitializeComponent();
@@ -51,7 +54,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             timer = new System.Threading.Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(updateIntervalSeconds).TotalMilliseconds);
         }
+        #endregion
 
+        #region Private methods
         private async Task UpdateMonitorValues()
         {
             MonitorValues.Clear();
@@ -73,10 +78,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             return Monitor != null ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : "";
         }
+        #endregion
 
+        #region Event handlers
         private async void timerCallback(object state)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateMonitorValues(); });
         }
+        #endregion
     }
 }
