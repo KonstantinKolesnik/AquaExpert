@@ -628,6 +628,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (controller != null)
             {
                 Save(model);
+
                 controller.Init(Context);
                 controllers.Add(controller);
 

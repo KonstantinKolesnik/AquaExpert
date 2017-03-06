@@ -36,13 +36,13 @@
                     <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
                 </telerikChart:RadCartesianChart.HorizontalAxis>
                 <telerikChart:RadCartesianChart.VerticalAxis>
-                    <telerikChart:LinearAxis x:Name="yAxis" LabelFormat="{}{0:N2}"/>
+                    <telerikChart:LinearAxis x:Name="yAxis" /><!--LabelFormat="{}{0:N1}"-->
                 </telerikChart:RadCartesianChart.VerticalAxis>
                 <telerikChart:RadCartesianChart.Grid>
                     <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->
                 </telerikChart:RadCartesianChart.Grid>
 
-                <!--<telerikChart:LineSeries ItemsSource="{Binding MonitorValues}">
+                <!--<telerikChart:LineSeries ItemsSource="{Binding Values}">
                         <telerikChart:LineSeries.ValueBinding>
                             <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
                         </telerikChart:LineSeries.ValueBinding>
@@ -51,9 +51,9 @@
                         </telerikChart:LineSeries.CategoryBinding>
                     </telerikChart:LineSeries>-->
 
-                <telerikChart:SplineSeries ItemsSource="{Binding MonitorValues}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
+                <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
                     <telerikChart:SplineSeries.LabelDefinitions>
-                        <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" HorizontalAlignment="Right" VerticalAlignment="Top" Format="{}{0:N1}"/>
+                        <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" HorizontalAlignment="Right" VerticalAlignment="Top" /><!--Format="{}{0:N1}"-->
                     </telerikChart:SplineSeries.LabelDefinitions>
 
                     <telerikChart:SplineSeries.ValueBinding>

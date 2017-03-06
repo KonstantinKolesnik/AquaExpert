@@ -30,10 +30,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            await (d as ucMonitor).UpdateMonitorValues();
+            await (d as ucMonitor).UpdateValues();
         }
 
-        public ObservableCollection<WemosLineValue> MonitorValues
+        public ObservableCollection<WemosLineValue> Values
         {
             get;
         } = new ObservableCollection<WemosLineValue>();
@@ -57,22 +57,22 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #endregion
 
         #region Private methods
-        private async Task UpdateMonitorValues()
+        private async Task UpdateValues()
         {
-            MonitorValues.Clear();
+            Values.Clear();
 
             if (Monitor != null)
             {
-                yAxis.LabelFormat = "{0:N2} " + GetUnits();
+                yAxis.LabelFormat = "{0:N1} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
                 var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
                 if (items != null)
                     foreach (var item in items.OrderBy(i => i.TimeStamp))
-                        MonitorValues.Add(item);
+                        Values.Add(item);
             }
 
-            LastValue = MonitorValues.Any() ? $"{MonitorValues.LastOrDefault().Value} {GetUnits()}" : "---";
+            LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
         }
         private string GetUnits()
         {
@@ -83,7 +83,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Event handlers
         private async void timerCallback(object state)
         {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateMonitorValues(); });
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
         }
         #endregion
     }

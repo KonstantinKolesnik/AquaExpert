@@ -28,7 +28,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
 
             switch (model.Type)
             {
-                //case WemosControllerType.Heater: return new HeaterController(model);
+                case WemosControllerType.Heater: return new WemosHeaterController(model);
                 case WemosControllerType.ScheduledSwitch: return new WemosScheduledSwitchController(model);
                 //case WemosControllerType.WaterLevel: return new WaterLevelController(model);
 

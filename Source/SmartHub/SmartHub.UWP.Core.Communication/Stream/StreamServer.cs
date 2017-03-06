@@ -11,6 +11,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #region Fields
         private StreamSocketListener listener;
         private string serviceName;
+        //private List<> clients
         #endregion
 
         #region Properties
