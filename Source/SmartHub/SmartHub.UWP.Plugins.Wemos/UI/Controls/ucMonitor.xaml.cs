@@ -1,6 +1,7 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
+using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,10 +20,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private double updateIntervalSeconds = 10;
         private double valuesDisplayCount = 10;
 
-        public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorDto), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
-        public WemosMonitorDto Monitor
+        public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorObservable), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
+        public WemosMonitorObservable Monitor
         {
-            get { return (WemosMonitorDto) GetValue(MonitorProperty); }
+            get { return (WemosMonitorObservable) GetValue(MonitorProperty); }
             set { SetValue(MonitorProperty, value); }
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

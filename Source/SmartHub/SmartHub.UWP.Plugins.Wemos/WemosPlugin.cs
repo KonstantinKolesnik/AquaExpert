@@ -576,6 +576,23 @@ namespace SmartHub.UWP.Plugins.Wemos
             return false;
         });
 
+        [ApiMethod(MethodName = "/api/wemos/monitors/setconfig"), Export(typeof(ApiMethod))]
+        public ApiMethod apiSetMonitorConfiguration => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var config = parameters[1].ToString();
+
+            var model = GetMonitor(id);
+            if (model != null)
+            {
+                model.SerializeConfiguration(config);
+                SaveOrUpdate(model);
+                return true;
+            }
+
+            return false;
+        });
+
         [ApiMethod(MethodName = "/api/wemos/monitors/delete"), Export(typeof(ApiMethod))]
         public ApiMethod apiDeleteMonitor => ((parameters) =>
         {

@@ -124,6 +124,7 @@
     <Compile Include="Core\WemosStreamMessageType.cs" />
     <Compile Include="Core\Models\WemosLine.cs" />
     <Compile Include="Core\Models\WemosLineValue.cs" />
+    <Compile Include="Monitors\Models\WemosMonitorObservable.cs" />
     <Compile Include="Monitors\Models\WemosMonitor.cs" />
     <Compile Include="Core\Models\WemosNode.cs" />
     <Compile Include="Core\Models\WemosNodeBatteryValue.cs" />
@@ -136,6 +137,9 @@
     </Compile>
     <Compile Include="UI\Controls\ucControllersList.xaml.cs">
       <DependentUpon>ucControllersList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ucMonitorsList.xaml.cs">
+      <DependentUpon>ucMonitorsList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
@@ -218,6 +222,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Controls\ucControllersList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ucMonitorsList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
