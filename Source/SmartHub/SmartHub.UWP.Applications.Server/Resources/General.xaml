@@ -12,4 +12,6 @@
     <vc:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     <vc:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
     <vc:NotNullToInvisibilityConverter x:Key="NotNullToInvisibilityConverter"/>
+    <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <vc:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter"/>
 </ResourceDictionary>

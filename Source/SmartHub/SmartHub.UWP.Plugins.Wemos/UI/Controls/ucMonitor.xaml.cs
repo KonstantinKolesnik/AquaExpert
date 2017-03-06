@@ -44,6 +44,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             get { return (string) GetValue(LastValueProperty); }
             set { SetValue(LastValueProperty, value); }
         }
+
+        public static readonly DependencyProperty IsEditableProperty = DependencyProperty.Register("IsEditable", typeof(bool), typeof(ucMonitor), new PropertyMetadata(false));
+        public bool IsEditable
+        {
+            get { return (bool) GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
+        }
         #endregion
 
         #region Constructor

@@ -31,6 +31,7 @@
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
+                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                 InputScope="AlphanumericFullWidth"/>
 
             <ContentPresenter

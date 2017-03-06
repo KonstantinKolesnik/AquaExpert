@@ -17,53 +17,106 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
-        <Border Grid.Column="1" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-            <TextBlock Text="{Binding LastValue}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
-        </Border>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rp.HorizontalAlignment" Value="Left"/>
+                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
-            <telerikChart:RadCartesianChart Margin="0,10">
-                <telerikChart:RadCartesianChart.HorizontalAxis>
-                    <telerikChart:CategoricalAxis FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>
-                    <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
-                </telerikChart:RadCartesianChart.HorizontalAxis>
-                <telerikChart:RadCartesianChart.VerticalAxis>
-                    <telerikChart:LinearAxis x:Name="yAxis" /><!--LabelFormat="{}{0:N1}"-->
-                </telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:RadCartesianChart.Grid>
-                    <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->
-                </telerikChart:RadCartesianChart.Grid>
-
-                <!--<telerikChart:LineSeries ItemsSource="{Binding Values}">
-                        <telerikChart:LineSeries.ValueBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
-                        </telerikChart:LineSeries.ValueBinding>
-                        <telerikChart:LineSeries.CategoryBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="TimeStamp"/>
-                        </telerikChart:LineSeries.CategoryBinding>
-                    </telerikChart:LineSeries>-->
-
-                <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
-                    <telerikChart:SplineSeries.LabelDefinitions>
-                        <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" HorizontalAlignment="Right" VerticalAlignment="Top" /><!--Format="{}{0:N1}"-->
-                    </telerikChart:SplineSeries.LabelDefinitions>
-
-                    <telerikChart:SplineSeries.ValueBinding>
-                        <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
-                    </telerikChart:SplineSeries.ValueBinding>
-                    <telerikChart:SplineSeries.CategoryBinding>
-                        <telerikChart:PropertyNameDataPointBinding PropertyName="TimeStamp"/>
-                    </telerikChart:SplineSeries.CategoryBinding>
-                </telerikChart:SplineSeries>
-            </telerikChart:RadCartesianChart>
+        <Grid Visibility="{Binding IsEditable, Converter={StaticResource BooleanToInvisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
+            <Border Grid.Column="1" Background="{ThemeResource SystemControlForegroundAccentBrush}">
+                <TextBlock Text="{Binding LastValue}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
+            </Border>
         </Grid>
+        
+        <Grid Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <RelativePanel x:Name="rp">
+                <TextBox
+                    x:Name="tbName"
+                    Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                    Text="{Binding Monitor.Name, Mode=TwoWay}"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    HorizontalAlignment="Stretch"
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                    InputScope="AlphanumericFullWidth"/>
+
+                <TextBox
+                    x:Name="tbNameForInformer"
+                    Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}"
+                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                    Text="{Binding Monitor.NameForInformer, Mode=TwoWay}"
+                    RelativePanel.Below="tbName"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    HorizontalAlignment="Stretch"
+                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                    InputScope="AlphanumericFullWidth"/>
+            </RelativePanel>
+
+            <Border Grid.Row="1" Background="{ThemeResource SystemControlForegroundAccentBrush}" HorizontalAlignment="Right">
+                <TextBlock Text="{Binding LastValue}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
+            </Border>
+        </Grid>
+
+        <telerikChart:RadCartesianChart Grid.Row="2" Margin="0,10">
+            <telerikChart:RadCartesianChart.HorizontalAxis>
+                <telerikChart:CategoricalAxis FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>
+                <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
+            </telerikChart:RadCartesianChart.HorizontalAxis>
+            <telerikChart:RadCartesianChart.VerticalAxis>
+                <telerikChart:LinearAxis x:Name="yAxis" /><!--LabelFormat="{}{0:N1}"-->
+            </telerikChart:RadCartesianChart.VerticalAxis>
+            <telerikChart:RadCartesianChart.Grid>
+                <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->
+            </telerikChart:RadCartesianChart.Grid>
+
+            <!--<telerikChart:LineSeries ItemsSource="{Binding Values}">
+                    <telerikChart:LineSeries.ValueBinding>
+                        <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
+                    </telerikChart:LineSeries.ValueBinding>
+                    <telerikChart:LineSeries.CategoryBinding>
+                        <telerikChart:PropertyNameDataPointBinding PropertyName="TimeStamp"/>
+                    </telerikChart:LineSeries.CategoryBinding>
+                </telerikChart:LineSeries>-->
+
+            <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
+                <telerikChart:SplineSeries.LabelDefinitions>
+                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" HorizontalAlignment="Right" VerticalAlignment="Top" /><!--Format="{}{0:N1}"-->
+                </telerikChart:SplineSeries.LabelDefinitions>
+
+                <telerikChart:SplineSeries.ValueBinding>
+                    <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
+                </telerikChart:SplineSeries.ValueBinding>
+                <telerikChart:SplineSeries.CategoryBinding>
+                    <telerikChart:PropertyNameDataPointBinding PropertyName="TimeStamp"/>
+                </telerikChart:SplineSeries.CategoryBinding>
+            </telerikChart:SplineSeries>
+        </telerikChart:RadCartesianChart>
     </Grid>
 </UserControl>
