@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,21 +28,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private void ucControllersList_ItemClicked(object sender, ObjectEventArgs e)
         {
             SelectedController = e.Item as WemosController;
-
-            var ctrl = WemosControllerBase.FromController(SelectedController);
-            switch (SelectedController.Type)
-            {
-                case WemosControllerType.ScheduledSwitch:
-                    ctrlPresenter.Content = new ucControllerScheduledSwitch();
-                    break;
-
-
-            }
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             SelectedController = null;
-            ctrlPresenter.Content = null;
         }
         #endregion
     }

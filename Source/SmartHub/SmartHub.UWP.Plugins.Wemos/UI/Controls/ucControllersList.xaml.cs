@@ -171,14 +171,5 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             ItemClicked?.Invoke(sender, new ObjectEventArgs(e.ClickedItem as WemosController));
         }
         #endregion
-
-
-        //var item = context.CellInfo.Item as WemosController;
-        //    if (!string.IsNullOrEmpty(item.Name))
-        //    {
-        //        var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setname", item.ID, item.Name);
-        //        if (res)
-        //            Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
-        //    }
     }
 }

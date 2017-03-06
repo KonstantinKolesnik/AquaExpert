@@ -16,24 +16,13 @@
 
         <Grid Visibility="{Binding SelectedController, Converter={StaticResource NotNullToVisibilityConverter}}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding SelectedController.Name}"/>
+            <uctrls:ucController Controller="{Binding SelectedController}" Margin="{StaticResource RootContainerMargin}"/>
 
-
-
-            <ContentPresenter x:Name="ctrlPresenter" Grid.Row="1" Margin="{StaticResource RootContainerMargin}">
-                <ContentPresenter.ContentTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition/>
-                    </TransitionCollection>
-                </ContentPresenter.ContentTransitions>
-            </ContentPresenter>
-
-            <CommandBar Grid.Row="2">
+            <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
                     <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
                         <AppBarButton.Icon>
