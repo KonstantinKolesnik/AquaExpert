@@ -112,6 +112,7 @@
     <Compile Include="Controllers\Models\WemosController.cs" />
     <Compile Include="Controllers\WemosControllerBase.cs" />
     <Compile Include="Controllers\WemosControllerType.cs" />
+    <Compile Include="Controllers\WemosHeaterController.cs" />
     <Compile Include="Controllers\WemosScheduledSwitchController.cs" />
     <Compile Include="Core\WemosInternalMessageType.cs" />
     <Compile Include="Core\Models\WemosLineType.cs" />

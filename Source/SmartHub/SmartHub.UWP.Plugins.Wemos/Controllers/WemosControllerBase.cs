@@ -11,7 +11,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected WemosController model;
         protected WemosPlugin host;
         protected IServiceContext context;
-        //protected float? lastLineValue;
         #endregion
 
         #region Constructor
@@ -40,33 +39,26 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             this.context = context;
             host = context.GetPlugin<WemosPlugin>();
-
-            //InitLastValues();
         }
         #endregion
 
         #region Abstract methods
         public abstract bool IsMyMessage(WemosMessage message);
         public abstract void RequestLinesValues();
+
         protected abstract void Process();
         #endregion
 
-        #region Protected methods
-        //protected virtual void InitLastValues()
-        //{
-        //}
-        #endregion
-
         #region Event handlers
-        public virtual void MessageCalibration(WemosMessage message)
+        internal virtual void MessageCalibration(WemosMessage message)
         {
         }
-        public virtual void MessageReceived(WemosMessage message)
+        internal virtual void MessageReceived(WemosMessage message)
         {
             if (model.IsAutoMode)
                 Process();
         }
-        public void TimerElapsed(DateTime now)
+        internal void TimerElapsed(DateTime now)
         {
             if (model.IsAutoMode)
                 Process();

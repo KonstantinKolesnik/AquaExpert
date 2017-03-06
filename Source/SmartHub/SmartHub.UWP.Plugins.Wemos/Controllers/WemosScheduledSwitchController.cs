@@ -17,19 +17,18 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
     {
         public class ControllerConfiguration
         {
-            public int LineSwitchID { get; set; }
-            public List<Period> ActivePeriods { get; set; }
+            public int LineSwitchID
+            {
+                get; set;
+            } = -1;
+            public List<Period> ActivePeriods
+            {
+                get;
+            } = new List<Period>();
 
             public static ControllerConfiguration Default
             {
-                get
-                {
-                    return new ControllerConfiguration()
-                    {
-                        LineSwitchID = -1,
-                        ActivePeriods = new List<Period>()
-                    };
-                }
+                get { return new ControllerConfiguration(); }
             }
         }
 
@@ -45,16 +44,16 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Constructor
-        public WemosScheduledSwitchController(WemosController controller)
-            : base (controller)
+        public WemosScheduledSwitchController(WemosController model)
+            : base (model)
         {
-            if (string.IsNullOrEmpty(controller.Configuration))
+            if (string.IsNullOrEmpty(model.Configuration))
             {
                 configuration = ControllerConfiguration.Default;
-                controller.SerializeConfiguration(configuration);
+                model.SerializeConfiguration(configuration);
             }
             else
-                configuration = controller.DeserializeConfiguration<ControllerConfiguration>();
+                configuration = model.DeserializeConfiguration<ControllerConfiguration>();
         }
         #endregion
 
@@ -69,15 +68,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         protected async override void Process()
         {
-            if (model.IsAutoMode)
-            {
-                DateTime now = DateTime.Now;
-                bool isActiveNew = false;
-                foreach (var range in configuration.ActivePeriods)
-                    isActiveNew |= (range.IsEnabled && IsInRange(now, range));
+            DateTime now = DateTime.Now;
+            bool isActiveNew = false;
+            foreach (var range in configuration.ActivePeriods)
+                isActiveNew |= (range.IsEnabled && IsInRange(now, range));
 
-                await host.SetLineValue(LineSwitch, isActiveNew ? 1 : 0);
-            }
+            await host.SetLineValue(LineSwitch, isActiveNew ? 1 : 0);
         }
         #endregion
 
