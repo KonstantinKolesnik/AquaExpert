@@ -8,23 +8,30 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
     public sealed partial class ucControllers : UserControl
     {
+        #region Properties
+        public static readonly DependencyProperty SelectedControllerProperty = DependencyProperty.Register("SelectedController", typeof(WemosController), typeof(ucControllers), null);
+        public WemosController SelectedController
+        {
+            get { return (WemosController) GetValue(SelectedControllerProperty); }
+            set { SetValue(SelectedControllerProperty, value); }
+        }
+        #endregion
+
         #region Constructor
         public ucControllers()
         {
             InitializeComponent();
+            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
 
         #region Event handlers
         private void ucControllersList_ItemClicked(object sender, ObjectEventArgs e)
         {
-            var selectedController = e.Item as WemosController;
+            SelectedController = e.Item as WemosController;
 
-            ucControllersList.Visibility = Visibility.Collapsed;
-            pnlControllerConfiguration.Visibility = Visibility.Visible;
-
-            var ctrl = WemosControllerBase.FromController(selectedController);
-            switch (selectedController.Type)
+            var ctrl = WemosControllerBase.FromController(SelectedController);
+            switch (SelectedController.Type)
             {
                 case WemosControllerType.ScheduledSwitch:
                     ctrlPresenter.Content = new ucControllerScheduledSwitch();
@@ -35,10 +42,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            SelectedController = null;
             ctrlPresenter.Content = null;
-
-            ucControllersList.Visibility = Visibility.Visible;
-            pnlControllerConfiguration.Visibility = Visibility.Collapsed;
         }
         #endregion
     }

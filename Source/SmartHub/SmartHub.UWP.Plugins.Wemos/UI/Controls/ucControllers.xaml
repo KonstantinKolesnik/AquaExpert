@@ -9,18 +9,23 @@
 
     <Grid>
         <uctrls:ucControllersList
-            x:Name="ucControllersList"
+            Visibility="{Binding SelectedController, Converter={StaticResource NotNullToInvisibilityConverter}}"
             IsGrouped="True"
             IsSorted="True"
             ItemClicked="ucControllersList_ItemClicked"/>
 
-        <Grid x:Name="pnlControllerConfiguration" Visibility="Collapsed">
+        <Grid Visibility="{Binding SelectedController, Converter={StaticResource NotNullToVisibilityConverter}}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ContentPresenter x:Name="ctrlPresenter" Margin="{StaticResource RootContainerMargin}">
+            <TextBox Text="{Binding SelectedController.Name}"/>
+
+
+
+            <ContentPresenter x:Name="ctrlPresenter" Grid.Row="1" Margin="{StaticResource RootContainerMargin}">
                 <ContentPresenter.ContentTransitions>
                     <TransitionCollection>
                         <EntranceThemeTransition/>
@@ -28,7 +33,7 @@
                 </ContentPresenter.ContentTransitions>
             </ContentPresenter>
 
-            <CommandBar Grid.Row="1">
+            <CommandBar Grid.Row="2">
                 <CommandBar.PrimaryCommands>
                     <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
                         <AppBarButton.Icon>

@@ -10,4 +10,6 @@
 
     <vc:StringToUpperStringConverter x:Key="StringToUpperStringConverter"/>
     <vc:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
+    <vc:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
+    <vc:NotNullToInvisibilityConverter x:Key="NotNullToInvisibilityConverter"/>
 </ResourceDictionary>
