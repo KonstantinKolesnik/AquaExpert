@@ -70,14 +70,10 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             transport.MessageReceived += async (sender, e, remoteAddress) => { await ProcessMessage(e.Message, remoteAddress); };
 
-            foreach (var ctrl in GetControllers())
+            foreach (var controller in GetControllers().Select(c => WemosControllerBase.FromModel(c)).Where(c => c != null))
             {
-                var controller = WemosControllerBase.FromController(ctrl);
-                if (controller != null)
-                {
-                    controllers.Add(controller);
-                    controller.Init(Context);
-                }
+                controllers.Add(controller);
+                controller.Init(Context);
             }
         }
         public override async void StartPlugin()
@@ -604,23 +600,23 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[0] as string;
             var type = (WemosControllerType)int.Parse(parameters[1].ToString());
 
-            var item = new WemosController()
+            var model = new WemosController()
             {
                 Name = name,
                 Type = type,
                 IsAutoMode = false
             };
 
-            var controller = WemosControllerBase.FromController(item);
+            var controller = WemosControllerBase.FromModel(model);
             if (controller != null)
             {
+                Save(model);
                 controller.Init(Context);
-                controller.AddToDB();
                 controllers.Add(controller);
 
                 //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
 
-                return item;
+                return model;
             }
 
             return null;
@@ -632,11 +628,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var item = GetController(id);
-            if (item != null)
+            var model = GetController(id);
+            if (model != null)
             {
-                item.Name = name;
-                SaveOrUpdate(item);
+                model.Name = name;
+                SaveOrUpdate(model);
                 return true;
             }
 
@@ -649,11 +645,28 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var isAutoMode = (bool)parameters[1];
 
-            var item = GetController(id);
-            if (item != null)
+            var model = GetController(id);
+            if (model != null)
             {
-                item.IsAutoMode = isAutoMode;
-                SaveOrUpdate(item);
+                model.IsAutoMode = isAutoMode;
+                SaveOrUpdate(model);
+                return true;
+            }
+
+            return false;
+        });
+
+        [ApiMethod(MethodName = "/api/wemos/controllers/setconfig"), Export(typeof(ApiMethod))]
+        public ApiMethod apiSetControllerConfiguration => ((parameters) =>
+        {
+            var id = int.Parse(parameters[0].ToString());
+            var config = parameters[1].ToString();
+
+            var model = GetController(id);
+            if (model != null)
+            {
+                model.SerializeConfiguration(config);
+                SaveOrUpdate(model);
                 return true;
             }
 

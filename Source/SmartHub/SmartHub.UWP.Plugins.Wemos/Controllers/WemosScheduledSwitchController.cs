@@ -69,7 +69,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         protected async override void Process()
         {
-            if (IsAutoMode)
+            if (model.IsAutoMode)
             {
                 DateTime now = DateTime.Now;
                 bool isActiveNew = false;

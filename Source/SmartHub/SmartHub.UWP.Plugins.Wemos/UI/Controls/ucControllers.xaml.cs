@@ -8,10 +8,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucControllers : UserControl
     {
         #region Properties
-        public static readonly DependencyProperty SelectedControllerProperty = DependencyProperty.Register("SelectedController", typeof(WemosController), typeof(ucControllers), null);
-        public WemosController SelectedController
+        public static readonly DependencyProperty SelectedControllerProperty = DependencyProperty.Register("SelectedController", typeof(WemosControllerObservable), typeof(ucControllers), null);
+        public WemosControllerObservable SelectedController
         {
-            get { return (WemosController) GetValue(SelectedControllerProperty); }
+            get { return (WemosControllerObservable) GetValue(SelectedControllerProperty); }
             set { SetValue(SelectedControllerProperty, value); }
         }
         #endregion
@@ -27,7 +27,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Event handlers
         private void ucControllersList_ItemClicked(object sender, ObjectEventArgs e)
         {
-            SelectedController = e.Item as WemosController;
+            SelectedController = e.Item as WemosControllerObservable;
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {

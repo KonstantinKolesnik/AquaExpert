@@ -8,98 +8,40 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
     public abstract class WemosControllerBase
     {
         #region Fields
-        protected WemosController controller;
+        protected WemosController model;
         protected WemosPlugin host;
-        protected IServiceContext Context;
-        protected float? lastLineValue;
+        protected IServiceContext context;
+        //protected float? lastLineValue;
         #endregion
 
         #region Constructor
-        public WemosControllerBase(WemosController controller)
+        protected WemosControllerBase(WemosController model)
         {
-            this.controller = controller;
-        }
-        #endregion
-
-        #region Properties
-        public int ID
-        {
-            get { return controller.ID; }
-        }
-        public string Name
-        {
-            get { return controller.Name; }
-            set
-            {
-                if (controller.Name != value)
-                {
-                    controller.Name = value;
-                    SaveToDB();
-                }
-            }
-        }
-        public bool IsAutoMode
-        {
-            get { return controller.IsAutoMode; }
-            set
-            {
-                if (controller.IsAutoMode != value)
-                {
-                    controller.IsAutoMode = value;
-                    SaveToDB();
-                }
-            }
-        }
-        public string Configuration
-        {
-            get { return controller.Configuration; }
-            set
-            {
-                if (controller.Configuration != value)
-                {
-                    controller.Configuration = value;
-                    SaveToDB();
-                }
-            }
+            this.model = model;
         }
         #endregion
 
         #region Public methods
-        public void Init(IServiceContext context)
+        public static WemosControllerBase FromModel(WemosController model)
         {
-            Context = context;
-            host = context.GetPlugin<WemosPlugin>();
-
-            InitLastValues();
-        }
-        //public void SetConfiguration(string config)
-        //{
-        //    controller.Configuration = config;
-        //    SaveToDB();
-        //}
-        public void AddToDB()
-        {
-            using (var db = Context.OpenConnection())
-                db.Insert(controller);
-        }
-        public void SaveToDB()
-        {
-            using (var db = Context.OpenConnection())
-                db.InsertOrReplace(controller);
-        }
-        public static WemosControllerBase FromController(WemosController controller)
-        {
-            if (controller == null)
+            if (model == null)
                 return null;
 
-            switch (controller.Type)
+            switch (model.Type)
             {
-                //case WemosControllerType.Heater: return new HeaterController(controller);
-                case WemosControllerType.ScheduledSwitch: return new WemosScheduledSwitchController(controller);
-                //case WemosControllerType.WaterLevel: return new WaterLevelController(controller);
+                //case WemosControllerType.Heater: return new HeaterController(model);
+                case WemosControllerType.ScheduledSwitch: return new WemosScheduledSwitchController(model);
+                //case WemosControllerType.WaterLevel: return new WaterLevelController(model);
 
                 default: return null;
             }
+        }
+        public void Init(IServiceContext context)
+        {
+            this.context = context;
+            host = context.GetPlugin<WemosPlugin>();
+
+            //InitLastValues();
         }
         #endregion
 
@@ -110,9 +52,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Protected methods
-        protected virtual void InitLastValues()
-        {
-        }
+        //protected virtual void InitLastValues()
+        //{
+        //}
         #endregion
 
         #region Event handlers
@@ -121,11 +63,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         public virtual void MessageReceived(WemosMessage message)
         {
-            Process();
+            if (model.IsAutoMode)
+                Process();
         }
         public void TimerElapsed(DateTime now)
         {
-            Process();
+            if (model.IsAutoMode)
+                Process();
         }
         #endregion
     }

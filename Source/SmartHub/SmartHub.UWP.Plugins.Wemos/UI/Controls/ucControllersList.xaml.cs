@@ -16,10 +16,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucControllersList : UserControl
     {
         #region Properties
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosController>), typeof(ucControllersList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
-        public ObservableCollection<WemosController> ItemsSource
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosControllerObservable>), typeof(ucControllersList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public ObservableCollection<WemosControllerObservable> ItemsSource
         {
-            get { return (ObservableCollection<WemosController>) GetValue(ItemsSourceProperty); }
+            get { return (ObservableCollection<WemosControllerObservable>) GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -27,16 +27,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var uc = d as ucControllersList;
             uc.UpdateItemsSource();
 
-            var items = e.NewValue as ObservableCollection<WemosController>;
+            var items = e.NewValue as ObservableCollection<WemosControllerObservable>;
             if (items != null)
                 items.CollectionChanged += (s, args) =>
                 {
                     uc.UpdateItemsSource();
 
                     if (args.Action == NotifyCollectionChangedAction.Add)
-                        uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosController));
+                        uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosControllerObservable));
                     else if (args.Action == NotifyCollectionChangedAction.Remove)
-                        uc.ItemDeleted?.Invoke(uc, new ObjectEventArgs(args.OldItems[0] as WemosController));
+                        uc.ItemDeleted?.Invoke(uc, new ObjectEventArgs(args.OldItems[0] as WemosControllerObservable));
                 };
         }
 
@@ -64,14 +64,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 {
                     int result = 0;
 
-                    var gg = itemsViewSource.Source as IOrderedEnumerable<IGrouping<string, WemosController>>;
+                    var gg = itemsViewSource.Source as IOrderedEnumerable<IGrouping<string, WemosControllerObservable>>;
                     foreach (var g in gg)
                         result += g.Count();
 
                     return result;
                 }
                 else
-                    return (itemsViewSource.Source as IEnumerable<WemosController>).Count();
+                    return (itemsViewSource.Source as IEnumerable<WemosControllerObservable>).Count();
             }
         }
         #endregion
@@ -121,8 +121,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async Task UpdateControllersList()
         {
-            var items = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
-            ItemsSource = new ObservableCollection<WemosController>(items);
+            var models = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
+            ItemsSource = new ObservableCollection<WemosControllerObservable>(models.Select(m => new WemosControllerObservable(m)));
         }
         #endregion
 
@@ -141,18 +141,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 var name = (dlgAddController.FindName("tbControllerName") as TextBox).Text;
                 var type = (WemosControllerType) (dlgAddController.FindName("cbTypes") as ComboBox).SelectedItem;
 
-                var controller = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name.Trim(), type);
-                if (controller != null)
-                    ItemsSource.Add(controller);
-            }
-        }
-        private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            var tag = (sender as ToggleSwitch).Tag;
-            if (tag != null)
-            {
-                int id = (int) tag;
-                var res = await Utils.RequestAsync<bool>("/api/wemos/controllers/setautomode", id, (sender as ToggleSwitch).IsOn);
+                var model = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name.Trim(), type);
+                if (model != null)
+                    ItemsSource.Add(new WemosControllerObservable(model));
             }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -168,7 +159,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void lvControllers_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ItemClicked?.Invoke(sender, new ObjectEventArgs(e.ClickedItem as WemosController));
+            ItemClicked?.Invoke(sender, new ObjectEventArgs(e.ClickedItem as WemosControllerObservable));
         }
         #endregion
     }

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
+    <Compile Include="Controllers\Models\WemosControllerObservable.cs" />
     <Compile Include="Controllers\Models\WemosController.cs" />
     <Compile Include="Controllers\WemosControllerBase.cs" />
     <Compile Include="Controllers\WemosControllerType.cs" />
