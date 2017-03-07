@@ -44,7 +44,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public Action<DateTime> TimerElapsed => ((dt) =>
         {
             foreach (var controller in controllers)
-                controller.TimerElapsed(dt);
+                controller.ProcessTimer(dt);
         });
         #endregion
 
@@ -83,7 +83,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             await RequestPresentation();
 
             foreach (var controller in controllers)
-                controller.RequestLinesValues(); // force lines to report their current values
+                controller.Start();
         }
         public override void StopPlugin()
         {
@@ -129,6 +129,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         public static bool IsMessageFromLine(WemosMessage msg, WemosLine line)
         {
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
+        }
+        public static bool IsMessageFromLine(WemosLineValue val, WemosLine line)
+        {
+            return val != null && line != null && line.NodeID == val.NodeID && line.LineID == val.LineID;
         }
 
         public List<WemosNode> GetNodes()
@@ -294,36 +298,30 @@ namespace SmartHub.UWP.Plugins.Wemos
                 case WemosMessageType.Report:
                     if (line != null)
                     {
-                        //NotifyMessageCalibrationForPlugins(message); // before saving to DB plugins may adjust the sensor value due to their calibration params
-                        foreach (var controller in controllers)
-                            if (controller.IsMyMessage(message))
-                            {
-                                controller.MessageCalibration(message);
-                                break;
-                            }
-
-                        WemosLineValue sv = new WemosLineValue()
+                        // save value:
+                        var lv = new WemosLineValue()
                         {
                             NodeID = message.NodeID,
                             LineID = message.LineID,
                             TimeStamp = DateTime.UtcNow,
                             Type = (WemosLineType) message.SubType,
-                            Value = message.GetFloat()
+                            Value = message.GetFloat() + line.Tune // tune value
                         };
-                        Save(sv);
+                        Save(lv);
 
-                        line.LastTimeStamp = sv.TimeStamp;
-                        line.LastValue = sv.Value;
+                        // update line:
+                        line.LastTimeStamp = lv.TimeStamp;
+                        line.LastValue = lv.Value;
                         SaveOrUpdate(line);
 
+                        // process:
                         //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
                         NotifyMessageReceivedForPlugins(message);
                         //NotifyMessageReceivedForScripts(message);
                         //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
 
                         foreach (var controller in controllers)
-                            if (controller.IsMyMessage(message))
-                                controller.MessageReceived(message);
+                            controller.ProcessMessage(lv);
                     }
                     break;
                 #endregion
@@ -628,9 +626,10 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (controller != null)
             {
                 Save(model);
+                controllers.Add(controller);
 
                 controller.Init(Context);
-                controllers.Add(controller);
+                controller.Start();
 
                 //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
 

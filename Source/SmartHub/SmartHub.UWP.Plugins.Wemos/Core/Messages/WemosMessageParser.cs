@@ -44,12 +44,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
                     WemosMessage msg = null;
                     try
                     {
-                        msg = new WemosMessage(
-                            int.Parse(entry.Groups["v0"].Value),
-                            int.Parse(entry.Groups["v1"].Value),
-                            (WemosMessageType) int.Parse(entry.Groups["v2"].Value),
-                            int.Parse(entry.Groups["v3"].Value))
-                            .Set(entry.Groups["v4"].Value.Trim());
+                        msg = new WemosMessage
+                            (
+                                int.Parse(entry.Groups["v0"].Value),
+                                int.Parse(entry.Groups["v1"].Value),
+                                (WemosMessageType) int.Parse(entry.Groups["v2"].Value),
+                                int.Parse(entry.Groups["v3"].Value)
+                            ).Set(entry.Groups["v4"].Value.Trim());
                     }
                     catch (Exception) { }
 

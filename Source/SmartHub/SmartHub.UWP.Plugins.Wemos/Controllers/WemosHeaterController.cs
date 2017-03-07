@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
@@ -12,55 +11,31 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             public int LineTemperatureID
             {
                 get; set;
-            }
+            } = -1;
             public int LineSwitchID
             {
                 get; set;
-            }
-            public float TemperatureCalibration
-            {
-                get; set;
-            }
+            } = -1;
 
-            public float TemperatureMin { get; set; }
-            public float TemperatureMax { get; set; }
-            public float TemperatureAlarmMin { get; set; }
-            public float TemperatureAlarmMax { get; set; }
-            public string TemperatureAlarmMinText { get; set; }
-            public string TemperatureAlarmMaxText { get; set; }
-
-            public static ControllerConfiguration Default
-            {
-                get
-                {
-                    return new ControllerConfiguration()
-                    {
-                        LineTemperatureID = -1,
-                        LineSwitchID = -1,
-                        TemperatureCalibration = 0.0f,
-
-                        TemperatureMin = 25.0f,
-                        TemperatureMax = 26.0f,
-                        TemperatureAlarmMin = 20.0f,
-                        TemperatureAlarmMax = 30.0f,
-                        TemperatureAlarmMinText = "Критически низкая температура",
-                        TemperatureAlarmMaxText = "Критически высокая температура"
-                    };
-                }
-            }
+            public float TemperatureMin { get; set; } = 25.0f;
+            public float TemperatureMax { get; set; } = 26.0f;
+            public float TemperatureAlarmMin { get; set; } = 20.0f;
+            public float TemperatureAlarmMax { get; set; } = 30.0f;
+            public string TemperatureAlarmMinText { get; set; } = "Критически низкая температура";
+            public string TemperatureAlarmMaxText { get; set; } = "Критически высокая температура";
         }
 
         #region Fields
         private ControllerConfiguration configuration = null;
-        protected float? lastSensorValue;
+        protected float? lastLineValue;
         #endregion
 
         #region Properties
-        public WemosLine LineTemperature
+        private WemosLine LineTemperature
         {
-            get { return host.GetLine(configuration.LineSwitchID); }
+            get { return host.GetLine(configuration.LineTemperatureID); }
         }
-        public WemosLine LineSwitch
+        private WemosLine LineSwitch
         {
             get { return host.GetLine(configuration.LineSwitchID); }
         }
@@ -72,7 +47,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             if (string.IsNullOrEmpty(model.Configuration))
             {
-                configuration = ControllerConfiguration.Default;
+                configuration = new ControllerConfiguration();
                 model.SerializeConfiguration(configuration);
             }
             else
@@ -81,22 +56,22 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Abstract Overrides
-        public override bool IsMyMessage(WemosMessage message)
+        protected override bool IsMyMessage(WemosLineValue value)
         {
             return
-                WemosPlugin.IsMessageFromLine(message, LineSwitch) ||
-                WemosPlugin.IsMessageFromLine(message, LineTemperature);
+                WemosPlugin.IsMessageFromLine(value, LineSwitch) ||
+                WemosPlugin.IsMessageFromLine(value, LineTemperature);
         }
-        public async override void RequestLinesValues()
+        protected async override void RequestLinesValues()
         {
             await host.RequestLineValue(LineSwitch);
             await host.RequestLineValue(LineTemperature);
         }
         protected async override void Process()
         {
-            if (lastSensorValue.HasValue)
+            if (lastLineValue.HasValue)
             {
-                float value = lastSensorValue.Value;
+                float value = lastLineValue.Value;
 
                 if (value < configuration.TemperatureMin)
                     await host.SetLineValue(LineSwitch, 1);
@@ -115,22 +90,17 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         //protected override void InitLastValues()
         //{
         //    var lastSV = mySensors.GetLastSensorValue(LineTemperature);
-        //    lastSensorValue = lastSV != null ? lastSV.Value : (float?) null;
+        //    lastLineValue = lastSV != null ? lastSV.Value : (float?) null;
         //}
         #endregion
 
         #region Event handlers
-        internal override void MessageCalibration(WemosMessage message)
+        protected override void MessageReceived(WemosLineValue value)
         {
-            if (WemosPlugin.IsMessageFromLine(message, LineTemperature))
-                message.Set(message.GetFloat() + configuration.TemperatureCalibration);
-        }
-        internal override void MessageReceived(WemosMessage message)
-        {
-            if (WemosPlugin.IsMessageFromLine(message, LineTemperature))
-                lastSensorValue = message.GetFloat();
+            if (WemosPlugin.IsMessageFromLine(value, LineTemperature))
+                lastLineValue = value.Value;
 
-            base.MessageReceived(message);
+            base.MessageReceived(value);
         }
         #endregion
     }

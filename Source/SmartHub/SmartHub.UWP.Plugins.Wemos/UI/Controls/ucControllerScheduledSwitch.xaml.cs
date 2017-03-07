@@ -49,7 +49,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             if (string.IsNullOrEmpty(Controller.Configuration))
             {
-                configuration = WemosScheduledSwitchController.ControllerConfiguration.Default;
+                configuration = new WemosScheduledSwitchController.ControllerConfiguration();
                 Controller.Configuration = JsonConvert.SerializeObject(configuration);
             }
             else

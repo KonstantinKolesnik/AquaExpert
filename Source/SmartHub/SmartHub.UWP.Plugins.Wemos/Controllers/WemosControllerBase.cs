@@ -1,7 +1,8 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core.Messages;
+using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
@@ -11,6 +12,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected WemosController model;
         protected WemosPlugin host;
         protected IServiceContext context;
+        protected readonly Dictionary<int, float> lastValues = new Dictionary<int, float>();
         #endregion
 
         #region Constructor
@@ -35,31 +37,39 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
                 default: return null;
             }
         }
+
         public void Init(IServiceContext context)
         {
             this.context = context;
             host = context.GetPlugin<WemosPlugin>();
         }
-        #endregion
-
-        #region Abstract methods
-        public abstract bool IsMyMessage(WemosMessage message);
-        public abstract void RequestLinesValues();
-
-        protected abstract void Process();
-        #endregion
-
-        #region Event handlers
-        internal virtual void MessageCalibration(WemosMessage message)
+        public void Start()
         {
+            RequestLinesValues(); // force lines to report their current values
         }
-        internal virtual void MessageReceived(WemosMessage message)
+        public void ProcessMessage(WemosLineValue value)
+        {
+            if (IsMyMessage(value))
+                MessageReceived(value);
+        }
+        public void ProcessTimer(DateTime now)
         {
             if (model.IsAutoMode)
                 Process();
         }
-        internal void TimerElapsed(DateTime now)
+        #endregion
+
+        #region Abstract methods
+        protected abstract bool IsMyMessage(WemosLineValue value);
+        protected abstract void RequestLinesValues();
+        protected abstract void Process();
+        #endregion
+
+        #region Event handlers
+        protected virtual void MessageReceived(WemosLineValue value)
         {
+            //lastValues
+
             if (model.IsAutoMode)
                 Process();
         }

@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -25,11 +24,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             {
                 get;
             } = new ObservableCollection<Period>();
-
-            public static ControllerConfiguration Default
-            {
-                get { return new ControllerConfiguration(); }
-            }
         }
 
         #region Fields
@@ -49,7 +43,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             if (string.IsNullOrEmpty(model.Configuration))
             {
-                configuration = ControllerConfiguration.Default;
+                configuration = new ControllerConfiguration();
                 model.SerializeConfiguration(configuration);
             }
             else
@@ -58,11 +52,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Abstract Overrides
-        public override bool IsMyMessage(WemosMessage message)
+        protected override bool IsMyMessage(WemosLineValue value)
         {
-            return WemosPlugin.IsMessageFromLine(message, LineSwitch);
+            return WemosPlugin.IsMessageFromLine(value, LineSwitch);
         }
-        public async override void RequestLinesValues()
+        protected async override void RequestLinesValues()
         {
             await host.RequestLineValue(LineSwitch);
         }
