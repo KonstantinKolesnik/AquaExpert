@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Core;
+﻿using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;

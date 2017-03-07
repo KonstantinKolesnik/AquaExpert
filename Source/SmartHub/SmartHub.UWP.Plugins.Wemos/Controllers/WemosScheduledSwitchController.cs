@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core;
+using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.ObjectModel;

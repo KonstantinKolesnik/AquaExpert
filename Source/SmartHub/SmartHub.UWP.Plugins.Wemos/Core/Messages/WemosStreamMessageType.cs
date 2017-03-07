@@ -1,4 +1,4 @@
-﻿namespace SmartHub.UWP.Plugins.Wemos.Core
+﻿namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
 {
     enum WemosStreamMessageType
     {

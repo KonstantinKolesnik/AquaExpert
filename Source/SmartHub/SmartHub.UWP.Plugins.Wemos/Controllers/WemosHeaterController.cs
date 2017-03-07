@@ -1,6 +1,6 @@
 ﻿using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core;
+using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers

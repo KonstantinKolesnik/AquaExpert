@@ -5,7 +5,7 @@ using SmartHub.UWP.Plugins.Timer.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core;
+using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
 using SmartHub.UWP.Plugins.Wemos.Monitors.Models;

@@ -1,6 +1,6 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
-using SmartHub.UWP.Plugins.Wemos.Core;
+using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers

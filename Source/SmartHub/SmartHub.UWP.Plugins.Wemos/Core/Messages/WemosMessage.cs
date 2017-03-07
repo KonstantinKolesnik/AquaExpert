@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace SmartHub.UWP.Plugins.Wemos.Core
+namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
 {
     public class WemosMessage
     {

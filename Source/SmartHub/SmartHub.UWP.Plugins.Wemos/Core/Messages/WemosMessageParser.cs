@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace SmartHub.UWP.Plugins.Wemos.Core
+namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
 {
     static class WemosMessageParser
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Core
+namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
 {
     public class WemosMessageEventArgs : EventArgs
     {
