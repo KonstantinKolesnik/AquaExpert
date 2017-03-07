@@ -50,7 +50,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         public void ProcessMessage(WemosLineValue value)
         {
             if (IsMyMessage(value))
+            {
+                // + lastValues;
+
                 MessageReceived(value);
+                if (model.IsAutoMode)
+                    Process();
+            }
         }
         public void ProcessTimer(DateTime now)
         {
@@ -63,15 +69,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected abstract bool IsMyMessage(WemosLineValue value);
         protected abstract void RequestLinesValues();
         protected abstract void Process();
-        #endregion
-
-        #region Event handlers
         protected virtual void MessageReceived(WemosLineValue value)
         {
-            //lastValues
-
-            if (model.IsAutoMode)
-                Process();
         }
         #endregion
     }

@@ -87,21 +87,16 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             else
                 RequestLinesValues();
         }
+        protected override void MessageReceived(WemosLineValue value)
+        {
+            if (WemosPlugin.IsMessageFromLine(value, LineTemperature))
+                lastLineValue = value.Value;
+        }
         //protected override void InitLastValues()
         //{
         //    var lastSV = mySensors.GetLastSensorValue(LineTemperature);
         //    lastLineValue = lastSV != null ? lastSV.Value : (float?) null;
         //}
-        #endregion
-
-        #region Event handlers
-        protected override void MessageReceived(WemosLineValue value)
-        {
-            if (WemosPlugin.IsMessageFromLine(value, LineTemperature))
-                lastLineValue = value.Value;
-
-            base.MessageReceived(value);
-        }
         #endregion
     }
 }
