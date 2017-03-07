@@ -233,6 +233,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From.
+        /// </summary>
+        public static string From {
+            get {
+                return ResourceManager.GetString("From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home page.
         /// </summary>
         public static string HomePage {
@@ -472,6 +481,15 @@ namespace SmartHub.UWP.Core.StringResources {
         public static string TimeStamp {
             get {
                 return ResourceManager.GetString("TimeStamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To.
+        /// </summary>
+        public static string To {
+            get {
+                return ResourceManager.GetString("To", resourceCulture);
             }
         }
         

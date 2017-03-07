@@ -2,15 +2,15 @@
 using SmartHub.UWP.Plugins.Wemos.Core;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
-    public struct Period
+    public class Period
     {
-        public DateTime From;
-        public DateTime To;
-        public bool IsEnabled;
+        public TimeSpan From { get; set; }
+        public TimeSpan To { get; set; }
+        public bool IsEnabled { get; set; }
     }
 
     public class WemosScheduledSwitchController : WemosControllerBase
@@ -21,10 +21,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             {
                 get; set;
             } = -1;
-            public List<Period> ActivePeriods
+            public ObservableCollection<Period> ActivePeriods
             {
                 get;
-            } = new List<Period>();
+            } = new ObservableCollection<Period>();
 
             public static ControllerConfiguration Default
             {
@@ -80,8 +80,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #region Private methods
         private static bool IsInRange(DateTime dt, Period range)
         {
-            TimeSpan start = range.From.ToLocalTime().TimeOfDay;
-            TimeSpan end = range.To.ToLocalTime().TimeOfDay;
+            //TimeSpan start = range.From.ToLocalTime().TimeOfDay;
+            //TimeSpan end = range.To.ToLocalTime().TimeOfDay;
+            TimeSpan start = range.From;
+            TimeSpan end = range.To;
+
             TimeSpan now = dt.TimeOfDay;
 
             if (start < end)

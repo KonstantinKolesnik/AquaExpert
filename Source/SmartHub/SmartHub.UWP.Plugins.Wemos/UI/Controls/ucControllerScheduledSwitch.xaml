@@ -47,7 +47,60 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </RelativePanel>
-        
-        
+
+        <ListView
+            Grid.Row="1"
+            x:Name="lvPeriods"
+            ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+            SelectionMode="None"
+            IsItemClickEnabled="False"
+            IsSwipeEnabled="False">
+            <ListView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource ListGroupHeaderTemplate}"/>
+            </ListView.GroupStyle>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="0,0,0,10" BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TimePicker
+                                Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
+                                HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                                Time="{Binding From, Mode=TwoWay}"
+                                ClockIdentifier="24HourClock"/>
+                            <TimePicker
+                                Grid.Column="1"
+                                Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
+                                HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                                Time="{Binding To, Mode=TwoWay}"
+                                ClockIdentifier="24HourClock"/>
+                            
+                            <ToggleSwitch
+                                Grid.Column="2"
+                                IsOn="{Binding IsEnabled, Mode=TwoWay}"
+                                Margin="0,0,-50,0"
+                                VerticalAlignment="Center"/>
+
+                            <AppBarButton Grid.Column="3" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="ButtonDelete_Click">
+                                <AppBarButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;"/>
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

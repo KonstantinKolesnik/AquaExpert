@@ -267,4 +267,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>С</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>По</value>
+  </data>
 </root>
