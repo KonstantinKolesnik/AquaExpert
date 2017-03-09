@@ -1,6 +1,7 @@
 ﻿using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
@@ -26,18 +27,17 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
 
         #region Fields
-        private ControllerConfiguration configuration = null;
         protected float? lastLineValue;
         #endregion
 
         #region Properties
         private WemosLine LineTemperature
         {
-            get { return host.GetLine(configuration.LineTemperatureID); }
+            get { return host.GetLine((Configuration as ControllerConfiguration).LineTemperatureID); }
         }
         private WemosLine LineSwitch
         {
-            get { return host.GetLine(configuration.LineSwitchID); }
+            get { return host.GetLine((Configuration as ControllerConfiguration).LineSwitchID); }
         }
         #endregion
 
@@ -45,17 +45,19 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         public WemosHeaterController(WemosController model)
             : base (model)
         {
-            if (string.IsNullOrEmpty(model.Configuration))
-            {
-                configuration = new ControllerConfiguration();
-                model.SerializeConfiguration(configuration);
-            }
-            else
-                configuration = model.DeserializeConfiguration<ControllerConfiguration>();
         }
         #endregion
 
         #region Abstract Overrides
+        protected override Type GetConfigurationType()
+        {
+            return typeof(ControllerConfiguration);
+        }
+        protected override object GetDefaultConfiguration()
+        {
+            return new ControllerConfiguration();
+        }
+
         protected override bool IsMyMessage(WemosLineValue value)
         {
             return
@@ -72,17 +74,18 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             if (lastLineValue.HasValue)
             {
                 float value = lastLineValue.Value;
+                var config = Configuration as ControllerConfiguration;
 
-                if (value < configuration.TemperatureMin)
+                if (value < config.TemperatureMin)
                     await host.SetLineValue(LineSwitch, 1);
-                else if (value > configuration.TemperatureMax)
+                else if (value > config.TemperatureMax)
                     await host.SetLineValue(LineSwitch, 0);
 
                 // voice alarm:
-                if (value <= configuration.TemperatureAlarmMin)
-                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMinText, value));
-                else if (value >= configuration.TemperatureAlarmMax)
-                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", configuration.TemperatureAlarmMaxText, value));
+                if (value <= config.TemperatureAlarmMin)
+                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", config.TemperatureAlarmMinText, value));
+                else if (value >= config.TemperatureAlarmMax)
+                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", config.TemperatureAlarmMaxText, value));
             }
             else
                 RequestLinesValues();

@@ -26,14 +26,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             } = new ObservableCollection<Period>();
         }
 
-        #region Fields
-        private ControllerConfiguration configuration = null;
-        #endregion
-
         #region Properties
         public WemosLine LineSwitch
         {
-            get { return host.GetLine(configuration.LineSwitchID); }
+            get { return host.GetLine((Configuration as ControllerConfiguration).LineSwitchID); }
         }
         #endregion
 
@@ -41,17 +37,19 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         public WemosScheduledSwitchController(WemosController model)
             : base (model)
         {
-            if (string.IsNullOrEmpty(model.Configuration))
-            {
-                configuration = new ControllerConfiguration();
-                model.SerializeConfiguration(configuration);
-            }
-            else
-                configuration = model.DeserializeConfiguration<ControllerConfiguration>();
         }
         #endregion
 
         #region Abstract Overrides
+        protected override Type GetConfigurationType()
+        {
+            return typeof(ControllerConfiguration);
+        }
+        protected override object GetDefaultConfiguration()
+        {
+            return new ControllerConfiguration();
+        }
+
         protected override bool IsMyMessage(WemosLineValue value)
         {
             return WemosPlugin.IsMessageFromLine(value, LineSwitch);
@@ -62,9 +60,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         protected async override void Process()
         {
+            var config = Configuration as ControllerConfiguration;
+
             DateTime now = DateTime.Now;
             bool isActiveNew = false;
-            foreach (var range in configuration.ActivePeriods)
+            foreach (var range in config.ActivePeriods)
                 isActiveNew |= (range.IsEnabled && IsInRange(now, range));
 
             await host.SetLineValue(LineSwitch, isActiveNew ? 1 : 0);

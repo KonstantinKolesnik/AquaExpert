@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Plugins;
+﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
@@ -19,6 +20,17 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         public WemosController Model
         {
             get { return model; }
+        }
+        public object Configuration
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(model.Configuration))
+                    model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
+
+                return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType());
+            }
+            set { model.Configuration = JsonConvert.SerializeObject(value); }
         }
         #endregion
 
@@ -41,7 +53,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
                 case WemosControllerType.ScheduledSwitch: return new WemosScheduledSwitchController(model);
                 //case WemosControllerType.WaterLevel: return new WaterLevelController(model);
 
-                default: return null;
+                default: throw new Exception("Not supported controller type!");
             }
         }
 
@@ -73,6 +85,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Abstract methods
+        protected abstract Type GetConfigurationType();
+        protected abstract object GetDefaultConfiguration();
+
         protected abstract bool IsMyMessage(WemosLineValue value);
         protected abstract void RequestLinesValues();
         protected abstract void Process();
