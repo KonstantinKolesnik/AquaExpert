@@ -15,6 +15,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected readonly Dictionary<int, float> lastValues = new Dictionary<int, float>();
         #endregion
 
+        #region Properties
+        public WemosController Model
+        {
+            get { return model; }
+        }
+        #endregion
+
         #region Constructor
         protected WemosControllerBase(WemosController model)
         {

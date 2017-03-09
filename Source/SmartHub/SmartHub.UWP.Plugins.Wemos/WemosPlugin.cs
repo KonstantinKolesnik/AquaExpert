@@ -198,6 +198,10 @@ namespace SmartHub.UWP.Plugins.Wemos
             using (var db = Context.OpenConnection())
                 return db.Table<WemosController>().FirstOrDefault(c => c.ID == id);
         }
+        public WemosControllerBase GetControllerBase(int id)
+        {
+            return controllers.FirstOrDefault(c => c.Model.ID == id);
+        }
 
         public static string LineTypeToUnits(WemosLineType lt)
         {
@@ -622,18 +626,19 @@ namespace SmartHub.UWP.Plugins.Wemos
                 IsAutoMode = false
             };
 
-            var controller = WemosControllerBase.FromModel(model);
-            if (controller != null)
+            var ctrl = WemosControllerBase.FromModel(model);
+            if (ctrl != null)
             {
-                Save(model);
-                controllers.Add(controller);
+                Save(ctrl.Model);
 
-                controller.Init(Context);
-                controller.Start();
+                controllers.Add(ctrl);
+
+                ctrl.Init(Context);
+                ctrl.Start();
 
                 //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
 
-                return model;
+                return ctrl.Model;
             }
 
             return null;
@@ -645,11 +650,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var model = GetController(id);
-            if (model != null)
+            var ctrl = GetControllerBase(id);
+            if (ctrl != null)
             {
-                model.Name = name;
-                SaveOrUpdate(model);
+                ctrl.Model.Name = name;
+                SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -662,11 +667,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var isAutoMode = (bool)parameters[1];
 
-            var model = GetController(id);
-            if (model != null)
+            var ctrl = GetControllerBase(id);
+            if (ctrl != null)
             {
-                model.IsAutoMode = isAutoMode;
-                SaveOrUpdate(model);
+                ctrl.Model.IsAutoMode = isAutoMode;
+                SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -679,11 +684,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var config = parameters[1].ToString();
 
-            var model = GetController(id);
-            if (model != null)
+            var ctrl = GetControllerBase(id);
+            if (ctrl != null)
             {
-                model.Configuration = config;
-                SaveOrUpdate(model);
+                ctrl.Model.Configuration = config;
+                SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -695,7 +700,13 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            Delete(GetController(id));
+            var model = GetController(id);
+            if (model != null)
+                Delete(model);
+
+            var ctrl = GetControllerBase(id);
+            if (ctrl != null)
+                controllers.Remove(ctrl);
 
             return true;
         });
