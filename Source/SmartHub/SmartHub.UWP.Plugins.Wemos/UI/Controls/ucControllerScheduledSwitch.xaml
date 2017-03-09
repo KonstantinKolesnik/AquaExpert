@@ -68,31 +68,31 @@
                     <Border Margin="0,0,0,10" BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TimePicker
-                                Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
-                                HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                                Time="{Binding From, Mode=TwoWay}"
-                                ClockIdentifier="24HourClock"/>
-                            <TimePicker
-                                Grid.Column="1"
-                                Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
-                                HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                                Time="{Binding To, Mode=TwoWay}"
-                                ClockIdentifier="24HourClock"/>
+                            <StackPanel>
+                                <TimePicker
+                                    Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
+                                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                                    Time="{Binding From, Mode=TwoWay}"
+                                    ClockIdentifier="24HourClock"/>
+                                <TimePicker
+                                    Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
+                                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                                    Time="{Binding To, Mode=TwoWay}"
+                                    ClockIdentifier="24HourClock"/>
+                            </StackPanel>
                             
                             <ToggleSwitch
-                                Grid.Column="2"
+                                Grid.Column="1"
                                 IsOn="{Binding IsEnabled, Mode=TwoWay}"
-                                Margin="0,0,-50,0"
+                                Margin="0,0,-80,0"
                                 VerticalAlignment="Center"/>
 
-                            <AppBarButton Grid.Column="3" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="ButtonDelete_Click">
+                            <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="ButtonDelete_Click">
                                 <AppBarButton.Icon>
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;"/>
                                 </AppBarButton.Icon>

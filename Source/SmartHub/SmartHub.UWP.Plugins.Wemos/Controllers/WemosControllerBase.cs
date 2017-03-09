@@ -23,13 +23,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         public object Configuration
         {
-            get
-            {
-                if (string.IsNullOrEmpty(model.Configuration))
-                    model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
-
-                return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType());
-            }
+            get { CheckConfiguration(); return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType()); }
             set { model.Configuration = JsonConvert.SerializeObject(value); }
         }
         #endregion
@@ -38,6 +32,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected WemosControllerBase(WemosController model)
         {
             this.model = model;
+            CheckConfiguration();
         }
         #endregion
 
@@ -93,6 +88,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected abstract void Process();
         protected virtual void MessageReceived(WemosLineValue value)
         {
+        }
+        #endregion
+
+        #region Private methods
+        private void CheckConfiguration()
+        {
+            if (string.IsNullOrEmpty(model.Configuration))
+                model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
         }
         #endregion
     }
