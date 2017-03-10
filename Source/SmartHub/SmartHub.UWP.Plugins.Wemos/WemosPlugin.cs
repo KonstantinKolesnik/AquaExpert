@@ -517,7 +517,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetMonitors => ((parameters) =>
         {
-            return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m)
+            return GetMonitors().Select(m => new WemosMonitorDto(m)
             {
                 LineName = GetLine(m.LineID).Name,
                 LineType = GetLine(m.LineID).Type

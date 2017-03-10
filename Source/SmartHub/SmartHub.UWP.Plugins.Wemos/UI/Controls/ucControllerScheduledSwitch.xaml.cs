@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using System.Linq;
-using System;
-using SmartHub.UWP.Core.StringResources;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
@@ -37,6 +37,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         } = new ObservableCollection<WemosLine>();
         #endregion
 
+        #region Constructor
         public ucControllerScheduledSwitch(WemosControllerObservable ctrl)
         {
             InitializeComponent();
@@ -47,12 +48,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (string.IsNullOrEmpty(Controller.Configuration))
             {
                 configuration = new WemosScheduledSwitchController.ControllerConfiguration();
-                Controller.Configuration = JsonConvert.SerializeObject(configuration);
+                SaveConfiguration();
             }
             else
                 configuration = JsonConvert.DeserializeObject<WemosScheduledSwitchController.ControllerConfiguration>(Controller.Configuration);
         }
+        #endregion
 
+        #region Private methods
         private async Task UpdateLinesList()
         {
             Lines.Clear();
@@ -65,21 +68,15 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void UpdatePeriodsList()
         {
-            //configuration.ActivePeriods.Add(new Period
-            //{
-            //    From = new TimeSpan(11, 0, 0),
-            //    To = new TimeSpan(15, 0, 0),
-            //    IsEnabled = true
-            //});
-            //configuration.ActivePeriods.Add(new Period
-            //{
-            //    From = new TimeSpan(17, 0, 0),
-            //    To = new TimeSpan(23, 0, 0),
-            //    IsEnabled = true
-            //});
-
             lvPeriods.ItemsSource = configuration.ActivePeriods;
+            if (configuration.ActivePeriods != null)
+                configuration.ActivePeriods.CollectionChanged += (s, e) => { SaveConfiguration(); };
         }
+        private void SaveConfiguration()
+        {
+            Controller.Configuration = JsonConvert.SerializeObject(configuration);
+        }
+        #endregion
 
         #region Event handlers
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -96,6 +93,23 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 Controller.Configuration = JsonConvert.SerializeObject(configuration);
             }
         }
+        private void btnAddPeriod_Click(object sender, RoutedEventArgs e)
+        {
+            configuration.ActivePeriods.Add(new Period
+            {
+                From = new TimeSpan(0, 0, 0),
+                To = new TimeSpan(1, 0, 0),
+                IsEnabled = false
+            });
+        }
+        private void TimePicker_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
+        {
+            SaveConfiguration();
+        }
+        private void tsIsActive_Toggled(object sender, RoutedEventArgs e)
+        {
+            SaveConfiguration();
+        }
         private async void btnDeletePeriod_Click(object sender, RoutedEventArgs e)
         {
             var period = (Period) ((sender as Button).Tag);
@@ -103,7 +117,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
             {
                 configuration.ActivePeriods.Remove(period);
-                Controller.Configuration = JsonConvert.SerializeObject(configuration);
             });
         }
         #endregion

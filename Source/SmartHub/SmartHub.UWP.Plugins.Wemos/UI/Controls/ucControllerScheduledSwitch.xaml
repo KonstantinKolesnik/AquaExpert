@@ -11,6 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -48,8 +49,14 @@
             </ComboBox>
         </RelativePanel>
 
+        <AppBarButton Grid.Row="1" Style="{StaticResource AppBarTinyButton}" HorizontalAlignment="Right" Margin="0,5" Click="btnAddPeriod_Click">
+            <AppBarButton.Icon>
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE109;"/>
+            </AppBarButton.Icon>
+        </AppBarButton>
+
         <ListView
-            Grid.Row="1"
+            Grid.Row="2"
             x:Name="lvPeriods"
             ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
             SelectionMode="None"
@@ -78,21 +85,25 @@
                                     Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding From, Mode=TwoWay}"
-                                    ClockIdentifier="24HourClock"/>
+                                    ClockIdentifier="24HourClock"
+                                    TimeChanged="TimePicker_TimeChanged"/>
                                 <TimePicker
                                     Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding To, Mode=TwoWay}"
-                                    ClockIdentifier="24HourClock"/>
+                                    ClockIdentifier="24HourClock"
+                                    TimeChanged="TimePicker_TimeChanged"/>
                             </StackPanel>
                             
                             <ToggleSwitch
                                 Grid.Column="1"
+                                Tag="{Binding}"
                                 IsOn="{Binding IsEnabled, Mode=TwoWay}"
-                                Margin="0,0,-80,0"
-                                VerticalAlignment="Center"/>
+                                Margin="0,0,-50,0"
+                                VerticalAlignment="Center"
+                                Toggled="tsIsActive_Toggled"/>
 
-                            <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="btnDeletePeriod_Click">
+                            <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Click="btnDeletePeriod_Click">
                                 <AppBarButton.Icon>
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;"/>
                                 </AppBarButton.Icon>
