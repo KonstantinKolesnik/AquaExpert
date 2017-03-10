@@ -74,7 +74,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void SaveConfiguration()
         {
-            Controller.Configuration = JsonConvert.SerializeObject(configuration);
+            if (Controller != null && configuration != null)
+                Controller.Configuration = JsonConvert.SerializeObject(configuration);
         }
         #endregion
 

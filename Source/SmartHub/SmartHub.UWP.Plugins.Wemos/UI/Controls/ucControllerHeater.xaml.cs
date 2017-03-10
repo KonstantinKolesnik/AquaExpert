@@ -78,7 +78,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void SaveConfiguration()
         {
-            Controller.Configuration = JsonConvert.SerializeObject(Configuration);
+            if (Controller != null && Configuration != null)
+                Controller.Configuration = JsonConvert.SerializeObject(Configuration);
         }
         #endregion
 
@@ -111,7 +112,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void tbTAlarm_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SaveConfiguration();
+             SaveConfiguration();
         }
         #endregion
     }

@@ -64,7 +64,7 @@
                 x:Name="nbTmin"
                 Header="T min, °C"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                Value="{Binding Configuration.TemperatureMin, Mode=TwoWay}"
+                Value="{Binding Configuration.TemperatureMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SmallChange="0.1"
                 LargeChange="1"
                 ValueFormat="{}{0:N1}"
@@ -124,22 +124,24 @@
                 x:Name="tbTAlarmMin"
                 Header="T min alarm"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                Text="{Binding Configuration.TemperatureAlarmMinText, Mode=TwoWay}"
+                Text="{Binding Configuration.TemperatureAlarmMinText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 RelativePanel.Below="nbTAlarmMax"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
+                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                 TextChanged="tbTAlarm_TextChanged"/>
 
             <TextBox
                 x:Name="tbTAlarmMax"
                 Header="T max alarm"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                Text="{Binding Configuration.TemperatureAlarmMaxText, Mode=TwoWay}"
+                Text="{Binding Configuration.TemperatureAlarmMaxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 RelativePanel.Below="tbTAlarmMin"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
+                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                 TextChanged="tbTAlarm_TextChanged"/>
         </RelativePanel>
     </ScrollViewer>
