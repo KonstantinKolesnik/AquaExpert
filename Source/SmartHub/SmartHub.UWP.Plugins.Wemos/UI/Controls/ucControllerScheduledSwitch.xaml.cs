@@ -44,22 +44,22 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
             Controller = ctrl;
-
-            if (string.IsNullOrEmpty(Controller.Configuration))
+            if (Controller != null)
             {
-                configuration = new WemosScheduledSwitchController.ControllerConfiguration();
-                SaveConfiguration();
+                if (string.IsNullOrEmpty(Controller.Configuration))
+                {
+                    configuration = new WemosScheduledSwitchController.ControllerConfiguration();
+                    SaveConfiguration();
+                }
+                else
+                    configuration = JsonConvert.DeserializeObject<WemosScheduledSwitchController.ControllerConfiguration>(Controller.Configuration);
             }
-            else
-                configuration = JsonConvert.DeserializeObject<WemosScheduledSwitchController.ControllerConfiguration>(Controller.Configuration);
         }
         #endregion
 
         #region Private methods
         private async Task UpdateLinesList()
         {
-            Lines.Clear();
-
             var models = (await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines")).Where(m => m.Type == WemosLineType.Switch);
             foreach (var model in models)
                 Lines.Add(model);
