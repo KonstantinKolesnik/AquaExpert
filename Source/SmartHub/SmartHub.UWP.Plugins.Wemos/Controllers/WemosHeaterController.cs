@@ -22,8 +22,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             public float TemperatureMax { get; set; } = 26.0f;
             public float TemperatureAlarmMin { get; set; } = 20.0f;
             public float TemperatureAlarmMax { get; set; } = 30.0f;
-            public string TemperatureAlarmMinText { get; set; } = "Критически низкая температура";
-            public string TemperatureAlarmMaxText { get; set; } = "Критически высокая температура";
+            public string TemperatureAlarmMinText { get; set; } = "Extremely low temperature";
+            public string TemperatureAlarmMaxText { get; set; } = "Extremely high temperature";
         }
 
         #region Fields
@@ -83,9 +83,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
 
                 // voice alarm:
                 if (value <= config.TemperatureAlarmMin)
-                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", config.TemperatureAlarmMinText, value));
+                    context.GetPlugin<SpeechPlugin>().Say($"{config.TemperatureAlarmMinText}, {value}");
                 else if (value >= config.TemperatureAlarmMax)
-                    context.GetPlugin<SpeechPlugin>().Say(string.Format("{0}, {1} градусов.", config.TemperatureAlarmMaxText, value));
+                    context.GetPlugin<SpeechPlugin>().Say($"{config.TemperatureAlarmMaxText}, {value}");
             }
             else
                 RequestLinesValues();

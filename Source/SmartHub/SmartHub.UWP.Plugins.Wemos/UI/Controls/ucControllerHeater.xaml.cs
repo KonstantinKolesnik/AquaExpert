@@ -3,6 +3,7 @@ using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,10 +15,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
     public sealed partial class ucControllerHeater : UserControl
     {
-        #region Fields
-        private WemosHeaterController.ControllerConfiguration configuration = null;
-        #endregion
-
         #region Properties
         public static readonly DependencyProperty ControllerProperty = DependencyProperty.Register("Controller", typeof(WemosControllerObservable), typeof(ucControllerHeater), new PropertyMetadata(null, new PropertyChangedCallback(OnControllerChanged)));
         public WemosControllerObservable Controller
@@ -27,6 +24,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private static void OnControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+        }
+
+        public static readonly DependencyProperty ConfigurationProperty = DependencyProperty.Register("Configuration", typeof(WemosHeaterController.ControllerConfiguration), typeof(ucControllerHeater), null);
+        public WemosHeaterController.ControllerConfiguration Configuration
+        {
+            get { return (WemosHeaterController.ControllerConfiguration) GetValue(ConfigurationProperty); }
+            set { SetValue(ConfigurationProperty, value); }
         }
 
         public ObservableCollection<WemosLine> SwitchLines
@@ -43,18 +47,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucControllerHeater(WemosControllerObservable ctrl)
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            Utils.FindFirstVisualChild<ScrollViewer>(this).DataContext = this;
 
             Controller = ctrl;
             if (Controller != null)
             {
                 if (string.IsNullOrEmpty(Controller.Configuration))
                 {
-                    configuration = new WemosHeaterController.ControllerConfiguration();
+                    Configuration = new WemosHeaterController.ControllerConfiguration();
                     SaveConfiguration();
                 }
                 else
-                    configuration = JsonConvert.DeserializeObject<WemosHeaterController.ControllerConfiguration>(Controller.Configuration);
+                    Configuration = JsonConvert.DeserializeObject<WemosHeaterController.ControllerConfiguration>(Controller.Configuration);
             }
         }
         #endregion
@@ -66,15 +70,15 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             
             foreach (var model in models.Where(m => m.Type == WemosLineType.Switch))
                 SwitchLines.Add(model);
-            cbSwitchLines.SelectedItem = SwitchLines.FirstOrDefault(l => l.ID == configuration.LineSwitchID);
+            cbSwitchLines.SelectedItem = SwitchLines.FirstOrDefault(l => l.ID == Configuration.LineSwitchID);
 
             foreach (var model in models.Where(m => m.Type == WemosLineType.Temperature))
                 TemperatureLines.Add(model);
-            cbTemperatureLines.SelectedItem = TemperatureLines.FirstOrDefault(l => l.ID == configuration.LineTemperatureID);
+            cbTemperatureLines.SelectedItem = TemperatureLines.FirstOrDefault(l => l.ID == Configuration.LineTemperatureID);
         }
         private void SaveConfiguration()
         {
-            Controller.Configuration = JsonConvert.SerializeObject(configuration);
+            Controller.Configuration = JsonConvert.SerializeObject(Configuration);
         }
         #endregion
 
@@ -86,48 +90,29 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private void cbSwitchLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var line = cbSwitchLines.SelectedItem as WemosLine;
-            if (line != null && line.ID != configuration.LineSwitchID)
+            if (line != null && line.ID != Configuration.LineSwitchID)
             {
-                configuration.LineSwitchID = line.ID;
+                Configuration.LineSwitchID = line.ID;
                 SaveConfiguration();
             }
         }
         private void cbTemperatureLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var line = cbTemperatureLines.SelectedItem as WemosLine;
-            if (line != null && line.ID != configuration.LineTemperatureID)
+            if (line != null && line.ID != Configuration.LineTemperatureID)
             {
-                configuration.LineTemperatureID = line.ID;
+                Configuration.LineTemperatureID = line.ID;
                 SaveConfiguration();
             }
         }
-
-        //private void btnAddPeriod_Click(object sender, RoutedEventArgs e)
-        //{
-        //    configuration.ActivePeriods.Add(new Period
-        //    {
-        //        From = new TimeSpan(0, 0, 0),
-        //        To = new TimeSpan(1, 0, 0),
-        //        IsEnabled = false
-        //    });
-        //}
-        //private void TimePicker_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
-        //{
-        //    SaveConfiguration();
-        //}
-        //private void tsIsActive_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    SaveConfiguration();
-        //}
-        //private async void btnDeletePeriod_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var period = (Period) ((sender as Button).Tag);
-
-        //    await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
-        //    {
-        //        configuration.ActivePeriods.Remove(period);
-        //    });
-        //}
+        private void RadNumericBox_ValueChanged(object sender, EventArgs e)
+        {
+            SaveConfiguration();
+        }
+        private void tbTAlarm_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SaveConfiguration();
+        }
         #endregion
     }
 }

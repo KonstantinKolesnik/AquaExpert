@@ -111,6 +111,7 @@
     <Compile Include="ValueConverters\BooleanToInvisibilityConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\NotNullToInvisibilityConverter.cs" />
+    <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\NotNullToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
