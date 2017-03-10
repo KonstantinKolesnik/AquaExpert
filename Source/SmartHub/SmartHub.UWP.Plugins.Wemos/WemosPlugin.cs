@@ -70,7 +70,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             transport.MessageReceived += async (sender, e, remoteAddress) => { await ProcessMessage(e.Message, remoteAddress); };
 
-            foreach (var controller in GetControllers().Select(c => WemosControllerBase.FromModel(c)).Where(c => c != null))
+            foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
             {
                 controllers.Add(controller);
                 controller.Init(Context);
@@ -631,7 +631,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             {
                 Save(ctrl.Model);
 
-                controllers.Add(ctrl);
+                Context.GetPlugin<WemosPlugin>().controllers.Add(ctrl);
 
                 ctrl.Init(Context);
                 ctrl.Start();
@@ -650,7 +650,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var ctrl = GetControllerBase(id);
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
             if (ctrl != null)
             {
                 ctrl.Model.Name = name;
@@ -667,7 +667,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var isAutoMode = (bool)parameters[1];
 
-            var ctrl = GetControllerBase(id);
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
             if (ctrl != null)
             {
                 ctrl.Model.IsAutoMode = isAutoMode;
@@ -684,7 +684,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var config = parameters[1].ToString();
 
-            var ctrl = GetControllerBase(id);
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
             if (ctrl != null)
             {
                 ctrl.Model.Configuration = config;
@@ -700,11 +700,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var model = GetController(id);
+            var model = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (model != null)
                 Delete(model);
 
-            var ctrl = GetControllerBase(id);
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
             if (ctrl != null)
                 controllers.Remove(ctrl);
 

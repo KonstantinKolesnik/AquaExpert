@@ -10,6 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System.Linq;
 using System;
+using SmartHub.UWP.Core.StringResources;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
@@ -34,10 +35,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             get;
         } = new ObservableCollection<WemosLine>();
-        //public ObservableCollection<Period> ActivePeriods
-        //{
-        //    get;
-        //} = new ObservableCollection<Period>();
         #endregion
 
         public ucControllerScheduledSwitch(WemosControllerObservable ctrl)
@@ -65,33 +62,30 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 Lines.Add(model);
 
             cbLines.SelectedItem = Lines.FirstOrDefault(l => l.ID == configuration.LineSwitchID);
-
-            //ActivePeriods.Clear();
-            //foreach (var period in configuration.ActivePeriods)
-            //    ActivePeriods.Add(period);
-
-            configuration.ActivePeriods.Add(new Period
-            {
-                From = new TimeSpan(11, 0, 0),
-                To = new TimeSpan(15, 0, 0),
-                IsEnabled = true
-            });
-            configuration.ActivePeriods.Add(new Period
-            {
-                From = new TimeSpan(17, 0, 0),
-                To = new TimeSpan(23, 0, 0),
-                IsEnabled = true
-            });
+        }
+        private void UpdatePeriodsList()
+        {
+            //configuration.ActivePeriods.Add(new Period
+            //{
+            //    From = new TimeSpan(11, 0, 0),
+            //    To = new TimeSpan(15, 0, 0),
+            //    IsEnabled = true
+            //});
+            //configuration.ActivePeriods.Add(new Period
+            //{
+            //    From = new TimeSpan(17, 0, 0),
+            //    To = new TimeSpan(23, 0, 0),
+            //    IsEnabled = true
+            //});
 
             lvPeriods.ItemsSource = configuration.ActivePeriods;
         }
-
-
 
         #region Event handlers
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             await UpdateLinesList();
+            UpdatePeriodsList();
         }
         private void cbLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -102,18 +96,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 Controller.Configuration = JsonConvert.SerializeObject(configuration);
             }
         }
-        private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        private async void btnDeletePeriod_Click(object sender, RoutedEventArgs e)
         {
-            //int id = (int) ((sender as Button).Tag);
+            var period = (Period) ((sender as Button).Tag);
 
-            //await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
-            //{
-            //    bool res = await Utils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
-            //    if (res)
-            //        ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
-            //});
+            await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
+            {
+                configuration.ActivePeriods.Remove(period);
+                Controller.Configuration = JsonConvert.SerializeObject(configuration);
+            });
         }
-
         #endregion
     }
 }

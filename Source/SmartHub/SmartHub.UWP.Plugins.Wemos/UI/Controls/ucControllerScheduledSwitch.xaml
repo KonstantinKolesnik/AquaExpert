@@ -92,7 +92,7 @@
                                 Margin="0,0,-80,0"
                                 VerticalAlignment="Center"/>
 
-                            <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="ButtonDelete_Click">
+                            <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Margin="15,0,0,0" Click="btnDeletePeriod_Click">
                                 <AppBarButton.Icon>
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;"/>
                                 </AppBarButton.Icon>
