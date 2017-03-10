@@ -90,7 +90,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (line != null && line.ID != configuration.LineSwitchID)
             {
                 configuration.LineSwitchID = line.ID;
-                Controller.Configuration = JsonConvert.SerializeObject(configuration);
+                SaveConfiguration();
             }
         }
         private void btnAddPeriod_Click(object sender, RoutedEventArgs e)

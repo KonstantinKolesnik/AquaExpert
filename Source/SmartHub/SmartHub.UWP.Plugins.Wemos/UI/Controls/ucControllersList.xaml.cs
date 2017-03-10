@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
-using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using System;
 using System.Collections.Generic;

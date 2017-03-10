@@ -135,6 +135,9 @@
     <Compile Include="UI\Controls\ucController.xaml.cs">
       <DependentUpon>ucController.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\ucControllerHeater.xaml.cs">
+      <DependentUpon>ucControllerHeater.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\ucControllersList.xaml.cs">
       <DependentUpon>ucControllersList.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Controls\ucController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ucControllerHeater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
