@@ -48,7 +48,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             get { return model.Configuration; }
             set
             {
-                //if (model.Configuration != value)
+                if (model.Configuration != value)
                 {
                     var res = Utils.RequestAsync<bool>("/api/wemos/controllers/setconfig", model.ID, value);
 

@@ -84,18 +84,12 @@
                                     Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding From, Mode=TwoWay}"
-                                    ClockIdentifier="24HourClock"
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Stretch"
-                                    />
+                                    ClockIdentifier="24HourClock"/>
                                 <TimePicker
                                     Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding To, Mode=TwoWay}"
-                                    ClockIdentifier="24HourClock"
-                                    HorizontalAlignment="Left"
-                                    HorizontalContentAlignment="Left"
-                                    />
+                                    ClockIdentifier="24HourClock"/>
                             </StackPanel>
                             
                             <ToggleSwitch
