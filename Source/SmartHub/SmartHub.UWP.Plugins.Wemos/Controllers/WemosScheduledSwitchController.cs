@@ -1,15 +1,44 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
+﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.ObjectModel;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
-    public class Period
+    public class Period : ObservableObject
     {
-        public TimeSpan From { get; set; }
-        public TimeSpan To { get; set; }
-        public bool IsEnabled { get; set; }
+        private TimeSpan from;
+        private TimeSpan to;
+        private bool isEnabled;
+
+        public TimeSpan From
+        {
+            get { return from; }
+            set
+            {
+                from = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public TimeSpan To
+        {
+            get { return to; }
+            set
+            {
+                to = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set
+            {
+                isEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
     }
 
     public class WemosScheduledSwitchController : WemosControllerBase

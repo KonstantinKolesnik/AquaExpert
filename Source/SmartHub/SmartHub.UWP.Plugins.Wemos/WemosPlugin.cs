@@ -40,7 +40,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Exports
-        [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 5)]
+        [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 3)]
         public Action<DateTime> TimerElapsed => ((dt) =>
         {
             foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)

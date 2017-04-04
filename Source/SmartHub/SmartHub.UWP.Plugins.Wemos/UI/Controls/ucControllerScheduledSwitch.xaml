@@ -85,13 +85,17 @@
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding From, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"
-                                    TimeChanged="TimePicker_TimeChanged"/>
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    />
                                 <TimePicker
                                     Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding To, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"
-                                    TimeChanged="TimePicker_TimeChanged"/>
+                                    HorizontalAlignment="Left"
+                                    HorizontalContentAlignment="Left"
+                                    />
                             </StackPanel>
                             
                             <ToggleSwitch
@@ -99,8 +103,7 @@
                                 Tag="{Binding}"
                                 IsOn="{Binding IsEnabled, Mode=TwoWay}"
                                 Margin="5,0,-60,0"
-                                VerticalAlignment="Center"
-                                Toggled="tsIsActive_Toggled"/>
+                                VerticalAlignment="Center"/>
 
                             <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Tag="{Binding}" Click="btnDeletePeriod_Click">
                                 <AppBarButton.Icon>

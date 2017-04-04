@@ -70,7 +70,21 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             lvPeriods.ItemsSource = configuration.ActivePeriods;
             if (configuration.ActivePeriods != null)
-                configuration.ActivePeriods.CollectionChanged += (s, e) => { SaveConfiguration(); };
+            {
+                configuration.ActivePeriods.All(period => {
+                    period.PropertyChanged += (s, e) => { SaveConfiguration(); };
+                    return true;
+                });
+
+                configuration.ActivePeriods.CollectionChanged += (s, e) =>
+                {
+                    if (e.NewItems != null)
+                        foreach (Period period in e.NewItems)
+                            period.PropertyChanged += (s1, e1) => { SaveConfiguration(); };
+
+                    SaveConfiguration();
+                };
+            }
         }
         private void SaveConfiguration()
         {
@@ -102,14 +116,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 To = new TimeSpan(1, 0, 0),
                 IsEnabled = false
             });
-        }
-        private void TimePicker_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
-        {
-            SaveConfiguration();
-        }
-        private void tsIsActive_Toggled(object sender, RoutedEventArgs e)
-        {
-            SaveConfiguration();
         }
         private async void btnDeletePeriod_Click(object sender, RoutedEventArgs e)
         {

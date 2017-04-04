@@ -259,7 +259,7 @@ namespace SmartHub.UWP.Plugins.Speech
             if (!string.IsNullOrEmpty(text) && speechSynthesizer != null)
             {
                 var stream = await speechSynthesizer.SynthesizeTextToStreamAsync(text);
-                await new MediaElement().PlayStreamAsync(stream, true);
+                /*await*/ new MediaElement().PlayStreamAsync(stream, true);
             }
         }
         #endregion
