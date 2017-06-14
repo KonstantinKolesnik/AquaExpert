@@ -44,7 +44,7 @@
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
             <telerikPrimitives:RadExpanderControl.ExpandableContent>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Stretch">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
                 </ScrollViewer>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>
