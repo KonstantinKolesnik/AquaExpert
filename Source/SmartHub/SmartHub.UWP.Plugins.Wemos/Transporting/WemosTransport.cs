@@ -16,7 +16,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
         private const string remoteMulticastAddress = "224.3.0.5";
         private const string remoteBroadcastAddress = "255.255.255.255";
 
-        private DatagramSocket listenerSocket = null;
+        private DatagramSocket socket = null;
+
         private const string socketId = "WemosTransportMulticastSocket";
         private const string socketBackgroundgTaskName = "WemosMulticastActivityBackgroundTask";
         private IBackgroundTaskRegistration task = null;
@@ -27,27 +28,27 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
         #endregion
 
         #region Public methods
-        public async Task Open()
+        public async Task Start()
         {
             //CheckBackgroundTask();
             //await CheckSocketAsync();
 
             #region Simple socket creation
-            if (listenerSocket == null)
+            if (socket == null)
             {
-                listenerSocket = new DatagramSocket();
-                listenerSocket.Control.DontFragment = true;
-                listenerSocket.Control.MulticastOnly = true;
-                listenerSocket.MessageReceived += DataReceived;
+                socket = new DatagramSocket();
+                socket.Control.DontFragment = true;
+                socket.Control.MulticastOnly = true;
+                socket.MessageReceived += DataReceived;
 
                 try
                 {
-                    await listenerSocket.BindServiceNameAsync(localService);
-                    listenerSocket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
+                    await socket.BindServiceNameAsync(localService);
+                    socket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
                 }
                 catch (Exception exception)
                 {
-                    Close();
+                    await Stop();
 
                     // If this is an unknown status it means that the error is fatal and retry will likely fail.
                     if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
@@ -70,9 +71,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                         // GetOutputStreamAsync can be called multiple times on a single DatagramSocket instance to obtain
                         // IOutputStreams pointing to various different remote endpoints. The remote hostname given to
                         // GetOutputStreamAsync can be a unicast, multicast or broadcast address.
-                        IOutputStream outputStream = await listenerSocket.GetOutputStreamAsync(new HostName(remoteMulticastAddress), remoteService);
+                        IOutputStream outputStream = await socket.GetOutputStreamAsync(new HostName(remoteMulticastAddress), remoteService);
 
-                        DataWriter writer = new DataWriter(outputStream);
+                        var writer = new DataWriter(outputStream);
                         writer.WriteString(str);
                         await writer.StoreAsync();
                     }
@@ -87,12 +88,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                 }
             }
         }
-        public void Close()
+        public async Task Stop()
         {
-            if (listenerSocket != null)
+            if (socket != null)
             {
-                listenerSocket.Dispose();
-                listenerSocket = null;
+                await socket.CancelIOAsync();
+                socket.Dispose();
+                socket = null;
             }
         }
         #endregion
@@ -122,6 +124,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                 //rootPage.NotifyUser("Error happened when receiving a datagram:" + exception.Message, NotifyType.ErrorMessage);
             }
         }
+
+
+
 
         private void CheckBackgroundTask()
         {

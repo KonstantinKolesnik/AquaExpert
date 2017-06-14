@@ -26,7 +26,7 @@ namespace SmartHub.UWP.Plugins.Wemos
     public class WemosPlugin : PluginBase
     {
         #region Fields
-        private WemosTransport transport = new WemosTransport();
+        private WemosTransport listener = new WemosTransport();
         private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
         #endregion
 
@@ -68,7 +68,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (GetSetting("UnitSystem") == null)
                 Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
-            transport.MessageReceived += async (sender, e, remoteAddress) => { await ProcessMessage(e.Message, remoteAddress); };
+            listener.MessageReceived += async (sender, e, remoteAddress) => { await ProcessMessage(e.Message, remoteAddress); };
 
             foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
             {
@@ -78,23 +78,23 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override async void StartPlugin()
         {
-            await transport.Open();
+            await listener.Start();
 
             await RequestPresentation();
 
             foreach (var controller in controllers)
                 controller.Start();
         }
-        public override void StopPlugin()
+        public override async void StopPlugin()
         {
-            transport.Close();
+            await listener.Stop();
         }
         #endregion
 
         #region Public methods
         public async Task Send(WemosMessage data)
         {
-            await transport.Send(data);
+            await listener.Send(data);
         }
 
         public async Task RequestPresentation(int nodeID = -1, int lineID = -1)
