@@ -6,7 +6,7 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace SmartHub.UWP.Applications.Server.Controls
+namespace SmartHub.UWP.Applications.Client.Controls
 {
     public sealed partial class ucSectionItemsList : UserControl
     {

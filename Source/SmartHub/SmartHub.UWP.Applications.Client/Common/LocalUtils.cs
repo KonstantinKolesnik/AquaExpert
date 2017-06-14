@@ -3,7 +3,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
-namespace SmartHub.UWP.Applications.Server.Common
+namespace SmartHub.UWP.Applications.Client.Common
 {
     public static class LocalUtils
     {

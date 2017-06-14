@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace SmartHub.UWP.Applications.Server
+namespace SmartHub.UWP.Applications.Client
 {
     public sealed partial class AppShell : Page
     {

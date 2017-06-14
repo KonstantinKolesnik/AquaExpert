@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Applications.Server.Common;
+﻿using SmartHub.UWP.Applications.Client.Common;
 using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace SmartHub.UWP.Applications.Server
+namespace SmartHub.UWP.Applications.Client
 {
     public class LanguageItem
     {

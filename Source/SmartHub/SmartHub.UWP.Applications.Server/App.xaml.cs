@@ -1,124 +1,82 @@
-﻿using Microsoft.ApplicationInsights;
-using SmartHub.UWP.Applications.Server.Common;
-using SmartHub.UWP.Core;
+﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.AppService;
-using Windows.ApplicationModel.Background;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace SmartHub.UWP.Applications.Server
 {
+    /// <summary>
+    /// Provides application-specific behavior to supplement the default Application class.
+    /// </summary>
     sealed partial class App : Application
     {
+        /// <summary>
+        /// Initializes the singleton application object.  This is the first line of authored code
+        /// executed, and as such is the logical equivalent of main() or WinMain().
+        /// </summary>
         public App()
         {
-            WindowsAppInitializer.InitializeAsync();
-
             InitializeComponent();
             Suspending += OnSuspending;
-            UnhandledException += App_UnhandledException;
         }
 
+        /// <summary>
+        /// Invoked when the application is launched normally by the end user.  Other entry points
+        /// will be used such as when the application is launched to open a specific file.
+        /// </summary>
+        /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            AppManager.Init();
-
-            var shell = Window.Current.Content as AppShell;
-
-            // Do not repeat app initialization when the Window already has content, just ensure that the window is active
-            if (shell == null)
+#if DEBUG
+            if (System.Diagnostics.Debugger.IsAttached)
             {
-                shell = new AppShell();
+                //DebugSettings.EnableFrameRateCounter = true;
+            }
+#endif
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (rootFrame == null)
+            {
+                // Create a Frame to act as the navigation context and navigate to the first page
+                rootFrame = new Frame();
+
+                rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
                 }
 
-                Window.Current.Content = shell;
+                // Place the frame in the current Window
+                Window.Current.Content = rootFrame;
             }
 
-            if (!e.PrelaunchActivated)
+            if (e.PrelaunchActivated == false)
             {
-                if (shell.AppFrame.Content == null)
+                if (rootFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    shell.AppFrame.Navigate(typeof(DashboardPage), e.Arguments);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
-
+                // Ensure the current window is active
                 Window.Current.Activate();
             }
-
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
-            LocalUtils.SetAppTheme();
         }
-        //protected override void OnActivated(IActivatedEventArgs args)
-        //{
-        //    base.OnActivated(args);
 
-        //    AppManager.Init();
-
-        //    var rootFrame = Window.Current.Content as Frame;
-
-        //    if (rootFrame == null)
-        //    {
-        //        rootFrame = new Frame();
-        //        rootFrame.NavigationFailed += OnNavigationFailed;
-        //        Window.Current.Content = rootFrame;
-        //    }
-
-        //    if (rootFrame.Content == null)
-        //        rootFrame.Navigate(typeof(MainPage));
-
-        //    Window.Current.Activate();
-        //}
-
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        /// <summary>
+        /// Invoked when Navigation to a certain page fails
+        /// </summary>
+        /// <param name="sender">The Frame which failed navigation</param>
+        /// <param name="e">Details about the navigation failure</param>
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            base.OnBackgroundActivated(args);
-
-            var taskInstance = args.TaskInstance;
-            var appServiceDeferral = taskInstance.GetDeferral();
-            taskInstance.Canceled += (s, e) => { appServiceDeferral.Complete(); };
-
-            var appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
-            var appServiceConnection = appService.AppServiceConnection;
-            appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
-            appServiceConnection.ServiceClosed += (s, e) => { appServiceDeferral.Complete(); };
-        }
-        private async void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
-        {
-            AppServiceDeferral messageDeferral = args.GetDeferral();
-
-            ValueSet message = args.Request.Message;
-            //string text = message["GetRootUI"] as string;
-            //if (text == "Value")
-            //{
-            //    var returnMessage = new ValueSet();
-            //    returnMessage.Add("Response", "True");
-
-            //    await args.Request.SendResponseAsync(returnMessage);
-            //}
-
-            //object ui = null;
-            //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-            //() =>
-            //{
-            //    ui =  new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
-            //});
-
-
-            //var returnMessage = new ValueSet();
-            //returnMessage.Add("Response", ui);
-            //await args.Request.SendResponseAsync(returnMessage);
-
-            messageDeferral.Complete();
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
         /// <summary>
@@ -131,16 +89,8 @@ namespace SmartHub.UWP.Applications.Server
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-
             //TODO: Save application state and stop any background activity
-            AppManager.OnSuspending(deferral);
-
             deferral.Complete();
-        }
-        private async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            await Utils.MessageBox(e.Message);
-            e.Handled = true;
         }
     }
 }

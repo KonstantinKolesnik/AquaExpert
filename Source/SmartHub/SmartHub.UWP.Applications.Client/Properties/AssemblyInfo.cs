@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SmartHub.UWP.Applications.Server")]
+[assembly: AssemblyTitle("SmartHub.UWP.Applications.Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SmartHub.UWP.Applications.Server")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("SmartHub.UWP.Applications.Client")]
+[assembly: AssemblyCopyright("Copyright ©  Konstantin Kolesnik")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace SmartHub.UWP.Applications.Server.Commands
+namespace SmartHub.UWP.Applications.Client.Commands
 {
     public class AppCommands
     {

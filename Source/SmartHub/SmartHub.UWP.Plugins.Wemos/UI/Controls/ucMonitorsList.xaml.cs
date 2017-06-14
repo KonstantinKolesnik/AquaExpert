@@ -117,7 +117,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var items = new ObservableCollection<WemosLine>(models);
 
             cbLines.ItemsSource = items;
-            cbLines.SelectedItem = items[0];
+            if (items.Count > 0)
+                cbLines.SelectedItem = items[0];
         }
         private async Task UpdateMonitorsList()
         {
