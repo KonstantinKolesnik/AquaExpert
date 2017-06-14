@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.Composition": "1.0.30",
-    "Microsoft.Data.SQLite": "1.1.0",
+    "Microsoft.Data.Sqlite": "1.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "SQLite.Net-PCL": "3.1.1"
   },

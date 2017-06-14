@@ -22,7 +22,7 @@
                 <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
             </telerikChart:RadCartesianChart.HorizontalAxis>
             <telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:LinearAxis x:Name="yAxis" /><!--LabelFormat="{}{0:N1}"-->
+                <telerikChart:LinearAxis x:Name="yAxis" FontSize="12" /><!--LabelFormat="{}{0:N1}"-->
             </telerikChart:RadCartesianChart.VerticalAxis>
             <telerikChart:RadCartesianChart.Grid>
                 <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->

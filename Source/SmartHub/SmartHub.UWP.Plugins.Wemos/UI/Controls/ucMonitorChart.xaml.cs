@@ -63,7 +63,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             if (Monitor != null)
             {
-                yAxis.LabelFormat = "{0:N1} " + GetUnits();
+                yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
                 var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);

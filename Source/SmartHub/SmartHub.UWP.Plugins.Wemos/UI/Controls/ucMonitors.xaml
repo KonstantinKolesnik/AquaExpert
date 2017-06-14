@@ -20,7 +20,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <uctrls:ucMonitor Monitor="{Binding SelectedMonitor}" IsEditable="True" Margin="{StaticResource RootContainerMargin}"/>
+            <uctrls:ucMonitor Monitor="{Binding SelectedMonitor}" IsEditable="False" Margin="{StaticResource RootContainerMargin}"/>
            
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>

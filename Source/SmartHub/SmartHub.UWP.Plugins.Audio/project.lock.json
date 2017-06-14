@@ -45,7 +45,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -2349,7 +2349,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -4642,7 +4642,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -6974,7 +6974,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -9276,7 +9276,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -11617,7 +11617,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -13919,7 +13919,7 @@
           "lib/netcore50/Microsoft.CSharp.dll": {}
         }
       },
-      "Microsoft.Data.SQLite/1.1.0": {
+      "Microsoft.Data.Sqlite/1.1.1": {
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "SQLite": "3.13.0",
@@ -16296,13 +16296,13 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "Microsoft.Data.SQLite/1.1.0": {
-      "sha512": "T09U31d2uBe9bvECrz/5cgMPR3256D8SY/+bVDD+KqpX9kbLQuyunm8pR9aUDlsRrVOlSq5Gbg2vMOnBMRbJRQ==",
+    "Microsoft.Data.Sqlite/1.1.1": {
+      "sha512": "EA/L0kQtkPm037kHyLtt/9dsB4ephlgmXgaQbW2qcb2jcW8R5RbfT9zh1j9amZIqFP3OwpnZ7kt7xTwC8z7M1A==",
       "type": "package",
-      "path": "Microsoft.Data.SQLite/1.1.0",
+      "path": "Microsoft.Data.Sqlite/1.1.1",
       "files": [
-        "Microsoft.Data.SQLite.1.1.0.nupkg.sha512",
-        "Microsoft.Data.SQLite.nuspec",
+        "Microsoft.Data.Sqlite.1.1.1.nupkg.sha512",
+        "Microsoft.Data.Sqlite.nuspec",
         "lib/net451/Microsoft.Data.Sqlite.dll",
         "lib/net451/Microsoft.Data.Sqlite.xml",
         "lib/netstandard1.3/Microsoft.Data.Sqlite.dll",

@@ -135,11 +135,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
+            tbMonitorName.Text = "";
+
             var result = await dlgAddMonitor.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                var name = (dlgAddMonitor.FindName("tbMonitorName") as TextBox).Text;
+                var name = tbMonitorName.Text;
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
 
                 var model = await Utils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name.Trim(), lineID);

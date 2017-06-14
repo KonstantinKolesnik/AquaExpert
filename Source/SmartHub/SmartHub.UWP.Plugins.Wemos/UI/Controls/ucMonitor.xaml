@@ -44,7 +44,9 @@
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
             <telerikPrimitives:RadExpanderControl.ExpandableContent>
-                <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Stretch">
+                    <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
+                </ScrollViewer>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>
         </telerikPrimitives:RadExpanderControl>
         
@@ -84,8 +86,10 @@
             <Border Grid.Row="1" Background="{ThemeResource SystemControlForegroundAccentBrush}" HorizontalAlignment="Right">
                 <TextBlock Text="{Binding LastValue, ElementName=mc2}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
             </Border>
-            
-            <uctrls:ucMonitorChart Grid.Row="2" x:Name="mc2" Monitor="{Binding Monitor}"/>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <uctrls:ucMonitorChart x:Name="mc2" Monitor="{Binding Monitor}"/>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>

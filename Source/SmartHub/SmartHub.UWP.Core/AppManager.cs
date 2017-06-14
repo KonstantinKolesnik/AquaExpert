@@ -73,9 +73,9 @@ namespace SmartHub.UWP.Core
                     case nameof(AppData.Language):
                         SetLanguage();
                         break;
-                        //case nameof(AppData.ServerUrl):
-                        //    SetServerActivity();
-                        //    break;
+                    case nameof(AppData.ServerUrl):
+                        SetServerActivity();
+                        break;
                 }
             };
 
