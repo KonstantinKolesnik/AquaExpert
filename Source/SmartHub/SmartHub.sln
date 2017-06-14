@@ -183,6 +183,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.ApiLis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Core.Xaml", "SmartHub.UWP.Core.Xaml\SmartHub.UWP.Core.Xaml.csproj", "{4DBE46C4-28B7-4FD6-A9F9-C0F92C8F5693}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4D1DE182-E175-4C4A-9FFF-5BAA1182A627}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{32879255-8FB2-4984-8DA2-DFDD41E4DE11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1233,6 +1237,8 @@ Global
 		{B846B4C2-22D3-46B4-8CBA-CBA4853D35A2} = {F1CB8D2F-9820-441C-B3BC-ED9A53184035}
 		{71718A41-DD1A-48E7-AA35-FA2569CAE77D} = {897A8020-4315-4C17-BBA2-41046480A37F}
 		{4DBE46C4-28B7-4FD6-A9F9-C0F92C8F5693} = {F1CB8D2F-9820-441C-B3BC-ED9A53184035}
+		{4D1DE182-E175-4C4A-9FFF-5BAA1182A627} = {0F702261-9DBE-4F34-8BA9-02C05F59EEDB}
+		{32879255-8FB2-4984-8DA2-DFDD41E4DE11} = {0F702261-9DBE-4F34-8BA9-02C05F59EEDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8

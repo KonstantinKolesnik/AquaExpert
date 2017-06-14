@@ -27,7 +27,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Event handlers
         private void ucControllersList_ItemClicked(object sender, ObjectEventArgs e)
         {
-            SelectedController = e.Item as WemosControllerObservable;
+            SelectedController = e.Data as WemosControllerObservable;
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {

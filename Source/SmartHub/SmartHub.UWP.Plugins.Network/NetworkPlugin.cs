@@ -14,7 +14,10 @@ namespace SmartHub.UWP.Plugins.Network
         #region Plugin overrides
         public override void InitPlugin()
         {
-            NetworkInformation.NetworkStatusChanged += async (s) => { await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { CheckInternetAccess(); }); };
+            NetworkInformation.NetworkStatusChanged += async (s) =>
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { CheckInternetAccess(); });
+            };
         }
         public override void StartPlugin()
         {

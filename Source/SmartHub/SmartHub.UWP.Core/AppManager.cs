@@ -66,15 +66,21 @@ namespace SmartHub.UWP.Core
         public static void Init()
         {
             AppData = new AppData(false);
-            AppData.PropertyChanged += AppData_PropertyChanged;
-
-            SetServerActivity();
+            AppData.PropertyChanged += (s, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(AppData.Language):
+                        SetLanguage();
+                        break;
+                        //case nameof(AppData.ServerUrl):
+                        //    SetServerActivity();
+                        //    break;
+                }
+            };
 
             SetLanguage();
-            //SetLanguage("en");
-            //SetLanguage("de");
-            //SetLanguage("ru");
-            //SetLanguage("uk");
+            SetServerActivity();
         }
         public static void OnSuspending(SuspendingDeferral defferal)
         {
@@ -113,21 +119,6 @@ namespace SmartHub.UWP.Core
             {
                 hub.StopServices();
                 hub = null;
-            }
-        }
-        #endregion
-
-        #region Event handlers
-        private static void AppData_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(AppData.Language):
-                    SetLanguage();
-                    break;
-                case nameof(AppData.ServerUrl):
-                    SetServerActivity();
-                    break;
             }
         }
         #endregion

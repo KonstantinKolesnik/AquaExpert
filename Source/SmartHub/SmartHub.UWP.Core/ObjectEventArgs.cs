@@ -4,14 +4,14 @@ namespace SmartHub.UWP.Core
 {
     public class ObjectEventArgs : EventArgs
     {
-        public object Item
+        public object Data
         {
             get;
         }
 
-        public ObjectEventArgs(object item)
+        public ObjectEventArgs(object data)
         {
-            Item = item;
+            Data = data;
         }
     }
 }
