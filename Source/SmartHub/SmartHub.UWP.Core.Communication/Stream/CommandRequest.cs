@@ -11,9 +11,6 @@
             get; set;
         }
 
-        public CommandRequest()
-        {
-        }
         public CommandRequest(string name, object[] parameters)
         {
             Name = name;

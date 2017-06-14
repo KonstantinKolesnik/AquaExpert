@@ -11,7 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
+using Windows.Networking.Sockets;
 using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -195,10 +197,6 @@ namespace SmartHub.UWP.Core
         public static async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
             return await StreamClient.RequestAsync<T>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
-        }
-        public static async Task RequestAsync(string commandName, params object[] parameters)
-        {
-            await RequestAsync<string>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
         }
         #endregion
 

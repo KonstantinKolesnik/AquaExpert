@@ -9,9 +9,6 @@ namespace SmartHub.UWP.Core
             get;
         }
 
-        public ObjectEventArgs()
-        {
-        }
         public ObjectEventArgs(object item)
         {
             Item = item;

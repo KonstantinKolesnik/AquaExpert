@@ -116,7 +116,7 @@
     <Compile Include="Stream\CommandRequest.cs" />
     <Compile Include="Stream\StreamServer.cs" />
     <Compile Include="Stream\StringEventArgs.cs" />
-    <Compile Include="Transporting\Transport.cs" />
+    <Compile Include="Stream\Utils.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Communication.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

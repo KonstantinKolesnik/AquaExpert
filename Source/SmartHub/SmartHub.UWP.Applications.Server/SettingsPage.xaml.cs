@@ -95,10 +95,10 @@ namespace SmartHub.UWP.Applications.Server
         {
             if (cbTheme.SelectedItem != null)
             {
-                var selItem = (cbTheme.SelectedItem as ThemeItem).Value;
-                if (AppManager.AppData.Theme != (int) selItem)
+                var theme = (int) (cbTheme.SelectedItem as ThemeItem).Value;
+                if (AppManager.AppData.Theme != theme)
                 {
-                    AppManager.AppData.Theme = (int) selItem;
+                    AppManager.AppData.Theme = theme;
                     LocalUtils.SetAppTheme();
                 }
             }

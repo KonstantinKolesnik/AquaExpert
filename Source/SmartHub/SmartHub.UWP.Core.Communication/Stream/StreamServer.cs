@@ -1,8 +1,6 @@
-﻿using SmartHub.UWP.Core.Communication.Transporting;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
-using Windows.Storage.Streams;
 
 namespace SmartHub.UWP.Core.Communication.Stream
 {
@@ -11,7 +9,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #region Fields
         private StreamSocketListener listener;
         private string serviceName;
-        //private List<> clients
         #endregion
 
         #region Properties
@@ -51,74 +48,23 @@ namespace SmartHub.UWP.Core.Communication.Stream
         }
         #endregion
 
-        #region Private methods
-        private static async Task<string> Receive(StreamSocket socket)
-        {
-            string result = null;
-
-            if (socket != null)
-                using (var reader = new DataReader(socket.InputStream))
-                {
-                    reader.InputStreamOptions = InputStreamOptions.Partial;
-
-                    uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
-                    if (sizeFieldLength == sizeof(uint))
-                    {
-                        uint dataLength = reader.ReadUInt32();
-                        uint actualDataLength = await reader.LoadAsync(dataLength);
-                        if (dataLength == actualDataLength)
-                            result = reader.ReadString(actualDataLength);
-                    }
-
-                    reader.DetachStream();
-                }
-
-            return result;
-        }
-        private static async Task Send(StreamSocket socket, object data)
-        {
-            if (socket != null)
-            {
-                using (var writer = new DataWriter(socket.OutputStream))
-                {
-                    var str = Transport.Serialize(data);
-                    writer.WriteUInt32(writer.MeasureString(str));
-                    writer.WriteString(str);
-
-                    try
-                    {
-                        await writer.StoreAsync();
-                        //await writer.FlushAsync();
-                    }
-                    catch (Exception exception)
-                    {
-                        // If this is an unknown status it means that the error if fatal and retry will likely fail.
-                        if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                        {
-                            throw;
-                        }
-                    }
-
-                    writer.DetachStream();
-                }
-
-                await socket.CancelIOAsync();
-                socket.Dispose();
-            }
-        }
-        #endregion
-
         #region Event handlers
         private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
             try
             {
-                string str = await Receive(args.Socket);
+                string requestDto = await Utils.ReceiveAsync(args.Socket);
+                var request = Utils.DtoDeserialize<CommandRequest>(requestDto);
 
-                var request = Transport.Deserialize<CommandRequest>(str);
-                var result = CommandProcessor?.Invoke(request.Name, request.Parameters);
+                var response = CommandProcessor?.Invoke(request.Name, request.Parameters);
+                if (response != null)
+                {
+                    var dataDto = Utils.DtoSerialize(response);
+                    await Utils.SendAsync(args.Socket, dataDto);
 
-                await Send(args.Socket, result);
+                    await args.Socket.CancelIOAsync();
+                    args.Socket.Dispose();
+                }
             }
             catch (Exception exception)
             {

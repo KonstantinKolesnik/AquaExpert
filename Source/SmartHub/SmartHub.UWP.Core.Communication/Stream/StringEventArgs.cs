@@ -9,9 +9,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
             get; set;
         }
 
-        public StringEventArgs()
-        {
-        }
         public StringEventArgs(string data)
         {
             Data = data;
