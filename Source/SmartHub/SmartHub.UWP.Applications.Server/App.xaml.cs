@@ -83,7 +83,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             base.OnBackgroundActivated(args);
 
-            IBackgroundTaskInstance taskInstance = args.TaskInstance;
+            var taskInstance = args.TaskInstance;
             var appServiceDeferral = taskInstance.GetDeferral();
             taskInstance.Canceled += (s, e) => { appServiceDeferral.Complete(); };
 

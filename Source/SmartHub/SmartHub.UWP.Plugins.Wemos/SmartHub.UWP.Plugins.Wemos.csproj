@@ -130,7 +130,6 @@
     <Compile Include="Core\Models\WemosNodeBatteryValue.cs" />
     <Compile Include="Core\Models\WemosSetting.cs" />
     <Compile Include="Monitors\WemosMonitorDto.cs" />
-    <Compile Include="Transporting\WemosTransport.cs" />
     <Compile Include="Transporting\WemosTransportBackgroundTask.cs" />
     <Compile Include="UI\Controls\ucController.xaml.cs">
       <DependentUpon>ucController.xaml</DependentUpon>

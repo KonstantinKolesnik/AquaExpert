@@ -11,9 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
-using Windows.Networking.Sockets;
 using Windows.Storage;
-using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -199,11 +197,6 @@ namespace SmartHub.UWP.Core
             return await StreamClient.RequestAsync<T>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
         }
         #endregion
-
-
-
-
-
 
         public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class
         {

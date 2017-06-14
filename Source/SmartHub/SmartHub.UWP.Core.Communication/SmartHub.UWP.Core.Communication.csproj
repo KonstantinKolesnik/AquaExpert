@@ -115,6 +115,9 @@
     <Compile Include="Stream\StreamClient.cs" />
     <Compile Include="Stream\CommandRequest.cs" />
     <Compile Include="Stream\StreamServer.cs" />
+    <Compile Include="Stream\UdpMessageEventArgs.cs" />
+    <Compile Include="Stream\UdpClient.cs" />
+    <Compile Include="Stream\UdpMessageEventHandler.cs" />
     <Compile Include="Stream\Utils.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Communication.rd.xml" />
   </ItemGroup>

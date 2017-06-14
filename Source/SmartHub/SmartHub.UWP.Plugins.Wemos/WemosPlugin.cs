@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Plugins;
+﻿using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.Timer.Attributes;
@@ -9,7 +10,6 @@ using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
 using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
-using SmartHub.UWP.Plugins.Wemos.Transporting;
 using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,12 @@ namespace SmartHub.UWP.Plugins.Wemos
     public class WemosPlugin : PluginBase
     {
         #region Fields
-        private WemosTransport listener = new WemosTransport();
+        private const string localService = "11111";
+        private const string remoteService = "22222";
+        private const string remoteMulticastAddress = "224.3.0.5";
+        //private const string broadcastAddress = "255.255.255.255";
+
+        private UdpClient udpClient = new UdpClient();
         private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
         #endregion
 
@@ -68,7 +73,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (GetSetting("UnitSystem") == null)
                 Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
-            listener.MessageReceived += async (sender, e, remoteAddress) => { await ProcessMessage(e.Message, remoteAddress); };
+            udpClient.MessageReceived += async (sender, e) =>
+            {
+                foreach (var msg in WemosMessage.FromDto(e.Data))
+                    await ProcessMessage(msg, e.RemoteAddress);
+            };
 
             foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
             {
@@ -78,7 +87,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override async void StartPlugin()
         {
-            await listener.Start();
+            await udpClient.Start(localService, remoteMulticastAddress);
 
             await RequestPresentation();
 
@@ -87,14 +96,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override async void StopPlugin()
         {
-            await listener.Stop();
+            await udpClient.Stop();
         }
         #endregion
 
         #region Public methods
         public async Task Send(WemosMessage data)
         {
-            await listener.Send(data);
+            if (data != null)
+                await udpClient.Send(remoteMulticastAddress, remoteService, data.ToDto());
         }
 
         public async Task RequestPresentation(int nodeID = -1, int lineID = -1)

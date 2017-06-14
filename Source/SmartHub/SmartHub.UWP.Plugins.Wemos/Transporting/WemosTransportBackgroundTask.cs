@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartHub.UWP.Core;
+using System;
 using System.Text;
 using Windows.ApplicationModel.Background;
 using Windows.Networking.Sockets;
@@ -62,19 +63,73 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             }
             catch (Exception ex)
             {
-                //ShowToast(ex.Message);
+                Utils.ShowToast(Windows.UI.Notifications.ToastTemplateType.ToastText02, ex.Message);
                 deferral.Complete();
             }
         }
-
-        //public void ShowToast(string text)
-        //{
-        //    var toastNotifier = ToastNotificationManager.CreateToastNotifier();
-        //    var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-        //    var textNodes = toastXml.GetElementsByTagName("text");
-        //    textNodes.First().AppendChild(toastXml.CreateTextNode(text));
-        //    var toastNotification = new ToastNotification(toastXml);
-        //    toastNotifier.Show(new ToastNotification(toastXml));
-        //}
     }
 }
+
+
+//private const string socketId = "WemosTransportMulticastSocket";
+//private const string socketBackgroundgTaskName = "WemosMulticastActivityBackgroundTask";
+//private IBackgroundTaskRegistration task = null;
+
+//private void CheckBackgroundTask()
+//{
+//    foreach (var current in BackgroundTaskRegistration.AllTasks)
+//        if (current.Value.Name == socketBackgroundgTaskName)
+//        {
+//            task = current.Value;
+//            break;
+//        }
+
+//    // if there is no task allready created, create a new one
+//    if (task == null)
+//    {
+//        var taskBuilder = new BackgroundTaskBuilder();
+//        taskBuilder.Name = socketBackgroundgTaskName;
+//        taskBuilder.TaskEntryPoint = socketBackgroundgTaskName + ".SocketActivityTask";
+//        taskBuilder.SetTrigger(new SocketActivityTrigger());
+//        //taskBuilder.SetTrigger(new SystemTrigger(SystemTriggerType.TimeZoneChange, false));
+//        //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
+
+//        task = taskBuilder.Register();
+//        //task.Completed += new BackgroundTaskCompletedEventHandler(OnCompleted);
+//    }
+//}
+//private async Task CheckSocketAsync()
+//{
+//    try
+//    {
+//        SocketActivityInformation socketInformation;
+//        if (!SocketActivityInformation.AllSockets.TryGetValue(socketId, out socketInformation))
+//        {
+//            var socket = new DatagramSocket();
+//            socket.Control.DontFragment = true;
+//            socket.Control.MulticastOnly = true;
+//            socket.EnableTransferOwnership(task.TaskId, SocketActivityConnectedStandbyAction.Wake);
+
+//            await socket.BindServiceNameAsync(localService);
+//            socket.JoinMulticastGroup(new HostName(remoteMulticastAddress));
+
+//            // To demonstrate usage of CancelIOAsync async, have a pending read on the socket and call 
+//            // cancel before transfering the socket. 
+//            //DataReader reader = new DataReader(socket.InputStream);
+//            //reader.InputStreamOptions = InputStreamOptions.Partial;
+//            //var read = reader.LoadAsync(250);
+//            //read.Completed += (info, status) =>
+//            //{
+//            //};
+//            //await socket.CancelIOAsync();
+
+//            socket.TransferOwnership(socketId);
+//            socket = null;
+//        }
+//        //rootPage.NotifyUser("Connected. You may close the application", NotifyType.StatusMessage);
+//    }
+//    catch (Exception exception)
+//    {
+//        //rootPage.NotifyUser(exception.Message, NotifyType.ErrorMessage);
+//    }
+//}
