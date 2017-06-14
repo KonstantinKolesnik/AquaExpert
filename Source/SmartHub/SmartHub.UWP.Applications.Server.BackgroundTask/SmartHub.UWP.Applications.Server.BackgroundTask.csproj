@@ -111,6 +111,12 @@
     <Compile Include="SmartHubServerBackgroundTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
+      <Project>{1345726d-287f-4561-a2da-b29ec65c85a1}</Project>
+      <Name>SmartHub.UWP.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

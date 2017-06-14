@@ -6,6 +6,7 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System.Linq;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -22,54 +23,20 @@ namespace SmartHub.UWP.Applications.Server
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             await CheckBackgroundTask();
-
-            //foreach (var task in BackgroundTaskRegistration.AllTasks)
-            //{
-            //    if (task.Value.Name == BackgroundTaskSample.ApplicationTriggerTaskName)
-            //    {
-            //        AttachProgressAndCompletedHandlers(task.Value);
-            //        BackgroundTaskSample.UpdateBackgroundTaskRegistrationStatus(BackgroundTaskSample.ApplicationTriggerTaskName, true);
-            //        break;
-            //    }
-            //}
-
-            //trigger = new ApplicationTrigger();
-            //UpdateUI();
         }
 
         private async Task CheckBackgroundTask()
         {
-            var access = await BackgroundExecutionManager.RequestAccessAsync();
-            //switch (access)
-            //{
-            //    case BackgroundAccessStatus.Unspecified:
-            //        break;
-            //    case BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity:
-            //        break;
-            //    case BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity:
-            //        break;
-            //    case BackgroundAccessStatus.Denied:
-            //        break;
-            //    default:
-            //        break;
-            //}
-            //var b = access;
-
-
-            return;
-
-
             // check if task is already registered:
-            foreach (var t in BackgroundTaskRegistration.AllTasks)
-                if (t.Value.Name == taskName)
-                {
-                    task = t.Value;
-                    break;
-                }
+            task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskName);
 
             // if not, register a new task:
             if (task == null)
             {
+                task.Unregister(true);
+
+                var access = await BackgroundExecutionManager.RequestAccessAsync();
+
                 var taskBuilder = new BackgroundTaskBuilder()
                 {
                     Name = taskName,
@@ -79,15 +46,20 @@ namespace SmartHub.UWP.Applications.Server
                 //var trigger = new ApplicationTrigger();
                 //var trigger = new SocketActivityTrigger();
                 //var trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
-                //taskBuilder.SetTrigger(trigger);
+                //var trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
+                var trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
+                taskBuilder.SetTrigger(trigger);
 
-                taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
+                //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
                 //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
 
                 task = taskBuilder.Register();
-                task.Completed += new BackgroundTaskCompletedEventHandler(Task_Completed);
+            }
 
-                //await trigger.RequestAsync(); // if ApplicationTrigger
+            if (task != null)
+            {
+                task.Completed += new BackgroundTaskCompletedEventHandler(Task_Completed);
+                //await trigger.RequestAsync(); // if trigger is ApplicationTrigger
             }
         }
         private void Task_Completed(IBackgroundTaskRegistration task, BackgroundTaskCompletedEventArgs args)

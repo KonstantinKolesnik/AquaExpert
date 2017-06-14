@@ -29,7 +29,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                         //await reader.LoadAsync(250);
                         //var dataString = reader.ReadString(reader.UnconsumedBufferLength);
                         ////ShowToast(dataString);
-                        //socket.TransferOwnership(socketInformation.Id);
+                        socket.TransferOwnership(socketInformation.Id);
                         break;
 
                     case SocketActivityTriggerReason.KeepAliveTimerExpired:
@@ -39,7 +39,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
                         //await writer.StoreAsync();
                         //writer.DetachStream();
                         //writer.Dispose();
-                        //socket.TransferOwnership(socketInformation.Id);
+                        socket.TransferOwnership(socketInformation.Id);
                         break;
 
                     case SocketActivityTriggerReason.SocketClosed:

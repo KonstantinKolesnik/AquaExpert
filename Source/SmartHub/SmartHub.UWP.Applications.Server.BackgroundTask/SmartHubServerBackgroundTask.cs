@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartHub.UWP.Core;
 using Windows.ApplicationModel.Background;
+using Windows.UI.Notifications;
 
 namespace SmartHub.UWP.Applications.Server.BackgroundTask
 {
@@ -11,7 +8,7 @@ namespace SmartHub.UWP.Applications.Server.BackgroundTask
     {
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            //SendToast("Hi this is background Task");
+            Utils.ShowToast(ToastTemplateType.ToastText02, "Smart Hub background task run");
 
             //var deferral = taskInstance.GetDeferral();
 
