@@ -3,7 +3,7 @@
   <Identity Name="07a5a158-235a-40cb-bf90-3be263fed556" Publisher="CN=gothicmaestro" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="07a5a158-235a-40cb-bf90-3be263fed556" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Smart Hub Client</DisplayName>
+    <DisplayName>Smart Hub</DisplayName>
     <PublisherDisplayName>Konstantin Kolesnik</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="SmartHub.UWP.Applications.Client.App">
-      <uap:VisualElements DisplayName="Smart Hub Client" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SmartHub.UWP.Applications.Client" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="Smart Hub" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Smart Hub" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
