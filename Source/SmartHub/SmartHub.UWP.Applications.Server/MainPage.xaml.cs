@@ -7,6 +7,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System.Linq;
+using SmartHub.UWP.Core;
+using Windows.UI.Notifications;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -33,7 +35,7 @@ namespace SmartHub.UWP.Applications.Server
             // if not, register a new task:
             if (task == null)
             {
-                task.Unregister(true);
+                //task.Unregister(true);
 
                 var access = await BackgroundExecutionManager.RequestAccessAsync();
 
@@ -43,24 +45,24 @@ namespace SmartHub.UWP.Applications.Server
                     TaskEntryPoint = typeof(SmartHubServerBackgroundTask).ToString()
                 };
 
-                //var trigger = new ApplicationTrigger();
-                //var trigger = new SocketActivityTrigger();
-                //var trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
-                //var trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
-                var trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
+                var trigger = new ApplicationTrigger();
+                //trigger = new SocketActivityTrigger();
+                //trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
+                //trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
+                //trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
                 taskBuilder.SetTrigger(trigger);
 
                 //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
                 //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
 
                 task = taskBuilder.Register();
+
+                if (task != null)
+                    await (trigger as ApplicationTrigger).RequestAsync();
             }
 
             if (task != null)
-            {
                 task.Completed += new BackgroundTaskCompletedEventHandler(Task_Completed);
-                //await trigger.RequestAsync(); // if trigger is ApplicationTrigger
-            }
         }
         private void Task_Completed(IBackgroundTaskRegistration task, BackgroundTaskCompletedEventArgs args)
         {
@@ -68,6 +70,8 @@ namespace SmartHub.UWP.Applications.Server
             //var key = task.TaskId.ToString();
             //var message = settings.Values[key].ToString();
             //UpdateUI(message);
+
+            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + task.Name + " completed");
         }
     }
 }

@@ -3,6 +3,7 @@ using SmartHub.UWP.Plugins.Timer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using Windows.System.Threading;
 
 namespace SmartHub.UWP.Plugins.Timer
 {
@@ -11,7 +12,8 @@ namespace SmartHub.UWP.Plugins.Timer
     {
         #region Fields
         private const int TIMER_INTERVAL = 10; // seconds
-        private System.Threading.Timer timer;
+        //private System.Threading.Timer timer;
+        private ThreadPoolTimer timer = null;
         private bool isTimerActive = false;
         private readonly List<PeriodicalAction> periodicalActions = new List<PeriodicalAction>();
         #endregion
@@ -24,7 +26,8 @@ namespace SmartHub.UWP.Plugins.Timer
         #region Plugin ovverrides
         public override void InitPlugin()
         {
-            timer = new System.Threading.Timer(timerCallback, null, 0, (int)TimeSpan.FromSeconds(TIMER_INTERVAL).TotalMilliseconds);
+            //timer = new System.Threading.Timer(timerCallback, null, 0, (int)TimeSpan.FromSeconds(TIMER_INTERVAL).TotalMilliseconds);
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerCallback), TimeSpan.FromSeconds(TIMER_INTERVAL));
 
             // register periodical actions:
             var now = DateTime.Now;

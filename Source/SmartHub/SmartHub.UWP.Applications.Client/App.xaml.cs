@@ -77,6 +77,7 @@ namespace SmartHub.UWP.Applications.Client
         //    Window.Current.Activate();
         //}
 
+        // for in-process background task activating:
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             base.OnBackgroundActivated(args);
