@@ -28,7 +28,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 socket = null;
             }
         }
-
         public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
             var request = new CommandRequest(commandName, parameters);
@@ -37,21 +36,26 @@ namespace SmartHub.UWP.Core.Communication.Stream
             var responseDto = await Utils.ReceiveAsync(socket);
             return Utils.DtoDeserialize<T>(responseDto);
         }
+
         public static async Task<T> RequestAsync<T>(string hostName, string serviceName, string commandName, params object[] parameters)
         {
             var socket = new StreamSocket();
             socket.Control.KeepAlive = false;
 
-            await Utils.ConnectAsync(socket, hostName, serviceName);
+            var connected = await Utils.ConnectAsync(socket, hostName, serviceName);
+            if (connected)
+            {
+                var request = new CommandRequest(commandName, parameters);
+                await Utils.SendAsync(socket, Utils.DtoSerialize(request));
 
-            var request = new CommandRequest(commandName, parameters);
-            await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+                var responseDto = await Utils.ReceiveAsync(socket);
 
-            var responseDto = await Utils.ReceiveAsync(socket);
+                socket.Dispose();
 
-            socket.Dispose();
-
-            return Utils.DtoDeserialize<T>(responseDto);
+                return Utils.DtoDeserialize<T>(responseDto);
+            }
+            else
+                return default(T);
         }
         #endregion
     }

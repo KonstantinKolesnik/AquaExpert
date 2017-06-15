@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
@@ -20,18 +21,27 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #endregion
 
         #region Public methods
-        public static async Task ConnectAsync(StreamSocket socket, string hostName, string serviceName)
+        public static async Task<bool> ConnectAsync(StreamSocket socket, string hostName, string serviceName, int timeOut = 5000)
         {
             try
             {
-                await socket.ConnectAsync(new HostName(hostName), serviceName);
+                var cts = new CancellationTokenSource();
+                cts.CancelAfter(timeOut);
+
+                await socket.ConnectAsync(new HostName(hostName), serviceName).AsTask(cts.Token);
+                return true;
             }
-            catch (Exception exception)
+            catch (TaskCanceledException ex)
+            {
+            }
+            catch (Exception ex)
             {
                 // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
                     throw;
             }
+
+            return false;
         }
         public static async Task<string> ReceiveAsync(StreamSocket socket)
         {
