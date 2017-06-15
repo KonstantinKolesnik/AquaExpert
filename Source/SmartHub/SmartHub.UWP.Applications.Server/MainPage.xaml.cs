@@ -1,14 +1,12 @@
 ﻿using SmartHub.UWP.Applications.Server.BackgroundTask;
+using SmartHub.UWP.Core;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
-using Windows.Storage;
-using Windows.UI.Xaml;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using System.Linq;
-using SmartHub.UWP.Core;
-using Windows.UI.Notifications;
 
 namespace SmartHub.UWP.Applications.Server
 {
@@ -29,40 +27,45 @@ namespace SmartHub.UWP.Applications.Server
 
         private async Task CheckBackgroundTask()
         {
+            IBackgroundTrigger trigger;
+            trigger = new ApplicationTrigger();
+            //trigger = new SocketActivityTrigger();
+            //trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
+            //trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
+            //trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
+
             // check if task is already registered:
             task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskName);
+
+            //!!!!!!!
+            //if (task != null)
+            //    task.Unregister(true);
 
             // if not, register a new task:
             if (task == null)
             {
-                //task.Unregister(true);
-
                 var access = await BackgroundExecutionManager.RequestAccessAsync();
 
                 var taskBuilder = new BackgroundTaskBuilder()
                 {
                     Name = taskName,
-                    TaskEntryPoint = typeof(SmartHubServerBackgroundTask).ToString()
+                    TaskEntryPoint = typeof(SmartHubServerBackgroundTask).ToString(),
+                    IsNetworkRequested = true
                 };
 
-                var trigger = new ApplicationTrigger();
-                //trigger = new SocketActivityTrigger();
-                //trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
-                //trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
-                //trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
                 taskBuilder.SetTrigger(trigger);
 
                 //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
                 //taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
 
                 task = taskBuilder.Register();
-
-                if (task != null)
-                    await (trigger as ApplicationTrigger).RequestAsync();
             }
 
             if (task != null)
+            {
                 task.Completed += new BackgroundTaskCompletedEventHandler(Task_Completed);
+                await (trigger as ApplicationTrigger).RequestAsync();
+            }
         }
         private void Task_Completed(IBackgroundTaskRegistration task, BackgroundTaskCompletedEventArgs args)
         {
