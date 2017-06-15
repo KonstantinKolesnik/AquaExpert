@@ -182,6 +182,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Core.Xaml", "SmartHub.UWP.Core.Xaml\SmartHub.UWP.Core.Xaml.csproj", "{4DBE46C4-28B7-4FD6-A9F9-C0F92C8F5693}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4D1DE182-E175-4C4A-9FFF-5BAA1182A627}"
+	ProjectSection(SolutionItems) = preProject
+		start.bat = start.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{32879255-8FB2-4984-8DA2-DFDD41E4DE11}"
 EndProject

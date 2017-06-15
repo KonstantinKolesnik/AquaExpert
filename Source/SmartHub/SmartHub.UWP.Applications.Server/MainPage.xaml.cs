@@ -4,7 +4,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel.Core;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -15,15 +19,38 @@ namespace SmartHub.UWP.Applications.Server
         private const string taskName = "Smart Hub Server";
         private IBackgroundTaskRegistration task = null;
 
+        private ThreadPoolTimer timer = null;
+        //private System.Threading.Timer timer;
+
         public MainPage()
         {
             InitializeComponent();
         }
 
-        //protected async override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    await CheckBackgroundTask();
-        //}
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //await CheckBackgroundTask();
+
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //Window.Current.Activate();
+                    Utils.ShowToast(ToastTemplateType.ToastText02, "Timer tick");
+                });
+            }), TimeSpan.FromSeconds(5));
+
+
+
+            //timer = new System.Threading.Timer(async (o) =>
+            //{
+            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //    {
+            //        Window.Current.Activate();
+            //    });
+
+            //}, null, 0, (int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+        }
 
         private async Task CheckBackgroundTask()
         {

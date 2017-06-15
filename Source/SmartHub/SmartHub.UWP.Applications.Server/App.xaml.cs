@@ -1,6 +1,9 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -9,10 +12,20 @@ namespace SmartHub.UWP.Applications.Server
 {
     sealed partial class App : Application
     {
+        private ThreadPoolTimer timer = null;
+
         public App()
         {
             InitializeComponent();
             Suspending += OnSuspending;
+
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    Window.Current.Activate();
+                });
+            }), TimeSpan.FromSeconds(5));
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
