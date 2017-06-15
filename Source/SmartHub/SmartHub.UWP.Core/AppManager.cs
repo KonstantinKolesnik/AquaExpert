@@ -1,7 +1,6 @@
 ﻿using SmartHub.UWP.Core.Infrastructure;
 using SmartHub.UWP.Plugins.ApiListener;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;
@@ -108,7 +107,7 @@ namespace SmartHub.UWP.Core
             {
                 if (hub == null)
                 {
-                    var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.StartsWith("SmartHub"));
+                    var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
 
                     hub = new Hub();
                     hub.Init(assemblies);

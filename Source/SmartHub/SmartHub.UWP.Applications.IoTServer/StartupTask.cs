@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Http;
+﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Infrastructure;
+using System;
 using Windows.ApplicationModel.Background;
 using Windows.System.Threading;
-using SmartHub.UWP.Core;
 using Windows.UI.Notifications;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
@@ -19,6 +16,7 @@ namespace SmartHub.UWP.Applications.IoTServer
         private ThreadPoolTimer timer = null;
         private BackgroundTaskDeferral deferral = null;
         private IBackgroundTaskInstance taskInstance = null;
+        private Hub hub;
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -30,7 +28,7 @@ namespace SmartHub.UWP.Applications.IoTServer
             // described in http://aka.ms/backgroundtaskdeferral
             //
 
-            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " Starting...");
+            //Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " Starting...");
 
             var cost = BackgroundWorkCost.CurrentBackgroundWorkCost;
 
@@ -40,26 +38,44 @@ namespace SmartHub.UWP.Applications.IoTServer
             this.taskInstance = taskInstance;
 
             timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(PeriodicTimerCallback), TimeSpan.FromSeconds(5));
+
+            RunServer();
+
+            while (true) ;
+        }
+
+        private void RunServer()
+        {
+            if (hub == null)
+            {
+                var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+
+                hub = new Hub();
+                hub.Init(assemblies);
+                hub.StartServices();
+            }
         }
 
         private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
+            //Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + sender.Task.Name + " Cancel Requested...");
+
             cancelRequested = true;
             cancelReason = reason;
-
-            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + sender.Task.Name + " Cancel Requested...");
         }
         private void PeriodicTimerCallback(ThreadPoolTimer timer)
         {
             if (!cancelRequested)// && _progress < 100)
             {
+                //Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " is running");
+
                 //_progress += 10;
                 //taskInstance.Progress = _progress;
-
-                Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " is running");
             }
             else
             {
+                //Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + taskStatus);
+
                 timer.Cancel();
 
                 //var key = taskInstance.Task.Name;
@@ -70,7 +86,12 @@ namespace SmartHub.UWP.Applications.IoTServer
                 //var settings = ApplicationData.Current.LocalSettings;
                 //settings.Values[key] = taskStatus;
 
-                Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + taskStatus);
+                if (hub != null)
+                {
+                    hub.StopServices();
+                    hub = null;
+                }
+
 
                 // Indicate that the background task has completed.
                 deferral.Complete();

@@ -89,7 +89,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             await udpClient.Start(localService, remoteMulticastAddress);
 
-            await RequestPresentation();
+            //await RequestPresentation();
 
             foreach (var controller in controllers)
                 controller.Start();
@@ -103,8 +103,16 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Public methods
         public async Task Send(WemosMessage data)
         {
-            if (data != null)
-                await udpClient.Send(remoteMulticastAddress, remoteService, data.ToDto());
+            try
+            {
+                if (data != null)
+                    await udpClient.Send(remoteMulticastAddress, remoteService, data.ToDto());
+            }
+            catch (Exception ex)
+            {
+                int a = 0;
+                int b = a;
+            }
         }
 
         public async Task RequestPresentation(int nodeID = -1, int lineID = -1)

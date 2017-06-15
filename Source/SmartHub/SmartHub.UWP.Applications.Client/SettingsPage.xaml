@@ -61,7 +61,8 @@
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 HorizontalAlignment="Stretch"
-                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
+                Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                Text="{Binding AppData.ServerUrl, Source={StaticResource AppManager}, Mode=TwoWay}"/>
         </RelativePanel>
     </ScrollViewer>
 </Page>

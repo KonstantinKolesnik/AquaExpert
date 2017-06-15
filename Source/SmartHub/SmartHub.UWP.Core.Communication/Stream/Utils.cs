@@ -24,8 +24,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         {
             try
             {
-                var host = new HostName(hostName);
-                await socket.ConnectAsync(host, serviceName);
+                await socket.ConnectAsync(new HostName(hostName), serviceName);
             }
             catch (Exception exception)
             {
@@ -70,11 +69,11 @@ namespace SmartHub.UWP.Core.Communication.Stream
                         await writer.StoreAsync();
                         //await writer.FlushAsync();
                     }
-                    catch (Exception exception)
+                    catch (Exception ex)
                     {
                         // If this is an unknown status it means that the error if fatal and retry will likely fail.
-                        if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                            throw;
+                        //if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
+                        //    throw;
                     }
 
                     writer.DetachStream();

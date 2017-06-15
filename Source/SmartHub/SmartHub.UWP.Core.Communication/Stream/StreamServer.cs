@@ -66,10 +66,10 @@ namespace SmartHub.UWP.Core.Communication.Stream
                     args.Socket.Dispose();
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
                 // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
                 {
                     await Stop();
                     await Start(serviceName);

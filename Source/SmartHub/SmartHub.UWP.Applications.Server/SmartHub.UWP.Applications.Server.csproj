@@ -132,10 +132,55 @@
       <Project>{6c6165ec-66ec-4bab-a640-30a2021b71e4}</Project>
       <Name>SmartHub.UWP.Applications.Server.BackgroundTask</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Communication\SmartHub.UWP.Core.Communication.csproj">
+      <Project>{9db4329d-1705-4f7a-98fc-3901ec521599}</Project>
+      <Name>SmartHub.UWP.Core.Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Infrastructure\SmartHub.UWP.Core.Infrastructure.csproj">
+      <Project>{af8e3222-a068-4e8b-b409-b03b23c523f1}</Project>
+      <Name>SmartHub.UWP.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Core.Plugins\SmartHub.UWP.Core.Plugins.csproj">
+      <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
+      <Name>SmartHub.UWP.Core.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Core\SmartHub.UWP.Core.csproj">
       <Project>{1345726D-287F-4561-A2DA-B29EC65C85A1}</Project>
       <Name>SmartHub.UWP.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
+      <Project>{71718a41-dd1a-48e7-aa35-fa2569cae77d}</Project>
+      <Name>SmartHub.UWP.Plugins.ApiListener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Audio\SmartHub.UWP.Plugins.Audio.csproj">
+      <Project>{0c5e60ef-07b1-4bbc-90df-35e93fd5ab71}</Project>
+      <Name>SmartHub.UWP.Plugins.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Network\SmartHub.UWP.Plugins.Network.csproj">
+      <Project>{8b9ecda3-0fd6-408d-8b1a-de46cdc4f05d}</Project>
+      <Name>SmartHub.UWP.Plugins.Network</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Speech\SmartHub.UWP.Plugins.Speech.csproj">
+      <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
+      <Name>SmartHub.UWP.Plugins.Speech</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Timer\SmartHub.UWP.Plugins.Timer.csproj">
+      <Project>{2254a4f7-b66f-4068-8b9f-54ac550d5b32}</Project>
+      <Name>SmartHub.UWP.Plugins.Timer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj">
+      <Project>{4dfaa97c-af72-4497-bfd2-b14d58ab340c}</Project>
+      <Name>SmartHub.UWP.Plugins.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Wemos\SmartHub.UWP.Plugins.Wemos.csproj">
+      <Project>{208680e0-389c-4ea4-a69c-140ce09f0ae6}</Project>
+      <Name>SmartHub.UWP.Plugins.Wemos</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Telerik UI For Universal Windows Platform, Version=2017.2.502.45">
+      <Name>Telerik UI For Universal Windows Platform</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

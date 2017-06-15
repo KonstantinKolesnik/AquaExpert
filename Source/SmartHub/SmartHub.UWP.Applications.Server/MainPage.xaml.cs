@@ -22,6 +22,8 @@ namespace SmartHub.UWP.Applications.Server
         private ThreadPoolTimer timer = null;
         //private System.Threading.Timer timer;
 
+        private Core.Infrastructure.Hub hub;
+
         public MainPage()
         {
             InitializeComponent();
@@ -30,15 +32,18 @@ namespace SmartHub.UWP.Applications.Server
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //await CheckBackgroundTask();
+            RunServer();
 
-            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    //Window.Current.Activate();
-                    Utils.ShowToast(ToastTemplateType.ToastText02, "Timer tick");
-                });
-            }), TimeSpan.FromSeconds(5));
+            //timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            //{
+            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            //    {
+            //        //Window.Current.Activate();
+            //        //Utils.ShowToast(ToastTemplateType.ToastText02, "Timer tick");
+            //    });
+            //}), TimeSpan.FromSeconds(5));
+
+
 
 
 
@@ -50,6 +55,18 @@ namespace SmartHub.UWP.Applications.Server
             //    });
 
             //}, null, 0, (int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+        }
+
+        private void RunServer()
+        {
+            if (hub == null)
+            {
+                var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+
+                hub = new Core.Infrastructure.Hub();
+                hub.Init(assemblies);
+                hub.StartServices();
+            }
         }
 
         private async Task CheckBackgroundTask()
