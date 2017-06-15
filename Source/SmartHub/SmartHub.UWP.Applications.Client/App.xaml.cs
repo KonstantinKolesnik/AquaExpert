@@ -56,26 +56,28 @@ namespace SmartHub.UWP.Applications.Client
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
             LocalUtils.SetAppTheme();
         }
-        //protected override void OnActivated(IActivatedEventArgs args)
-        //{
-        //    base.OnActivated(args);
 
-        //    AppManager.Init();
+        // by protocol etc.
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
 
-        //    var rootFrame = Window.Current.Content as Frame;
+            //AppManager.Init();
 
-        //    if (rootFrame == null)
-        //    {
-        //        rootFrame = new Frame();
-        //        rootFrame.NavigationFailed += OnNavigationFailed;
-        //        Window.Current.Content = rootFrame;
-        //    }
+            //var rootFrame = Window.Current.Content as Frame;
 
-        //    if (rootFrame.Content == null)
-        //        rootFrame.Navigate(typeof(MainPage));
+            //if (rootFrame == null)
+            //{
+            //    rootFrame = new Frame();
+            //    rootFrame.NavigationFailed += OnNavigationFailed;
+            //    Window.Current.Content = rootFrame;
+            //}
 
-        //    Window.Current.Activate();
-        //}
+            //if (rootFrame.Content == null)
+            //    rootFrame.Navigate(typeof(MainPage));
+
+            //Window.Current.Activate();
+        }
 
         // for in-process background task activating:
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

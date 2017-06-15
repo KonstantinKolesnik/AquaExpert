@@ -21,9 +21,6 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <uap:Extension Category="windows.protocol">
-          <uap:Protocol Name="smarthubuwp" />
-        </uap:Extension>
         <!--<uap:Extension Category="windows.appService" >
           <uap3:AppService Name="smarthubuwp.server" SupportsRemoteSystems="true"/>
         </uap:Extension>-->

@@ -21,6 +21,9 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="smarthubuwpserver" />
+        </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="SmartHub.UWP.Applications.Server.BackgroundTask.SmartHubServerBackgroundTask">
           <BackgroundTasks>
             <Task Type="systemEvent" />

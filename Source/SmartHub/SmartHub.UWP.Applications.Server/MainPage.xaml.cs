@@ -20,31 +20,41 @@ namespace SmartHub.UWP.Applications.Server
             InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            await CheckBackgroundTask();
-        }
+        //protected async override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    await CheckBackgroundTask();
+        //}
 
         private async Task CheckBackgroundTask()
         {
             IBackgroundTrigger trigger;
-            trigger = new ApplicationTrigger();
+            //trigger = new ApplicationTrigger();
             //trigger = new SocketActivityTrigger();
             //trigger = new SystemTrigger(SystemTriggerType.TimeZoneChange, false);
             //trigger = new SystemTrigger(SystemTriggerType.PowerStateChange, true);
             //trigger = new SystemTrigger(SystemTriggerType.SessionConnected, true);
+            //trigger = new SystemTrigger(SystemTriggerType.UserPresent, true);
+            //trigger = new SystemTrigger(SystemTriggerType.UserAway, true);
+            //trigger = new SystemTrigger(SystemTriggerType.OnlineIdConnectedStateChange, true);
+            trigger = new SystemTrigger(SystemTriggerType.DefaultSignInAccountChange, true);
+            
 
             // check if task is already registered:
             task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskName);
 
             //!!!!!!!
-            //if (task != null)
-            //    task.Unregister(true);
+            if (task != null)
+                task.Unregister(true);
 
             // if not, register a new task:
-            if (task == null)
+            //if (task == null)
             {
                 var access = await BackgroundExecutionManager.RequestAccessAsync();
+                if (access == BackgroundAccessStatus.DeniedByUser || access == BackgroundAccessStatus.DeniedBySystemPolicy || access == BackgroundAccessStatus.Unspecified)
+                {
+                    Utils.ShowToast(ToastTemplateType.ToastText02, "Background access denied!");
+                    return;
+                }
 
                 var taskBuilder = new BackgroundTaskBuilder()
                 {
@@ -64,7 +74,7 @@ namespace SmartHub.UWP.Applications.Server
             if (task != null)
             {
                 task.Completed += new BackgroundTaskCompletedEventHandler(Task_Completed);
-                await (trigger as ApplicationTrigger).RequestAsync();
+                //await (trigger as ApplicationTrigger).RequestAsync();
             }
         }
         private void Task_Completed(IBackgroundTaskRegistration task, BackgroundTaskCompletedEventArgs args)
