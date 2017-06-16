@@ -31,7 +31,7 @@
                 <TextBlock Text="Lines values management" Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}">
-                <uctrls:ucMonitors/>
+                <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
                 <uctrls:ucControllers/>

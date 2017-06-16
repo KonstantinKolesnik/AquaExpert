@@ -9,12 +9,13 @@
 
     <Grid>
         <uctrls:ucMonitorsList
-            Visibility="{Binding SelectedMonitor, Converter={StaticResource NotNullToInvisibilityConverter}}"
             IsGrouped="True"
             IsSorted="True"
-            ItemClicked="ucMonitorsList_ItemClicked"/>
+            />
+            <!--Visibility="{Binding SelectedMonitor, Converter={StaticResource NotNullToInvisibilityConverter}}"-->
+            <!--ItemClicked="ucMonitorsList_ItemClicked"-->
 
-        <Grid Visibility="{Binding SelectedMonitor, Converter={StaticResource NotNullToVisibilityConverter}}">
+        <!--<Grid Visibility="{Binding SelectedMonitor, Converter={StaticResource NotNullToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -31,6 +32,6 @@
                     </AppBarButton>
                 </CommandBar.PrimaryCommands>
             </CommandBar>
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

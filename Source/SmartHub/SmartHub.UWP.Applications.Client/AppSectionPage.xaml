@@ -44,7 +44,10 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <uctrls:ucSectionItemsList x:Name="lvItems" ItemsSource="{Binding Items}" ItemClicked="lvItems_ItemClicked"/>
+        <uctrls:ucSectionItemsList
+            x:Name="lvItems"
+            ItemsSource="{Binding Items}"
+            ItemClicked="lvItems_ItemClicked"/>
 
         <ContentPresenter
             x:Name="DetailContentPresenter"

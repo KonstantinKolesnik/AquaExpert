@@ -8,12 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <UserControl.Resources>
-        <DataTemplate x:Key="PointTemplate">
-            <Rectangle Width="8" Height="8" RadiusX="8" RadiusY="8" Fill="Red"/>
-        </DataTemplate>
-    </UserControl.Resources>
-
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -28,68 +22,72 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
-        <telerikPrimitives:RadExpanderControl IsExpanded="False" Visibility="{Binding IsEditable, Converter={StaticResource BooleanToInvisibilityConverter}}">
+        
+        <telerikPrimitives:RadExpanderControl IsExpanded="False">
             <telerikPrimitives:RadExpanderControl.Content>
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-            
-                    <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
-                    <Border Grid.Column="1" Background="{ThemeResource SystemControlForegroundAccentBrush}">
+
+                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}"/>
+                        <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>-->
+                        
+                        <TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="2" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" Foreground="{ThemeResource InactiveBrush}" VerticalAlignment="Center"/>
+
+                    <Border Grid.Column="3" Background="{ThemeResource SystemControlForegroundAccentBrush}">
                         <TextBlock Text="{Binding LastValue, ElementName=mc1}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
                     </Border>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
+            
             <telerikPrimitives:RadExpanderControl.ExpandableContent>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
-                </ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <RelativePanel x:Name="rp" Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBox
+                            x:Name="tbName"
+                            Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                            Text="{Binding Monitor.Name, Mode=TwoWay}"
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="AlphanumericFullWidth"/>
+
+                        <TextBox
+                            x:Name="tbNameForInformer"
+                            Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}"
+                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                            Text="{Binding Monitor.NameForInformer, Mode=TwoWay}"
+                            RelativePanel.Below="tbName"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="AlphanumericFullWidth"/>
+                    </RelativePanel>
+                    
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
+                    </ScrollViewer>
+                </Grid>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>
         </telerikPrimitives:RadExpanderControl>
-        
-        <Grid Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <RelativePanel x:Name="rp">
-                <TextBox
-                    x:Name="tbName"
-                    Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
-                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                    Text="{Binding Monitor.Name, Mode=TwoWay}"
-                    RelativePanel.AlignTopWithPanel="True"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.AlignRightWithPanel="True"
-                    HorizontalAlignment="Stretch"
-                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                    InputScope="AlphanumericFullWidth"/>
-
-                <TextBox
-                    x:Name="tbNameForInformer"
-                    Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}"
-                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                    Text="{Binding Monitor.NameForInformer, Mode=TwoWay}"
-                    RelativePanel.Below="tbName"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    RelativePanel.AlignRightWithPanel="True"
-                    HorizontalAlignment="Stretch"
-                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                    InputScope="AlphanumericFullWidth"/>
-            </RelativePanel>
-
-            <Border Grid.Row="1" Background="{ThemeResource SystemControlForegroundAccentBrush}" HorizontalAlignment="Right">
-                <TextBlock Text="{Binding LastValue, ElementName=mc2}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
-            </Border>
-
-            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-                <uctrls:ucMonitorChart x:Name="mc2" Monitor="{Binding Monitor}"/>
-            </ScrollViewer>
-        </Grid>
     </Grid>
 </UserControl>
