@@ -84,30 +84,39 @@
                         <ScrollViewer RelativePanel.AlignTopWithPanel="True" RelativePanel.Above="pnlFooter" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <StackPanel>
                                 <RadioButton x:Name="menuDashboard"
-                                Width="{StaticResource SplitViewPaneWidth}"
-                                Content="{Binding Labels.Dashboard, Source={StaticResource LabelsManager}}"
-                                GroupName="Navigation"
-                                Click="menuItem_Click">
+                                    Width="{StaticResource SplitViewPaneWidth}"
+                                    Content="{Binding Labels.Dashboard, Source={StaticResource LabelsManager}}"
+                                    GroupName="Navigation"
+                                    Click="menuItem_Click">
                                     <RadioButton.Tag>
                                         <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE10F;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                                 <RadioButton x:Name="menuApplications"
-                                Width="{StaticResource SplitViewPaneWidth}"
-                                Content="{Binding Labels.Applications, Source={StaticResource LabelsManager}}"
-                                GroupName="Navigation"
-                                Click="menuItem_Click">
+                                    Width="{StaticResource SplitViewPaneWidth}"
+                                    Content="{Binding Labels.Applications, Source={StaticResource LabelsManager}}"
+                                    GroupName="Navigation"
+                                    Click="menuItem_Click">
                                     <RadioButton.Tag>
                                         <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xEC4E;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                                 <RadioButton x:Name="menuSystem"
-                                Width="{StaticResource SplitViewPaneWidth}"
-                                Content="{Binding Labels.System, Source={StaticResource LabelsManager}}"
-                                GroupName="Navigation"
-                                Click="menuItem_Click">
+                                    Width="{StaticResource SplitViewPaneWidth}"
+                                    Content="{Binding Labels.System, Source={StaticResource LabelsManager}}"
+                                    GroupName="Navigation"
+                                    Click="menuItem_Click">
                                     <RadioButton.Tag>
                                         <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE15E;"/>
+                                    </RadioButton.Tag>
+                                </RadioButton>
+                                <RadioButton x:Name="menuStorage"
+                                    Width="{StaticResource SplitViewPaneWidth}"
+                                    Content="{Binding Labels.Storage, Source={StaticResource LabelsManager}}"
+                                    GroupName="Navigation"
+                                    Click="menuItem_Click">
+                                    <RadioButton.Tag>
+                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE83B;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                             </StackPanel>

@@ -106,6 +106,8 @@ namespace SmartHub.UWP.Applications.Client
                     case "menuDashboard": AppFrame.Navigate(typeof(DashboardPage)); break;
                     case "menuApplications": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.Applications); break;
                     case "menuSystem": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.System); break;
+
+
                     case "menuSettings": AppFrame.Navigate(typeof(SettingsPage)); break;
                     case "menuAbout": AppFrame.Navigate(typeof(AboutPage)); break;
                 }
