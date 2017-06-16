@@ -101,6 +101,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Public methods
+
+        #region Send/Receive
         public async Task Send(WemosMessage data)
         {
             try
@@ -110,8 +112,6 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
             catch (Exception ex)
             {
-                int a = 0;
-                int b = a;
             }
         }
 
@@ -127,11 +127,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public async Task SetLineValue(WemosLine line, float value)
         {
             if (line != null)
-            {
-                //var lastSV = GetLastSensorValue(line);
-                //if (lastSV == null || (lastSV.Value != value))
-                    await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
-            }
+                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
         public async Task SetLineValue(WemosLine line, string value)
         {
@@ -143,16 +139,43 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (node != null)
                 await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
         }
+        #endregion
 
         public static bool IsMessageFromLine(WemosMessage msg, WemosLine line)
         {
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
         }
-        public static bool IsMessageFromLine(WemosLineValue val, WemosLine line)
+        public static bool IsValueFromLine(WemosLineValue val, WemosLine line)
         {
             return val != null && line != null && line.NodeID == val.NodeID && line.LineID == val.LineID;
         }
+        public static string LineTypeToUnits(WemosLineType lt)
+        {
+            switch (lt)
+            {
+                case WemosLineType.Switch: return "";
+                case WemosLineType.Temperature: return "°C";
+                case WemosLineType.Humidity: return "%";
+                case WemosLineType.Barometer: return "mm Hg";
+                case WemosLineType.Weight: return "kg";
+                case WemosLineType.Voltage: return "V";
+                case WemosLineType.Current: return "A";
+                case WemosLineType.Power: return "Wt";
+                case WemosLineType.Rain: return "";
+                case WemosLineType.UV: return "";
+                case WemosLineType.Distance: return "m";
+                case WemosLineType.LightLevel: return "lux";
+                case WemosLineType.IR: return "";
+                case WemosLineType.AirQuality: return "";
+                case WemosLineType.Vibration: return "";
+                case WemosLineType.Ph: return "";
+                case WemosLineType.ORP: return "";
 
+                default: return "";
+            }
+        }
+
+        //#region DB
         public List<WemosNode> GetNodes()
         {
             using (var db = Context.OpenConnection())
@@ -221,31 +244,6 @@ namespace SmartHub.UWP.Plugins.Wemos
             return controllers.FirstOrDefault(c => c.Model.ID == id);
         }
 
-        public static string LineTypeToUnits(WemosLineType lt)
-        {
-            switch (lt)
-            {
-                case WemosLineType.Switch: return "";
-                case WemosLineType.Temperature: return "°C";
-                case WemosLineType.Humidity: return "%";
-                case WemosLineType.Barometer: return "mm Hg";
-                case WemosLineType.Weight: return "kg";
-                case WemosLineType.Voltage: return "V";
-                case WemosLineType.Current: return "A";
-                case WemosLineType.Power: return "Wt";
-                case WemosLineType.Rain: return "";
-                case WemosLineType.UV: return "";
-                case WemosLineType.Distance: return "m";
-                case WemosLineType.LightLevel: return "lux";
-                case WemosLineType.IR: return "";
-                case WemosLineType.AirQuality: return "";
-                case WemosLineType.Vibration: return "";
-                case WemosLineType.Ph: return "";
-                case WemosLineType.ORP: return "";
-
-                default: return "";
-            }
-        }
         #endregion
 
         #region Private methods

@@ -61,8 +61,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected override bool IsMyMessage(WemosLineValue value)
         {
             return
-                WemosPlugin.IsMessageFromLine(value, LineSwitch) ||
-                WemosPlugin.IsMessageFromLine(value, LineTemperature);
+                WemosPlugin.IsValueFromLine(value, LineSwitch) ||
+                WemosPlugin.IsValueFromLine(value, LineTemperature);
         }
         protected async override void RequestLinesValues()
         {
@@ -92,7 +92,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         protected override void MessageReceived(WemosLineValue value)
         {
-            if (WemosPlugin.IsMessageFromLine(value, LineTemperature))
+            if (WemosPlugin.IsValueFromLine(value, LineTemperature))
                 lastLineValue = value.Value;
         }
         //protected override void InitLastValues()

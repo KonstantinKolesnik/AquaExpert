@@ -6,14 +6,29 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
     public class WemosLineValue
     {
         [NotNull]
-        public int NodeID { get; set; }
+        public int NodeID
+        {
+            get; set;
+        }
         [NotNull]
-        public int LineID { get; set; }
+        public int LineID
+        {
+            get; set;
+        }
         [NotNull]
-        public DateTime TimeStamp { get; set; }
+        public WemosLineType Type
+        {
+            get; set;
+        }
         [NotNull]
-        public WemosLineType Type { get; set; }
+        public DateTime TimeStamp
+        {
+            get; set;
+        }
         [NotNull, Default()]
-        public float Value { get; set; }
+        public float Value
+        {
+            get; set;
+        }
     }
 }

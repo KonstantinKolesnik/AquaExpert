@@ -81,7 +81,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
 
         protected override bool IsMyMessage(WemosLineValue value)
         {
-            return WemosPlugin.IsMessageFromLine(value, LineSwitch);
+            return WemosPlugin.IsValueFromLine(value, LineSwitch);
         }
         protected async override void RequestLinesValues()
         {

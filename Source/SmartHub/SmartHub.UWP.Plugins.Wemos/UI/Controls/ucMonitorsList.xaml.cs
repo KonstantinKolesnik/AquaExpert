@@ -26,13 +26,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var uc = d as ucMonitorsList;
-            uc.UpdateItemsSource();
+            uc.UpdateItemsViewSource();
 
             var items = e.NewValue as ObservableCollection<WemosMonitorObservable>;
             if (items != null)
                 items.CollectionChanged += (s, args) =>
                 {
-                    uc.UpdateItemsSource();
+                    uc.UpdateItemsViewSource();
 
                     if (args.Action == NotifyCollectionChangedAction.Add)
                         uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosMonitorObservable));
@@ -92,7 +92,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #endregion
 
         #region Private methods
-        private void UpdateItemsSource()
+        private async Task UpdateLinesList()
+        {
+            var models = await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
+            var items = new ObservableCollection<WemosLine>(models);
+
+            cbLines.ItemsSource = items;
+            if (items.Count > 0)
+                cbLines.SelectedItem = items[0];
+        }
+        private void UpdateItemsViewSource()
         {
             itemsViewSource.IsSourceGrouped = IsGrouped;
 
@@ -111,15 +120,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             tbEmptyContent.Visibility = Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
-        private async Task UpdateLinesList()
-        {
-            var models = await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
-            var items = new ObservableCollection<WemosLine>(models);
-
-            cbLines.ItemsSource = items;
-            if (items.Count > 0)
-                cbLines.SelectedItem = items[0];
-        }
         private async Task UpdateMonitorsList()
         {
             var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
@@ -130,15 +130,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Event handlers
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            await UpdateLinesList();
             await UpdateMonitorsList();
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             tbMonitorName.Text = "";
+            await UpdateLinesList();
 
             var result = await dlgAddMonitor.ShowAsync();
-
             if (result == ContentDialogResult.Primary)
             {
                 var name = tbMonitorName.Text;
@@ -151,10 +150,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            int id = (int) ((sender as Button).Tag);
-
             await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
+                int id = (int) ((sender as Button).Tag);
+
                 bool res = await Utils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
                 if (res)
                     ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));

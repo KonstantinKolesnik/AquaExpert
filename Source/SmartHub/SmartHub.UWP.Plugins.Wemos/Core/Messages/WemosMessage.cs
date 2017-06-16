@@ -29,7 +29,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
             get; set;
         }
 
-        public string Data => data;
+        //public string Data => data;
 
         //public List<int> PayloadFirmware
         //{
@@ -81,7 +81,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         {
             return $"{NodeID};{LineID};{(int)Type};{SubType};{data ?? string.Empty}\n";
         }
-
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
