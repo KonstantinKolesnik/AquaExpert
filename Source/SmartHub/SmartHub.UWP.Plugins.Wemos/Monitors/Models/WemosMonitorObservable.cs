@@ -14,6 +14,18 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get { return model.ID; }
         }
+        public int LineID
+        {
+            get { return model.LineID; }
+        }
+        public string LineName
+        {
+            get { return model.LineName; }
+        }
+        public WemosLineType LineType
+        {
+            get { return model.LineType; }
+        }
         public string Name
         {
             get { return model.Name; }
@@ -39,19 +51,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
                     NotifyPropertyChanged();
                 }
             }
-        }
-        public int LineID
-        {
-            get { return model.LineID; }
-        }
-        public string LineName
-        {
-            get { return model.LineName; }
-
-        }
-        public WemosLineType LineType
-        {
-            get { return model.LineType; }
         }
         public string Configuration
         {

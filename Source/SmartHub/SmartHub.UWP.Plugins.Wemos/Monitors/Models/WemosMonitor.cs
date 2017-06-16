@@ -6,15 +6,29 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
     public class WemosMonitor
     {
         [PrimaryKey, NotNull, AutoIncrement]
-        public int ID { get; set; }
-
+        public int ID
+        {
+            get; set;
+        }
         [NotNull]
-        public string Name { get; set; }
-        public string NameForInformer { get; set; }
+        public string Name
+        {
+            get; set;
+        }
+        public string NameForInformer
+        {
+            get; set;
+        }
         [NotNull]
-        public int LineID { get; set; }
+        public int LineID
+        {
+            get; set;
+        }
         [NotNull]
-        public string Configuration { get; set; }
+        public string Configuration
+        {
+            get; set;
+        }
 
         public T DeserializeConfiguration<T>()
         {

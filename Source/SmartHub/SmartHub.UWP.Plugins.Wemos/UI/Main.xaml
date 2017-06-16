@@ -5,14 +5,17 @@
     xmlns:ctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d">
 
-    <Grid Margin="10,0">
-        <StackPanel>
-            <TextBlock Text="Wemos" Style="{ThemeResource TitleTextBlockStyle}"/>
-            <TextBlock Text="Content" Style="{ThemeResource CaptionTextBlockStyle}"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="{StaticResource RootContainerMargin}">
+            <TextBlock Text="Wemos" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <!--<TextBlock Text="Wemos modules" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
     </Grid>
 </UserControl>

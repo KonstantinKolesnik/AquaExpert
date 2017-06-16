@@ -101,6 +101,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (items.Count > 0)
                 cbLines.SelectedItem = items[0];
         }
+        private async Task UpdateMonitorsList()
+        {
+            var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
+            ItemsSource = new ObservableCollection<WemosMonitorObservable>(models.Select(m => new WemosMonitorObservable(m)));
+        }
         private void UpdateItemsViewSource()
         {
             itemsViewSource.IsSourceGrouped = IsGrouped;
@@ -120,11 +125,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             tbEmptyContent.Visibility = Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
-        private async Task UpdateMonitorsList()
-        {
-            var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
-            ItemsSource = new ObservableCollection<WemosMonitorObservable>(models.Select(m => new WemosMonitorObservable(m)));
-        }
         #endregion
 
         #region Event handlers
@@ -140,10 +140,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var result = await dlgAddMonitor.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                var name = tbMonitorName.Text;
+                var name = tbMonitorName.Text.Trim();
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
 
-                var model = await Utils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name.Trim(), lineID);
+                var model = await Utils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name, lineID);
                 if (model != null)
                     ItemsSource.Add(new WemosMonitorObservable(model));
             }

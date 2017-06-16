@@ -21,8 +21,8 @@ using Windows.Networking;
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules (D1 Mini Pro, D1 Mini, D1, ESP8266) management")]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules (D1 Mini Pro, D1 Mini, D1, ESP8266) network")]
+    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules")]
     public class WemosPlugin : PluginBase
     {
         #region Fields
@@ -89,7 +89,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             await udpClient.Start(localService, remoteMulticastAddress);
 
-            //await RequestPresentation();
+            await RequestPresentation();
 
             foreach (var controller in controllers)
                 controller.Start();
@@ -533,11 +533,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetMonitors => ((parameters) =>
         {
-            return GetMonitors().Select(m => new WemosMonitorDto(m)
-            {
-                LineName = GetLine(m.LineID).Name,
-                LineType = GetLine(m.LineID).Type
-            }).ToList();
+            return GetMonitors().Select(m => new WemosMonitorDto(m) { LineName = GetLine(m.LineID).Name, LineType = GetLine(m.LineID).Type }).ToList();
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitor"), Export(typeof(ApiMethod))]
@@ -545,9 +541,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var item = GetMonitor(id);
-            var line = GetLine(item.LineID);
-            return new WemosMonitorDto(item) { LineName = line.Name, LineType = line.Type };
+            var model = GetMonitor(id);
+            var line = GetLine(model.LineID);
+            return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/add"), Export(typeof(ApiMethod))]
@@ -556,23 +552,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[0] as string;
             var lineID = int.Parse(parameters[1].ToString());
 
-            var item = new WemosMonitor()
+            var model = new WemosMonitor()
             {
                 Name = name,
                 LineID = lineID,
                 Configuration = "{}"
             };
 
-            Save(item);
+            Save(model);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
-            var line = GetLine(item.LineID);
-            var m = new WemosMonitorDto(item);
-            m.LineName = line.Name;
-            m.LineType = line.Type;
-
-            return m;
+            var line = GetLine(model.LineID);
+            return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/setnames"), Export(typeof(ApiMethod))]
@@ -582,12 +574,13 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[1] as string;
             var nameForInformer = parameters[2] as string;
 
-            var item = GetMonitor(id);
-            if (item != null)
+            var model = GetMonitor(id);
+            if (model != null)
             {
-                item.Name = name;
-                item.NameForInformer = nameForInformer;
-                SaveOrUpdate(item);
+                model.Name = name;
+                model.NameForInformer = nameForInformer;
+                SaveOrUpdate(model);
+
                 return true;
             }
 
@@ -605,6 +598,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             {
                 model.SerializeConfiguration(config);
                 SaveOrUpdate(model);
+
                 return true;
             }
 

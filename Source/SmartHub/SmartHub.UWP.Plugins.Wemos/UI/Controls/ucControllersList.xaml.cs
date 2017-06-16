@@ -24,13 +24,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var uc = d as ucControllersList;
-            uc.UpdateItemsSource();
+            uc.UpdateItemsViewSource();
 
             var items = e.NewValue as ObservableCollection<WemosControllerObservable>;
             if (items != null)
                 items.CollectionChanged += (s, args) =>
                 {
-                    uc.UpdateItemsSource();
+                    uc.UpdateItemsViewSource();
 
                     if (args.Action == NotifyCollectionChangedAction.Add)
                         uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosControllerObservable));
@@ -90,7 +90,22 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #endregion
 
         #region Private methods
-        private void UpdateItemsSource()
+        private void UpdateTypesList()
+        {
+            var items = new ObservableCollection<WemosControllerType>();
+            foreach (var item in Enum.GetValues(typeof(WemosControllerType)))
+                items.Add((WemosControllerType) item);
+
+            cbTypes.ItemsSource = items;
+            if (items.Count > 0)
+                cbTypes.SelectedItem = items[0];
+        }
+        private async Task UpdateControllersList()
+        {
+            var models = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
+            ItemsSource = new ObservableCollection<WemosControllerObservable>(models.Select(m => new WemosControllerObservable(m)));
+        }
+        private void UpdateItemsViewSource()
         {
             itemsViewSource.IsSourceGrouped = IsGrouped;
 
@@ -109,20 +124,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
             tbEmptyContent.Visibility = Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
-        private void UpdateTypesList()
-        {
-            var items = new ObservableCollection<WemosControllerType>();
-            foreach (var item in Enum.GetValues(typeof(WemosControllerType)))
-                items.Add((WemosControllerType) item);
-
-            cbTypes.ItemsSource = items;
-            cbTypes.SelectedItem = items[0];
-        }
-        private async Task UpdateControllersList()
-        {
-            var models = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
-            ItemsSource = new ObservableCollection<WemosControllerObservable>(models.Select(m => new WemosControllerObservable(m)));
-        }
         #endregion
 
         #region Event handlers
@@ -133,24 +134,25 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var result = await dlgAddController.ShowAsync();
+            tbControllerName.Text = "";
 
+            var result = await dlgAddController.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                var name = (dlgAddController.FindName("tbControllerName") as TextBox).Text;
-                var type = (WemosControllerType) (dlgAddController.FindName("cbTypes") as ComboBox).SelectedItem;
+                var name = tbControllerName.Text.Trim();
+                var type = (WemosControllerType) cbTypes.SelectedItem;
 
-                var model = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name.Trim(), type);
+                var model = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name, type);
                 if (model != null)
                     ItemsSource.Add(new WemosControllerObservable(model));
             }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            int id = (int) ((sender as Button).Tag);
-
             await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
+                int id = (int) ((sender as Button).Tag);
+
                 bool res = await Utils.RequestAsync<bool>("/api/wemos/controllers/delete", id);
                 if (res)
                     ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
