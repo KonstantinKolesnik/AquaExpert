@@ -54,7 +54,7 @@
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
             SelectionMode="None"
-            IsItemClickEnabled="False"
+            IsItemClickEnabled="True"
             IsSwipeEnabled="False"
             ItemClick="lvMonitors_ItemClick">
             <ListView.GroupStyle>
@@ -67,14 +67,14 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <!--<Border BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">-->
+                    <Border Margin="0,8,0,0" ><!--BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}"-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <uctrls:ucMonitor Monitor="{Binding}" IsEditable="True"/>
+                            <uctrls:ucMonitor Monitor="{Binding}" IsEditable="True" VerticalAlignment="Center"/>
 
                             <AppBarButton Grid.Column="1" Style="{StaticResource AppBarTinyButton}" Tag="{Binding ID}" Margin="15,10,0,0" VerticalAlignment="Top" Click="ButtonDelete_Click">
                                 <AppBarButton.Icon>
@@ -82,7 +82,7 @@
                                 </AppBarButton.Icon>
                             </AppBarButton>
                         </Grid>
-                    <!--</Border>-->
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

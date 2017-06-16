@@ -21,7 +21,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
         #endregion
 
         #region Public methods
-        public static async Task<bool> ConnectAsync(StreamSocket socket, string hostName, string serviceName, int timeOut = 5000)
+        public static async Task<bool> ConnectAsync(StreamSocket socket, string hostName, string serviceName, int timeOut = 10000)
         {
             try
             {

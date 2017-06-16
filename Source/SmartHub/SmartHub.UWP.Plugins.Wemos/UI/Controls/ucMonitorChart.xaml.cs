@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,7 +17,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucMonitorChart : UserControl
     {
         #region Fields
-        private System.Threading.Timer timer;
+        private ThreadPoolTimer timer;
         private double updateIntervalSeconds = 10;
         private double valuesDisplayCount = 10;
         #endregion
@@ -52,7 +53,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             InitializeComponent();
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            timer = new System.Threading.Timer(timerCallback, null, 0, (int) TimeSpan.FromSeconds(updateIntervalSeconds).TotalMilliseconds);
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    if (Visibility == Visibility.Visible)
+                        await UpdateValues();
+                });
+            }), TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
 
@@ -66,10 +74,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
-                var items = await Utils.RequestAsync<IEnumerable<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
-                if (items != null)
-                    foreach (var item in items.OrderBy(i => i.TimeStamp))
-                        Values.Add(item);
+                //try
+                {
+                    var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
+                    if (items != null)
+                        foreach (var item in items.OrderBy(i => i.TimeStamp))
+                            Values.Add(item);
+                }
+                //catch (Exception ex)
+                //{
+                //}
             }
 
             LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
@@ -77,17 +91,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private string GetUnits()
         {
             return Monitor != null ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : "";
-        }
-        #endregion
-
-        #region Event handlers
-        private async void timerCallback(object state)
-        {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                if (Visibility == Visibility.Visible)
-                    await UpdateValues();
-            });
         }
         #endregion
     }

@@ -29,23 +29,19 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}"/>
-                        <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>-->
-                        
-                        <TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>
+                        <!--<TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>-->
+                        <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> <!--Foreground="{ThemeResource InactiveBrush}"-->
                     </StackPanel>
 
-                    <TextBlock Grid.Column="2" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" Foreground="{ThemeResource InactiveBrush}" VerticalAlignment="Center"/>
-
-                    <Border Grid.Column="3" Background="{ThemeResource SystemControlForegroundAccentBrush}">
-                        <TextBlock Text="{Binding LastValue, ElementName=mc1}" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="10" VerticalAlignment="Center"/>
+                    <Border Grid.Column="2" Width="80" Background="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding LastValue, ElementName=mc}" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                     </Border>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
@@ -57,7 +53,10 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <RelativePanel x:Name="rp" Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <RelativePanel
+                        x:Name="rp"
+                        Margin="{StaticResource RootContainerMargin}"
+                        Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBox
                             x:Name="tbName"
                             Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
@@ -83,9 +82,9 @@
                             InputScope="AlphanumericFullWidth"/>
                     </RelativePanel>
                     
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <uctrls:ucMonitorChart x:Name="mc1" Monitor="{Binding Monitor}"/>
-                    </ScrollViewer>
+                    <!--<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">-->
+                        <uctrls:ucMonitorChart Grid.Row="1" x:Name="mc" Monitor="{Binding Monitor}"/>
+                    <!--</ScrollViewer>-->
                 </Grid>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>
         </telerikPrimitives:RadExpanderControl>
