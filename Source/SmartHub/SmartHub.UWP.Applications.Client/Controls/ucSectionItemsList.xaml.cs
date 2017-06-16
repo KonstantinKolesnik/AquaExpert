@@ -20,11 +20,11 @@ namespace SmartHub.UWP.Applications.Client.Controls
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var uc = d as ucSectionItemsList;
-            uc.UpdateItemsSource();
+            uc.UpdateItemsViewSource();
 
             var items = e.NewValue as ObservableCollection<AppSectionItemAttribute>;
             if (items != null)
-                items.CollectionChanged += (s, args) => { uc.UpdateItemsSource(); };
+                items.CollectionChanged += (s, args) => { uc.UpdateItemsViewSource(); };
         }
 
         public static readonly DependencyProperty IsSortedProperty = DependencyProperty.Register("IsSorted", typeof(bool), typeof(ucSectionItemsList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
@@ -76,7 +76,7 @@ namespace SmartHub.UWP.Applications.Client.Controls
         #endregion
 
         #region Private methods
-        private void UpdateItemsSource()
+        private void UpdateItemsViewSource()
         {
             itemsViewSource.IsSourceGrouped = IsGrouped;
 

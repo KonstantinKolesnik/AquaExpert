@@ -16,13 +16,13 @@
     <x:Double x:Key="LargeWindowSnapPoint">1024</x:Double>
 
     <!-- Page -->
-    <!--<ImageBrush x:Key="PageBackground" ImageSource="ms-appx:///Assets/PageBackground.jpg" Opacity="0.10" Stretch="Fill"/>-->
+    <ImageBrush x:Key="PageBackground" ImageSource="ms-appx:///Assets/Internet-of-Things-02.png" Opacity="0.10" Stretch="Fill"/>
     <SolidColorBrush x:Key="InactiveBrush" Color="{ThemeResource SystemBaseMediumColor}"/>
     <Thickness x:Key="RootContainerMargin">10,0</Thickness>
     <x:Double x:Key="MaxEditorsPanelWidth">360</x:Double>
     <Thickness x:Key="LeftPanelMargin">0,0,80,0</Thickness>
     <Thickness x:Key="ParagraphMargin">0,0,0,30</Thickness>
-    <GridLength x:Key="MasterColumnWidth">400</GridLength>
+    <GridLength x:Key="MasterColumnWidth">350</GridLength>
     <Style x:Key="EmptyContentTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
         <Setter Property="Foreground" Value="{ThemeResource InactiveBrush}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -33,7 +33,6 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-
 
     <!-- Hyperlink -->
     <Style TargetType="HyperlinkButton">

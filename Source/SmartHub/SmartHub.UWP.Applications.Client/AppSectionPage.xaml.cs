@@ -64,6 +64,45 @@ namespace SmartHub.UWP.Applications.Client
         }
         #endregion
 
+        #region Private methods
+        private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
+        {
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
+            var isNarrow = newState == NarrowState;
+
+            if (!isNarrow)
+            {
+                MasterColumn.Width = (GridLength) Application.Current.Resources["MasterColumnWidth"];
+                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+            else
+            {
+                MasterColumn.Width = selectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+                DetailColumn.Width = selectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+            }
+
+            EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
+            if (DetailContentPresenter != null)
+                EntranceNavigationTransitionInfo.SetIsTargetElement(DetailContentPresenter, !isNarrow);
+        }
+        private async Task UpdateList()
+        {
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
+
+            var items = await Utils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
+
+            Items.Clear();
+            if (items != null)
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+
+                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
+                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
+                }
+        }
+        #endregion
+
         #region Event handlers
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
@@ -106,45 +145,6 @@ namespace SmartHub.UWP.Applications.Client
 
                 e.Handled = true;
             }
-        }
-        #endregion
-
-        #region Private methods
-        private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
-        {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-            var isNarrow = newState == NarrowState;
-
-            if (!isNarrow)
-            {
-                MasterColumn.Width = (GridLength) Application.Current.Resources["MasterColumnWidth"];
-                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
-            else
-            {
-                MasterColumn.Width = selectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
-                DetailColumn.Width = selectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
-            }
-
-            EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
-            if (DetailContentPresenter != null)
-                EntranceNavigationTransitionInfo.SetIsTargetElement(DetailContentPresenter, !isNarrow);
-        }
-        private async Task UpdateList()
-        {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-
-            var items = await Utils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
-
-            Items.Clear();
-            if (items != null)
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-
-                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
-                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
-                }
         }
         #endregion
     }
