@@ -90,6 +90,12 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE109;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
+                <AppBarSeparator/>
+                <AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Grid>

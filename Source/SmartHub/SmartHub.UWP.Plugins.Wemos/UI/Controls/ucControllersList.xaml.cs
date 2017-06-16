@@ -132,6 +132,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             UpdateTypesList();
             await UpdateControllersList();
         }
+        private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await UpdateControllersList();
+        }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             tbControllerName.Text = "";

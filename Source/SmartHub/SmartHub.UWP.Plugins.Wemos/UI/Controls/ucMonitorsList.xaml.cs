@@ -132,6 +132,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await UpdateMonitorsList();
         }
+        private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await UpdateMonitorsList();
+        }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             tbMonitorName.Text = "";
