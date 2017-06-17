@@ -11,19 +11,24 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="PointTemplate">
-            <Rectangle Width="8" Height="8" RadiusX="8" RadiusY="8" Fill="Red"/>
+            <Rectangle Width="5" Height="5" RadiusX="5" RadiusY="5" Fill="Red"/>
         </DataTemplate>
+        <Style x:Key="ValueStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+            <!--<Setter Property="Foreground" Value="{ThemeResource InactiveBrush}"/>--> <!--{ThemeResource SystemControlForegroundAccentBrush}-->
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
         <telerikChart:RadCartesianChart Margin="0,10">
             <telerikChart:RadCartesianChart.HorizontalAxis>
-                <telerikChart:CategoricalAxis FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>
+                <telerikChart:CategoricalAxis FontSize="8" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>
                 <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
             </telerikChart:RadCartesianChart.HorizontalAxis>
             <telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:LinearAxis x:Name="yAxis" FontSize="12" /><!--LabelFormat="{}{0:N1}"-->
+                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" /><!--LabelFormat="{}{0:N1}"-->
             </telerikChart:RadCartesianChart.VerticalAxis>
+           
             <telerikChart:RadCartesianChart.Grid>
                 <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->
             </telerikChart:RadCartesianChart.Grid>
@@ -39,7 +44,13 @@
 
             <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
                 <telerikChart:SplineSeries.LabelDefinitions>
-                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" HorizontalAlignment="Right" VerticalAlignment="Top" /><!--Format="{}{0:N1}"-->
+                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top"><!--Format="{}{0:N1}"-->
+                        <!--<telerikChart:ChartSeriesLabelDefinition.Template>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DataItem.Value}" FontSize="10"/>
+                            </DataTemplate>
+                        </telerikChart:ChartSeriesLabelDefinition.Template>-->
+                    </telerikChart:ChartSeriesLabelDefinition>
                 </telerikChart:SplineSeries.LabelDefinitions>
 
                 <telerikChart:SplineSeries.ValueBinding>

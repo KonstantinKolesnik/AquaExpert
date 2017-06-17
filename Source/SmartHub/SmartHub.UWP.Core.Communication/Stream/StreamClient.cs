@@ -20,14 +20,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 await Utils.ConnectAsync(socket, hostName, serviceName);
             }
         }
-        public void Stop()
-        {
-            if (socket != null)
-            {
-                socket.Dispose();
-                socket = null;
-            }
-        }
         public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
             var request = new CommandRequest(commandName, parameters);
@@ -36,9 +28,19 @@ namespace SmartHub.UWP.Core.Communication.Stream
             var responseDto = await Utils.ReceiveAsync(socket);
             return Utils.DtoDeserialize<T>(responseDto);
         }
+        public void Stop()
+        {
+            if (socket != null)
+            {
+                socket.Dispose();
+                socket = null;
+            }
+        }
 
         public static async Task<T> RequestAsync<T>(string hostName, string serviceName, string commandName, params object[] parameters)
         {
+            T result = default(T);
+
             var socket = new StreamSocket();
             socket.Control.KeepAlive = false;
 

@@ -74,16 +74,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
-                //try
-                {
-                    var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
-                    if (items != null)
-                        foreach (var item in items.OrderBy(i => i.TimeStamp))
-                            Values.Add(item);
-                }
-                //catch (Exception ex)
-                //{
-                //}
+                var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
+                if (items != null)
+                    foreach (var item in items.OrderBy(i => i.TimeStamp))
+                        Values.Add(item);
             }
 
             LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
