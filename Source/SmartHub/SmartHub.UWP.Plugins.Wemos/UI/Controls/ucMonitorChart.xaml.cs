@@ -67,8 +67,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateValues()
         {
-            Values.Clear();
-
             if (Monitor != null)
             {
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
@@ -76,9 +74,26 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
                 var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
                 if (items != null)
+                {
+                    //// remove orphan items:
+                    //var deletedItems = Values.Except(items);
+                    //foreach (var item in deletedItems)
+                    //    Values.Remove(item);
+
+                    //// add new items:
+                    //var addedItems = items.Except(Values);
+                    //foreach (var item in addedItems)
+                    //    Values.Add(item);
+
+
+
+                    Values.Clear();
                     foreach (var item in items.OrderBy(i => i.TimeStamp))
                         Values.Add(item);
+                }
             }
+            else
+                Values.Clear();
 
             LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
         }

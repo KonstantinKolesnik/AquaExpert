@@ -36,28 +36,29 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 socket = null;
             }
         }
+        #endregion
 
+        #region Static methods
         public static async Task<T> RequestAsync<T>(string hostName, string serviceName, string commandName, params object[] parameters)
         {
             T result = default(T);
 
-            var socket = new StreamSocket();
-            socket.Control.KeepAlive = false;
-
-            var connected = await Utils.ConnectAsync(socket, hostName, serviceName);
-            if (connected)
+            using (var socket = new StreamSocket())
             {
-                var request = new CommandRequest(commandName, parameters);
-                await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+                socket.Control.KeepAlive = false;
 
-                var responseDto = await Utils.ReceiveAsync(socket);
+                var connected = await Utils.ConnectAsync(socket, hostName, serviceName);
+                if (connected)
+                {
+                    var request = new CommandRequest(commandName, parameters);
+                    await Utils.SendAsync(socket, Utils.DtoSerialize(request));
 
-                socket.Dispose();
-
-                return Utils.DtoDeserialize<T>(responseDto);
+                    var responseDto = await Utils.ReceiveAsync(socket);
+                    result = Utils.DtoDeserialize<T>(responseDto);
+                }
             }
-            else
-                return default(T);
+
+            return result;
         }
         #endregion
     }
