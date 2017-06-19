@@ -18,7 +18,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     {
         #region Fields
         private ThreadPoolTimer timer;
-        //DispatcherTimer dispatcherTimer;
+        //private DispatcherTimer dispatcherTimer;
         private double updateIntervalSeconds = 10;
         private double valuesDisplayCount = 10;
         #endregion
@@ -118,10 +118,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         #endregion
 
+        #region Event handlers
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             timer.Cancel();
             //dispatcherTimer.Stop();
         }
+        #endregion
     }
 }
