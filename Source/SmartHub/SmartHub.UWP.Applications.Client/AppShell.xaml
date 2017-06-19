@@ -51,7 +51,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Background="{ThemeResource PageBackground}">
+        <Grid ><!--Background="{ThemeResource PageBackground}"-->
             <Grid.ChildrenTransitions>
                 <TransitionCollection>
                     <EntranceThemeTransition FromHorizontalOffset="480" />

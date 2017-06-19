@@ -18,6 +18,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     {
         #region Fields
         private ThreadPoolTimer timer;
+        //DispatcherTimer dispatcherTimer;
         private double updateIntervalSeconds = 10;
         private double valuesDisplayCount = 10;
         #endregion
@@ -53,6 +54,15 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             InitializeComponent();
             Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
+            //dispatcherTimer = new DispatcherTimer();
+            //dispatcherTimer.Interval = TimeSpan.FromSeconds(updateIntervalSeconds);
+            //dispatcherTimer.Tick += (s, e) =>
+            //{
+            //    if (Visibility == Visibility.Visible)
+            //        UpdateValues();
+            //};
+            //dispatcherTimer.Start();
+
             timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
             {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
@@ -60,6 +70,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                     if (Visibility == Visibility.Visible)
                         await UpdateValues();
                 });
+
             }), TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
@@ -92,7 +103,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
 
                     Values.Clear();
-                    foreach (var item in items.OrderBy(i => i.TimeStamp))
+                    foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
                         Values.Add(item);
                 }
             }
@@ -106,5 +117,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             return Monitor != null ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : "";
         }
         #endregion
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            timer.Cancel();
+            //dispatcherTimer.Stop();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.ApplicationInsights;
 using SmartHub.UWP.Applications.Client.Common;
 using SmartHub.UWP.Core;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
@@ -58,69 +59,69 @@ namespace SmartHub.UWP.Applications.Client
         }
 
         // by protocol etc.
-        protected override void OnActivated(IActivatedEventArgs args)
-        {
-            base.OnActivated(args);
+        //protected override void OnActivated(IActivatedEventArgs args)
+        //{
+        //    base.OnActivated(args);
 
-            //AppManager.Init();
+        //    AppManager.Init();
 
-            //var rootFrame = Window.Current.Content as Frame;
+        //    var rootFrame = Window.Current.Content as Frame;
 
-            //if (rootFrame == null)
-            //{
-            //    rootFrame = new Frame();
-            //    rootFrame.NavigationFailed += OnNavigationFailed;
-            //    Window.Current.Content = rootFrame;
-            //}
+        //    if (rootFrame == null)
+        //    {
+        //        rootFrame = new Frame();
+        //        rootFrame.NavigationFailed += OnNavigationFailed;
+        //        Window.Current.Content = rootFrame;
+        //    }
 
-            //if (rootFrame.Content == null)
-            //    rootFrame.Navigate(typeof(MainPage));
+        //    if (rootFrame.Content == null)
+        //        rootFrame.Navigate(typeof(MainPage));
 
-            //Window.Current.Activate();
-        }
+        //    Window.Current.Activate();
+        //}
 
         // for in-process background task activating:
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
-        {
-            base.OnBackgroundActivated(args);
+        //protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        //{
+        //    base.OnBackgroundActivated(args);
 
-            var taskInstance = args.TaskInstance;
-            var appServiceDeferral = taskInstance.GetDeferral();
-            taskInstance.Canceled += (s, e) => { appServiceDeferral.Complete(); };
+        //    var taskInstance = args.TaskInstance;
+        //    var appServiceDeferral = taskInstance.GetDeferral();
+        //    taskInstance.Canceled += (s, e) => { appServiceDeferral.Complete(); };
 
-            var appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
-            var appServiceConnection = appService.AppServiceConnection;
-            appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
-            appServiceConnection.ServiceClosed += (s, e) => { appServiceDeferral.Complete(); };
-        }
-        private async void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
-        {
-            AppServiceDeferral messageDeferral = args.GetDeferral();
+        //    var appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
+        //    var appServiceConnection = appService.AppServiceConnection;
+        //    appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
+        //    appServiceConnection.ServiceClosed += (s, e) => { appServiceDeferral.Complete(); };
+        //}
+        //private async void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        //{
+        //    AppServiceDeferral messageDeferral = args.GetDeferral();
 
-            ValueSet message = args.Request.Message;
-            //string text = message["GetRootUI"] as string;
-            //if (text == "Value")
-            //{
-            //    var returnMessage = new ValueSet();
-            //    returnMessage.Add("Response", "True");
+        //    ValueSet message = args.Request.Message;
+        //    string text = message["GetRootUI"] as string;
+        //    if (text == "Value")
+        //    {
+        //        var returnMessage = new ValueSet();
+        //        returnMessage.Add("Response", "True");
 
-            //    await args.Request.SendResponseAsync(returnMessage);
-            //}
+        //        await args.Request.SendResponseAsync(returnMessage);
+        //    }
 
-            //object ui = null;
-            //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-            //() =>
-            //{
-            //    ui =  new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
-            //});
+        //    object ui = null;
+        //    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+        //    () =>
+        //    {
+        //        ui = new ucMainUI().ToJson();// AppManager.Hub.Context.GetPlugin<UIPlugin>().GetUI();
+        //    });
 
 
-            //var returnMessage = new ValueSet();
-            //returnMessage.Add("Response", ui);
-            //await args.Request.SendResponseAsync(returnMessage);
+        //    var returnMessage = new ValueSet();
+        //    returnMessage.Add("Response", ui);
+        //    await args.Request.SendResponseAsync(returnMessage);
 
-            messageDeferral.Complete();
-        }
+        //    messageDeferral.Complete();
+        //}
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
@@ -140,8 +141,15 @@ namespace SmartHub.UWP.Applications.Client
         }
         private async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            await Utils.MessageBox(e.Message);
             e.Handled = true;
+
+#if !DEBUG
+   // log
+#else
+            if (System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Break();
+#endif
+            await Utils.MessageBox(e.Message);
         }
     }
 }

@@ -95,16 +95,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         private async Task UpdateLinesList()
         {
             var models = await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
-            var items = new ObservableCollection<WemosLine>(models);
+            var items = models != null ? new ObservableCollection<WemosLine>(models.Where(m => m != null)) : null;
 
             cbLines.ItemsSource = items;
-            if (items.Count > 0)
+            if (items != null && items.Count > 0)
                 cbLines.SelectedItem = items[0];
         }
         private async Task UpdateMonitorsList()
         {
             var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
-            ItemsSource = new ObservableCollection<WemosMonitorObservable>(models.Select(m => new WemosMonitorObservable(m)));
+            ItemsSource = models != null ? new ObservableCollection<WemosMonitorObservable>(models.Where(m => m != null).Select(m => new WemosMonitorObservable(m))) : null;
         }
         private void UpdateItemsViewSource()
         {
@@ -114,11 +114,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 if (IsGrouped)
                     itemsViewSource.Source = ItemsSource
-                        .OrderBy(item => IsSorted ? item.Name : "")
-                        .GroupBy(item => item.Name.Substring(0, 1).ToUpper())
+                        .Where(item => item != null)
+                        .OrderBy(item => IsSorted ? item.Name ?? "" : "")
+                        .GroupBy(item => string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
                         .OrderBy(item => item.Key);
                 else
-                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Name : "");
+                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Name ?? "" : "");
             }
             else
                 itemsViewSource.Source = null;

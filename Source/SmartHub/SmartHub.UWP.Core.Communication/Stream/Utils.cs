@@ -50,9 +50,10 @@ namespace SmartHub.UWP.Core.Communication.Stream
             if (socket != null)
                 using (var reader = new DataReader(socket.InputStream))
                 {
+                    reader.InputStreamOptions = InputStreamOptions.Partial;
+
                     try
                     {
-                        reader.InputStreamOptions = InputStreamOptions.Partial;
 
                         uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
                         if (sizeFieldLength == sizeof(uint))
@@ -109,7 +110,18 @@ namespace SmartHub.UWP.Core.Communication.Stream
         }
         public static T DtoDeserialize<T>(string data)
         {
-            return JsonConvert.DeserializeObject<T>(data, dtoSettings);
+            T result = default(T);
+
+            if (!string.IsNullOrEmpty(data))
+                try
+                {
+                    result = JsonConvert.DeserializeObject<T>(data, dtoSettings);
+                }
+                catch (Exception ex)
+                {
+                }
+
+            return result;
 
             //List<JsonConverter> converters = new List<JsonConverter>();
             //converters.Add(new ToolConverter());

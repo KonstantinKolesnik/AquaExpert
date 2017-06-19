@@ -54,7 +54,8 @@ namespace SmartHub.UWP.Core.Communication.Stream
         {
             try
             {
-                using (var socket = args.Socket)
+                var socket = args.Socket;
+                //using (var socket = args.Socket)
                 {
                     string requestDto = await Utils.ReceiveAsync(socket);
                     var request = Utils.DtoDeserialize<CommandRequest>(requestDto);
@@ -66,8 +67,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
                         {
                             var dataDto = Utils.DtoSerialize(response);
                             await Utils.SendAsync(socket, dataDto);
-
-                            //await socket.CancelIOAsync();
                         }
                     }
                 }
