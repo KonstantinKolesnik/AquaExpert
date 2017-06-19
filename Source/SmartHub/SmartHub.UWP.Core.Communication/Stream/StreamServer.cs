@@ -32,7 +32,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 // These options will be automatically applied to the connected StreamSockets resulting from
                 // incoming connections (i.e., those passed as arguments to the ConnectionReceived event handler).
                 // Refer to the StreamSocketListenerControl class' MSDN documentation for the full list of control options.
-                listener.Control.KeepAlive = true;
+                listener.Control.KeepAlive = false;
 
                 await listener.BindServiceNameAsync(serviceName);
             }
@@ -43,6 +43,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
             {
                 await listener.CancelIOAsync();
                 listener.Dispose();
+
                 listener = null;
             }
         }
@@ -66,7 +67,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
                             var dataDto = Utils.DtoSerialize(response);
                             await Utils.SendAsync(socket, dataDto);
 
-                            await socket.CancelIOAsync();
+                            //await socket.CancelIOAsync();
                         }
                     }
                 }

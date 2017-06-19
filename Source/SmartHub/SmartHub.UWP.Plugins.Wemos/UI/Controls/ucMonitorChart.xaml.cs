@@ -70,7 +70,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (Monitor != null)
             {
                 //xAxis.LabelFormat = "{0:G}";
-                xAxis.LabelFormat = "{0:dd.MM.yyyy\nH:mm:ss}";
+                xAxis.LabelFormat = "{0:dd.MM.yy\nH:mm:ss}";
 
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
 

@@ -86,7 +86,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
                         writer.WriteString(data);
 
                         await writer.StoreAsync();
-                        //await writer.FlushAsync();
+                        await writer.FlushAsync();
 
                         return true;
                     }
