@@ -69,7 +69,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             if (Monitor != null)
             {
+                //xAxis.LabelFormat = "{0:G}";
+                xAxis.LabelFormat = "{0:dd.MM.yyyy\nH:mm:ss}";
+
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
+
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
                 var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);

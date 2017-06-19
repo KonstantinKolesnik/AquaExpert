@@ -50,15 +50,24 @@ namespace SmartHub.UWP.Core.Communication.Stream
             if (socket != null)
                 using (var reader = new DataReader(socket.InputStream))
                 {
-                    reader.InputStreamOptions = InputStreamOptions.Partial;
-
-                    uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
-                    if (sizeFieldLength == sizeof(uint))
+                    try
                     {
-                        uint dataLength = reader.ReadUInt32();
-                        uint actualDataLength = await reader.LoadAsync(dataLength);
-                        if (dataLength == actualDataLength)
-                            result = reader.ReadString(actualDataLength);
+                        reader.InputStreamOptions = InputStreamOptions.Partial;
+
+                        uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
+                        if (sizeFieldLength == sizeof(uint))
+                        {
+                            uint dataLength = reader.ReadUInt32();
+                            uint actualDataLength = await reader.LoadAsync(dataLength);
+                            if (dataLength == actualDataLength)
+                                result = reader.ReadString(actualDataLength);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // If this is an unknown status it means that the error if fatal and retry will likely fail.
+                        //if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
+                        //    throw;
                     }
 
                     reader.DetachStream();
@@ -66,18 +75,20 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
             return result;
         }
-        public static async Task SendAsync(StreamSocket socket, string data)
+        public static async Task<bool> SendAsync(StreamSocket socket, string data)
         {
             if (socket != null && !string.IsNullOrEmpty(data))
                 using (var writer = new DataWriter(socket.OutputStream))
                 {
-                    writer.WriteUInt32(writer.MeasureString(data));
-                    writer.WriteString(data);
-
                     try
                     {
+                        writer.WriteUInt32(writer.MeasureString(data));
+                        writer.WriteString(data);
+
                         await writer.StoreAsync();
                         //await writer.FlushAsync();
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
@@ -88,6 +99,8 @@ namespace SmartHub.UWP.Core.Communication.Stream
 
                     writer.DetachStream();
                 }
+
+            return false;
         }
 
         public static string DtoSerialize(object data)

@@ -22,11 +22,18 @@ namespace SmartHub.UWP.Core.Communication.Stream
         }
         public async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
-            var request = new CommandRequest(commandName, parameters);
-            await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+            T result = default(T);
 
-            var responseDto = await Utils.ReceiveAsync(socket);
-            return Utils.DtoDeserialize<T>(responseDto);
+            var request = new CommandRequest(commandName, parameters);
+            var success = await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+
+            if (success)
+            {
+                var responseDto = await Utils.ReceiveAsync(socket);
+                return Utils.DtoDeserialize<T>(responseDto);
+            }
+
+            return result;
         }
         public void Stop()
         {
@@ -47,14 +54,17 @@ namespace SmartHub.UWP.Core.Communication.Stream
             {
                 socket.Control.KeepAlive = false;
 
-                var connected = await Utils.ConnectAsync(socket, hostName, serviceName);
-                if (connected)
+                var success = await Utils.ConnectAsync(socket, hostName, serviceName);
+                if (success)
                 {
                     var request = new CommandRequest(commandName, parameters);
-                    await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+                    success = await Utils.SendAsync(socket, Utils.DtoSerialize(request));
 
-                    var responseDto = await Utils.ReceiveAsync(socket);
-                    result = Utils.DtoDeserialize<T>(responseDto);
+                    if (success)
+                    {
+                        var responseDto = await Utils.ReceiveAsync(socket);
+                        result = Utils.DtoDeserialize<T>(responseDto);
+                    }
                 }
             }
 
