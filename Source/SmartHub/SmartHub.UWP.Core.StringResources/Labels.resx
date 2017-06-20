@@ -276,4 +276,7 @@
   <data name="Storage" xml:space="preserve">
     <value>Storage</value>
   </data>
+  <data name="Tune" xml:space="preserve">
+    <value>Tune</value>
+  </data>
 </root>

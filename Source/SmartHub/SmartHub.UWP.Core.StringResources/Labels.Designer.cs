@@ -503,6 +503,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tune.
+        /// </summary>
+        public static string Tune {
+            get {
+                return ResourceManager.GetString("Tune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type.
         /// </summary>
         public static string Type {

@@ -9,31 +9,48 @@
     mc:Ignorable="d"
     Loaded="UserControl_Loaded">
 
-    <telerikGrid:RadDataGrid
-        ItemsSource="{Binding Lines}"
-        AutoGenerateColumns="False"
-        UserEditMode="Inline"
-        SelectionMode="Single"
-        SelectionUnit="Cell">
-        <telerikGrid:RadDataGrid.Columns>
-            <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
-                <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-                    <DataTemplate>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;" Margin="10,0" VerticalAlignment="Center"/>
-                    </DataTemplate>
-                </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
-            </telerikGrid:DataGridTemplateColumn>
-            <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="Node ID" CanUserEdit="False" SizeMode="Auto"/>
-            <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
-            <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
-            <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
-            <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
-            <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="Tune" CellContentFormat="{}{0:N1}" CanUserEdit="True" SizeMode="Auto"/>
-            <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
-            <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding Labels.Value, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
-        </telerikGrid:RadDataGrid.Columns>
-        <telerikGrid:RadDataGrid.Commands>
-            <ctrls:LineCommitEditCommand/>
-        </telerikGrid:RadDataGrid.Commands>
-    </telerikGrid:RadDataGrid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <telerikGrid:RadDataGrid
+            ItemsSource="{Binding Lines}"
+            AutoGenerateColumns="False"
+            UserEditMode="Inline"
+            SelectionMode="Single"
+            SelectionUnit="Cell">
+            <telerikGrid:RadDataGrid.Columns>
+                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;" Margin="10,0" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                </telerikGrid:DataGridTemplateColumn>
+                <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="Node ID" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="{Binding Labels.Tune, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="True" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding Labels.Value, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+            </telerikGrid:RadDataGrid.Columns>
+            <telerikGrid:RadDataGrid.Commands>
+                <ctrls:LineCommitEditCommand/>
+            </telerikGrid:RadDataGrid.Commands>
+        </telerikGrid:RadDataGrid>
+
+        <CommandBar Grid.Row="1">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Grid>
 </UserControl>

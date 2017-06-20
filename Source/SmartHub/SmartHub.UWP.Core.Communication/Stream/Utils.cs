@@ -51,10 +51,11 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 using (var reader = new DataReader(socket.InputStream))
                 {
                     reader.InputStreamOptions = InputStreamOptions.Partial;
+                    //reader.UnicodeEncoding = UnicodeEncoding.Utf8;
+                    //reader.ByteOrder = ByteOrder.LittleEndian;
 
                     try
                     {
-
                         uint sizeFieldLength = await reader.LoadAsync(sizeof(uint));
                         if (sizeFieldLength == sizeof(uint))
                         {

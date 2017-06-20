@@ -276,4 +276,7 @@
   <data name="Storage" xml:space="preserve">
     <value>Хранилище</value>
   </data>
+  <data name="Tune" xml:space="preserve">
+    <value>Коррекция</value>
+  </data>
 </root>

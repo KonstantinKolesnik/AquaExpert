@@ -2,6 +2,7 @@
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Telerik.UI.Xaml.Controls.Grid;
 using Telerik.UI.Xaml.Controls.Grid.Commands;
@@ -27,22 +28,27 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         #endregion
 
-        #region Event handlers
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            await UpdateLinesList();
-        }
-        #endregion
-
         #region Private methods
         private async Task UpdateLinesList()
         {
             var items = await Utils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
 
             Lines.Clear();
+
             if (items != null)
-                foreach (var item in items)
+                foreach (var item in items.Where(item => item != null))
                     Lines.Add(item);
+        }
+        #endregion
+
+        #region Event handlers
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            await UpdateLinesList();
+        }
+        private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await UpdateLinesList();
         }
         #endregion
     }

@@ -3,9 +3,11 @@ using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Telerik.UI.Xaml.Controls.Grid;
 using Telerik.UI.Xaml.Controls.Grid.Commands;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
@@ -27,22 +29,27 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         #endregion
 
-        #region Event handlers
-        private async void UserControl_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            await UpdateNodesList();
-        }
-        #endregion
-
         #region Private methods
         private async Task UpdateNodesList()
         {
             var items = await Utils.RequestAsync<IEnumerable<WemosNode>>("/api/wemos/nodes");
 
             Nodes.Clear();
+
             if (items != null)
-                foreach (var item in items)
+                foreach (var item in items.Where(item => item != null))
                     Nodes.Add(item);
+        }
+        #endregion
+
+        #region Event handlers
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            await UpdateNodesList();
+        }
+        private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await UpdateNodesList();
         }
         #endregion
     }

@@ -8,10 +8,10 @@
     mc:Ignorable="d">
 
     <Grid>
-        <uctrls:ucMonitorsList
+        <!--<uctrls:ucMonitorsList
             IsGrouped="True"
             IsSorted="True"
-            />
+            />-->
             <!--Visibility="{Binding SelectedMonitor, Converter={StaticResource NotNullToInvisibilityConverter}}"-->
             <!--ItemClicked="ucMonitorsList_ItemClicked"-->
 
