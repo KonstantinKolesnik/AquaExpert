@@ -59,10 +59,7 @@ namespace SmartHub.UWP.Plugins.Timer
                     handler.TryToExecute(now);
 
                 // do some work not connected with UI:
-                //await Window.Current.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-                //    () => {
-                //    // do some work on UI here;
-                //});
+                //await Window.Current.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { });
 
                 //isTimerActive = true;
             }
@@ -72,11 +69,9 @@ namespace SmartHub.UWP.Plugins.Timer
 }
 
 /*
-
         [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 10)]
         public Action<DateTime> aaa => ((dt) =>
         {
             int a = 0;
         });
-
 */

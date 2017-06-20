@@ -35,8 +35,17 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
             get; set;
         }
         [NotNull, Default()]
-        public float Tune { get; set; }
-        public DateTime LastTimeStamp { get; set; }
-        public float LastValue { get; set; }
+        public float Tune
+        {
+            get; set;
+        }
+        public DateTime LastTimeStamp
+        {
+            get; set;
+        }
+        public float LastValue
+        {
+            get; set;
+        }
     }
 }

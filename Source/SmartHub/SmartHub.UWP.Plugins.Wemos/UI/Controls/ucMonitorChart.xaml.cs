@@ -46,6 +46,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             get { return (string) GetValue(LastValueProperty); }
             set { SetValue(LastValueProperty, value); }
         }
+
+        public static readonly DependencyProperty LastTimeStampProperty = DependencyProperty.Register("LastTimeStamp", typeof(string), typeof(ucMonitorChart), null);
+        public string LastTimeStamp
+        {
+            get { return (string) GetValue(LastTimeStampProperty); }
+            set { SetValue(LastTimeStampProperty, value); }
+        }
         #endregion
 
         #region Constructor
@@ -84,37 +91,25 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 //xAxis.LabelFormat = "{0:G}";
                 xAxis.LabelFormat = "{0:dd.MM.yy\nH:mm:ss}";
-
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
-
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
                 var items = await Utils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
+
+                Values.Clear();
+
                 if (items != null)
-                {
-                    //// remove orphan items:
-                    //var deletedItems = Values.Except(items);
-                    //foreach (var item in deletedItems)
-                    //    Values.Remove(item);
-
-                    //// add new items:
-                    //var addedItems = items.Except(Values);
-                    //foreach (var item in addedItems)
-                    //    Values.Add(item);
-
-
-                    Values.Clear();
                     foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
                     {
                         //item.TimeStamp = item.TimeStamp.ToLocalTime();
                         Values.Add(item);
                     }
-                }
             }
             else
                 Values.Clear();
 
             LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
+            LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy H:mm:ss")}" : "---";
 
             biRequest.IsActive = false;
         }

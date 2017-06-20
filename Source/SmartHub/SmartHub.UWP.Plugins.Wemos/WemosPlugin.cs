@@ -31,7 +31,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         private const string remoteMulticastAddress = "224.3.0.5";
         //private const string broadcastAddress = "255.255.255.255";
 
-        private object locObject = new object();
+        //private object locObject = new object();
         private UdpClient udpClient = new UdpClient();
         private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
         #endregion
@@ -67,6 +67,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                 db.CreateTable<WemosMonitor>();
                 db.CreateTable<WemosController>();
+                //db.CreateTable<WemosZone>();
             }
         }
         public override void InitPlugin()
@@ -194,7 +195,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         public List<WemosLine> GetLines()
         {
             using (var db = Context.OpenConnection())
-                return db.Table<WemosLine>().ToList();
+                return db.Table<WemosLine>()
+                    .Select(l => { l.LastTimeStamp = l.LastTimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
+                    .ToList();
         }
         public WemosLine GetLine(int nodeID, int lineID)
         {
@@ -245,7 +248,16 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return controllers.FirstOrDefault(c => c.Model.ID == id);
         }
-
+        public void AddController(WemosControllerBase ctrl)
+        {
+            if (ctrl != null)
+                controllers.Add(ctrl);
+        }
+        public void RemoveController(WemosControllerBase ctrl)
+        {
+            if (ctrl != null)
+                controllers.Remove(ctrl);
+        }
         #endregion
 
         #region Private methods
@@ -491,9 +503,9 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var item = GetNode(id);
+            var item = Context.GetPlugin<WemosPlugin>().GetNode(id);
             item.Name = name;
-            SaveOrUpdate(item);
+            Context.GetPlugin<WemosPlugin>().SaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
@@ -515,9 +527,9 @@ namespace SmartHub.UWP.Plugins.Wemos
             var lineID = int.Parse(parameters[1].ToString());
             var name = parameters[2] as string;
 
-            var item = GetLine(nodeID, lineID);
+            var item = Context.GetPlugin<WemosPlugin>().GetLine(nodeID, lineID);
             item.Name = name;
-            SaveOrUpdate(item);
+            Context.GetPlugin<WemosPlugin>().SaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
@@ -530,7 +542,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var count = int.Parse(parameters[1].ToString());
 
-            return GetLineValues(id, count);
+            return Context.GetPlugin<WemosPlugin>().GetLineValues(id, count);
         });
         #endregion
 
@@ -538,7 +550,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetMonitors => ((parameters) =>
         {
-            return GetMonitors().Select(m => new WemosMonitorDto(m) { LineName = GetLine(m.LineID).Name, LineType = GetLine(m.LineID).Type }).ToList();
+            return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m) { LineName = GetLine(m.LineID).Name, LineType = GetLine(m.LineID).Type }).ToList();
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitor"), Export(typeof(ApiMethod))]
@@ -546,8 +558,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var model = GetMonitor(id);
-            var line = GetLine(model.LineID);
+            var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
+            var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
             return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
@@ -564,11 +576,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                 Configuration = "{}"
             };
 
-            Save(model);
+            Context.GetPlugin<WemosPlugin>().Save(model);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
-            var line = GetLine(model.LineID);
+            var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
             return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
@@ -579,12 +591,12 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[1] as string;
             var nameForInformer = parameters[2] as string;
 
-            var model = GetMonitor(id);
+            var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             if (model != null)
             {
                 model.Name = name;
                 model.NameForInformer = nameForInformer;
-                SaveOrUpdate(model);
+                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(model);
 
                 return true;
             }
@@ -598,11 +610,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var config = parameters[1].ToString();
 
-            var model = GetMonitor(id);
+            var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             if (model != null)
             {
                 model.SerializeConfiguration(config);
-                SaveOrUpdate(model);
+                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(model);
 
                 return true;
             }
@@ -615,7 +627,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            Delete(GetMonitor(id));
+            Context.GetPlugin<WemosPlugin>().Delete(GetMonitor(id));
 
             return true;
         });
@@ -644,9 +656,8 @@ namespace SmartHub.UWP.Plugins.Wemos
             var ctrl = WemosControllerBase.FromModel(model);
             if (ctrl != null)
             {
-                Save(ctrl.Model);
-
-                Context.GetPlugin<WemosPlugin>().controllers.Add(ctrl);
+                Context.GetPlugin<WemosPlugin>().Save(ctrl.Model);
+                Context.GetPlugin<WemosPlugin>().AddController(ctrl);
 
                 ctrl.Init(Context);
                 ctrl.Start();
@@ -669,7 +680,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.Name = name;
-                SaveOrUpdate(ctrl.Model);
+                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -686,7 +697,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.IsAutoMode = isAutoMode;
-                SaveOrUpdate(ctrl.Model);
+                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -703,7 +714,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.Configuration = config;
-                SaveOrUpdate(ctrl.Model);
+                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -717,11 +728,10 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             var model = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (model != null)
-                Delete(model);
+                Context.GetPlugin<WemosPlugin>().Delete(model);
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
-            if (ctrl != null)
-                controllers.Remove(ctrl);
+            Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
 
             return true;
         });

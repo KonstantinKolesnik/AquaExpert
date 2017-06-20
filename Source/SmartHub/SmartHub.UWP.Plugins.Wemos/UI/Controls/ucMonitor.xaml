@@ -40,8 +40,11 @@
                         <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> <!--Foreground="{ThemeResource InactiveBrush}"-->
                     </StackPanel>
 
-                    <Border Grid.Column="2" Width="70" Background="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding LastValue, ElementName=mc}" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <Border Grid.Column="2" MinWidth="110" Background="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
+                        <StackPanel VerticalAlignment="Center" Margin="7">
+                            <TextBlock Text="{Binding LastValue, ElementName=mc}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding LastTimeStamp, ElementName=mc}" HorizontalAlignment="Right" Style="{ThemeResource ListItemSubtitleStyle}"/>
+                        </StackPanel>
                     </Border>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
