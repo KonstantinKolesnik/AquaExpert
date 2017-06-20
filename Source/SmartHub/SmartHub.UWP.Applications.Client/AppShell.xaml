@@ -89,7 +89,7 @@
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
-                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE10F;"/>
+                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xECA5;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                                 <RadioButton x:Name="menuApplications"
@@ -98,7 +98,7 @@
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
-                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xEC4E;"/>
+                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE71D;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                                 <RadioButton x:Name="menuSystem"
@@ -107,16 +107,7 @@
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
-                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE15E;"/>
-                                    </RadioButton.Tag>
-                                </RadioButton>
-                                <RadioButton x:Name="menuStorage"
-                                    Width="{StaticResource SplitViewPaneWidth}"
-                                    Content="{Binding Labels.Storage, Source={StaticResource LabelsManager}}"
-                                    GroupName="Navigation"
-                                    Click="menuItem_Click">
-                                    <RadioButton.Tag>
-                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE83B;"/>
+                                        <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xEC7A;"/>
                                     </RadioButton.Tag>
                                 </RadioButton>
                             </StackPanel>

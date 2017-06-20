@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using Windows.UI.Core;
@@ -24,8 +25,8 @@ namespace SmartHub.UWP.Applications.Client
 
         new public ElementTheme RequestedTheme
         {
-            get { return Utils.FindFirstVisualChild<Grid>(this).RequestedTheme; }
-            set { Utils.FindFirstVisualChild<Grid>(this).RequestedTheme = value; }
+            get { return XamlUtils.FindFirstVisualChild<Grid>(this).RequestedTheme; }
+            set { XamlUtils.FindFirstVisualChild<Grid>(this).RequestedTheme = value; }
         }
         #endregion
 
@@ -46,7 +47,7 @@ namespace SmartHub.UWP.Applications.Client
         public void SetNavigationInfo(string title = null, string menuItemNameToSelect = null)
         {
             if (!string.IsNullOrEmpty(title))
-                tbTitle.Text = Utils.GetLabelValue(title).ToUpper();
+                tbTitle.Text = CoreUtils.GetLabelValue(title).ToUpper();
 
             if (!string.IsNullOrEmpty(menuItemNameToSelect))
             {
@@ -107,7 +108,6 @@ namespace SmartHub.UWP.Applications.Client
                     case "menuApplications": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.Applications); break;
                     case "menuSystem": AppFrame.Navigate(typeof(AppSectionPage), AppSectionType.System); break;
 
-
                     case "menuSettings": AppFrame.Navigate(typeof(SettingsPage)); break;
                     case "menuAbout": AppFrame.Navigate(typeof(AboutPage)); break;
                 }
@@ -138,7 +138,7 @@ namespace SmartHub.UWP.Applications.Client
         }
         private async void AppFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            await Utils.MessageBox("Failed to load Page " + e.SourcePageType.FullName);
+            await CoreUtils.MessageBox("Failed to load Page " + e.SourcePageType.FullName);
             e.Handled = true;
         }
         #endregion

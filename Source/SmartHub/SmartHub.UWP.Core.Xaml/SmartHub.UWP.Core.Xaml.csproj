@@ -107,6 +107,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ValueConverters\Class1.cs" />
+    <Compile Include="Controls\ucPropertyNameValuePair.xaml.cs">
+      <DependentUpon>ucPropertyNameValuePair.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueConverters\BooleanToInvisibilityConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
@@ -115,22 +119,22 @@
     <Compile Include="ValueConverters\NotNullToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringToUpperStringConverter.cs" />
+    <Compile Include="XamlUtils.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.Xaml.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Main.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Page Include="Controls\ucPropertyNameValuePair.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

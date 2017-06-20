@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
@@ -41,7 +42,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucControllerScheduledSwitch(WemosControllerObservable ctrl)
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
             Controller = ctrl;
             if (Controller != null)
@@ -60,7 +61,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var models = (await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines")).Where(m => m.Type == WemosLineType.Switch);
+            var models = (await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines")).Where(m => m.Type == WemosLineType.Switch);
             foreach (var model in models)
                 Lines.Add(model);
 
@@ -121,7 +122,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             var period = (Period) ((sender as Button).Tag);
 
-            await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
+            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
             {
                 configuration.ActivePeriods.Remove(period);
             });

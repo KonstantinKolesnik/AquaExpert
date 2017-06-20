@@ -252,6 +252,10 @@
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
       <Name>SmartHub.UWP.Plugins.Speech</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Storage\SmartHub.UWP.Plugins.Storage.csproj">
+      <Project>{4a52ac2e-2a6c-4241-953b-494fc314d7af}</Project>
+      <Name>SmartHub.UWP.Plugins.Storage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.Timer\SmartHub.UWP.Plugins.Timer.csproj">
       <Project>{2254a4f7-b66f-4068-8b9f-54ac550d5b32}</Project>
       <Name>SmartHub.UWP.Plugins.Timer</Name>

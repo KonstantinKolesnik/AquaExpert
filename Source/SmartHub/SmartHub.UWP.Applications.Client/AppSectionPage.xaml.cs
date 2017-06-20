@@ -89,7 +89,7 @@ namespace SmartHub.UWP.Applications.Client
         {
             var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
 
-            var items = await Utils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
+            var items = await CoreUtils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
 
             Items.Clear();
             if (items != null)

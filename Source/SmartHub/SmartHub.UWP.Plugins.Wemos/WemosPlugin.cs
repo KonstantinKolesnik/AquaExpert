@@ -21,8 +21,8 @@ using Windows.Networking;
 namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
-    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(Main), "Wemos modules")]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(Settings), "Wemos modules")]
+    [AppSectionItem("Wemos", AppSectionType.Applications, typeof(MainPage), "Wemos modules")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(SettingsPage), "Wemos modules")]
     public class WemosPlugin : PluginBase
     {
         #region Fields

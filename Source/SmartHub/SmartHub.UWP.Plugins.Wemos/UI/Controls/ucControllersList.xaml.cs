@@ -1,5 +1,6 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucControllersList()
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
 
@@ -102,7 +103,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async Task UpdateControllersList()
         {
-            var models = await Utils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
+            var models = await CoreUtils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
             ItemsSource = new ObservableCollection<WemosControllerObservable>(models.Select(m => new WemosControllerObservable(m)));
         }
         private void UpdateItemsViewSource()
@@ -146,18 +147,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 var name = tbControllerName.Text.Trim();
                 var type = (WemosControllerType) cbTypes.SelectedItem;
 
-                var model = await Utils.RequestAsync<WemosController>("/api/wemos/controllers/add", name, type);
+                var model = await CoreUtils.RequestAsync<WemosController>("/api/wemos/controllers/add", name, type);
                 if (model != null)
                     ItemsSource.Add(new WemosControllerObservable(model));
             }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
+            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
                 int id = (int) ((sender as Button).Tag);
 
-                bool res = await Utils.RequestAsync<bool>("/api/wemos/controllers/delete", id);
+                bool res = await CoreUtils.RequestAsync<bool>("/api/wemos/controllers/delete", id);
                 if (res)
                     ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
             });

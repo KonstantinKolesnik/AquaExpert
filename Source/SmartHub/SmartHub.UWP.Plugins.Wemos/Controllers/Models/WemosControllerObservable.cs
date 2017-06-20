@@ -20,7 +20,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.Name != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/controllers/setname", model.ID, value);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setname", model.ID, value);
                     model.Name = value;
                     NotifyPropertyChanged();
                 }
@@ -37,7 +37,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.IsAutoMode != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/controllers/setautomode", model.ID, value);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setautomode", model.ID, value);
                     model.IsAutoMode = value;
                     NotifyPropertyChanged();
                 }
@@ -50,7 +50,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.Configuration != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/controllers/setconfig", model.ID, value);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setconfig", model.ID, value);
                     model.Configuration = value;
                     NotifyPropertyChanged();
                 }

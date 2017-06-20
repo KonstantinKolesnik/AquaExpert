@@ -5,8 +5,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ms-appx:///SmartHub.UWP.Core.Xaml/Resources/General.xaml"/>
                 <ResourceDictionary Source="/Resources/General.xaml"/>
+                <ResourceDictionary Source="ms-appx:///SmartHub.UWP.Core.Xaml/Main.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

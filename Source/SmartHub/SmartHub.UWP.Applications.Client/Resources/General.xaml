@@ -3,11 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:telerikPrimatives="using:Telerik.UI.Xaml.Controls.Primitives"
     xmlns:core="using:SmartHub.UWP.Core"
-    xmlns:stringResources="using:SmartHub.UWP.Core.StringResources"
+    xmlns:strings="using:SmartHub.UWP.Core.StringResources"
     xmlns:vc="using:SmartHub.UWP.Core.Xaml.ValueConverters">
-    
-	<core:AppManager x:Key="AppManager"/>
-    <stringResources:LabelsManager x:Key="LabelsManager"/>
+
+    <core:AppManager x:Key="AppManager"/>
+    <strings:LabelsManager x:Key="LabelsManager"/>
 
     <!-- Busy indicator -->
     <Style TargetType="telerikPrimatives:RadBusyIndicator">
@@ -23,4 +23,8 @@
     <vc:NotNullToInvisibilityConverter x:Key="NotNullToInvisibilityConverter"/>
     <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <vc:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter"/>
+
+    <vc:SizeToPropertyNameStyleConverter x:Key="SizeToPropertyNameStyleConverter"/>
+    <vc:SizeToPropertyValueHStyleConverter x:Key="SizeToPropertyValueHStyleConverter"/>
+    <vc:SizeToPropertyValueVStyleConverter x:Key="SizeToPropertyValueVStyleConverter"/>
 </ResourceDictionary>

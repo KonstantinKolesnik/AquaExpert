@@ -112,7 +112,7 @@
     <Compile Include="ObjectEventArgs.cs" />
     <Compile Include="ObjectEventHandler.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="CoreUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Core.rd.xml" />
   </ItemGroup>

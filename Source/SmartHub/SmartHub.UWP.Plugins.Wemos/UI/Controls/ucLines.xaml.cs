@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +25,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucLines()
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<RadDataGrid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<RadDataGrid>(this).DataContext = this;
         }
         #endregion
 
@@ -33,7 +34,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             biRequest.IsActive = true;
 
-            var items = await Utils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
+            var items = await CoreUtils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
 
             Lines.Clear();
 
@@ -73,7 +74,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var context = parameter as EditContext;
 
             var item = context.CellInfo.Item as WemosLine;
-            var res = await Utils.RequestAsync<bool>("/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
+            var res = await CoreUtils.RequestAsync<bool>("/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
             if (res)
                 Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }

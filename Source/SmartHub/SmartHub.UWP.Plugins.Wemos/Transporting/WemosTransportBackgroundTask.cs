@@ -63,7 +63,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Transporting
             }
             catch (Exception ex)
             {
-                Utils.ShowToast(Windows.UI.Notifications.ToastTemplateType.ToastText02, ex.Message);
+                CoreUtils.ShowToast(Windows.UI.Notifications.ToastTemplateType.ToastText02, ex.Message);
                 deferral.Complete();
             }
         }

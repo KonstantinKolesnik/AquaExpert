@@ -146,11 +146,11 @@
     <Compile Include="UI\Controls\ucMonitorsList.xaml.cs">
       <DependentUpon>ucMonitorsList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Main.xaml.cs">
-      <DependentUpon>Main.xaml</DependentUpon>
+    <Compile Include="UI\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="UI\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\ucControllers.xaml.cs">
       <DependentUpon>ucControllers.xaml</DependentUpon>
@@ -237,11 +237,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Main.xaml">
+    <Page Include="UI\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Settings.xaml">
+    <Page Include="UI\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

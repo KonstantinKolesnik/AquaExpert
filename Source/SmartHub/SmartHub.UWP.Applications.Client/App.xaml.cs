@@ -149,7 +149,7 @@ namespace SmartHub.UWP.Applications.Client
             if (System.Diagnostics.Debugger.IsAttached)
                 System.Diagnostics.Debugger.Break();
 #endif
-            await Utils.MessageBox(e.Message);
+            await CoreUtils.MessageBox(e.Message);
         }
     }
 }

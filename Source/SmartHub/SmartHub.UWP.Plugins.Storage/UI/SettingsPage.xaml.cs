@@ -1,11 +1,11 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace SmartHub.UWP.Plugins.Wemos.UI
+namespace SmartHub.UWP.Plugins.Storage.UI
 {
-    public sealed partial class Settings : UserControl
+    public sealed partial class SettingsPage : Page
     {
         #region Constructor
-        public Settings()
+        public SettingsPage()
         {
             InitializeComponent();
         }

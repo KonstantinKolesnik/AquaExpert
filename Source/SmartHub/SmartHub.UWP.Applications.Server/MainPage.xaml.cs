@@ -61,7 +61,7 @@ namespace SmartHub.UWP.Applications.Server
         {
             if (hub == null)
             {
-                var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+                var assemblies = CoreUtils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
 
                 hub = new Core.Infrastructure.Hub();
                 hub.Init(assemblies);
@@ -96,7 +96,7 @@ namespace SmartHub.UWP.Applications.Server
                 var access = await BackgroundExecutionManager.RequestAccessAsync();
                 if (access == BackgroundAccessStatus.DeniedByUser || access == BackgroundAccessStatus.DeniedBySystemPolicy || access == BackgroundAccessStatus.Unspecified)
                 {
-                    Utils.ShowToast(ToastTemplateType.ToastText02, "Background access denied!");
+                    CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background access denied!");
                     return;
                 }
 
@@ -128,7 +128,7 @@ namespace SmartHub.UWP.Applications.Server
             //var message = settings.Values[key].ToString();
             //UpdateUI(message);
 
-            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + task.Name + " completed");
+            CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background " + task.Name + " completed");
         }
     }
 }

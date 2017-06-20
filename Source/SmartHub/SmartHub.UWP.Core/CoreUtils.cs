@@ -14,12 +14,10 @@ using Windows.ApplicationModel.Resources.Core;
 using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 
 namespace SmartHub.UWP.Core
 {
-    public static class Utils
+    public static class CoreUtils
     {
         #region UI
         public static string GetLabelValue(string labelId)
@@ -37,26 +35,6 @@ namespace SmartHub.UWP.Core
             }
 
             return result;
-        }
-
-        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child != null && child is T)
-                        yield return (T) child;
-
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
-                        yield return childOfChild;
-                }
-            }
-        }
-        public static T FindFirstVisualChild<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            return FindVisualChildren<T>(depObj).FirstOrDefault();
         }
         #endregion
 
@@ -236,6 +214,12 @@ namespace SmartHub.UWP.Core
                 var exePath = Package.Current.InstalledLocation.Path;
                 return Path.GetDirectoryName(exePath);
             }
+        }
+        public static async Task<ulong> GetFileSizeAsync(string path)
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path);
+            var props = await file.GetBasicPropertiesAsync();
+            return props.Size;
         }
 
         #region Toast notification

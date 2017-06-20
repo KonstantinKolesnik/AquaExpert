@@ -1,5 +1,6 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.StringResources;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors;
 using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
@@ -87,14 +88,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucMonitorsList()
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
 
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var models = await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
+            var models = await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
             var items = models != null ? new ObservableCollection<WemosLine>(models.Where(m => m != null)) : null;
 
             cbLines.ItemsSource = items;
@@ -105,7 +106,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             biRequest.IsActive = true;
 
-            var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
+            var models = await CoreUtils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
             ItemsSource = models != null ? new ObservableCollection<WemosMonitorObservable>(models.Where(m => m != null).Select(m => new WemosMonitorObservable(m))) : null;
 
             biRequest.IsActive = false;
@@ -152,18 +153,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 var name = tbMonitorName.Text.Trim();
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
 
-                var model = await Utils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name, lineID);
+                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name, lineID);
                 if (model != null)
                     ItemsSource.Add(new WemosMonitorObservable(model));
             }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            await Utils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
+            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
                 int id = (int) ((sender as Button).Tag);
 
-                bool res = await Utils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
+                bool res = await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
                 if (res)
                     ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
             });

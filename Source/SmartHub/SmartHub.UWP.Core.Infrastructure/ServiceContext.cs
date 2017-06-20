@@ -33,7 +33,7 @@ namespace SmartHub.UWP.Core.Infrastructure
 
         #region Database
         private static string dbPath = string.Empty;
-        public static string DbPath
+        private static string DbPath
         {
             get
             {
@@ -43,6 +43,8 @@ namespace SmartHub.UWP.Core.Infrastructure
                 return dbPath;
             }
         }
+
+        public string StoragePath => DbPath;
 
         public SQLiteConnection OpenConnection()
         {

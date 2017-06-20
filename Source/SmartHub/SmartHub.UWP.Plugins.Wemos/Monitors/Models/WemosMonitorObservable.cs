@@ -33,7 +33,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             {
                 if (model.Name != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, value, model.NameForInformer);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, value, model.NameForInformer);
                     model.Name = value;
                     NotifyPropertyChanged();
                 }
@@ -46,7 +46,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             {
                 if (model.NameForInformer != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, model.Name, value);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, model.Name, value);
                     model.NameForInformer = value;
                     NotifyPropertyChanged();
                 }
@@ -59,7 +59,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             {
                 if (model.Configuration != value)
                 {
-                    var res = Utils.RequestAsync<bool>("/api/wemos/monitors/setconfig", model.ID, value);
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setconfig", model.ID, value);
                     model.Configuration = value;
                     NotifyPropertyChanged();
                 }

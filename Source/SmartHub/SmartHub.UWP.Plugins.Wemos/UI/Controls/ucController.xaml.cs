@@ -1,5 +1,4 @@
-﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Plugins.Wemos.Controllers;
+﻿using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,7 +24,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucController()
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
 

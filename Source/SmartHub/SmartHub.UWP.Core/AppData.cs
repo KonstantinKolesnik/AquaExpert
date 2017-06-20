@@ -5,18 +5,18 @@
         #region Settings data
         public string ServerUrl
         {
-            get { return Utils.GetAppData(nameof(ServerUrl), "", IsRoaming); }
-            set { Utils.SetAppData(nameof(ServerUrl), value?.Trim(), IsRoaming); NotifyPropertyChanged(); }
+            get { return CoreUtils.GetAppData(nameof(ServerUrl), "", IsRoaming); }
+            set { CoreUtils.SetAppData(nameof(ServerUrl), value?.Trim(), IsRoaming); NotifyPropertyChanged(); }
         }
         public string Language
         {
-            get { return Utils.GetAppData(nameof(Language), "en-US", IsRoaming); }
-            set { Utils.SetAppData(nameof(Language), value, IsRoaming); NotifyPropertyChanged(); }
+            get { return CoreUtils.GetAppData(nameof(Language), "en-US", IsRoaming); }
+            set { CoreUtils.SetAppData(nameof(Language), value, IsRoaming); NotifyPropertyChanged(); }
         }
         public int Theme
         {
-            get { return Utils.GetAppData(nameof(Theme), 0); }
-            set { Utils.SetAppData(nameof(Theme), value); NotifyPropertyChanged(); }
+            get { return CoreUtils.GetAppData(nameof(Theme), 0); }
+            set { CoreUtils.SetAppData(nameof(Theme), value); NotifyPropertyChanged(); }
         }
         #endregion
 

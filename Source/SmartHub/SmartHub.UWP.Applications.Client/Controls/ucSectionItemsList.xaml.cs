@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,7 +71,7 @@ namespace SmartHub.UWP.Applications.Client.Controls
         public ucSectionItemsList()
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<Grid>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
 

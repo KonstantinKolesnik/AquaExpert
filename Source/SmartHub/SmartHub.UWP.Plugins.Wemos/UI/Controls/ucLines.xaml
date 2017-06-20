@@ -26,7 +26,7 @@
                 <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
                     <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
                         <DataTemplate>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;" Margin="10,0" VerticalAlignment="Center"/>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE957;" Margin="10,0" VerticalAlignment="Center"/>
                         </DataTemplate>
                     </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
                 </telerikGrid:DataGridTemplateColumn>

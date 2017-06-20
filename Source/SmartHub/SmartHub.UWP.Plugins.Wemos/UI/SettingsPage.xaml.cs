@@ -2,11 +2,13 @@
 
 namespace SmartHub.UWP.Plugins.Wemos.UI
 {
-    public sealed partial class Main : UserControl
+    public sealed partial class SettingsPage : UserControl
     {
-        public Main()
+        #region Constructor
+        public SettingsPage()
         {
             InitializeComponent();
         }
+        #endregion
     }
 }

@@ -69,7 +69,7 @@
                             <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xEADF;" Margin="5,0,15,0" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTitleStyle}"/>
-                                <TextBlock Text="{Binding Type}" Style="{ThemeResource ListItemSubtitleStyle}"/>
+                                <TextBlock Text="{Binding Type}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </StackPanel>
                             <ToggleSwitch Grid.Column="2" IsOn="{Binding IsAutoMode, Mode=TwoWay}" Margin="5,0,-60,0" VerticalAlignment="Center"/>
                             <AppBarButton Grid.Column="3" Style="{StaticResource AppBarTinyButton}" Tag="{Binding ID}" Click="ButtonDelete_Click">

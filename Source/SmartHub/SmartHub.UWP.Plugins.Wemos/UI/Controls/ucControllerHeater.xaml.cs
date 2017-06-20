@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
@@ -47,7 +48,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public ucControllerHeater(WemosControllerObservable ctrl)
         {
             InitializeComponent();
-            Utils.FindFirstVisualChild<ScrollViewer>(this).DataContext = this;
+            XamlUtils.FindFirstVisualChild<ScrollViewer>(this).DataContext = this;
 
             Controller = ctrl;
             if (Controller != null)
@@ -66,7 +67,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var models = await Utils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
+            var models = await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
             
             foreach (var model in models.Where(m => m.Type == WemosLineType.Switch))
                 SwitchLines.Add(model);

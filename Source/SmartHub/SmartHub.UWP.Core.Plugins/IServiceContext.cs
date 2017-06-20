@@ -11,6 +11,10 @@ namespace SmartHub.UWP.Core.Plugins
         #endregion
 
         #region Database
+        string StoragePath
+        {
+            get;
+        }
         SQLiteConnection OpenConnection();
         #endregion
     }

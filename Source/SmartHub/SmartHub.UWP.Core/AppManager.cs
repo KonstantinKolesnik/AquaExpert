@@ -107,7 +107,7 @@ namespace SmartHub.UWP.Core
             {
                 if (hub == null)
                 {
-                    var assemblies = Utils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+                    var assemblies = CoreUtils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
 
                     hub = new Hub();
                     hub.Init(assemblies);

@@ -16,7 +16,7 @@ namespace SmartHub.UWP.Applications.Server.BackgroundTask
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " Starting...");
+            CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " Starting...");
 
             var cost = BackgroundWorkCost.CurrentBackgroundWorkCost;
 
@@ -33,7 +33,7 @@ namespace SmartHub.UWP.Applications.Server.BackgroundTask
             cancelRequested = true;
             cancelReason = reason;
 
-            Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + sender.Task.Name + " Cancel Requested...");
+            CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background " + sender.Task.Name + " Cancel Requested...");
         }
         private void PeriodicTimerCallback(ThreadPoolTimer timer)
         {
@@ -42,7 +42,7 @@ namespace SmartHub.UWP.Applications.Server.BackgroundTask
                 //_progress += 10;
                 //taskInstance.Progress = _progress;
 
-                Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " is running");
+                CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + " is running");
             }
             else
             {
@@ -56,7 +56,7 @@ namespace SmartHub.UWP.Applications.Server.BackgroundTask
                 //var settings = ApplicationData.Current.LocalSettings;
                 //settings.Values[key] = taskStatus;
 
-                Utils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + taskStatus);
+                CoreUtils.ShowToast(ToastTemplateType.ToastText02, "Background " + taskInstance.Task.Name + taskStatus);
 
                 // Indicate that the background task has completed.
                 deferral.Complete();
