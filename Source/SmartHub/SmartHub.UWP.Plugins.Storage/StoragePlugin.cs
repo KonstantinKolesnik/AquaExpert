@@ -14,16 +14,8 @@ namespace SmartHub.UWP.Plugins.Storage
     {
 
         #region Plugin ovverrides
-        public override void InitDbModel()
-        {
-            //using (var db = Context.OpenConnection())
-            //{
-            //    //db.CreateTable<WemosSetting>();
-            //}
-        }
         public override void InitPlugin()
         {
-            //Context.StoragePath
         }
         public override void StartPlugin()
         {
@@ -32,7 +24,6 @@ namespace SmartHub.UWP.Plugins.Storage
         {
         }
         #endregion
-
 
         #region Remote API
         [ApiMethod(MethodName = "/api/storage/size"), Export(typeof(ApiMethod))]

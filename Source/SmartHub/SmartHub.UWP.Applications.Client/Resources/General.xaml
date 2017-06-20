@@ -19,6 +19,7 @@
     <vc:StringToUpperStringConverter x:Key="StringToUpperStringConverter"/>
     <vc:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     <vc:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <vc:StringFormatConverter x:Key="StringFormatConverter"/>
     <vc:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
     <vc:NotNullToInvisibilityConverter x:Key="NotNullToInvisibilityConverter"/>
     <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
