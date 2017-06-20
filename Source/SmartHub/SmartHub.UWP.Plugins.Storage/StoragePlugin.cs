@@ -12,7 +12,6 @@ namespace SmartHub.UWP.Plugins.Storage
     [AppSectionItem("Storage", AppSectionType.System, typeof(SettingsPage), "Data storage")]
     public class StoragePlugin : PluginBase
     {
-
         #region Plugin ovverrides
         public override void InitPlugin()
         {
