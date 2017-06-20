@@ -78,6 +78,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateValues()
         {
+            biRequest.IsActive = true;
+
             if (Monitor != null)
             {
                 //xAxis.LabelFormat = "{0:G}";
@@ -101,16 +103,20 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                     //    Values.Add(item);
 
 
-
                     Values.Clear();
                     foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
+                    {
+                        //item.TimeStamp = item.TimeStamp.ToLocalTime();
                         Values.Add(item);
+                    }
                 }
             }
             else
                 Values.Clear();
 
             LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
+
+            biRequest.IsActive = false;
         }
         private string GetUnits()
         {

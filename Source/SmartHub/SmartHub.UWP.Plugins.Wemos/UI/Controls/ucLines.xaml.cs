@@ -31,6 +31,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateLinesList()
         {
+            biRequest.IsActive = true;
+
             var items = await Utils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
 
             Lines.Clear();
@@ -38,6 +40,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (items != null)
                 foreach (var item in items.Where(item => item != null))
                     Lines.Add(item);
+
+            biRequest.IsActive = false;
         }
         #endregion
 

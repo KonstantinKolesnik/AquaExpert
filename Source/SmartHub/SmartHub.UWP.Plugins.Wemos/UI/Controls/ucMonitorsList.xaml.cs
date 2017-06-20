@@ -103,8 +103,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async Task UpdateMonitorsList()
         {
+            biRequest.IsActive = true;
+
             var models = await Utils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
             ItemsSource = models != null ? new ObservableCollection<WemosMonitorObservable>(models.Where(m => m != null).Select(m => new WemosMonitorObservable(m))) : null;
+
+            biRequest.IsActive = false;
         }
         private void UpdateItemsViewSource()
         {

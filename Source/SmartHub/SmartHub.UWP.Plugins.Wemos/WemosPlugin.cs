@@ -216,6 +216,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                     .OrderByDescending(v => v.TimeStamp)
                     .Take(count)
                     .OrderBy(v => v.TimeStamp)
+                    .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local
                     .ToList();
         }
 

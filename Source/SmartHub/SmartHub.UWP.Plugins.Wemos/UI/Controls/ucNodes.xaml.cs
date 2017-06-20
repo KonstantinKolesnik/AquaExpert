@@ -32,6 +32,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateNodesList()
         {
+            biRequest.IsActive = true;
+
             var items = await Utils.RequestAsync<IEnumerable<WemosNode>>("/api/wemos/nodes");
 
             Nodes.Clear();
@@ -39,6 +41,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (items != null)
                 foreach (var item in items.Where(item => item != null))
                     Nodes.Add(item);
+
+            biRequest.IsActive = false;
         }
         #endregion
 
@@ -68,8 +72,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         public async override void Execute(object parameter)
         {
             var context = parameter as EditContext;
-
             var item = context.CellInfo.Item as WemosNode;
+
             var res = await Utils.RequestAsync<bool>("/api/wemos/nodes/setname", item.NodeID, item.Name);
             if (res)
                 Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
