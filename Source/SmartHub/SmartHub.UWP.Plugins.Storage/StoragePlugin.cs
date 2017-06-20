@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.Infrastructure;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
@@ -27,6 +28,7 @@ namespace SmartHub.UWP.Plugins.Storage
         }
         public override void InitPlugin()
         {
+            //ServiceContext.DbPath
         }
         public override void StartPlugin()
         {

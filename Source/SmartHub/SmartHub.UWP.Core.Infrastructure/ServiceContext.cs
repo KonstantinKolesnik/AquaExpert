@@ -33,7 +33,7 @@ namespace SmartHub.UWP.Core.Infrastructure
 
         #region Database
         private static string dbPath = string.Empty;
-        private static string DbPath
+        public static string DbPath
         {
             get
             {
