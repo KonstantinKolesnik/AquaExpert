@@ -38,7 +38,10 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Imports
         [ImportMany]
-        public Action<WemosMessage>[] WemosMessageHandlers { get; set; }
+        public Action<WemosMessage>[] WemosMessageHandlers
+        {
+            get; set;
+        }
         private void NotifyMessageReceivedForPlugins(WemosMessage msg)
         {
             Run(WemosMessageHandlers, x => x(msg));
