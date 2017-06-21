@@ -285,4 +285,10 @@
   <data name="Information" xml:space="preserve">
     <value>Information</value>
   </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="ModificationDate" xml:space="preserve">
+    <value>Modified</value>
+  </data>
 </root>

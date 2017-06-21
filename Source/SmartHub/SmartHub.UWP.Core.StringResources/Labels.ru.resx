@@ -285,4 +285,10 @@
   <data name="Information" xml:space="preserve">
     <value>Информация</value>
   </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Дата создания</value>
+  </data>
+  <data name="ModificationDate" xml:space="preserve">
+    <value>Дата изменения</value>
+  </data>
 </root>

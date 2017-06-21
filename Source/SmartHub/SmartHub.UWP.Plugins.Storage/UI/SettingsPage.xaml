@@ -27,8 +27,8 @@
             <PivotItem Header="{Binding Labels.Information, Source={StaticResource LabelsManager}}">
                 <StackPanel Margin="{StaticResource RootContainerMargin}">
                     <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.Size, Source={StaticResource LabelsManager}}" PropertyValue="{Binding StorageSize}"/>
-                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="Date Modified" PropertyValue="{Binding DateModified}"/>
-                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="Item Date" PropertyValue="{Binding ItemDate}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.CreationDate, Source={StaticResource LabelsManager}}" PropertyValue="{Binding ItemDate}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.ModificationDate, Source={StaticResource LabelsManager}}" PropertyValue="{Binding DateModified}"/>
                 </StackPanel>
             </PivotItem>
             <!--<PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">

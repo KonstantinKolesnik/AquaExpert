@@ -152,6 +152,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string CreationDate {
+            get {
+                return ResourceManager.GetString("CreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         public static string Dark {
@@ -301,6 +310,15 @@ namespace SmartHub.UWP.Core.StringResources {
         public static string Lines {
             get {
                 return ResourceManager.GetString("Lines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified.
+        /// </summary>
+        public static string ModificationDate {
+            get {
+                return ResourceManager.GetString("ModificationDate", resourceCulture);
             }
         }
         
