@@ -140,8 +140,6 @@ namespace SmartHub.UWP.Plugins.Storage.UI
 
             if (NetworkHelper.Instance.ConnectionInformation.IsInternetAvailable)
             {
-                //Live SDK ID: 00000000401DF53E
-
                 var folder = await OneDriveService.Instance.DocumentsFolderAsync();
                 //var remoteFile = await folder.GetFileAsync("NewFile.docx");
 

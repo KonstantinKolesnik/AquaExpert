@@ -32,13 +32,31 @@ namespace SmartHub.UWP.Core.Infrastructure
         #endregion
 
         #region Database
-        private readonly string dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "SmartHubUWPDB.sqlite");
+        public const string StorageFileName = "SmartHubUWPDB.sqlite";
 
-        public string StoragePath => dbPath;
+        private readonly string storagePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, StorageFileName);
 
-        public SQLiteConnection OpenConnection()
+        public string StoragePath => storagePath;
+
+        public SQLiteConnection StorageOpen()
         {
-            return new SQLiteConnection(new SQLitePlatformWinRT(), dbPath);
+            return new SQLiteConnection(new SQLitePlatformWinRT(), storagePath);
+        }
+
+        public void StorageSave(object item)
+        {
+            using (var db = StorageOpen())
+                db.Insert(item);
+        }
+        public void StorageSaveOrUpdate(object item)
+        {
+            using (var db = StorageOpen())
+                db.InsertOrReplace(item);
+        }
+        public void StorageDelete(object item)
+        {
+            using (var db = StorageOpen())
+                db.Delete(item);
         }
         #endregion
     }

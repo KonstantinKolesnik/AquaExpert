@@ -60,7 +60,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Plugin ovverrides
         public override void InitDbModel()
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
             {
                 db.CreateTable<WemosSetting>();
                 db.CreateTable<WemosNode>();
@@ -76,7 +76,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public override void InitPlugin()
         {
             if (GetSetting("UnitSystem") == null)
-                Save(new WemosSetting() { Name = "UnitSystem", Value = "M" });
+                Context.StorageSave(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
             udpClient.MessageReceived += async (sender, e) =>
             {
@@ -180,15 +180,14 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
         }
 
-        //#region DB
         public List<WemosNode> GetNodes()
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosNode>().ToList();
         }
         public WemosNode GetNode(int nodeID)
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
             {
                 //db.TraceListener = new DebugTraceListener(); // activate tracing
                 return db.Table<WemosNode>().FirstOrDefault(n => n.NodeID == nodeID);
@@ -197,26 +196,26 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public List<WemosLine> GetLines()
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosLine>()
                     .Select(l => { l.LastTimeStamp = l.LastTimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
                     .ToList();
         }
         public WemosLine GetLine(int nodeID, int lineID)
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
         }
         public WemosLine GetLine(int id)
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosLine>().FirstOrDefault(l => l.ID == id);
         }
         public List<WemosLineValue> GetLineValues(int id, int count)
         {
             var line = GetLine(id);
 
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosLineValue>()
                     .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)// && v.TimeStamp > DateTime.Now.AddDays(-1))
                     .OrderByDescending(v => v.TimeStamp)
@@ -228,23 +227,23 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public List<WemosMonitor> GetMonitors()
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosMonitor>().ToList();
         }
         public WemosMonitor GetMonitor(int id)
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
         }
 
         public List<WemosController> GetControllers()
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosController>().ToList();
         }
         public WemosController GetController(int id)
         {
-            using (var db = Context.OpenConnection())
+            using (var db = Context.StorageOpen())
                 return db.Table<WemosController>().FirstOrDefault(c => c.ID == id);
         }
         public WemosControllerBase GetControllerBase(int id)
@@ -260,6 +259,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             if (ctrl != null)
                 controllers.Remove(ctrl);
+        }
+
+        public WemosSetting GetSetting(string name)
+        {
+            using (var db = Context.StorageOpen())
+                return db.Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
         }
         #endregion
 
@@ -289,14 +294,14 @@ namespace SmartHub.UWP.Plugins.Wemos
                                     ProtocolVersion = message.GetFloat(),
                                     IPAddress = remoteAddress.CanonicalName
                                 };
-                                Save(node);
+                                Context.StorageSave(node);
                             }
                             else
                             {
                                 node.Type = (WemosLineType) message.SubType;
                                 node.ProtocolVersion = message.GetFloat();
                                 node.IPAddress = remoteAddress.CanonicalName;
-                                SaveOrUpdate(node);
+                                Context.StorageSaveOrUpdate(node);
                             }
 
                             //NotifyMessageReceivedForPlugins(message);
@@ -316,13 +321,13 @@ namespace SmartHub.UWP.Plugins.Wemos
                                         Type = (WemosLineType) message.SubType,
                                         ProtocolVersion = message.GetFloat()
                                     };
-                                    Save(line);
+                                    Context.StorageSave(line);
                                 }
                                 else
                                 {
                                     line.Type = (WemosLineType) message.SubType;
                                     line.ProtocolVersion = message.GetFloat();
-                                    SaveOrUpdate(line);
+                                    Context.StorageSaveOrUpdate(line);
                                 }
 
                                 //NotifyMessageReceivedForPlugins(message);
@@ -346,12 +351,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 Type = (WemosLineType) message.SubType,
                                 Value = message.GetFloat() + line.Tune // tune value
                             };
-                            Save(lv);
+                            Context.StorageSave(lv);
 
                             // update line:
                             line.LastTimeStamp = lv.TimeStamp;
                             line.LastValue = lv.Value;
-                            SaveOrUpdate(line);
+                            Context.StorageSaveOrUpdate(line);
 
                             // process:
                             //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
@@ -389,12 +394,12 @@ namespace SmartHub.UWP.Plugins.Wemos
                                         TimeStamp = DateTime.Now,
                                         Value = (int) message.GetInteger()
                                     };
-                                    Save(bl);
+                                    Context.StorageSave(bl);
 
                                     node.LastTimeStamp = bl.TimeStamp;
                                     node.LastBatteryValue = bl.Value;
                                     node.IPAddress = remoteAddress.CanonicalName;
-                                    SaveOrUpdate(node);
+                                    Context.StorageSaveOrUpdate(node);
 
                                     //NotifyMessageReceivedForPlugins(message);
                                     //NotifyMessageReceivedForScripts(message);
@@ -410,7 +415,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 if (node != null)
                                 {
                                     node.ProtocolVersion = message.GetFloat();
-                                    SaveOrUpdate(node);
+                                    Context.StorageSaveOrUpdate(node);
                                 }
                                 break;
                             case WemosInternalMessageType.Config:
@@ -425,7 +430,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                                     else
                                         node.FirmwareVersion = message.GetFloat();
 
-                                    SaveOrUpdate(node);
+                                    Context.StorageSaveOrUpdate(node);
 
                                     //NotifyMessageReceivedForPlugins(message);
                                     //NotifyMessageReceivedForScripts(message);
@@ -465,30 +470,6 @@ namespace SmartHub.UWP.Plugins.Wemos
                 }
             }
         }
-
-        #region DB
-        private WemosSetting GetSetting(string name)
-        {
-            using (var db = Context.OpenConnection())
-                return db.Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
-        }
-        private void Save(object item)
-        {
-            using (var db = Context.OpenConnection())
-                db.Insert(item);
-        }
-        private void SaveOrUpdate(object item)
-        {
-            using (var db = Context.OpenConnection())
-                db.InsertOrReplace(item);
-        }
-        private void Delete(object item)
-        {
-            using (var db = Context.OpenConnection())
-                db.Delete(item);
-        }
-        #endregion
-
         #endregion
 
         #region Remote API
@@ -508,7 +489,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             var item = Context.GetPlugin<WemosPlugin>().GetNode(id);
             item.Name = name;
-            Context.GetPlugin<WemosPlugin>().SaveOrUpdate(item);
+            Context.StorageSaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
@@ -532,7 +513,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             var item = Context.GetPlugin<WemosPlugin>().GetLine(nodeID, lineID);
             item.Name = name;
-            Context.GetPlugin<WemosPlugin>().SaveOrUpdate(item);
+            Context.StorageSaveOrUpdate(item);
 
             //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
@@ -579,7 +560,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                 Configuration = "{}"
             };
 
-            Context.GetPlugin<WemosPlugin>().Save(model);
+            Context.StorageSave(model);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
@@ -599,7 +580,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             {
                 model.Name = name;
                 model.NameForInformer = nameForInformer;
-                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(model);
+                Context.StorageSaveOrUpdate(model);
 
                 return true;
             }
@@ -617,7 +598,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (model != null)
             {
                 model.SerializeConfiguration(config);
-                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(model);
+                Context.StorageSaveOrUpdate(model);
 
                 return true;
             }
@@ -630,7 +611,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            Context.GetPlugin<WemosPlugin>().Delete(GetMonitor(id));
+            Context.StorageDelete(GetMonitor(id));
 
             return true;
         });
@@ -659,7 +640,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var ctrl = WemosControllerBase.FromModel(model);
             if (ctrl != null)
             {
-                Context.GetPlugin<WemosPlugin>().Save(ctrl.Model);
+                Context.StorageSave(ctrl.Model);
                 Context.GetPlugin<WemosPlugin>().AddController(ctrl);
 
                 ctrl.Init(Context);
@@ -683,7 +664,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.Name = name;
-                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
+                Context.StorageSaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -700,7 +681,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.IsAutoMode = isAutoMode;
-                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
+                Context.StorageSaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -717,7 +698,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 ctrl.Model.Configuration = config;
-                Context.GetPlugin<WemosPlugin>().SaveOrUpdate(ctrl.Model);
+                Context.StorageSaveOrUpdate(ctrl.Model);
                 return true;
             }
 
@@ -731,7 +712,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             var model = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (model != null)
-                Context.GetPlugin<WemosPlugin>().Delete(model);
+                Context.StorageDelete(model);
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
             Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
