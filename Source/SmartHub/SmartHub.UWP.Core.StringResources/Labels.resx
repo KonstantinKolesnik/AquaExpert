@@ -291,4 +291,7 @@
   <data name="ModificationDate" xml:space="preserve">
     <value>Modified</value>
   </data>
+  <data name="Cloud" xml:space="preserve">
+    <value>Cloud</value>
+  </data>
 </root>

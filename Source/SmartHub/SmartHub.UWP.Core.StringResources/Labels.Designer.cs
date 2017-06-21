@@ -134,6 +134,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cloud.
+        /// </summary>
+        public static string Cloud {
+            get {
+                return ResourceManager.GetString("Cloud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete item?.
         /// </summary>
         public static string confirmDeleteItem {

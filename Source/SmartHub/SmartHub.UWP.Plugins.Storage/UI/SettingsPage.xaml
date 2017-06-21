@@ -31,9 +31,9 @@
                     <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.ModificationDate, Source={StaticResource LabelsManager}}" PropertyValue="{Binding DateModified}"/>
                 </StackPanel>
             </PivotItem>
-            <!--<PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
-                <uctrls:ucLines Margin="{StaticResource RootContainerMargin}"/>
-            </PivotItem>-->
+            <PivotItem Header="{Binding Labels.Cloud, Source={StaticResource LabelsManager}}">
+
+            </PivotItem>
         </Pivot>
 
         <telerikPrimitives:RadBusyIndicator

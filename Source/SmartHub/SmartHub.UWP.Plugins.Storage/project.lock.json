@@ -58,6 +58,39 @@
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
         }
       },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        }
+      },
       "Microsoft.NETCore/5.0.2": {
         "dependencies": {
           "Microsoft.CSharp": "4.0.1",
@@ -265,6 +298,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -2346,6 +2434,112 @@
             "rid": "aot"
           }
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win10-arm/native/winsdkfb.dll": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb.pri": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/Controls/FacebookLoginButton.xbf": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/FacebookDialog.xbf": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/FacebookProfilePictureControl.xbf": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/Images/fb_blank_profile_portrait.png": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/Themes/Generic.xbf": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-arm/native/winsdkfb/Themes/Styles.xbf": {
+            "assetType": "native",
+            "rid": "win10-arm"
+          },
+          "runtimes/win10-x64/native/winsdkfb.dll": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb.pri": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/Controls/FacebookLoginButton.xbf": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/FacebookDialog.xbf": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/FacebookProfilePictureControl.xbf": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/Images/fb_blank_profile_portrait.png": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/Themes/Generic.xbf": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x64/native/winsdkfb/Themes/Styles.xbf": {
+            "assetType": "native",
+            "rid": "win10-x64"
+          },
+          "runtimes/win10-x86/native/winsdkfb.dll": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb.pri": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/Controls/FacebookLoginButton.xbf": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/FacebookDialog.xbf": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/FacebookProfilePictureControl.xbf": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/Images/fb_blank_profile_portrait.png": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/Themes/Generic.xbf": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          },
+          "runtimes/win10-x86/native/winsdkfb/Themes/Styles.xbf": {
+            "assetType": "native",
+            "rid": "win10-x86"
+          }
+        }
       }
     },
     "UAP,Version=v10.0/win10-arm": {
@@ -2402,6 +2596,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -2558,6 +2785,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -4681,6 +4963,24 @@
         "runtime": {
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-arm/native/winsdkfb.dll": {},
+          "runtimes/win10-arm/native/winsdkfb.pri": {},
+          "runtimes/win10-arm/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-arm/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
@@ -4737,6 +5037,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -4894,6 +5227,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -7055,6 +7443,24 @@
         "runtime": {
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-arm/native/winsdkfb.dll": {},
+          "runtimes/win10-arm/native/winsdkfb.pri": {},
+          "runtimes/win10-arm/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-arm/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-arm/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x64": {
@@ -7111,6 +7517,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -7271,6 +7710,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -9399,6 +9893,24 @@
         "runtime": {
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-x64/native/winsdkfb.dll": {},
+          "runtimes/win10-x64/native/winsdkfb.pri": {},
+          "runtimes/win10-x64/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-x64/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
@@ -9455,6 +9967,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -9616,6 +10161,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -11782,6 +12382,24 @@
         "runtime": {
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-x64/native/winsdkfb.dll": {},
+          "runtimes/win10-x64/native/winsdkfb.pri": {},
+          "runtimes/win10-x64/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-x64/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-x64/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x86": {
@@ -11838,6 +12456,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -11998,6 +12649,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -14126,6 +14832,24 @@
         "runtime": {
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-x86/native/winsdkfb.dll": {},
+          "runtimes/win10-x86/native/winsdkfb.pri": {},
+          "runtimes/win10-x86/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-x86/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
@@ -14182,6 +14906,39 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Data.Sqlite.dll": {}
+        }
+      },
+      "Microsoft.Graph/1.2.0": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.3.0",
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll": {}
+        }
+      },
+      "Microsoft.Graph.Core/1.3.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "[6.0.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        },
+        "runtime": {
+          "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll": {}
+        }
+      },
+      "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+        "compile": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll": {},
+          "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll": {}
         }
       },
       "Microsoft.NETCore/5.0.2": {
@@ -14343,6 +15100,61 @@
         }
       },
       "Microsoft.NETCore.Windows.ApiSets/1.0.1": {},
+      "Microsoft.OneDriveSDK/2.0.6": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll": {}
+        }
+      },
+      "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+        "dependencies": {
+          "Microsoft.Graph.Core": "1.2.1",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "(2.22.0, 3.0.0)",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        },
+        "runtime": {
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll": {},
+          "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp/1.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+        "dependencies": {
+          "Microsoft.Graph": "1.2.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.7",
+          "Microsoft.OneDriveSDK": "2.0.6",
+          "Microsoft.OneDriveSDK.Authentication": "1.0.8",
+          "Microsoft.Toolkit.Uwp": "1.4.1",
+          "Newtonsoft.Json": "9.0.1",
+          "winsdkfb": "0.12.20161020.4"
+        },
+        "compile": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll": {}
+        }
+      },
       "Microsoft.VisualBasic/10.0.1": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -16509,6 +17321,24 @@
         "runtime": {
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "winsdkfb/0.12.20161020.4": {
+        "compile": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "runtime": {
+          "lib/win10/winsdkfb.winmd": {}
+        },
+        "native": {
+          "runtimes/win10-x86/native/winsdkfb.dll": {},
+          "runtimes/win10-x86/native/winsdkfb.pri": {},
+          "runtimes/win10-x86/native/winsdkfb/Controls/FacebookLoginButton.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/FacebookDialog.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/FacebookProfilePictureControl.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/Images/fb_blank_profile_portrait.png": {},
+          "runtimes/win10-x86/native/winsdkfb/Themes/Generic.xbf": {},
+          "runtimes/win10-x86/native/winsdkfb/Themes/Styles.xbf": {}
+        }
       }
     }
   },
@@ -16601,6 +17431,65 @@
         "lib/net451/Microsoft.Data.Sqlite.xml",
         "lib/netstandard1.3/Microsoft.Data.Sqlite.dll",
         "lib/netstandard1.3/Microsoft.Data.Sqlite.xml"
+      ]
+    },
+    "Microsoft.Graph/1.2.0": {
+      "sha512": "+hEY5UQsnIGLqBoRCrK1t1FJbnrV4dkfgZatoCC8NKIpou84ypS55by159f6U8SKM8Fk2uu15WK8cGrh1CabeA==",
+      "type": "package",
+      "path": "Microsoft.Graph/1.2.0",
+      "files": [
+        "Microsoft.Graph.1.2.0.nupkg.sha512",
+        "Microsoft.Graph.nuspec",
+        "lib/MonoAndroid10/Microsoft.Graph.dll",
+        "lib/MonoTouch10/Microsoft.Graph.dll",
+        "lib/Xamarin.Mac20/Microsoft.Graph.dll",
+        "lib/Xamarin.iOS10/Microsoft.Graph.dll",
+        "lib/portable45-net45+win8+wpa81/Microsoft.Graph.dll"
+      ]
+    },
+    "Microsoft.Graph.Core/1.3.0": {
+      "sha512": "F7dKX5fAwcGwZ3Tnf9/PzhGl1845aiAIou1HRO7D8H4zvLTpgk0pSP/sxuAT3Kn9pRNkAi/V/R95sqA1Jf340A==",
+      "type": "package",
+      "path": "Microsoft.Graph.Core/1.3.0",
+      "files": [
+        "Microsoft.Graph.Core.1.3.0.nupkg.sha512",
+        "Microsoft.Graph.Core.nuspec",
+        "lib/MonoAndroid10/Microsoft.Graph.Core.dll",
+        "lib/MonoTouch10/Microsoft.Graph.Core.dll",
+        "lib/Xamarin.Mac20/Microsoft.Graph.Core.dll",
+        "lib/Xamarin.iOS10/Microsoft.Graph.Core.dll",
+        "lib/portable45-net45+win8+wpa81/Microsoft.Graph.Core.dll"
+      ]
+    },
+    "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7": {
+      "sha512": "XGiN0mBDFMCETSh3A9g00qz75uBQmnqbTpRjue7ljxsEACruTLiyNcvH+jWsX1CbR6NMogblHxcLQa/KMFqjDg==",
+      "type": "package",
+      "path": "Microsoft.IdentityModel.Clients.ActiveDirectory/3.13.7",
+      "files": [
+        "Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.7.nupkg.sha512",
+        "Microsoft.IdentityModel.Clients.ActiveDirectory.nuspec",
+        "lib/MonoAndroid10/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.XML",
+        "lib/MonoAndroid10/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll",
+        "lib/MonoAndroid10/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/MonoAndroid10/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "lib/Xamarin.iOS10/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.XML",
+        "lib/Xamarin.iOS10/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll",
+        "lib/Xamarin.iOS10/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/Xamarin.iOS10/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "lib/net45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.XML",
+        "lib/net45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll",
+        "lib/net45/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/net45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.XML",
+        "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll",
+        "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/netcore45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.XML",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "lib/portable-net45+win/Microsoft.IdentityModel.Clients.ActiveDirectory.XML",
+        "lib/portable-net45+win/Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
       ]
     },
     "Microsoft.NETCore/5.0.2": {
@@ -16767,6 +17656,55 @@
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "runtime.json"
+      ]
+    },
+    "Microsoft.OneDriveSDK/2.0.6": {
+      "sha512": "3FBkCa5cVuUe/YP23mSwbzNsenzRJAeOwIk45nXfFfaTz6mYtOWNj490xKRttoCn0IT0UZy1a3YjWRxBkN3l0g==",
+      "type": "package",
+      "path": "Microsoft.OneDriveSDK/2.0.6",
+      "files": [
+        "Microsoft.OneDriveSDK.2.0.6.nupkg.sha512",
+        "Microsoft.OneDriveSDK.nuspec",
+        "lib/portable-net45+netcore45+wpa81+win8/Microsoft.OneDrive.Sdk.dll"
+      ]
+    },
+    "Microsoft.OneDriveSDK.Authentication/1.0.8": {
+      "sha512": "sN3kPp58/nHmwQJpA3WREWrojKOblDsXpRRW//NyKhaXuq1+NJoQILst5cC+uuvH0pL3afsD6bIANjH0Tytzgg==",
+      "type": "package",
+      "path": "Microsoft.OneDriveSDK.Authentication/1.0.8",
+      "files": [
+        "Microsoft.OneDriveSDK.Authentication.1.0.8.nupkg.sha512",
+        "Microsoft.OneDriveSDK.Authentication.nuspec",
+        "lib/net451/Microsoft.OneDrive.Sdk.Authentication.Desktop.dll",
+        "lib/portable-win81+wpa81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll",
+        "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinRT.dll",
+        "lib/win81/Microsoft.OneDrive.Sdk.Authentication.WinStore.dll"
+      ]
+    },
+    "Microsoft.Toolkit.Uwp/1.4.1": {
+      "sha512": "9bThPlEnIREgukNQQe4ufQSl86kODoGkRLOWrSanUDuApe9X68sgVBN61diPdy7LDQ9wvcEa6vYw5+Tao/Tk1A==",
+      "type": "package",
+      "path": "Microsoft.Toolkit.Uwp/1.4.1",
+      "files": [
+        "Microsoft.Toolkit.Uwp.1.4.1.nupkg.sha512",
+        "Microsoft.Toolkit.Uwp.nuspec",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.dll",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.pdb",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.pri",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.xml"
+      ]
+    },
+    "Microsoft.Toolkit.Uwp.Services/1.4.1": {
+      "sha512": "UITxo7ljWFkSJzNR1kpXVVy8zXH9SV+MHHtJxen/ZVKqcqHk9A6qxcw6x5ks1oGXSxWiMzegTAcdmgL3ZDxw2Q==",
+      "type": "package",
+      "path": "Microsoft.Toolkit.Uwp.Services/1.4.1",
+      "files": [
+        "Microsoft.Toolkit.Uwp.Services.1.4.1.nupkg.sha512",
+        "Microsoft.Toolkit.Uwp.Services.nuspec",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.dll",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.pdb",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.pri",
+        "lib/uap10.0/Microsoft.Toolkit.Uwp.Services.xml"
       ]
     },
     "Microsoft.VisualBasic/10.0.1": {
@@ -23188,12 +24126,58 @@
         "ref/xamarinwatchos10/_._",
         "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll"
       ]
+    },
+    "winsdkfb/0.12.20161020.4": {
+      "sha512": "0R+Hl3eVI3jMxrE5IIj0sMomH4/dYsaeLlGkHKDnakNsSBlvtoteC876XfJK+XZ/l5Sc554LmtdBfyBdlCFzZQ==",
+      "type": "package",
+      "path": "winsdkfb/0.12.20161020.4",
+      "files": [
+        "build/native/winsdkfb.targets",
+        "lib/win10/design/winsdkfb.dll",
+        "lib/win10/design/winsdkfb.pri",
+        "lib/win10/winsdkfb.pri",
+        "lib/win10/winsdkfb.winmd",
+        "lib/win10/winsdkfb/Controls/FacebookLoginButton.xbf",
+        "lib/win10/winsdkfb/FacebookDialog.xbf",
+        "lib/win10/winsdkfb/FacebookProfilePictureControl.xbf",
+        "lib/win10/winsdkfb/Images/fb_blank_profile_portrait.png",
+        "lib/win10/winsdkfb/Themes/Generic.xbf",
+        "lib/win10/winsdkfb/Themes/Styles.xbf",
+        "runtimes/win10-arm/native/winsdkfb.dll",
+        "runtimes/win10-arm/native/winsdkfb.pri",
+        "runtimes/win10-arm/native/winsdkfb/Controls/FacebookLoginButton.xbf",
+        "runtimes/win10-arm/native/winsdkfb/FacebookDialog.xbf",
+        "runtimes/win10-arm/native/winsdkfb/FacebookProfilePictureControl.xbf",
+        "runtimes/win10-arm/native/winsdkfb/Images/fb_blank_profile_portrait.png",
+        "runtimes/win10-arm/native/winsdkfb/Themes/Generic.xbf",
+        "runtimes/win10-arm/native/winsdkfb/Themes/Styles.xbf",
+        "runtimes/win10-x64/native/winsdkfb.dll",
+        "runtimes/win10-x64/native/winsdkfb.pri",
+        "runtimes/win10-x64/native/winsdkfb/Controls/FacebookLoginButton.xbf",
+        "runtimes/win10-x64/native/winsdkfb/FacebookDialog.xbf",
+        "runtimes/win10-x64/native/winsdkfb/FacebookProfilePictureControl.xbf",
+        "runtimes/win10-x64/native/winsdkfb/Images/fb_blank_profile_portrait.png",
+        "runtimes/win10-x64/native/winsdkfb/Themes/Generic.xbf",
+        "runtimes/win10-x64/native/winsdkfb/Themes/Styles.xbf",
+        "runtimes/win10-x86/native/winsdkfb.dll",
+        "runtimes/win10-x86/native/winsdkfb.pri",
+        "runtimes/win10-x86/native/winsdkfb/Controls/FacebookLoginButton.xbf",
+        "runtimes/win10-x86/native/winsdkfb/FacebookDialog.xbf",
+        "runtimes/win10-x86/native/winsdkfb/FacebookProfilePictureControl.xbf",
+        "runtimes/win10-x86/native/winsdkfb/Images/fb_blank_profile_portrait.png",
+        "runtimes/win10-x86/native/winsdkfb/Themes/Generic.xbf",
+        "runtimes/win10-x86/native/winsdkfb/Themes/Styles.xbf",
+        "winsdkfb.0.12.20161020.4.nupkg.sha512",
+        "winsdkfb.githash.txt",
+        "winsdkfb.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "": [
       "Microsoft.Composition >= 1.0.30",
-      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2"
+      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2",
+      "Microsoft.Toolkit.Uwp.Services >= 1.4.1"
     ],
     "UAP,Version=v10.0": []
   }

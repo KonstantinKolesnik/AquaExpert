@@ -8,8 +8,8 @@
 
     <Grid Margin="{StaticResource RootContainerMargin}">
         <StackPanel>
-            <TextBlock Text="Dahboard" Style="{ThemeResource TitleTextBlockStyle}"/>
-            <TextBlock Text="Tiles go here" Style="{ThemeResource CaptionTextBlockStyle}"/>
+            <TextBlock Text="{Binding Labels.Dashboard, Source={StaticResource LabelsManager}}" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <!--<TextBlock Text="Tiles go here" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
     </Grid>
 </Page>

@@ -291,4 +291,7 @@
   <data name="ModificationDate" xml:space="preserve">
     <value>Дата изменения</value>
   </data>
+  <data name="Cloud" xml:space="preserve">
+    <value>Облако</value>
+  </data>
 </root>
