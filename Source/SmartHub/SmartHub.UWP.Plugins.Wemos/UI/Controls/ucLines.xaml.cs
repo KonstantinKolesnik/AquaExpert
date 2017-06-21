@@ -34,7 +34,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             biRequest.IsActive = true;
 
-            var items = await CoreUtils.RequestAsync<IEnumerable<WemosLine>>("/api/wemos/lines");
+            var items = await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
 
             Lines.Clear();
 

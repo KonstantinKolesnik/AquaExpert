@@ -23,28 +23,18 @@
             <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
-        <Grid Grid.Row="1" Margin="{StaticResource RootContainerMargin}">
-            <uctrls:ucPropertyNameValuePair PropertyName="Size" PropertyValue="{Binding StorageSize}"/>
-        </Grid>
-        
-        
-        <!--<Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
-            <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
-                <uctrls:ucNodes Margin="{StaticResource RootContainerMargin}"/>
+        <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
+            <PivotItem Header="{Binding Labels.Information, Source={StaticResource LabelsManager}}">
+                <StackPanel Margin="{StaticResource RootContainerMargin}">
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.Size, Source={StaticResource LabelsManager}}" PropertyValue="{Binding StorageSize}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="Date Modified" PropertyValue="{Binding DateModified}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="Item Date" PropertyValue="{Binding ItemDate}"/>
+                </StackPanel>
             </PivotItem>
-            <PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
+            <!--<PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
                 <uctrls:ucLines Margin="{StaticResource RootContainerMargin}"/>
-            </PivotItem>
-            <PivotItem Header="{Binding Labels.Database, Source={StaticResource LabelsManager}}">
-                <TextBlock Text="Lines values management" Margin="{StaticResource RootContainerMargin}"/>
-            </PivotItem>
-            <PivotItem Header="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}">
-                <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
-            </PivotItem>
-            <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
-                <uctrls:ucControllers/>
-            </PivotItem>
-        </Pivot>-->
+            </PivotItem>-->
+        </Pivot>
 
         <telerikPrimitives:RadBusyIndicator
             Grid.Row="1"

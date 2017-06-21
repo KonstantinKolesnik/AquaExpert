@@ -279,4 +279,10 @@
   <data name="Tune" xml:space="preserve">
     <value>Tune</value>
   </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
 </root>

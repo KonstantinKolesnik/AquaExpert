@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
@@ -91,7 +92,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             if (Monitor != null)
             {
                 //xAxis.LabelFormat = "{0:G}";
-                xAxis.LabelFormat = "{0:dd.MM.yy\nH:mm:ss}";
+                xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
                 yAxis.LabelFormat = "{0:N2} " + GetUnits();
                 lblDefinition.Format = "{0:N1} " + GetUnits();
 
@@ -109,8 +110,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             else
                 Values.Clear();
 
-            LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : "---";
-            LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy H:mm:ss")}" : "---";
+            LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : Labels.NoData;
+            LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy HH:mm:ss")}" : "";
 
             biRequest.IsActive = false;
         }

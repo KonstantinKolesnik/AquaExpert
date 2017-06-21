@@ -251,6 +251,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IP-address.
         /// </summary>
         public static string IPAddress {
@@ -454,6 +463,15 @@ namespace SmartHub.UWP.Core.StringResources {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
             }
         }
         

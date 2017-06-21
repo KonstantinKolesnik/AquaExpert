@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\StorageInfo.cs" />
     <Compile Include="StoragePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\SettingsPage.xaml.cs">

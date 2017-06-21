@@ -2,6 +2,7 @@
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
+using SmartHub.UWP.Plugins.Storage.Models;
 using SmartHub.UWP.Plugins.Storage.UI;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System.Composition;
@@ -28,9 +29,15 @@ namespace SmartHub.UWP.Plugins.Storage
         [ApiMethod(MethodName = "/api/storage/size"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetStorageSize => ((parameters) =>
         {
-            var task = CoreUtils.GetFileSizeAsync(Context.StoragePath);
+            var task = CoreUtils.GetFileBasicPropertiesAsync(Context.StoragePath);
             task.Wait();
-            return task.Result;
+
+            return new StorageInfo
+            {
+                Size = task.Result.Size,
+                DateModified = task.Result.DateModified,
+                ItemDate = task.Result.ItemDate,
+            };
         });
         #endregion
     }

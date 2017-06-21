@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 
@@ -215,11 +216,10 @@ namespace SmartHub.UWP.Core
                 return Path.GetDirectoryName(exePath);
             }
         }
-        public static async Task<ulong> GetFileSizeAsync(string path)
+        public static async Task<BasicProperties> GetFileBasicPropertiesAsync(string path)
         {
             var file = await StorageFile.GetFileFromPathAsync(path);
-            var props = await file.GetBasicPropertiesAsync();
-            return props.Size;
+            return await file.GetBasicPropertiesAsync();
         }
 
         #region Toast notification

@@ -35,7 +35,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             biRequest.IsActive = true;
 
-            var items = await CoreUtils.RequestAsync<IEnumerable<WemosNode>>("/api/wemos/nodes");
+            var items = await CoreUtils.RequestAsync<List<WemosNode>>("/api/wemos/nodes");
 
             Nodes.Clear();
 
