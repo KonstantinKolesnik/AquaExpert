@@ -96,6 +96,9 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             await RequestPresentation();
 
+            foreach (var line in GetLines())
+                await RequestLineValue(line);
+
             foreach (var controller in controllers)
                 controller.Start();
         }
