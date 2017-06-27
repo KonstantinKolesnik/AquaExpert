@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using System.Threading.Tasks;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
 {
@@ -19,11 +20,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             set
             {
                 if (model.Name != value)
-                {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setname", model.ID, value);
-                    model.Name = value;
-                    NotifyPropertyChanged();
-                }
+                    Task.Run(async () =>
+                    {
+                        var res = await CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setname", model.ID, value);
+                        if (res)
+                            model.Name = value;
+                        NotifyPropertyChanged(nameof(Name));
+                    });
             }
         }
         public WemosControllerType Type

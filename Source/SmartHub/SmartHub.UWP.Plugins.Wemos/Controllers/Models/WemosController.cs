@@ -30,5 +30,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         {
             get; set;
         }
+
+
+
+
+
+        //[Ignore]
+        protected object worker;
     }
 }

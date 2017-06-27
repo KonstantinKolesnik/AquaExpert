@@ -70,19 +70,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Abstract Overrides
-        protected override Type GetConfigurationType()
-        {
-            return typeof(ControllerConfiguration);
-        }
-        protected override object GetDefaultConfiguration()
-        {
-            return new ControllerConfiguration();
-        }
+        protected override Type GetConfigurationType() => typeof(ControllerConfiguration);
+        protected override object GetDefaultConfiguration() => new ControllerConfiguration();
 
-        protected override bool IsMyMessage(WemosLineValue value)
-        {
-            return WemosPlugin.IsValueFromLine(value, LineSwitch);
-        }
+        protected override bool IsMyMessage(WemosLineValue value) => WemosPlugin.IsValueFromLine(value, LineSwitch);
         protected async override void RequestLinesValues()
         {
             await host.RequestLineValue(LineSwitch);
@@ -91,7 +82,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             var config = Configuration as ControllerConfiguration;
 
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
             bool isActiveNew = false;
             foreach (var range in config.ActivePeriods)
                 isActiveNew |= (range.IsEnabled && IsInRange(now, range));

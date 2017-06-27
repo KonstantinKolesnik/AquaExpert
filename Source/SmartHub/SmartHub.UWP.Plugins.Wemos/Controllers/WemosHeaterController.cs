@@ -42,21 +42,15 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Constructor
-        public WemosHeaterController(WemosController model)
+        internal WemosHeaterController(WemosController model)
             : base (model)
         {
         }
         #endregion
 
         #region Abstract Overrides
-        protected override Type GetConfigurationType()
-        {
-            return typeof(ControllerConfiguration);
-        }
-        protected override object GetDefaultConfiguration()
-        {
-            return new ControllerConfiguration();
-        }
+        protected override Type GetConfigurationType() => typeof(ControllerConfiguration);
+        protected override object GetDefaultConfiguration() => new ControllerConfiguration();
 
         protected override bool IsMyMessage(WemosLineValue value)
         {
@@ -68,6 +62,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             await host.RequestLineValue(LineSwitch);
             await host.RequestLineValue(LineTemperature);
+        }
+        protected override void Preprocess(WemosLineValue value)
+        {
+            if (WemosPlugin.IsValueFromLine(value, LineTemperature))
+                lastLineValue = value.Value;
         }
         protected async override void Process()
         {
@@ -89,11 +88,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             }
             else
                 RequestLinesValues();
-        }
-        protected override void MessageReceived(WemosLineValue value)
-        {
-            if (WemosPlugin.IsValueFromLine(value, LineTemperature))
-                lastLineValue = value.Value;
         }
         //protected override void InitLastValues()
         //{

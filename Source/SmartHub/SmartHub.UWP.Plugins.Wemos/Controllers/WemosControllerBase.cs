@@ -17,22 +17,32 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         #endregion
 
         #region Properties
-        public WemosController Model
-        {
-            get { return model; }
-        }
+        public WemosController Model => model;
         public object Configuration
         {
-            get { CheckConfiguration(); return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType()); }
-            set { model.Configuration = JsonConvert.SerializeObject(value); }
+            //get { CheckModelConfiguration(); return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType()); }
+            get { return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType()); }
+            //set { model.Configuration = JsonConvert.SerializeObject(value); }
         }
         #endregion
 
         #region Constructor
         protected WemosControllerBase(WemosController model)
         {
+            if (string.IsNullOrEmpty(model.Configuration))
+                model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
+
             this.model = model;
-            CheckConfiguration();
+        }
+        protected WemosControllerBase(WemosControllerType type, string name)
+        {
+            model = new WemosController()
+            {
+                Type = type,
+                Name = name,
+                IsAutoMode = false,
+                Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration())
+            };
         }
         #endregion
 
@@ -51,11 +61,22 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
                 default: throw new Exception("Not supported controller type!");
             }
         }
+        //public static WemosControllerBase Create(WemosControllerType type, string name)
+        //{
+        //    switch (type)
+        //    {
+        //        case WemosControllerType.Heater: return new WemosHeaterController(model);
+        //        case WemosControllerType.ScheduledSwitch: return new WemosScheduledSwitchController(model);
+        //        //case WemosControllerType.WaterLevel: return new WaterLevelController(model);
+
+        //        default: throw new Exception("Not supported controller type!");
+        //    }
+        //}
 
         public void Init(IServiceContext context)
         {
             this.context = context;
-            host = context.GetPlugin<WemosPlugin>();
+            host = context?.GetPlugin<WemosPlugin>();
         }
         public void Start()
         {
@@ -67,7 +88,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             {
                 // + lastValues;
 
-                MessageReceived(value);
+                Preprocess(value);
                 if (model.IsAutoMode)
                     Process();
             }
@@ -85,18 +106,18 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
 
         protected abstract bool IsMyMessage(WemosLineValue value);
         protected abstract void RequestLinesValues();
-        protected abstract void Process();
-        protected virtual void MessageReceived(WemosLineValue value)
+        protected virtual void Preprocess(WemosLineValue value)
         {
         }
+        protected abstract void Process();
         #endregion
 
         #region Private methods
-        private void CheckConfiguration()
-        {
-            if (string.IsNullOrEmpty(model.Configuration))
-                model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
-        }
+        //private void CheckModelConfiguration()
+        //{
+        //    if (string.IsNullOrEmpty(model.Configuration))
+        //        model.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
+        //}
         #endregion
     }
 }
