@@ -32,7 +32,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         //private const string broadcastAddress = "255.255.255.255";
 
         private UdpClient udpClient = new UdpClient();
-        private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
+        //private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
+        private List<WemosController> controllers = new List<WemosController>();
         #endregion
 
         #region Imports
@@ -83,10 +84,15 @@ namespace SmartHub.UWP.Plugins.Wemos
                     await ProcessMessage(msg, e.RemoteAddress);
             };
 
-            foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
+            //foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
+            //{
+            //    controllers.Add(controller);
+            //    controller.Init(Context);
+            //}
+            foreach (var controller in GetControllers())
             {
-                controllers.Add(controller);
                 controller.Init(Context);
+                controllers.Add(controller);
             }
         }
         public override async void StartPlugin()
@@ -245,23 +251,36 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public WemosController GetController(int id)
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosController>().FirstOrDefault(c => c.ID == id);
+            //using (var db = Context.StorageOpen())
+            //    return db.Table<WemosController>().FirstOrDefault(c => c.ID == id);
+
+            return controllers.FirstOrDefault(c => c.ID == id);
         }
-        public WemosControllerBase GetControllerBase(int id)
-        {
-            return controllers.FirstOrDefault(c => c.Model.ID == id);
-        }
-        public void AddController(WemosControllerBase ctrl)
+        //public WemosControllerBase GetControllerBase(int id)
+        //{
+        //    return controllers.FirstOrDefault(c => c.Model.ID == id);
+        //}
+        //public void AddController(WemosControllerBase ctrl)
+        //{
+        //    if (ctrl != null)
+        //        controllers.Add(ctrl);
+        //}
+        public void AddController(WemosController ctrl)
         {
             if (ctrl != null)
                 controllers.Add(ctrl);
         }
-        public void RemoveController(WemosControllerBase ctrl)
+        //public void RemoveController(WemosControllerBase ctrl)
+        //{
+        //    if (ctrl != null)
+        //        controllers.Remove(ctrl);
+        //}
+        public void RemoveController(WemosController ctrl)
         {
             if (ctrl != null)
                 controllers.Remove(ctrl);
         }
+
 
         public WemosSetting GetSetting(string name)
         {
@@ -629,44 +648,59 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[0] as string;
             var type = (WemosControllerType)int.Parse(parameters[1].ToString());
 
-            var model = new WemosController()
+            //var model = new WemosController()
+            //{
+            //    Name = name,
+            //    Type = type,
+            //    IsAutoMode = false
+            //};
+            //var ctrl = WemosControllerBase.FromModel(model);
+            ////var ctrl = WemosControllerBase.Create(type, name);
+            //if (ctrl != null)
+            //{
+            //    Context.StorageSave(ctrl.Model);
+            //    Context.GetPlugin<WemosPlugin>().AddController(ctrl);
+            //    ctrl.Init(Context);
+            //    ctrl.Start();
+            //    //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
+            //    return ctrl.Model;
+            //}
+
+
+            var ctrl = new WemosController()
             {
                 Name = name,
                 Type = type,
                 IsAutoMode = false
             };
+            Context.StorageSave(ctrl);
+            Context.GetPlugin<WemosPlugin>().AddController(ctrl);
+            ctrl.Init(Context);
+            ctrl.Start();
+            //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
 
-            var ctrl = WemosControllerBase.FromModel(model);
-            //var ctrl = WemosControllerBase.Create(type, name);
-            if (ctrl != null)
-            {
-                Context.StorageSave(ctrl.Model);
-                Context.GetPlugin<WemosPlugin>().AddController(ctrl);
-
-                ctrl.Init(Context);
-                ctrl.Start();
-
-                //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
-
-                return ctrl.Model;
-            }
-
-            return null;
+            return ctrl;
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/setname"), Export(typeof(ApiMethod))]
         public ApiMethod apiSetControllerName => ((parameters) =>
         {
-            return false;
-
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
 
-            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //if (ctrl != null)
+            //{
+            //    ctrl.Model.Name = name;
+            //    Context.StorageSaveOrUpdate(ctrl.Model);
+            //    return true;
+            //}
+
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
             {
-                ctrl.Model.Name = name;
-                Context.StorageSaveOrUpdate(ctrl.Model);
+                ctrl.Name = name;
+                Context.StorageSaveOrUpdate(ctrl);
                 return true;
             }
 
@@ -679,11 +713,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var isAutoMode = (bool)parameters[1];
 
-            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //if (ctrl != null)
+            //{
+            //    ctrl.Model.IsAutoMode = isAutoMode;
+            //    Context.StorageSaveOrUpdate(ctrl.Model);
+            //    return true;
+            //}
+
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
             {
-                ctrl.Model.IsAutoMode = isAutoMode;
-                Context.StorageSaveOrUpdate(ctrl.Model);
+                ctrl.IsAutoMode = isAutoMode;
+                Context.StorageSaveOrUpdate(ctrl);
                 return true;
             }
 
@@ -696,11 +738,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = int.Parse(parameters[0].ToString());
             var config = parameters[1].ToString();
 
-            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //if (ctrl != null)
+            //{
+            //    ctrl.Model.Configuration = config;
+            //    Context.StorageSaveOrUpdate(ctrl.Model);
+            //    return true;
+            //}
+
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
             {
-                ctrl.Model.Configuration = config;
-                Context.StorageSaveOrUpdate(ctrl.Model);
+                ctrl.Configuration = config;
+                Context.StorageSaveOrUpdate(ctrl);
                 return true;
             }
 
@@ -712,14 +762,24 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
 
-            var model = Context.GetPlugin<WemosPlugin>().GetController(id);
-            if (model != null)
-                Context.StorageDelete(model);
+            //var model = Context.GetPlugin<WemosPlugin>().GetController(id);
+            //if (model != null)
+            //{
+            //    Context.StorageDelete(model);
+            //    var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
+            //    Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
+            //    return true;
+            //}
 
-            var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
-            Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
+            var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
+            if (ctrl != null)
+            {
+                Context.StorageDelete(ctrl);
+                Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
+                return true;
+            }
 
-            return true;
+            return false;
         });
         #endregion
 

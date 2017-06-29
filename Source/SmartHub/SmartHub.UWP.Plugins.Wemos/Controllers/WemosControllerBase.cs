@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected WemosController model;
         protected WemosPlugin host;
         protected IServiceContext context;
-        protected readonly Dictionary<int, float> lastValues = new Dictionary<int, float>();
+        //protected readonly Dictionary<int, float> lastValues = new Dictionary<int, float>();
         #endregion
 
         #region Properties
