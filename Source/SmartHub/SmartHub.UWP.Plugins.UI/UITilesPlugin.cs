@@ -46,20 +46,21 @@ namespace SmartHub.UWP.Plugins.UI
         private void AddTile(string typeFullName, string parameters)
         {
             if (registeredTiles.ContainsKey(typeFullName))
-                using (var db = Context.StorageOpen())
+            {
+                var db = Context.StorageOpen();
+
+                var lastDbTile = db.Table<TileDB>().OrderByDescending(t => t.SortOrder).FirstOrDefault();
+                int nextSortOrder = lastDbTile == null ? 0 : lastDbTile.SortOrder + 1;
+
+                var dbTile = new TileDB
                 {
-                    var lastDbTile = db.Table<TileDB>().OrderByDescending(t => t.SortOrder).FirstOrDefault();
-                    int nextSortOrder = lastDbTile == null ? 0 : lastDbTile.SortOrder + 1;
+                    TypeFullName = typeFullName,
+                    SortOrder = nextSortOrder,
+                    SerializedParameters = parameters
+                };
 
-                    var dbTile = new TileDB
-                    {
-                        TypeFullName = typeFullName,
-                        SortOrder = nextSortOrder,
-                        SerializedParameters = parameters
-                    };
-
-                    db.InsertOrReplace(dbTile);
-                }
+                db.InsertOrReplace(dbTile);
+            }
         }
         #endregion
     }

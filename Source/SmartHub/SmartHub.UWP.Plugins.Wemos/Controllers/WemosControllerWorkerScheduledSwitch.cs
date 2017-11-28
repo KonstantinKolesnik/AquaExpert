@@ -41,7 +41,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected override bool IsMyMessage(WemosLineValue value) => WemosPlugin.IsValueFromLine(value, LineSwitch);
         protected async override void RequestLinesValues()
         {
-            await host.RequestLineValue(LineSwitch);
+            await host.RequestLineValueAsync(LineSwitch);
         }
         protected async override void DoWork()
         {
@@ -52,7 +52,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             foreach (var range in config.ActivePeriods)
                 isActiveNew |= (range.IsEnabled && IsInRange(now, range));
 
-            await host.SetLineValue(LineSwitch, isActiveNew ? 1 : 0);
+            await host.SetLineValueAsync(LineSwitch, isActiveNew ? 1 : 0);
         }
         #endregion
 

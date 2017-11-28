@@ -78,6 +78,8 @@ namespace SmartHub.UWP.Core.Infrastructure
                     //logger.Info("Stop plugin {0}", plugin.GetType().FullName);
                 }
 
+                Context.StorageClose();
+
                 //logger.Info("All plugins are stopped");
             }
             catch (Exception ex)

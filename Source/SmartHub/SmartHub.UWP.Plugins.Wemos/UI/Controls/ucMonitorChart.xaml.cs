@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.System.Threading;
@@ -20,9 +21,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     {
         #region Fields
         private ThreadPoolTimer timer;
-        //private DispatcherTimer dispatcherTimer;
-        private double updateIntervalSeconds = 10;
+        private double updateIntervalSeconds = 3;
         private double valuesDisplayCount = 10;
+
+        private Task taskListen;
+        private CancellationTokenSource ctsListen;
+        private bool isListenActive = false;
         #endregion
 
         #region Properties
@@ -34,7 +38,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            await (d as ucMonitorChart).UpdateValues();
+            //await (d as ucMonitorChart).UpdateValues();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await (d as ucMonitorChart).UpdateValues(); });
         }
 
         public ObservableCollection<WemosLineValue> Values
@@ -63,23 +68,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            //dispatcherTimer = new DispatcherTimer();
-            //dispatcherTimer.Interval = TimeSpan.FromSeconds(updateIntervalSeconds);
-            //dispatcherTimer.Tick += (s, e) =>
-            //{
-            //    if (Visibility == Visibility.Visible)
-            //        UpdateValues();
-            //};
-            //dispatcherTimer.Start();
-
             timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    if (Visibility == Visibility.Visible)
-                        await UpdateValues();
-                });
-
+                //await UpdateValues();
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
             }), TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
@@ -87,45 +79,86 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateValues()
         {
-            biRequest.IsActive = true;
-
-            if (Monitor != null)
+            if (Visibility == Visibility.Visible)
             {
-                //xAxis.LabelFormat = "{0:G}";
-                xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
-                yAxis.LabelFormat = "{0:N2} " + GetUnits();
-                lblDefinition.Format = "{0:N1} " + GetUnits();
+                //await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                //{
+                biRequest.IsActive = true;
 
-                var items = await CoreUtils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
+                if (Monitor != null)
+                {
+                    //xAxis.LabelFormat = "{0:G}";
+                    xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
+                    yAxis.LabelFormat = "{0:N2} " + GetUnits();
+                    lblDefinition.Format = "{0:N1} " + GetUnits();
 
-                Values.Clear();
+                    var items = await CoreUtils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
 
-                if (items != null)
-                    foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
-                    {
-                        //item.TimeStamp = item.TimeStamp.ToLocalTime();
-                        Values.Add(item);
-                    }
+                    Values.Clear();
+
+                    if (items != null)
+                        foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
+                        {
+                            //item.TimeStamp = item.TimeStamp.ToLocalTime();
+                            Values.Add(item);
+                        }
+                }
+                else
+                    Values.Clear();
+
+                LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : Labels.NoData;
+                LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy HH:mm:ss")}" : "";
+
+                biRequest.IsActive = false;
+                //});
             }
-            else
-                Values.Clear();
-
-            LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : Labels.NoData;
-            LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy HH:mm:ss")}" : "";
-
-            biRequest.IsActive = false;
         }
         private string GetUnits()
         {
             return Monitor != null ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : "";
         }
+
+        private void StartListen()
+        {
+            if (!isListenActive)
+            {
+                ctsListen = new CancellationTokenSource();
+
+                taskListen = Task.Factory.StartNew(async () =>
+                {
+                    while (!ctsListen.IsCancellationRequested)
+                    {
+                        if (isListenActive)
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
+
+                        await Task.Delay((int)updateIntervalSeconds * 1000);
+                    }
+                }, ctsListen.Token);
+
+                isListenActive = true;
+            }
+        }
+        private void StopListen()
+        {
+            if (isListenActive)
+            {
+                ctsListen?.Cancel();
+                isListenActive = false;
+            }
+        }
         #endregion
 
         #region Event handlers
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //StartListen();
+        }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            timer.Cancel();
-            //dispatcherTimer.Stop();
+            if (timer != null)
+                timer.Cancel();
+
+            //StopListen();
         }
         #endregion
     }

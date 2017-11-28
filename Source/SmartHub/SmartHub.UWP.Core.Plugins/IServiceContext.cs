@@ -17,6 +17,7 @@ namespace SmartHub.UWP.Core.Plugins
         }
 
         SQLiteConnection StorageOpen();
+        void StorageClose();
 
         void StorageSave(object item);
         void StorageSaveOrUpdate(object item);

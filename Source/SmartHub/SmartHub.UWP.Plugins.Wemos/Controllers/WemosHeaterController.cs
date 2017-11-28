@@ -60,8 +60,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         }
         protected async override void RequestLinesValues()
         {
-            await host.RequestLineValue(LineSwitch);
-            await host.RequestLineValue(LineTemperature);
+            await host.RequestLineValueAsync(LineSwitch);
+            await host.RequestLineValueAsync(LineTemperature);
         }
         protected override void Preprocess(WemosLineValue value)
         {
@@ -76,9 +76,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
                 var config = Configuration as ControllerConfiguration;
 
                 if (value < config.TemperatureMin)
-                    await host.SetLineValue(LineSwitch, 1);
+                    await host.SetLineValueAsync(LineSwitch, 1);
                 else if (value > config.TemperatureMax)
-                    await host.SetLineValue(LineSwitch, 0);
+                    await host.SetLineValueAsync(LineSwitch, 0);
 
                 // voice alarm:
                 if (value <= config.TemperatureAlarmMin)

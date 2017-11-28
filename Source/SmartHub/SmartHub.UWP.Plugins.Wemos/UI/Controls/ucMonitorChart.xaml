@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     MinHeight="400"
-    Unloaded="UserControl_Unloaded">
+    Unloaded="UserControl_Unloaded" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <DataTemplate x:Key="PointTemplate">

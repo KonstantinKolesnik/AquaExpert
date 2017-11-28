@@ -39,9 +39,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         private List<WemosController> controllers = new List<WemosController>();
 
 
-        private Task taskListen;
-        private CancellationTokenSource ctsListen;
-        private bool isListenActive = false;
+        private Task taskControllers;
+        private CancellationTokenSource ctsControllers;
+        private bool isTaskControllersActive = false;
         #endregion
 
         #region Imports
@@ -57,29 +57,28 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Exports
-        [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 5)]
-        public Action<DateTime> TimerElapsed => ((dt) =>
-        {
-            //foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
-            //    controller.ProcessTimer(dt);
-        });
+        //[Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 1)]
+        //public Action<DateTime> TimerElapsed => ((dt) =>
+        //{
+        //    foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+        //        controller.ProcessTimer(dt);
+        //});
         #endregion
 
         #region Plugin ovverrides
         public override void InitDbModel()
         {
-            using (var db = Context.StorageOpen())
-            {
-                db.CreateTable<WemosSetting>();
-                db.CreateTable<WemosNode>();
-                db.CreateTable<WemosLine>();
-                db.CreateTable<WemosNodeBatteryValue>();
-                db.CreateTable<WemosLineValue>();
+            var db = Context.StorageOpen();
 
-                db.CreateTable<WemosMonitor>();
-                db.CreateTable<WemosController>();
-                //db.CreateTable<WemosZone>();
-            }
+            db.CreateTable<WemosSetting>();
+            db.CreateTable<WemosNode>();
+            db.CreateTable<WemosLine>();
+            db.CreateTable<WemosNodeBatteryValue>();
+            db.CreateTable<WemosLineValue>();
+
+            db.CreateTable<WemosMonitor>();
+            db.CreateTable<WemosController>();
+            //db.CreateTable<WemosZone>();
         }
         public override void InitPlugin()
         {
@@ -110,28 +109,28 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             await udpClient.Start(localService, remoteMulticastAddress);
 
-            await RequestPresentation();
+            await RequestPresentationAsync();
 
             foreach (var line in GetLines())
-                await RequestLineValue(line);
+                await RequestLineValueAsync(line);
 
             foreach (var controller in controllers)
                 controller.Start();
 
-            StartListen();
+            StartControllers();
         }
         public override async void StopPlugin()
         {
             await udpClient.Stop();
 
-            StopListen();
+            StopControllers();
         }
         #endregion
 
         #region Public methods
 
         #region Send/Receive
-        public async Task Send(WemosMessage data)
+        public async Task SendAsync(WemosMessage data)
         {
             try
             {
@@ -143,29 +142,29 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
         }
 
-        public async Task RequestPresentation(int nodeID = -1, int lineID = -1)
+        public async Task RequestPresentationAsync(int nodeID = -1, int lineID = -1)
         {
-            await Send(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
+            await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
         }
-        public async Task RequestLineValue(WemosLine line)
-        {
-            if (line != null)
-                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
-        }
-        public async Task SetLineValue(WemosLine line, float value)
+        public async Task RequestLineValueAsync(WemosLine line)
         {
             if (line != null)
-                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+                await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Get, (int) line.Type));
         }
-        public async Task SetLineValue(WemosLine line, string value)
+        public async Task SetLineValueAsync(WemosLine line, float value)
         {
             if (line != null)
-                await Send(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+                await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
-        public async Task RebootNode(WemosNode node)
+        public async Task SetLineValueAsync(WemosLine line, string value)
+        {
+            if (line != null)
+                await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
+        }
+        public async Task RebootNodeAsync(WemosNode node)
         {
             if (node != null)
-                await Send(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
+                await SendAsync(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
         }
         #endregion
 
@@ -205,69 +204,57 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public List<WemosNode> GetNodes()
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosNode>().ToList();
+            return Context.StorageOpen().Table<WemosNode>().ToList();
         }
         public WemosNode GetNode(int nodeID)
         {
-            using (var db = Context.StorageOpen())
-            {
-                //db.TraceListener = new DebugTraceListener(); // activate tracing
-                return db.Table<WemosNode>().FirstOrDefault(n => n.NodeID == nodeID);
-            }
+            //Context.StorageOpen().TraceListener = new DebugTraceListener(); // activate tracing
+            return Context.StorageOpen().Table<WemosNode>().FirstOrDefault(n => n.NodeID == nodeID);
         }
 
         public List<WemosLine> GetLines()
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosLine>()
-                    .Select(l => { l.LastTimeStamp = l.LastTimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
-                    .ToList();
+            return Context.StorageOpen().Table<WemosLine>()
+                .Select(l => { l.LastTimeStamp = l.LastTimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
+                .ToList();
         }
         public WemosLine GetLine(int nodeID, int lineID)
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
+            return Context.StorageOpen().Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
         }
         public WemosLine GetLine(int id)
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosLine>().FirstOrDefault(l => l.ID == id);
+            return Context.StorageOpen().Table<WemosLine>().FirstOrDefault(l => l.ID == id);
         }
         public List<WemosLineValue> GetLineValues(int id, int count)
         {
             var line = GetLine(id);
 
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosLineValue>()
-                    .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)// && v.TimeStamp > DateTime.Now.AddDays(-1))
-                    .OrderByDescending(v => v.TimeStamp)
-                    .Take(count)
-                    .OrderBy(v => v.TimeStamp)
-                    .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local
-                    .ToList();
+            return Context.StorageOpen().Table<WemosLineValue>()
+                .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)// && v.TimeStamp > DateTime.Now.AddDays(-1))
+                .OrderByDescending(v => v.TimeStamp)
+                .Take(count)
+                .OrderBy(v => v.TimeStamp)
+                .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local
+                .ToList();
         }
 
         public List<WemosMonitor> GetMonitors()
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosMonitor>().ToList();
+            return Context.StorageOpen().Table<WemosMonitor>().ToList();
         }
         public WemosMonitor GetMonitor(int id)
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
+            return Context.StorageOpen().Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
         }
 
         public List<WemosController> GetControllers()
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosController>().ToList();
+            return Context.StorageOpen().Table<WemosController>().ToList();
         }
         public WemosController GetController(int id)
         {
-            //using (var db = Context.StorageOpen())
-            //    return db.Table<WemosController>().FirstOrDefault(c => c.ID == id);
+            //return Context.StorageOpen().Table<WemosController>().FirstOrDefault(c => c.ID == id);
 
             return controllers.FirstOrDefault(c => c.ID == id);
         }
@@ -296,45 +283,44 @@ namespace SmartHub.UWP.Plugins.Wemos
                 controllers.Remove(ctrl);
         }
 
-
         public WemosSetting GetSetting(string name)
         {
-            using (var db = Context.StorageOpen())
-                return db.Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
+            return Context.StorageOpen().Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
         }
         #endregion
 
         #region Private methods
-        private void StartListen()
+        private void StartControllers()
         {
-            if (!isListenActive)
+            if (!isTaskControllersActive)
             {
-                ctsListen = new CancellationTokenSource();
+                ctsControllers = new CancellationTokenSource();
 
-                taskListen = Task.Factory.StartNew(() =>
+                taskControllers = Task.Factory.StartNew(async () =>
                 {
-                    while (!ctsListen.IsCancellationRequested)
-                        if (isListenActive)
+                    while (!ctsControllers.IsCancellationRequested)
+                        if (isTaskControllersActive)
                         {
-                            foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
-                                controller.ProcessTimer(DateTime.UtcNow);
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+                                    controller.ProcessTimer(DateTime.UtcNow);
+                            });
 
-                            //var str = await ReadAsync(ctsListen);
-                            //if (!string.IsNullOrEmpty(str)) // event arrived
-                            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { Received?.Invoke(this, new StringEventArgs(str)); });
+                            //await Task.Delay(1000);
                         }
 
-                }, ctsListen.Token);
+                }, ctsControllers.Token);
 
-                isListenActive = true;
+                isTaskControllersActive = true;
             }
         }
-        private void StopListen()
+        private void StopControllers()
         {
-            if (isListenActive)
+            if (isTaskControllersActive)
             {
-                ctsListen?.Cancel();
-                isListenActive = false;
+                ctsControllers?.Cancel();
+                isTaskControllersActive = false;
             }
         }
 
@@ -476,7 +462,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                         case WemosInternalMessageType.Time:
                             var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                             var sec = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds); // seconds since 1970
-                            await Send(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(sec));
+                            await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(sec));
                             break;
                         case WemosInternalMessageType.Version:
                             if (node != null)
@@ -486,7 +472,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                             }
                             break;
                         case WemosInternalMessageType.Config:
-                            await Send(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
+                            await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
                             break;
                         case WemosInternalMessageType.FirmwareName:
                         case WemosInternalMessageType.FirmwareVersion:
