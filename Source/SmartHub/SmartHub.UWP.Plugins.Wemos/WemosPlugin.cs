@@ -15,8 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Networking;
+using Windows.UI.Core;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
@@ -34,6 +37,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         private UdpClient udpClient = new UdpClient();
         //private List<WemosControllerBase> controllers = new List<WemosControllerBase>();
         private List<WemosController> controllers = new List<WemosController>();
+
+
+        private Task taskListen;
+        private CancellationTokenSource ctsListen;
+        private bool isListenActive = false;
         #endregion
 
         #region Imports
@@ -52,8 +60,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         [Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 5)]
         public Action<DateTime> TimerElapsed => ((dt) =>
         {
-            foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
-                controller.ProcessTimer(dt);
+            //foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+            //    controller.ProcessTimer(dt);
         });
         #endregion
 
@@ -80,8 +88,11 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             udpClient.MessageReceived += async (sender, e) =>
             {
-                foreach (var msg in WemosMessage.FromDto(e.Data))
-                    await ProcessMessage(msg, e.RemoteAddress);
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    foreach (var msg in WemosMessage.FromDto(e.Data))
+                        await ProcessMessage(msg, e.RemoteAddress);
+                });
             };
 
             //foreach (var controller in GetControllers().Select(model => WemosControllerBase.FromModel(model)).Where(c => c != null))
@@ -106,10 +117,14 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             foreach (var controller in controllers)
                 controller.Start();
+
+            StartListen();
         }
         public override async void StopPlugin()
         {
             await udpClient.Stop();
+
+            StopListen();
         }
         #endregion
 
@@ -290,6 +305,39 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Private methods
+        private void StartListen()
+        {
+            if (!isListenActive)
+            {
+                ctsListen = new CancellationTokenSource();
+
+                taskListen = Task.Factory.StartNew(() =>
+                {
+                    while (!ctsListen.IsCancellationRequested)
+                        if (isListenActive)
+                        {
+                            foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+                                controller.ProcessTimer(DateTime.UtcNow);
+
+                            //var str = await ReadAsync(ctsListen);
+                            //if (!string.IsNullOrEmpty(str)) // event arrived
+                            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { Received?.Invoke(this, new StringEventArgs(str)); });
+                        }
+
+                }, ctsListen.Token);
+
+                isListenActive = true;
+            }
+        }
+        private void StopListen()
+        {
+            if (isListenActive)
+            {
+                ctsListen?.Cancel();
+                isListenActive = false;
+            }
+        }
+
         private async Task ProcessMessage(WemosMessage message, HostName remoteAddress)
         {
             if (message == null)

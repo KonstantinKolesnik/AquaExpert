@@ -7,6 +7,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
 {
     public class WemosController
     {
+        #region Fields
+        private WemosControllerWorker worker;
+        #endregion
+
+        #region Properties
         [PrimaryKey, NotNull, AutoIncrement]
         public int ID
         {
@@ -33,11 +38,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         {
             get; set;
         }
+        #endregion
 
-        //----------------------------------------------------------------------------------------------
-
-        private WemosControllerWorker worker;
-
+        #region Public methods
         public void Init(IServiceContext context)
         {
             switch (Type)
@@ -62,5 +65,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             if (IsAutoMode)
                 worker?.ProcessTimer(now);
         }
+        #endregion
     }
 }

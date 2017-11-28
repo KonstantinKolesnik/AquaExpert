@@ -138,13 +138,13 @@ namespace SmartHub.UWP.Plugins.Storage.UI
 
             //-------------------------------------------------------------------------------------------------------------------------------------------
 
-            if (NetworkHelper.Instance.ConnectionInformation.IsInternetAvailable)
-            {
-                var folder = await OneDriveService.Instance.DocumentsFolderAsync();
-                //var remoteFile = await folder.GetFileAsync("NewFile.docx");
+            //if (NetworkHelper.Instance.ConnectionInformation.IsInternetAvailable)
+            //{
+            //    var folder = await OneDriveService.Instance.DocumentsFolderAsync();
+            //    //var remoteFile = await folder.GetFileAsync("NewFile.docx");
 
 
-            }
+            //}
         }
         #endregion
 

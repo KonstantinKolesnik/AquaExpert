@@ -34,6 +34,8 @@ namespace SmartHub.UWP.Core.Infrastructure
 
             try
             {
+                //SqliteEngine.UseWinSqlite3();
+
                 LoadPlugins(assemblies);
 
                 foreach (var plugin in Context.GetAllPlugins())
