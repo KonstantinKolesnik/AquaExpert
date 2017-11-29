@@ -40,7 +40,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
                 {
                     return apiMethods.ContainsKey(name) ? apiMethods[name](parameters) : null;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return null;
                 }

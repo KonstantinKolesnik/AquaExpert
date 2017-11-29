@@ -21,7 +21,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     {
         #region Fields
         private ThreadPoolTimer timer;
-        private double updateIntervalSeconds = 3;
+        private double updateIntervalSeconds = 1;
         private double valuesDisplayCount = 10;
 
         private Task taskListen;
@@ -68,11 +68,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
-            {
-                //await UpdateValues();
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
-            }), TimeSpan.FromSeconds(updateIntervalSeconds));
+            //timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            //{
+            //    //await UpdateValues();
+            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
+            //}), TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
 
@@ -151,14 +151,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Event handlers
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //StartListen();
+            StartListen();
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             if (timer != null)
                 timer.Cancel();
 
-            //StopListen();
+            StopListen();
         }
         #endregion
     }

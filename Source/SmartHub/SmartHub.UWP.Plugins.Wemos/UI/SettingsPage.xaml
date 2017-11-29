@@ -1,11 +1,11 @@
 ﻿<UserControl
     x:Class="SmartHub.UWP.Plugins.Wemos.UI.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
-    xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uctrlsGeneral="using:SmartHub.UWP.Core.Xaml.Controls"
+    xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
     mc:Ignorable="d">
 
     <Grid>
@@ -20,6 +20,7 @@
             <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
+        <!--
         <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
             <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
                 <uctrls:ucNodes Margin="{StaticResource RootContainerMargin}"/>
@@ -34,6 +35,40 @@
                 <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
             </PivotItem>
             <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
+                <uctrls:ucControllers/>
+            </PivotItem>
+        </Pivot>
+        -->
+
+        <Pivot Grid.Row="1" Style="{StaticResource TabsPivotStyle}" Margin="0,10,0,0">
+            <PivotItem>
+                <PivotItem.Header>
+                    <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}"/>
+                </PivotItem.Header>
+                <uctrls:ucNodes Margin="{StaticResource RootContainerMargin}"/>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Lines, Source={StaticResource LabelsManager}}"/>
+                </PivotItem.Header>
+                <uctrls:ucLines Margin="{StaticResource RootContainerMargin}"/>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Database, Source={StaticResource LabelsManager}}"/>
+                </PivotItem.Header>
+                <TextBlock Text="Lines values management" Margin="{StaticResource RootContainerMargin}"/>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}"/>
+                </PivotItem.Header>
+                <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}"/>
+                </PivotItem.Header>
                 <uctrls:ucControllers/>
             </PivotItem>
         </Pivot>

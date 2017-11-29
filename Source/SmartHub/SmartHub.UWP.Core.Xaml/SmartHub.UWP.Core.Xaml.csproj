@@ -104,6 +104,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controls\ucImagePivotHeader.xaml.cs">
+      <DependentUpon>ucImagePivotHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\Class1.cs" />
     <Compile Include="Controls\ucPropertyNameValuePair.xaml.cs">
       <DependentUpon>ucPropertyNameValuePair.xaml</DependentUpon>
@@ -133,6 +136,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ucImagePivotHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ucPropertyNameValuePair.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

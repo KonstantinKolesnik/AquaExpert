@@ -25,6 +25,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             this.ctrl = ctrl;
             this.context = context;
             host = context?.GetPlugin<WemosPlugin>();
+
+            ctrl.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
         }
 
         public void Start()

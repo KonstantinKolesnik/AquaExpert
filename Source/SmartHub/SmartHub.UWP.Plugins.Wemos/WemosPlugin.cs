@@ -2,9 +2,7 @@
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
-using SmartHub.UWP.Plugins.Timer.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using SmartHub.UWP.Plugins.Wemos.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
@@ -303,8 +301,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                         {
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                             {
-                                foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
-                                    controller.ProcessTimer(DateTime.UtcNow);
+                                //foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+                                //    controller.ProcessTimer(DateTime.UtcNow);
+
+                                for (int i = 0; i < Context.GetPlugin<WemosPlugin>().controllers.Count; i++)
+                                    Context.GetPlugin<WemosPlugin>().controllers[i].ProcessTimer(DateTime.UtcNow);
                             });
 
                             //await Task.Delay(1000);
@@ -707,9 +708,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                 Type = type,
                 IsAutoMode = false
             };
+            ctrl.Init(Context);
+
             Context.StorageSave(ctrl);
             Context.GetPlugin<WemosPlugin>().AddController(ctrl);
-            ctrl.Init(Context);
+
             ctrl.Start();
             //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
 
