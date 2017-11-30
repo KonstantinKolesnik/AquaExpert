@@ -301,14 +301,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                         {
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                             {
-                                //foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
-                                //    controller.ProcessTimer(DateTime.UtcNow);
-
                                 for (int i = 0; i < Context.GetPlugin<WemosPlugin>().controllers.Count; i++)
                                     Context.GetPlugin<WemosPlugin>().controllers[i].ProcessTimer(DateTime.UtcNow);
                             });
 
-                            //await Task.Delay(1000);
+                            await Task.Delay(50);
                         }
 
                 }, ctsControllers.Token);

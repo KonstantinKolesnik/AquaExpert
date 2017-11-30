@@ -9,7 +9,7 @@ namespace SmartHub.UWP.Core.Infrastructure
 {
     public class Hub
     {
-        #region Fields
+        #region Properties
         //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         [Import]
         public IServiceContext Context
@@ -85,6 +85,7 @@ namespace SmartHub.UWP.Core.Infrastructure
             catch (Exception ex)
             {
                 //logger.Error(ex, "Error on stop plugins");
+                throw;
             }
         }
         #endregion
