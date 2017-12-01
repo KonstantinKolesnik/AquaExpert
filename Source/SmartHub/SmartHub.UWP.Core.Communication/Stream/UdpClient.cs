@@ -54,9 +54,13 @@ namespace SmartHub.UWP.Core.Communication.Stream
                     // GetOutputStreamAsync can be a unicast, multicast or broadcast address.
                     var outputStream = await socket.GetOutputStreamAsync(new HostName(remoteHostAddress), remoteServiceName);
 
-                    var writer = new DataWriter(outputStream);
-                    writer.WriteString(data);
-                    await writer.StoreAsync();
+                    using (var writer = new DataWriter(outputStream))
+                    {
+                        writer.WriteString(data);
+                        await writer.StoreAsync();
+                        await writer.FlushAsync();
+                        writer.DetachStream();
+                    }
                 }
                 catch (Exception exception)
                 {

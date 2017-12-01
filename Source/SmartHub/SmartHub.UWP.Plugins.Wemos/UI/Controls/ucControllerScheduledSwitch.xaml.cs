@@ -18,7 +18,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucControllerScheduledSwitch : UserControl
     {
         #region Fields
-        private WemosScheduledSwitchController.ControllerConfiguration configuration = null;
+        private WemosControllerWorkerScheduledSwitch.ControllerConfiguration configuration = null;
         #endregion
 
         #region Properties
@@ -49,11 +49,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 if (string.IsNullOrEmpty(Controller.Configuration))
                 {
-                    configuration = new WemosScheduledSwitchController.ControllerConfiguration();
+                    configuration = new WemosControllerWorkerScheduledSwitch.ControllerConfiguration();
                     SaveConfiguration();
                 }
                 else
-                    configuration = JsonConvert.DeserializeObject<WemosScheduledSwitchController.ControllerConfiguration>(Controller.Configuration);
+                    configuration = JsonConvert.DeserializeObject<WemosControllerWorkerScheduledSwitch.ControllerConfiguration>(Controller.Configuration);
             }
         }
         #endregion

@@ -27,10 +27,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
         }
 
-        public static readonly DependencyProperty ConfigurationProperty = DependencyProperty.Register("Configuration", typeof(WemosHeaterController.ControllerConfiguration), typeof(ucControllerHeater), null);
-        public WemosHeaterController.ControllerConfiguration Configuration
+        public static readonly DependencyProperty ConfigurationProperty = DependencyProperty.Register("Configuration", typeof(WemosControllerWorkerHeater.ControllerConfiguration), typeof(ucControllerHeater), null);
+        public WemosControllerWorkerHeater.ControllerConfiguration Configuration
         {
-            get { return (WemosHeaterController.ControllerConfiguration) GetValue(ConfigurationProperty); }
+            get { return (WemosControllerWorkerHeater.ControllerConfiguration) GetValue(ConfigurationProperty); }
             set { SetValue(ConfigurationProperty, value); }
         }
 
@@ -55,11 +55,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 if (string.IsNullOrEmpty(Controller.Configuration))
                 {
-                    Configuration = new WemosHeaterController.ControllerConfiguration();
+                    Configuration = new WemosControllerWorkerHeater.ControllerConfiguration();
                     SaveConfiguration();
                 }
                 else
-                    Configuration = JsonConvert.DeserializeObject<WemosHeaterController.ControllerConfiguration>(Controller.Configuration);
+                    Configuration = JsonConvert.DeserializeObject<WemosControllerWorkerHeater.ControllerConfiguration>(Controller.Configuration);
             }
         }
         #endregion

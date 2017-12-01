@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Plugins;
+﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
@@ -6,7 +7,42 @@ using System.Collections.ObjectModel;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
-    class WemosControllerWorkerScheduledSwitch : WemosControllerWorker
+    public class Period : ObservableObject
+    {
+        private TimeSpan from;
+        private TimeSpan to;
+        private bool isEnabled;
+
+        public TimeSpan From
+        {
+            get { return from; }
+            set
+            {
+                from = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public TimeSpan To
+        {
+            get { return to; }
+            set
+            {
+                to = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set
+            {
+                isEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
+    }
+
+    public class WemosControllerWorkerScheduledSwitch : WemosControllerWorker
     {
         public class ControllerConfiguration
         {
@@ -43,11 +79,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         {
             await host.RequestLineValueAsync(LineSwitch);
         }
-        protected async override void DoWork()
+        protected async override void DoWork(DateTime now)
         {
             var config = Configuration as ControllerConfiguration;
 
-            var now = DateTime.Now;
             bool isActiveNew = false;
             foreach (var range in config.ActivePeriods)
                 isActiveNew |= (range.IsEnabled && IsInRange(now, range));

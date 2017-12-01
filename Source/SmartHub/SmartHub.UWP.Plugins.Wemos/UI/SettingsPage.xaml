@@ -70,6 +70,7 @@
                     <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}"/>
                 </PivotItem.Header>
                 <uctrls:ucControllers/>
+                <!--<uctrls:ucControllersList/>-->
             </PivotItem>
         </Pivot>
     </Grid>

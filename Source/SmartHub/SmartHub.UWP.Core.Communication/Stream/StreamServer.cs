@@ -43,7 +43,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
             {
                 await listener.CancelIOAsync();
                 listener.Dispose();
-
                 listener = null;
             }
         }

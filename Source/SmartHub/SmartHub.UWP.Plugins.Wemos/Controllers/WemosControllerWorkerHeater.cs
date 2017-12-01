@@ -6,7 +6,7 @@ using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
-    class WemosControllerWorkerHeater : WemosControllerWorker
+    public class WemosControllerWorkerHeater : WemosControllerWorker
     {
         public class ControllerConfiguration
         {
@@ -69,7 +69,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
             if (WemosPlugin.IsValueFromLine(value, LineTemperature))
                 lastLineValue = value.Value;
         }
-        protected async override void DoWork()
+        protected async override void DoWork(DateTime now)
         {
             if (lastLineValue.HasValue)
             {

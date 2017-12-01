@@ -6,61 +6,62 @@ using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
-    abstract class WemosControllerWorker
+    public abstract class WemosControllerWorker
     {
+        #region Fields
         protected WemosController ctrl;
         protected IServiceContext context;
         protected WemosPlugin host;
+        #endregion
 
+        #region Properties
         protected object Configuration
         {
-            //get { CheckModelConfiguration(); return JsonConvert.DeserializeObject(model.Configuration, GetConfigurationType()); }
             get { return JsonConvert.DeserializeObject(ctrl.Configuration, GetConfigurationType()); }
-
-            //set { ctrl.Configuration = JsonConvert.SerializeObject(value); }
         }
+        #endregion
 
-        public WemosControllerWorker(WemosController ctrl, IServiceContext context)
+        #region Constructor
+        internal WemosControllerWorker(WemosController ctrl, IServiceContext context)
         {
             this.ctrl = ctrl;
             this.context = context;
             host = context?.GetPlugin<WemosPlugin>();
 
-            ctrl.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
+            if (string.IsNullOrEmpty(ctrl.Configuration))
+                ctrl.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
         }
+        #endregion
 
-        public void Start()
+        #region Public methods
+        internal void Start()
         {
             RequestLinesValues(); // force lines to report their current values
         }
-        public void ProcessMessage(WemosLineValue value)
+        internal void ProcessMessage(WemosLineValue value)
         {
             if (IsMyMessage(value))
             {
                 Preprocess(value);
-                DoWork();
+                DoWork(DateTime.Now);
             }
         }
-        public void ProcessTimer(DateTime now)
+        internal void ProcessTimer(DateTime now)
         {
-            DoWork();
+            DoWork(now);
         }
+        #endregion
 
+        #region Private methods
         protected abstract Type GetConfigurationType();
         protected abstract object GetDefaultConfiguration();
+
         protected abstract void RequestLinesValues();
         protected abstract bool IsMyMessage(WemosLineValue value);
         protected virtual void Preprocess(WemosLineValue value)
         {
         }
-        protected abstract void DoWork();
-
-        #region Private methods
-        //private void CheckModelConfiguration()
-        //{
-        //    if (string.IsNullOrEmpty(ctrl.Configuration))
-        //        ctrl.Configuration = JsonConvert.SerializeObject(GetDefaultConfiguration());
-        //}
+        protected abstract void DoWork(DateTime now);
         #endregion
     }
 }
