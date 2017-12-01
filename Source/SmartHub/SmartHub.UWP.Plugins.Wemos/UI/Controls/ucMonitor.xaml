@@ -40,7 +40,7 @@
                         <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> <!--Foreground="{ThemeResource InactiveBrush}"-->
                     </StackPanel>
 
-                    <Border Grid.Column="2" MinWidth="110" Background="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
+                    <Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" Margin="7">
                             <TextBlock Text="{Binding LastValue, ElementName=mc}" HorizontalAlignment="Right"/>
                             <TextBlock Text="{Binding LastTimeStamp, ElementName=mc}" HorizontalAlignment="Right" Style="{ThemeResource ListItemSubtitleStyle}"/>

@@ -34,7 +34,7 @@
                 <telerikGrid:DataGridNumericalColumn PropertyName="LineID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
                 <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
-                <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                <!--<telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>-->
                 <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="{Binding Labels.Tune, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="True" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding Labels.TimeStamp, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:dd.MM.yy HH:mm:ss}" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding Labels.Value, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>

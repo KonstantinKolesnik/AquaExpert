@@ -32,8 +32,8 @@
                 </telerikGrid:DataGridTemplateColumn>
                 <telerikGrid:DataGridNumericalColumn PropertyName="NodeID" Header="ID" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}" CanUserEdit="True"/>
-                <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
-                <telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+                <!--<telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding Labels.Type, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>-->
+                <!--<telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding Labels.ProtocolVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>-->
                 <telerikGrid:DataGridTextColumn PropertyName="IPAddress" Header="{Binding Labels.IPAddress, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="FirmwareName" Header="{Binding Labels.FirmwareName, Source={StaticResource LabelsManager}}" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="FirmwareVersion" Header="{Binding Labels.FirmwareVersion, Source={StaticResource LabelsManager}}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>

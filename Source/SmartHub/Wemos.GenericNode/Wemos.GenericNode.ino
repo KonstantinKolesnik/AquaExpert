@@ -1,14 +1,21 @@
 #include <Wemos.h>
-#include <SFE_MicroOLED.h>
+//#include <SFE_MicroOLED.h>
 
 //ADC_MODE(ADC_VCC);
-WemosNode node(2);
+//WemosNode node(2);
 
-unsigned long prevMsTime = 0;
-const unsigned long intervalTime = 1000;
+WemosNode node(8, "8 Relay Node", 1.0);
 
-#define PIN_RESET 255
-#define DC_JUMPER 0  // I2C Address: 0 - 0x3C, 1 - 0x3D
+#pragma region MyRegion
+
+#pragma endregion
+
+
+//unsigned long prevMsTime = 0;
+//const unsigned long intervalTime = 1000;
+
+//#define PIN_RESET 255
+//#define DC_JUMPER 0  // I2C Address: 0 - 0x3C, 1 - 0x3D
 //MicroOLED oled(PIN_RESET, DC_JUMPER); // Example I2C declaration
 
 void setup()
@@ -21,26 +28,35 @@ void setup()
 	////oled.setFontType(3);  // Set the text to large (5 columns, 1 row worth of characters).
 	//oled.display();
 
-	node.addModule(new WemosModuleRelay(0, D1));
-	node.addModule(new WemosModuleDHT(1, 2, 10000, WemosModuleDHTType::WMDHT22));
+	//node.addModule(new WemosModuleRelay(0, D1));
+	//node.addModule(new WemosModuleDHT(1, 2, 10000, WemosModuleDHTType::WMDHT22));
 
-	node.setOutMsgCallback(onOutMessage);
+	node.addModule(new WemosModuleRelay(0, D1));
+	node.addModule(new WemosModuleRelay(1, D2));
+	node.addModule(new WemosModuleRelay(2, D3));
+	node.addModule(new WemosModuleRelay(3, D4));
+	node.addModule(new WemosModuleRelay(4, D5));
+	node.addModule(new WemosModuleRelay(5, D6));
+	node.addModule(new WemosModuleRelay(6, D7));
+	node.addModule(new WemosModuleRelay(7, D8));
+
+	//node.setOutMsgCallback(onOutMessage);
 
 	node.begin();
-	node.sendFirmwareInfo("Test Node", 1.0);
+	//node.sendFirmwareInfo();
 }
 
-String tt = "", dt = "";
-float t = 0, h = 0;
+//String tt = "", dt = "";
+//float t = 0, h = 0;
 void loop()
 {
 	node.process();
 
-	if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
-		if (node.getDateTimeString(dt, tt))
-		{
-			//Serial.println(dt + " " + tt);
-		}
+	//if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
+	//	if (node.getDateTimeString(dt, tt))
+	//	{
+	//		//Serial.println(dt + " " + tt);
+	//	}
 
 	//oled.clear(PAGE);
 	//oled.setCursor(0, 0);
@@ -52,10 +68,10 @@ void loop()
 	//oled.display();
 }
 
-void onOutMessage(const WemosMessage& msg)
-{
-	if (msg.subType == WemosLineType::WLT_Temperature)
-		t = msg.getFloat();
-	if (msg.subType == WemosLineType::WLT_Humidity)
-		h = msg.getFloat();
-}
+//void onOutMessage(const WemosMessage& msg)
+//{
+//	if (msg.subType == WemosLineType::WLT_Temperature)
+//		t = msg.getFloat();
+//	if (msg.subType == WemosLineType::WLT_Humidity)
+//		h = msg.getFloat();
+//}
