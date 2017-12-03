@@ -2,9 +2,9 @@
 //#include <SFE_MicroOLED.h>
 
 //ADC_MODE(ADC_VCC);
-//WemosNode node(2);
 
-WemosNode node(8, "8 Relay Node", 1.0);
+//WemosNode node(2, "T-H-R Node", 1.0);
+WemosNode node(8, "8-Relay Node", 1.0);
 
 #pragma region MyRegion
 
@@ -28,22 +28,23 @@ void setup()
 	////oled.setFontType(3);  // Set the text to large (5 columns, 1 row worth of characters).
 	//oled.display();
 
+
+
 	//node.addModule(new WemosModuleRelay(0, D1));
 	//node.addModule(new WemosModuleDHT(1, 2, 10000, WemosModuleDHTType::WMDHT22));
 
-	node.addModule(new WemosModuleRelay(0, D1));
-	node.addModule(new WemosModuleRelay(1, D2));
-	node.addModule(new WemosModuleRelay(2, D3));
-	node.addModule(new WemosModuleRelay(3, D4));
-	node.addModule(new WemosModuleRelay(4, D5));
-	node.addModule(new WemosModuleRelay(5, D6));
-	node.addModule(new WemosModuleRelay(6, D7));
-	node.addModule(new WemosModuleRelay(7, D8));
+	node.addModule(new WemosModuleRelay(0, D1, LOW));
+	node.addModule(new WemosModuleRelay(1, D2, LOW));
+	node.addModule(new WemosModuleRelay(2, D3, LOW));
+	node.addModule(new WemosModuleRelay(3, D4, LOW));
+	node.addModule(new WemosModuleRelay(4, D5, LOW));
+	node.addModule(new WemosModuleRelay(5, D6, LOW));
+	node.addModule(new WemosModuleRelay(6, D7, LOW));
+	node.addModule(new WemosModuleRelay(7, D8, LOW));
 
 	//node.setOutMsgCallback(onOutMessage);
 
 	node.begin();
-	//node.sendFirmwareInfo();
 }
 
 //String tt = "", dt = "";
