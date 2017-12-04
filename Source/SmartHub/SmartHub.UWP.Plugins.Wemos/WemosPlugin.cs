@@ -247,6 +247,16 @@ namespace SmartHub.UWP.Plugins.Wemos
             //return Context.StorageOpen().Table<WemosController>().FirstOrDefault(c => c.ID == id);
             return controllers.FirstOrDefault(c => c.ID == id);
         }
+        public void AddController(WemosController ctrl)
+        {
+            if (ctrl != null)
+                controllers.Add(ctrl);
+        }
+        public void RemoveController(WemosController ctrl)
+        {
+            if (ctrl != null)
+                controllers.Remove(ctrl);
+        }
 
         public WemosSetting GetSetting(string name)
         {
@@ -501,8 +511,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/nodes"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetNodes => ((parameters) =>
         {
-            //return Context.GetPlugin<WemosPlugin>().GetNodes();
-            return GetNodes();
+            return Context.GetPlugin<WemosPlugin>().GetNodes();
         });
 
         [ApiMethod(MethodName = "/api/wemos/nodes/setname"), Export(typeof(ApiMethod))]
@@ -525,8 +534,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/lines"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetLines => ((parameters) =>
         {
-            //return Context.GetPlugin<WemosPlugin>().GetLines();
-            return GetLines();
+            return Context.GetPlugin<WemosPlugin>().GetLines();
         });
 
         [ApiMethod(MethodName = "/api/wemos/lines/setname"), Export(typeof(ApiMethod))]
@@ -559,7 +567,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetMonitors => ((parameters) =>
         {
-            return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m) { LineName = GetLine(m.LineID).Name, LineType = GetLine(m.LineID).Type }).ToList();
+            return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m)
+            {
+                LineName = Context.GetPlugin<WemosPlugin>().GetLine(m.LineID).Name,
+                LineType = Context.GetPlugin<WemosPlugin>().GetLine(m.LineID).Type
+            }).ToList();
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitor"), Export(typeof(ApiMethod))]
@@ -655,25 +667,6 @@ namespace SmartHub.UWP.Plugins.Wemos
             var name = parameters[0] as string;
             var type = (WemosControllerType)int.Parse(parameters[1].ToString());
 
-            //var model = new WemosController()
-            //{
-            //    Name = name,
-            //    Type = type,
-            //    IsAutoMode = false
-            //};
-            //var ctrl = WemosControllerBase.FromModel(model);
-            ////var ctrl = WemosControllerBase.Create(type, name);
-            //if (ctrl != null)
-            //{
-            //    Context.StorageSave(ctrl.Model);
-            //    Context.GetPlugin<WemosPlugin>().AddController(ctrl);
-            //    ctrl.Init(Context);
-            //    ctrl.Start();
-            //    //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
-            //    return ctrl.Model;
-            //}
-
-
             var ctrl = new WemosController()
             {
                 Name = name,
@@ -684,7 +677,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             ctrl.Init(Context);
 
             Context.StorageSave(ctrl);
-            Context.GetPlugin<WemosPlugin>().controllers.Add(ctrl);
+            Context.GetPlugin<WemosPlugin>().AddController(ctrl);
 
             ctrl.Start();
             //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
@@ -697,14 +690,6 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(parameters[0].ToString());
             var name = parameters[1] as string;
-
-            //var ctrl = Context.GetPlugin<WemosPlugin>().GetControllerBase(id);
-            //if (ctrl != null)
-            //{
-            //    ctrl.Model.Name = name;
-            //    Context.StorageSaveOrUpdate(ctrl.Model);
-            //    return true;
-            //}
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
@@ -760,7 +745,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 Context.StorageDelete(ctrl);
-                Context.GetPlugin<WemosPlugin>().controllers.Remove(ctrl);
+                Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
                 return true;
             }
 
