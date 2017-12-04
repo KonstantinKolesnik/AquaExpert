@@ -56,6 +56,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await UpdateNodesList();
         }
+        private async void ButtonPresentation_Click(object sender, RoutedEventArgs e)
+        {
+            await CoreUtils.RequestAsync<bool>("/api/wemos/presentation");
+        }
         #endregion
     }
 

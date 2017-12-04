@@ -491,11 +491,18 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Remote API
 
+        [ApiMethod(MethodName = "/api/wemos/presentation"), Export(typeof(ApiMethod))]
+        public ApiMethod apiPresentation => ((parameters) =>
+        {
+            return Context.GetPlugin<WemosPlugin>().RequestPresentationAsync();
+        });
+
         #region Nodes
         [ApiMethod(MethodName = "/api/wemos/nodes"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetNodes => ((parameters) =>
         {
-            return Context.GetPlugin<WemosPlugin>().GetNodes();
+            //return Context.GetPlugin<WemosPlugin>().GetNodes();
+            return GetNodes();
         });
 
         [ApiMethod(MethodName = "/api/wemos/nodes/setname"), Export(typeof(ApiMethod))]
@@ -518,7 +525,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/lines"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetLines => ((parameters) =>
         {
-            return Context.GetPlugin<WemosPlugin>().GetLines();
+            //return Context.GetPlugin<WemosPlugin>().GetLines();
+            return GetLines();
         });
 
         [ApiMethod(MethodName = "/api/wemos/lines/setname"), Export(typeof(ApiMethod))]

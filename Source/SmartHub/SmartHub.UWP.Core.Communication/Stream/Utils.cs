@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Networking;
@@ -10,6 +11,8 @@ namespace SmartHub.UWP.Core.Communication.Stream
 {
     static class Utils
     {
+        private const int MAX_BUFFER_SIZE_KB = 1024;
+
         #region Fields
         private static JsonSerializerSettings dtoSettings = new JsonSerializerSettings()
         {
@@ -51,8 +54,6 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 using (var reader = new DataReader(socket.InputStream))
                 {
                     reader.InputStreamOptions = InputStreamOptions.Partial;
-                    //reader.UnicodeEncoding = UnicodeEncoding.Utf8;
-                    //reader.ByteOrder = ByteOrder.LittleEndian;
 
                     try
                     {
@@ -60,9 +61,17 @@ namespace SmartHub.UWP.Core.Communication.Stream
                         if (sizeFieldLength == sizeof(uint))
                         {
                             uint dataLength = reader.ReadUInt32();
-                            uint actualDataLength = await reader.LoadAsync(dataLength);
-                            if (dataLength == actualDataLength)
-                                result = reader.ReadString(actualDataLength);
+
+                            uint actualDataLength = 0;
+                            var sb = new StringBuilder();
+                            while (actualDataLength < dataLength)
+                            {
+                                var read = await reader.LoadAsync(MAX_BUFFER_SIZE_KB * 1024);
+                                sb.Append(reader.ReadString(read));
+                                actualDataLength += read;
+                            }
+
+                            result = sb.ToString();
                         }
                     }
                     catch (Exception ex)

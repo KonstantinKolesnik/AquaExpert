@@ -21,7 +21,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     {
         #region Fields
         private ThreadPoolTimer timer;
-        private double updateIntervalSeconds = 1;
+        private double updateIntervalSeconds = 3;
         private double valuesDisplayCount = 10;
 
         private Task taskListen;

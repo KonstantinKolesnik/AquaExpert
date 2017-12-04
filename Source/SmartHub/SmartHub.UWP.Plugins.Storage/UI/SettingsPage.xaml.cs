@@ -59,6 +59,24 @@ namespace SmartHub.UWP.Plugins.Storage.UI
         }
         private async Task InitCloud()
         {
+            try
+            {
+                //OneDriveService.Instance.Initialize(appClientId, AccountProviderType.Msa, OneDriveScopes.OfflineAccess | OneDriveScopes.ReadWrite);
+                if (OneDriveService.Instance.Initialize(OneDriveScopes.OfflineAccess | OneDriveScopes.ReadWrite))
+                    if (await OneDriveService.Instance.LoginAsync())
+                    {
+                        //IsConnected = true;
+                        //result = true;
+                    }
+            }
+            catch (Exception ex)
+            {
+                await CoreUtils.MessageBox(ex.Message);
+            }
+
+
+
+
             // First get the root of your OneDrive.
             // By default the service silently connects the current Windows user if Windows is associated with a Microsoft Account.
             //var folder = await OneDriveService.Instance.RootFolderAsync();
@@ -152,7 +170,7 @@ namespace SmartHub.UWP.Plugins.Storage.UI
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             await UpdateStorageInfo();
-            await InitCloud();
+            //await InitCloud();
         }
         private async void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
