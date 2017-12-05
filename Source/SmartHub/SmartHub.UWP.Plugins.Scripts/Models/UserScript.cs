@@ -5,11 +5,12 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
 {
     public class UserScript
     {
-        [PrimaryKey, NotNull, AutoIncrement]
-        public int ID
+        //blob, integer, numeric, real, text
+        [PrimaryKey, NotNull]//, AutoIncrement]
+        public string ID
         {
             get; set;
-        }
+        } = Guid.NewGuid().ToString();
         [NotNull]
         public string Name
         {

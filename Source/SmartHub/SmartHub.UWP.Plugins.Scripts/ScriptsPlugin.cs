@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Reflection;
 
 namespace SmartHub.UWP.Plugins.Scripts
 {
@@ -42,8 +43,8 @@ namespace SmartHub.UWP.Plugins.Scripts
         public override void InitDbModel()
         {
             var db = Context.StorageGet();
-            //db.CreateTable<UserScript>();
-            //db.CreateTable<ScriptEventHandler>();
+            db.CreateTable<UserScript>();
+            db.CreateTable<ScriptEventHandler>();
         }
         public override void InitPlugin()
         {
@@ -52,7 +53,7 @@ namespace SmartHub.UWP.Plugins.Scripts
                 scriptCommands.Add(scriptCommand.Metadata.MethodName, scriptCommand.Value);
 
             scriptHost = new ScriptHost(scriptCommands, ExecuteScriptByName);
-            //scriptEvents = RegisterScriptEvents(Context.GetAllPlugins(), Logger);
+            scriptEvents = RegisterScriptEvents(Context.GetAllPlugins());
         }
         #endregion
 
@@ -69,12 +70,45 @@ namespace SmartHub.UWP.Plugins.Scripts
         {
             return Context.StorageGet().Table<UserScript>().ToList();
         }
-        public UserScript GetScript(int id)
+        public UserScript GetScript(string id)
         {
             return Context.StorageGet().Table<UserScript>().FirstOrDefault(x => x.ID == id);
         }
         #endregion
 
+        #region Private methods
+        private static HashSet<string> RegisterScriptEvents(IEnumerable<PluginBase> plugins)
+        {
+            var scriptEvents = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase);
+
+            foreach (var plugin in plugins)
+            {
+                var properties = plugin.GetType()
+                    .GetProperties()
+                    .Where(m => m.PropertyType == typeof(ScriptEventHandlerDelegate[]))
+                    .ToList();
+
+                foreach (var member in properties)
+                {
+                    var eventInfo = member.GetCustomAttributes<ScriptEventAttribute>().SingleOrDefault();
+
+                    if (eventInfo != null)
+                    {
+                        //logger.Info("Register script event '{0}' ({1})", eventInfo.EventAlias, member);
+
+                        if (scriptEvents.Contains(eventInfo.EventAlias))
+                        {
+                            var message = string.Format("Duplicate event alias: '{0}'", eventInfo.EventAlias);
+                            throw new Exception(message);
+                        }
+
+                        scriptEvents.Add(eventInfo.EventAlias);
+                    }
+                }
+            }
+
+            return scriptEvents;
+        }
 
         /// <summary>
         /// Запуск скриптов по имени (из других скриптов)
@@ -82,7 +116,7 @@ namespace SmartHub.UWP.Plugins.Scripts
         private void ExecuteScriptByName(string scriptName, object[] args)
         {
             var script = Context.StorageGet().Table<UserScript>().FirstOrDefault(n => n.Name == scriptName);
-            ExecuteScript(script, args);
+            ExecuteScript(script, scriptHost, args);
         }
         /// <summary>
         /// Запуск скрипта
@@ -106,6 +140,6 @@ namespace SmartHub.UWP.Plugins.Scripts
             //        //logger.Error(ex, message);
             //    }
         }
-
+        #endregion
     }
 }
