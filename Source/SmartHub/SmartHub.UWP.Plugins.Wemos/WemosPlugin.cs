@@ -318,6 +318,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                             node = new WemosNode
                             {
                                 NodeID = message.NodeID,
+                                Name = $"Node {message.NodeID}",
                                 Type = (WemosLineType) message.SubType,
                                 ProtocolVersion = message.GetFloat(),
                                 IPAddress = remoteAddress.CanonicalName
@@ -346,6 +347,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 {
                                     NodeID = node.NodeID,
                                     LineID = message.LineID,
+                                    Name = $"Line {message.NodeID}-{message.LineID}",
                                     Type = (WemosLineType) message.SubType,
                                     ProtocolVersion = message.GetFloat()
                                 };

@@ -16,8 +16,8 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="rp.HorizontalAlignment" Value="Left"/>
-                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>
+                        <!--<Setter Target="rp.HorizontalAlignment" Value="Left"/>
+                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -35,9 +35,12 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>
+                        <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>-->
                         <!--<TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>-->
-                        <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> <!--Foreground="{ThemeResource InactiveBrush}"-->
+                        <!--<TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> --><!--Foreground="{ThemeResource InactiveBrush}"-->
+
+
+                        <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>
                     </StackPanel>
 
                     <Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
@@ -60,7 +63,7 @@
                         x:Name="rp"
                         Margin="{StaticResource RootContainerMargin}"
                         Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBox
+                        <!--<TextBox
                             x:Name="tbName"
                             Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
                             HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
@@ -82,7 +85,7 @@
                             RelativePanel.AlignRightWithPanel="True"
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="AlphanumericFullWidth"/>
+                            InputScope="AlphanumericFullWidth"/>-->
                     </RelativePanel>
                     
                     <uctrls:ucMonitorChart Grid.Row="1" x:Name="mc" Monitor="{Binding Monitor}"/>

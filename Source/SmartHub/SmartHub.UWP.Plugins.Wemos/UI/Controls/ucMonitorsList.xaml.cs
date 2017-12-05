@@ -120,8 +120,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 if (IsGrouped)
                     itemsViewSource.Source = ItemsSource
                         .Where(item => item != null)
-                        .OrderBy(item => IsSorted ? item.Name ?? "" : "")
-                        .GroupBy(item => string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
+                        //.OrderBy(item => IsSorted ? item.Name ?? "" : "")
+                        .OrderBy(item => IsSorted ? item.LineName ?? "" : "")
+
+                        //.GroupBy(item => string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
+                        .GroupBy(item => string.IsNullOrEmpty(item.LineName) ? "" : item.LineName.Substring(0, 1).ToUpper())
+
                         .OrderBy(item => item.Key);
                 else
                     itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Name ?? "" : "");

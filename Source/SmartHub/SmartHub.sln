@@ -194,6 +194,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Applications.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Storage", "SmartHub.UWP.Plugins.Storage\SmartHub.UWP.Plugins.Storage.csproj", "{4A52AC2E-2A6C-4241-953B-494FC314D7AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Scripts", "SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj", "{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1036,6 +1038,26 @@ Global
 		{4A52AC2E-2A6C-4241-953B-494FC314D7AF}.Release|x64.Build.0 = Release|x64
 		{4A52AC2E-2A6C-4241-953B-494FC314D7AF}.Release|x86.ActiveCfg = Release|x86
 		{4A52AC2E-2A6C-4241-953B-494FC314D7AF}.Release|x86.Build.0 = Release|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|ARM.ActiveCfg = Debug|ARM
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|ARM.Build.0 = Debug|ARM
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|Win32.ActiveCfg = Debug|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|Win32.Build.0 = Debug|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|x64.ActiveCfg = Debug|x64
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|x64.Build.0 = Debug|x64
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|x86.ActiveCfg = Debug|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Debug|x86.Build.0 = Debug|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|ARM.ActiveCfg = Release|ARM
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|ARM.Build.0 = Release|ARM
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|Win32.ActiveCfg = Release|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|Win32.Build.0 = Release|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x64.ActiveCfg = Release|x64
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x64.Build.0 = Release|x64
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x86.ActiveCfg = Release|x86
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1120,9 +1142,10 @@ Global
 		{6C6165EC-66EC-4BAB-A640-30A2021B71E4} = {4D1DE182-E175-4C4A-9FFF-5BAA1182A627}
 		{C6D98D08-45A8-4C3A-8FCD-FD40CBFDC80F} = {4D1DE182-E175-4C4A-9FFF-5BAA1182A627}
 		{4A52AC2E-2A6C-4241-953B-494FC314D7AF} = {897A8020-4315-4C17-BBA2-41046480A37F}
+		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890} = {897A8020-4315-4C17-BBA2-41046480A37F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 		SolutionGuid = {D2E7755D-DCB1-45FF-ADE1-EF87790B4082}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 	EndGlobalSection
 EndGlobal
