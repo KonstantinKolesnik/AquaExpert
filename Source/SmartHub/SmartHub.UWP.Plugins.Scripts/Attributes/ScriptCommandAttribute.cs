@@ -3,20 +3,13 @@ using System.Composition;
 
 namespace SmartHub.UWP.Plugins.Scripts.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class ScriptCommandAttribute : ExportAttribute, IScriptCommandAttribute
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class ScriptCommandAttribute : Attribute, IScriptCommandAttribute
     {
-        public const string ContractID = nameof(ScriptCommandAttribute);
-
-        public string Alias
+        public string MethodName
         {
-            get; private set;
-        }
-
-        public ScriptCommandAttribute(string alias)
-            : base(ContractID, typeof(Delegate))
-        {
-            Alias = alias;
+            get; set;
         }
     }
 }

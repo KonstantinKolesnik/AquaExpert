@@ -246,6 +246,10 @@
       <Project>{8b9ecda3-0fd6-408d-8b1a-de46cdc4f05d}</Project>
       <Name>SmartHub.UWP.Plugins.Network</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj">
+      <Project>{21b27d1d-05bd-43a2-86c2-3ddc1f97f890}</Project>
+      <Name>SmartHub.UWP.Plugins.Scripts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.Speech\SmartHub.UWP.Plugins.Speech.csproj">
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
       <Name>SmartHub.UWP.Plugins.Speech</Name>

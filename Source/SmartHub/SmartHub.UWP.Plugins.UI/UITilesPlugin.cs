@@ -47,7 +47,7 @@ namespace SmartHub.UWP.Plugins.UI
         {
             if (registeredTiles.ContainsKey(typeFullName))
             {
-                var db = Context.StorageOpen();
+                var db = Context.StorageGet();
 
                 var lastDbTile = db.Table<TileDB>().OrderByDescending(t => t.SortOrder).FirstOrDefault();
                 int nextSortOrder = lastDbTile == null ? 0 : lastDbTile.SortOrder + 1;

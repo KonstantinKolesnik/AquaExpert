@@ -2,6 +2,8 @@
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
+using SmartHub.UWP.Plugins.Scripts;
+using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Messages;
@@ -49,6 +51,19 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             Run(WemosMessageHandlers, x => x(msg));
         }
+
+
+
+
+        //[ScriptEvent("mySensors.connected")]
+        //public ScriptEventHandlerDelegate[] OnConnectedForScripts
+        //{
+        //    get; set;
+        //}
+        //private void NotifyConnectedForScripts()
+        //{
+        //    this.RaiseScriptEvent(x => x.OnConnectedForScripts);
+        //}
         #endregion
 
         #region Exports
@@ -58,12 +73,33 @@ namespace SmartHub.UWP.Plugins.Wemos
         //    foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
         //        controller.ProcessTimer(dt);
         //});
+
+        [ScriptCommand(MethodName = "wemosSendCommand"), Export(typeof(ScriptCommand))]
+        public ScriptCommand scriptSendCommand => ((args) =>
+        {
+            var nodeID = int.Parse(args[0].ToString());
+            var lineID = int.Parse(args[1].ToString());
+            var messageType = int.Parse(args[2].ToString());
+            var messageSubtype = int.Parse(args[3].ToString());
+            //var value = float.Parse(args[4].ToString());
+            var value = args[4].ToString();
+
+            return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
+        });
+
+        //[ScriptCommand(MethodName = "wemosClearLinesValuesCommand"), Export(typeof(ScriptCommand))]
+        //public ScriptCommand scriptClearLinesValuesCommand => ((args) =>
+        //{
+        //    var lastDayToPreserve = int.Parse(args[0].ToString());
+
+        //    return Context.GetPlugin<WemosPlugin>().DeleteSensorValues(DateTime.Now.AddDays(-lastDayToPreserve));
+        //});
         #endregion
 
         #region Plugin ovverrides
         public override void InitDbModel()
         {
-            var db = Context.StorageOpen();
+            var db = Context.StorageGet();
 
             db.CreateTable<WemosSetting>();
             db.CreateTable<WemosNode>();
@@ -194,33 +230,33 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public List<WemosNode> GetNodes()
         {
-            return Context.StorageOpen().Table<WemosNode>().ToList();
+            return Context.StorageGet().Table<WemosNode>().ToList();
         }
         public WemosNode GetNode(int nodeID)
         {
             //Context.StorageOpen().TraceListener = new DebugTraceListener(); // activate tracing
-            return Context.StorageOpen().Table<WemosNode>().FirstOrDefault(n => n.NodeID == nodeID);
+            return Context.StorageGet().Table<WemosNode>().FirstOrDefault(n => n.NodeID == nodeID);
         }
 
         public List<WemosLine> GetLines()
         {
-            return Context.StorageOpen().Table<WemosLine>()
+            return Context.StorageGet().Table<WemosLine>()
                 .Select(l => { l.LastTimeStamp = l.LastTimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
                 .ToList();
         }
         public WemosLine GetLine(int nodeID, int lineID)
         {
-            return Context.StorageOpen().Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
+            return Context.StorageGet().Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
         }
         public WemosLine GetLine(int id)
         {
-            return Context.StorageOpen().Table<WemosLine>().FirstOrDefault(l => l.ID == id);
+            return Context.StorageGet().Table<WemosLine>().FirstOrDefault(l => l.ID == id);
         }
         public List<WemosLineValue> GetLineValues(int id, int count)
         {
             var line = GetLine(id);
 
-            return Context.StorageOpen().Table<WemosLineValue>()
+            return Context.StorageGet().Table<WemosLineValue>()
                 .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)// && v.TimeStamp > DateTime.Now.AddDays(-1))
                 .OrderByDescending(v => v.TimeStamp)
                 .Take(count)
@@ -231,16 +267,16 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public List<WemosMonitor> GetMonitors()
         {
-            return Context.StorageOpen().Table<WemosMonitor>().ToList();
+            return Context.StorageGet().Table<WemosMonitor>().ToList();
         }
         public WemosMonitor GetMonitor(int id)
         {
-            return Context.StorageOpen().Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
+            return Context.StorageGet().Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
         }
 
         public List<WemosController> GetControllers()
         {
-            return Context.StorageOpen().Table<WemosController>().ToList();
+            return Context.StorageGet().Table<WemosController>().ToList();
         }
         public WemosController GetController(int id)
         {
@@ -260,7 +296,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public WemosSetting GetSetting(string name)
         {
-            return Context.StorageOpen().Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
+            return Context.StorageGet().Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
         }
         #endregion
 
@@ -504,23 +540,23 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Remote API
 
         [ApiMethod(MethodName = "/api/wemos/presentation"), Export(typeof(ApiMethod))]
-        public ApiMethod apiPresentation => ((parameters) =>
+        public ApiMethod apiPresentation => ((args) =>
         {
             return Context.GetPlugin<WemosPlugin>().RequestPresentationAsync();
         });
 
         #region Nodes
         [ApiMethod(MethodName = "/api/wemos/nodes"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetNodes => ((parameters) =>
+        public ApiMethod apiGetNodes => ((args) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetNodes();
         });
 
         [ApiMethod(MethodName = "/api/wemos/nodes/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetNodeName => ((parameters) =>
+        public ApiMethod apiSetNodeName => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var name = parameters[1] as string;
+            var id = int.Parse(args[0].ToString());
+            var name = args[1] as string;
 
             var item = Context.GetPlugin<WemosPlugin>().GetNode(id);
             item.Name = name;
@@ -534,17 +570,17 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Lines
         [ApiMethod(MethodName = "/api/wemos/lines"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetLines => ((parameters) =>
+        public ApiMethod apiGetLines => ((args) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetLines();
         });
 
         [ApiMethod(MethodName = "/api/wemos/lines/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetLineName => ((parameters) =>
+        public ApiMethod apiSetLineName => ((args) =>
         {
-            var nodeID = int.Parse(parameters[0].ToString());
-            var lineID = int.Parse(parameters[1].ToString());
-            var name = parameters[2] as string;
+            var nodeID = int.Parse(args[0].ToString());
+            var lineID = int.Parse(args[1].ToString());
+            var name = args[2] as string;
 
             var item = Context.GetPlugin<WemosPlugin>().GetLine(nodeID, lineID);
             item.Name = name;
@@ -556,10 +592,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/line/values"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetLineValues => ((parameters) =>
+        public ApiMethod apiGetLineValues => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var count = int.Parse(parameters[1].ToString());
+            var id = int.Parse(args[0].ToString());
+            var count = int.Parse(args[1].ToString());
 
             return Context.GetPlugin<WemosPlugin>().GetLineValues(id, count);
         });
@@ -567,7 +603,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Monitors
         [ApiMethod(MethodName = "/api/wemos/monitors"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetMonitors => ((parameters) =>
+        public ApiMethod apiGetMonitors => ((args) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetMonitors().Select(m => new WemosMonitorDto(m)
             {
@@ -577,9 +613,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitor"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetMonitor => ((parameters) =>
+        public ApiMethod apiGetMonitor => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
+            var id = int.Parse(args[0].ToString());
 
             var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
@@ -587,10 +623,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/add"), Export(typeof(ApiMethod))]
-        public ApiMethod apiAddMonitor => ((parameters) =>
+        public ApiMethod apiAddMonitor => ((args) =>
         {
-            var name = parameters[0] as string;
-            var lineID = int.Parse(parameters[1].ToString());
+            var name = args[0] as string;
+            var lineID = int.Parse(args[1].ToString());
 
             var model = new WemosMonitor()
             {
@@ -608,11 +644,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/setnames"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetMonitorNames => ((parameters) =>
+        public ApiMethod apiSetMonitorNames => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var name = parameters[1] as string;
-            var nameForInformer = parameters[2] as string;
+            var id = int.Parse(args[0].ToString());
+            var name = args[1] as string;
+            var nameForInformer = args[2] as string;
 
             var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             if (model != null)
@@ -628,10 +664,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/setconfig"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetMonitorConfiguration => ((parameters) =>
+        public ApiMethod apiSetMonitorConfiguration => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var config = parameters[1].ToString();
+            var id = int.Parse(args[0].ToString());
+            var config = args[1].ToString();
 
             var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             if (model != null)
@@ -646,9 +682,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/delete"), Export(typeof(ApiMethod))]
-        public ApiMethod apiDeleteMonitor => ((parameters) =>
+        public ApiMethod apiDeleteMonitor => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
+            var id = int.Parse(args[0].ToString());
 
             Context.StorageDelete(GetMonitor(id));
 
@@ -658,16 +694,16 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Controllers
         [ApiMethod(MethodName = "/api/wemos/controllers"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetControllers => ((parameters) =>
+        public ApiMethod apiGetControllers => ((args) =>
         {
             return Context.GetPlugin<WemosPlugin>().GetControllers();
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/add"), Export(typeof(ApiMethod))]
-        public ApiMethod apiAddController => ((parameters) =>
+        public ApiMethod apiAddController => ((args) =>
         {
-            var name = parameters[0] as string;
-            var type = (WemosControllerType)int.Parse(parameters[1].ToString());
+            var name = args[0] as string;
+            var type = (WemosControllerType)int.Parse(args[1].ToString());
 
             var ctrl = new WemosController()
             {
@@ -688,10 +724,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetControllerName => ((parameters) =>
+        public ApiMethod apiSetControllerName => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var name = parameters[1] as string;
+            var id = int.Parse(args[0].ToString());
+            var name = args[1] as string;
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
@@ -705,10 +741,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/setautomode"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetControllerAutoMode => ((parameters) =>
+        public ApiMethod apiSetControllerAutoMode => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var isAutoMode = (bool)parameters[1];
+            var id = int.Parse(args[0].ToString());
+            var isAutoMode = (bool)args[1];
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
@@ -722,10 +758,10 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/setconfig"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetControllerConfiguration => ((parameters) =>
+        public ApiMethod apiSetControllerConfiguration => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
-            var config = parameters[1].ToString();
+            var id = int.Parse(args[0].ToString());
+            var config = args[1].ToString();
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)
@@ -739,9 +775,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         });
 
         [ApiMethod(MethodName = "/api/wemos/controllers/delete"), Export(typeof(ApiMethod))]
-        public ApiMethod apiDeleteController => ((parameters) =>
+        public ApiMethod apiDeleteController => ((args) =>
         {
-            var id = int.Parse(parameters[0].ToString());
+            var id = int.Parse(args[0].ToString());
 
             var ctrl = Context.GetPlugin<WemosPlugin>().GetController(id);
             if (ctrl != null)

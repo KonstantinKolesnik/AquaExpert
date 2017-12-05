@@ -112,6 +112,9 @@
     <Compile Include="Attributes\ScriptEventHandlerDelegate.cs" />
     <Compile Include="Models\ScriptEventHandler.cs" />
     <Compile Include="Models\UserScript.cs" />
+    <Compile Include="ScriptCommand.cs" />
+    <Compile Include="ScriptEventHelper.cs" />
+    <Compile Include="ScriptHost.cs" />
     <Compile Include="ScriptsPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MainPage.xaml.cs">

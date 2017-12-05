@@ -2,7 +2,7 @@
 {
     public interface IScriptCommandAttribute
     {
-        string Alias
+        string MethodName
         {
             get;
         }

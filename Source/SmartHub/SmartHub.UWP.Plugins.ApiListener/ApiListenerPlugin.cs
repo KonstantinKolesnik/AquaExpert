@@ -34,11 +34,11 @@ namespace SmartHub.UWP.Plugins.ApiListener
             foreach (var apiMethod in ApiMethods)
                 apiMethods.Add(apiMethod.Metadata.MethodName, apiMethod.Value);
 
-            server.CommandProcessor = (name, parameters) =>
+            server.CommandProcessor = (name, args) =>
             {
                 try
                 {
-                    return apiMethods.ContainsKey(name) ? apiMethods[name](parameters) : null;
+                    return apiMethods.ContainsKey(name) ? apiMethods[name].Invoke(args) : null;
                 }
                 catch (Exception ex)
                 {

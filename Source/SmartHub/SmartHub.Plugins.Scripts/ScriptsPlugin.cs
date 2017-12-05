@@ -82,9 +82,7 @@ namespace SmartHub.Plugins.Scripts
         }
         public override void InitPlugin()
         {
-            var actions = RegisterScriptCommands();
-
-            scriptHost = new ScriptHost(actions, Logger, ExecuteScriptByName);
+            scriptHost = new ScriptHost(RegisterScriptCommands(), Logger, ExecuteScriptByName);
             scriptEvents = RegisterScriptEvents(Context.GetAllPlugins(), Logger);
         }
         #endregion
@@ -171,6 +169,7 @@ namespace SmartHub.Plugins.Scripts
 
             return scriptEvents;
         }
+
         /// <summary>
         /// Запуск скриптов по имени (из других скриптов)
         /// </summary>
@@ -204,7 +203,11 @@ namespace SmartHub.Plugins.Scripts
                 logger.Error(ex, messge);
             }
         }
+        #endregion
 
+        #region Web API
+
+        #region Scripts
         private object BuildScriptWebModel(UserScript script)
         {
             if (script == null)
@@ -216,11 +219,6 @@ namespace SmartHub.Plugins.Scripts
                 Name = script.Name
             };
         }
-        #endregion
-
-        #region Web API
-
-        #region Scripts
         [HttpCommand("/api/scripts/list")]
         private object apiGetScripts(HttpRequestParams request)
         {

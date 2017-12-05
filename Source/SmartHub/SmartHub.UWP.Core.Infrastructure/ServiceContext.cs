@@ -39,7 +39,7 @@ namespace SmartHub.UWP.Core.Infrastructure
 
         public string StoragePath => storagePath;
 
-        public SQLiteConnection StorageOpen()
+        public SQLiteConnection StorageGet()
         {
             if (db == null)
                 db = new SQLiteConnection(new SQLitePlatformWinRT(), storagePath);
@@ -54,15 +54,15 @@ namespace SmartHub.UWP.Core.Infrastructure
 
         public void StorageSave(object item)
         {
-            StorageOpen().Insert(item);
+            StorageGet().Insert(item);
         }
         public void StorageSaveOrUpdate(object item)
         {
-            StorageOpen().InsertOrReplace(item);
+            StorageGet().InsertOrReplace(item);
         }
         public void StorageDelete(object item)
         {
-            StorageOpen().Delete(item);
+            StorageGet().Delete(item);
         }
         #endregion
     }

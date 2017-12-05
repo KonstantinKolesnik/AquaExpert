@@ -197,6 +197,10 @@
       <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
       <Name>SmartHub.UWP.Plugins.ApiListener</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj">
+      <Project>{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}</Project>
+      <Name>SmartHub.UWP.Plugins.Scripts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.Speech\SmartHub.UWP.Plugins.Speech.csproj">
       <Project>{cc29a0ee-eb42-45dc-a9a3-7248211b8d78}</Project>
       <Name>SmartHub.UWP.Plugins.Speech</Name>

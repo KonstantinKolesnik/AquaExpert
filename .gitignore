@@ -160,3 +160,4 @@ Visual Micro
 *.targets
 *.ide-shm
 *.db-shm
+*.props
