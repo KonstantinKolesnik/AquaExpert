@@ -21,29 +21,29 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="{StaticResource ParagraphMargin}">
-                <TextBlock Text="{Binding AppName, Source={StaticResource AppManager}}" Style="{StaticResource TitleTextBlockStyle}" FontFamily="Arial"/>
+                <TextBlock Text="{Binding AppName, Source={StaticResource AppManager}, Converter={StaticResource StringToUpperStringConverter}}" Style="{StaticResource TitleTextBlockStyle}" FontFamily="Arial"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Labels.Version, Source={StaticResource LabelsManager}}" Margin="0,0,10,0"/>
+                    <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Version}" Margin="0,0,10,0"/>
                     <TextBlock Text="{Binding AppVersion, Source={StaticResource AppManager}}"/>
                 </StackPanel>
-                <TextBlock Text="{Binding Labels.AppDescription, Source={StaticResource LabelsManager}}" Margin="0,20,0,0" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=AppDescription}" Margin="0,20,0,0" TextWrapping="Wrap"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Margin="{StaticResource ParagraphMargin}">
-                <TextBlock Text="{Binding Labels.Disclaimer, Source={StaticResource LabelsManager}}" Style="{StaticResource SubtitleTextBlockStyle}" FontFamily="Arial" Margin="0,0,0,10"/>
-                <TextBlock Text="{Binding Labels.DisclaimerText, Source={StaticResource LabelsManager}}" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Disclaimer}" Style="{StaticResource SubtitleTextBlockStyle}" FontFamily="Arial" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=DisclaimerText}" TextWrapping="Wrap"/>
             </StackPanel>
 
             <StackPanel Grid.Row="2" Margin="{StaticResource ParagraphMargin}">
                 <!--<HyperlinkButton Content="{Binding Labels.SupportFeedback, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.SendEmailCommand, Source={StaticResource AppManager}}"/>-->
                 <!--<HyperlinkButton Content="{Binding Labels.RateApp, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.RateAppCommand, Source={StaticResource AppManager}}"/>-->
-                <HyperlinkButton Content="{Binding Labels.HomePage, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppHomePage, Source={StaticResource AppManager}}"/>
-                <HyperlinkButton Content="{Binding Labels.PrivacyPolicy, Source={StaticResource LabelsManager}}" NavigateUri="{Binding AppPrivacyPolicyPage, Source={StaticResource AppManager}}"/>
+                <HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=HomePage}" NavigateUri="{Binding AppHomePage, Source={StaticResource AppManager}}"/>
+                <HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=PrivacyPolicy}" NavigateUri="{Binding AppPrivacyPolicyPage, Source={StaticResource AppManager}}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Margin="{StaticResource ParagraphMargin}" VerticalAlignment="Bottom" Orientation="Horizontal">
                 <TextBlock Text="Copyright ©" Margin="0,0,10,0"/>
-                <TextBlock Text="{Binding Labels.Author, Source={StaticResource LabelsManager}}"/>
+                <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Author}"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

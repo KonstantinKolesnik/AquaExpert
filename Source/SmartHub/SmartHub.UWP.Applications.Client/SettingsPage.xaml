@@ -24,7 +24,7 @@
         <RelativePanel x:Name="rp">
             <ComboBox
                 x:Name="cbLanguage"
-                Header="{Binding Labels.Language, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Language}"
                 RelativePanel.AlignTopWithPanel="True"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
@@ -40,7 +40,7 @@
 
             <ComboBox
                 x:Name="cbTheme"
-                Header="{Binding Labels.Theme, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Theme}"
                 RelativePanel.Below="cbLanguage"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
@@ -56,7 +56,7 @@
 
             <TextBox
                 x:Name="tbRemoteUrl"
-                Header="{Binding Labels.ServerUrl, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=ServerUrl}"
                 RelativePanel.Below="cbTheme"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
