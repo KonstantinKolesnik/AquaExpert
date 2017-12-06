@@ -28,4 +28,6 @@
     <vc:SizeToPropertyNameStyleConverter x:Key="SizeToPropertyNameStyleConverter"/>
     <vc:SizeToPropertyValueHStyleConverter x:Key="SizeToPropertyValueHStyleConverter"/>
     <vc:SizeToPropertyValueVStyleConverter x:Key="SizeToPropertyValueVStyleConverter"/>
+
+    <vc:LocalizationConverter x:Key="LC"/>
 </ResourceDictionary>

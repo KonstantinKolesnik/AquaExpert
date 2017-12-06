@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
+using Windows.Globalization;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Notifications;
@@ -20,24 +21,16 @@ namespace SmartHub.UWP.Core
 {
     public static class CoreUtils
     {
-        #region UI
-        public static string GetLabelValue(string labelId)
+        public static void SetAppLanguage(string languageID)
         {
-            var result = string.Empty;
+            //languageID = "en-US";
+            //languageID = "de-DE";
+            //languageID = "ru-RU";
+            //languageID = "uk-UA";
 
-            if (!string.IsNullOrEmpty(labelId))
-            {
-                var ctx = new ResourceContext() { Languages = new string[] { AppManager.AppData.Language } };
-                ResourceMap rmap = ResourceManager.Current.MainResourceMap.GetSubtree("SmartHub.UWP.Core.StringResources.Labels/");
-                if (rmap.ContainsKey(labelId))
-                    result = rmap.GetValue(labelId, ctx).ValueAsString;
-                else
-                    result = labelId;
-            }
-
-            return result;
+            ApplicationLanguages.PrimaryLanguageOverride = languageID;
+            ResourceContext.GetForCurrentView().Languages = new List<string>() { languageID };
         }
-        #endregion
 
         #region Message boxes
         public static async Task<IUICommand> MessageBox(string msg)

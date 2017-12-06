@@ -1,13 +1,9 @@
 ﻿using Microsoft.ApplicationInsights;
 using SmartHub.UWP.Applications.Client.Common;
 using SmartHub.UWP.Core;
-using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.AppService;
-using Windows.ApplicationModel.Background;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -26,8 +22,6 @@ namespace SmartHub.UWP.Applications.Client
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            AppManager.Init();
-
             var shell = Window.Current.Content as AppShell;
             if (shell == null)
             {
@@ -55,7 +49,15 @@ namespace SmartHub.UWP.Applications.Client
             }
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
-            LocalUtils.SetAppTheme();
+            LocalUtils.SetAppTheme((ElementTheme)AppManager.AppData.Theme);
+
+            AppManager.AppData.PropertyChanged += (s1, e1) =>
+            {
+                switch (e1.PropertyName)
+                {
+                    case nameof(AppManager.AppData.Theme): LocalUtils.SetAppTheme((ElementTheme)AppManager.AppData.Theme); break;
+                }
+            };
         }
 
         // by protocol etc.

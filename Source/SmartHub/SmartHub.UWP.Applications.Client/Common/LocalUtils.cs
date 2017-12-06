@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml.ValueConverters;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -7,10 +8,12 @@ namespace SmartHub.UWP.Applications.Client.Common
 {
     public static class LocalUtils
     {
-        public static void SetAppTheme()
+        public static string GetLocalizedString(string stringId)
         {
-            var theme = (ElementTheme) AppManager.AppData.Theme;
-
+            return new LocalizationConverter().Convert(AppManager.AppData.Language, null, stringId, null) as string;
+        }
+        public static void SetAppTheme(ElementTheme theme)
+        {
             AppShell.Current.RequestedTheme = theme;
 
             // set title bar colors:

@@ -78,15 +78,13 @@
                     
                     <TextBox
                         Grid.Row="1"
-                        ScrollViewer.HorizontalScrollMode="Disabled"
-                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                        ScrollViewer.VerticalScrollMode="Auto"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         x:Name="tbScript"
                         Header="{Binding Labels.Script, Source={StaticResource LabelsManager}}"
                         HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                         Text="{Binding Script.Body, Mode=TwoWay}"
                         AcceptsReturn="True"
+                        TextWrapping="Wrap"
                         FontSize="12"
                         HorizontalAlignment="Stretch"
                         Height="250"

@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Applications.Client.Common;
+using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
@@ -39,7 +40,6 @@ namespace SmartHub.UWP.Applications.Client
             AppFrame.CacheSize = 1; // TODO: change this value to a cache size that is appropriate for your application
 
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
-            //DataTransferManager.GetForCurrentView().DataRequested += OnDataRequested;
         }
         #endregion
 
@@ -47,7 +47,7 @@ namespace SmartHub.UWP.Applications.Client
         public void SetNavigationInfo(string title = null, string menuItemNameToSelect = null)
         {
             if (!string.IsNullOrEmpty(title))
-                tbTitle.Text = CoreUtils.GetLabelValue(title).ToUpper();
+                tbTitle.Text = LocalUtils.GetLocalizedString(title).ToUpper();
 
             if (!string.IsNullOrEmpty(menuItemNameToSelect))
             {
@@ -98,10 +98,7 @@ namespace SmartHub.UWP.Applications.Client
         }
         private void menuItem_Click(object sender, RoutedEventArgs e)
         {
-            var rb = sender as RadioButton;
-
-            if (rb != null && rb != checkedMenuItem)
-            {
+            if (sender is RadioButton rb && rb != checkedMenuItem)
                 switch (rb.Name)
                 {
                     case "menuDashboard": AppFrame.Navigate(typeof(DashboardPage)); break;
@@ -111,7 +108,6 @@ namespace SmartHub.UWP.Applications.Client
                     case "menuSettings": AppFrame.Navigate(typeof(SettingsPage)); break;
                     case "menuAbout": AppFrame.Navigate(typeof(AboutPage)); break;
                 }
-            }
         }
 
         private void AppFrame_Navigated(object sender, NavigationEventArgs e)
@@ -121,12 +117,14 @@ namespace SmartHub.UWP.Applications.Client
 
             // clear frame stack from previous duplicates to the end
             int idx = -1;
+
             foreach (var pse in AppFrame.BackStack)
                 if (pse.SourcePageType == e.SourcePageType)
                 {
                     idx = AppFrame.BackStack.IndexOf(pse);
                     break;
                 }
+
             if (idx != -1)
             {
                 int n = AppFrame.BackStack.Count - idx;

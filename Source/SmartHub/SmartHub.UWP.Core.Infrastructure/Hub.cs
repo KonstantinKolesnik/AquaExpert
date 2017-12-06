@@ -32,7 +32,7 @@ namespace SmartHub.UWP.Core.Infrastructure
             //StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             //var files = await assets.GetFilesAsync();
 
-            try
+            //try
             {
                 //SqliteEngine.UseWinSqlite3();
 
@@ -44,11 +44,11 @@ namespace SmartHub.UWP.Core.Infrastructure
                 foreach (var plugin in Context.GetAllPlugins())
                     plugin.InitPlugin();
             }
-            catch (Exception ex)
-            {
-                //logger.Error(ex, "Error on plugins initialization");
-                throw;
-            }
+            //catch (Exception ex)
+            //{
+            //    //logger.Error(ex, "Error on plugins initialization");
+            //    throw;
+            //}
         }
         public void StartServices()
         {

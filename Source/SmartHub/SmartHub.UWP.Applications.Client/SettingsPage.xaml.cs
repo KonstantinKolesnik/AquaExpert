@@ -1,6 +1,5 @@
 ﻿using SmartHub.UWP.Applications.Client.Common;
 using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.StringResources;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,7 +12,6 @@ namespace SmartHub.UWP.Applications.Client
         public string Value { get; set; }
         public string Text { get; set; }
     }
-
     public class ThemeItem
     {
         public ElementTheme Value { get; set; }
@@ -44,10 +42,6 @@ namespace SmartHub.UWP.Applications.Client
         private void SetLabelsText()
         {
             AppShell.Current.SetNavigationInfo("Settings", "menuSettings");
-
-            for (int i = 0; i < 10; i++)
-                (Application.Current.Resources["LabelsManager"] as LabelsManager).RefreshResources();
-
             InitThemeList();
         }
         private void InitLanguageList()
@@ -67,9 +61,9 @@ namespace SmartHub.UWP.Applications.Client
         private void InitThemeList()
         {
             cbTheme.ItemsSource = new List<ThemeItem>() {
-                new ThemeItem() { Text = Labels.Default, Value = ElementTheme.Default },
-                new ThemeItem() { Text = Labels.Light, Value = ElementTheme.Light },
-                new ThemeItem() { Text = Labels.Dark, Value = ElementTheme.Dark }
+                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Default"), Value = ElementTheme.Default },
+                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Light"), Value = ElementTheme.Light },
+                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Dark"), Value = ElementTheme.Dark }
             };
 
             foreach (ThemeItem li in cbTheme.Items)
@@ -94,14 +88,7 @@ namespace SmartHub.UWP.Applications.Client
         private void cbTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbTheme.SelectedItem != null)
-            {
-                var theme = (int) (cbTheme.SelectedItem as ThemeItem).Value;
-                if (AppManager.AppData.Theme != theme)
-                {
-                    AppManager.AppData.Theme = theme;
-                    LocalUtils.SetAppTheme();
-                }
-            }
+                AppManager.AppData.Theme = (int)(cbTheme.SelectedItem as ThemeItem).Value;
         }
         #endregion
     }

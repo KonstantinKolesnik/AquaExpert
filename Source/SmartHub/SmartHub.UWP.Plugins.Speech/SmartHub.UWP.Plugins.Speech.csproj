@@ -115,6 +115,10 @@
       <Project>{0bc52fb7-0f4b-4715-aa90-3b564401d912}</Project>
       <Name>SmartHub.UWP.Core.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj">
+      <Project>{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}</Project>
+      <Name>SmartHub.UWP.Plugins.Scripts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Composition">

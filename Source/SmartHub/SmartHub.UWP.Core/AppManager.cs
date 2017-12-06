@@ -1,9 +1,6 @@
 ﻿using SmartHub.UWP.Core.Infrastructure;
 using SmartHub.UWP.Plugins.ApiListener;
-using System.Collections.Generic;
 using Windows.ApplicationModel;
-using Windows.ApplicationModel.Resources.Core;
-using Windows.Globalization;
 
 namespace SmartHub.UWP.Core
 {
@@ -14,14 +11,8 @@ namespace SmartHub.UWP.Core
         #endregion
 
         #region Properties
-        //public static string AppId
-        //{
-        //    get { return "9b1c8c98-9041-497b-9c5b-40002ad629c8"; }
-        //}
-        public static string AppName
-        {
-            get { return Package.Current.DisplayName; }
-        }
+        public static string AppId => Package.Current.Id.ProductId;
+        public static string AppName => Package.Current.DisplayName;
         public static string AppVersion
         {
             get
@@ -31,18 +22,9 @@ namespace SmartHub.UWP.Core
                 //return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
         }
-        public static string AppEmail
-        {
-            get { return "gothicmaestro@live.com"; }
-        }
-        public static string AppHomePage
-        {
-            get { return "http://www.smarthub.at.ua"; }
-        }
-        public static string AppPrivacyPolicyPage
-        {
-            get { return $"{AppHomePage}/index/privacy_policy/0-10"; }
-        }
+        public static string AppEmail => "gothicmaestro@live.com";
+        public static string AppHomePage => "http://www.smarthub.at.ua";
+        public static string AppPrivacyPolicyPage => $"{AppHomePage}/index/privacy_policy/0-10";
         public static AppData AppData
         {
             get; private set;
@@ -61,26 +43,25 @@ namespace SmartHub.UWP.Core
         public static string RemoteServiceName => ApiListenerPlugin.ServiceName;
         #endregion
 
-        #region Public methods
-        public static void Init()
+        #region Constructor
+        static AppManager()
         {
             AppData = new AppData(false);
             AppData.PropertyChanged += (s, e) =>
             {
                 switch (e.PropertyName)
                 {
-                    case nameof(AppData.Language):
-                        SetLanguage();
-                        break;
-                    case nameof(AppData.ServerUrl):
-                        SetServerActivity();
-                        break;
+                    case nameof(AppData.Language): CoreUtils.SetAppLanguage(AppData.Language); break;
+                    case nameof(AppData.ServerUrl): SetServerActivity(); break;
                 }
             };
 
-            SetLanguage();
+            CoreUtils.SetAppLanguage(AppData.Language);
             SetServerActivity();
         }
+        #endregion
+
+        #region Public methods
         public static void OnSuspending(SuspendingDeferral defferal)
         {
             //hub.StopServices();
@@ -88,17 +69,6 @@ namespace SmartHub.UWP.Core
         #endregion
 
         #region Private methods
-        private static void SetLanguage()
-        {
-            var id = AppData.Language;
-            //var id = "en-US";
-            //var id = "de-DE";
-            //var id = "ru-RU";
-            //var id = "uk-UA";
-
-            ApplicationLanguages.PrimaryLanguageOverride = id;
-            ResourceContext.GetForCurrentView().Languages = new List<string>() { id };
-        }
         private static void SetServerActivity()
         {
             IsServer = string.IsNullOrEmpty(AppData.ServerUrl?.Trim());
