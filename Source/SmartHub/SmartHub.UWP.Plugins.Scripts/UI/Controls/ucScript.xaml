@@ -32,7 +32,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE15C;" Margin="5,0,15,0" VerticalAlignment="Center"/>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>-->
@@ -74,19 +74,24 @@
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                             InputScope="AlphanumericFullWidth"/>
-
-                        <TextBox
-                            x:Name="tbScript"
-                            Header="{Binding Labels.Script, Source={StaticResource LabelsManager}}"
-                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                            Text="{Binding Script.Body, Mode=TwoWay}"
-                            RelativePanel.Below="tbName"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="AlphanumericFullWidth"/>
                     </RelativePanel>
+                    
+                    <TextBox
+                        Grid.Row="1"
+                        ScrollViewer.HorizontalScrollMode="Disabled"
+                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                        ScrollViewer.VerticalScrollMode="Auto"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        x:Name="tbScript"
+                        Header="{Binding Labels.Script, Source={StaticResource LabelsManager}}"
+                        HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                        Text="{Binding Script.Body, Mode=TwoWay}"
+                        AcceptsReturn="True"
+                        FontSize="12"
+                        HorizontalAlignment="Stretch"
+                        Height="250"
+                        Margin="{StaticResource RootContainerMargin}"
+                        InputScope="AlphanumericFullWidth"/>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>
         </telerikPrimitives:RadExpanderControl>
