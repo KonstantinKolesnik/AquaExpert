@@ -85,7 +85,7 @@
                             <StackPanel>
                                 <RadioButton x:Name="menuDashboard"
                                     Width="{StaticResource SplitViewPaneWidth}"
-                                    Content="{Binding Labels.Dashboard, Source={StaticResource LabelsManager}}"
+                                    Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Dashboard}"
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
@@ -94,7 +94,7 @@
                                 </RadioButton>
                                 <RadioButton x:Name="menuApplications"
                                     Width="{StaticResource SplitViewPaneWidth}"
-                                    Content="{Binding Labels.Applications, Source={StaticResource LabelsManager}}"
+                                    Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Applications}"
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
@@ -103,7 +103,7 @@
                                 </RadioButton>
                                 <RadioButton x:Name="menuSystem"
                                     Width="{StaticResource SplitViewPaneWidth}"
-                                    Content="{Binding Labels.System, Source={StaticResource LabelsManager}}"
+                                    Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=System}"
                                     GroupName="Navigation"
                                     Click="menuItem_Click">
                                     <RadioButton.Tag>
@@ -115,12 +115,20 @@
 
                         <StackPanel x:Name="pnlFooter" RelativePanel.AlignBottomWithPanel="True">
                             <Border BorderBrush="{ThemeResource InactiveBrush}" BorderThickness="0,0.5,0,0" Opacity="0.5" Width="Auto"/>
-                            <RadioButton x:Name="menuSettings" Width="{StaticResource SplitViewPaneWidth}" Content="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" GroupName="Navigation" Click="menuItem_Click">
+                            <RadioButton x:Name="menuSettings"
+                                Width="{StaticResource SplitViewPaneWidth}"
+                                Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Settings}"
+                                GroupName="Navigation"
+                                Click="menuItem_Click">
                                 <RadioButton.Tag>
                                     <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE713;"/>
                                 </RadioButton.Tag>
                             </RadioButton>
-                            <RadioButton x:Name="menuAbout" Width="{StaticResource SplitViewPaneWidth}" Content="{Binding Labels.About, Source={StaticResource LabelsManager}}" GroupName="Navigation" Click="menuItem_Click">
+                            <RadioButton x:Name="menuAbout"
+                                Width="{StaticResource SplitViewPaneWidth}"
+                                Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=About}"
+                                GroupName="Navigation"
+                                Click="menuItem_Click">
                                 <RadioButton.Tag>
                                     <TextBlock Style="{StaticResource SplitViewTextBlockStyle}" Text="&#xE946;"/>
                                 </RadioButton.Tag>
@@ -131,9 +139,9 @@
 
                 <SplitView.Content>
                     <Frame
-                    x:Name="appShellFrame"
-                    Navigated="AppFrame_Navigated"
-                    NavigationFailed="AppFrame_NavigationFailed">
+                        x:Name="appShellFrame"
+                        Navigated="AppFrame_Navigated"
+                        NavigationFailed="AppFrame_NavigationFailed">
                         <Frame.ContentTransitions>
                             <TransitionCollection>
                                 <NavigationThemeTransition>

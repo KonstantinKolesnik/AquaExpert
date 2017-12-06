@@ -366,8 +366,7 @@
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>16799GothicMaestro.ECoSCab</MainPackageIdentityName>
     <MainPackageIdentityName>16799GothicMaestro.ECoSCabbeta</MainPackageIdentityName>
-    <MainPackageIdentityName>16799GothicMaestro.PandoraAlarm</MainPackageIdentityName>
-    <MainPackageIdentityName>16799GothicMaestro.RCHub</MainPackageIdentityName>
+    <MainPackageIdentityName>16799GothicMaestro.Panddialer</MainPackageIdentityName>
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9PD6RBWBFQL5" />
 </StoreAssociation>
