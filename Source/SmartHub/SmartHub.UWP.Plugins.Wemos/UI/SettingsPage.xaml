@@ -63,7 +63,7 @@
                 <PivotItem.Header>
                     <uctrlsGeneral:ucImagePivotHeader Text="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}"/>
                 </PivotItem.Header>
-                <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
+                <uctrls:UcMonitorsList IsGrouped="True" IsSorted="True"/>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>

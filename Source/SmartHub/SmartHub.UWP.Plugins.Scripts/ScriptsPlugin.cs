@@ -1,5 +1,6 @@
-﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Plugins;
+﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.ApiListener;
+using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.Scripts.Models;
 using SmartHub.UWP.Plugins.Scripts.UI;
@@ -140,6 +141,81 @@ namespace SmartHub.UWP.Plugins.Scripts
             //        //logger.Error(ex, message);
             //    }
         }
+        #endregion
+
+        #region Remote API
+        [ApiMethod(MethodName = "/api/scripts"), Export(typeof(ApiMethod))]
+        public ApiMethod apiGetNodes => ((args) =>
+        {
+            return Context.GetPlugin<ScriptsPlugin>().GetScripts();
+        });
+
+        [ApiMethod(MethodName = "/api/scripts/setname"), Export(typeof(ApiMethod))]
+        public ApiMethod apiSetScriptName => ((args) =>
+        {
+            var id = args[0] as string;
+            var name = args[1] as string;
+
+            var item = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
+            item.Name = !string.IsNullOrEmpty(name) ? name : "Script";
+            Context.StorageSaveOrUpdate(item);
+
+            //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
+
+            return true;
+        });
+
+        [ApiMethod(MethodName = "/api/scripts/setbody"), Export(typeof(ApiMethod))]
+        public ApiMethod apiSetScriptBody => ((args) =>
+        {
+            var id = args[0] as string;
+            var body = args[1] as string;
+
+            var item = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
+            item.Body = !string.IsNullOrEmpty(body) ? body : "alert('No code!');";
+            Context.StorageSaveOrUpdate(item);
+
+            return true;
+        });
+
+        [ApiMethod(MethodName = "/api/scripts/add"), Export(typeof(ApiMethod))]
+        public ApiMethod apiAddScript => ((args) =>
+        {
+            var name = args[0] as string;
+
+            var model = new UserScript()
+            {
+                Name = name,
+                Body = "alert('No code!');"
+            };
+
+            Context.StorageSave(model);
+
+            //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
+
+            return model;
+        });
+
+        [ApiMethod(MethodName = "/api/scripts/delete"), Export(typeof(ApiMethod))]
+        public ApiMethod apiDeleteScript => ((args) =>
+        {
+            var id = args[0] as string;
+
+            Context.StorageDelete(Context.GetPlugin<ScriptsPlugin>().GetScript(id));
+
+            return true;
+        });
+
+        [ApiMethod(MethodName = "/api/scripts/run"), Export(typeof(ApiMethod))]
+        public ApiMethod apiRunScript => ((args) =>
+        {
+            var id = args[0] as string;
+
+            var script = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
+            ExecuteScript(script, null);
+
+            return true;
+        });
         #endregion
     }
 }

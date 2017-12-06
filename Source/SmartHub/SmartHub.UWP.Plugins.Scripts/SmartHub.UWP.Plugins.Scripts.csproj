@@ -112,11 +112,18 @@
     <Compile Include="Attributes\ScriptEventHandlerDelegate.cs" />
     <Compile Include="Models\ScriptEventHandler.cs" />
     <Compile Include="Models\UserScript.cs" />
+    <Compile Include="Models\UserScriptObservable.cs" />
     <Compile Include="ScriptCommand.cs" />
     <Compile Include="ScriptEventHelper.cs" />
     <Compile Include="ScriptHost.cs" />
     <Compile Include="ScriptsPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Controls\ucScriptsList.xaml.cs">
+      <DependentUpon>ucScriptsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ucScript.xaml.cs">
+      <DependentUpon>ucScript.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -159,8 +166,20 @@
       <Name>SmartHub.UWP.Plugins.UI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <SDKReference Include="Telerik UI For Universal Windows Platform, Version=2017.2.502.45">
+      <Name>Telerik UI For Universal Windows Platform</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\Controls\ucScriptsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ucScript.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

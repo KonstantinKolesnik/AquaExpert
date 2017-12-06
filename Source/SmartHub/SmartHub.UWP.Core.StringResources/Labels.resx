@@ -294,4 +294,10 @@
   <data name="Cloud" xml:space="preserve">
     <value>Cloud</value>
   </data>
+  <data name="Scripts" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
+  <data name="Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
 </root>

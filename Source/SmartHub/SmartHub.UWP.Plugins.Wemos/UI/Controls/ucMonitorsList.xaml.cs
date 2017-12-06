@@ -15,10 +15,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 {
-    public sealed partial class ucMonitorsList : UserControl
+    public sealed partial class UcMonitorsList : UserControl
     {
         #region Properties
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosMonitorObservable>), typeof(ucMonitorsList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosMonitorObservable>), typeof(UcMonitorsList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
         public ObservableCollection<WemosMonitorObservable> ItemsSource
         {
             get { return (ObservableCollection<WemosMonitorObservable>) GetValue(ItemsSourceProperty); }
@@ -26,7 +26,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var uc = d as ucMonitorsList;
+            var uc = d as UcMonitorsList;
             uc.UpdateItemsViewSource();
 
             var items = e.NewValue as ObservableCollection<WemosMonitorObservable>;
@@ -42,14 +42,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 };
         }
 
-        public static readonly DependencyProperty IsSortedProperty = DependencyProperty.Register("IsSorted", typeof(bool), typeof(ucControllersList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty IsSortedProperty = DependencyProperty.Register("IsSorted", typeof(bool), typeof(UcMonitorsList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
         public bool IsSorted
         {
             get { return (bool) GetValue(IsSortedProperty); }
             set { SetValue(IsSortedProperty, value); }
         }
 
-        public static readonly DependencyProperty IsGroupedProperty = DependencyProperty.Register("IsGrouped", typeof(bool), typeof(ucControllersList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty IsGroupedProperty = DependencyProperty.Register("IsGrouped", typeof(bool), typeof(UcMonitorsList), new PropertyMetadata(false, new PropertyChangedCallback(OnItemsSourceChanged)));
         public bool IsGrouped
         {
             get { return (bool) GetValue(IsGroupedProperty); }
@@ -85,7 +85,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #endregion
 
         #region Constructor
-        public ucMonitorsList()
+        public UcMonitorsList()
         {
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
@@ -166,9 +166,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
-                int id = (int) ((sender as Button).Tag);
+                var id = (int) ((sender as Button).Tag);
 
-                bool res = await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
+                var res = await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
                 if (res)
                     ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
             });

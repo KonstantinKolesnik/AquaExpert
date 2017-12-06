@@ -686,7 +686,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = int.Parse(args[0].ToString());
 
-            Context.StorageDelete(GetMonitor(id));
+            Context.StorageDelete(Context.GetPlugin<WemosPlugin>().GetMonitor(id));
 
             return true;
         });

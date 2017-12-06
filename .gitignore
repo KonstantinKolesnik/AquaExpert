@@ -161,3 +161,7 @@ Visual Micro
 *.ide-shm
 *.db-shm
 *.props
+*.ide-wal
+*.db-wal
+Browse.VC.db
+Solution.VC.db

@@ -20,6 +20,6 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
         public string Body
         {
             get; set;
-        }
+        } = "alert('No code!');";
     }
 }

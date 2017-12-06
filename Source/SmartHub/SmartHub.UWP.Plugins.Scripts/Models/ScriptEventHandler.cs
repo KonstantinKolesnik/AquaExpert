@@ -16,8 +16,6 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
             get; set;
         }
         [NotNull]
-        //[ForeignKey(typeof(UserScript))]
-        //[OneToMany(CascadeOperations = CascadeOperation.All)]
         public string UserScriptID
         {
             get; set;
