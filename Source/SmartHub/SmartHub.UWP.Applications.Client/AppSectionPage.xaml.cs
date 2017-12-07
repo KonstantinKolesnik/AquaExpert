@@ -52,7 +52,6 @@ namespace SmartHub.UWP.Applications.Client
 
             AppShell.Current.SetNavigationInfo(IsAppsSection ? "Applications" : "System", IsAppsSection ? "menuApplications" : "menuSystem");
             AppShell.Current.SetPrimaryBackRequestHandler(OnBackRequested);
-
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
             await UpdateList();
@@ -60,46 +59,8 @@ namespace SmartHub.UWP.Applications.Client
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             AppShell.Current.SetPrimaryBackRequestHandler(null);
+
             base.OnNavigatedFrom(e);
-        }
-        #endregion
-
-        #region Private methods
-        private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
-        {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-            var isNarrow = newState == NarrowState;
-
-            if (!isNarrow)
-            {
-                MasterColumn.Width = (GridLength) Application.Current.Resources["MasterColumnWidth"];
-                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
-            else
-            {
-                MasterColumn.Width = selectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
-                DetailColumn.Width = selectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
-            }
-
-            EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
-            if (DetailContentPresenter != null)
-                EntranceNavigationTransitionInfo.SetIsTargetElement(DetailContentPresenter, !isNarrow);
-        }
-        private async Task UpdateList()
-        {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-
-            var items = await CoreUtils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
-
-            Items.Clear();
-            if (items != null)
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-
-                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
-                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
-                }
         }
         #endregion
 
@@ -145,6 +106,45 @@ namespace SmartHub.UWP.Applications.Client
 
                 e.Handled = true;
             }
+        }
+        #endregion
+
+        #region Private methods
+        private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
+        {
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
+            var isNarrow = newState == NarrowState;
+
+            if (!isNarrow)
+            {
+                MasterColumn.Width = (GridLength) Application.Current.Resources["MasterColumnWidth"];
+                DetailColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+            else
+            {
+                MasterColumn.Width = selectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+                DetailColumn.Width = selectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+            }
+
+            EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
+            if (DetailContentPresenter != null)
+                EntranceNavigationTransitionInfo.SetIsTargetElement(DetailContentPresenter, !isNarrow);
+        }
+        private async Task UpdateList()
+        {
+            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
+
+            var items = await CoreUtils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
+
+            Items.Clear();
+            if (items != null)
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+
+                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
+                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
+                }
         }
         #endregion
     }

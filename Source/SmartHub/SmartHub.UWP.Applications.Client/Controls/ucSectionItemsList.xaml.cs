@@ -72,6 +72,12 @@ namespace SmartHub.UWP.Applications.Client.Controls
         {
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
+
+            //AppManager.EcosApp.ActiveProfile.LocomotivesManager.PropertyChanged += (s, e) =>
+            //{
+            //    if (e.PropertyName == nameof(AppManager.EcosApp.ActiveProfile.LocomotivesManager.SelectedItem))
+            //        SetSelectedItem();
+            //};
         }
         #endregion
 
@@ -99,20 +105,18 @@ namespace SmartHub.UWP.Applications.Client.Controls
         private void SetSelectedItem()
         {
             var selectedItem = AppSectionPage.IsAppsSection ? AppSectionPage.SelectedItemApps : AppSectionPage.SelectedItemSystem;
-            if (lvItems.SelectedItem != selectedItem)
-            {
-                lvItems.SelectedItem = selectedItem;
-                if (selectedItem != null)
-                    lvItems.ScrollIntoView(selectedItem);
-            }
+            lvItems.SelectionMode = selectedItem != null ? ListViewSelectionMode.Single : ListViewSelectionMode.None;
+            lvItems.SelectedItem = selectedItem;
+            if (selectedItem != null)
+                lvItems.ScrollIntoView(selectedItem);
         }
         #endregion
 
         #region Event handlers
-        private void UserControl_LayoutUpdated(object sender, object e)
-        {
-            SetSelectedItem();
-        }
+        //private void UserControl_LayoutUpdated(object sender, object e)
+        //{
+        //    //SetSelectedItem();
+        //}
         private void lvItems_ItemClick(object sender, ItemClickEventArgs e)
         {
             ItemClicked?.Invoke(sender, new AppSectionItemEventArgs(e.ClickedItem as AppSectionItemAttribute));

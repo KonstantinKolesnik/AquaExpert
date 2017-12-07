@@ -5,20 +5,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    LayoutUpdated="UserControl_LayoutUpdated">
+    ><!--LayoutUpdated="UserControl_LayoutUpdated"-->
 
     <UserControl.Resources>
         <CollectionViewSource x:Name="itemsViewSource"/>
     </UserControl.Resources>
 
     <Grid>
-        <TextBlock x:Name="tbEmptyContent" Text="{Binding Labels.NoData, Source={StaticResource LabelsManager}}" Style="{StaticResource EmptyListTextBlockStyle}"/>
+        <TextBlock x:Name="tbEmptyContent" Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=NoData}" Style="{StaticResource EmptyListTextBlockStyle}"/>
 
         <ListView
             x:Name="lvItems"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
-            SelectionMode="Single"
+            SelectionMode="None"
             IsItemClickEnabled="True"
             IsSwipeEnabled="False"
             ItemClick="lvItems_ItemClick">

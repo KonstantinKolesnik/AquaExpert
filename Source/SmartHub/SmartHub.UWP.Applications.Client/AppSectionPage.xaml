@@ -35,7 +35,7 @@
                 </VisualState>
                 <VisualState x:Name="NarrowState">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinWindowSnapPoint}" />
+                        <AdaptiveTrigger MinWindowWidth="0" /><!--{StaticResource MinWindowSnapPoint}-->
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="DetailContentPresenter.BorderThickness" Value="0" />
