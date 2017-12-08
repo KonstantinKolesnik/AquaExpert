@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
+    xmlns:telerikInput="using:Telerik.UI.Xaml.Controls.Input"
     xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
     mc:Ignorable="d">
 
@@ -16,8 +17,8 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--<Setter Target="rp.HorizontalAlignment" Value="Left"/>
-                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>-->
+                        <Setter Target="rp.HorizontalAlignment" Value="Left"/>
+                        <Setter Target="rp.Width" Value="{StaticResource MaxEditorsPanelWidth}"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -33,16 +34,7 @@
                     </Grid.ColumnDefinitions>
 
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>-->
-                        <!--<TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>-->
-                        <!--<TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> --><!--Foreground="{ThemeResource InactiveBrush}"-->
-
-
-                        <TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>
-                    </StackPanel>
-
+                    <TextBlock Grid.Column="1" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
                     <Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" Margin="7">
                             <TextBlock Text="{Binding LastValue, ElementName=mc}" HorizontalAlignment="Right"/>
@@ -86,6 +78,35 @@
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                             InputScope="AlphanumericFullWidth"/>-->
+
+                        <telerikInput:RadNumericBox
+                            x:Name="nbMin"
+                            Header="Min"
+                            Value="{Binding Monitor.Min, Mode=TwoWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            SmallChange="1"
+                            LargeChange="10"
+                            ValueFormat="{}{0,0:N1}"
+                            AllowNullValue="False"/>
+                        
+                        <telerikInput:RadNumericBox
+                            x:Name="nbMax"
+                            Header="Max"
+                            RelativePanel.Below="nbMin"
+                            Value="{Binding Monitor.Max, Mode=TwoWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            SmallChange="1"
+                            LargeChange="10"
+                            ValueFormat="{}{0,0:N1}"
+                            AllowNullValue="False"/>
                     </RelativePanel>
                     
                     <uctrls:ucMonitorChart Grid.Row="1" x:Name="mc" Monitor="{Binding Monitor}"/>

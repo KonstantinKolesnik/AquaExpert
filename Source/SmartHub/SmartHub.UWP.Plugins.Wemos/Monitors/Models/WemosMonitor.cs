@@ -1,45 +1,54 @@
 ﻿using Newtonsoft.Json;
 using SQLite.Net.Attributes;
+using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
 {
     public class WemosMonitor
     {
-        [PrimaryKey, NotNull, AutoIncrement]
-        public int ID
+        [PrimaryKey, NotNull]//, AutoIncrement]
+        public string ID
         {
             get; set;
-        }
-        [NotNull]
-        public string Name
-        {
-            get; set;
-        }
-        public string NameForInformer
-        {
-            get; set;
-        }
+        } = Guid.NewGuid().ToString();
         [NotNull]
         public int LineID
         {
             get; set;
         }
         [NotNull]
-        public string Configuration
+        public float Min
+        {
+            get; set;
+        }
+        [NotNull]
+        public float Max
         {
             get; set;
         }
 
-        public T DeserializeConfiguration<T>()
-        {
-            if (string.IsNullOrWhiteSpace(Configuration))
-                Configuration = "{}";
 
-            return JsonConvert.DeserializeObject<T>(Configuration);
-        }
-        public void SerializeConfiguration(object value)
-        {
-            Configuration = JsonConvert.SerializeObject(value);
-        }
+
+
+
+
+
+        //[NotNull]
+        //public string Configuration
+        //{
+        //    get; set;
+        //}
+
+        //public T DeserializeConfiguration<T>()
+        //{
+        //    if (string.IsNullOrWhiteSpace(Configuration))
+        //        Configuration = "{}";
+
+        //    return JsonConvert.DeserializeObject<T>(Configuration);
+        //}
+        //public void SerializeConfiguration(object value)
+        //{
+        //    Configuration = JsonConvert.SerializeObject(value);
+        //}
     }
 }

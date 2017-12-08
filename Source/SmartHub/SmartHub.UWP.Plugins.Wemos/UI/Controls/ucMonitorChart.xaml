@@ -21,29 +21,34 @@
     </UserControl.Resources>
 
     <Grid>
-        <telerikChart:RadCartesianChart Margin="0,10">
+        <telerikChart:RadCartesianChart>
             <telerikChart:RadCartesianChart.HorizontalAxis>
                 <telerikChart:CategoricalAxis x:Name="xAxis" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" /><!--LabelFormat="{}{0,0:G}"-->
-                <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="12" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
+                <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}" />-->
             </telerikChart:RadCartesianChart.HorizontalAxis>
             <telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" /><!--LabelFormat="{}{0:N1}"-->
+                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" Minimum="{Binding Monitor.Min}" Maximum="{Binding Monitor.Max}" /><!--LabelFormat="{}{0:N1}"-->
             </telerikChart:RadCartesianChart.VerticalAxis>
            
             <telerikChart:RadCartesianChart.Grid>
                 <telerikChart:CartesianChartGrid MajorLinesVisibility="XY" /><!--StripLinesVisibility="XY"-->
             </telerikChart:RadCartesianChart.Grid>
 
-            <!--<telerikChart:LineSeries ItemsSource="{Binding Values}">
-                    <telerikChart:LineSeries.ValueBinding>
+            <telerikChart:LineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
+                <telerikChart:LineSeries.LabelDefinitions>
+                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition0" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    </telerikChart:ChartSeriesLabelDefinition>
+                </telerikChart:LineSeries.LabelDefinitions>
+
+                <telerikChart:LineSeries.ValueBinding>
                         <telerikChart:PropertyNameDataPointBinding PropertyName="Value"/>
                     </telerikChart:LineSeries.ValueBinding>
                     <telerikChart:LineSeries.CategoryBinding>
                         <telerikChart:PropertyNameDataPointBinding PropertyName="TimeStamp"/>
                     </telerikChart:LineSeries.CategoryBinding>
-                </telerikChart:LineSeries>-->
+                </telerikChart:LineSeries>
 
-            <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}">
+            <telerikChart:SplineSeries ItemsSource="{Binding Values}" ShowLabels="True" PointTemplate="{StaticResource PointTemplate}" Visibility="Collapsed">
                 <telerikChart:SplineSeries.LabelDefinitions>
                     <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top"><!--Format="{}{0:N1}"-->
                         <!--<telerikChart:ChartSeriesLabelDefinition.Template>

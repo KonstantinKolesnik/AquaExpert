@@ -269,7 +269,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return Context.StorageGet().Table<WemosMonitor>().ToList();
         }
-        public WemosMonitor GetMonitor(int id)
+        public WemosMonitor GetMonitor(string id)
         {
             return Context.StorageGet().Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
         }
@@ -615,24 +615,29 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitor"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetMonitor => ((args) =>
         {
-            var id = int.Parse(args[0].ToString());
+            var id = args[0].ToString();
 
             var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
+
             return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
         [ApiMethod(MethodName = "/api/wemos/monitors/add"), Export(typeof(ApiMethod))]
         public ApiMethod apiAddMonitor => ((args) =>
         {
-            var name = args[0] as string;
-            var lineID = int.Parse(args[1].ToString());
+            //var name = args[0] as string;
+            var lineID = int.Parse(args[0].ToString());
+            var min = float.Parse(args[1].ToString());
+            var max = float.Parse(args[2].ToString());
 
             var model = new WemosMonitor()
             {
-                Name = name,
+                //Name = name,
                 LineID = lineID,
-                Configuration = "{}"
+                Min = min,
+                Max = max
+                //Configuration = "{}"
             };
 
             Context.StorageSave(model);
@@ -643,36 +648,20 @@ namespace SmartHub.UWP.Plugins.Wemos
             return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
-        [ApiMethod(MethodName = "/api/wemos/monitors/setnames"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetMonitorNames => ((args) =>
+        [ApiMethod(MethodName = "/api/wemos/monitors/update"), Export(typeof(ApiMethod))]
+        public ApiMethod apiUpdateMonitor => ((args) =>
         {
-            var id = int.Parse(args[0].ToString());
-            var name = args[1] as string;
-            var nameForInformer = args[2] as string;
+            var id = args[0].ToString();
+            var min = float.Parse(args[1].ToString());
+            var max = float.Parse(args[2].ToString());
+            //var config = args[3].ToString();
 
             var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
             if (model != null)
             {
-                model.Name = name;
-                model.NameForInformer = nameForInformer;
-                Context.StorageSaveOrUpdate(model);
-
-                return true;
-            }
-
-            return false;
-        });
-
-        [ApiMethod(MethodName = "/api/wemos/monitors/setconfig"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetMonitorConfiguration => ((args) =>
-        {
-            var id = int.Parse(args[0].ToString());
-            var config = args[1].ToString();
-
-            var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
-            if (model != null)
-            {
-                model.SerializeConfiguration(config);
+                model.Min = min;
+                model.Max = max;
+                //model.SerializeConfiguration(config);
                 Context.StorageSaveOrUpdate(model);
 
                 return true;
@@ -684,7 +673,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors/delete"), Export(typeof(ApiMethod))]
         public ApiMethod apiDeleteMonitor => ((args) =>
         {
-            var id = int.Parse(args[0].ToString());
+            var id = args[0].ToString();
 
             Context.StorageDelete(Context.GetPlugin<WemosPlugin>().GetMonitor(id));
 

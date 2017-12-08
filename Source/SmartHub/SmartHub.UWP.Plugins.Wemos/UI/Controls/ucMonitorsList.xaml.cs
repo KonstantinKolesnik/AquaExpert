@@ -128,7 +128,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
 
                         .OrderBy(item => item.Key);
                 else
-                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.Name ?? "" : "");
+                    itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.LineName ?? "" : "");
             }
             else
                 itemsViewSource.Source = null;
@@ -148,16 +148,21 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            tbMonitorName.Text = "";
+            //tbMonitorName.Text = "";
+            nbMin.Value = 0;
+            nbMax.Value = 0;
+
             await UpdateLinesList();
 
             var result = await dlgAddMonitor.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                var name = tbMonitorName.Text.Trim();
+                //var name = tbMonitorName.Text.Trim();
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
+                var min = nbMin.Value.Value;
+                var max = nbMax.Value.Value;
 
-                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", name, lineID);
+                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", /*name,*/ lineID, min, max);
                 if (model != null)
                     ItemsSource.Add(new WemosMonitorObservable(model));
             }
@@ -166,7 +171,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
-                var id = (int) ((sender as Button).Tag);
+                var id = (string) ((sender as Button).Tag);
 
                 var res = await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
                 if (res)

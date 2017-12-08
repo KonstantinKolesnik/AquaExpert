@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySensors.Controllers", "MySensors.Controllers\MySensors.Controllers.csproj", "{A86171C5-EDF7-4342-8F4D-76D6A02B9CBB}"
 EndProject
@@ -195,6 +195,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Storage", "SmartHub.UWP.Plugins.Storage\SmartHub.UWP.Plugins.Storage.csproj", "{4A52AC2E-2A6C-4241-953B-494FC314D7AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Scripts", "SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj", "{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Dashboard", "SmartHub.Dashboard\SmartHub.Dashboard.csproj", "{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1047,6 +1049,26 @@ Global
 		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x64.Build.0 = Release|x64
 		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x86.ActiveCfg = Release|x86
 		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}.Release|x86.Build.0 = Release|x86
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|ARM.Build.0 = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|Win32.Build.0 = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|x64.Build.0 = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Debug|x86.Build.0 = Debug|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|ARM.Build.0 = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|Win32.Build.0 = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|x64.ActiveCfg = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|x64.Build.0 = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|x86.ActiveCfg = Release|Any CPU
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1132,9 +1154,10 @@ Global
 		{C6D98D08-45A8-4C3A-8FCD-FD40CBFDC80F} = {4D1DE182-E175-4C4A-9FFF-5BAA1182A627}
 		{4A52AC2E-2A6C-4241-953B-494FC314D7AF} = {897A8020-4315-4C17-BBA2-41046480A37F}
 		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890} = {897A8020-4315-4C17-BBA2-41046480A37F}
+		{B7EDB17A-BF4D-4C99-83BA-1E27B8684758} = {32879255-8FB2-4984-8DA2-DFDD41E4DE11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 		SolutionGuid = {D2E7755D-DCB1-45FF-ADE1-EF87790B4082}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 	EndGlobalSection
 EndGlobal

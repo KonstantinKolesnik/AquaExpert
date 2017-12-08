@@ -9,21 +9,26 @@
     ".NETPortable,Version=v4.6,Profile=Profile44": []
   },
   "packageFolders": {
-    "C:\\Users\\gothicmaestro\\.nuget\\packages\\": {}
+    "C:\\Users\\gothi\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "D:\\Work\\- My\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\SmartHub.UWP.Core.StringResources.csproj",
+      "projectUniqueName": "D:\\Work\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\SmartHub.UWP.Core.StringResources.csproj",
       "projectName": "SmartHub.UWP.Core.StringResources",
-      "projectPath": "D:\\Work\\- My\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\SmartHub.UWP.Core.StringResources.csproj",
-      "projectJsonPath": "D:\\Work\\- My\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\project.json",
-      "packagesPath": "C:\\Users\\gothicmaestro\\.nuget\\packages\\",
-      "outputPath": "D:\\Work\\- My\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\obj\\",
+      "projectPath": "D:\\Work\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\SmartHub.UWP.Core.StringResources.csproj",
+      "projectJsonPath": "D:\\Work\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\project.json",
+      "packagesPath": "C:\\Users\\gothi\\.nuget\\packages\\",
+      "outputPath": "D:\\Work\\SmartHub\\Source\\SmartHub\\SmartHub.UWP.Core.StringResources\\obj\\",
       "projectStyle": "ProjectJson",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
+      ],
       "configFilePaths": [
-        "D:\\Work\\- My\\SmartHub\\Source\\SmartHub\\.nuget\\NuGet.Config",
-        "C:\\Users\\gothicmaestro\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "D:\\Work\\SmartHub\\Source\\SmartHub\\.nuget\\NuGet.Config",
+        "C:\\Users\\gothi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},

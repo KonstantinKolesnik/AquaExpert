@@ -19,10 +19,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors
             if (model != null)
             {
                 ID = model.ID;
-                Name = model.Name;
-                NameForInformer = model.NameForInformer;
+                //Name = model.Name;
+                //NameForInformer = model.NameForInformer;
                 LineID = model.LineID;
-                Configuration = model.Configuration;
+                Min = model.Min;
+                Max = model.Max;
+                //Configuration = model.Configuration;
             }
         }
     }

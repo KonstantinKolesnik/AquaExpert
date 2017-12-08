@@ -30,5 +30,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
         }
         #endregion
+
+        //private void RadExpanderControl_PreviewKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        //{
+        //    e.Handled = true;
+        //}
     }
 }

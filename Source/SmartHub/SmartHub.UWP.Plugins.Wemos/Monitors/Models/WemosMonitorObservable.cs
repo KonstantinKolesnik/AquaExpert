@@ -10,7 +10,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         #endregion
 
         #region Properties
-        public int ID
+        public string ID
         {
             get { return model.ID; }
         }
@@ -26,45 +26,46 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get { return model.LineType; }
         }
-        public string Name
+        public float Min
         {
-            get { return model.Name; }
+            get { return model.Min; }
             set
             {
-                if (model.Name != value)
+                if (model.Min != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, value, model.NameForInformer);
-                    model.Name = value;
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, value, model.Max);
+                    model.Min = value;
                     NotifyPropertyChanged();
                 }
             }
         }
-        public string NameForInformer
+        public float Max
         {
-            get { return model.NameForInformer; }
+            get { return model.Max; }
             set
             {
-                if (model.NameForInformer != value)
+                if (model.Max != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setnames", model.ID, model.Name, value);
-                    model.NameForInformer = value;
+                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, model.Min, value);
+                    model.Max = value;
                     NotifyPropertyChanged();
                 }
             }
         }
-        public string Configuration
-        {
-            get { return model.Configuration; }
-            set
-            {
-                if (model.Configuration != value)
-                {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/setconfig", model.ID, value);
-                    model.Configuration = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+
+        //public string Configuration
+        //{
+        //    get { return model.Configuration; }
+        //    set
+        //    {
+        //        if (model.Configuration != value)
+        //        {
+        //            var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, model.Min, model.Max, value);
+        //            model.Configuration = value;
+        //            NotifyPropertyChanged();
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Constructor
