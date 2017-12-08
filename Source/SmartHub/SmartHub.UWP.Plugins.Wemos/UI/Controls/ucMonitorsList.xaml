@@ -22,18 +22,18 @@
         <ContentDialog
             x:Name="dlgAddMonitor"
             VerticalAlignment="Stretch"
-            PrimaryButtonText="{Binding Labels.OK, Source={StaticResource LabelsManager}}"
-            SecondaryButtonText="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}"
+            PrimaryButtonText="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=OK}"
+            SecondaryButtonText="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Cancel}"
             IsPrimaryButtonEnabled="{Binding Text, ElementName=tbMonitorName, Mode=OneWay, Converter={StaticResource StringToBooleanConverter}}">
             <StackPanel>
                 <TextBox
                     x:Name="tbMonitorName"
-                    Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}"
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
                 <ComboBox
                     x:Name="cbLines"
-                    Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Line}"
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}">
                     <ComboBox.ItemTemplate>
@@ -47,7 +47,7 @@
 
         <TextBlock
             x:Name="tbEmptyContent"
-            Text="{Binding Labels.NoData, Source={StaticResource LabelsManager}}"
+            Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=NoData}"
             Style="{StaticResource EmptyListTextBlockStyle}"/>
 
         <ListView
@@ -95,13 +95,13 @@
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="{Binding Labels.Add, Source={StaticResource LabelsManager}}" Click="ButtonAdd_Click">
+                <AppBarButton Label="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Add}" Click="ButtonAdd_Click">
                     <AppBarButton.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE109;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                <AppBarButton Label="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Refresh}" Click="ButtonRefresh_Click">
                     <AppBarButton.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
                     </AppBarButton.Icon>

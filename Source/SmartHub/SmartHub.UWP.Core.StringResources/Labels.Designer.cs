@@ -440,6 +440,15 @@ namespace SmartHub.UWP.Core.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Presentation.
+        /// </summary>
+        public static string Presentation {
+            get {
+                return ResourceManager.GetString("Presentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Privacy policy.
         /// </summary>
         public static string PrivacyPolicy {

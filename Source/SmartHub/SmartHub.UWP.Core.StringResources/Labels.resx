@@ -300,4 +300,7 @@
   <data name="Script" xml:space="preserve">
     <value>Script</value>
   </data>
+  <data name="Presentation" xml:space="preserve">
+    <value>Presentation</value>
+  </data>
 </root>
