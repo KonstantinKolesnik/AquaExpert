@@ -10,9 +10,9 @@
     <Grid>
         <uctrls:ucControllersList
             Visibility="{Binding SelectedController, Converter={StaticResource NotNullToInvisibilityConverter}}"
-            IsGrouped="True"
+            
             IsSorted="True"
-            ItemClicked="ucControllersList_ItemClicked"/>
+            ItemClicked="ucControllersList_ItemClicked"/><!--IsGrouped="True"-->
 
         <Grid Visibility="{Binding SelectedController, Converter={StaticResource NotNullToVisibilityConverter}}">
             <Grid.RowDefinitions>
