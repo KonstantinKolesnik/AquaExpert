@@ -26,8 +26,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get; set;
         }
-
-
+        [NotNull]
+        public int ValuesCount
+        {
+            get; set;
+        } = 10;
 
 
 

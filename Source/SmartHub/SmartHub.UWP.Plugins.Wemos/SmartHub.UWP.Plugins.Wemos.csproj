@@ -137,9 +137,6 @@
     <Compile Include="UI\Controls\ucControllersList.xaml.cs">
       <DependentUpon>ucControllersList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\ucMonitorChart.xaml.cs">
-      <DependentUpon>ucMonitorChart.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Controls\ucMonitorsList.xaml.cs">
       <DependentUpon>ucMonitorsList.xaml</DependentUpon>
     </Compile>
@@ -229,10 +226,6 @@
     <Page Include="UI\Controls\ucControllersList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\ucMonitorChart.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Controls\ucMonitorsList.xaml">
       <SubType>Designer</SubType>

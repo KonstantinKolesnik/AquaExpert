@@ -22,6 +22,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors
                 LineID = model.LineID;
                 Min = model.Min;
                 Max = model.Max;
+                ValuesCount = model.ValuesCount;
             }
         }
     }

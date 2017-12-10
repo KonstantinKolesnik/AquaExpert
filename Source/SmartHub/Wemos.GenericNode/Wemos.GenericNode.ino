@@ -1,8 +1,9 @@
 #include <WemosNode.h>
 //#include <WemosModuleRelay.h>
 //#include <WemosModuleDHT.h>
-//#include <WemosModuleBH1750.h>
+#include <WemosModuleBH1750.h>
 #include <WemosModuleBMP085.h>
+#include <WemosModuleSCT013.h>
 
 //#include <SFE_MicroOLED.h>
 
@@ -12,7 +13,7 @@
 #pragma region Node
 //WemosNode node(2, "T-H-R Node", 1.0);
 //WemosNode node(8, "8-Relay Node", 1.0);
-WemosNode node(1, "Meteo Node", 1.0);
+WemosNode node(3, "Meteo Node", 1.0);
 #pragma endregion
 
 
@@ -48,6 +49,8 @@ void setup()
 	//node.addModule(new WemosModuleRelay(7, D8, LOW));
 
 	node.addModule(new WemosModuleBMP085(0, 1, 10000));
+	node.addModule(new WemosModuleBH1750(2, 10000));
+	node.addModule(new WemosModuleSCT013(3, 10000));
 
 	//node.setOutMsgCallback(onOutMessage);
 
