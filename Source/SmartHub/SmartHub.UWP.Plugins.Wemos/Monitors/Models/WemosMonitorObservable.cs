@@ -33,7 +33,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             {
                 if (model.Min != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, value, model.Max);
                     model.Min = value;
                     NotifyPropertyChanged();
                 }
@@ -46,7 +45,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             {
                 if (model.Max != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, model.Min, value);
                     model.Max = value;
                     NotifyPropertyChanged();
                 }
@@ -60,7 +58,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         //    {
         //        if (model.Configuration != value)
         //        {
-        //            var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model.ID, model.Min, model.Max, value);
         //            model.Configuration = value;
         //            NotifyPropertyChanged();
         //        }
@@ -72,6 +69,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         public WemosMonitorObservable(WemosMonitorDto model)
         {
             this.model = model;
+            PropertyChanged += (s, e) => { var res = CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model); };
         }
         #endregion
     }

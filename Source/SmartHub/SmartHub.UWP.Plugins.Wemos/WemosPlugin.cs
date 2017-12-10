@@ -618,14 +618,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors/add"), Export(typeof(ApiMethod))]
         public ApiMethod apiAddMonitor => ((args) =>
         {
-            //var name = args[0] as string;
             var lineID = args[0].ToString();
             var min = float.Parse(args[1].ToString());
             var max = float.Parse(args[2].ToString());
 
             var model = new WemosMonitor()
             {
-                //Name = name,
                 LineID = lineID,
                 Min = min,
                 Max = max
@@ -643,19 +641,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/monitors/update"), Export(typeof(ApiMethod))]
         public ApiMethod apiUpdateMonitor => ((args) =>
         {
-            var id = args[0].ToString();
-            var min = float.Parse(args[1].ToString());
-            var max = float.Parse(args[2].ToString());
-            //var config = args[3].ToString();
+            var item = JsonConvert.DeserializeObject<WemosMonitor>(args[0].ToString());
 
-            var model = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
-            if (model != null)
+            if (item != null)
             {
-                model.Min = min;
-                model.Max = max;
-                //model.SerializeConfiguration(config);
-                Context.StorageSaveOrUpdate(model);
-
+                Context.StorageSaveOrUpdate(item);
                 return true;
             }
 

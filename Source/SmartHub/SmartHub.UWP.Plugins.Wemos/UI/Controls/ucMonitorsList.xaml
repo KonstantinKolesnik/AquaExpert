@@ -27,11 +27,6 @@
             SecondaryButtonText="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Cancel}"
             ><!--IsPrimaryButtonEnabled="{Binding Text, ElementName=tbMonitorName, Mode=OneWay, Converter={StaticResource StringToBooleanConverter}}"-->
             <StackPanel>
-                <!--<TextBox
-                    x:Name="tbMonitorName"
-                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}"
-                    HorizontalAlignment="Stretch"
-                    Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>-->
                 <ComboBox
                     x:Name="cbLines"
                     Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Line}"

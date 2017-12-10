@@ -120,12 +120,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 if (IsGrouped)
                     itemsViewSource.Source = ItemsSource
                         .Where(item => item != null)
-                        //.OrderBy(item => IsSorted ? item.Name ?? "" : "")
                         .OrderBy(item => IsSorted ? item.LineName ?? "" : "")
-
-                        //.GroupBy(item => string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
                         .GroupBy(item => string.IsNullOrEmpty(item.LineName) ? "" : item.LineName.Substring(0, 1).ToUpper())
-
                         .OrderBy(item => item.Key);
                 else
                     itemsViewSource.Source = ItemsSource.OrderBy(item => IsSorted ? item.LineName ?? "" : "");
@@ -148,7 +144,6 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            //tbMonitorName.Text = "";
             nbMin.Value = 0;
             nbMax.Value = 0;
 
@@ -157,12 +152,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var result = await dlgAddMonitor.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                //var name = tbMonitorName.Text.Trim();
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
                 var min = nbMin.Value.Value;
                 var max = nbMax.Value.Value;
 
-                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", /*name,*/ lineID, min, max);
+                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", lineID, min, max);
                 if (model != null)
                     ItemsSource.Add(new WemosMonitorObservable(model));
             }

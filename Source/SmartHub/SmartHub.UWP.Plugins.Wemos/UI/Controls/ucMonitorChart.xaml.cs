@@ -96,7 +96,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 {
                     //xAxis.LabelFormat = "{0:G}";
                     xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
-                    yAxis.LabelFormat = "{0:N3} " + GetUnits();
+                    yAxis.LabelFormat = "{0:N1} " + GetUnits();
                     lblDefinition0.Format = yAxis.LabelFormat;
                     lblDefinition.Format = yAxis.LabelFormat;
 
