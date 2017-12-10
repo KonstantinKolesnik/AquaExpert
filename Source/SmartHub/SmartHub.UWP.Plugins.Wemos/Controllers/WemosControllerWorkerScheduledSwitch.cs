@@ -46,10 +46,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
     {
         public class ControllerConfiguration
         {
-            public int LineSwitchID
+            public string LineSwitchID
             {
                 get; set;
-            } = -1;
+            }
             public ObservableCollection<Period> ActivePeriods
             {
                 get;

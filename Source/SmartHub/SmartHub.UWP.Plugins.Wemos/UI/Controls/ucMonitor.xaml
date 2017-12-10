@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uctrls="using:SmartHub.UWP.Plugins.Wemos.UI.Controls"
+    xmlns:telerikChart="using:Telerik.UI.Xaml.Controls.Chart"
+    xmlns:telerikDataViz="using:Telerik.UI.Xaml.Controls.DataVisualization"
     xmlns:telerikInput="using:Telerik.UI.Xaml.Controls.Input"
     xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
     mc:Ignorable="d">
@@ -36,10 +38,45 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0,15,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
                     <Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
-                        <StackPanel VerticalAlignment="Center" Margin="7">
-                            <TextBlock Text="{Binding LastValue, ElementName=mc}" HorizontalAlignment="Right"/>
+                        <!--<StackPanel VerticalAlignment="Center" Margin="7">
+                            <TextBlock Text="{Binding LastValueText, ElementName=mc}" HorizontalAlignment="Right"/>
                             <TextBlock Text="{Binding LastTimeStamp, ElementName=mc}" HorizontalAlignment="Right" Style="{ThemeResource ListItemSubtitleStyle}"/>
-                        </StackPanel>
+                        </StackPanel>-->
+
+                        <Grid>
+                            <telerikDataViz:RadRadialGauge Visibility="Collapsed"
+                                Height="100"
+                                MinValue="{Binding Monitor.Min}"
+                                MaxValue="{Binding Monitor.Max}"
+                                MinAngle="0"
+                                MaxAngle="180"
+                                LabelRadiusScale="0.6"
+                                >
+                                <!--
+                                LabelStep="10"
+                                TickStep="5"
+                                TickRadiusScale="0.8"
+                                -->
+                                <telerikDataViz:RadRadialGauge.LabelTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Margin="-5 0 0 0" Foreground="#595959" FontSize="12"></TextBlock>
+                                    </DataTemplate>
+                                </telerikDataViz:RadRadialGauge.LabelTemplate>
+                            
+                                <!--<telerikDataViz:SegmentedRadialGaugeIndicator StartValue="0" Value="120"  telerikDataViz:RadRadialGauge.IndicatorRadiusScale="0.8">
+                                    <telerikDataViz:BarIndicatorSegment Thickness="2" Stroke="#595959" Length="120"  telerikDataViz:RadRadialGauge.IndicatorRadiusScale="0.8"/>
+                                </telerikDataViz:SegmentedRadialGaugeIndicator>-->
+                            
+                                <telerikDataViz:RadialBarGaugeIndicator StartValue="{Binding Monitor.Min}" Value="{Binding LastValue, ElementName=mc}" Brush="{ThemeResource SystemControlForegroundAccentBrush}" Thickness="20"/><!--telerikDataViz:RadRadialGauge.IndicatorRadiusScale="1"-->
+                                <!--<telerikDataViz:RadialBarGaugeIndicator Value="{Binding LastValue, ElementName=mc}" Brush="{ThemeResource SystemControlForegroundAccentBrush}" Thickness="20"/>--><!--telerikDataViz:RadRadialGauge.IndicatorRadiusScale="1"-->
+
+                            </telerikDataViz:RadRadialGauge>
+                            
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding LastValueText, ElementName=mc}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding LastTimeStamp, ElementName=mc}" HorizontalAlignment="Center" Style="{ThemeResource ListItemSubtitleStyle}"/>
+                            </StackPanel>
+                        </Grid>
                     </Border>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
@@ -82,6 +119,8 @@
                         <telerikInput:RadNumericBox
                             x:Name="nbMin"
                             Header="Min"
+                            Minimum="-1000000"
+                            Maximum="1000000"
                             Value="{Binding Monitor.Min, Mode=TwoWay}"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
@@ -96,8 +135,10 @@
                         <telerikInput:RadNumericBox
                             x:Name="nbMax"
                             Header="Max"
-                            RelativePanel.Below="nbMin"
+                            Minimum="-1000000"
+                            Maximum="1000000"
                             Value="{Binding Monitor.Max, Mode=TwoWay}"
+                            RelativePanel.Below="nbMin"
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
                             HorizontalAlignment="Stretch"

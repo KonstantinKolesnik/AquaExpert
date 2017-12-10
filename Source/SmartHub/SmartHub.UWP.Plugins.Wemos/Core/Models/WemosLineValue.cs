@@ -51,6 +51,5 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
         //{
         //    return Name;
         //}
-
     }
 }

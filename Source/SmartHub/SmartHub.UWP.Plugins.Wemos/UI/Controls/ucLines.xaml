@@ -36,7 +36,8 @@
                 <telerikGrid:DataGridTextColumn PropertyName="Name" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}" CanUserEdit="True"/>
                 <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Type}" CanUserEdit="False" SizeMode="Auto"/>
                 <!--<telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=ProtocolVersion}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>-->
-                <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Tune}" CellContentFormat="{}{0:N1}" CanUserEdit="True" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Factor" Header="k" CellContentFormat="{}{0:N3}" CanUserEdit="True" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="b" CellContentFormat="{}{0:N3}" CanUserEdit="True" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=TimeStamp}" CellContentFormat="{}{0:dd.MM.yy HH:mm:ss}" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Value}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
             </telerikGrid:RadDataGrid.Columns>

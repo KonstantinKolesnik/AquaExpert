@@ -6,13 +6,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
 {
     public class WemosMonitor
     {
-        [PrimaryKey, NotNull]//, AutoIncrement]
+        [PrimaryKey, NotNull]
         public string ID
         {
             get; set;
         } = Guid.NewGuid().ToString();
         [NotNull]
-        public int LineID
+        public string LineID
         {
             get; set;
         }

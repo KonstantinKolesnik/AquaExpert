@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Communication.Stream;
+﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core.Communication.Stream;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
@@ -209,7 +210,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                 case WemosLineType.Switch: return "";
                 case WemosLineType.Temperature: return "°C";
                 case WemosLineType.Humidity: return "%";
-                case WemosLineType.Barometer: return "mm Hg";
+                case WemosLineType.Barometer: return "Pa"; // mm Hg
                 case WemosLineType.Weight: return "kg";
                 case WemosLineType.Voltage: return "V";
                 case WemosLineType.Current: return "A";
@@ -248,11 +249,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return Context.StorageGet().Table<WemosLine>().FirstOrDefault(l => l.NodeID == nodeID && l.LineID == lineID);
         }
-        public WemosLine GetLine(int id)
+        public WemosLine GetLine(string id)
         {
             return Context.StorageGet().Table<WemosLine>().FirstOrDefault(l => l.ID == id);
         }
-        public List<WemosLineValue> GetLineValues(int id, int count)
+        public List<WemosLineValue> GetLineValues(string id, int count)
         {
             var line = GetLine(id);
 
@@ -384,8 +385,10 @@ namespace SmartHub.UWP.Plugins.Wemos
                                     NodeID = node.NodeID,
                                     LineID = message.LineID,
                                     Name = $"Line {message.NodeID}-{message.LineID}",
-                                    Type = (WemosLineType) message.SubType,
-                                    ProtocolVersion = message.GetFloat()
+                                    Type = (WemosLineType)message.SubType,
+                                    ProtocolVersion = message.GetFloat(),
+                                    Factor = 1,
+                                    Tune = 0
                                 };
                                 Context.StorageSave(line);
                             }
@@ -415,7 +418,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                             LineID = message.LineID,
                             TimeStamp = DateTime.UtcNow,
                             Type = (WemosLineType) message.SubType,
-                            Value = message.GetFloat() + line.Tune // tune value
+                            Value = line.Factor * message.GetFloat() + line.Tune // tune value
                         };
                         Context.StorageSave(lv);
 
@@ -552,16 +555,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.GetPlugin<WemosPlugin>().GetNodes();
         });
 
-        [ApiMethod(MethodName = "/api/wemos/nodes/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetNodeName => ((args) =>
+        [ApiMethod(MethodName = "/api/wemos/nodes/update"), Export(typeof(ApiMethod))]
+        public ApiMethod apiUpdateNode => ((args) =>
         {
-            var id = int.Parse(args[0].ToString());
-            var name = args[1] as string;
-
-            var item = Context.GetPlugin<WemosPlugin>().GetNode(id);
-            item.Name = name;
+            var item = JsonConvert.DeserializeObject<WemosNode>(args[0].ToString());
             Context.StorageSaveOrUpdate(item);
-
             //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
             return true;
@@ -575,17 +573,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.GetPlugin<WemosPlugin>().GetLines();
         });
 
-        [ApiMethod(MethodName = "/api/wemos/lines/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetLineName => ((args) =>
+        [ApiMethod(MethodName = "/api/wemos/lines/update"), Export(typeof(ApiMethod))]
+        public ApiMethod apiUpdateLine => ((args) =>
         {
-            var nodeID = int.Parse(args[0].ToString());
-            var lineID = int.Parse(args[1].ToString());
-            var name = args[2] as string;
-
-            var item = Context.GetPlugin<WemosPlugin>().GetLine(nodeID, lineID);
-            item.Name = name;
+            var item = JsonConvert.DeserializeObject<WemosLine>(args[0].ToString());
             Context.StorageSaveOrUpdate(item);
-
             //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
             return true;
@@ -594,7 +586,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/line/values"), Export(typeof(ApiMethod))]
         public ApiMethod apiGetLineValues => ((args) =>
         {
-            var id = int.Parse(args[0].ToString());
+            var id = args[0].ToString();
             var count = int.Parse(args[1].ToString());
 
             return Context.GetPlugin<WemosPlugin>().GetLineValues(id, count);
@@ -627,7 +619,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public ApiMethod apiAddMonitor => ((args) =>
         {
             //var name = args[0] as string;
-            var lineID = int.Parse(args[0].ToString());
+            var lineID = args[0].ToString();
             var min = float.Parse(args[1].ToString());
             var max = float.Parse(args[2].ToString());
 

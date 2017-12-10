@@ -5,11 +5,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
 {
     public class WemosLine
     {
-        [PrimaryKey, NotNull, AutoIncrement]
-        public int ID
+        [PrimaryKey, NotNull]
+        public string ID
         {
             get; set;
-        }
+        } = Guid.NewGuid().ToString();
 
         [NotNull]
         public int NodeID
@@ -34,11 +34,19 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
         {
             get; set;
         }
+
+        // value = value * factor + tune
+        [NotNull]
+        public float Factor
+        {
+            get; set;
+        } = 1;
         [NotNull, Default()]
         public float Tune
         {
             get; set;
-        }
+        } = 0;
+
         public DateTime LastTimeStamp
         {
             get; set;

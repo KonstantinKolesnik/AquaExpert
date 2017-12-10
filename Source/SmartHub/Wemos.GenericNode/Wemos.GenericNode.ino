@@ -1,13 +1,18 @@
-#include <Wemos.h>
+#include <WemosNode.h>
+//#include <WemosModuleRelay.h>
+//#include <WemosModuleDHT.h>
+//#include <WemosModuleBH1750.h>
+#include <WemosModuleBMP085.h>
+
 //#include <SFE_MicroOLED.h>
 
 //ADC_MODE(ADC_VCC);
 
+
+#pragma region Node
 //WemosNode node(2, "T-H-R Node", 1.0);
-WemosNode node(8, "8-Relay Node", 1.0);
-
-#pragma region MyRegion
-
+//WemosNode node(8, "8-Relay Node", 1.0);
+WemosNode node(1, "Meteo Node", 1.0);
 #pragma endregion
 
 
@@ -20,6 +25,7 @@ WemosNode node(8, "8-Relay Node", 1.0);
 
 void setup()
 {
+#pragma region OLED
 	//oled.begin();
 	//oled.clear(ALL);
 	//oled.setFontType(0);  // Set the text to small (10 columns, 6 rows worth of characters).
@@ -27,20 +33,21 @@ void setup()
 	////oled.setFontType(2);  // Set the text to medium/7-segment (5 columns, 3 rows worth of characters).
 	////oled.setFontType(3);  // Set the text to large (5 columns, 1 row worth of characters).
 	//oled.display();
-
-
+#pragma endregion
 
 	//node.addModule(new WemosModuleRelay(0, D1));
 	//node.addModule(new WemosModuleDHT(1, 2, 10000, WemosModuleDHTType::WMDHT22));
 
-	node.addModule(new WemosModuleRelay(0, D1, LOW));
-	node.addModule(new WemosModuleRelay(1, D2, LOW));
-	node.addModule(new WemosModuleRelay(2, D3, LOW));
-	node.addModule(new WemosModuleRelay(3, D4, LOW));
-	node.addModule(new WemosModuleRelay(4, D5, LOW));
-	node.addModule(new WemosModuleRelay(5, D6, LOW));
-	node.addModule(new WemosModuleRelay(6, D7, LOW));
-	node.addModule(new WemosModuleRelay(7, D8, LOW));
+	//node.addModule(new WemosModuleRelay(0, D1, LOW));
+	//node.addModule(new WemosModuleRelay(1, D2, LOW));
+	//node.addModule(new WemosModuleRelay(2, D3, LOW));
+	//node.addModule(new WemosModuleRelay(3, D4, LOW));
+	//node.addModule(new WemosModuleRelay(4, D5, LOW));
+	//node.addModule(new WemosModuleRelay(5, D6, LOW));
+	//node.addModule(new WemosModuleRelay(6, D7, LOW));
+	//node.addModule(new WemosModuleRelay(7, D8, LOW));
+
+	node.addModule(new WemosModuleBMP085(0, 1, 10000));
 
 	//node.setOutMsgCallback(onOutMessage);
 
@@ -52,6 +59,8 @@ void setup()
 void loop()
 {
 	node.process();
+
+
 
 	//if (node.hasIntervalElapsed(&prevMsTime, intervalTime))
 	//	if (node.getDateTimeString(dt, tt))

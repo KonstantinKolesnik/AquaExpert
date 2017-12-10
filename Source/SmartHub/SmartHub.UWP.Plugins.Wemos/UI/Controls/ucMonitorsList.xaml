@@ -50,6 +50,8 @@
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                     InputScope="NumberFullWidth"
+                    Minimum="-1000000"
+                    Maximum="1000000"
                     SmallChange="1"
                     LargeChange="10"
                     ValueFormat="{}{0,0:N1}"
@@ -61,6 +63,8 @@
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                     InputScope="NumberFullWidth"
+                    Minimum="-1000000"
+                    Maximum="1000000"
                     SmallChange="1"
                     LargeChange="10"
                     ValueFormat="{}{0,0:N1}"
@@ -91,7 +95,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}"><!---->
+                    <Border BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

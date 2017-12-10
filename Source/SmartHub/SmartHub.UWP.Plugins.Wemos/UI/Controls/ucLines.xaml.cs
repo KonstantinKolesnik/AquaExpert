@@ -74,7 +74,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var context = parameter as EditContext;
 
             var item = context.CellInfo.Item as WemosLine;
-            var res = await CoreUtils.RequestAsync<bool>("/api/wemos/lines/setname", item.NodeID, item.LineID, item.Name);
+            var res = await CoreUtils.RequestAsync<bool>("/api/wemos/lines/update", item);
             if (res)
                 Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }

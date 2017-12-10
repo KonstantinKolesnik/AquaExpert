@@ -79,7 +79,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var context = parameter as EditContext;
             var item = context.CellInfo.Item as WemosNode;
 
-            var res = await CoreUtils.RequestAsync<bool>("/api/wemos/nodes/setname", item.NodeID, item.Name);
+            var res = await CoreUtils.RequestAsync<bool>("/api/wemos/nodes/update", item);
             if (res)
                 Owner.CommandService.ExecuteDefaultCommand(CommandId.CommitEdit, context);
         }

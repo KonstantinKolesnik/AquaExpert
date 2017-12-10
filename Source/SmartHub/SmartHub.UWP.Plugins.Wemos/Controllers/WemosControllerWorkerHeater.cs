@@ -10,14 +10,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
     {
         public class ControllerConfiguration
         {
-            public int LineTemperatureID
+            public string LineTemperatureID
             {
                 get; set;
-            } = -1;
-            public int LineSwitchID
+            }
+            public string LineSwitchID
             {
                 get; set;
-            } = -1;
+            }
 
             public float TemperatureMin { get; set; } = 25.0f;
             public float TemperatureMax { get; set; } = 26.0f;

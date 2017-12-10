@@ -47,11 +47,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             get;
         } = new ObservableCollection<WemosLineValue>();
 
-        public static readonly DependencyProperty LastValueProperty = DependencyProperty.Register("LastValue", typeof(string), typeof(ucMonitorChart), null);
-        public string LastValue
+        public static readonly DependencyProperty LastValueProperty = DependencyProperty.Register("LastValue", typeof(float), typeof(ucMonitorChart), null);
+        public float LastValue
         {
-            get { return (string) GetValue(LastValueProperty); }
+            get { return (float) GetValue(LastValueProperty); }
             set { SetValue(LastValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty LastValueTextProperty = DependencyProperty.Register("LastValueText", typeof(string), typeof(ucMonitorChart), null);
+        public string LastValueText
+        {
+            get { return (string)GetValue(LastValueTextProperty); }
+            set { SetValue(LastValueTextProperty, value); }
         }
 
         public static readonly DependencyProperty LastTimeStampProperty = DependencyProperty.Register("LastTimeStamp", typeof(string), typeof(ucMonitorChart), null);
@@ -89,9 +96,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 {
                     //xAxis.LabelFormat = "{0:G}";
                     xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
-                    yAxis.LabelFormat = "{0:N1} " + GetUnits();
-                    lblDefinition0.Format = "{0:N1} " + GetUnits();
-                    lblDefinition.Format = "{0:N1} " + GetUnits();
+                    yAxis.LabelFormat = "{0:N3} " + GetUnits();
+                    lblDefinition0.Format = yAxis.LabelFormat;
+                    lblDefinition.Format = yAxis.LabelFormat;
 
                     var items = await CoreUtils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", Monitor.LineID, valuesDisplayCount);
 
@@ -107,7 +114,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 else
                     Values.Clear();
 
-                LastValue = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : Labels.NoData;
+                LastValue = Values.Any() ? Values.LastOrDefault().Value : float.NaN;
+                LastValueText = Values.Any() ? $"{Values.LastOrDefault().Value} {GetUnits()}" : Labels.NoData;
                 LastTimeStamp = Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy HH:mm:ss")}" : "";
 
                 biRequest.IsActive = false;

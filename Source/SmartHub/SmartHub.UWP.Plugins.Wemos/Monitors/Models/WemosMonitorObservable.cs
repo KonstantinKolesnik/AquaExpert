@@ -14,7 +14,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get { return model.ID; }
         }
-        public int LineID
+        public string LineID
         {
             get { return model.LineID; }
         }
