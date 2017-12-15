@@ -1,0 +1,26 @@
+﻿
+<div id="content">
+    <h2>Контроллеры</h2>
+
+    <form class="form-inline k-block" role="form">
+        <div class="form-group">
+            <label for="tbNewControllerName">Имя</label>
+            <input type="text" id="tbNewControllerName" class="k-textbox inline-control" placeholder="Укажите имя контроллера" />
+        </div>
+        <div class="form-group">
+            <label for="ddlNewControllerType">Тип</label>
+            <select id="ddlNewControllerType" class="inline-control"></select>
+        </div>
+        <button class="k-button k-primary js-btn-add-controller">Добавить контроллер</button>
+    </form>
+
+    <div id="gridControllers" class="entities-grid"></div>
+</div>
+
+<script id="tmplIsAutoMode" type="text/x-kendo-template">
+    # if (data.IsAutoMode) { #
+    <span class="k-icon k-i-tick"></span>
+    # } else { #
+    <span class="k-icon k-i-close"></span>
+    # } #
+</script>

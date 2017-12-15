@@ -1,0 +1,55 @@
+﻿<UserControl
+    x:Class="SmartHub.UWP.Plugins.Storage.UI.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
+    xmlns:uctrls="using:SmartHub.UWP.Core.Xaml.Controls"
+    xmlns:vc="using:SmartHub.UWP.Core.Xaml.ValueConverters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="{StaticResource RootContainerMargin}">
+            <TextBlock Text="{Binding Labels.Storage, Source={StaticResource LabelsManager}}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <!--<TextBlock Text="Wemos modules" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
+            <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
+        </StackPanel>
+
+        <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
+            <PivotItem Header="{Binding Labels.Information, Source={StaticResource LabelsManager}}">
+                <StackPanel Margin="{StaticResource RootContainerMargin}">
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.Size, Source={StaticResource LabelsManager}}" PropertyValue="{Binding StorageSize}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.CreationDate, Source={StaticResource LabelsManager}}" PropertyValue="{Binding ItemDate}"/>
+                    <uctrls:ucPropertyNameValuePair IsVertical="True" PropertyName="{Binding Labels.ModificationDate, Source={StaticResource LabelsManager}}" PropertyValue="{Binding DateModified}"/>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="{Binding Labels.Cloud, Source={StaticResource LabelsManager}}">
+
+            </PivotItem>
+        </Pivot>
+
+        <telerikPrimitives:RadBusyIndicator
+            Grid.Row="1"
+            x:Name="biRequest"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"/>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Grid>
+</UserControl>

@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{87F5C8F8-2E14-4D7E-A378-5E58FED3C0DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SmartHub.Plugins.Controllers</RootNamespace>
+    <AssemblyName>SmartHub.Plugins.Controllers</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.Controllers\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Plugins\SmartHub.Plugins.Controllers\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ECM7.Migrator.Framework">
+      <HintPath>..\packages\ECM7Migrator.2.8.0.0\lib\net40\ECM7.Migrator.Framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\CO2Controller.cs" />
+    <Compile Include="Core\ControllerBase.cs" />
+    <Compile Include="Core\ControllerType.cs" />
+    <Compile Include="Core\HeaterController.cs" />
+    <Compile Include="Core\SwitchController.cs" />
+    <Compile Include="Core\WaterLevelController.cs" />
+    <Compile Include="Data\Controller.cs" />
+    <Compile Include="Data\Migrations.cs" />
+    <Compile Include="ControllersPlugin.cs" />
+    <Compile Include="ControllersTile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartHub.Core.Plugins\SmartHub.Core.Plugins.csproj">
+      <Project>{3be84d3d-7b5b-4c90-803d-a112d8ab40c7}</Project>
+      <Name>SmartHub.Core.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.HttpListener\SmartHub.Plugins.HttpListener.csproj">
+      <Project>{b2826828-29a4-4e27-9452-22e5c167ec25}</Project>
+      <Name>SmartHub.Plugins.HttpListener</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.MySensors\SmartHub.Plugins.MySensors.csproj">
+      <Project>{2bb4c561-2d7e-4d19-82be-519fa659e4be}</Project>
+      <Name>SmartHub.Plugins.MySensors</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.SignalR\SmartHub.Plugins.SignalR.csproj">
+      <Project>{46e58075-b4a0-4779-9f24-79d4b6f26a7b}</Project>
+      <Name>SmartHub.Plugins.SignalR</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Speech\SmartHub.Plugins.Speech.csproj">
+      <Project>{74ee7ae8-c021-48b5-8c2d-e1f45c8bfbd8}</Project>
+      <Name>SmartHub.Plugins.Speech</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.Timer\SmartHub.Plugins.Timer.csproj">
+      <Project>{ab1e5cf0-a30e-4046-a468-0f8aa8d0be5d}</Project>
+      <Name>SmartHub.Plugins.Timer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.Plugins.WebUI\SmartHub.Plugins.WebUI.csproj">
+      <Project>{52e99c27-8034-4516-9ac8-9f00c4a2c5a6}</Project>
+      <Name>SmartHub.Plugins.WebUI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\controller-editor-model.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\controller-editor-view.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\controller-editor.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\controller-editor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\settings-model.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\settings-view.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\settings.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\settings.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\utils.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\js\utils.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

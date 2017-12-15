@@ -1,0 +1,149 @@
+﻿
+<div id="content">
+    <h2>Сеть MySensors</h2>
+
+    <div id="tabstrip">
+        <ul>
+            <li class="k-state-active">Узлы</li>
+            <li>Сенсоры</li>
+            <li>Настройки</li>
+        </ul>
+        <div>
+            <div id="gridNodes" class="entities-grid" data-bind="source: Nodes"></div>
+        </div>
+        <div>
+            <div id="gridSensors" class="entities-grid" data-bind="source: Sensors"></div>
+        </div>
+        <div>
+            <div id="pnlSettings" class="entities-grid">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2" for="ddlUnitSystem">Система единиц измерения</label>
+                        <div class="col-xs-12 col-sm-9 col-md-8">
+                            <select id="ddlUnitSystem" data-bind="value: UnitSystem"></select>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2" for="ntbHeaterTemperatureMax">Удалить значения по</label>
+                        <div class="col-xs-12 col-sm-9 col-md-2">
+                            <input id="dpTo" />
+                        </div>
+                        <button class="k-button k-primary js-btn-clear">Удалить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Templates  -->
+<script id="nodeDetailsTemplate" type="text/x-kendo-tmpl">
+    <div class="nodeDetailsTabStrip">
+        <ul>
+            <li class="k-state-active">Сенсоры</li>
+            <li>Батарея</li>
+        </ul>
+        <div>
+            <div class="nodeDetailsSensors" style="height:300px;" data-bind="source: Sensors"></div>
+        </div>
+        <div>
+            <div class="nodeDetailsBatteryLevels" style="height:300px;" data-bind="source: BatteryLevels"></div>
+        </div>
+    </div>
+</script>
+<script id="sensorDetailsTemplate" type="text/x-kendo-tmpl">
+    <div>
+        <!--<div class="sensorDetailsOptions">
+            <div>
+                <h6>Ед. времени</h6>
+                <ul class="list-inline">
+                    <li>
+                        <input id="baseUnitAuto" name="baseUnit" type="radio" value="" checked="checked" autocomplete="off" />
+                        <label for="baseUnitAuto">Авто (по умолчанию)</label>
+                    </li>
+                    <li>
+                        <input id="baseUnitYears" name="baseUnit" type="radio" value="years" autocomplete="off" />
+                        <label for="baseUnitYears">Год</label>
+                    </li>
+                    <li>
+                        <input id="baseUnitMonths" name="baseUnit" type="radio" value="months" autocomplete="off" />
+                        <label for="baseUnitMonths">Месяц</label>
+                    </li>
+                    <li>
+                        <input id="baseUnitWeeks" name="baseUnit" type="radio" value="weeks" autocomplete="off" />
+                        <label for="baseUnitWeeks">Неделя</label>
+                    </li>
+                    <li>
+                        <input id="baseUnitDays" name="baseUnit" type="radio" value="days" autocomplete="off" />
+                        <label for="baseUnitDays">День</label>
+                    </li>
+                    <li>
+                        <input id="baseUnitHours" name="baseUnit" type="radio" value="hours" autocomplete="off" />
+                        <label for="baseUnitHours">Час</label>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h6>Аггрегация</h6>
+                <ul class="list-inline">
+                    <li>
+                        <input id="aggregateMax" name="aggregate" type="radio" value="max" autocomplete="off" />
+                        <label for="aggregateMax">Макс (по умолчанию)</label>
+                    </li>
+                    <li>
+                        <input id="aggregateMin" name="aggregate" type="radio" value="min" autocomplete="off" />
+                        <label for="aggregateMin">Мин</label>
+                    </li>
+                    <li>
+                        <input id="aggregateSum" name="aggregate" type="radio" value="sum" autocomplete="off" />
+                        <label for="aggregateSum">Сумма</label>
+                    </li>
+                    <li>
+                        <input id="aggregateAvg" name="aggregate" type="radio" value="avg" checked="checked" autocomplete="off" />
+                        <label for="aggregateAvg">Среднее</label>
+                    </li>
+                    <li>
+                        <input id="aggregateCount" name="aggregate" type="radio" value="count" autocomplete="off" />
+                        <label for="aggregateCount">Количество</label>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+        <div class="sensorDetailsValues"></div>
+    </div>
+</script>
+
+<script id="batteryLevelLevelCellTemplate" type="text/x-kendo-tmpl">
+    <div>#: data.BatteryLevelLevel == null ? "--" : data.BatteryLevelLevel #</div>
+</script>
+<script id="batteryLevelTimeStampCellTemplate" type="text/x-kendo-tmpl">
+    # if (data.BatteryLevelTimeStamp == null) { #
+        --
+    # } else { #
+        <div>
+            <span>
+                #: kendo.toString(data.BatteryLevelTimeStamp, "dd.MM.yyyy") #
+                <small>#: kendo.toString(data.BatteryLevelTimeStamp, "HH:mm:ss") #</small>
+            </span>
+        </div>
+    # } #
+</script>
+<script id="sensorValueValueCellTemplate" type="text/x-kendo-tmpl">
+    <div>#: data.SensorValueValue == null ? "--" : data.SensorValueValue #</div>
+</script>
+<script id="sensorValueTimeStampCellTemplate" type="text/x-kendo-tmpl">
+    # if (data.SensorValueTimeStamp == null) { #
+        --
+    # } else { #
+        <div>
+            <span>
+                #: kendo.toString(data.SensorValueTimeStamp, "dd.MM.yyyy") #
+                <!--<span style="font-size:0.9em; font-style:italic; color:darkgray;">#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</span>-->
+                <small>#: kendo.toString(data.SensorValueTimeStamp, "HH:mm:ss") #</small>
+            </span>
+        </div>
+    # } #
+</script>
