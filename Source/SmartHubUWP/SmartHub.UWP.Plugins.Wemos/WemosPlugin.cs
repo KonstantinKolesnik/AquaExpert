@@ -48,13 +48,6 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             get; set;
         }
-        private void NotifyMessageReceivedForPlugins(WemosMessage msg)
-        {
-            Run(WemosMessageHandlers, x => x(msg));
-        }
-
-
-
 
         //[ScriptEvent("mySensors.connected")]
         //public ScriptEventHandlerDelegate[] OnConnectedForScripts
@@ -69,7 +62,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         #region Exports
         //[Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 1)]
-        //public Action<DateTime> TimerElapsed => ((dt) =>
+        //public Action<DateTime> TimerElapsed => (dt =>
         //{
         //    foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
         //        controller.ProcessTimer(dt);
@@ -97,7 +90,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         //});
         #endregion
 
-        #region Plugin ovverrides
+        #region Plugin overrides
         public override void InitDbModel()
         {
             var db = Context.StorageGet();
@@ -429,7 +422,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                         // process:
                         //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
-                        NotifyMessageReceivedForPlugins(message);
+                        Run(WemosMessageHandlers, method => method(message));
                         //NotifyMessageReceivedForScripts(message);
                         //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
 

@@ -20,10 +20,13 @@ namespace SmartHub.UWP.Plugins.Timer
 
         #region Imports
         [ImportMany]
-        public IEnumerable<Lazy<Action<DateTime>, RunPeriodicallyAttribute>> PeriodicalHandlers { get; set; }
+        public IEnumerable<Lazy<Action<DateTime>, RunPeriodicallyAttribute>> PeriodicalHandlers
+        {
+            get; set;
+        }
         #endregion
 
-        #region Plugin ovverrides
+        #region Plugin overrides
         public override void InitPlugin()
         {
             //timer = new System.Threading.Timer(timerCallback, null, 0, (int)TimeSpan.FromSeconds(TIMER_INTERVAL).TotalMilliseconds);

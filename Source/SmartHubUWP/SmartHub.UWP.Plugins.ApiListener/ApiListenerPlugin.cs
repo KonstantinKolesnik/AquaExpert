@@ -28,7 +28,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
         }
         #endregion
 
-        #region Plugin ovverrides
+        #region Plugin overrides
         public override void InitPlugin()
         {
             foreach (var apiMethod in ApiMethods)

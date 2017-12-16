@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Storag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Scripts", "SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj", "{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.Dashboard", "SmartHub.Dashboard\SmartHub.Dashboard.csproj", "{B9285CF7-35E5-48C2-8570-F51F717969AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHub.Dashboard", "SmartHub.Dashboard\SmartHub.Dashboard.csproj", "{B9285CF7-35E5-48C2-8570-F51F717969AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -537,7 +537,7 @@ Global
 		{B9285CF7-35E5-48C2-8570-F51F717969AF} = {32879255-8FB2-4984-8DA2-DFDD41E4DE11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D2E7755D-DCB1-45FF-ADE1-EF87790B4082}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
+		SolutionGuid = {D2E7755D-DCB1-45FF-ADE1-EF87790B4082}
 	EndGlobalSection
 EndGlobal
