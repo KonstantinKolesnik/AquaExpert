@@ -23,7 +23,6 @@
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="SmartHub.UWP.Applications.IoTServer.StartupTask">
           <BackgroundTasks>
-            <uap:Task Type="mediaProcessing" />
             <iot:Task Type="startup" />
           </BackgroundTasks>
         </Extension>

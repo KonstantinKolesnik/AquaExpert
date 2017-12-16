@@ -6,25 +6,19 @@ namespace SmartHub.UWP.Applications.IoTServer
 {
     public sealed class StartupTask : IBackgroundTask
     {
-        private BackgroundTaskDeferral deferral = null;
+        private BackgroundTaskDeferral deferral;
         private Hub hub;
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
             deferral = taskInstance.GetDeferral();
-
             //var cost = BackgroundWorkCost.CurrentBackgroundWorkCost;
 
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler(OnCanceled);
 
-            if (hub == null)
-            {
-                var assemblies = CoreUtils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+            StartHub();
 
-                hub = new Hub();
-                hub.Init(assemblies);
-                hub.StartServices();
-            }
+            while (true) ;
         }
 
         private void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
@@ -43,13 +37,29 @@ namespace SmartHub.UWP.Applications.IoTServer
                     break;
             }
 
+            StopHub();
+
+            deferral.Complete();
+        }
+
+        private void StartHub()
+        {
+            if (hub == null)
+            {
+                var assemblies = CoreUtils.GetSatelliteAssemblies(file => file.FileType == ".dll" && file.DisplayName.ToLower().StartsWith("smarthub"));
+
+                hub = new Hub();
+                hub.Init(assemblies);
+                hub.StartServices();
+            }
+        }
+        private void StopHub()
+        {
             if (hub != null)
             {
                 hub.StopServices();
                 hub = null;
             }
-
-            deferral.Complete();
         }
     }
 }
