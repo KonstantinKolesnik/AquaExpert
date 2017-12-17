@@ -624,6 +624,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                 ValuesCount = 10,
                 Factor = 1,
                 Offset = 0,
+                Precision = 0,
                 Units = LineTypeToUnits(line.Type)
             };
 

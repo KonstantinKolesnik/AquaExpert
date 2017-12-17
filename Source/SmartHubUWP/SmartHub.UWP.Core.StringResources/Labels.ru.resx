@@ -304,9 +304,12 @@
     <value>Презентация</value>
   </data>
   <data name="Factor" xml:space="preserve">
-    <value>Коэф.</value>
+    <value>Коэффициент</value>
   </data>
   <data name="Units" xml:space="preserve">
-    <value>Ед. изм.</value>
+    <value>Единица измерения</value>
+  </data>
+  <data name="Precision" xml:space="preserve">
+    <value>Точность</value>
   </data>
 </root>

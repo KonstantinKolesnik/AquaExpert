@@ -309,4 +309,7 @@
   <data name="Units" xml:space="preserve">
     <value>Units</value>
   </data>
+  <data name="Precision" xml:space="preserve">
+    <value>Precision</value>
+  </data>
 </root>

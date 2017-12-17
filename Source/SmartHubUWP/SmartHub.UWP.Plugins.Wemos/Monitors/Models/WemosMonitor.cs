@@ -48,5 +48,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get; set;
         } = 10;
+
+        [NotNull, Default()]
+        public int Precision
+        {
+            get; set;
+        } = 0;
     }
 }

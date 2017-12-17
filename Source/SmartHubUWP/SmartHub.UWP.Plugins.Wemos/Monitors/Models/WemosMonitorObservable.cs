@@ -74,6 +74,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
                 {
                     model.Units = value;
                     NotifyPropertyChanged();
+                    NotifyPropertyChanged("LastValueText");
                 }
             }
         }
@@ -114,6 +115,19 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
                 }
             }
         }
+        public int Precision
+        {
+            get { return model.Precision; }
+            set
+            {
+                if (model.Precision != value)
+                {
+                    model.Precision = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("LastValueText");
+                }
+            }
+        }
 
         // helper properties:
         public ObservableCollection<WemosLineValue> Values
@@ -126,7 +140,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         }
         public string LastValueText
         {
-            get { return Values.Any() ? $"{LastValue} { (string.IsNullOrEmpty(Units) ? WemosPlugin.LineTypeToUnits(LineType) : Units) }" : "-"; }
+            get { return Values.Any() ? $"{LastValue.ToString($"N{Precision}")} { (string.IsNullOrEmpty(Units) ? WemosPlugin.LineTypeToUnits(LineType) : Units) }" : "-"; }
         }
         public string LastTimeStamp
         {

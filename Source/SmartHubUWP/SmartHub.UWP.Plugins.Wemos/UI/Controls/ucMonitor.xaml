@@ -155,82 +155,6 @@
                         x:Name="rp"
                         Margin="{StaticResource RootContainerMargin}"
                         Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <!--
-                        <TextBox
-                            x:Name="tbName"
-                            Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
-                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                            Text="{Binding Monitor.Name, Mode=TwoWay}"
-                            RelativePanel.AlignTopWithPanel="True"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="AlphanumericFullWidth"/>
-
-                        <TextBox
-                            x:Name="tbNameForInformer"
-                            Header="{Binding Labels.NameForInformer, Source={StaticResource LabelsManager}}"
-                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
-                            Text="{Binding Monitor.NameForInformer, Mode=TwoWay}"
-                            RelativePanel.Below="tbName"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="AlphanumericFullWidth"/>
-                        -->
-
-                        <telerikInput:RadNumericBox
-                            x:Name="nbMin"
-                            Header="Min"
-                            Value="{Binding Monitor.Min, Mode=TwoWay}"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="NumberFullWidth"
-                            Minimum="-1000000"
-                            Maximum="1000000"
-                            SmallChange="1"
-                            LargeChange="10"
-                            ValueFormat="{}{0,0:N3}"
-                            AllowNullValue="False"/>
-                        
-                        <telerikInput:RadNumericBox
-                            x:Name="nbMax"
-                            Header="Max"
-                            Value="{Binding Monitor.Max, Mode=TwoWay}"
-                            RelativePanel.Below="nbMin"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="NumberFullWidth"
-                            Minimum="-1000000"
-                            Maximum="1000000"
-                            SmallChange="1"
-                            LargeChange="10"
-                            ValueFormat="{}{0,0:N3}"
-                            AllowNullValue="False"/>
-
-                        <telerikInput:RadNumericBox
-                            x:Name="nbValuesCount"
-                            Header="Values count"
-                            Value="{Binding Monitor.ValuesCount, Mode=TwoWay}"
-                            RelativePanel.Below="nbMax"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            RelativePanel.AlignRightWithPanel="True"
-                            HorizontalAlignment="Stretch"
-                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="NumberFullWidth"
-                            Minimum="1"
-                            Maximum="100"
-                            SmallChange="1"
-                            LargeChange="5"
-                            ValueFormat="{}{0,0:N0}"
-                            AllowNullValue="False"/>
-
                         <telerikInput:RadNumericBox
                             x:Name="nbFactor"
                             Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Factor}"
@@ -261,7 +185,52 @@
                             Maximum="1000000"
                             SmallChange="1"
                             LargeChange="10"
-                            ValueFormat="{}{0,0:N6}"
+                            AllowNullValue="False"/>
+
+                        <telerikInput:RadNumericBox
+                            x:Name="nbMin"
+                            Header="Min"
+                            Value="{Binding Monitor.Min, Mode=TwoWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="-1000000"
+                            Maximum="1000000"
+                            SmallChange="1"
+                            LargeChange="10"
+                            AllowNullValue="False"/>
+                        <telerikInput:RadNumericBox
+                            x:Name="nbMax"
+                            Header="Max"
+                            Value="{Binding Monitor.Max, Mode=TwoWay}"
+                            RelativePanel.Below="nbMin"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="-1000000"
+                            Maximum="1000000"
+                            SmallChange="1"
+                            LargeChange="10"
+                            AllowNullValue="False"/>
+                        <telerikInput:RadNumericBox
+                            x:Name="nbPrecision"
+                            Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Precision}"
+                            Value="{Binding Monitor.Precision, Mode=TwoWay}"
+                            RelativePanel.Below="nbMax"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="0"
+                            Maximum="10"
+                            SmallChange="1"
+                            LargeChange="1"
+                            ValueFormat="{}{0,0:N0}"
                             AllowNullValue="False"/>
 
                         <TextBox
@@ -275,6 +244,23 @@
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                             InputScope="AlphanumericFullWidth"/>
+
+                        <telerikInput:RadNumericBox
+                            x:Name="nbValuesCount"
+                            Header="Values count"
+                            Value="{Binding Monitor.ValuesCount, Mode=TwoWay}"
+                            RelativePanel.Below="nbPrecision"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="1"
+                            Maximum="100"
+                            SmallChange="1"
+                            LargeChange="5"
+                            ValueFormat="{}{0,0:N0}"
+                            AllowNullValue="False"/>
                     </RelativePanel>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>

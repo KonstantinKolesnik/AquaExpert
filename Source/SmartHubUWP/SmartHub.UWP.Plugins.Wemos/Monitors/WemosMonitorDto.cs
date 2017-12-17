@@ -25,6 +25,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors
                 Units = model.Units;
                 Min = model.Min;
                 Max = model.Max;
+                Precision = model.Precision;
                 ValuesCount = model.ValuesCount;
             }
         }

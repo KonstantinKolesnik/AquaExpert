@@ -54,9 +54,13 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 //xAxis.LabelFormat = "{0:G}";
                 xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
-                yAxis.LabelFormat = "{0:N1} " + (string.IsNullOrEmpty(Monitor.Units) ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : Monitor.Units);
-                lblDefinition0.Format = yAxis.LabelFormat;
-                lblDefinition.Format = yAxis.LabelFormat;
+
+                var valueFormat = "{0:N" + Monitor.Precision + "}";
+                var units = (string.IsNullOrEmpty(Monitor.Units) ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : Monitor.Units);
+
+                yAxis.LabelFormat = $"{valueFormat} {units}";
+                lblDefinition0.Format = lblDefinition.Format = valueFormat;
+                nbMin.ValueFormat = nbMax.ValueFormat = nbOffset.ValueFormat = valueFormat;
             }
         }
         #endregion
