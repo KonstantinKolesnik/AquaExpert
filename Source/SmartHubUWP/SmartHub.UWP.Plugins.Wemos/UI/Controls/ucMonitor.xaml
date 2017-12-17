@@ -102,11 +102,11 @@
                     <Grid MinHeight="300">
                         <telerikChart:RadCartesianChart>
                             <telerikChart:RadCartesianChart.HorizontalAxis>
-                                <telerikChart:CategoricalAxis x:Name="xAxis" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{Binding XAxisFormat}"/>
+                                <telerikChart:CategoricalAxis x:Name="xAxis" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315"/>
                                 <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>-->
                             </telerikChart:RadCartesianChart.HorizontalAxis>
                             <telerikChart:RadCartesianChart.VerticalAxis>
-                                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" Minimum="{Binding Monitor.Min}" Maximum="{Binding Monitor.Max}" LabelFormat="{Binding YAxisFormat}"/>
+                                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" Minimum="{Binding Monitor.Min}" Maximum="{Binding Monitor.Max}"/>
                             </telerikChart:RadCartesianChart.VerticalAxis>
 
                             <telerikChart:RadCartesianChart.Grid>
@@ -115,7 +115,7 @@
 
                             <telerikChart:LineSeries ItemsSource="{Binding Monitor.Values}" ShowLabels="True" PointTemplate="{StaticResource ValuePointTemplate}">
                                 <telerikChart:LineSeries.LabelDefinitions>
-                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition0" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Format="{Binding ValueFormat}">
+                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition0" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top">
                                     </telerikChart:ChartSeriesLabelDefinition>
                                 </telerikChart:LineSeries.LabelDefinitions>
 
@@ -129,7 +129,7 @@
 
                             <telerikChart:SplineSeries ItemsSource="{Binding Monitor.Values}" ShowLabels="True" PointTemplate="{StaticResource ValuePointTemplate}" Visibility="Collapsed">
                                 <telerikChart:SplineSeries.LabelDefinitions>
-                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Format="{Binding ValueFormat}">
+                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top">
                                         <!--<telerikChart:ChartSeriesLabelDefinition.Template>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding DataItem.Value}" FontSize="10"/>

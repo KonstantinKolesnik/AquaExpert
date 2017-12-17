@@ -612,6 +612,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public ApiMethod apiAddMonitor => ((args) =>
         {
             var lineID = args[0].ToString();
+            var line = Context.GetPlugin<WemosPlugin>().GetLine(lineID);
             var min = float.Parse(args[1].ToString());
             var max = float.Parse(args[2].ToString());
 
@@ -623,14 +624,13 @@ namespace SmartHub.UWP.Plugins.Wemos
                 ValuesCount = 10,
                 Factor = 1,
                 Offset = 0,
-                Units = LineTypeToUnits(GetLine(lineID).Type)
+                Units = LineTypeToUnits(line.Type)
             };
 
             Context.StorageSave(model);
 
             //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
 
-            var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
             return new WemosMonitorDto(model) { LineName = line.Name, LineType = line.Type };
         });
 
