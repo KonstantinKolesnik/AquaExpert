@@ -102,11 +102,11 @@
                     <Grid MinHeight="300">
                         <telerikChart:RadCartesianChart>
                             <telerikChart:RadCartesianChart.HorizontalAxis>
-                                <telerikChart:CategoricalAxis x:Name="xAxis" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" /><!--LabelFormat="{}{0,0:G}"-->
+                                <telerikChart:CategoricalAxis x:Name="xAxis" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{Binding XAxisFormat}"/>
                                 <!--<telerikChart:DateTimeCategoricalAxis DateTimeComponent="Second" FontSize="10" LabelFitMode="Rotate" LabelRotationAngle="315" LabelFormat="{}{0,0:G}"/>-->
                             </telerikChart:RadCartesianChart.HorizontalAxis>
                             <telerikChart:RadCartesianChart.VerticalAxis>
-                                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" Minimum="{Binding Monitor.Min}" Maximum="{Binding Monitor.Max}" /><!--LabelFormat="{}{0:N1}"-->
+                                <telerikChart:LinearAxis x:Name="yAxis" FontSize="10" Minimum="{Binding Monitor.Min}" Maximum="{Binding Monitor.Max}" LabelFormat="{Binding YAxisFormat}"/>
                             </telerikChart:RadCartesianChart.VerticalAxis>
 
                             <telerikChart:RadCartesianChart.Grid>
@@ -115,7 +115,7 @@
 
                             <telerikChart:LineSeries ItemsSource="{Binding Monitor.Values}" ShowLabels="True" PointTemplate="{StaticResource ValuePointTemplate}">
                                 <telerikChart:LineSeries.LabelDefinitions>
-                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition0" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition0" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Format="{Binding ValueFormat}">
                                     </telerikChart:ChartSeriesLabelDefinition>
                                 </telerikChart:LineSeries.LabelDefinitions>
 
@@ -129,7 +129,7 @@
 
                             <telerikChart:SplineSeries ItemsSource="{Binding Monitor.Values}" ShowLabels="True" PointTemplate="{StaticResource ValuePointTemplate}" Visibility="Collapsed">
                                 <telerikChart:SplineSeries.LabelDefinitions>
-                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top"><!--Format="{}{0:N1}"-->
+                                    <telerikChart:ChartSeriesLabelDefinition x:Name="lblDefinition" DefaultVisualStyle="{StaticResource ValueStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Format="{Binding ValueFormat}">
                                         <!--<telerikChart:ChartSeriesLabelDefinition.Template>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding DataItem.Value}" FontSize="10"/>
@@ -146,6 +146,7 @@
                                 </telerikChart:SplineSeries.CategoryBinding>
                             </telerikChart:SplineSeries>
                         </telerikChart:RadCartesianChart>
+                        
                         <!--<telerikPrimitives:RadBusyIndicator x:Name="biRequest" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
                     </Grid>
 
@@ -177,7 +178,8 @@
                             RelativePanel.AlignRightWithPanel="True"
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
-                            InputScope="AlphanumericFullWidth"/>-->
+                            InputScope="AlphanumericFullWidth"/>
+                        -->
 
                         <telerikInput:RadNumericBox
                             x:Name="nbMin"
@@ -213,8 +215,8 @@
                             AllowNullValue="False"/>
 
                         <telerikInput:RadNumericBox
-                            x:Name="nbPeriod"
-                            Header="Period, hours"
+                            x:Name="nbValuesCount"
+                            Header="Values count"
                             Value="{Binding Monitor.ValuesCount, Mode=TwoWay}"
                             RelativePanel.Below="nbMax"
                             RelativePanel.AlignLeftWithPanel="True"
@@ -222,12 +224,57 @@
                             HorizontalAlignment="Stretch"
                             Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
                             InputScope="NumberFullWidth"
-                            Minimum="0"
-                            Maximum="8640"
+                            Minimum="1"
+                            Maximum="100"
                             SmallChange="1"
-                            LargeChange="12"
+                            LargeChange="5"
                             ValueFormat="{}{0,0:N0}"
                             AllowNullValue="False"/>
+
+                        <telerikInput:RadNumericBox
+                            x:Name="nbFactor"
+                            Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Factor}"
+                            Value="{Binding Monitor.Factor, Mode=TwoWay}"
+                            RelativePanel.Below="nbValuesCount"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="-1000000"
+                            Maximum="1000000"
+                            SmallChange="1"
+                            LargeChange="10"
+                            ValueFormat="{}{0,0:N10}"
+                            AllowNullValue="False"/>
+                        <telerikInput:RadNumericBox
+                            x:Name="nbOffset"
+                            Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Offset}"
+                            Value="{Binding Monitor.Offset, Mode=TwoWay}"
+                            RelativePanel.Below="nbFactor"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="NumberFullWidth"
+                            Minimum="-1000000"
+                            Maximum="1000000"
+                            SmallChange="1"
+                            LargeChange="10"
+                            ValueFormat="{}{0,0:N6}"
+                            AllowNullValue="False"/>
+
+                        <TextBox
+                            x:Name="tbUnits"
+                            Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Units}"
+                            HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                            Text="{Binding Monitor.Units, Mode=TwoWay}"
+                            RelativePanel.Below="nbOffset"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            HorizontalAlignment="Stretch"
+                            Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"
+                            InputScope="AlphanumericFullWidth"/>
                     </RelativePanel>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.ExpandableContent>

@@ -40,6 +40,44 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get { return model.LineType; }
         }
+
+        public float Factor
+        {
+            get { return model.Factor; }
+            set
+            {
+                if (model.Factor != value)
+                {
+                    model.Factor = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public float Offset
+        {
+            get { return model.Offset; }
+            set
+            {
+                if (model.Offset != value)
+                {
+                    model.Offset = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public string Units
+        {
+            get { return model.Units; }
+            set
+            {
+                if (model.Units != value)
+                {
+                    model.Units = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public float Min
         {
             get { return model.Min; }
@@ -88,7 +126,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         }
         public string LastValueText
         {
-            get { return Values.Any() ? $"{LastValue} {WemosPlugin.LineTypeToUnits(LineType)}" : "-"; }
+            get { return Values.Any() ? $"{LastValue} { (string.IsNullOrEmpty(Units) ? WemosPlugin.LineTypeToUnits(LineType) : Units) }" : "-"; }
         }
         public string LastTimeStamp
         {
@@ -123,7 +161,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             Values.Clear();
             if (items != null)
                 foreach (var item in items.Where(item => item != null).OrderBy(i => i.TimeStamp))
+                {
+                    item.Value = item.Value * Factor + Offset;
                     Values.Add(item);
+                }
 
             NotifyPropertyChanged("LastValue");
             NotifyPropertyChanged("LastValueText");

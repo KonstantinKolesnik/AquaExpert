@@ -381,7 +381,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                                     Type = (WemosLineType)message.SubType,
                                     ProtocolVersion = message.GetFloat(),
                                     Factor = 1,
-                                    Tune = 0
+                                    Offset = 0
                                 };
                                 Context.StorageSave(line);
                             }
@@ -411,7 +411,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                             LineID = message.LineID,
                             TimeStamp = DateTime.UtcNow,
                             Type = (WemosLineType) message.SubType,
-                            Value = line.Factor * message.GetFloat() + line.Tune // tune value
+                            Value = line.Factor * message.GetFloat() + line.Offset // tune value
                         };
                         Context.StorageSave(lv);
 
@@ -619,8 +619,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             {
                 LineID = lineID,
                 Min = min,
-                Max = max
-                //Configuration = "{}"
+                Max = max,
+                ValuesCount = 10,
+                Factor = 1,
+                Offset = 0,
+                Units = LineTypeToUnits(GetLine(lineID).Type)
             };
 
             Context.StorageSave(model);
@@ -650,9 +653,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             var id = args[0].ToString();
 
-            Context.StorageDelete(Context.GetPlugin<WemosPlugin>().GetMonitor(id));
+            var item = Context.GetPlugin<WemosPlugin>().GetMonitor(id);
 
-            return true;
+            if (item != null)
+            {
+                Context.StorageDelete(item);
+                return true;
+            }
+
+            return false;
         });
         #endregion
 

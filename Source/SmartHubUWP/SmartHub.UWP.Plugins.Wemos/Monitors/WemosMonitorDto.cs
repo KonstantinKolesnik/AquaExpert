@@ -20,6 +20,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors
             {
                 ID = model.ID;
                 LineID = model.LineID;
+                Factor = model.Factor;
+                Offset = model.Offset;
+                Units = model.Units;
                 Min = model.Min;
                 Max = model.Max;
                 ValuesCount = model.ValuesCount;

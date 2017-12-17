@@ -16,6 +16,23 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get; set;
         }
+
+        // value = value * factor + Offset
+        [NotNull]
+        public float Factor
+        {
+            get; set;
+        } = 1;
+        [NotNull, Default()]
+        public float Offset
+        {
+            get; set;
+        } = 0;
+        public string Units
+        {
+            get; set;
+        }
+
         [NotNull]
         public float Min
         {
@@ -31,27 +48,5 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             get; set;
         } = 10;
-
-
-
-
-
-        //[NotNull]
-        //public string Configuration
-        //{
-        //    get; set;
-        //}
-
-        //public T DeserializeConfiguration<T>()
-        //{
-        //    if (string.IsNullOrWhiteSpace(Configuration))
-        //        Configuration = "{}";
-
-        //    return JsonConvert.DeserializeObject<T>(Configuration);
-        //}
-        //public void SerializeConfiguration(object value)
-        //{
-        //    Configuration = JsonConvert.SerializeObject(value);
-        //}
     }
 }

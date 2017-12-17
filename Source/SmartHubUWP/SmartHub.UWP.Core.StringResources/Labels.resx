@@ -276,8 +276,8 @@
   <data name="Storage" xml:space="preserve">
     <value>Storage</value>
   </data>
-  <data name="Tune" xml:space="preserve">
-    <value>Tune</value>
+  <data name="Offset" xml:space="preserve">
+    <value>Offset</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
@@ -302,5 +302,11 @@
   </data>
   <data name="Presentation" xml:space="preserve">
     <value>Presentation</value>
+  </data>
+  <data name="Factor" xml:space="preserve">
+    <value>Factor</value>
+  </data>
+  <data name="Units" xml:space="preserve">
+    <value>Units</value>
   </data>
 </root>

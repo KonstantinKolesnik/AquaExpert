@@ -276,8 +276,8 @@
   <data name="Storage" xml:space="preserve">
     <value>Хранилище</value>
   </data>
-  <data name="Tune" xml:space="preserve">
-    <value>Коррекция</value>
+  <data name="Offset" xml:space="preserve">
+    <value>Смещение</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Размер</value>
@@ -302,5 +302,11 @@
   </data>
   <data name="Presentation" xml:space="preserve">
     <value>Презентация</value>
+  </data>
+  <data name="Factor" xml:space="preserve">
+    <value>Коэф.</value>
+  </data>
+  <data name="Units" xml:space="preserve">
+    <value>Ед. изм.</value>
   </data>
 </root>

@@ -35,14 +35,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
             get; set;
         }
 
-        // value = value * factor + tune
+        // value = value * factor + offset
         [NotNull]
         public float Factor
         {
             get; set;
         } = 1;
         [NotNull, Default()]
-        public float Tune
+        public float Offset
         {
             get; set;
         } = 0;

@@ -37,9 +37,23 @@
                 <telerikGrid:DataGridTextColumn PropertyName="Type" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Type}" CanUserEdit="False" SizeMode="Auto"/>
                 <!--<telerikGrid:DataGridTextColumn PropertyName="ProtocolVersion" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=ProtocolVersion}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>-->
                 <telerikGrid:DataGridTextColumn PropertyName="Factor" Header="k" CellContentFormat="{}{0:N3}" CanUserEdit="True" SizeMode="Auto"/>
-                <telerikGrid:DataGridTextColumn PropertyName="Tune" Header="b" CellContentFormat="{}{0:N3}" CanUserEdit="True" SizeMode="Auto"/>
+                <telerikGrid:DataGridTextColumn PropertyName="Offset" Header="b" CellContentFormat="{}{0:N3}" CanUserEdit="True" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastTimeStamp" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=TimeStamp}" CellContentFormat="{}{0:dd.MM.yy HH:mm:ss}" CanUserEdit="False" SizeMode="Auto"/>
                 <telerikGrid:DataGridTextColumn PropertyName="LastValue" Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Value}" CellContentFormat="{}{0:N1}" CanUserEdit="False" SizeMode="Auto"/>
+
+                <telerikGrid:DataGridTemplateColumn SizeMode="Auto">
+                    <telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!--<AppBarButton Style="{StaticResource AppBarTinyButton}" x:Name="{Binding ID}" VerticalAlignment="Center" Click="ButtonDelete_Click">
+                                <AppBarButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="13" Glyph="&#xE107;"/>
+                                </AppBarButton.Icon>
+                            </AppBarButton>-->
+                            <TextBlock Text="{Binding ID}"/>
+
+                        </DataTemplate>
+                    </telerikGrid:DataGridTemplateColumn.CellContentTemplate>
+                </telerikGrid:DataGridTemplateColumn>
             </telerikGrid:RadDataGrid.Columns>
             <telerikGrid:RadDataGrid.Commands>
                 <ctrls:LineCommitEditCommand/>

@@ -23,16 +23,35 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 await newMonitor.UpdateValues();
 
-                var uc = d as ucMonitor;
-                //xAxis.LabelFormat = "{0:G}";
-                uc.xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
-                uc.yAxis.LabelFormat = "{0:N1} " + WemosPlugin.LineTypeToUnits(newMonitor.LineType);
-                uc.lblDefinition0.Format = uc.yAxis.LabelFormat;
-                uc.lblDefinition.Format = uc.yAxis.LabelFormat;
+                //var uc = d as ucMonitor;
+                //uc.xAxis.LabelFormat = "{0:G}";
+                //uc.xAxis.LabelFormat = "{0:dd.MM.yy\nHH:mm:ss}";
+                //uc.yAxis.LabelFormat = "{0:N1} " + (string.IsNullOrEmpty(newMonitor.Units) ? WemosPlugin.LineTypeToUnits(newMonitor.LineType) : newMonitor.Units);
+                //uc.lblDefinition0.Format = uc.yAxis.LabelFormat;
+                //uc.lblDefinition.Format = uc.yAxis.LabelFormat;
 
                 newMonitor.StartListen();
             }
         }
+
+        public static readonly DependencyProperty XAxisFormatProperty = DependencyProperty.Register("XAxisFormat", typeof(string), typeof(ucMonitor), new PropertyMetadata("{0:dd.MM.yy\nHH:mm:ss}"));
+        public string XAxisFormat
+        {
+            get { return (string)GetValue(XAxisFormatProperty); }
+        }
+
+        public static readonly DependencyProperty YAxisFormatProperty = DependencyProperty.Register("YAxisFormat", typeof(string), typeof(ucMonitor), null);/*new PropertyMetadata("{0:N1}")*/
+        public string YAxisFormat
+        {
+            get { return "{0:N1} " + (string.IsNullOrEmpty(Monitor.Units) ? WemosPlugin.LineTypeToUnits(Monitor.LineType) : Monitor.Units); }
+        }
+
+        public static readonly DependencyProperty ValueFormatProperty = DependencyProperty.Register("ValueFormat", typeof(string), typeof(ucMonitor), new PropertyMetadata("{0:N1}"));
+        public string ValueFormat
+        {
+            get { return "{}{0,0:N1}" /*"{0:N1}"*/; }
+        }
+
 
         public static readonly DependencyProperty IsEditableProperty = DependencyProperty.Register("IsEditable", typeof(bool), typeof(ucMonitor), new PropertyMetadata(false));
         public bool IsEditable

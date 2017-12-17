@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp iot">
-  <Identity Name="SmartHub.UWP.Applications.IoTServer-uwp" Publisher="CN=gothi_000" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="5bca624a-72d9-4c3b-844b-aab22972bc6e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="16799GothicMaestro.SmartHubIotServer" Publisher="CN=511B756D-8D0E-4C33-9E48-13F53061EBB7" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="419bb842-32be-418a-a719-b115a46c426c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>SmartHub.UWP.Applications.IoTServer</DisplayName>
-    <PublisherDisplayName>gothi_000</PublisherDisplayName>
+    <DisplayName>Smart Hub Iot Server</DisplayName>
+    <PublisherDisplayName>Konstantin Kolesnik</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>

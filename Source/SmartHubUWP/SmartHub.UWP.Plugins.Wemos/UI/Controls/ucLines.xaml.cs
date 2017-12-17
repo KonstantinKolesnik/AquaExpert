@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System.Collections.Generic;
@@ -55,6 +56,19 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await UpdateLinesList();
         }
+        private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
+            {
+                //var id = (string)((sender as AppBarButton).Tag);
+                var id = (sender as AppBarButton).Name;
+
+                //var res = await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/delete", id);
+                //if (res)
+                //    ItemsSource.Remove(ItemsSource.FirstOrDefault(m => m.ID == id));
+            });
+        }
+
         #endregion
     }
 
