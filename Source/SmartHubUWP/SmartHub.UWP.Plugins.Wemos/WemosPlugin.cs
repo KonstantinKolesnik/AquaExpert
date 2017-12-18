@@ -274,7 +274,6 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public WemosController GetWorkingController(string id)
         {
-            //return Context.StorageGet().Table<WemosController>().FirstOrDefault(c => c.ID == id);
             return controllers.FirstOrDefault(c => c.ID == id);
         }
         public void AddController(WemosController ctrl)
