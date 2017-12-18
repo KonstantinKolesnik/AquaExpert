@@ -56,7 +56,7 @@ namespace SmartHub.UWP.Core.Communication.Stream
                 var socket = args.Socket;
                 //using (var socket = args.Socket)
                 {
-                    string requestDto = await Utils.ReceiveAsync(socket);
+                    var requestDto = await Utils.ReceiveAsync(socket);
                     var request = Utils.DtoDeserialize<CommandRequest>(requestDto);
 
                     if (request != null)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartHub.Dashboard.Services;
 
 namespace SmartHub.Dashboard
 {
@@ -22,6 +23,7 @@ namespace SmartHub.Dashboard
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddTransient(typeof(SmartHubService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

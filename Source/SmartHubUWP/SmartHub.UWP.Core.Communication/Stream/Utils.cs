@@ -62,13 +62,13 @@ namespace SmartHub.UWP.Core.Communication.Stream
                         {
                             uint dataLength = reader.ReadUInt32();
 
-                            uint actualDataLength = 0;
+                            uint loadedDataLength = 0;
                             var sb = new StringBuilder();
-                            while (actualDataLength < dataLength)
+                            while (loadedDataLength < dataLength)
                             {
                                 var read = await reader.LoadAsync(MAX_BUFFER_SIZE_KB * 1024);
                                 sb.Append(reader.ReadString(read));
-                                actualDataLength += read;
+                                loadedDataLength += read;
                             }
 
                             result = sb.ToString();

@@ -1,5 +1,3 @@
-using System;
-
 namespace SmartHub.Dashboard.Models
 {
     public class ErrorViewModel
