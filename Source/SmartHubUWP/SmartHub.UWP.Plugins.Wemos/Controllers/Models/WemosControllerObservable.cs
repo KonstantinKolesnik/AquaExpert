@@ -9,9 +9,13 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         #endregion
 
         #region Properties
-        public int ID
+        public string ID
         {
             get { return model.ID; }
+        }
+        public WemosControllerType Type
+        {
+            get { return model.Type; }
         }
         public string Name
         {
@@ -20,15 +24,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.Name != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setname", model.ID, value);
                     model.Name = value;
                     NotifyPropertyChanged(nameof(Name));
                 }
             }
-        }
-        public WemosControllerType Type
-        {
-            get { return model.Type; }
         }
         public bool IsAutoMode
         {
@@ -37,7 +36,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.IsAutoMode != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setautomode", model.ID, value);
                     model.IsAutoMode = value;
                     NotifyPropertyChanged();
                 }
@@ -50,7 +48,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
             {
                 if (model.Configuration != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/wemos/controllers/setconfig", model.ID, value);
                     model.Configuration = value;
                     NotifyPropertyChanged();
                 }
@@ -62,6 +59,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         public WemosControllerObservable(WemosController model)
         {
             this.model = model;
+
+            PropertyChanged += async (s, e) => { await CoreUtils.RequestAsync<bool>("/api/wemos/controllers/update", model); };
         }
         #endregion
     }

@@ -12,11 +12,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
         #endregion
 
         #region Properties
-        [PrimaryKey, NotNull, AutoIncrement]
-        public int ID
+        [PrimaryKey, NotNull]
+        public string ID
         {
             get; set;
-        }
+        } = Guid.NewGuid().ToString();
         [NotNull]
         public string Name
         {

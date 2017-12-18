@@ -50,7 +50,7 @@ namespace SmartHub.UWP.Core.Plugins
                     {
                         method(parameter);
                     }
-                    catch (Exception ex)
+                    catch (Exception)// ex)
                     {
                         //Logger.Error(ex, ex.Message);
                     }

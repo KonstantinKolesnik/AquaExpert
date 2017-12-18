@@ -159,10 +159,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
             //}), TimeSpan.FromSeconds(updateIntervalSeconds));
 
-            PropertyChanged += (s, e) =>
+            PropertyChanged += async (s, e) =>
             {
                 if (!e.PropertyName.Contains("Last"))
-                    CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model);
+                    await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model);
             };
         }
         #endregion

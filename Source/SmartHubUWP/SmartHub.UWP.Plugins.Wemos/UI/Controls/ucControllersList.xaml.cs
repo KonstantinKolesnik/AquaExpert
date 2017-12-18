@@ -156,7 +156,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
             {
-                int id = (int) ((sender as Button).Tag);
+                var id = (string) ((sender as Button).Tag);
 
                 bool res = await CoreUtils.RequestAsync<bool>("/api/wemos/controllers/delete", id);
                 if (res)

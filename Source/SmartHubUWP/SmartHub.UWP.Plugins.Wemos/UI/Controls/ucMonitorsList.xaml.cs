@@ -150,7 +150,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             await UpdateLinesList();
 
             var result = await dlgAddMonitor.ShowAsync();
-            if (result == ContentDialogResult.Primary)
+            if (result == ContentDialogResult.Primary && cbLines.SelectedItem != null)
             {
                 var lineID = (cbLines.SelectedItem as WemosLine).ID;
                 var min = nbMin.Value.Value;
