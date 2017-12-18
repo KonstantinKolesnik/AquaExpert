@@ -165,6 +165,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         public async Task RequestPresentationAsync(int nodeID = -1, int lineID = -1)
         {
             await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
+            GetLines().ForEach(async line => await RequestLineValueAsync(line));
         }
         public async Task RequestLineValueAsync(WemosLine line)
         {
@@ -537,10 +538,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod(MethodName = "/api/wemos/presentation"), Export(typeof(ApiMethod))]
         public ApiMethod apiPresentation => (args =>
         {
-            var host = Context.GetPlugin<WemosPlugin>();
-
-            host.RequestPresentationAsync();//.Wait();
-            host.GetLines().ForEach(async line => await RequestLineValueAsync(line));
+            Context.GetPlugin<WemosPlugin>().RequestPresentationAsync();//.Wait();
 
             return true; 
         });
@@ -712,7 +710,11 @@ namespace SmartHub.UWP.Plugins.Wemos
 
                 var ctrl = Context.GetPlugin<WemosPlugin>().GetWorkingController(item.ID);
                 if (ctrl != null)
+                {
+                    ctrl.Name = item.Name;
+                    ctrl.IsAutoMode = item.IsAutoMode;
                     ctrl.Configuration = item.Configuration;
+                }
 
                 return true;
             }
