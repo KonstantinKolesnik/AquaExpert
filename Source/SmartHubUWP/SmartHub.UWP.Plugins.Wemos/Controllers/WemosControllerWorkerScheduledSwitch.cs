@@ -4,6 +4,7 @@ using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SmartHub.UWP.Plugins.Wemos.Controllers
 {
@@ -39,6 +40,16 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
                 isEnabled = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public bool Contains(DateTime dt)
+        {
+            var now = dt.TimeOfDay;
+
+            if (From < To)
+                return From <= now && now <= To;
+            else
+                return !(To < now && now < From);
         }
     }
 
@@ -82,29 +93,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Controllers
         protected async override void DoWork(DateTime now)
         {
             var config = Configuration as ControllerConfiguration;
-
-            bool isActiveNew = false;
-            foreach (var range in config.ActivePeriods)
-                isActiveNew |= (range.IsEnabled && IsInRange(now, range));
-
+            var isActiveNew = config.ActivePeriods.Where(p => p.IsEnabled && p.Contains(now)).Any();
             await host.SetLineValueAsync(LineSwitch, isActiveNew ? 1 : 0);
-        }
-        #endregion
-
-        #region Private methods
-        private static bool IsInRange(DateTime dt, Period range)
-        {
-            //TimeSpan start = range.From.ToLocalTime().TimeOfDay;
-            //TimeSpan end = range.To.ToLocalTime().TimeOfDay;
-            TimeSpan start = range.From;
-            TimeSpan end = range.To;
-
-            TimeSpan now = dt.TimeOfDay;
-
-            if (start < end)
-                return start <= now && now <= end;
-            else
-                return !(end < now && now < start);
         }
         #endregion
     }

@@ -33,31 +33,31 @@ namespace SmartHub.Dashboard.Services
                     //var reader = new BinaryReader(stream);
                     //var s = reader.ReadString();
 
-                    string responseDto = null;
+                    //string responseDto = null;
 
-                    byte[] b = new byte[sizeof(uint)];
-                    var read = stream.Read(b, 0, b.Length);
-                    if (read == b.Length)
-                    {
-                        uint dataLength = BitConverter.ToUInt32(b, 0);
-                        uint loadedDataLength = 0;
-                        var sb = new StringBuilder();
+                    //byte[] b = new byte[sizeof(uint)];
+                    //var read = stream.Read(b, 0, b.Length);
+                    //if (read == b.Length)
+                    //{
+                    //    uint dataLength = BitConverter.ToUInt32(b, 0);
+                    //    uint loadedDataLength = 0;
+                    //    var sb = new StringBuilder();
 
-                        while (loadedDataLength < dataLength)
-                        {
-                            var buffer = new byte[MAX_BUFFER_SIZE_KB * 1024];
-                            var n = stream.Read(buffer, 0, buffer.Length);
-                            sb.Append(Encoding.UTF8.GetString(buffer, 0, n));
+                    //    while (loadedDataLength < dataLength)
+                    //    {
+                    //        var buffer = new byte[MAX_BUFFER_SIZE_KB * 1024];
+                    //        var n = stream.Read(buffer, 0, buffer.Length);
+                    //        sb.Append(Encoding.UTF8.GetString(buffer, 0, n));
 
-                            loadedDataLength += (uint)n;
-                        }
+                    //        loadedDataLength += (uint)n;
+                    //    }
 
-                        responseDto = sb.ToString();
-                        result = Utils.DtoDeserialize<T>(responseDto);
-                    }
+                    //    responseDto = sb.ToString();
+                    //    result = Utils.DtoDeserialize<T>(responseDto);
+                    //}
 
-                    stream.Close();
-                    client.Close();
+                    //stream.Close();
+                    //client.Close();
                 }
             }
 

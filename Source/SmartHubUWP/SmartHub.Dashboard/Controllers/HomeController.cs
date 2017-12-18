@@ -16,20 +16,7 @@ namespace SmartHub.Dashboard.Controllers
         public HomeController(SmartHubService smartHubService)
         {
             this.smartHubService = smartHubService;
-
-
-
-
         }
-
-
-
-
-
-
-
-
-
 
         public IActionResult Index()
         {
@@ -52,7 +39,6 @@ namespace SmartHub.Dashboard.Controllers
             ViewData["Message"] = "Your contact page.";
             return View();
         }
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
