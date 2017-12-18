@@ -9,8 +9,7 @@ using SmartHub.Dashboard.Services;
 
 namespace SmartHub.Dashboard.Controllers
 {
-
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class SmartHubController : Controller
     {
         private readonly SmartHubService smartHubService;
