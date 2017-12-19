@@ -1,5 +1,5 @@
-﻿using SmartHub.UWP.Applications.Client.Common;
-using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -61,9 +61,9 @@ namespace SmartHub.UWP.Applications.Client
         private void InitThemeList()
         {
             cbTheme.ItemsSource = new List<ThemeItem>() {
-                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Default"), Value = ElementTheme.Default },
-                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Light"), Value = ElementTheme.Light },
-                new ThemeItem() { Text = LocalUtils.GetLocalizedString("Dark"), Value = ElementTheme.Dark }
+                new ThemeItem() { Text = XamlUtils.GetLocalizedString(AppManager.AppData.Language, "Default"), Value = ElementTheme.Default },
+                new ThemeItem() { Text = XamlUtils.GetLocalizedString(AppManager.AppData.Language, "Light"), Value = ElementTheme.Light },
+                new ThemeItem() { Text = XamlUtils.GetLocalizedString(AppManager.AppData.Language, "Dark"), Value = ElementTheme.Dark }
             };
 
             foreach (ThemeItem li in cbTheme.Items)

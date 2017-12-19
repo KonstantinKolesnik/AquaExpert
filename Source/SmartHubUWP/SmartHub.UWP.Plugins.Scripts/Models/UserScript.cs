@@ -6,7 +6,7 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
     public class UserScript
     {
         //blob, integer, numeric, real, text
-        [PrimaryKey, NotNull]//, AutoIncrement]
+        [PrimaryKey, NotNull]
         public string ID
         {
             get; set;
@@ -20,6 +20,6 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
         public string Body
         {
             get; set;
-        } = "alert('No code!');";
+        } = "alert('Not implemented!');";
     }
 }

@@ -147,7 +147,7 @@ namespace SmartHub.UWP.Plugins.Scripts.UI.Controls
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, async (onYes) =>
+            await CoreUtils.MessageBoxYesNo(XamlUtils.GetLocalizedString(AppManager.AppData.Language, "confirmDeleteItem"), async (onYes) =>
             {
                 var id = (string)((sender as Button).Tag);
 

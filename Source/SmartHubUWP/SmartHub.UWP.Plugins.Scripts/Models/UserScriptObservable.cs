@@ -20,7 +20,6 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
             {
                 if (model.Name != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/scripts/setname", model.ID, value, model.Name);
                     model.Name = value;
                     NotifyPropertyChanged();
                 }
@@ -33,7 +32,6 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
             {
                 if (model.Body != value)
                 {
-                    var res = CoreUtils.RequestAsync<bool>("/api/scripts/setbody", model.ID, value);
                     model.Body = value;
                     NotifyPropertyChanged();
                 }
@@ -45,6 +43,7 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
         public UserScriptObservable(UserScript model)
         {
             this.model = model;
+            PropertyChanged += async (s, e) => { await CoreUtils.RequestAsync<bool>("/api/scripts/update", model); };
         }
         #endregion
     }

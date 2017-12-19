@@ -69,13 +69,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         //});
 
         [ScriptCommand(MethodName = "wemosSendCommand"), Export(typeof(ScriptCommand))]
-        public ScriptCommand scriptSendCommand => ((args) =>
+        public ScriptCommand scriptSendCommand => (args =>
         {
             var nodeID = int.Parse(args[0].ToString());
             var lineID = int.Parse(args[1].ToString());
             var messageType = int.Parse(args[2].ToString());
             var messageSubtype = int.Parse(args[3].ToString());
-            //var value = float.Parse(args[4].ToString());
             var value = args[4].ToString();
 
             return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));

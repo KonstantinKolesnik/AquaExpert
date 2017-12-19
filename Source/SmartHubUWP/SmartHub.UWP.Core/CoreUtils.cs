@@ -39,16 +39,16 @@ namespace SmartHub.UWP.Core
             dlg.DefaultCommandIndex = 1;
             return await dlg.ShowAsync();
         }
-        public static async Task<IUICommand> MessageBoxOKCancel(string msg, UICommandInvokedHandler onOK = null, UICommandInvokedHandler onCancel = null)
-        {
-            var dlg = new MessageDialog(msg, AppManager.AppName);
-            dlg.Commands.Add(new UICommand(Labels.OK) { Id = "btnOK", Invoked = onOK });
-            dlg.Commands.Add(new UICommand(Labels.Cancel) { Id = "btnCancel", Invoked = onCancel });
-            dlg.DefaultCommandIndex = 1;
-            dlg.CancelCommandIndex = 0;
+        //public static async Task<IUICommand> MessageBoxOKCancel(string msg, UICommandInvokedHandler onOK = null, UICommandInvokedHandler onCancel = null)
+        //{
+        //    var dlg = new MessageDialog(msg, AppManager.AppName);
+        //    dlg.Commands.Add(new UICommand(Labels.OK) { Id = "btnOK", Invoked = onOK });
+        //    dlg.Commands.Add(new UICommand(Labels.Cancel) { Id = "btnCancel", Invoked = onCancel });
+        //    dlg.DefaultCommandIndex = 1;
+        //    dlg.CancelCommandIndex = 0;
 
-            return await dlg.ShowAsync();
-        }
+        //    return await dlg.ShowAsync();
+        //}
         public static async Task<IUICommand> MessageBoxYesNo(string msg, UICommandInvokedHandler onYes = null, UICommandInvokedHandler onNo = null)
         {
             var dlg = new MessageDialog(msg, AppManager.AppName);

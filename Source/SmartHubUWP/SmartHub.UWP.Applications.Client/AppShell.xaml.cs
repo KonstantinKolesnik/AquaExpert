@@ -47,7 +47,7 @@ namespace SmartHub.UWP.Applications.Client
         public void SetNavigationInfo(string title = null, string menuItemNameToSelect = null)
         {
             if (!string.IsNullOrEmpty(title))
-                tbTitle.Text = LocalUtils.GetLocalizedString(title).ToUpper();
+                tbTitle.Text = XamlUtils.GetLocalizedString(AppManager.AppData.Language, title).ToUpper();
 
             if (!string.IsNullOrEmpty(menuItemNameToSelect))
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SmartHub.UWP.Core.Xaml.ValueConverters;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -25,6 +26,11 @@ namespace SmartHub.UWP.Core.Xaml
         public static T FindFirstVisualChild<T>(DependencyObject depObj) where T : DependencyObject
         {
             return FindVisualChildren<T>(depObj).FirstOrDefault();
+        }
+
+        public static string GetLocalizedString(string language, string stringId)
+        {
+            return new LocalizationConverter().Convert(language, null, stringId, null) as string;
         }
     }
 }

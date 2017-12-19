@@ -122,7 +122,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             var period = (Period) ((sender as Button).Tag);
 
-            await CoreUtils.MessageBoxYesNo(Labels.confirmDeleteItem, (onYes) =>
+            await CoreUtils.MessageBoxYesNo(XamlUtils.GetLocalizedString(AppManager.AppData.Language, "confirmDeleteItem"), (onYes) =>
             {
                 configuration.ActivePeriods.Remove(period);
             });

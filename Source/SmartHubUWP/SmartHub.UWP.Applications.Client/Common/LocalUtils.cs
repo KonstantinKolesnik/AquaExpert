@@ -1,6 +1,4 @@
-﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.Xaml.ValueConverters;
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -8,10 +6,6 @@ namespace SmartHub.UWP.Applications.Client.Common
 {
     public static class LocalUtils
     {
-        public static string GetLocalizedString(string stringId)
-        {
-            return new LocalizationConverter().Convert(AppManager.AppData.Language, null, stringId, null) as string;
-        }
         public static void SetAppTheme(ElementTheme theme)
         {
             AppShell.Current.RequestedTheme = theme;

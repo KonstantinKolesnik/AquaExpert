@@ -63,7 +63,7 @@
                 <PivotItem.Header>
                     <uctrlsGeneral:ucImagePivotHeader Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Monitors}"/>
                 </PivotItem.Header>
-                <uctrls:UcMonitorsList  IsSorted="True"/><!--IsGrouped="True"-->
+                <uctrls:UcMonitorsList IsGrouped="False" IsSorted="True"/>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>

@@ -28,38 +28,6 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         {
             get; set;
         }
-
-        //public string Data => data;
-
-        //public List<int> PayloadFirmware
-        //{
-        //    get
-        //    {
-        //        var result = new List<int>();
-
-        //        if (Type == WemosMessageType.Stream)
-        //            for (var i = 0; i < Payload.Length; i += 2)
-        //                result.Add(int.Parse(Payload.Substring(i, 2), NumberStyles.HexNumber));
-
-        //        return result;
-        //    }
-        //    set
-        //    {
-        //        if (Type == WemosMessageType.Stream)
-        //        {
-        //            string result = "";
-
-        //            for (var i = 0; i < value.Count; i++)
-        //            {
-        //                if (value[i] < 16) // ??????
-        //                    result += "0";
-        //                result += value[i].ToString("x");
-        //            }
-
-        //            Payload = result;
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Constructors
@@ -130,16 +98,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         }
         public bool GetBoolean()
         {
-            bool result = false;
-            if (bool.TryParse(data, out result))
+            if (bool.TryParse(data, out bool result))
                 return result;
 
             return false;
         }
         public long GetInteger()
         {
-            long result = 0;
-            if (long.TryParse(data, out result))
+            if (long.TryParse(data, out long result))
                 return result;
 
             return 0;
@@ -151,8 +117,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
                 string ds = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
                 string str = data.Replace(",", ds).Replace(".", ds);
 
-                float result = 0;
-                if (float.TryParse(str, out result))
+                if (float.TryParse(str, out float result))
                     return result;
             }
 

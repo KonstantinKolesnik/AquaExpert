@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Plugins;
+﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
@@ -25,7 +26,7 @@ namespace SmartHub.UWP.Plugins.Scripts
 
         #region Import
         /// <summary>
-        /// Методы плагинов, доступные в скриптах
+        /// Методы плагинов для использования в скриптах
         /// </summary>
         [ImportMany]
         public IEnumerable<Lazy<ScriptCommand, ScriptCommandAttribute>> ScriptCommands
@@ -145,66 +146,62 @@ namespace SmartHub.UWP.Plugins.Scripts
 
         #region Remote API
         [ApiMethod(MethodName = "/api/scripts"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetNodes => ((args) =>
+        public ApiMethod apiGetScripts => (args =>
         {
             return Context.GetPlugin<ScriptsPlugin>().GetScripts();
         });
 
-        [ApiMethod(MethodName = "/api/scripts/setname"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetScriptName => ((args) =>
-        {
-            var id = args[0] as string;
-            var name = args[1] as string;
-
-            var item = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
-            item.Name = !string.IsNullOrEmpty(name) ? name : "Script";
-            Context.StorageSaveOrUpdate(item);
-
-            //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
-
-            return true;
-        });
-
-        [ApiMethod(MethodName = "/api/scripts/setbody"), Export(typeof(ApiMethod))]
-        public ApiMethod apiSetScriptBody => ((args) =>
-        {
-            var id = args[0] as string;
-            var body = args[1] as string;
-
-            var item = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
-            item.Body = !string.IsNullOrEmpty(body) ? body : "alert('No code!');";
-            Context.StorageSaveOrUpdate(item);
-
-            return true;
-        });
-
         [ApiMethod(MethodName = "/api/scripts/add"), Export(typeof(ApiMethod))]
-        public ApiMethod apiAddScript => ((args) =>
+        public ApiMethod apiAddScript => (args =>
         {
-            var name = args[0] as string;
+            var name = args[0].ToString();
 
             var model = new UserScript()
             {
                 Name = name,
-                Body = "alert('No code!');"
+                Body = "alert('Not implemented!');"
             };
 
             Context.StorageSave(model);
 
-            //NotifyForSignalR(new { MsgId = "MonitorAdded", Data = BuildMonitorWebModel(ctrl) });
-
             return model;
         });
 
-        [ApiMethod(MethodName = "/api/scripts/delete"), Export(typeof(ApiMethod))]
-        public ApiMethod apiDeleteScript => ((args) =>
+        [ApiMethod(MethodName = "/api/wemos/scripts/update"), Export(typeof(ApiMethod))]
+        public ApiMethod apiUpdateScript => (args =>
         {
-            var id = args[0] as string;
+            var item = JsonConvert.DeserializeObject<UserScript>(args[0].ToString());
 
-            Context.StorageDelete(Context.GetPlugin<ScriptsPlugin>().GetScript(id));
+            if (item != null)
+            {
+                item.Name = item.Name ?? "Script";
+                item.Body = item.Body ?? "alert('Not implemented!');";
 
-            return true;
+                Context.StorageSaveOrUpdate(item);
+                return true;
+            }
+
+            return false;
         });
+
+        [ApiMethod(MethodName = "/api/scripts/delete"), Export(typeof(ApiMethod))]
+        public ApiMethod apiDeleteScript => (args =>
+        {
+            var id = args[0].ToString();
+
+            var item = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
+
+            if (item != null)
+            {
+                Context.StorageDelete(item);
+                return true;
+            }
+
+            return false;
+        });
+
+
+
 
         [ApiMethod(MethodName = "/api/scripts/run"), Export(typeof(ApiMethod))]
         public ApiMethod apiRunScript => ((args) =>
