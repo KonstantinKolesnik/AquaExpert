@@ -25,7 +25,7 @@
            
             <CommandBar Grid.Row="1">
                 <CommandBar.PrimaryCommands>
-                    <AppBarButton Label="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}" Click="ButtonCancel_Click">
+                    <AppBarButton Label="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Cancel}" Click="ButtonCancel_Click">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE106;"/>
                         </AppBarButton.Icon>

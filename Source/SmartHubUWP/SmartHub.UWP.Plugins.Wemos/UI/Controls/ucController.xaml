@@ -29,7 +29,7 @@
         <RelativePanel x:Name="rp">
             <TextBox
                 x:Name="tbName"
-                Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                 Text="{Binding Controller.Name, Mode=TwoWay}"
                 RelativePanel.AlignTopWithPanel="True"

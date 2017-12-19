@@ -17,24 +17,24 @@
         <StackPanel Margin="{StaticResource RootContainerMargin}">
             <TextBlock Text="Wemos" Style="{ThemeResource SubtitleTextBlockStyle}"/>
             <!--<TextBlock Text="Wemos modules" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
-            <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
+            <!--<TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Settings}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
         <!--
         <Pivot Grid.Row="1" Style="{StaticResource TextStylePivotStyle}">
-            <PivotItem Header="{Binding Labels.Nodes, Source={StaticResource LabelsManager}}">
+            <PivotItem Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Nodes}">
                 <uctrls:ucNodes Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
-            <PivotItem Header="{Binding Labels.Lines, Source={StaticResource LabelsManager}}">
+            <PivotItem Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Lines}">
                 <uctrls:ucLines Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
-            <PivotItem Header="{Binding Labels.Database, Source={StaticResource LabelsManager}}">
+            <PivotItem Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Database}">
                 <TextBlock Text="Lines values management" Margin="{StaticResource RootContainerMargin}"/>
             </PivotItem>
-            <PivotItem Header="{Binding Labels.Monitors, Source={StaticResource LabelsManager}}">
+            <PivotItem Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Monitors}">
                 <uctrls:ucMonitorsList IsGrouped="True" IsSorted="True"/>
             </PivotItem>
-            <PivotItem Header="{Binding Labels.Controllers, Source={StaticResource LabelsManager}}">
+            <PivotItem Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Controllers}">
                 <uctrls:ucControllers/>
             </PivotItem>
         </Pivot>

@@ -7,7 +7,6 @@
     xmlns:vc="using:SmartHub.UWP.Core.Xaml.ValueConverters">
 
     <core:AppManager x:Key="AppManager"/>
-    <strings:LabelsManager x:Key="LabelsManager"/>
 
     <!-- Busy indicator -->
     <Style TargetType="telerikPrimatives:RadBusyIndicator">

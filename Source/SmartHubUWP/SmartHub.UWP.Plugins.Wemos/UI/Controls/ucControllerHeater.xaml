@@ -26,7 +26,7 @@
         <RelativePanel x:Name="rp">
             <ComboBox
                 x:Name="cbSwitchLines"
-                Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Line}"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                 ItemsSource="{Binding SwitchLines}"
                 RelativePanel.AlignTopWithPanel="True"
@@ -44,7 +44,7 @@
 
             <ComboBox
                 x:Name="cbTemperatureLines"
-                Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Line}"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                 ItemsSource="{Binding TemperatureLines}"
                 RelativePanel.Below="cbSwitchLines"

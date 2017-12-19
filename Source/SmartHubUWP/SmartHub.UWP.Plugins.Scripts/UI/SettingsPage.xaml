@@ -15,9 +15,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Margin="{StaticResource RootContainerMargin}">
-            <TextBlock Text="{Binding Labels.Scripts, Source={StaticResource LabelsManager}}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Scripts}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
             <!--<TextBlock Text="Wemos modules" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
-            <!--<TextBlock Text="{Binding Labels.Settings, Source={StaticResource LabelsManager}}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
+            <!--<TextBlock Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Settings}" Style="{ThemeResource CaptionTextBlockStyle}"/>-->
         </StackPanel>
 
         <Pivot Grid.Row="1" Style="{StaticResource TabsPivotStyle}" Margin="0,10,0,0">

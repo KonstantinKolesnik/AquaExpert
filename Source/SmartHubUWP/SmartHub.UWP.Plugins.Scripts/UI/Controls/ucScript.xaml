@@ -1,11 +1,10 @@
 ﻿<UserControl
     x:Class="SmartHub.UWP.Plugins.Scripts.UI.Controls.ucScript"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
-    xmlns:local="using:SmartHub.UWP.Plugins.Scripts.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
     mc:Ignorable="d">
 
     <Grid>
@@ -65,7 +64,7 @@
                         Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBox
                             x:Name="tbName"
-                            Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                            Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}"
                             HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                             Text="{Binding Script.Name, Mode=TwoWay}"
                             RelativePanel.AlignTopWithPanel="True"
@@ -80,7 +79,7 @@
                         Grid.Row="1"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         x:Name="tbScript"
-                        Header="{Binding Labels.Script, Source={StaticResource LabelsManager}}"
+                        Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Script}"
                         HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                         Text="{Binding Script.Body, Mode=TwoWay}"
                         AcceptsReturn="True"

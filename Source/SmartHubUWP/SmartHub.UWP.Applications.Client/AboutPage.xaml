@@ -35,8 +35,8 @@
             </StackPanel>
 
             <StackPanel Grid.Row="2" Margin="{StaticResource ParagraphMargin}">
-                <!--<HyperlinkButton Content="{Binding Labels.SupportFeedback, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.SendEmailCommand, Source={StaticResource AppManager}}"/>-->
-                <!--<HyperlinkButton Content="{Binding Labels.RateApp, Source={StaticResource LabelsManager}}" Command="{Binding AppCommands.RateAppCommand, Source={StaticResource AppManager}}"/>-->
+                <!--<HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=SupportFeedback}" Command="{Binding AppCommands.SendEmailCommand, Source={StaticResource AppManager}}"/>-->
+                <!--<HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=RateApp}" Command="{Binding AppCommands.RateAppCommand, Source={StaticResource AppManager}}"/>-->
                 <HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=HomePage}" NavigateUri="{Binding AppHomePage, Source={StaticResource AppManager}}"/>
                 <HyperlinkButton Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=PrivacyPolicy}" NavigateUri="{Binding AppPrivacyPolicyPage, Source={StaticResource AppManager}}"/>
             </StackPanel>

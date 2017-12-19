@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using System;
@@ -103,8 +102,12 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async Task UpdateControllersList()
         {
+            biRequest.IsActive = true;
+
             var models = await CoreUtils.RequestAsync<List<WemosController>>("/api/wemos/controllers");
             ItemsSource = new ObservableCollection<WemosControllerObservable>(models.Select(m => new WemosControllerObservable(m)));
+
+            biRequest.IsActive = false;
         }
         private void UpdateItemsViewSource()
         {

@@ -31,7 +31,7 @@
         <RelativePanel x:Name="rp">
             <ComboBox
                 x:Name="cbLines"
-                Header="{Binding Labels.Line, Source={StaticResource LabelsManager}}"
+                Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Line}"
                 HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                 ItemsSource="{Binding Lines}"
                 RelativePanel.AlignTopWithPanel="True"
@@ -81,12 +81,12 @@
 
                             <StackPanel>
                                 <TimePicker
-                                    Header="{Binding Labels.From, Source={StaticResource LabelsManager}}"
+                                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=From}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding From, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"/>
                                 <TimePicker
-                                    Header="{Binding Labels.To, Source={StaticResource LabelsManager}}"
+                                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=To}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding To, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"/>

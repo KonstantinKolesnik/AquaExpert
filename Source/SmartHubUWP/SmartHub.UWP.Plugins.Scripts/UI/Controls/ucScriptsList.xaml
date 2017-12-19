@@ -22,13 +22,13 @@
         <ContentDialog
             x:Name="dlgAddScript"
             VerticalAlignment="Stretch"
-            PrimaryButtonText="{Binding Labels.OK, Source={StaticResource LabelsManager}}"
-            SecondaryButtonText="{Binding Labels.Cancel, Source={StaticResource LabelsManager}}"
+            PrimaryButtonText="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=OK}"
+            SecondaryButtonText="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Cancel}"
             IsPrimaryButtonEnabled="{Binding Text, ElementName=tbScriptName, Mode=OneWay, Converter={StaticResource StringToBooleanConverter}}">
             <StackPanel>
                 <TextBox
                     x:Name="tbScriptName"
-                    Header="{Binding Labels.Name, Source={StaticResource LabelsManager}}"
+                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Name}"
                     HorizontalAlignment="Stretch"
                     Margin="{StaticResource PropertyNameValueVerticalBlockMargin}"/>
             </StackPanel>
@@ -36,7 +36,7 @@
 
         <TextBlock
             x:Name="tbEmptyContent"
-            Text="{Binding Labels.NoData, Source={StaticResource LabelsManager}}"
+            Text="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=NoData}"
             Style="{StaticResource EmptyListTextBlockStyle}"/>
 
         <ListView
@@ -77,20 +77,17 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <telerikPrimitives:RadBusyIndicator
-            x:Name="biRequest"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"/>
+        <telerikPrimitives:RadBusyIndicator x:Name="biRequest" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="{Binding Labels.Add, Source={StaticResource LabelsManager}}" Click="ButtonAdd_Click">
+                <AppBarButton Label="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Add}" Click="ButtonAdd_Click">
                     <AppBarButton.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE109;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarSeparator/>
-                <AppBarButton Label="{Binding Labels.Refresh, Source={StaticResource LabelsManager}}" Click="ButtonRefresh_Click">
+                <AppBarButton Label="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Refresh}" Click="ButtonRefresh_Click">
                     <AppBarButton.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;"/>
                     </AppBarButton.Icon>

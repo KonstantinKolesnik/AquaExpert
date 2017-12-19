@@ -1,5 +1,4 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Core.StringResources;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Scripts.Models;
 using System;
@@ -27,8 +26,7 @@ namespace SmartHub.UWP.Plugins.Scripts.UI.Controls
             var uc = d as ucScriptsList;
             uc.UpdateItemsViewSource();
 
-            var items = e.NewValue as ObservableCollection<UserScriptObservable>;
-            if (items != null)
+            if (e.NewValue is ObservableCollection<UserScriptObservable> items)
                 items.CollectionChanged += (s, args) =>
                 {
                     uc.UpdateItemsViewSource();
