@@ -16,12 +16,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
     {
         #region Fields
         private WemosMonitorDto model;
-        private ThreadPoolTimer timer;
+        //private ThreadPoolTimer timer;
         private double updateIntervalSeconds = 5;
 
-        //private Task taskListen;
-        //private CancellationTokenSource ctsListen;
-        //private bool isListenActive = false;
+        private Task taskListen;
+        private CancellationTokenSource ctsListen;
+        private bool isListenActive = false;
         #endregion
 
         #region Properties
@@ -160,11 +160,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
                     await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model);
             };
 
-            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
-            {
-                await UpdateValues();
-                //await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
-            }), TimeSpan.FromSeconds(updateIntervalSeconds));
+            //timer = ThreadPoolTimer.CreatePeriodicTimer(async t => {
+            //    await UpdateValues();
+            //}, TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
 
@@ -186,37 +184,37 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
             NotifyPropertyChanged("LastTimeStamp");
         }
 
-        //public void StartListen()
-        //{
-        //    if (!isListenActive)
-        //    {
-        //        ctsListen = new CancellationTokenSource();
+        public void StartListen()
+        {
+            if (!isListenActive)
+            {
+                ctsListen = new CancellationTokenSource();
 
-        //        taskListen = Task.Factory.StartNew(async () =>
-        //        {
-        //            while (!ctsListen.IsCancellationRequested)
-        //            {
-        //                if (isListenActive)
-        //                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
+                taskListen = Task.Factory.StartNew(async () =>
+                {
+                    while (!ctsListen.IsCancellationRequested)
+                    {
+                        if (isListenActive)
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
 
-        //                await Task.Delay((int)updateIntervalSeconds * 1000);
-        //            }
-        //        }, ctsListen.Token);
+                        await Task.Delay((int)updateIntervalSeconds * 1000);
+                    }
+                }, ctsListen.Token);
 
-        //        isListenActive = true;
-        //    }
-        //}
-        //public void StopListen()
-        //{
-        //    //if (timer != null)
-        //    //    timer.Cancel();
+                isListenActive = true;
+            }
+        }
+        public void StopListen()
+        {
+            //if (timer != null)
+            //    timer.Cancel();
 
-        //    if (isListenActive)
-        //    {
-        //        ctsListen?.Cancel();
-        //        isListenActive = false;
-        //    }
-        //}
+            if (isListenActive)
+            {
+                ctsListen?.Cancel();
+                isListenActive = false;
+            }
+        }
         #endregion
     }
 }

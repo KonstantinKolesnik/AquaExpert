@@ -121,6 +121,7 @@
     <Compile Include="Core\Messages\WemosStreamMessageType.cs" />
     <Compile Include="Core\Models\WemosLine.cs" />
     <Compile Include="Core\Models\WemosLineValue.cs" />
+    <Compile Include="Infrastructure\LineValueSources\Models\WemosLineValueSource.cs" />
     <Compile Include="Infrastructure\Monitors\Models\WemosMonitorObservable.cs" />
     <Compile Include="Infrastructure\Monitors\Models\WemosMonitor.cs" />
     <Compile Include="Core\Models\WemosNode.cs" />

@@ -16,8 +16,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //if (e.OldValue is WemosMonitorObservable oldMonitor)
-            //    oldMonitor.StopListen();
+            if (e.OldValue is WemosMonitorObservable oldMonitor)
+                oldMonitor.StopListen();
 
             if (e.NewValue is WemosMonitorObservable newMonitor)
             {
@@ -27,7 +27,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 newMonitor.PropertyChanged += (s, args) => { uc.SetChartsFormats(); };
 
                 await newMonitor.UpdateValues();
-                //newMonitor.StartListen();
+                newMonitor.StartListen();
             }
         }
 

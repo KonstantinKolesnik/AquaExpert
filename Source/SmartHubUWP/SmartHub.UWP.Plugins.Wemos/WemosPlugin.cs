@@ -9,6 +9,7 @@ using SmartHub.UWP.Plugins.UI.Attributes;
 using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.LineValueSources.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 using SmartHub.UWP.Plugins.Wemos.UI;
@@ -102,6 +103,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
             db.CreateTable<WemosMonitor>();
             db.CreateTable<WemosController>();
+            //db.CreateTable<WemosLineValueSource>();
             //db.CreateTable<WemosZone>();
         }
         public override void InitPlugin()
@@ -129,9 +131,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             await udpClient.Start(localService, remoteMulticastAddress);
 
             await RequestPresentationAsync();
-
-            foreach (var line in GetLines())
-                await RequestLineValueAsync(line);
+            await RequestLinesValueAsync();
 
             foreach (var controller in controllers)
                 controller.Start();
@@ -164,7 +164,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         public async Task RequestPresentationAsync(int nodeID = -1, int lineID = -1)
         {
             await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
-            GetLines().ForEach(async line => await RequestLineValueAsync(line));
+        }
+        public async Task RequestLinesValueAsync()
+        {
+            //GetLines().ForEach(async line => await RequestLineValueAsync(line));
+            foreach (var line in GetLines())
+                await RequestLineValueAsync(line);
         }
         public async Task RequestLineValueAsync(WemosLine line)
         {
@@ -268,6 +273,18 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.StorageGet().Table<WemosMonitor>().FirstOrDefault(m => m.ID == id);
         }
 
+        public List<WemosLineValueSource> GetLineValueSources()
+        {
+            return Context.StorageGet().Table<WemosLineValueSource>().ToList();
+        }
+        public WemosLineValueSource GetLineValueSource(string id)
+        {
+            return Context.StorageGet().Table<WemosLineValueSource>().FirstOrDefault(m => m.ID == id);
+        }
+
+
+
+
         public List<WemosController> GetControllers()
         {
             return Context.StorageGet().Table<WemosController>().ToList();
@@ -276,12 +293,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return controllers.FirstOrDefault(c => c.ID == id);
         }
-        public void AddController(WemosController ctrl)
+        public void AddWorkingController(WemosController ctrl)
         {
             if (ctrl != null)
                 controllers.Add(ctrl);
         }
-        public void RemoveController(WemosController ctrl)
+        public void RemoveWorkingController(WemosController ctrl)
         {
             if (ctrl != null)
                 controllers.Remove(ctrl);
@@ -310,8 +327,9 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 for (int i = 0; i < Context.GetPlugin<WemosPlugin>().controllers.Count; i++)
                                     Context.GetPlugin<WemosPlugin>().controllers[i].ProcessTimer(DateTime.Now);
 
-
-
+                                //var lvss = Context.GetPlugin<WemosPlugin>().GetLineValueSources();
+                                //for (int i = 0; i < lvss.Count; i++)
+                                //    lvss[i].Process();
                             });
 
                             await Task.Delay(50);
@@ -693,7 +711,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             ctrl.Init(Context);
 
             Context.StorageSave(ctrl);
-            Context.GetPlugin<WemosPlugin>().AddController(ctrl);
+            Context.GetPlugin<WemosPlugin>().AddWorkingController(ctrl);
 
             ctrl.Start();
             //NotifyForSignalR(new { MsgId = "ControllerAdded", Data = BuildControllerWebModel(ctrl) });
@@ -733,7 +751,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (ctrl != null)
             {
                 Context.StorageDelete(ctrl);
-                Context.GetPlugin<WemosPlugin>().RemoveController(ctrl);
+                Context.GetPlugin<WemosPlugin>().RemoveWorkingController(ctrl);
                 return true;
             }
 
