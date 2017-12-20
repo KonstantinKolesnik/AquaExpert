@@ -105,12 +105,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attributes\WemosMessageHandlerAttribute.cs" />
-    <Compile Include="Controllers\Models\WemosControllerObservable.cs" />
-    <Compile Include="Controllers\Models\WemosController.cs" />
-    <Compile Include="Controllers\Models\WemosControllerType.cs" />
-    <Compile Include="Controllers\WemosControllerWorker.cs" />
-    <Compile Include="Controllers\WemosControllerWorkerHeater.cs" />
-    <Compile Include="Controllers\WemosControllerWorkerScheduledSwitch.cs" />
+    <Compile Include="Infrastructure\Controllers\Models\WemosControllerObservable.cs" />
+    <Compile Include="Infrastructure\Controllers\Models\WemosController.cs" />
+    <Compile Include="Infrastructure\Controllers\Models\WemosControllerType.cs" />
+    <Compile Include="Infrastructure\Controllers\WemosControllerWorker.cs" />
+    <Compile Include="Infrastructure\Controllers\WemosControllerWorkerHeater.cs" />
+    <Compile Include="Infrastructure\Controllers\WemosControllerWorkerScheduledSwitch.cs" />
     <Compile Include="Core\Messages\WemosInternalMessageType.cs" />
     <Compile Include="Core\Models\WemosLineType.cs" />
     <Compile Include="Core\Messages\WemosMessage.cs" />
@@ -121,12 +121,12 @@
     <Compile Include="Core\Messages\WemosStreamMessageType.cs" />
     <Compile Include="Core\Models\WemosLine.cs" />
     <Compile Include="Core\Models\WemosLineValue.cs" />
-    <Compile Include="Monitors\Models\WemosMonitorObservable.cs" />
-    <Compile Include="Monitors\Models\WemosMonitor.cs" />
+    <Compile Include="Infrastructure\Monitors\Models\WemosMonitorObservable.cs" />
+    <Compile Include="Infrastructure\Monitors\Models\WemosMonitor.cs" />
     <Compile Include="Core\Models\WemosNode.cs" />
     <Compile Include="Core\Models\WemosNodeBatteryValue.cs" />
     <Compile Include="Core\Models\WemosSetting.cs" />
-    <Compile Include="Monitors\WemosMonitorDto.cs" />
+    <Compile Include="Infrastructure\Monitors\WemosMonitorDto.cs" />
     <Compile Include="Transporting\WemosTransportBackgroundTask.cs" />
     <Compile Include="UI\Controls\ucController.xaml.cs">
       <DependentUpon>ucController.xaml</DependentUpon>
@@ -212,7 +212,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Zones\" />
+    <Folder Include="Infrastructure\Zones\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Controls\ucController.xaml">

@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
 {
     public class WemosMonitor
     {

@@ -1,4 +1,4 @@
-﻿namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
+﻿namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
 {
     public enum WemosControllerType
     {

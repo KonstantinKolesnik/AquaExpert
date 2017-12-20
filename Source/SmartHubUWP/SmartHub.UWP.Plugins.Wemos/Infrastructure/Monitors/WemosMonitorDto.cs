@@ -1,7 +1,7 @@
 ﻿using SmartHub.UWP.Plugins.Wemos.Core.Models;
-using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 
-namespace SmartHub.UWP.Plugins.Wemos.Monitors
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors
 {
     public class WemosMonitorDto : WemosMonitor
     {

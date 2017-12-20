@@ -6,11 +6,11 @@ using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.Scripts;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Messages;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
-using SmartHub.UWP.Plugins.Wemos.Monitors;
-using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
 using System.Collections.Generic;
@@ -309,6 +309,9 @@ namespace SmartHub.UWP.Plugins.Wemos
                             {
                                 for (int i = 0; i < Context.GetPlugin<WemosPlugin>().controllers.Count; i++)
                                     Context.GetPlugin<WemosPlugin>().controllers[i].ProcessTimer(DateTime.Now);
+
+
+
                             });
 
                             await Task.Delay(50);

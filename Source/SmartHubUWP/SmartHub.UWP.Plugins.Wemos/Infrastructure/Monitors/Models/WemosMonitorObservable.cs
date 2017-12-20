@@ -7,20 +7,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.System.Threading;
 using Windows.UI.Core;
 
-namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
 {
     public class WemosMonitorObservable : ObservableObject
     {
         #region Fields
         private WemosMonitorDto model;
-        //private ThreadPoolTimer timer;
-        private double updateIntervalSeconds = 3;
+        private ThreadPoolTimer timer;
+        private double updateIntervalSeconds = 5;
 
-        private Task taskListen;
-        private CancellationTokenSource ctsListen;
-        private bool isListenActive = false;
+        //private Task taskListen;
+        //private CancellationTokenSource ctsListen;
+        //private bool isListenActive = false;
         #endregion
 
         #region Properties
@@ -153,17 +154,17 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
         {
             this.model = model;
 
-            //timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
-            //{
-            //    //await UpdateValues();
-            //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
-            //}), TimeSpan.FromSeconds(updateIntervalSeconds));
-
             PropertyChanged += async (s, e) =>
             {
                 if (!e.PropertyName.Contains("Last"))
                     await CoreUtils.RequestAsync<bool>("/api/wemos/monitors/update", model);
             };
+
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(async (t) =>
+            {
+                await UpdateValues();
+                //await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
+            }), TimeSpan.FromSeconds(updateIntervalSeconds));
         }
         #endregion
 
@@ -185,37 +186,37 @@ namespace SmartHub.UWP.Plugins.Wemos.Monitors.Models
             NotifyPropertyChanged("LastTimeStamp");
         }
 
-        public void StartListen()
-        {
-            if (!isListenActive)
-            {
-                ctsListen = new CancellationTokenSource();
+        //public void StartListen()
+        //{
+        //    if (!isListenActive)
+        //    {
+        //        ctsListen = new CancellationTokenSource();
 
-                taskListen = Task.Factory.StartNew(async () =>
-                {
-                    while (!ctsListen.IsCancellationRequested)
-                    {
-                        if (isListenActive)
-                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
+        //        taskListen = Task.Factory.StartNew(async () =>
+        //        {
+        //            while (!ctsListen.IsCancellationRequested)
+        //            {
+        //                if (isListenActive)
+        //                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await UpdateValues(); });
 
-                        await Task.Delay((int)updateIntervalSeconds * 1000);
-                    }
-                }, ctsListen.Token);
+        //                await Task.Delay((int)updateIntervalSeconds * 1000);
+        //            }
+        //        }, ctsListen.Token);
 
-                isListenActive = true;
-            }
-        }
-        public void StopListen()
-        {
-            //if (timer != null)
-            //    timer.Cancel();
+        //        isListenActive = true;
+        //    }
+        //}
+        //public void StopListen()
+        //{
+        //    //if (timer != null)
+        //    //    timer.Cancel();
 
-            if (isListenActive)
-            {
-                ctsListen?.Cancel();
-                isListenActive = false;
-            }
-        }
+        //    if (isListenActive)
+        //    {
+        //        ctsListen?.Cancel();
+        //        isListenActive = false;
+        //    }
+        //}
         #endregion
     }
 }

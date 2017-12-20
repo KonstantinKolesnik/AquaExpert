@@ -1,12 +1,12 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace SmartHub.UWP.Plugins.Wemos.Controllers
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
 {
     public class Period : ObservableObject
     {

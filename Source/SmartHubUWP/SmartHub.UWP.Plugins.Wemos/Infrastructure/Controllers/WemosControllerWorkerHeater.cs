@@ -1,10 +1,10 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.Speech;
-using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Controllers
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
 {
     public class WemosControllerWorkerHeater : WemosControllerWorker
     {

@@ -3,7 +3,7 @@ using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
 {
     public class WemosController
     {

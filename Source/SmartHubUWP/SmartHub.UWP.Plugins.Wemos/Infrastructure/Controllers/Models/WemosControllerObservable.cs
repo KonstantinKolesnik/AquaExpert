@@ -1,6 +1,6 @@
 ﻿using SmartHub.UWP.Core;
 
-namespace SmartHub.UWP.Plugins.Wemos.Controllers.Models
+namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
 {
     public class WemosControllerObservable : ObservableObject
     {

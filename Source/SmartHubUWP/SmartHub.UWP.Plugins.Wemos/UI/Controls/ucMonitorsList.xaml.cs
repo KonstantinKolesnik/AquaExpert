@@ -1,8 +1,8 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
-using SmartHub.UWP.Plugins.Wemos.Monitors;
-using SmartHub.UWP.Plugins.Wemos.Monitors.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

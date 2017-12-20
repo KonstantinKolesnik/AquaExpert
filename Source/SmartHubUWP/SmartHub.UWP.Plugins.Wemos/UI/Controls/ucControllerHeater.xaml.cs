@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
-using SmartHub.UWP.Plugins.Wemos.Controllers;
-using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Core.Xaml;
-using SmartHub.UWP.Plugins.Wemos.Controllers.Models;
+using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
