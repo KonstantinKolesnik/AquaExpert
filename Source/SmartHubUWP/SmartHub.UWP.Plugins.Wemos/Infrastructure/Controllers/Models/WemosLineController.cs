@@ -53,16 +53,19 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
             host = context?.GetPlugin<WemosPlugin>();
 
             line = host.GetLine(LineID);
-            host.RequestLineValueAsync(line);
+            host.RequestLineValueAsync(line).Wait();
         }
         public async Task ProcessAsync()
         {
-            var lastValue = host.GetLineLastValue(LineID);
+            if (IsEnabled)
+            {
+                var lastValue = host.GetLineLastValue(LineID);
 
-            if (lastValue == null)
-                await host.RequestLineValueAsync(line);
-            else if (lastValue.Value != Value)
-                await host.SetLineValueAsync(line, Value);
+                if (lastValue == null)
+                    await host.RequestLineValueAsync(line);
+                else if (lastValue.Value != Value)
+                    await host.SetLineValueAsync(line, Value);
+            }
         }
         #endregion
     }
