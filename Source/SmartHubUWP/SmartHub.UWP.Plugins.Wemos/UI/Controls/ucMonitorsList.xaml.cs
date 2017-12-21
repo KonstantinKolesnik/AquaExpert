@@ -17,10 +17,10 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class UcMonitorsList : UserControl
     {
         #region Properties
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosMonitorObservable>), typeof(UcMonitorsList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
-        public ObservableCollection<WemosMonitorObservable> ItemsSource
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(ObservableCollection<WemosLineMonitorObservable>), typeof(UcMonitorsList), new PropertyMetadata(null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public ObservableCollection<WemosLineMonitorObservable> ItemsSource
         {
-            get { return (ObservableCollection<WemosMonitorObservable>) GetValue(ItemsSourceProperty); }
+            get { return (ObservableCollection<WemosLineMonitorObservable>) GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -28,16 +28,16 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             var uc = d as UcMonitorsList;
             uc.UpdateItemsViewSource();
 
-            var items = e.NewValue as ObservableCollection<WemosMonitorObservable>;
+            var items = e.NewValue as ObservableCollection<WemosLineMonitorObservable>;
             if (items != null)
                 items.CollectionChanged += (s, args) =>
                 {
                     uc.UpdateItemsViewSource();
 
                     if (args.Action == NotifyCollectionChangedAction.Add)
-                        uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosMonitorObservable));
+                        uc.ItemAdded?.Invoke(uc, new ObjectEventArgs(args.NewItems[0] as WemosLineMonitorObservable));
                     else if (args.Action == NotifyCollectionChangedAction.Remove)
-                        uc.ItemDeleted?.Invoke(uc, new ObjectEventArgs(args.OldItems[0] as WemosMonitorObservable));
+                        uc.ItemDeleted?.Invoke(uc, new ObjectEventArgs(args.OldItems[0] as WemosLineMonitorObservable));
                 };
         }
 
@@ -65,14 +65,14 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 {
                     int result = 0;
 
-                    var gg = itemsViewSource.Source as IOrderedEnumerable<IGrouping<string, WemosMonitorObservable>>;
+                    var gg = itemsViewSource.Source as IOrderedEnumerable<IGrouping<string, WemosLineMonitorObservable>>;
                     foreach (var g in gg)
                         result += g.Count();
 
                     return result;
                 }
                 else
-                    return (itemsViewSource.Source as IEnumerable<WemosMonitorObservable>).Count();
+                    return (itemsViewSource.Source as IEnumerable<WemosLineMonitorObservable>).Count();
             }
         }
         #endregion
@@ -105,8 +105,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             biRequest.IsActive = true;
 
-            var models = await CoreUtils.RequestAsync<List<WemosMonitorDto>>("/api/wemos/monitors");
-            ItemsSource = models != null ? new ObservableCollection<WemosMonitorObservable>(models.Where(m => m != null).Select(m => new WemosMonitorObservable(m))) : null;
+            var models = await CoreUtils.RequestAsync<List<WemosLineMonitorDto>>("/api/wemos/monitors");
+            ItemsSource = models != null ? new ObservableCollection<WemosLineMonitorObservable>(models.Where(m => m != null).Select(m => new WemosLineMonitorObservable(m))) : null;
 
             biRequest.IsActive = false;
         }
@@ -155,9 +155,9 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
                 var min = nbMin.Value.Value;
                 var max = nbMax.Value.Value;
 
-                var model = await CoreUtils.RequestAsync<WemosMonitorDto>("/api/wemos/monitors/add", lineID, min, max);
+                var model = await CoreUtils.RequestAsync<WemosLineMonitorDto>("/api/wemos/monitors/add", lineID, min, max);
                 if (model != null)
-                    ItemsSource.Add(new WemosMonitorObservable(model));
+                    ItemsSource.Add(new WemosLineMonitorObservable(model));
             }
         }
         private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -173,7 +173,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         }
         private void lvMonitors_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ItemClicked?.Invoke(sender, new ObjectEventArgs(e.ClickedItem as WemosMonitorObservable));
+            ItemClicked?.Invoke(sender, new ObjectEventArgs(e.ClickedItem as WemosLineMonitorObservable));
         }
         #endregion
     }

@@ -12,10 +12,10 @@ using Windows.UI.Core;
 
 namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
 {
-    public class WemosMonitorObservable : ObservableObject
+    public class WemosLineMonitorObservable : ObservableObject
     {
         #region Fields
-        private WemosMonitorDto model;
+        private WemosLineMonitorDto model;
         //private ThreadPoolTimer timer;
         private double updateIntervalSeconds = 5;
 
@@ -150,7 +150,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
         #endregion
 
         #region Constructor
-        public WemosMonitorObservable(WemosMonitorDto model)
+        public WemosLineMonitorObservable(WemosLineMonitorDto model)
         {
             this.model = model;
 

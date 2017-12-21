@@ -3,7 +3,7 @@ using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 
 namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors
 {
-    public class WemosMonitorDto : WemosMonitor
+    public class WemosLineMonitorDto : WemosLineMonitor
     {
         public string LineName
         {
@@ -14,7 +14,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors
             get; set;
         }
 
-        public WemosMonitorDto(WemosMonitor model)
+        public WemosLineMonitorDto(WemosLineMonitor model)
         {
             if (model != null)
             {

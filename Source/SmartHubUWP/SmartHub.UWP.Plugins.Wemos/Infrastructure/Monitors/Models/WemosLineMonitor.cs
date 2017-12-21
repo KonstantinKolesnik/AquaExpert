@@ -3,7 +3,7 @@ using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
 {
-    public class WemosMonitor
+    public class WemosLineMonitor
     {
         [PrimaryKey, NotNull]
         public string ID

@@ -8,18 +8,18 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
     public sealed partial class ucMonitor : UserControl
     {
         #region Properties
-        public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosMonitorObservable), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
-        public WemosMonitorObservable Monitor
+        public static readonly DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(WemosLineMonitorObservable), typeof(ucMonitor), new PropertyMetadata(null, new PropertyChangedCallback(OnMonitorChanged)));
+        public WemosLineMonitorObservable Monitor
         {
-            get { return (WemosMonitorObservable) GetValue(MonitorProperty); }
+            get { return (WemosLineMonitorObservable) GetValue(MonitorProperty); }
             set { SetValue(MonitorProperty, value); }
         }
         private async static void OnMonitorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is WemosMonitorObservable oldMonitor)
+            if (e.OldValue is WemosLineMonitorObservable oldMonitor)
                 oldMonitor.StopListen();
 
-            if (e.NewValue is WemosMonitorObservable newMonitor)
+            if (e.NewValue is WemosLineMonitorObservable newMonitor)
             {
                 var uc = d as ucMonitor;
                 uc.SetChartsFormats();
