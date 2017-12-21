@@ -102,8 +102,8 @@ namespace SmartHub.UWP.Plugins.Wemos
             db.CreateTable<WemosLineValue>();
 
             db.CreateTable<WemosLineMonitor>();
+            db.CreateTable<WemosLineController>();
             db.CreateTable<WemosController>();
-            //db.CreateTable<WemosLineController>();
             //db.CreateTable<WemosZone>();
         }
         public override void InitPlugin()

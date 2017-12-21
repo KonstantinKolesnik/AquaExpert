@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SQLite.Net.Attributes;
 using System;
 using System.Threading.Tasks;
@@ -8,8 +9,9 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
     public class WemosLineController
     {
         #region Fields
-        protected IServiceContext context;
-        protected WemosPlugin host;
+        private IServiceContext context;
+        private WemosPlugin host;
+        private WemosLine line;
         #endregion
 
         #region Properties
@@ -28,6 +30,15 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
         {
             get; set;
         }
+
+        // list of setters
+
+        // may be set from:
+        // - UI (switch/slider/color picker etc.)
+        // - script (programmaticaly)
+        // - time source
+        // - other line value
+        // after set, if other line is available, set back its value
         [NotNull, Default()]
         public float Value
         {
@@ -40,12 +51,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
         {
             this.context = context;
             host = context?.GetPlugin<WemosPlugin>();
-        }
 
+            line = host.GetLine(LineID);
+            host.RequestLineValueAsync(line);
+        }
         public async Task ProcessAsync()
         {
-            var line = host.GetLine(LineID);
             var lastValue = host.GetLineLastValue(LineID);
+
             if (lastValue == null)
                 await host.RequestLineValueAsync(line);
             else if (lastValue.Value != Value)
