@@ -1,10 +1,9 @@
 ﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:telerikPrimatives="using:Telerik.UI.Xaml.Controls.Primitives"
     xmlns:core="using:SmartHub.UWP.Core"
-    xmlns:strings="using:SmartHub.UWP.Core.StringResources"
-    xmlns:vc="using:SmartHub.UWP.Core.Xaml.ValueConverters">
+    xmlns:vc="using:SmartHub.UWP.Core.Xaml.ValueConverters"
+    xmlns:telerikPrimatives="using:Telerik.UI.Xaml.Controls.Primitives">
 
     <core:AppManager x:Key="AppManager"/>
 

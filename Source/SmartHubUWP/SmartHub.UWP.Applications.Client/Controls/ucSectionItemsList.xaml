@@ -32,7 +32,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="0,0,0,5" BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">
+                    <!--<Border Margin="0,0,0,5" BorderThickness="{StaticResource ListItemSeparatorThickness}" BorderBrush="{StaticResource ListItemSeparatorBrush}">-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -46,7 +46,7 @@
                                 <TextBlock Text="{Binding Description}" Style="{ThemeResource ListItemSubtitleStyle}"/>
                             </StackPanel>
                         </Grid>
-                    </Border>
+                    <!--</Border>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

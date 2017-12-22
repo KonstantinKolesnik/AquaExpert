@@ -1,10 +1,10 @@
-﻿using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Applications.Client.Common;
+using SmartHub.UWP.Core;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,22 +16,21 @@ namespace SmartHub.UWP.Applications.Client
     public sealed partial class AppSectionPage : Page
     {
         #region Properties
+        public AppSectionItemAttribute SelectedItem
+        {
+            get { return LocalUtils.AppState.IsAppsSection ? LocalUtils.AppState.SelectedItemApps : LocalUtils.AppState.SelectedItemSystem; }
+            set
+            {
+                if (LocalUtils.AppState.IsAppsSection)
+                    LocalUtils.AppState.SelectedItemApps = value;
+                else
+                    LocalUtils.AppState.SelectedItemSystem = value;
+            }
+        }
         public ObservableCollection<AppSectionItemAttribute> Items
         {
             get;
         } = new ObservableCollection<AppSectionItemAttribute>();
-        public static bool IsAppsSection
-        {
-            get; private set;
-        }
-        public static AppSectionItemAttribute SelectedItemApps
-        {
-            get; set;
-        }
-        public static AppSectionItemAttribute SelectedItemSystem
-        {
-            get; set;
-        }
         #endregion
 
         #region Constructor
@@ -47,10 +46,10 @@ namespace SmartHub.UWP.Applications.Client
         {
             base.OnNavigatedTo(e);
 
-            IsAppsSection = e.Parameter != null ? (AppSectionType) e.Parameter == AppSectionType.Applications : (bool)CoreApplication.Properties[nameof(IsAppsSection)];
-            CoreApplication.Properties[nameof(IsAppsSection)] = IsAppsSection;
+            if (e.Parameter != null)
+                LocalUtils.AppState.IsAppsSection = (AppSectionType)e.Parameter == AppSectionType.Applications;
 
-            AppShell.Current.SetNavigationInfo(IsAppsSection ? "Applications" : "System", IsAppsSection ? "menuApplications" : "menuSystem");
+            AppShell.Current.SetNavigationInfo(LocalUtils.AppState.IsAppsSection ? "Applications" : "System", LocalUtils.AppState.IsAppsSection ? "menuApplications" : "menuSystem");
             AppShell.Current.SetPrimaryBackRequestHandler(OnBackRequested);
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
@@ -59,7 +58,6 @@ namespace SmartHub.UWP.Applications.Client
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             AppShell.Current.SetPrimaryBackRequestHandler(null);
-
             base.OnNavigatedFrom(e);
         }
         #endregion
@@ -71,14 +69,9 @@ namespace SmartHub.UWP.Applications.Client
         }
         private void lvItems_ItemClicked(object sender, AppSectionItemEventArgs e)
         {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-            if (selectedItem != e.Item)
+            if (SelectedItem != e.Item)
             {
-                if (IsAppsSection)
-                    SelectedItemApps = e.Item;
-                else
-                    SelectedItemSystem = e.Item;
-
+                SelectedItem = e.Item;
                 DetailContentPresenter.Content = Activator.CreateInstance(e.Item.UIModuleType);
             }
 
@@ -97,11 +90,7 @@ namespace SmartHub.UWP.Applications.Client
                 MasterColumn.Width = new GridLength(1, GridUnitType.Star);
                 DetailColumn.Width = new GridLength(0);
 
-                if (IsAppsSection)
-                    SelectedItemApps = null;
-                else
-                    SelectedItemSystem = null;
-
+                SelectedItem = null;
                 DetailContentPresenter.Content = null;
 
                 e.Handled = true;
@@ -112,7 +101,6 @@ namespace SmartHub.UWP.Applications.Client
         #region Private methods
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
             var isNarrow = newState == NarrowState;
 
             if (!isNarrow)
@@ -122,8 +110,8 @@ namespace SmartHub.UWP.Applications.Client
             }
             else
             {
-                MasterColumn.Width = selectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
-                DetailColumn.Width = selectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+                MasterColumn.Width = SelectedItem != null ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+                DetailColumn.Width = SelectedItem != null ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(lvItems, isNarrow);
@@ -132,18 +120,15 @@ namespace SmartHub.UWP.Applications.Client
         }
         private async Task UpdateList()
         {
-            var selectedItem = IsAppsSection ? SelectedItemApps : SelectedItemSystem;
-
-            var items = await CoreUtils.RequestAsync<IEnumerable<AppSectionItemAttribute>>(IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
+            var items = await CoreUtils.RequestAsync<List<AppSectionItemAttribute>>(LocalUtils.AppState.IsAppsSection ? "/api/ui/sections/apps" : "/api/ui/sections/system");
 
             Items.Clear();
             if (items != null)
                 foreach (var item in items)
                 {
                     Items.Add(item);
-
-                    if (selectedItem != null && selectedItem.UIModuleType == item.UIModuleType)
-                        DetailContentPresenter.Content = Activator.CreateInstance(item.UIModuleType);
+                    if (SelectedItem != null && SelectedItem.UIModuleType == item.UIModuleType)
+                        DetailContentPresenter.Content = Activator.CreateInstance(SelectedItem.UIModuleType);
                 }
         }
         #endregion

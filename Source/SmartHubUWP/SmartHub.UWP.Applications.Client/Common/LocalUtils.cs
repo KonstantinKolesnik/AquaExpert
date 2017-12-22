@@ -6,6 +6,11 @@ namespace SmartHub.UWP.Applications.Client.Common
 {
     public static class LocalUtils
     {
+        public static AppState AppState
+        {
+            get;
+        } = new AppState();
+
         public static void SetAppTheme(ElementTheme theme)
         {
             AppShell.Current.RequestedTheme = theme;

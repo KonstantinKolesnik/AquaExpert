@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Xaml;
+﻿using SmartHub.UWP.Applications.Client.Common;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,11 +74,11 @@ namespace SmartHub.UWP.Applications.Client.Controls
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
 
-            //AppManager.EcosApp.ActiveProfile.LocomotivesManager.PropertyChanged += (s, e) =>
-            //{
-            //    if (e.PropertyName == nameof(AppManager.EcosApp.ActiveProfile.LocomotivesManager.SelectedItem))
-            //        SetSelectedItem();
-            //};
+            LocalUtils.AppState.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(LocalUtils.AppState.SelectedItemApps) || e.PropertyName == nameof(LocalUtils.AppState.SelectedItemSystem))
+                    SetSelectedItem();
+            };
         }
         #endregion
 
@@ -104,9 +105,11 @@ namespace SmartHub.UWP.Applications.Client.Controls
         }
         private void SetSelectedItem()
         {
-            var selectedItem = AppSectionPage.IsAppsSection ? AppSectionPage.SelectedItemApps : AppSectionPage.SelectedItemSystem;
+            var selectedItem = LocalUtils.AppState.IsAppsSection ? LocalUtils.AppState.SelectedItemApps : LocalUtils.AppState.SelectedItemSystem;
+
             lvItems.SelectionMode = selectedItem != null ? ListViewSelectionMode.Single : ListViewSelectionMode.None;
-            lvItems.SelectedItem = selectedItem;
+            lvItems.SelectedItem = ItemsSource?.FirstOrDefault(i => i.Name == selectedItem?.Name);
+
             if (selectedItem != null)
                 lvItems.ScrollIntoView(selectedItem);
         }

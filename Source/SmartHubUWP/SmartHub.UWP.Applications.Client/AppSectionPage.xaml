@@ -30,24 +30,21 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource LargeWindowSnapPoint}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="DetailContentPresenter.BorderThickness" Value="0.5,0,0,0" />
+                        <Setter Target="DetailContentPresenter.BorderThickness" Value="0.5,0,0,0"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="NarrowState">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" /><!--{StaticResource MinWindowSnapPoint}-->
+                        <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="DetailContentPresenter.BorderThickness" Value="0" />
+                        <Setter Target="DetailContentPresenter.BorderThickness" Value="0"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <uctrls:ucSectionItemsList
-            x:Name="lvItems"
-            ItemsSource="{Binding Items}"
-            ItemClicked="lvItems_ItemClicked"/>
+        <uctrls:ucSectionItemsList x:Name="lvItems" ItemsSource="{Binding Items}" ItemClicked="lvItems_ItemClicked"/>
 
         <ContentPresenter
             x:Name="DetailContentPresenter"

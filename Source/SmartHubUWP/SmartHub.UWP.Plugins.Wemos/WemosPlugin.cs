@@ -102,7 +102,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             db.CreateTable<WemosLineValue>();
 
             db.CreateTable<WemosLineMonitor>();
-            db.CreateTable<WemosLineController>();
+            //db.CreateTable<WemosLineController>();
             db.CreateTable<WemosController>();
             //db.CreateTable<WemosZone>();
         }
@@ -126,11 +126,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                 oldControllers.Add(controller);
             });
 
-            GetLineControllers().ForEach(controller =>
-            {
-                controller.Init(Context);
-                controllers.Add(controller);
-            });
+            //GetLineControllers().ForEach(controller =>
+            //{
+            //    controller.Init(Context);
+            //    controllers.Add(controller);
+            //});
         }
         public override async void StartPlugin()
         {
@@ -353,9 +353,9 @@ namespace SmartHub.UWP.Plugins.Wemos
                                 for (int i = 0; i < Context.GetPlugin<WemosPlugin>().oldControllers.Count; i++)
                                     Context.GetPlugin<WemosPlugin>().oldControllers[i].ProcessTimer(DateTime.Now);
 
-                                var controllers = Context.GetPlugin<WemosPlugin>().controllers;
-                                for (int i = 0; i < controllers.Count; i++)
-                                    await controllers[i].ProcessAsync();
+                                //var controllers = Context.GetPlugin<WemosPlugin>().controllers;
+                                //for (int i = 0; i < controllers.Count; i++)
+                                //    await controllers[i].ProcessAsync();
                             });
 
                             await Task.Delay(50);
