@@ -262,17 +262,16 @@ namespace SmartHub.UWP.Plugins.Speech
         //}
         #endregion
 
-        //#region Script events
+        #region Script events
         //[ScriptEvent("speech.commandReceived")]
         //public ScriptEventHandlerDelegate[] OnVoiceCommandReceivedForScripts { get; set; }
-        //#endregion
+        #endregion
 
         #region Script commands
-
-        [ScriptCommand(MethodName = "speechSay"), Export(typeof(ScriptCommand))]
-        public ScriptCommand scriptSay => ((args) =>
+        [ScriptCommand("speechSay")]
+        public ScriptCommand scriptSay => (args =>
         {
-            var text = args[0] as string;
+            var text = args[0].ToString();
             Context.GetPlugin<SpeechPlugin>().Say(text).Wait();
             return null;
         });
@@ -284,7 +283,7 @@ namespace SmartHub.UWP.Plugins.Speech
         //    GC.SuppressFinalize(this);
         //}
 
-        //#region Web API
+        #region Remote API
         //[HttpCommand("/api/speech/voicecommand/list")]
         //private object apiGetCommands(HttpRequestParams request)
         //{
@@ -368,6 +367,6 @@ namespace SmartHub.UWP.Plugins.Speech
 
         //    return null;
         //}
-        //#endregion
+        #endregion
     }
 }

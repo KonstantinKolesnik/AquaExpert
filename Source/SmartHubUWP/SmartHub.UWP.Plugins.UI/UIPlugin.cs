@@ -3,7 +3,6 @@ using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Reflection;
 
@@ -49,14 +48,14 @@ namespace SmartHub.UWP.Plugins.UI
         #endregion
 
         #region Remote API
-        [ApiMethod(MethodName = "/api/ui/sections/apps"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetApplicationsSectionItems => ((parameters) =>
+        [ApiMethod("/api/ui/sections/apps")]
+        public ApiMethod apiGetApplicationsSectionItems => (args =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.Applications);
         });
 
-        [ApiMethod(MethodName = "/api/ui/sections/system"), Export(typeof(ApiMethod))]
-        public ApiMethod apiGetSystemSectionItems => ((parameters) =>
+        [ApiMethod("/api/ui/sections/system")]
+        public ApiMethod apiGetSystemSectionItems => (args =>
         {
             return Context.GetPlugin<UIPlugin>().GetSectionItems(AppSectionType.System);
         });

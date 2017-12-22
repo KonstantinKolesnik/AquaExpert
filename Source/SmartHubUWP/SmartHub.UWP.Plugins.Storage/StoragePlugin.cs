@@ -5,7 +5,6 @@ using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using SmartHub.UWP.Plugins.Storage.Models;
 using SmartHub.UWP.Plugins.Storage.UI;
 using SmartHub.UWP.Plugins.UI.Attributes;
-using System.Composition;
 
 namespace SmartHub.UWP.Plugins.Storage
 {
@@ -26,7 +25,7 @@ namespace SmartHub.UWP.Plugins.Storage
         #endregion
 
         #region Remote API
-        [ApiMethod(MethodName = "/api/storage/size"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/storage/size")]
         public ApiMethod apiGetStorageSize => ((parameters) =>
         {
             var task = CoreUtils.GetFileBasicPropertiesAsync(Context.StoragePath);

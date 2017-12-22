@@ -33,6 +33,7 @@ namespace SmartHub.UWP.Plugins.Scripts
         {
             get; set;
         }
+
         //[OnImportsSatisfied]
         //public void OnImportsSatisfied()
         //{
@@ -145,13 +146,13 @@ namespace SmartHub.UWP.Plugins.Scripts
         #endregion
 
         #region Remote API
-        [ApiMethod(MethodName = "/api/scripts"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/scripts")]
         public ApiMethod apiGetScripts => (args =>
         {
             return Context.GetPlugin<ScriptsPlugin>().GetScripts();
         });
 
-        [ApiMethod(MethodName = "/api/scripts/add"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/scripts/add")]
         public ApiMethod apiAddScript => (args =>
         {
             var name = args[0].ToString();
@@ -167,7 +168,7 @@ namespace SmartHub.UWP.Plugins.Scripts
             return model;
         });
 
-        [ApiMethod(MethodName = "/api/wemos/scripts/update"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/wemos/scripts/update")]
         public ApiMethod apiUpdateScript => (args =>
         {
             var item = JsonConvert.DeserializeObject<UserScript>(args[0].ToString());
@@ -184,7 +185,7 @@ namespace SmartHub.UWP.Plugins.Scripts
             return false;
         });
 
-        [ApiMethod(MethodName = "/api/scripts/delete"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/scripts/delete")]
         public ApiMethod apiDeleteScript => (args =>
         {
             var id = args[0].ToString();
@@ -200,18 +201,19 @@ namespace SmartHub.UWP.Plugins.Scripts
             return false;
         });
 
-
-
-
-        [ApiMethod(MethodName = "/api/scripts/run"), Export(typeof(ApiMethod))]
+        [ApiMethod("/api/scripts/run")]
         public ApiMethod apiRunScript => ((args) =>
         {
-            var id = args[0] as string;
+            var id = args[0].ToString();
 
             var script = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
-            ExecuteScript(script, null);
+            if (script != null)
+            {
+                ExecuteScript(script, null);
+                return true;
+            }
 
-            return true;
+            return false;
         });
         #endregion
     }

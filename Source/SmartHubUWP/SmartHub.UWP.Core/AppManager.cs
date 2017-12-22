@@ -61,12 +61,12 @@ namespace SmartHub.UWP.Core
         }
         #endregion
 
-        #region Public methods
-        public static void OnSuspending(SuspendingDeferral defferal)
-        {
-            //hub.StopServices();
-        }
-        #endregion
+        //#region Public methods
+        //public static void OnSuspending(SuspendingDeferral defferal)
+        //{
+        //    hub.StopServices();
+        //}
+        //#endregion
 
         #region Private methods
         private static void SetServerActivity()
@@ -84,9 +84,9 @@ namespace SmartHub.UWP.Core
                     hub.StartServices();
                 }
             }
-            else if (hub != null)
+            else
             {
-                hub.StopServices();
+                hub?.StopServices();
                 hub = null;
             }
         }
