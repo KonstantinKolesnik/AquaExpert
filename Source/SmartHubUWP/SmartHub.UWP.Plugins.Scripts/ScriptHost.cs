@@ -5,12 +5,12 @@ namespace SmartHub.UWP.Plugins.Scripts
 {
     public class ScriptHost
     {
-        private readonly Dictionary<string, ScriptCommand> methods;
+        private readonly Dictionary<string, ScriptCommand> scriptMethods;
         private readonly Action<string, object[]> scriptRunnerMethod;
 
-        public ScriptHost(Dictionary<string, ScriptCommand> methods, Action<string, object[]> scriptRunnerMethod)
+        public ScriptHost(Dictionary<string, ScriptCommand> scriptMethods, Action<string, object[]> scriptRunnerMethod)
         {
-            this.methods = methods;
+            this.scriptMethods = scriptMethods;
             this.scriptRunnerMethod = scriptRunnerMethod;
         }
 
@@ -18,7 +18,7 @@ namespace SmartHub.UWP.Plugins.Scripts
         {
             try
             {
-                return methods.ContainsKey(methodName) ? methods[methodName].Invoke(args) : null;
+                return scriptMethods.ContainsKey(methodName) ? scriptMethods[methodName].Invoke(args) : null;
             }
             catch (Exception ex)
             {

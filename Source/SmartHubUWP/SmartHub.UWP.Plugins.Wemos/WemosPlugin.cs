@@ -69,7 +69,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         //        controller.ProcessTimer(dt);
         //});
 
-        [ScriptCommand("wemosSendd")]
+        [ScriptCommand("wemosSend")]
         public ScriptCommand scriptSendCommand => (args =>
         {
             var nodeID = int.Parse(args[0].ToString());
@@ -81,7 +81,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
         });
 
-        [ScriptCommand("wemosClearLinesValues")]
+        [ScriptCommand("wemosDeleteLinesValues")]
         public ScriptCommand scriptClearLinesValuesCommand => (args =>
         {
             var lastDayToPreserve = int.Parse(args[0].ToString());

@@ -21,7 +21,7 @@ namespace SmartHub.UWP.Plugins.Scripts
     {
         #region Fields
         private ScriptHost scriptHost;
-        private HashSet<string> scriptEvents;
+        private HashSet<string> scriptEventNames;
         #endregion
 
         #region Import
@@ -56,7 +56,8 @@ namespace SmartHub.UWP.Plugins.Scripts
                 scriptCommands.Add(scriptCommand.Metadata.MethodName, scriptCommand.Value);
 
             scriptHost = new ScriptHost(scriptCommands, ExecuteScriptByName);
-            scriptEvents = RegisterScriptEvents(Context.GetAllPlugins());
+
+            scriptEventNames = RegisterScriptEventNames();
         }
         #endregion
 
@@ -80,30 +81,23 @@ namespace SmartHub.UWP.Plugins.Scripts
         #endregion
 
         #region Private methods
-        private static HashSet<string> RegisterScriptEvents(IEnumerable<PluginBase> plugins)
+        private HashSet<string> RegisterScriptEventNames()
         {
             var scriptEvents = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase);
 
-            foreach (var plugin in plugins)
+            foreach (var plugin in Context.GetAllPlugins())
             {
-                var properties = plugin.GetType()
-                    .GetProperties()
-                    .Where(m => m.PropertyType == typeof(ScriptEventHandlerDelegate[]))
-                    .ToList();
+                var methods = plugin.GetType().GetProperties().Where(pi => pi.PropertyType == typeof(ScriptEventHandlerDelegate[])).ToList();
 
-                foreach (var member in properties)
+                foreach (var method in methods)
                 {
-                    var eventInfo = member.GetCustomAttributes<ScriptEventAttribute>().SingleOrDefault();
-
+                    var eventInfo = method.GetCustomAttributes<ScriptEventAttribute>().SingleOrDefault();
                     if (eventInfo != null)
                     {
                         //logger.Info("Register script event '{0}' ({1})", eventInfo.EventAlias, member);
 
                         if (scriptEvents.Contains(eventInfo.EventAlias))
-                        {
-                            var message = string.Format("Duplicate event alias: '{0}'", eventInfo.EventAlias);
-                            throw new Exception(message);
-                        }
+                            throw new Exception(string.Format("Duplicated event alias: '{0}'", eventInfo.EventAlias));
 
                         scriptEvents.Add(eventInfo.EventAlias);
                     }
@@ -202,7 +196,7 @@ namespace SmartHub.UWP.Plugins.Scripts
         });
 
         [ApiMethod("/api/scripts/run")]
-        public ApiMethod apiRunScript => ((args) =>
+        public ApiMethod apiRunScript => (args =>
         {
             var id = args[0].ToString();
 

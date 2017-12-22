@@ -5,7 +5,7 @@ namespace SmartHub.UWP.Plugins.Scripts.Models
 {
     public class ScriptEventHandler
     {
-        [PrimaryKey, NotNull]//, AutoIncrement]
+        [PrimaryKey, NotNull]
         public string ID
         {
             get; set;
