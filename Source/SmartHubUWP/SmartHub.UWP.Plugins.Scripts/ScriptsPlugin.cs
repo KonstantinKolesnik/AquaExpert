@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
@@ -69,6 +70,14 @@ namespace SmartHub.UWP.Plugins.Scripts
         {
             ExecuteScript(script, scriptHost, args);
         }
+        /// <summary>
+        /// Запуск скриптов по имени (из других скриптов)
+        /// </summary>
+        public void ExecuteScriptByName(string scriptName, params object[] args)
+        {
+            var script = Context.StorageGet().Table<UserScript>().FirstOrDefault(n => n.Name == scriptName);
+            ExecuteScript(script, args);
+        }
 
         public List<UserScript> GetScripts()
         {
@@ -106,36 +115,22 @@ namespace SmartHub.UWP.Plugins.Scripts
 
             return scriptEvents;
         }
-
-        /// <summary>
-        /// Запуск скриптов по имени (из других скриптов)
-        /// </summary>
-        private void ExecuteScriptByName(string scriptName, object[] args)
-        {
-            var script = Context.StorageGet().Table<UserScript>().FirstOrDefault(n => n.Name == scriptName);
-            ExecuteScript(script, scriptHost, args);
-        }
-        /// <summary>
-        /// Запуск скрипта
-        /// </summary>
         private static void ExecuteScript(UserScript script, ScriptHost scriptHost, object[] args)
         {
-            //if (script != null)
-            //    try
-            //    {
-            //        //var engine = new JScriptEngine(WindowsScriptEngineFlags.EnableDebugging);
-            //        var engine = new JScriptEngine();
-            //        engine.AddHostObject("host", scriptHost);
+            if (script != null)
+                try
+                {
+                    //var engine = new JScriptEngine(/*WindowsScriptEngineFlags.EnableDebugging*/);
+                    //engine.AddHostObject("host", scriptHost);
 
-            //        string initArgsScript = string.Format("var arguments = {0};", args.ToJson());// "[]"));
-            //        engine.Execute(initArgsScript);
-            //        engine.Execute(script.Body);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        var message = string.Format("Error in user script {0}", script.Name);
-            //        //logger.Error(ex, message);
-            //    }
+                    //string initArgsScript = string.Format("var arguments = {0};", args.ToJson());// "[]"));
+                    //engine.Execute(initArgsScript);
+                    //engine.Execute(script.Body);
+                }
+                catch (Exception ex)
+                {
+                    //logger.Error(ex, string.Format("Error in user script {0}", script.Name));
+                }
         }
         #endregion
 
