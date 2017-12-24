@@ -312,4 +312,7 @@
   <data name="Precision" xml:space="preserve">
     <value>Precision</value>
   </data>
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
-﻿using SmartHub.UWP.Core.Xaml;
+﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.Scripts.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,6 +29,13 @@ namespace SmartHub.UWP.Plugins.Scripts.UI.Controls
         {
             InitializeComponent();
             XamlUtils.FindFirstVisualChild<Grid>(this).DataContext = this;
+        }
+        #endregion
+
+        #region Event handlers
+        private async void btnRun_Click(object sender, RoutedEventArgs e)
+        {
+            await CoreUtils.RequestAsync<bool>("/api/scripts/run", Script.ID);
         }
         #endregion
     }

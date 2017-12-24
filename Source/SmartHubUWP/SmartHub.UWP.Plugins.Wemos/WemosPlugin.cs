@@ -81,6 +81,16 @@ namespace SmartHub.UWP.Plugins.Wemos
             return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
         });
 
+        [ScriptCommand("wemosSetLineValue")]
+        public ScriptCommand scriptSetLineValue => (args =>
+        {
+            var nodeID = int.Parse(args[0].ToString());
+            var lineID = int.Parse(args[1].ToString());
+            var value = args[2].ToString();
+
+            return Context.GetPlugin<WemosPlugin>().SetLineValueAsync(GetLine(nodeID, lineID), value);
+        });
+
         [ScriptCommand("wemosDeleteLinesValues")]
         public ScriptCommand scriptClearLinesValuesCommand => (args =>
         {

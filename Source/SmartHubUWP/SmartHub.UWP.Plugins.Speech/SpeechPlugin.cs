@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Globalization;
 using Windows.Media.SpeechRecognition;
 using Windows.Media.SpeechSynthesis;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 
 namespace SmartHub.UWP.Plugins.Speech
@@ -269,10 +271,16 @@ namespace SmartHub.UWP.Plugins.Speech
 
         #region Script commands
         [ScriptCommand("speechSay")]
-        public ScriptCommand scriptSay => (args =>
+        public ScriptCommand scriptSay => (args => 
         {
             var text = args[0].ToString();
-            Context.GetPlugin<SpeechPlugin>().Say(text).Wait();
+
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                await Context.GetPlugin<SpeechPlugin>().Say(text);
+            }).AsTask().Wait();
+
+            //Context.GetPlugin<SpeechPlugin>().Say(text).Wait();
             return null;
         });
         #endregion

@@ -32,22 +32,8 @@
                     </Grid.ColumnDefinitions>
 
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE15C;" Margin="5,0,15,0" VerticalAlignment="Center"/>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <!--<TextBlock Text="{Binding Monitor.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>-->
-                        <!--<TextBlock Text="{Binding Monitor.NameForInformer}" Style="{ThemeResource ListItemSubtitleStyle}" Visibility="{Binding Monitor.NameForInformer, Converter={StaticResource StringToVisibilityConverter}}"/>-->
-                        <!--<TextBlock Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/> -->
-                        <!--Foreground="{ThemeResource InactiveBrush}"-->
-
-                        <TextBlock Text="{Binding Script.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2"/>
-                    </StackPanel>
-
-                    <!--<Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
-                        <StackPanel VerticalAlignment="Center" Margin="7">
-                            <TextBlock Text="{Binding LastValue, ElementName=mc}" HorizontalAlignment="Right"/>
-                            <TextBlock Text="{Binding LastTimeStamp, ElementName=mc}" HorizontalAlignment="Right" Style="{ThemeResource ListItemSubtitleStyle}"/>
-                        </StackPanel>
-                    </Border>-->
+                    <TextBlock Grid.Column="1" Text="{Binding Script.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
+                    <Button Grid.Column="2" Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Run}" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click"/>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
 

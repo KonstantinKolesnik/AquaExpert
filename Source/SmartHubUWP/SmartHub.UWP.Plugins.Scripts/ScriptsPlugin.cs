@@ -68,7 +68,36 @@ namespace SmartHub.UWP.Plugins.Scripts
         /// </summary>
         public void ExecuteScript(UserScript script, params object[] args)
         {
-            ExecuteScript(script, scriptHost, args);
+            if (script != null)
+                try
+                {
+                    var lines = script.Body.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    var p = lines[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+                    var method = p[0];
+                    var methodName = p[1];
+                    var pp = p.Skip(2).ToArray();
+
+                    switch (method)
+                    {
+                        case "executeMethod": scriptHost.executeMethod(methodName, pp); break;
+                        case "runScript": scriptHost.runScript(methodName, pp); break;
+                    }
+
+
+
+
+
+                    //var engine = new JScriptEngine(/*WindowsScriptEngineFlags.EnableDebugging*/);
+                    //engine.AddHostObject("host", scriptHost);
+
+                    //string initArgsScript = string.Format("var arguments = {0};", args.ToJson());// "[]"));
+                    //engine.Execute(initArgsScript);
+                    //engine.Execute(script.Body);
+                }
+                catch (Exception ex)
+                {
+                    //logger.Error(ex, string.Format("Error in user script {0}", script.Name));
+                }
         }
         /// <summary>
         /// Запуск скриптов по имени (из других скриптов)
@@ -115,23 +144,6 @@ namespace SmartHub.UWP.Plugins.Scripts
 
             return scriptEvents;
         }
-        private static void ExecuteScript(UserScript script, ScriptHost scriptHost, object[] args)
-        {
-            if (script != null)
-                try
-                {
-                    //var engine = new JScriptEngine(/*WindowsScriptEngineFlags.EnableDebugging*/);
-                    //engine.AddHostObject("host", scriptHost);
-
-                    //string initArgsScript = string.Format("var arguments = {0};", args.ToJson());// "[]"));
-                    //engine.Execute(initArgsScript);
-                    //engine.Execute(script.Body);
-                }
-                catch (Exception ex)
-                {
-                    //logger.Error(ex, string.Format("Error in user script {0}", script.Name));
-                }
-        }
         #endregion
 
         #region Remote API
@@ -157,7 +169,7 @@ namespace SmartHub.UWP.Plugins.Scripts
             return model;
         });
 
-        [ApiMethod("/api/wemos/scripts/update")]
+        [ApiMethod("/api/scripts/update")]
         public ApiMethod apiUpdateScript => (args =>
         {
             var item = JsonConvert.DeserializeObject<UserScript>(args[0].ToString());
@@ -198,7 +210,7 @@ namespace SmartHub.UWP.Plugins.Scripts
             var script = Context.GetPlugin<ScriptsPlugin>().GetScript(id);
             if (script != null)
             {
-                ExecuteScript(script, null);
+                Context.GetPlugin<ScriptsPlugin>().ExecuteScript(script, null);
                 return true;
             }
 
