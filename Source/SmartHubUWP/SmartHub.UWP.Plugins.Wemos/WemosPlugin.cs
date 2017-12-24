@@ -196,7 +196,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public async Task SetLineValueAsync(WemosLine line, float value)
         {
-            if (line != null)
+            if (line != null && GetLineLastValue(line.ID)?.Value != value)
                 await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
         public async Task SetLineValueAsync(WemosLine line, string value)

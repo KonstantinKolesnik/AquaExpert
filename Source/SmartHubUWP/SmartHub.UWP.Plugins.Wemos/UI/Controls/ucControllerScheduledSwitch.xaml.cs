@@ -114,7 +114,8 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
             {
                 From = new TimeSpan(0, 0, 0),
                 To = new TimeSpan(1, 0, 0),
-                IsEnabled = false
+                IsEnabled = false,
+                Value = 0
             });
         }
         private async void btnDeletePeriod_Click(object sender, RoutedEventArgs e)

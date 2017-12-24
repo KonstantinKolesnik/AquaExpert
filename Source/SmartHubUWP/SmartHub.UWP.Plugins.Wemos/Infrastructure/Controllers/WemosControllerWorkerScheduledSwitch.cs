@@ -13,6 +13,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         private TimeSpan from;
         private TimeSpan to;
         private bool isEnabled;
+        private float value = 0;
 
         public TimeSpan From
         {
@@ -38,6 +39,15 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
             set
             {
                 isEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public float Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
                 NotifyPropertyChanged();
             }
         }
@@ -93,8 +103,11 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         protected async override void DoWork(DateTime now)
         {
             var config = Configuration as ControllerConfiguration;
-            var isActiveNew = config.ActivePeriods.Where(p => p.IsEnabled && p.Contains(now)).Any();
-            await host.SetLineValueAsync(LineSwitch, isActiveNew ? 1 : 0);
+            var period = config.ActivePeriods.FirstOrDefault(p => p.IsEnabled && p.Contains(now));
+
+            await host.SetLineValueAsync(LineSwitch, period != null ? period.Value : 0);
+            //if (period != null)
+            //    await host.SetLineValueAsync(LineSwitch, period.Value);
         }
         #endregion
     }

@@ -33,7 +33,9 @@
 
                     <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE15C;" Margin="5,0,15,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding Script.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
-                    <Button Grid.Column="2" Content="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=Run}" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click"/>
+                    <Button Grid.Column="2" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE102;" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
 
