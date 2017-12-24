@@ -145,7 +145,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
         }
         public string LastTimeStamp
         {
-            get { return Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy HH:mm:ss")}" : ""; }
+            get { return Values.Any() ? $"{Values.LastOrDefault().TimeStamp.ToString("dd.MM.yy  HH:mm:ss")}" : ""; }
         }
         #endregion
 

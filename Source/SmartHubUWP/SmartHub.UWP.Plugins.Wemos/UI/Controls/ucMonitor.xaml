@@ -45,8 +45,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE9D9;" Margin="5,0" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
+                    <FontIcon FontFamily="Segoe MDL2 Assets"  Glyph="&#xE9D9;" Margin="5,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Monitor.LineName}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" TextWrapping="WrapWholeWords" VerticalAlignment="Center"/>
                     <Border Grid.Column="2" MinWidth="110" BorderThickness="2" BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center">
                         <!--<StackPanel VerticalAlignment="Center" Margin="7">
                             <TextBlock Text="{Binding Monitor.LastValueText}" HorizontalAlignment="Right"/>

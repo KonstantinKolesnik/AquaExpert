@@ -31,11 +31,18 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xE15C;" Margin="5,0,15,0" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="{Binding Script.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" VerticalAlignment="Center"/>
-                    <Button Grid.Column="2" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE102;" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
+                    <FontIcon FontFamily="Segoe MDL2 Assets"  Glyph="&#xE15C;" Margin="5,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Script.Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" TextWrapping="WrapWholeWords" VerticalAlignment="Center"/>
+                    <!--<Button Grid.Column="2" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE102;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>-->
+
+                    <AppBarButton Grid.Column="2" Style="{StaticResource AppBarTinyButton}" Margin="5,0" VerticalAlignment="Center" Click="btnRun_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE102;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
                 </Grid>
             </telerikPrimitives:RadExpanderControl.Content>
 
@@ -72,7 +79,7 @@
                         Text="{Binding Script.Body, Mode=TwoWay}"
                         AcceptsReturn="True"
                         TextWrapping="Wrap"
-                        FontSize="12"
+                        FontSize="13"
                         HorizontalAlignment="Stretch"
                         Height="250"
                         Margin="{StaticResource RootContainerMargin}"

@@ -1,5 +1,4 @@
-﻿using SmartHub.UWP.Applications.Client.Common;
-using SmartHub.UWP.Core;
+﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;

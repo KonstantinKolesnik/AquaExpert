@@ -67,9 +67,9 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="32" Glyph="&#xEADF;" Margin="5,0,15,0" VerticalAlignment="Center"/>
+                            <FontIcon FontFamily="Segoe MDL2 Assets"  Glyph="&#xEADF;" Margin="5,0" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTitleStyle}"/>
+                                <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTitleStyle}" MaxLines="2" TextWrapping="WrapWholeWords"/>
                                 <TextBlock Text="{Binding Type}" Style="{ThemeResource ListItemSubtitleStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </StackPanel>
                             <ToggleSwitch Grid.Column="2" IsOn="{Binding IsAutoMode, Mode=TwoWay}" Margin="5,0,-60,0" VerticalAlignment="Center"/>
