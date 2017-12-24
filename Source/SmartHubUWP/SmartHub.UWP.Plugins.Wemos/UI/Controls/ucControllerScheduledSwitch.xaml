@@ -86,6 +86,13 @@
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
                                     Time="{Binding From, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"/>
+                                <!--<telerikInput:RadTimePicker
+                                    Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=From}"
+                                    HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
+                                    Value="{Binding From, Mode=TwoWay}"
+                                    CalendarClockIdentifier="24HourClock"/>-->
+
+
                                 <TimePicker
                                     Header="{Binding AppData.Language, Source={StaticResource AppManager}, Converter={StaticResource LC}, ConverterParameter=To}"
                                     HeaderTemplate="{StaticResource PropertyEditorHeaderTemplate}"
