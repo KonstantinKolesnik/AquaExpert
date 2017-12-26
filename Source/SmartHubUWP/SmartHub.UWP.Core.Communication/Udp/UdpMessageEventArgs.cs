@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.Networking;
 
-namespace SmartHub.UWP.Core.Communication.Stream.Udp
+namespace SmartHub.UWP.Core.Communication.Udp
 {
     public class UdpMessageEventArgs : EventArgs
     {

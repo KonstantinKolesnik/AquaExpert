@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SmartHub.UWP.Core.Communication.Stream.Udp;
+using SmartHub.UWP.Core.Communication.Udp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;

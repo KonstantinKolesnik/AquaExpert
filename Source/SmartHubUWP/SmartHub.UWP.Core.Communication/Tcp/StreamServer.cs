@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
+using Windows.System.Threading;
 
-namespace SmartHub.UWP.Core.Communication.Stream.Tcp
+namespace SmartHub.UWP.Core.Communication.Tcp
 {
     public class StreamServer
     {
@@ -12,21 +13,22 @@ namespace SmartHub.UWP.Core.Communication.Stream.Tcp
         #endregion
 
         #region Properties
-        public CommandProcessor CommandProcessor
+        public ApiRequestHandler ApiRequestHandler
         {
             get; set;
         }
         #endregion
 
         #region Public methods
-        public async Task Start(string serviceName)
+        public async Task StartAsync(string serviceName)
         {
             if (listener == null)
             {
                 this.serviceName = serviceName;
 
                 listener = new StreamSocketListener();
-                listener.ConnectionReceived += Listener_ConnectionReceived;
+                //listener.ConnectionReceived += Listener_ConnectionReceived;
+                listener.ConnectionReceived += (s, e) => ThreadPool.RunAsync(async w => ProcessRequestAsync(e.Socket));
 
                 // If necessary, tweak the listener's control options before carrying out the bind operation.
                 // These options will be automatically applied to the connected StreamSockets resulting from
@@ -37,7 +39,7 @@ namespace SmartHub.UWP.Core.Communication.Stream.Tcp
                 await listener.BindServiceNameAsync(serviceName);
             }
         }
-        public async Task Stop()
+        public async Task StopAsync()
         {
             if (listener != null)
             {
@@ -49,34 +51,33 @@ namespace SmartHub.UWP.Core.Communication.Stream.Tcp
         #endregion
 
         #region Event handlers
-        private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+        private async void ProcessRequestAsync(StreamSocket socket)
         {
             try
             {
-                var socket = args.Socket;
-                //using (var socket = args.Socket)
-                {
-                    var requestDto = await Utils.ReceiveAsync(socket);
-                    var request = Utils.DtoDeserialize<CommandRequest>(requestDto);
+                var requestDto = await Utils.ReceiveAsync(socket);
+                var request = Utils.DtoDeserialize<ApiRequest>(requestDto);
 
-                    if (request != null)
+                if (request != null)
+                {
+                    var response = ApiRequestHandler?.Invoke(request);
+                    if (response != null)
                     {
-                        var response = CommandProcessor?.Invoke(request.Name, request.Parameters);
-                        if (response != null)
-                        {
-                            var dataDto = Utils.DtoSerialize(response);
-                            await Utils.SendAsync(socket, dataDto);
-                        }
+                        var dataDto = Utils.DtoSerialize(response);
+                        await Utils.SendAsync(socket, dataDto);
                     }
                 }
+
+                await socket.CancelIOAsync();
+                socket.Dispose();
             }
             catch (Exception ex)
             {
                 // If this is an unknown status it means that the error is fatal and retry will likely fail.
                 if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
                 {
-                    await Stop();
-                    await Start(serviceName);
+                    await StopAsync();
+                    await StartAsync(serviceName);
                 }
             }
         }

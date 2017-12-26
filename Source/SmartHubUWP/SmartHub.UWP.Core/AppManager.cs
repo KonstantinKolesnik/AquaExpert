@@ -40,7 +40,7 @@ namespace SmartHub.UWP.Core
         }
 
         public static string RemoteUrl => IsServer ? "localhost" : AppData.ServerUrl;
-        public static string RemoteServiceName => ApiListenerPlugin.ServiceName;
+        public static string RemoteTcpServiceName => ApiListenerPlugin.TcpServiceName;
         #endregion
 
         #region Constructor

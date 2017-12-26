@@ -1,6 +1,6 @@
-﻿namespace SmartHub.UWP.Core.Communication.Stream.Tcp
+﻿namespace SmartHub.UWP.Core.Communication
 {
-    class CommandRequest
+    public class ApiRequest
     {
         public string Name
         {
@@ -11,7 +11,7 @@
             get; set;
         }
 
-        public CommandRequest(string name, object[] parameters)
+        public ApiRequest(string name, object[] parameters)
         {
             Name = name;
             Parameters = parameters;

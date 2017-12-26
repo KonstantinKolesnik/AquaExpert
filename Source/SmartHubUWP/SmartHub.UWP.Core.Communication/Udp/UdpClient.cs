@@ -4,7 +4,7 @@ using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
-namespace SmartHub.UWP.Core.Communication.Stream.Udp
+namespace SmartHub.UWP.Core.Communication.Udp
 {
     public class UdpClient
     {

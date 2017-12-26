@@ -22,12 +22,12 @@ namespace SmartHub.UWP.Plugins.Speech
     public class SpeechPlugin : PluginBase//, IDisposable
     {
         #region Fields
-        private bool disposed = false;
+        //private bool disposed = false;
         private SpeechSynthesizer speechSynthesizer;
         private SpeechRecognizer speechRecognizer;
         private string languageTag = Language.CurrentInputMethodLanguageTag;
 
-        private DateTime? readyDate;
+        //private DateTime? readyDate;
         private const string NAME = "эй кампьютэр";
         private const string RESPONSE_READY = "слушаю!";
         private const int READY_PERIOD = 15; // seconds

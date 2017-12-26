@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SmartHub.UWP.Core.Communication.Stream.Tcp;
+using SmartHub.UWP.Core.Communication.Tcp;
 using SmartHub.UWP.Core.StringResources;
 using System;
 using System.Collections.Generic;
@@ -122,7 +122,7 @@ namespace SmartHub.UWP.Core
             //    .Where(f => f.DisplayName.StartsWith("SmartHub"))
             //    .Select(f => Assembly.Load(new AssemblyName(f.DisplayName))).ToList();
 
-            List<Assembly> assemblies = new List<Assembly>();
+            var assemblies = new List<Assembly>();
 
             var files = await Package.Current.InstalledLocation.GetFilesAsync();
             if (files != null)
@@ -142,7 +142,7 @@ namespace SmartHub.UWP.Core
         }
         public static List<Assembly> GetSatelliteAssemblies(Func<StorageFile, bool> filter)
         {
-            List<Assembly> assemblies = new List<Assembly>();
+            var assemblies = new List<Assembly>();
 
             var files = Package.Current.InstalledLocation.GetFilesAsync();
             files.AsTask().Wait();
@@ -166,7 +166,7 @@ namespace SmartHub.UWP.Core
         #region Stream Client
         public static async Task<T> RequestAsync<T>(string commandName, params object[] parameters)
         {
-            return await StreamClient.RequestAsync<T>(AppManager.RemoteUrl, AppManager.RemoteServiceName, commandName, parameters);
+            return await StreamClient.RequestAsync<T>(AppManager.RemoteUrl, AppManager.RemoteTcpServiceName, commandName, parameters);
         }
         #endregion
 

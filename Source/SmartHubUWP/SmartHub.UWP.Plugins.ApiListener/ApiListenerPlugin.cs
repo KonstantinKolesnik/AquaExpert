@@ -1,4 +1,6 @@
-﻿using SmartHub.UWP.Core.Communication.Stream.Tcp;
+﻿using SmartHub.UWP.Core.Communication;
+using SmartHub.UWP.Core.Communication.Http;
+using SmartHub.UWP.Core.Communication.Tcp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using System;
@@ -10,11 +12,13 @@ namespace SmartHub.UWP.Plugins.ApiListener
     [Plugin]
     public class ApiListenerPlugin : PluginBase
     {
-        public const string ServiceName = "11111";
+        public const string TcpServiceName = "11111";
+        public const string WebServiceName = "8888";
 
         #region Fields
-        private StreamServer server = new StreamServer();
         private readonly Dictionary<string, ApiMethod> apiMethods = new Dictionary<string, ApiMethod>();
+        private StreamServer tcpServer = new StreamServer();
+        private HttpServer httpServer = new HttpServer();
         #endregion
 
         #region Imports
@@ -34,25 +38,32 @@ namespace SmartHub.UWP.Plugins.ApiListener
             foreach (var apiMethod in ApiMethods)
                 apiMethods.Add(apiMethod.Metadata.MethodName, apiMethod.Value);
 
-            server.CommandProcessor = (name, args) =>
-            {
-                try
-                {
-                    return apiMethods.ContainsKey(name) ? apiMethods[name].Invoke(args) : null;
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            };
+            tcpServer.ApiRequestHandler = ApiRequestHandler;
+            httpServer.ApiRequestHandler = ApiRequestHandler;
         }
         public async override void StartPlugin()
         {
-            await server.Start(ServiceName);
+            await tcpServer.StartAsync(TcpServiceName);
+            await httpServer.StartAsync(WebServiceName);
         }
         public async override void StopPlugin()
         {
-            await server.Stop();
+            await tcpServer.StopAsync();
+            await httpServer.StopAsync();
+        }
+        #endregion
+
+        #region Private methods
+        private object ApiRequestHandler(ApiRequest request)
+        {
+            try
+            {
+                return apiMethods.ContainsKey(request.Name) ? apiMethods[request.Name].Invoke(request.Parameters) : null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         #endregion
     }
