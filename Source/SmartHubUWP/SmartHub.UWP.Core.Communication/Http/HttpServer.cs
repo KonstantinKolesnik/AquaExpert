@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.System.Threading;
@@ -9,6 +8,7 @@ using Windows.Web.Http;
 
 namespace SmartHub.UWP.Core.Communication.Http
 {
+    //http://devstyle.io/blog/2015/11/4/minimal-rest-server-for-windows-10-iot-core-
     public class HttpServer
     {
         #region Fields
@@ -18,14 +18,10 @@ namespace SmartHub.UWP.Core.Communication.Http
         #endregion
 
         #region Properties
-        public ApiRequestHandler ApiRequestHandler
+        public RESTHandler RestHandler
         {
-            get; set;
-        }
-        //public RESTHandler RestHandler
-        //{
-        //    get;
-        //} = new RESTHandler();
+            get;
+        } = new RESTHandler();
         #endregion
 
         #region Public methods
@@ -57,67 +53,37 @@ namespace SmartHub.UWP.Core.Communication.Http
         {
             try
             {
-                //var requestDto = await Utils.ReceiveAsync(socket);
-                //var request = Utils.DtoDeserialize<ApiRequest>(requestDto);
+                HttpRequest request;
 
-                //if (request != null)
-                //{
-                //    var response = ApiRequestHandler?.Invoke(request);
-                //    if (response != null)
-                //    {
-                //        var dataDto = Utils.DtoSerialize(response);
-                //        await Utils.SendAsync(socket, dataDto);
-                //    }
-                //}
+                try
+                {
+                    request = HttpRequest.Read(socket);
+                }
+                catch (Exception ex)
+                {
+                    await WriteInternalServerErrorResponse(socket, ex);
+                    return;
+                }
 
-                //await socket.CancelIOAsync();
-                //socket.Dispose();
+                if (acceptedVerbs.Contains(request.Method.Method))
+                {
+                    HttpResponse response;
 
+                    try
+                    {
+                        response = await RestHandler.Handle(request);
+                    }
+                    catch (Exception ex)
+                    {
+                        await WriteInternalServerErrorResponse(socket, ex);
+                        return;
+                    }
 
+                    await WriteResponse(response, socket);
 
-
-
-
-
-                //HttpRequest request;
-
-                //try
-                //{
-                //    request = HttpRequest.Read(socket);
-                //}
-                //catch (Exception ex)
-                //{
-                //    await WriteInternalServerErrorResponse(socket, ex);
-                //    return;
-                //}
-
-                //if (acceptedVerbs.Contains(request.Method.Method))
-                //{
-                //    HttpResponse response;
-
-                //    try
-                //    {
-                //        //response = await RestHandler.Handle(request);
-
-                //        var url = request.Path;
-                //        //if (url.PathAndQuery.Contains(c.Prefix))
-                //        //{
-
-                //        //}
-                //        //else
-                //            response = new HttpResponse(HttpStatusCode.NotFound, $"No controllers found that support this path: '{ url }'.");
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        await WriteInternalServerErrorResponse(socket, ex);
-                //        return;
-                //    }
-
-                //    await WriteResponse(response, socket);
-
-                //    await socket.CancelIOAsync();
-                //    socket.Dispose();
-                //}
+                    await socket.CancelIOAsync();
+                    socket.Dispose();
+                }
             }
             catch (Exception ex)
             {

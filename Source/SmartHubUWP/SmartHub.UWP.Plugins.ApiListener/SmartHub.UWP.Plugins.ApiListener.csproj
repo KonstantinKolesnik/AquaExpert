@@ -108,6 +108,7 @@
     <Compile Include="ApiListenerPlugin.cs" />
     <Compile Include="Attributes\ApiMethodAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestController.cs" />
     <EmbeddedResource Include="Properties\SmartHub.UWP.Plugins.ApiListener.rd.xml" />
   </ItemGroup>
   <ItemGroup>

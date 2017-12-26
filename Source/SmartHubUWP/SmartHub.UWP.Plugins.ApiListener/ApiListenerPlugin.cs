@@ -39,7 +39,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
                 apiMethods.Add(apiMethod.Metadata.MethodName, apiMethod.Value);
 
             tcpServer.ApiRequestHandler = ApiRequestHandler;
-            httpServer.ApiRequestHandler = ApiRequestHandler;
+            httpServer.RestHandler.RegisterController(new RestController());
         }
         public async override void StartPlugin()
         {

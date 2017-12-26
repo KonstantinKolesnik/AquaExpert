@@ -106,6 +106,8 @@
   <ItemGroup>
     <Compile Include="AppService\AppServiceClientLocal.cs" />
     <Compile Include="AppService\AppServiceClientRemote.cs" />
+    <Compile Include="Http\Controller.cs" />
+    <Compile Include="Http\ControllerAttributes.cs.cs" />
     <Compile Include="Http\HttpRequest.cs" />
     <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\HttpServer.cs" />
