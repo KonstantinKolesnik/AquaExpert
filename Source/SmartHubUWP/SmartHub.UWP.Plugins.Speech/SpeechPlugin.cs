@@ -3,7 +3,6 @@ using SmartHub.UWP.Plugins.Scripts;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;

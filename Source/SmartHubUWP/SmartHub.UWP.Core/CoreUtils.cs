@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SmartHub.UWP.Core.Communication.Stream;
+using SmartHub.UWP.Core.Communication.Stream.Tcp;
 using SmartHub.UWP.Core.StringResources;
 using System;
 using System.Collections.Generic;
@@ -177,17 +177,17 @@ namespace SmartHub.UWP.Core
 
         public static async Task<string> GETRequest(string uri)
         {
-            //Uri geturi = new Uri("http://api.openweathermap.org/data/2.5/weather?q=London");
-            Uri geturi = new Uri(uri);
+            //var geturi = new Uri("http://api.openweathermap.org/data/2.5/weather?q=London");
+            var geturi = new Uri(uri);
 
-            HttpClient client = new HttpClient();
-            HttpResponseMessage responseGet = await client.GetAsync(geturi);
+            var client = new HttpClient();
+            var responseGet = await client.GetAsync(geturi);
             return await responseGet.Content.ReadAsStringAsync();
         }
         public static async Task<string> POSTRequest(string uri, object data)
         {
-            //Uri requestUri = new Uri("https://www.userauth");
-            Uri requestUri = new Uri(uri);
+            //var requestUri = new Uri("https://www.userauth");
+            var requestUri = new Uri(uri);
 
             //dynamic dynamicJson = new ExpandoObject();
             //dynamicJson.username = "sureshmit55@gmail.com".ToString();
@@ -197,8 +197,8 @@ namespace SmartHub.UWP.Core
             string json = JsonConvert.SerializeObject(data);
 
             var client = new HttpClient();
-            HttpResponseMessage respon = await client.PostAsync(requestUri, new StringContent(json, Encoding.UTF8, "application/json"));
-            return await respon.Content.ReadAsStringAsync();
+            var response = await client.PostAsync(requestUri, new StringContent(json, Encoding.UTF8, "application/json"));
+            return await response.Content.ReadAsStringAsync();
         }
 
         public static string ExecutablePath

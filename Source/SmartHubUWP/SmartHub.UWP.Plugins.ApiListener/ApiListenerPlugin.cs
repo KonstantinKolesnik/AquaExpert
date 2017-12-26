@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Core.Communication.Stream;
+﻿using SmartHub.UWP.Core.Communication.Stream.Tcp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
 using System;

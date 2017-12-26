@@ -1,4 +1,4 @@
-﻿namespace SmartHub.UWP.Core.Communication.Stream
+﻿namespace SmartHub.UWP.Core.Communication.Stream.Tcp
 {
     class CommandRequest
     {

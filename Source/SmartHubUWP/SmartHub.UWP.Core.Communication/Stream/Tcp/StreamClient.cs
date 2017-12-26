@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 
-namespace SmartHub.UWP.Core.Communication.Stream
+namespace SmartHub.UWP.Core.Communication.Stream.Tcp
 {
     public class StreamClient
     {
