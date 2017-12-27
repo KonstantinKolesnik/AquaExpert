@@ -28,7 +28,12 @@ namespace SmartHub.UWP.Core.Communication.Tcp
 
                 listener = new StreamSocketListener();
                 //listener.ConnectionReceived += Listener_ConnectionReceived;
-                listener.ConnectionReceived += (s, e) => ThreadPool.RunAsync(async w => ProcessRequestAsync(e.Socket));
+                listener.ConnectionReceived += (s, e) => ThreadPool.RunAsync(async w => await ProcessRequestAsync(e.Socket));
+                //listener.ConnectionReceived += async (s, e) =>
+                //{
+                //    await ThreadPool.RunAsync(async w => await ProcessRequestAsync(e.Socket));
+                //};
+
 
                 // If necessary, tweak the listener's control options before carrying out the bind operation.
                 // These options will be automatically applied to the connected StreamSockets resulting from
@@ -51,7 +56,7 @@ namespace SmartHub.UWP.Core.Communication.Tcp
         #endregion
 
         #region Event handlers
-        private async void ProcessRequestAsync(StreamSocket socket)
+        private async Task ProcessRequestAsync(StreamSocket socket)
         {
             try
             {

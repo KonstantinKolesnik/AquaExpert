@@ -15,15 +15,17 @@ namespace SmartHub.UWP.Core.Communication.Http
 
         public Controller()
         {
-            var type = this.GetType().GetTypeInfo();
-            var routePrefix = (RoutePrefix)this.GetType().GetTypeInfo().GetCustomAttribute(typeof(RoutePrefix));
+            var type = GetType().GetTypeInfo();
+            var routePrefix = (RoutePrefix)GetType().GetTypeInfo().GetCustomAttribute(typeof(RoutePrefix));
             Prefix = routePrefix.Path;
 
-            var methods = GetType().GetMethods().ToList();
-            methods = methods.Where(m => m.GetCustomAttribute(typeof(Route)) != null).ToList();
+            //var methods = GetType().GetMethods().ToList();
+            //methods = methods.Where(m => m.GetCustomAttribute(typeof(Route)) != null).ToList();
+            var methods = GetType().GetMethods().Where(m => m.GetCustomAttribute(typeof(Route)) != null).ToList();
 
-            foreach (var m in methods)
-                RoutingMethods.Add(m);
+            //foreach (var m in methods)
+            //    RoutingMethods.Add(m);
+            RoutingMethods.AddRange(methods);
         }
 
         public async Task<HttpResponse> Handle(HttpRequest request)

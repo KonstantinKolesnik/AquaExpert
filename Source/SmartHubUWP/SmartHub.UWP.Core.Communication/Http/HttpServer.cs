@@ -27,13 +27,34 @@ namespace SmartHub.UWP.Core.Communication.Http
         #region Public methods
         public async Task StartAsync(string serviceName)
         {
+            //List<string> ipAddresses = new List<string>();
+            //var hostnames = NetworkInformation.GetHostNames();
+            //foreach (var hn in hostnames)
+            //{
+            //    //IanaInterfaceType == 71 => Wifi
+            //    //IanaInterfaceType == 6 => Ethernet (Emulator)
+            //    if (hn.IPInformation != null &&
+            //        (hn.IPInformation.NetworkAdapter.IanaInterfaceType == 71
+            //        || hn.IPInformation.NetworkAdapter.IanaInterfaceType == 6))
+            //    {
+            //        string ipAddress = hn.DisplayName;
+            //        ipAddresses.Add(ipAddress);
+            //    }
+            //}
+
             if (listener == null)
             {
+                //list = new System.Net.HttpListener();
                 this.serviceName = serviceName;
 
                 listener = new StreamSocketListener();
-                listener.ConnectionReceived += (s, e) => ThreadPool.RunAsync(async w => ProcessRequestAsync(e.Socket));
+                listener.ConnectionReceived += (s, e) => ThreadPool.RunAsync(async w => await ProcessRequestAsync(e.Socket));
+                //listener.ConnectionReceived += async (s, e) =>
+                //{
+                //    await ThreadPool.RunAsync(async w => await ProcessRequestAsync(e.Socket));
+                //};
 
+                listener.Control.KeepAlive = false;
                 await listener.BindServiceNameAsync(serviceName);
             }
         }
@@ -49,7 +70,7 @@ namespace SmartHub.UWP.Core.Communication.Http
         #endregion
 
         #region Event handlers
-        private async void ProcessRequestAsync(StreamSocket socket)
+        private async Task ProcessRequestAsync(StreamSocket socket)
         {
             try
             {
@@ -81,8 +102,8 @@ namespace SmartHub.UWP.Core.Communication.Http
 
                     await WriteResponse(response, socket);
 
-                    await socket.CancelIOAsync();
-                    socket.Dispose();
+                    //await socket.CancelIOAsync();
+                    //socket.Dispose();
                 }
             }
             catch (Exception ex)

@@ -15,6 +15,7 @@ namespace SmartHub.UWP.Core.Communication.Http
 
     }
 
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class RoutePrefix : Attribute
     {
@@ -27,10 +28,9 @@ namespace SmartHub.UWP.Core.Communication.Http
 
         public virtual string Path
         {
-            get { return this.path; }
+            get { return path; }
         }
     }
-
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class Route : Attribute
@@ -44,7 +44,7 @@ namespace SmartHub.UWP.Core.Communication.Http
 
         public Route()
         {
-            this.path = String.Empty;
+            path = String.Empty;
         }
 
 
@@ -54,6 +54,7 @@ namespace SmartHub.UWP.Core.Communication.Http
         }
 
     }
+
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public abstract class HttpRequestMethod : Attribute

@@ -58,12 +58,11 @@ namespace SmartHub.UWP.Core.Communication.Http
                 using (var reader = new StreamReader(input.AsStreamForRead()))
                 {
                     var requestHeader = reader.ReadLine();
-
                     var headerSegments = requestHeader.Split(' ');
+
                     request.Method = new HttpMethod(headerSegments[0]);
                     request.Path = new Uri(headerSegments[1], UriKind.RelativeOrAbsolute);
                     request.Version = GetHttpVersion(headerSegments[2]);
-
                     if (request.Version.Equals(HttpVersion.Http10))
                         request.Headers.Add("Host", $"{socket.Information.LocalAddress}:{socket.Information.LocalPort}");
 

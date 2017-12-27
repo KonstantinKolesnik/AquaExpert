@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
     public class ApiListenerPlugin : PluginBase
     {
         public const string TcpServiceName = "11111";
-        public const string WebServiceName = "8888";
+        public const string WebServiceName = "55555";
 
         #region Fields
         private readonly Dictionary<string, ApiMethod> apiMethods = new Dictionary<string, ApiMethod>();
