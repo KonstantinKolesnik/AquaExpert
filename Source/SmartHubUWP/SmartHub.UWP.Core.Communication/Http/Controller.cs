@@ -11,23 +11,26 @@ namespace SmartHub.UWP.Core.Communication.Http
     public abstract class Controller
     {
         public string Prefix = "";
-        public List<MethodInfo> RoutingMethods = new List<MethodInfo>();
+        private List<MethodInfo> RoutingMethods = new List<MethodInfo>();
 
         public Controller()
         {
-            var type = GetType().GetTypeInfo();
             var routePrefix = (RoutePrefix)GetType().GetTypeInfo().GetCustomAttribute(typeof(RoutePrefix));
             Prefix = routePrefix.Path;
 
-            //var methods = GetType().GetMethods().ToList();
-            //methods = methods.Where(m => m.GetCustomAttribute(typeof(Route)) != null).ToList();
             var methods = GetType().GetMethods().Where(m => m.GetCustomAttribute(typeof(Route)) != null).ToList();
-
-            //foreach (var m in methods)
-            //    RoutingMethods.Add(m);
             RoutingMethods.AddRange(methods);
         }
 
+
+        public HttpResponse BadRequest(string message = "")
+        {
+            return new HttpResponse(HttpStatusCode.BadRequest, message);
+        }
+        public HttpResponse NotFound(string message = "")
+        {
+            return new HttpResponse(HttpStatusCode.NotFound, message);
+        }
         public async Task<HttpResponse> Handle(HttpRequest request)
         {
             var url = request.Path;
@@ -58,6 +61,7 @@ namespace SmartHub.UWP.Core.Communication.Http
             return NotFound($"Couldn't find a fitting method on the on matched controller '{ GetType().Name }' for path '{ url }'");
         }
 
+
         private List<object> ExtractParameters(MethodInfo method, RESTPath path, HttpRequest request)
         {
             var parameters = new List<object>();
@@ -73,15 +77,6 @@ namespace SmartHub.UWP.Core.Communication.Http
             }
 
             return parameters;
-        }
-
-        public HttpResponse BadRequest(string message = "")
-        {
-            return new HttpResponse(HttpStatusCode.BadRequest, message);
-        }
-        public HttpResponse NotFound(string message = "")
-        {
-            return new HttpResponse(HttpStatusCode.NotFound, message);
         }
     }
 }

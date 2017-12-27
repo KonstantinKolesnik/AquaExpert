@@ -112,8 +112,8 @@
     <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\HttpServer.cs" />
     <Compile Include="Http\JsonResponse.cs" />
-    <Compile Include="Http\RequestHandler.cs" />
-    <Compile Include="Http\RESTHandler.cs" />
+    <Compile Include="Http\RequestHandlers\IRequestHandler.cs" />
+    <Compile Include="Http\RequestHandlers\RESTHandler.cs" />
     <Compile Include="Http\RESTPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppService\RemoteSystemSearcher.cs" />

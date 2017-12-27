@@ -3,21 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
-namespace SmartHub.UWP.Core.Communication.Http
+namespace SmartHub.UWP.Core.Communication.Http.RequestHandlers
 {
-    public class RESTHandler : RequestHandler
+    public class RESTHandler : IRequestHandler
     {
-        private List<Controller> Controllers = new List<Controller>();
+        private List<Controller> controllers = new List<Controller>();
 
         public void RegisterController(Controller controller)
         {
-            Controllers.Add(controller);
+            controllers.Add(controller);
         }
 
-        public async override Task<HttpResponse> Handle(HttpRequest request)
+        public async Task<HttpResponse> Handle(HttpRequest request)
         {
             var url = request.Path;
-            var controller = Controllers.SingleOrDefault(c => url.PathAndQuery.Contains(c.Prefix));
+            var controller = controllers.SingleOrDefault(c => url.PathAndQuery.Contains(c.Prefix));
 
             if (controller != null)
                 return await controller.Handle(request);

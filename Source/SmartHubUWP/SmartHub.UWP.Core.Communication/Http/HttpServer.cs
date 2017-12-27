@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartHub.UWP.Core.Communication.Http.RequestHandlers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,39 +13,23 @@ namespace SmartHub.UWP.Core.Communication.Http
     public class HttpServer
     {
         #region Fields
-        private StreamSocketListener listener;
         private string serviceName;
         private List<String> acceptedVerbs = new List<String> { HttpMethod.Get.Method, HttpMethod.Post.Method, HttpMethod.Delete.Method, HttpMethod.Put.Method };
+        private StreamSocketListener listener;
         #endregion
 
         #region Properties
-        public RESTHandler RestHandler
+        public IRequestHandler RequestHandler
         {
-            get;
-        } = new RESTHandler();
+            get; set;
+        }
         #endregion
 
         #region Public methods
         public async Task StartAsync(string serviceName)
         {
-            //List<string> ipAddresses = new List<string>();
-            //var hostnames = NetworkInformation.GetHostNames();
-            //foreach (var hn in hostnames)
-            //{
-            //    //IanaInterfaceType == 71 => Wifi
-            //    //IanaInterfaceType == 6 => Ethernet (Emulator)
-            //    if (hn.IPInformation != null &&
-            //        (hn.IPInformation.NetworkAdapter.IanaInterfaceType == 71
-            //        || hn.IPInformation.NetworkAdapter.IanaInterfaceType == 6))
-            //    {
-            //        string ipAddress = hn.DisplayName;
-            //        ipAddresses.Add(ipAddress);
-            //    }
-            //}
-
             if (listener == null)
             {
-                //list = new System.Net.HttpListener();
                 this.serviceName = serviceName;
 
                 listener = new StreamSocketListener();
@@ -55,6 +40,7 @@ namespace SmartHub.UWP.Core.Communication.Http
                 //};
 
                 listener.Control.KeepAlive = false;
+
                 await listener.BindServiceNameAsync(serviceName);
             }
         }
@@ -75,7 +61,6 @@ namespace SmartHub.UWP.Core.Communication.Http
             try
             {
                 HttpRequest request;
-
                 try
                 {
                     request = HttpRequest.Read(socket);
@@ -89,10 +74,9 @@ namespace SmartHub.UWP.Core.Communication.Http
                 if (acceptedVerbs.Contains(request.Method.Method))
                 {
                     HttpResponse response;
-
                     try
                     {
-                        response = await RestHandler.Handle(request);
+                        response = await RequestHandler?.Handle(request);
                     }
                     catch (Exception ex)
                     {
@@ -102,8 +86,8 @@ namespace SmartHub.UWP.Core.Communication.Http
 
                     await WriteResponse(response, socket);
 
-                    //await socket.CancelIOAsync();
-                    //socket.Dispose();
+                    await socket.CancelIOAsync();
+                    socket.Dispose();
                 }
             }
             catch (Exception ex)
@@ -129,8 +113,9 @@ namespace SmartHub.UWP.Core.Communication.Http
         }
         private static async Task WriteResponse(HttpResponse response, StreamSocket socket)
         {
-            using (var stream = socket.OutputStream.AsStreamForWrite())
-                await response.WriteToStream(stream);
+            if (response != null)
+                using (var stream = socket.OutputStream.AsStreamForWrite())
+                    await response.WriteToStream(stream);
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using SmartHub.UWP.Core.Communication;
 using SmartHub.UWP.Core.Communication.Http;
+using SmartHub.UWP.Core.Communication.Http.RequestHandlers;
 using SmartHub.UWP.Core.Communication.Tcp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
@@ -13,7 +14,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
     public class ApiListenerPlugin : PluginBase
     {
         public const string TcpServiceName = "11111";
-        public const string WebServiceName = "55555";
+        public const string WebServiceName = "7777";
 
         #region Fields
         private readonly Dictionary<string, ApiMethod> apiMethods = new Dictionary<string, ApiMethod>();
@@ -39,7 +40,10 @@ namespace SmartHub.UWP.Plugins.ApiListener
                 apiMethods.Add(apiMethod.Metadata.MethodName, apiMethod.Value);
 
             tcpServer.ApiRequestHandler = ApiRequestHandler;
-            httpServer.RestHandler.RegisterController(new RestController());
+
+            var requestHandler = new RESTHandler();
+            requestHandler.RegisterController(new RestController());
+            httpServer.RequestHandler = requestHandler;
         }
         public async override void StartPlugin()
         {
