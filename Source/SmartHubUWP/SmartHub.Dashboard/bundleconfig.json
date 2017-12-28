@@ -11,13 +11,17 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/site.js",
+      "wwwroot/js/APICallers/APICaller.js",
+      "wwwroot/js/APICallers/ServerAPICaller.js"
     ],
+
     // Optionally specify minification options
     "minify": {
       "enabled": true,
       "renameLocals": true
     },
+
     // Optionally generate .map file
     "sourceMap": false
   }

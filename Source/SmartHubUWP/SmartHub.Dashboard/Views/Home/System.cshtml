@@ -1,0 +1,42 @@
+﻿@*@using Core.CAD.Connectors.Onshape;*@
+@using SmartHub.Dashboard.Controllers;
+@model IEnumerable<AppSectionItemAttribute>
+@{
+    ViewData["Title"] = "System";
+    //OnshapeContext context = ViewBag.OnshapeContext as OnshapeContext;
+}
+
+<div class="row">
+    @*<input id="hidDocumentId" type="hidden" value="@context.DocumentId" />
+        <input id="hidWorkspaceId" type="hidden" value="@context.WorkspaceId" />
+        <input id="hidCoreAppSessionId" type="hidden" value="@ViewBag.CoreAppSessionID" />*@
+</div>
+
+@*<h2>@ViewData["Title"]</h2>*@
+<h3>@ViewData["Message"]</h3>
+
+@*<p>Use this area to provide additional information.</p>*@
+@*<h5>Server URL:</h5>
+<h6>@ViewBag.ServerUrl</h6>*@
+
+@*<hr />*@
+
+<h3>Items</h3>
+
+<table class="table-condensed">
+    <tr>
+        <td><h4>Name</h4></td>
+        <td><h4>Description</h4></td>
+        @*<td>Type</td>*@
+        @*<td></td>*@
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            @*<td>@item.Type</td>*@
+            @*<td><a href="~/Home/Buy/@phone.Id">Купить</a></td>*@
+        </tr>
+    }
+</table>
