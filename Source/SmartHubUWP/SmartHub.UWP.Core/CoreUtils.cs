@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources.Core;
@@ -173,32 +171,6 @@ namespace SmartHub.UWP.Core
         public static TResult GetValueOrDefault<T, TResult>(this T obj, Func<T, TResult> func) where T : class
         {
             return obj == null ? default(TResult) : func(obj);
-        }
-
-        public static async Task<string> GETRequest(string uri)
-        {
-            //var geturi = new Uri("http://api.openweathermap.org/data/2.5/weather?q=London");
-            var geturi = new Uri(uri);
-
-            var client = new HttpClient();
-            var responseGet = await client.GetAsync(geturi);
-            return await responseGet.Content.ReadAsStringAsync();
-        }
-        public static async Task<string> POSTRequest(string uri, object data)
-        {
-            //var requestUri = new Uri("https://www.userauth");
-            var requestUri = new Uri(uri);
-
-            //dynamic dynamicJson = new ExpandoObject();
-            //dynamicJson.username = "sureshmit55@gmail.com".ToString();
-            //dynamicJson.password = "9442921025";
-            //string json = JsonConvert.SerializeObject(dynamicJson);
-
-            string json = JsonConvert.SerializeObject(data);
-
-            var client = new HttpClient();
-            var response = await client.PostAsync(requestUri, new StringContent(json, Encoding.UTF8, "application/json"));
-            return await response.Content.ReadAsStringAsync();
         }
 
         public static string ExecutablePath

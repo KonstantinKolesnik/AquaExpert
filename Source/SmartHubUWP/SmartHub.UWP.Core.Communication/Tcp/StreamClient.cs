@@ -25,12 +25,12 @@ namespace SmartHub.UWP.Core.Communication.Tcp
             T result = default(T);
 
             var request = new ApiRequest(commandName, parameters);
-            var success = await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+            var success = await Utils.SendAsync(socket, CommunucationUtils.DtoSerialize(request));
 
             if (success)
             {
                 var responseDto = await Utils.ReceiveAsync(socket);
-                return Utils.DtoDeserialize<T>(responseDto);
+                return CommunucationUtils.DtoDeserialize<T>(responseDto);
             }
 
             return result;
@@ -58,12 +58,12 @@ namespace SmartHub.UWP.Core.Communication.Tcp
                 if (success)
                 {
                     var request = new ApiRequest(commandName, parameters);
-                    success = await Utils.SendAsync(socket, Utils.DtoSerialize(request));
+                    success = await Utils.SendAsync(socket, CommunucationUtils.DtoSerialize(request));
 
                     if (success)
                     {
                         var responseDto = await Utils.ReceiveAsync(socket);
-                        result = Utils.DtoDeserialize<T>(responseDto);
+                        result = CommunucationUtils.DtoDeserialize<T>(responseDto);
                     }
                 }
             }

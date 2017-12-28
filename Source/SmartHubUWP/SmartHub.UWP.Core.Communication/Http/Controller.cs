@@ -31,25 +31,23 @@ namespace SmartHub.UWP.Core.Communication.Http
         {
             return new HttpResponse(HttpStatusCode.NotFound, message);
         }
+
         public async Task<HttpResponse> Handle(HttpRequest request)
         {
             var url = request.Path;
-            var httpMethod = request.Method;
 
             foreach (var route in RoutingMethods)
             {
-                var requestPath = url.AbsolutePath;
+                var routHttpMethod = ((HttpRequestMethod)route.GetCustomAttribute(typeof(HttpRequestMethod)))?.Method ?? HttpMethod.Get;
+                var routPath = RESTPath.Combine(Prefix, ((Route)route.GetCustomAttribute(typeof(Route))).Path);
 
-                var routingMethod = ((HttpRequestMethod)route.GetCustomAttribute(typeof(HttpRequestMethod)))?.Method ?? HttpMethod.Get;
-                var routingPath = RESTPath.Combine(Prefix, ((Route)route.GetCustomAttribute(typeof(Route))).Path);
+                bool sameHttpMethod = String.Equals(routHttpMethod.Method, request.Method);
+                bool samePath = routPath.Matches(url.AbsolutePath);
 
-                bool sameMethod = String.Equals(routingMethod.Method, httpMethod.Method);
-                bool matchingUrl = routingPath.Matches(requestPath);
-
-                if (sameMethod && matchingUrl)
+                if (sameHttpMethod && samePath)
                 {
                     var method = route;
-                    var parameters = ExtractParameters(method, routingPath, request);
+                    var parameters = ExtractParameters(method, routPath, request);
 
                     if (method.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null)
                         return await (Task<HttpResponse>)method.Invoke(this, parameters.ToArray());

@@ -41,8 +41,12 @@ namespace SmartHub.UWP.Plugins.ApiListener
 
             tcpServer.ApiRequestHandler = ApiRequestHandler;
 
-            var requestHandler = new RESTHandler();
-            requestHandler.RegisterController(new RestController());
+            //var requestHandler = new RESTHandler();
+            //requestHandler.RegisterController(new RestController());
+            //httpServer.RequestHandler = requestHandler;
+
+            var requestHandler = new PlainHandler();
+            requestHandler.ApiRequestHandler = ApiRequestHandler;
             httpServer.RequestHandler = requestHandler;
         }
         public async override void StartPlugin()

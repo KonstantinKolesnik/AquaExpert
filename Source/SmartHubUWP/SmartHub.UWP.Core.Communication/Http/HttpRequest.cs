@@ -102,7 +102,7 @@ namespace SmartHub.UWP.Core.Communication.Http
                     break;
                 }
 
-                if (String.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
                     finishedParsingHeaders = true;
                 else if (!finishedParsingHeaders)
                 {

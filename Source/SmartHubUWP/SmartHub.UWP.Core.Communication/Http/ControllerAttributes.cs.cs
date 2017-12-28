@@ -6,13 +6,11 @@ namespace SmartHub.UWP.Core.Communication.Http
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
     public class Body : Attribute
     {
-
     }
 
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
     public class JsonBody : Body
     {
-
     }
 
 
@@ -21,14 +19,14 @@ namespace SmartHub.UWP.Core.Communication.Http
     {
         private string path;
 
-        public RoutePrefix(string path)
-        {
-            this.path = path;
-        }
-
         public virtual string Path
         {
             get { return path; }
+        }
+
+        public RoutePrefix(string path)
+        {
+            this.path = path;
         }
     }
 
@@ -37,25 +35,22 @@ namespace SmartHub.UWP.Core.Communication.Http
     {
         private string path;
 
+        public virtual string Path
+        {
+            get { return path; }
+        }
+
+        public Route()
+            : this(String.Empty)
+        {
+        }
         public Route(string path)
         {
             this.path = path;
         }
-
-        public Route()
-        {
-            path = String.Empty;
-        }
-
-
-        public virtual string Path
-        {
-            get { return this.path; }
-        }
-
     }
 
-
+    #region Http methods
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public abstract class HttpRequestMethod : Attribute
     {
@@ -85,4 +80,5 @@ namespace SmartHub.UWP.Core.Communication.Http
     {
         public override HttpMethod Method { get; } = HttpMethod.Put;
     }
+    #endregion
 }

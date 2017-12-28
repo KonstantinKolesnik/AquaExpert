@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,16 +11,6 @@ namespace SmartHub.UWP.Core.Communication.Tcp
     static class Utils
     {
         private const int MAX_BUFFER_SIZE_KB = 1024;
-
-        #region Fields
-        private static JsonSerializerSettings dtoSettings = new JsonSerializerSettings()
-        {
-            //TypeNameAssemblyFormat = FormatterAssemblyStyle.Full,
-
-            //TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.None
-        };
-        #endregion
 
         #region Public methods
         public static async Task<bool> ConnectAsync(StreamSocket socket, string hostName, string serviceName, int timeOut = 10000)
@@ -112,31 +101,6 @@ namespace SmartHub.UWP.Core.Communication.Tcp
                 }
 
             return false;
-        }
-
-        public static string DtoSerialize(object data)
-        {
-            return JsonConvert.SerializeObject(data, typeof(object), dtoSettings);
-        }
-        public static T DtoDeserialize<T>(string data)
-        {
-            T result = default(T);
-
-            if (!string.IsNullOrEmpty(data))
-                try
-                {
-                    result = JsonConvert.DeserializeObject<T>(data, dtoSettings);
-                }
-                catch (Exception ex)
-                {
-                }
-
-            return result;
-
-            //List<JsonConverter> converters = new List<JsonConverter>();
-            //converters.Add(new ToolConverter());
-            //converters.Add(new CLSToolOperationConverter());
-            //return JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings() { Converters = converters });
         }
         #endregion
     }

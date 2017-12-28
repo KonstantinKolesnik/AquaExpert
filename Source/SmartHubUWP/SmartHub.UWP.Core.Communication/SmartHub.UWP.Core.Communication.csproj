@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="AppService\AppServiceClientLocal.cs" />
     <Compile Include="AppService\AppServiceClientRemote.cs" />
+    <Compile Include="CommunucationUtils.cs" />
     <Compile Include="Http\Controller.cs" />
     <Compile Include="Http\ControllerAttributes.cs.cs" />
     <Compile Include="Http\HttpRequest.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Http\HttpServer.cs" />
     <Compile Include="Http\JsonResponse.cs" />
     <Compile Include="Http\RequestHandlers\IRequestHandler.cs" />
+    <Compile Include="Http\RequestHandlers\PlainHandler.cs" />
     <Compile Include="Http\RequestHandlers\RESTHandler.cs" />
     <Compile Include="Http\RESTPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

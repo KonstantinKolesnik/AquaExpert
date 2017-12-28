@@ -61,15 +61,15 @@ namespace SmartHub.UWP.Core.Communication.Tcp
             try
             {
                 var requestDto = await Utils.ReceiveAsync(socket);
-                var request = Utils.DtoDeserialize<ApiRequest>(requestDto);
+                var request = CommunucationUtils.DtoDeserialize<ApiRequest>(requestDto);
 
                 if (request != null)
                 {
                     var response = ApiRequestHandler?.Invoke(request);
                     if (response != null)
                     {
-                        var dataDto = Utils.DtoSerialize(response);
-                        await Utils.SendAsync(socket, dataDto);
+                        var responseDto = CommunucationUtils.DtoSerialize(response);
+                        await Utils.SendAsync(socket, responseDto);
                     }
                 }
 
