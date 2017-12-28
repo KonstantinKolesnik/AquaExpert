@@ -1,7 +1,4 @@
 ﻿var apiCaller = {
-    WebApiPrefix: "api",
-
-    // Web API:
     ajaxFailHandler: function (jqXHR) {
         if ((jqXHR.responseText == '' && jqXHR.status == 12029))
             return; //suppress if connection to server failed
@@ -32,7 +29,7 @@
 
         return $.ajax({
             type: httpVerb,
-            url: $.url(this.WebApiPrefix + "/" + apiPathAndParams),
+            url: $.url(apiPathAndParams),
             contentType: "application/json; charset=utf-8",
             async: sync ? false : true,
             data: data ? JSON.stringify(data) : "",
@@ -50,15 +47,15 @@
                 if ((e.responseText == '' && e.status == 12029))// || onError == null)
                     return; //suppress if connection to server failed
 
-                var response = $.parseJSON(e.responseText); // response will be null if e.responseText is empty (which can be on connection failure)
-                if (response) {
-                    if (onError)
-                        onError(response.Message);
-                    else {
-                        hideWaitForm();
-                        popupNotification.show(response.Message, NotificationType.Error);
-                    }
-                }
+                //var response = $.parseJSON(e.responseText); // response will be null if e.responseText is empty (which can be on connection failure)
+                //if (response) {
+                //    if (onError)
+                //        onError(response.Message);
+                //    else {
+                //        hideWaitForm();
+                //        popupNotification.show(response.Message, NotificationType.Error);
+                //    }
+                //}
 
                 //if (e.status == 409/*Conflict*/) {
                 //    location.href = RMUtils.getUrl('Logout.aspx');

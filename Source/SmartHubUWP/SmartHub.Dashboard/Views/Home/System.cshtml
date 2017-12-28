@@ -1,15 +1,11 @@
-﻿@*@using Core.CAD.Connectors.Onshape;*@
-@using SmartHub.Dashboard.Controllers;
-@model IEnumerable<AppSectionItemAttribute>
+﻿@using SmartHub.Dashboard.Controllers;
+@*@model IEnumerable<AppSectionItemAttribute>*@
 @{
     ViewData["Title"] = "System";
-    //OnshapeContext context = ViewBag.OnshapeContext as OnshapeContext;
 }
 
 <div class="row">
-    @*<input id="hidDocumentId" type="hidden" value="@context.DocumentId" />
-        <input id="hidWorkspaceId" type="hidden" value="@context.WorkspaceId" />
-        <input id="hidCoreAppSessionId" type="hidden" value="@ViewBag.CoreAppSessionID" />*@
+    <input id="hidServerUrl" type="hidden" value="@ViewBag.ServerUrl" />
 </div>
 
 @*<h2>@ViewData["Title"]</h2>*@
@@ -21,22 +17,28 @@
 
 @*<hr />*@
 
-<h3>Items</h3>
+<div class="row">
+    <div class="col-md-3">
+        <h3>Items</h3>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Type</th>
+                </tr>
+            </thead>
 
-<table class="table-condensed">
-    <tr>
-        <td><h4>Name</h4></td>
-        <td><h4>Description</h4></td>
-        @*<td>Type</td>*@
-        @*<td></td>*@
-    </tr>
-    @foreach (var item in Model)
+            @*@foreach (var item in Model)
     {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.Description</td>
-            @*<td>@item.Type</td>*@
-            @*<td><a href="~/Home/Buy/@phone.Id">Купить</a></td>*@
-        </tr>
-    }
-</table>
+            <tr>
+                <td>@item.Name</td>
+                <td><small>@item.Description</small></td>
+                <td><small>@item.Type</small></td>
+                <td><a href="~/Home/Buy/@phone.Id">Купить</a></td>
+            </tr>
+}*@
+        </table>
+    </div>
+
+</div>

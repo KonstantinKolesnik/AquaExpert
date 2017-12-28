@@ -58,8 +58,12 @@ namespace SmartHub.UWP.Core.Communication.Http
             foreach (var header in Headers)
                 headerBuilder.AppendLine($"{header.Key}: {header.Value}");
 
+            headerBuilder.AppendLine("Access-Control-Allow-Origin: *");
+            headerBuilder.AppendLine("Access-Control-Allow-Headers: *");
+
             headerBuilder.AppendLine($"Content-Length: {contentStream.Length}");
             headerBuilder.AppendLine("Connection: close");
+
             headerBuilder.AppendLine();
 
             var headerArray = Encoding.UTF8.GetBytes(headerBuilder.ToString());

@@ -14,7 +14,7 @@ namespace SmartHub.UWP.Core.Communication.Http
     {
         #region Fields
         private string serviceName;
-        private List<String> acceptedVerbs = new List<String> { HttpMethod.Get.Method, HttpMethod.Post.Method, HttpMethod.Delete.Method, HttpMethod.Put.Method };
+        private List<String> acceptedVerbs = new List<String> { HttpMethod.Get.Method, HttpMethod.Post.Method, HttpMethod.Delete.Method, HttpMethod.Put.Method, HttpMethod.Options.Method };
         private StreamSocketListener listener;
         #endregion
 

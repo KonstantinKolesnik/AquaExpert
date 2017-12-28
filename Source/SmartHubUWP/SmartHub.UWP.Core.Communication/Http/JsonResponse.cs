@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using Windows.Web.Http;
 
 namespace SmartHub.UWP.Core.Communication.Http
@@ -10,24 +9,18 @@ namespace SmartHub.UWP.Core.Communication.Http
         protected JsonResponse()
             : base()
         {
-            Headers.Add("Content-Type", "application/json");
+            Headers.Add("Content-Type", "application/json; charset=utf-8");
             Headers.Add("Accept", "application/json");
         }
-        public JsonResponse(String jsonString, HttpStatusCode statusCode = HttpStatusCode.Ok)
+        public JsonResponse(string jsonString, HttpStatusCode statusCode = HttpStatusCode.Ok)
             : this()
         {
-            var jsonObject = JsonConvert.DeserializeObject(jsonString);
-
-            StatusCode = statusCode;
-            Content = jsonObject.ToString();
-        }
-        public JsonResponse(object jsonObject, HttpStatusCode statusCode = HttpStatusCode.Ok)
-            : this()
-        {
-            var jsonString = JsonConvert.SerializeObject(jsonObject);
-
             StatusCode = statusCode;
             Content = jsonString;
+        }
+        public JsonResponse(object jsonObject, HttpStatusCode statusCode = HttpStatusCode.Ok)
+            : this(JsonConvert.SerializeObject(jsonObject), statusCode)
+        {
         }
         #endregion
     }

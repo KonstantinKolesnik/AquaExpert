@@ -22,7 +22,7 @@ namespace SmartHub.UWP.Core.Communication.Http.RequestHandlers
                 return new JsonResponse(responseDto);
             }
             else
-                return new HttpResponse(HttpStatusCode.NotFound, $"No api method found that supports this path: '{ request.Path }'.");
+                return new HttpResponse(HttpStatusCode.NotFound, $"No api method found with name: '{ request.Path }'.");
         }
     }
 }

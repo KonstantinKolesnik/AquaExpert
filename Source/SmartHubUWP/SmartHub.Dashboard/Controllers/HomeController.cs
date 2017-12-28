@@ -5,6 +5,7 @@ using SmartHub.Dashboard.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 //using SmartHub.Dashboard.Services;
 
 namespace SmartHub.Dashboard.Controllers
@@ -28,21 +29,22 @@ namespace SmartHub.Dashboard.Controllers
         public IActionResult Index()
         {
             return View();
+            //return Redirect("/Home/System");
         }
         public IActionResult Applications()
         {
             ViewData["Message"] = "Applications";
             return View();
         }
-        public async System.Threading.Tasks.Task<IActionResult> System()
+        public async Task<IActionResult> System()
         {
             ViewData["Message"] = "System maintenance";
             ViewBag.ServerUrl = config["serverUrl"];
 
-            var data = await Utils.GETRequest(config["serverUrl"] + "/api/ui/sections/system");
-            var model = Utils.DtoDeserialize<List<AppSectionItemAttribute>>(data);
+            //var data = await Utils.GETRequest(config["serverUrl"] + "/api/ui/sections/system");
+            //var model = Utils.DtoDeserialize<List<AppSectionItemAttribute>>(data);
 
-            return View(model);
+            return View();// model);
         }
         //public IActionResult About()
         //{
