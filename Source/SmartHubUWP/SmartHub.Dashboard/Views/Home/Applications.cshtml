@@ -1,15 +1,15 @@
-﻿@model IEnumerable<AppSectionItem>
+﻿
+@model IEnumerable<AppSectionItem>
 @{
     ViewData["Title"] = "Applications";
 }
 
 <h4>@ViewData["Message"]</h4>
 
-<div class="row">
-    <div class="col-md-3">
-        @foreach (var item in Model)
-        {
-            <h5><a href="~/Home/Buy/@item.Type">@item.Name</a></h5>
-        }
-    </div>
-</div>
+@foreach (var item in Model)
+{
+    <p>
+        @Html.ActionLink(item.Name, "SectionItem", "Home", item)<br />
+        <small>@item.Description</small><br />
+    </p>
+}

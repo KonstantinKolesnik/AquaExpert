@@ -14,13 +14,13 @@
     "inputFiles": [
       "wwwroot/js/site.js",
       "wwwroot/js/APICallers/APICaller.js",
-      "wwwroot/js/APICallers/ServerAPICaller.js",
-      "wwwroot/js/Views/SystemView.js"
+      "wwwroot/js/APICallers/ServerAPICaller.js"
+      //"wwwroot/js/Views/SystemView.js"
     ],
 
     // Optionally specify minification options
     "minify": {
-      "enabled": false,
+      "enabled": true,
       "renameLocals": true
     },
 

@@ -1,4 +1,5 @@
-﻿@using SmartHub.Dashboard.Common;
+﻿
+@using SmartHub.Dashboard.Common;
 @model AppSectionItem
 @{
     ViewData["Title"] = Model.Name;
@@ -6,7 +7,5 @@
     var data = await Utils.GETRequest(ViewBag.ServerUrl + Model.Url);
     var html = Utils.DtoDeserialize<string>(data);
 }
-
-<h4>@ViewData["Message"]</h4>
 
 @Html.Raw(html)
