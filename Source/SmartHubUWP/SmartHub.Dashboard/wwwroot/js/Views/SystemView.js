@@ -6,9 +6,9 @@ function SystemView() {
 
 
     function initView() {
-        serverAPICaller.apiGetSystemSectionItems(function (items) {
-            alert(items.length);
-        });
+        //serverAPICaller.apiGetSystemSectionItems(function (items) {
+        //    alert(items.length);
+        //});
 
     }
 

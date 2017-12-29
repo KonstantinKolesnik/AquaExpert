@@ -1,44 +1,30 @@
-﻿@using SmartHub.Dashboard.Controllers;
-@*@model IEnumerable<AppSectionItemAttribute>*@
+﻿@model IEnumerable<AppSectionItem>
 @{
     ViewData["Title"] = "System";
 }
 
-<div class="row">
-    <input id="hidServerUrl" type="hidden" value="@ViewBag.ServerUrl" />
+@*<div class="row">
+        <input id="hidServerUrl" type="hidden" value="@ViewBag.ServerUrl" />
+    </div>*@
+
+<h4>@ViewData["Message"]</h4>
+
+<div>
+    @*@Html.Raw(ViewBag.Text)*@
 </div>
 
-@*<h2>@ViewData["Title"]</h2>*@
-<h3>@ViewData["Message"]</h3>
-
-@*<p>Use this area to provide additional information.</p>*@
-@*<h5>Server URL:</h5>
-<h6>@ViewBag.ServerUrl</h6>*@
-
-@*<hr />*@
 
 <div class="row">
     <div class="col-md-3">
-        <h3>Items</h3>
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Type</th>
-                </tr>
-            </thead>
-
-            @*@foreach (var item in Model)
+        @foreach (var item in Model)
     {
-            <tr>
-                <td>@item.Name</td>
-                <td><small>@item.Description</small></td>
-                <td><small>@item.Type</small></td>
-                <td><a href="~/Home/Buy/@phone.Id">Купить</a></td>
-            </tr>
-}*@
-        </table>
+        <h5>@Html.ActionLink(item.Name, "SectionItem", "Home", item)</h5>
+        <h6>@item.Description</h6>
+    }
     </div>
-
 </div>
+
+@section scripts
+    {
+    <script src="~/js/Views/SystemView.js" asp-append-version="true"></script>
+}

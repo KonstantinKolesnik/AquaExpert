@@ -15,7 +15,9 @@ using SmartHub.UWP.Plugins.Wemos.UI;
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -26,7 +28,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 {
     [Plugin]
     [AppSectionItem("Wemos", AppSectionType.Applications, typeof(MainPage), "Wemos modules")]
-    [AppSectionItem("Wemos", AppSectionType.System, typeof(SettingsPage), "Wemos modules")]
+    [AppSectionItem("Wemos", AppSectionType.System, typeof(SettingsPage), "Wemos modules", "/api/wemos/ui/settings")]
     public class WemosPlugin : PluginBase
     {
         #region Fields
@@ -795,6 +797,23 @@ namespace SmartHub.UWP.Plugins.Wemos
             return false;
         });
         #endregion
+
+        [ApiMethod("/api/wemos/ui/settings")]
+        public ApiMethod apiGetUISettings => (args =>
+        {
+            var assembly = GetType().GetTypeInfo().Assembly;
+            var names = assembly.GetManifestResourceNames();
+
+            var stream = assembly.GetManifestResourceStream("SmartHub.UWP.Plugins.Wemos.UIWeb.Settings.html");
+            //if (stream == null)
+            //{
+            //    throw new InvalidOperationException(
+            //        String.Format("Cannot create stream from specified URL: {0}", fileName));
+            //}
+
+            using (var reader = new StreamReader(stream))
+                return reader.ReadToEnd();
+        });
 
         #endregion
     }

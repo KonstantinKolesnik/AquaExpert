@@ -1,25 +1,10 @@
 ﻿
 var thousandsSeparator = "";
 var decimalSeparator = ".";
-
 var serverAPICaller;
-
-
-$(document).ready(function () {
-    //popupNotification = new PopupNotification();
-    //popupDialog = new PopupDialog();
-    //waitIndicator = new WaitIndicator();
-    //waitForm = new WaitForm();
-
-    serverAPICaller = new ServerAPICaller();
-});
-
-
 
 function initApplication() {
     initKendoCulture();
-
-    //serverAPICaller = new ServerAPICaller();
 
     function initKendoCulture() {
         kendo.culture("en-US");
@@ -31,3 +16,17 @@ function initApplication() {
         kendo.culture().numberFormat.currency["."] = decimalSeparator;
     }
 }
+
+
+
+
+
+
+$(document).ready(function () {
+    //popupNotification = new PopupNotification();
+    //popupDialog = new PopupDialog();
+    //waitIndicator = new WaitIndicator();
+    //waitForm = new WaitForm();
+
+    serverAPICaller = new ServerAPICaller();
+});

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using SmartHub.Dashboard.Common;
 using SmartHub.Dashboard.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -28,24 +27,40 @@ namespace SmartHub.Dashboard.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Text = "<h3>Hello!</h3><script>var a = 0; alert('OK!');</script>";
             return View();
             //return Redirect("/Home/System");
+            //return View("System");
         }
-        public IActionResult Applications()
+        public async Task<IActionResult> Applications()
         {
             ViewData["Message"] = "Applications";
-            return View();
+            ViewBag.ServerUrl = config["serverUrl"];
+
+            var data = await Utils.GETRequest(config["serverUrl"] + "/api/ui/sections/apps");
+            var model = Utils.DtoDeserialize<List<AppSectionItem>>(data);
+
+            return View(model);
         }
         public async Task<IActionResult> System()
         {
             ViewData["Message"] = "System maintenance";
             ViewBag.ServerUrl = config["serverUrl"];
 
-            //var data = await Utils.GETRequest(config["serverUrl"] + "/api/ui/sections/system");
-            //var model = Utils.DtoDeserialize<List<AppSectionItemAttribute>>(data);
+            var data = await Utils.GETRequest(config["serverUrl"] + "/api/ui/sections/system");
+            var model = Utils.DtoDeserialize<List<AppSectionItem>>(data);
 
-            return View();// model);
+            return View(model);
         }
+
+        public IActionResult SectionItem(AppSectionItem item)
+        {
+            ViewData["Message"] = item.Name;
+            ViewBag.ServerUrl = config["serverUrl"];
+
+            return View(item);
+        }
+
         //public IActionResult About()
         //{
         //    ViewData["Message"] = "Your application description page.";
@@ -64,23 +79,4 @@ namespace SmartHub.Dashboard.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
-
-
-
-
-
-    public enum AppSectionType
-    {
-        Applications,
-        System
-    }
-
-    public class AppSectionItemAttribute
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public AppSectionType Type { get; set; }
-        //public Type UIModuleType { get; set; }
-    }
-
 }
