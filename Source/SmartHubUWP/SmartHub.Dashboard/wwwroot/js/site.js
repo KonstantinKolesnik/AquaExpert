@@ -17,11 +17,6 @@ function initApplication() {
     }
 }
 
-
-
-
-
-
 $(document).ready(function () {
     //popupNotification = new PopupNotification();
     //popupDialog = new PopupDialog();

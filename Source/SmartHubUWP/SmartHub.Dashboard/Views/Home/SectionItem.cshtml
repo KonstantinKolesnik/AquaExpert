@@ -6,6 +6,12 @@
 
     var data = await Utils.GETRequest(ViewBag.ServerUrl + Model.Url);
     var html = Utils.DtoDeserialize<string>(data);
+    html = html.Replace("@ViewBag.ServerUrl", ViewBag.ServerUrl);
 }
 
-@Html.Raw(html)
+<div>@Html.Raw(html)</div>
+
+
+
+
+@*<div>@{Html.RenderPartial("PartialViews/pvWemos");}</div>*@
