@@ -1,0 +1,90 @@
+﻿
+<h4>Wemos Settings</h4>
+
+<div id="tabstrip" data-role="tabstrip">
+    <ul>
+        <li class="k-state-active">Nodes</li>
+        <li>Lines</li>
+    </ul>
+    <div>
+        <div id="gridWemosNodes" style="font-size:smaller;"></div>
+    </div>
+    <div>
+        <div id="gridWemosLines" style="font-size:smaller;"></div>
+    </div>
+</div>
+
+<script>
+    init();
+
+    function init() {
+        $("#tabstrip").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
+
+        $("#gridWemosNodes").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: $.serverUrl() + "/api/wemos/nodes"
+                }
+            },
+            height: 550,
+            scrollable: true,
+            groupable: true,
+            sortable: true,
+            resizable: true,
+            editable: "incell",
+            columns: [
+                //{
+                //    template: "<div class='customer-photo'" +
+                //    "style='background-image: url(../content/web/Customers/#:data.CustomerID#.jpg);'></div>" +
+                //    "<div class='customer-name'>#: ContactName #</div>",
+                //    field: "ContactName",
+                //    title: "Contact Name",
+                //    width: 240
+                //},
+                { field: "NodeID", title: "ID", editable: readonly },
+                { field: "Name", title: "Name" },
+                { field: "IPAddress", title: "IP Address", editable: readonly },
+                //{ field: "Type", title: "Type", editable: readonly },
+                //{ field: "ProtocolVersion", title: "Protocol Version", editable: readonly },
+                { field: "FirmwareName", title: "Firmware Name", editable: readonly },
+                { field: "FirmwareVersion", title: "Firmware Version", editable: readonly },
+                { field: "LastTimeStamp", title: "Time", editable: readonly },
+                { field: "LastBatteryValue", title: "Battery", editable: readonly }
+            ]
+        });
+
+        $("#gridWemosLines").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: $.serverUrl() + "/api/wemos/lines"
+                }
+            },
+            height: 550,
+            scrollable: true,
+            groupable: true,
+            sortable: true,
+            resizable: true,
+            editable: "incell",
+            columns: [
+                { field: "NodeID", title: "Node ID", editable: readonly },
+                { field: "LineID", title: "Line ID", editable: readonly },
+                { field: "Name", title: "Name" },
+                { field: "Type", title: "Type", editable: readonly },
+                { field: "Factor", title: "Factor" },
+                { field: "Offset", title: "Offset" },
+                { field: "LastTimeStamp", title: "Time", editable: readonly },
+                { field: "LastValue", title: "Value", editable: readonly }
+            ]
+        });
+
+        function readonly() {
+            return false;
+        }
+    }
+</script>

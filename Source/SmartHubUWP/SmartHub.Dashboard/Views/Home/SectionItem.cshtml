@@ -1,12 +1,12 @@
 ﻿
 @using SmartHub.Dashboard.Common;
 @model AppSectionItem
+
 @{
     ViewData["Title"] = Model.Name;
 
-    var data = await Utils.GETRequest(ViewBag.ServerUrl + Model.Url);
-    var html = Utils.DtoDeserialize<string>(data);
-    html = html.Replace("@ViewBag.ServerUrl", ViewBag.ServerUrl);
+    var htmlDto = await Utils.GETRequest(ViewBag.ServerUrl + Model.Url);
+    var html = Utils.DtoDeserialize<string>(htmlDto);
 }
 
 <div>@Html.Raw(html)</div>

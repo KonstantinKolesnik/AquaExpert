@@ -613,10 +613,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         public ApiMethod apiUpdateNode => (args =>
         {
             var item = JsonConvert.DeserializeObject<WemosNode>(args[0].ToString());
-            Context.StorageSaveOrUpdate(item);
-            //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
 
-            return true;
+            if (item != null)
+            {
+                Context.StorageSaveOrUpdate(item);
+                //NotifyForSignalR(new { MsgId = "NodeNameChanged", Data = new { Id = id, Name = name } });
+                return true;
+            }
+
+            return false;
         });
         #endregion
 
@@ -631,10 +636,15 @@ namespace SmartHub.UWP.Plugins.Wemos
         public ApiMethod apiUpdateLine => (args =>
         {
             var item = JsonConvert.DeserializeObject<WemosLine>(args[0].ToString());
-            Context.StorageSaveOrUpdate(item);
-            //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
 
-            return true;
+            if (item != null)
+            {
+                Context.StorageSaveOrUpdate(item);
+                //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
+                return true;
+            }
+
+            return false;
         });
 
         [ApiMethod("/api/wemos/line/values")]
@@ -661,9 +671,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod("/api/wemos/monitor")]
         public ApiMethod apiGetMonitor => (args =>
         {
-            var id = args[0].ToString();
-
-            var model = Context.GetPlugin<WemosPlugin>().GetLineMonitor(id);
+            var model = Context.GetPlugin<WemosPlugin>().GetLineMonitor(args[0].ToString());
             var line = Context.GetPlugin<WemosPlugin>().GetLine(model.LineID);
 
             return new WemosLineMonitorDto(model) { LineName = line.Name, LineType = line.Type };
@@ -713,9 +721,7 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod("/api/wemos/monitors/delete")]
         public ApiMethod apiDeleteMonitor => (args =>
         {
-            var id = args[0].ToString();
-
-            var item = Context.GetPlugin<WemosPlugin>().GetLineMonitor(id);
+            var item = Context.GetPlugin<WemosPlugin>().GetLineMonitor(args[0].ToString());
 
             if (item != null)
             {
@@ -784,13 +790,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod("/api/wemos/controllers/delete")]
         public ApiMethod apiDeleteController => (args =>
         {
-            var id = args[0].ToString();
+            var item = Context.GetPlugin<WemosPlugin>().GetWorkingController(args[0].ToString());
 
-            var ctrl = Context.GetPlugin<WemosPlugin>().GetWorkingController(id);
-            if (ctrl != null)
+            if (item != null)
             {
-                Context.StorageDelete(ctrl);
-                Context.GetPlugin<WemosPlugin>().RemoveWorkingController(ctrl);
+                Context.StorageDelete(item);
+                Context.GetPlugin<WemosPlugin>().RemoveWorkingController(item);
                 return true;
             }
 
