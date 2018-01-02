@@ -18,12 +18,12 @@ namespace SmartHub.UWP.Core.Infrastructure
         }
         #endregion
 
-        [OnImportsSatisfied]
-        public void OnImportsSatisfied()
-        {
-            //int a = 0;
-            //int b = a;
-        }
+        //[OnImportsSatisfied]
+        //public void OnImportsSatisfied()
+        //{
+        //    //int a = 0;
+        //    //int b = a;
+        //}
 
         #region Public methods
         public void Init(List<Assembly> assemblies = null)

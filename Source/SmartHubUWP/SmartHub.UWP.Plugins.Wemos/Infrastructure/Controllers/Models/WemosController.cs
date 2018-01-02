@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SQLite.Net.Attributes;
 using System;
 
@@ -54,7 +54,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
         {
             worker?.Start();
         }
-        public void ProcessMessage(WemosLineValue value)
+        public void ProcessMessage(LineValue value)
         {
             if (IsAutoMode)
                 worker?.ProcessMessage(value);

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Wemos.Core.Models;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using System;
 
@@ -38,7 +38,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         {
             RequestLinesValues(); // force lines to report their current values
         }
-        internal void ProcessMessage(WemosLineValue value)
+        internal void ProcessMessage(LineValue value)
         {
             if (IsMyMessage(value))
             {
@@ -57,8 +57,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         protected abstract object GetDefaultConfiguration();
 
         protected abstract void RequestLinesValues();
-        protected abstract bool IsMyMessage(WemosLineValue value);
-        protected virtual void Preprocess(WemosLineValue value)
+        protected abstract bool IsMyMessage(LineValue value);
+        protected virtual void Preprocess(LineValue value)
         {
         }
         protected abstract void DoWork(DateTime now);

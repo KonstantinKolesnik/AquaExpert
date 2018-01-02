@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Core.Models;
+﻿using SmartHub.UWP.Plugins.Lines.Models;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -49,6 +49,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         {
             return $"{NodeID};{LineID};{(int)Type};{SubType};{data ?? string.Empty}\n";
         }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -58,10 +59,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
             sb.Append(string.Format("[{0}] ", Type));
             switch (Type)
             {
-                case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
+                case WemosMessageType.Presentation: sb.AppendFormat("[{0}] ", (LineType) SubType); break;
                 case WemosMessageType.Report:
                 case WemosMessageType.Set:
-                case WemosMessageType.Get: sb.AppendFormat("[{0}] ", (WemosLineType) SubType); break;
+                case WemosMessageType.Get: sb.AppendFormat("[{0}] ", (LineType) SubType); break;
                 case WemosMessageType.Internal: sb.AppendFormat("[{0}] ", (WemosInternalMessageType) SubType); break;
                 case WemosMessageType.Stream: sb.AppendFormat("[{0}] ", (WemosStreamMessageType) SubType); break;
                 default: sb.AppendFormat("[{0}] ", SubType); break;

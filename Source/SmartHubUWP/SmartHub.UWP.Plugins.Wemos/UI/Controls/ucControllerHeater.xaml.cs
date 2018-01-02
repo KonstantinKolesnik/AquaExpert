@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
@@ -69,11 +70,11 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         {
             var models = await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines");
             
-            foreach (var model in models.Where(m => m.Type == WemosLineType.Switch))
+            foreach (var model in models.Where(m => m.Type == LineType.Switch))
                 SwitchLines.Add(model);
             cbSwitchLines.SelectedItem = SwitchLines.FirstOrDefault(l => l.ID == Configuration.LineSwitchID);
 
-            foreach (var model in models.Where(m => m.Type == WemosLineType.Temperature))
+            foreach (var model in models.Where(m => m.Type == LineType.Temperature))
                 TemperatureLines.Add(model);
             cbTemperatureLines.SelectedItem = TemperatureLines.FirstOrDefault(l => l.ID == Configuration.LineTemperatureID);
         }

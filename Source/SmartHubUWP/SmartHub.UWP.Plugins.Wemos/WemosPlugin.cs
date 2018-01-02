@@ -3,6 +3,8 @@ using SmartHub.UWP.Core.Communication.Udp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
+using SmartHub.UWP.Plugins.Lines;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Scripts;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
@@ -111,11 +113,11 @@ namespace SmartHub.UWP.Plugins.Wemos
             db.CreateTable<WemosNode>();
             db.CreateTable<WemosLine>();
             db.CreateTable<WemosNodeBatteryValue>();
-            db.CreateTable<WemosLineValue>();
+            //db.CreateTable<LineValue>();
 
             db.CreateTable<WemosLineMonitor>();
             //db.CreateTable<WemosLineController>();
-            db.CreateTable<WemosController>();
+            //db.CreateTable<WemosController>();
             //db.CreateTable<WemosZone>();
         }
         public override void InitPlugin()
@@ -132,11 +134,11 @@ namespace SmartHub.UWP.Plugins.Wemos
                 });
             };
 
-            GetControllers().ForEach(controller =>
-            {
-                controller.Init(Context);
-                oldControllers.Add(controller);
-            });
+            //GetControllers().ForEach(controller =>
+            //{
+            //    controller.Init(Context);
+            //    oldControllers.Add(controller);
+            //});
 
             //GetLineControllers().ForEach(controller =>
             //{
@@ -151,16 +153,16 @@ namespace SmartHub.UWP.Plugins.Wemos
             await RequestPresentationAsync();
             await RequestLinesValueAsync();
 
-            foreach (var controller in oldControllers)
-                controller.Start();
+            //foreach (var controller in oldControllers)
+            //    controller.Start();
 
-            StartControllersTask();
+            //StartControllersTask();
         }
         public override async void StopPlugin()
         {
             await udpClient.Stop();
 
-            StopControllersTask();
+            //StopControllersTask();
         }
         #endregion
 
@@ -198,7 +200,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public async Task SetLineValueAsync(WemosLine line, float value)
         {
-            if (line != null && GetLineLastValue(line.ID)?.Value != value)
+            if (line != null && Context.GetPlugin<LinesPlugin>().GetLineLastValue(line.ID)?.Value != value)
                 await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
         public async Task SetLineValueAsync(WemosLine line, string value)
@@ -239,63 +241,49 @@ namespace SmartHub.UWP.Plugins.Wemos
         {
             return Context.StorageGet().Table<WemosLine>().FirstOrDefault(l => l.ID == id);
         }
-        public List<WemosLineValue> GetLineValues(string id, int count)
-        {
-            var line = GetLine(id);
-
-            return Context.StorageGet().Table<WemosLineValue>()
-                .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)// && v.TimeStamp > DateTime.Now.AddDays(-1))
-                .OrderByDescending(v => v.TimeStamp)
-                .Take(count)
-                .OrderBy(v => v.TimeStamp)
-                .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local time
-                .ToList();
-        }
-        public WemosLineValue GetLineLastValue(string id)
-        {
-            var line = GetLine(id);
-
-            return Context.StorageGet().Table<WemosLineValue>()
-                .Where(v => v.NodeID == line.NodeID && v.LineID == line.LineID)
-                .OrderByDescending(v => v.TimeStamp)
-                .Take(1)
-                .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local time
-                .FirstOrDefault(); 
-        }
 
         public static bool IsMessageFromLine(WemosMessage msg, WemosLine line)
         {
             return msg != null && line != null && line.NodeID == msg.NodeID && line.LineID == msg.LineID;
         }
-        public static bool IsValueFromLine(WemosLineValue val, WemosLine line)
-        {
-            return val != null && line != null && line.NodeID == val.NodeID && line.LineID == val.LineID;
-        }
-        public static string LineTypeToUnits(WemosLineType lt)
+        public static string LineTypeToUnits(LineType lt)
         {
             switch (lt)
             {
-                case WemosLineType.Switch: return "";
-                case WemosLineType.Temperature: return "°C";
-                case WemosLineType.Humidity: return "%";
-                case WemosLineType.Barometer: return "Pa"; // mm Hg
-                case WemosLineType.Weight: return "kg";
-                case WemosLineType.Voltage: return "V";
-                case WemosLineType.Current: return "A";
-                case WemosLineType.Power: return "Wt";
-                case WemosLineType.Rain: return "";
-                case WemosLineType.UV: return "";
-                case WemosLineType.Distance: return "m";
-                case WemosLineType.LightLevel: return "lux";
-                case WemosLineType.IR: return "";
-                case WemosLineType.AirQuality: return "";
-                case WemosLineType.Vibration: return "";
-                case WemosLineType.Ph: return "";
-                case WemosLineType.ORP: return "";
+                case LineType.Switch: return "";
+                case LineType.Temperature: return "°C";
+                case LineType.Humidity: return "%";
+                case LineType.Barometer: return "Pa"; // mm Hg
+                case LineType.Weight: return "kg";
+                case LineType.Voltage: return "V";
+                case LineType.Current: return "A";
+                case LineType.Power: return "Wt";
+                case LineType.Rain: return "";
+                case LineType.UV: return "";
+                case LineType.Distance: return "m";
+                case LineType.LightLevel: return "lux";
+                case LineType.IR: return "";
+                case LineType.AirQuality: return "";
+                case LineType.Vibration: return "";
+                case LineType.Ph: return "";
+                case LineType.ORP: return "";
 
                 default: return "";
             }
         }
+
+        public static bool IsWemosLine(WemosLine line)
+        {
+            return line.ID.StartsWith("WEMOS");
+        }
+        public static string GetLineID(int nodeID, int lineNumber)
+        {
+            return $"WEMOS-{nodeID}-{lineNumber}";
+        }
+        //public static int GetLineNodeID(this WemosLine line)
+        //{
+        //    var parts = line.ID.Split('-');
+        //}
         #endregion
 
         #region Line Monitors
@@ -407,17 +395,19 @@ namespace SmartHub.UWP.Plugins.Wemos
                             {
                                 NodeID = message.NodeID,
                                 Name = $"Node {message.NodeID}",
-                                Type = (WemosLineType) message.SubType,
-                                ProtocolVersion = message.GetFloat(),
+                                Type = (LineType) message.SubType,
+                                //ProtocolVersion = message.GetFloat(),
                                 IPAddress = remoteAddress.CanonicalName
                             };
+
                             Context.StorageSave(node);
                         }
                         else
                         {
-                            node.Type = (WemosLineType) message.SubType;
-                            node.ProtocolVersion = message.GetFloat();
+                            node.Type = (LineType) message.SubType;
+                            //node.ProtocolVersion = message.GetFloat();
                             node.IPAddress = remoteAddress.CanonicalName;
+
                             Context.StorageSaveOrUpdate(node);
                         }
 
@@ -433,20 +423,21 @@ namespace SmartHub.UWP.Plugins.Wemos
                             {
                                 line = new WemosLine()
                                 {
-                                    NodeID = node.NodeID,
-                                    LineID = message.LineID,
-                                    Name = $"Line {message.NodeID}-{message.LineID}",
-                                    Type = (WemosLineType)message.SubType,
-                                    ProtocolVersion = message.GetFloat(),
+                                    ID = GetLineID(message.NodeID, message.LineID),
+                                    Name = $"Wemos Line {message.NodeID}-{message.LineID}",
+                                    Type = (LineType)message.SubType,
+                                    //ProtocolVersion = message.GetFloat(),
                                     Factor = 1,
                                     Offset = 0
                                 };
+
                                 Context.StorageSave(line);
                             }
                             else
                             {
-                                line.Type = (WemosLineType) message.SubType;
-                                line.ProtocolVersion = message.GetFloat();
+                                line.Type = (LineType) message.SubType;
+                                //line.ProtocolVersion = message.GetFloat();
+
                                 Context.StorageSaveOrUpdate(line);
                             }
 
@@ -463,12 +454,10 @@ namespace SmartHub.UWP.Plugins.Wemos
                     if (line != null)
                     {
                         // save value:
-                        var lv = new WemosLineValue()
+                        var lv = new LineValue()
                         {
-                            NodeID = message.NodeID,
-                            LineID = message.LineID,
+                            LineID = line.ID,
                             TimeStamp = DateTime.UtcNow,
-                            Type = (WemosLineType) message.SubType,
                             Value = line.Factor * message.GetFloat() + line.Offset // tune value
                         };
                         Context.StorageSave(lv);
@@ -597,9 +586,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         [ApiMethod("/api/wemos/presentation")]
         public ApiMethod apiPresentation => (args =>
         {
-            Context.GetPlugin<WemosPlugin>().RequestPresentationAsync();//.Wait();
+            Context.GetPlugin<WemosPlugin>().RequestPresentationAsync();
 
-            return true; 
+            return true;
         });
 
         #region Nodes
@@ -653,7 +642,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = args[0].ToString();
             var count = int.Parse(args[1].ToString());
 
-            return Context.GetPlugin<WemosPlugin>().GetLineValues(id, count);
+            return Context.GetPlugin<LinesPlugin>().GetLineValues(id, count);
         });
         #endregion
 

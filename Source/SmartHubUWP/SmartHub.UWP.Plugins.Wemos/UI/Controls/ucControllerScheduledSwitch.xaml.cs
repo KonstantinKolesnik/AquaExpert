@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Xaml;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
@@ -60,7 +61,7 @@ namespace SmartHub.UWP.Plugins.Wemos.UI.Controls
         #region Private methods
         private async Task UpdateLinesList()
         {
-            var models = (await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines")).Where(m => m.Type == WemosLineType.Switch);
+            var models = (await CoreUtils.RequestAsync<List<WemosLine>>("/api/wemos/lines")).Where(m => m.Type == LineType.Switch);
             foreach (var model in models)
                 Lines.Add(model);
 

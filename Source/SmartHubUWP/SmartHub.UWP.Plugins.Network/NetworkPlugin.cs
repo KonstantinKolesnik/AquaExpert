@@ -16,17 +16,17 @@ namespace SmartHub.UWP.Plugins.Network
         {
             NetworkInformation.NetworkStatusChanged += async (s) =>
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { CheckInternetAccess(); });
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ReportNetworkStatus(); });
             };
         }
         public override void StartPlugin()
         {
-            CheckInternetAccess();
+            ReportNetworkStatus();
         }
         #endregion
 
         #region Private methods
-        private void CheckInternetAccess()
+        private void ReportNetworkStatus()
         {
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
 

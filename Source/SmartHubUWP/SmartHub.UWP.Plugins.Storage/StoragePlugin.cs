@@ -12,30 +12,19 @@ namespace SmartHub.UWP.Plugins.Storage
     [AppSectionItem("Storage", AppSectionType.System, typeof(SettingsPage), "Data storage")]
     public class StoragePlugin : PluginBase
     {
-        #region Plugin ovverrides
-        public override void InitPlugin()
-        {
-        }
-        public override void StartPlugin()
-        {
-        }
-        public override void StopPlugin()
-        {
-        }
-        #endregion
-
         #region Remote API
         [ApiMethod("/api/storage/size")]
-        public ApiMethod apiGetStorageSize => ((parameters) =>
+        public ApiMethod apiGetStorageSize => (args =>
         {
             var task = CoreUtils.GetFileBasicPropertiesAsync(Context.StoragePath);
             task.Wait();
+            var result = task.Result;
 
             return new StorageInfo
             {
-                Size = task.Result.Size,
-                DateModified = task.Result.DateModified,
-                ItemDate = task.Result.ItemDate,
+                Size = result.Size,
+                DateModified = result.DateModified,
+                ItemDate = result.ItemDate,
             };
         });
         #endregion

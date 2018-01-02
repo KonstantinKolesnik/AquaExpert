@@ -1,6 +1,6 @@
-﻿namespace SmartHub.UWP.Plugins.Wemos.Core.Models
+﻿namespace SmartHub.UWP.Plugins.Lines.Models
 {
-    public enum WemosLineType
+    public enum LineType
     {
         WemosNode,
 

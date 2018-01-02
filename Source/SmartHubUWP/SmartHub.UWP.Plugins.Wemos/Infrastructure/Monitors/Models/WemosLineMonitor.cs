@@ -32,26 +32,26 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
             get; set;
         }
 
-        [NotNull]
+        [NotNull, Default]
         public float Min
         {
             get; set;
         }
-        [NotNull]
+        [NotNull, Default]
         public float Max
         {
             get; set;
         }
-        [NotNull]
+        [NotNull, Default(true, 10)]
         public int ValuesCount
         {
             get; set;
-        } = 10;
+        }
 
-        [NotNull, Default()]
+        [NotNull, Default]
         public int Precision
         {
             get; set;
-        } = 0;
+        }
     }
 }

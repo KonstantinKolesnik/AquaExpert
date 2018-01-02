@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Wemos.Core.Models;
+﻿using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 
 namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors
@@ -9,7 +9,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors
         {
             get; set;
         }
-        public WemosLineType LineType
+        public LineType LineType
         {
             get; set;
         }

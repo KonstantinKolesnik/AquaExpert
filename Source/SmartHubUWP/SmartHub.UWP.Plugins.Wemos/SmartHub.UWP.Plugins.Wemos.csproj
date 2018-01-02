@@ -112,7 +112,6 @@
     <Compile Include="Infrastructure\Controllers\WemosControllerWorkerHeater.cs" />
     <Compile Include="Infrastructure\Controllers\WemosControllerWorkerScheduledSwitch.cs" />
     <Compile Include="Core\Messages\WemosInternalMessageType.cs" />
-    <Compile Include="Core\Models\WemosLineType.cs" />
     <Compile Include="Core\Messages\WemosMessage.cs" />
     <Compile Include="Core\Messages\WemosMessageEventArgs.cs" />
     <Compile Include="Core\Messages\WemosMessageEventHandler.cs" />
@@ -120,7 +119,6 @@
     <Compile Include="Core\Messages\WemosMessageType.cs" />
     <Compile Include="Core\Messages\WemosStreamMessageType.cs" />
     <Compile Include="Core\Models\WemosLine.cs" />
-    <Compile Include="Core\Models\WemosLineValue.cs" />
     <Compile Include="Infrastructure\Controllers\Models\WemosLineController.cs" />
     <Compile Include="Infrastructure\Monitors\Models\WemosLineMonitorObservable.cs" />
     <Compile Include="Infrastructure\Monitors\Models\WemosLineMonitor.cs" />
@@ -194,6 +192,10 @@
     <ProjectReference Include="..\SmartHub.UWP.Plugins.ApiListener\SmartHub.UWP.Plugins.ApiListener.csproj">
       <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
       <Name>SmartHub.UWP.Plugins.ApiListener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Lines\SmartHub.UWP.Plugins.Lines.csproj">
+      <Project>{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}</Project>
+      <Name>SmartHub.UWP.Plugins.Lines</Name>
     </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj">
       <Project>{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}</Project>

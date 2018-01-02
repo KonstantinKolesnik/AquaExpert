@@ -1,4 +1,5 @@
 ﻿using SmartHub.UWP.Core;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
         {
             get { return model.LineName; }
         }
-        public WemosLineType LineType
+        public LineType LineType
         {
             get { return model.LineType; }
         }
@@ -131,10 +132,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
         }
 
         // helper properties:
-        public ObservableCollection<WemosLineValue> Values
+        public ObservableCollection<LineValue> Values
         {
             get;
-        } = new ObservableCollection<WemosLineValue>();
+        } = new ObservableCollection<LineValue>();
         public float LastValue
         {
             get { return Values.Any() ? Values.LastOrDefault().Value : float.NaN; }
@@ -169,7 +170,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models
         #region Public methods
         public async Task UpdateValues()
         {
-            var items = await CoreUtils.RequestAsync<List<WemosLineValue>>("/api/wemos/line/values", LineID, ValuesCount);
+            var items = await CoreUtils.RequestAsync<List<LineValue>>("/api/wemos/line/values", LineID, ValuesCount);
 
             Values.Clear();
             if (items != null)

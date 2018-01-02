@@ -1,4 +1,5 @@
-﻿using SQLite.Net.Attributes;
+﻿using SmartHub.UWP.Plugins.Lines.Models;
+using SQLite.Net.Attributes;
 using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Core.Models
@@ -21,12 +22,14 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
         {
             get; set;
         }
+
+
         public string Name
         {
             get; set;
         }
         [NotNull]
-        public WemosLineType Type
+        public LineType Type
         {
             get; set;
         }
@@ -36,7 +39,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
         }
 
         // value = value * factor + offset
-        [NotNull]
+        [NotNull, Default(true, 1.0)]
         public float Factor
         {
             get; set;
@@ -45,7 +48,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
         public float Offset
         {
             get; set;
-        } = 0;
+        }
 
         public DateTime LastTimeStamp
         {

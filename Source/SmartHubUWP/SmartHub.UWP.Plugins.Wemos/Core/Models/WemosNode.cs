@@ -1,4 +1,5 @@
-﻿using SQLite.Net.Attributes;
+﻿using SmartHub.UWP.Plugins.Lines.Models;
+using SQLite.Net.Attributes;
 using System;
 
 namespace SmartHub.UWP.Plugins.Wemos.Core.Models
@@ -15,7 +16,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Models
             get; set;
         }
         [NotNull]
-        public WemosLineType Type
+        public LineType Type
         {
             get; set;
         }

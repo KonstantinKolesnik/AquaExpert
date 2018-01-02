@@ -1,4 +1,6 @@
 ﻿using SmartHub.UWP.Core.Plugins;
+using SmartHub.UWP.Plugins.Lines;
+using SmartHub.UWP.Plugins.Lines.Models;
 using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
@@ -53,20 +55,20 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         protected override Type GetConfigurationType() => typeof(ControllerConfiguration);
         protected override object GetDefaultConfiguration() => new ControllerConfiguration();
 
-        protected override bool IsMyMessage(WemosLineValue value)
+        protected override bool IsMyMessage(LineValue value)
         {
             return
-                WemosPlugin.IsValueFromLine(value, LineSwitch) ||
-                WemosPlugin.IsValueFromLine(value, LineTemperature);
+                LinesPlugin.IsValueFromLine(value, LineSwitch.ID) ||
+                LinesPlugin.IsValueFromLine(value, LineTemperature.ID);
         }
         protected async override void RequestLinesValues()
         {
             await host.RequestLineValueAsync(LineSwitch);
             await host.RequestLineValueAsync(LineTemperature);
         }
-        protected override void Preprocess(WemosLineValue value)
+        protected override void Preprocess(LineValue value)
         {
-            if (WemosPlugin.IsValueFromLine(value, LineTemperature))
+            if (LinesPlugin.IsValueFromLine(value, LineTemperature.ID))
                 lastLineValue = value.Value;
         }
         protected async override void DoWork(DateTime now)

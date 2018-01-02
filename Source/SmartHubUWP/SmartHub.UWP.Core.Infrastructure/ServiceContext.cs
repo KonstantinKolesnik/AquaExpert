@@ -49,7 +49,10 @@ namespace SmartHub.UWP.Core.Infrastructure
         public void StorageClose()
         {
             if (db != null)
+            {
                 db.Dispose();
+                db = null;
+            }
         }
 
         public void StorageSave(object item)
