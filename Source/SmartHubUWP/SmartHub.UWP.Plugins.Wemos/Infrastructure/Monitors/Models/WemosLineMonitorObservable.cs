@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Core;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using System;
 using System.Collections.Generic;

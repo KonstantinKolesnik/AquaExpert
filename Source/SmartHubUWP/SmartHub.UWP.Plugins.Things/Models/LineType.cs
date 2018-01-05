@@ -1,4 +1,4 @@
-﻿namespace SmartHub.UWP.Plugins.Lines.Models
+﻿namespace SmartHub.UWP.Plugins.Things.Models
 {
     public enum LineType
     {

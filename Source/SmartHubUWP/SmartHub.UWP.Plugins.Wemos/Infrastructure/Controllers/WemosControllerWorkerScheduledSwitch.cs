@@ -1,7 +1,7 @@
 ﻿using SmartHub.UWP.Core;
 using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Lines;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things;
+using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
 using System;
@@ -97,7 +97,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         protected override Type GetConfigurationType() => typeof(ControllerConfiguration);
         protected override object GetDefaultConfiguration() => new ControllerConfiguration();
 
-        protected override bool IsMyMessage(LineValue value) => LinesPlugin.IsValueFromLine(value, LineSwitch.ID);
+        protected override bool IsMyMessage(LineValue value) => ThingsPlugin.IsValueFromLine(value, LineSwitch.ID);
         protected async override void RequestLinesValues()
         {
             await host.RequestLineValueAsync(LineSwitch);

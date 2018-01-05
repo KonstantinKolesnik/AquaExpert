@@ -1,7 +1,7 @@
 ﻿using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
-namespace SmartHub.UWP.Plugins.Lines
+namespace SmartHub.UWP.Plugins.Things
 {
-    [AppSectionItem("Lines", AppSectionType.System, null, "Lines represent things/entities", "/api/lines/ui/settings")]
-    public class LinesPlugin : PluginBase
+    [AppSectionItem("Things", AppSectionType.System, null, "Things represent devices and their lines", "/api/things/ui/settings")]
+    public class ThingsPlugin : PluginBase
     {
         #region Fields
         private Task taskValues;
@@ -29,7 +29,7 @@ namespace SmartHub.UWP.Plugins.Lines
         {
             var db = Context.StorageGet();
 
-            //db.CreateTable<WemosNode>();
+            db.CreateTable<Device>();
             db.CreateTable<Line>();
             db.CreateTable<LineValue>();
 
@@ -47,6 +47,44 @@ namespace SmartHub.UWP.Plugins.Lines
             StopValuesTask();
         }
         #endregion
+
+        public void RegisterDevice(Device device)
+        {
+            var item = GetDevice(device.ID);
+
+            if (item != null)
+            {
+                item.Type = device.Type;
+                item.IPAddress = device.IPAddress;
+
+                Context.StorageSaveOrUpdate(item);
+            }
+            else
+                Context.StorageSave(device);
+        }
+        public List<Device> GetDevices()
+        {
+            return Context.StorageGet().Table<Device>().ToList();
+        }
+        public Device GetDevice(string id)
+        {
+            return Context.StorageGet().Table<Device>().SingleOrDefault(d => d.ID == id);
+        }
+
+        public List<Line> GetLines()
+        {
+            return Context.StorageGet().Table<Line>()
+                .Select(l => { l.TimeStamp = l.TimeStamp.ToLocalTime(); return l; }) // time in DB is in UTC; convert to local
+                .ToList();
+        }
+        public Line GetLine(string id)
+        {
+            return Context.StorageGet().Table<Line>()
+                .Select(l => { l.TimeStamp = l.TimeStamp.ToLocalTime(); return l; })
+                .FirstOrDefault(l => l.ID == id);
+        }
+
+
 
         public List<LineValue> GetLineValues(string lineID, int count)
         {
@@ -120,10 +158,10 @@ namespace SmartHub.UWP.Plugins.Lines
 
 
         #region Web UI
-        [ApiMethod("/api/lines/ui/settings")]
+        [ApiMethod("/api/things/ui/settings")]
         public ApiMethod apiGetUISettings => (args =>
         {
-            var stream = GetType().GetTypeInfo().Assembly.GetManifestResourceStream("SmartHub.UWP.Plugins.Lines.UIWeb.Settings.html");
+            var stream = GetType().GetTypeInfo().Assembly.GetManifestResourceStream("SmartHub.UWP.Plugins.Things.UIWeb.Settings.html");
             using (var reader = new StreamReader(stream))
                 return reader.ReadToEnd();
         });

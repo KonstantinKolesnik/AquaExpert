@@ -1,6 +1,6 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Lines;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things;
+using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.Speech;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models;
@@ -58,8 +58,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         protected override bool IsMyMessage(LineValue value)
         {
             return
-                LinesPlugin.IsValueFromLine(value, LineSwitch.ID) ||
-                LinesPlugin.IsValueFromLine(value, LineTemperature.ID);
+                ThingsPlugin.IsValueFromLine(value, LineSwitch.ID) ||
+                ThingsPlugin.IsValueFromLine(value, LineTemperature.ID);
         }
         protected async override void RequestLinesValues()
         {
@@ -68,7 +68,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers
         }
         protected override void Preprocess(LineValue value)
         {
-            if (LinesPlugin.IsValueFromLine(value, LineTemperature.ID))
+            if (ThingsPlugin.IsValueFromLine(value, LineTemperature.ID))
                 lastLineValue = value.Value;
         }
         protected async override void DoWork(DateTime now)

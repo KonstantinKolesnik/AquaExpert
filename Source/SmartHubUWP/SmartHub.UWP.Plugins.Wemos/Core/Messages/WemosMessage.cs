@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Lines.Models;
+﻿using SmartHub.UWP.Plugins.Things.Models;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;

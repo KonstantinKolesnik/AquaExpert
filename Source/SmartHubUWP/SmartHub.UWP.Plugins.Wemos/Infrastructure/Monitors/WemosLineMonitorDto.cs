@@ -1,4 +1,4 @@
-﻿using SmartHub.UWP.Plugins.Lines.Models;
+﻿using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors.Models;
 
 namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Monitors

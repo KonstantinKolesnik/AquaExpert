@@ -7,8 +7,8 @@
     <ProjectGuid>{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartHub.UWP.Plugins.Lines</RootNamespace>
-    <AssemblyName>SmartHub.UWP.Plugins.Lines</AssemblyName>
+    <RootNamespace>SmartHub.UWP.Plugins.Things</RootNamespace>
+    <AssemblyName>SmartHub.UWP.Plugins.Things</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
@@ -106,7 +106,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="LinesPlugin.cs" />
+    <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\DeviceType.cs" />
+    <Compile Include="ThingsPlugin.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\LineType.cs" />
     <Compile Include="Models\LineValue.cs" />
@@ -118,7 +120,7 @@
       <Version>1.0.31</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.4</Version>
+      <Version>6.0.5</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

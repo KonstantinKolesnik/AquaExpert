@@ -1,7 +1,7 @@
 ﻿using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Lines.Models
+namespace SmartHub.UWP.Plugins.Things.Models
 {
     public class LineValue// : IEquatable<WemosLineValue>, IComparable<WemosLineValue>
     {

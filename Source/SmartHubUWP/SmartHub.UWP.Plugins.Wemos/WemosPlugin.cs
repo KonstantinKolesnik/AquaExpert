@@ -3,8 +3,8 @@ using SmartHub.UWP.Core.Communication.Udp;
 using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
-using SmartHub.UWP.Plugins.Lines;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things;
+using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.Scripts;
 using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.UI.Attributes;
@@ -200,7 +200,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public async Task SetLineValueAsync(WemosLine line, float value)
         {
-            if (line != null && Context.GetPlugin<LinesPlugin>().GetLineLastValue(line.ID)?.Value != value)
+            if (line != null && Context.GetPlugin<ThingsPlugin>().GetLineLastValue(line.ID)?.Value != value)
                 await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
         public async Task SetLineValueAsync(WemosLine line, string value)
@@ -642,7 +642,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             var id = args[0].ToString();
             var count = int.Parse(args[1].ToString());
 
-            return Context.GetPlugin<LinesPlugin>().GetLineValues(id, count);
+            return Context.GetPlugin<ThingsPlugin>().GetLineValues(id, count);
         });
         #endregion
 

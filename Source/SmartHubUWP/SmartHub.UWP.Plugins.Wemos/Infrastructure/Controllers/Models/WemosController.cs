@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Lines.Models;
+using SmartHub.UWP.Plugins.Things.Models;
 using SQLite.Net.Attributes;
 using System;
 

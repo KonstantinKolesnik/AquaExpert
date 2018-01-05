@@ -1,5 +1,5 @@
 ﻿using SmartHub.UWP.Core.Plugins;
-using SmartHub.UWP.Plugins.Lines;
+using SmartHub.UWP.Plugins.Things;
 using SmartHub.UWP.Plugins.Wemos.Core.Models;
 using SQLite.Net.Attributes;
 using System;
@@ -60,7 +60,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Infrastructure.Controllers.Models
         {
             if (IsEnabled)
             {
-                var lastValue = context.GetPlugin<LinesPlugin>().GetLineLastValue(LineID);
+                var lastValue = context.GetPlugin<ThingsPlugin>().GetLineLastValue(LineID);
 
                 if (lastValue == null)
                     await host.RequestLineValueAsync(line);

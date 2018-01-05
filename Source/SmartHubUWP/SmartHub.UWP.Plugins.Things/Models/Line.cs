@@ -1,7 +1,7 @@
 ﻿using SQLite.Net.Attributes;
 using System;
 
-namespace SmartHub.UWP.Plugins.Lines.Models
+namespace SmartHub.UWP.Plugins.Things.Models
 {
     public class Line
     {
@@ -9,17 +9,26 @@ namespace SmartHub.UWP.Plugins.Lines.Models
         public string ID
         {
             get; set;
-        } = Guid.NewGuid().ToString();
-        public string Route
+        }
+        public string DeviceID
         {
             get; set;
         }
-        public string Name
+        public string LineID
         {
             get; set;
         }
         [NotNull]
         public LineType Type
+        {
+            get; set;
+        }
+
+        public string Route
+        {
+            get; set;
+        }
+        public string Name
         {
             get; set;
         }
