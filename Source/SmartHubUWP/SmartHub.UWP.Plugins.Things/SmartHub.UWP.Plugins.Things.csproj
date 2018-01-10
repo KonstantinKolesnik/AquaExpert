@@ -133,6 +133,10 @@
       <Project>{71718A41-DD1A-48E7-AA35-FA2569CAE77D}</Project>
       <Name>SmartHub.UWP.Plugins.ApiListener</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SmartHub.UWP.Plugins.Scripts\SmartHub.UWP.Plugins.Scripts.csproj">
+      <Project>{21B27D1D-05BD-43A2-86C2-3DDC1F97F890}</Project>
+      <Name>SmartHub.UWP.Plugins.Scripts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmartHub.UWP.Plugins.UI\SmartHub.UWP.Plugins.UI.csproj">
       <Project>{4DFAA97C-AF72-4497-BFD2-B14D58AB340C}</Project>
       <Name>SmartHub.UWP.Plugins.UI</Name>

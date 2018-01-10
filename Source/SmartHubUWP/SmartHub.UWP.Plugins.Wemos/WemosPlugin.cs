@@ -34,6 +34,8 @@ namespace SmartHub.UWP.Plugins.Wemos
     [AppSectionItem("Wemos", AppSectionType.System, typeof(SettingsPage), "ESP8266 based Wi-Fi modules", "/api/wemos/ui/settings")]
     public class WemosPlugin : PluginBase
     {
+        public const int BroadcastID = -1;
+
         #region Fields
         private const string localService = "11111";
         private const string remoteService = "22222";
@@ -49,11 +51,11 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Imports
-        [ImportMany]
-        public Action<WemosMessage>[] WemosMessageHandlers
-        {
-            get; set;
-        }
+        //[ImportMany]
+        //public Action<WemosMessage>[] WemosMessageHandlers
+        //{
+        //    get; set;
+        //}
 
         //[ScriptEvent("wemos.connected")]
         //public ScriptEventHandlerDelegate[] OnConnectedForScripts
@@ -74,35 +76,35 @@ namespace SmartHub.UWP.Plugins.Wemos
         //        controller.ProcessTimer(dt);
         //});
 
-        [ScriptCommand("wemosSend")]
-        public ScriptCommand scriptSendCommand => (args =>
-        {
-            var nodeID = int.Parse(args[0].ToString());
-            var lineID = int.Parse(args[1].ToString());
-            var messageType = int.Parse(args[2].ToString());
-            var messageSubtype = int.Parse(args[3].ToString());
-            var value = args[4].ToString();
+        //[ScriptCommand("wemosSend")]
+        //public ScriptCommand scriptSendCommand => (args =>
+        //{
+        //    var nodeID = int.Parse(args[0].ToString());
+        //    var lineID = int.Parse(args[1].ToString());
+        //    var messageType = int.Parse(args[2].ToString());
+        //    var messageSubtype = int.Parse(args[3].ToString());
+        //    var value = args[4].ToString();
 
-            return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
-        });
+        //    return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
+        //});
 
-        [ScriptCommand("wemosSetLineValue")]
-        public ScriptCommand scriptSetLineValue => (args =>
-        {
-            var nodeID = int.Parse(args[0].ToString());
-            var lineID = int.Parse(args[1].ToString());
-            var value = args[2].ToString();
+        //[ScriptCommand("wemosSetLineValue")]
+        //public ScriptCommand scriptSetLineValue => (args =>
+        //{
+        //    var nodeID = int.Parse(args[0].ToString());
+        //    var lineID = int.Parse(args[1].ToString());
+        //    var value = args[2].ToString();
 
-            return Context.GetPlugin<WemosPlugin>().SetLineValueAsync(GetLine(nodeID, lineID), value);
-        });
+        //    return Context.GetPlugin<WemosPlugin>().SetLineValueAsync(GetLine(nodeID, lineID), value);
+        //});
 
-        [ScriptCommand("wemosDeleteLinesValues")]
-        public ScriptCommand scriptClearLinesValuesCommand => (args =>
-        {
-            var lastDayToPreserve = int.Parse(args[0].ToString());
-            //return Context.GetPlugin<WemosPlugin>().DeleteSensorValues(DateTime.Now.AddDays(-lastDayToPreserve));
-            return null;
-        });
+        //[ScriptCommand("wemosDeleteLinesValues")]
+        //public ScriptCommand scriptClearLinesValuesCommand => (args =>
+        //{
+        //    var lastDayToPreserve = int.Parse(args[0].ToString());
+        //    //return Context.GetPlugin<WemosPlugin>().DeleteSensorValues(DateTime.Now.AddDays(-lastDayToPreserve));
+        //    return null;
+        //});
         #endregion
 
         #region Plugin overrides
@@ -182,7 +184,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
         }
 
-        public async Task RequestPresentationAsync(int nodeID = -1, int lineID = -1)
+        public async Task RequestPresentationAsync(int nodeID = BroadcastID, int lineID = BroadcastID)
         {
             await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation));
         }
@@ -210,10 +212,9 @@ namespace SmartHub.UWP.Plugins.Wemos
                 await SendAsync(new WemosMessage(line.NodeID, line.LineID, WemosMessageType.Set, (int) line.Type).Set(value));
         }
 
-        public async Task RebootNodeAsync(WemosNode node)
+        public async Task RebootNodeAsync(int nodeID)
         {
-            if (node != null)
-                await SendAsync(new WemosMessage(node.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
+            await SendAsync(new WemosMessage(nodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Reboot));
         }
         #endregion
 
@@ -254,7 +255,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                 case LineType.Switch: return "";
                 case LineType.Temperature: return "°C";
                 case LineType.Humidity: return "%";
-                case LineType.Barometer: return "Pa"; // mm Hg
+                case LineType.Pressure: return "Pa"; // mm Hg
                 case LineType.Weight: return "kg";
                 case LineType.Voltage: return "V";
                 case LineType.Current: return "A";
@@ -403,6 +404,8 @@ namespace SmartHub.UWP.Plugins.Wemos
                         var line = new Line()
                         {
                             ID = BuildLineID(message.NodeID, message.LineID),
+                            DeviceID = BuildDeviceID(message.NodeID),
+                            LineID = message.LineID.ToString(),
                             Name = $"Wemos Line {message.NodeID}-{message.LineID}",
                             Type = (LineType) message.SubType,
                             Factor = 1,

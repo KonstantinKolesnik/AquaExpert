@@ -1,10 +1,14 @@
-﻿using SmartHub.UWP.Core.Plugins;
+﻿using Newtonsoft.Json;
+using SmartHub.UWP.Core.Plugins;
 using SmartHub.UWP.Plugins.ApiListener;
 using SmartHub.UWP.Plugins.ApiListener.Attributes;
+using SmartHub.UWP.Plugins.Scripts;
+using SmartHub.UWP.Plugins.Scripts.Attributes;
 using SmartHub.UWP.Plugins.Things.Models;
 using SmartHub.UWP.Plugins.UI.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Composition;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +26,63 @@ namespace SmartHub.UWP.Plugins.Things
         private Task taskValues;
         private CancellationTokenSource ctsValues;
         private bool isTaskValuesActive = false;
+        #endregion
+
+        #region Imports
+        //[ImportMany]
+        //public Action<WemosMessage>[] WemosMessageHandlers
+        //{
+        //    get; set;
+        //}
+
+        //[ScriptEvent("things.XXX")]
+        //public ScriptEventHandlerDelegate[] OnXXXForScripts
+        //{
+        //    get; set;
+        //}
+        //private void NotifyXXXForScripts()
+        //{
+        //    this.RaiseScriptEvent(x => x.OnXXXForScripts);
+        //}
+        #endregion
+
+        #region Exports
+        //[Export(typeof(Action<DateTime>)), RunPeriodically(Interval = 1)]
+        //public Action<DateTime> TimerElapsed => (dt =>
+        //{
+        //    foreach (var controller in Context.GetPlugin<WemosPlugin>().controllers)
+        //        controller.ProcessTimer(dt);
+        //});
+
+        //[ScriptCommand("wemosSend")]
+        //public ScriptCommand scriptSendCommand => (args =>
+        //{
+        //    var nodeID = int.Parse(args[0].ToString());
+        //    var lineID = int.Parse(args[1].ToString());
+        //    var messageType = int.Parse(args[2].ToString());
+        //    var messageSubtype = int.Parse(args[3].ToString());
+        //    var value = args[4].ToString();
+
+        //    return Context.GetPlugin<WemosPlugin>().SendAsync(new WemosMessage(nodeID, lineID, (WemosMessageType)messageType, messageSubtype).Set(value));
+        //});
+
+        //[ScriptCommand("wemosSetLineValue")]
+        //public ScriptCommand scriptSetLineValue => (args =>
+        //{
+        //    var nodeID = int.Parse(args[0].ToString());
+        //    var lineID = int.Parse(args[1].ToString());
+        //    var value = args[2].ToString();
+
+        //    return Context.GetPlugin<WemosPlugin>().SetLineValueAsync(GetLine(nodeID, lineID), value);
+        //});
+
+        //[ScriptCommand("wemosDeleteLinesValues")]
+        //public ScriptCommand scriptClearLinesValuesCommand => (args =>
+        //{
+        //    var lastDayToPreserve = int.Parse(args[0].ToString());
+        //    //return Context.GetPlugin<WemosPlugin>().DeleteSensorValues(DateTime.Now.AddDays(-lastDayToPreserve));
+        //    return null;
+        //});
         #endregion
 
         #region Plugin overrides
@@ -83,8 +144,9 @@ namespace SmartHub.UWP.Plugins.Things
 
                 if (item != null)
                 {
+                    item.DeviceID = line.DeviceID;
+                    item.LineID = line.LineID;
                     item.Type = line.Type;
-                    //item.IPAddress = device.IPAddress;
 
                     Context.StorageSaveOrUpdate(item);
                 }
@@ -133,6 +195,7 @@ namespace SmartHub.UWP.Plugins.Things
 
             if (line != null)
             {
+                // save value:
                 var lv = new LineValue()
                 {
                     LineID = lineID,
@@ -140,7 +203,6 @@ namespace SmartHub.UWP.Plugins.Things
                     Value = line.Factor * value + line.Offset // tune value
                 };
                 Context.StorageSave(lv);
-
 
                 // update line:
                 line.TimeStamp = lv.TimeStamp;
@@ -203,6 +265,62 @@ namespace SmartHub.UWP.Plugins.Things
         #endregion
 
         #region Remote API
+
+        #region Devices
+        [ApiMethod("/api/things/devices")]
+        public ApiMethod apiGetDevices => (args =>
+        {
+            return Context.GetPlugin<ThingsPlugin>().GetDevices();
+        });
+
+        [ApiMethod("/api/things/devices/update")]
+        public ApiMethod apiUpdateDevice => (args =>
+        {
+            var item = JsonConvert.DeserializeObject<Device>(args[0].ToString());
+
+            if (item != null)
+            {
+                Context.StorageSaveOrUpdate(item);
+                //NotifyForSignalR(new { MsgId = "DeviceNameChanged", Data = new { Id = id, Name = name } });
+                return true;
+            }
+
+            return false;
+        });
+        #endregion
+
+        #region Lines
+        [ApiMethod("/api/things/lines")]
+        public ApiMethod apiGetLines => (args =>
+        {
+            return Context.GetPlugin<ThingsPlugin>().GetLines();
+        });
+
+        [ApiMethod("/api/things/lines/update")]
+        public ApiMethod apiUpdateLine => (args =>
+        {
+            var item = JsonConvert.DeserializeObject<Line>(args[0].ToString());
+
+            if (item != null)
+            {
+                Context.StorageSaveOrUpdate(item);
+                //NotifyForSignalR(new { MsgId = "SensorNameChanged", Data = new { Id = id, Name = name } });
+                return true;
+            }
+
+            return false;
+        });
+
+        [ApiMethod("/api/things/line/values")]
+        public ApiMethod apiGetLineValues => (args =>
+        {
+            var id = args[0].ToString();
+            var count = int.Parse(args[1].ToString());
+
+            return Context.GetPlugin<ThingsPlugin>().GetLineValues(id, count);
+        });
+        #endregion
+
 
 
 

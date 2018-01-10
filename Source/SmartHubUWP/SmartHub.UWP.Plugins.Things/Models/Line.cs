@@ -64,8 +64,52 @@ namespace SmartHub.UWP.Plugins.Things.Models
             get; set;
         }
 
+        public string MonitorConfiguration
+        {
+            get; set;
+        }
+        //[NotNull]
+        //public float Factor
+        //{
+        //    get; set;
+        //} = 1;
+        //[NotNull, Default()]
+        //public float Offset
+        //{
+        //    get; set;
+        //} = 0;
+        //public string Units
+        //{
+        //    get; set;
+        //}
+        //[NotNull, Default]
+        //public float Min
+        //{
+        //    get; set;
+        //}
+        //[NotNull, Default]
+        //public float Max
+        //{
+        //    get; set;
+        //}
+        //[NotNull, Default(true, 10)]
+        //public int ValuesCount
+        //{
+        //    get; set;
+        //}
+
+        //[NotNull, Default]
+        //public int Precision
+        //{
+        //    get; set;
+        //}
 
 
+
+        public string ControlConfiguration
+        {
+            get; set;
+        }
 
         #region Public methods
         public string GetUnits()
@@ -75,7 +119,7 @@ namespace SmartHub.UWP.Plugins.Things.Models
                 case LineType.Switch: return "";
                 case LineType.Temperature: return "°C";
                 case LineType.Humidity: return "%";
-                case LineType.Barometer: return "Pa"; // mmHg
+                case LineType.Pressure: return "Pa"; // mmHg
                 case LineType.Weight: return "kg";
                 case LineType.Voltage: return "V";
                 case LineType.Current: return "A";

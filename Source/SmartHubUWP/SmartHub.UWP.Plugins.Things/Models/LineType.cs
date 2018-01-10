@@ -2,12 +2,10 @@
 {
     public enum LineType
     {
-        WemosNode,
-
-        Switch,
+        Switch = 1,
         Temperature,
         Humidity,
-        Barometer,
+        Pressure,
         Weight,
         Voltage,
         Current,
@@ -21,7 +19,6 @@
         Vibration,
         Ph,
         ORP
-
 
 
         //Door = 0,               // Door and window sensors
