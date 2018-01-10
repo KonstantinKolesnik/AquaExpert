@@ -127,6 +127,35 @@ namespace SmartHub.UWP.Plugins.Things
                 .FirstOrDefault();
         }
 
+        public void UpdateLineValue(string lineID, float value)
+        {
+            var line = GetLine(lineID);
+
+            if (line != null)
+            {
+                var lv = new LineValue()
+                {
+                    LineID = lineID,
+                    TimeStamp = DateTime.UtcNow,
+                    Value = line.Factor * value + line.Offset // tune value
+                };
+                Context.StorageSave(lv);
+
+
+                // update line:
+                line.TimeStamp = lv.TimeStamp;
+                line.Value = lv.Value;
+                Context.StorageSaveOrUpdate(line);
+
+                // process:
+                //Run(WemosMessageHandlers, method => method(message));
+
+                //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
+                //NotifyMessageReceivedForScripts(message);
+                //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
+            }
+        }
+
         public static bool IsValueFromLine(LineValue val, string lineID)
         {
             return val != null && lineID == val.LineID;

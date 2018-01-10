@@ -31,6 +31,10 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         #endregion
 
         #region Constructors
+        public WemosMessage(int nodeID, int lineID, WemosMessageType type)
+            : this(nodeID, lineID, type, 0)
+        {
+        }
         public WemosMessage(int nodeID, int lineID, WemosMessageType type, int subType)
         {
             NodeID = nodeID;

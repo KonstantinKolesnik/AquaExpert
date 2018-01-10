@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         #region Public methods
         public static List<WemosMessage> Parse(string data)
         {
-            List<WemosMessage> result = new List<WemosMessage>();
+            var result = new List<WemosMessage>();
 
             if (!string.IsNullOrEmpty(data))
             {
@@ -28,12 +28,12 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
         #region Private methods
         private static List<WemosMessage> ParseBuffer()
         {
-            List<WemosMessage> result = new List<WemosMessage>();
+            var result = new List<WemosMessage>();
 
             string pattern = @"(?<v0>[\s\S]*);(?<v1>[\s\S]*);(?<v2>[\s\S]*);(?<v3>[\s\S]*);(?<v4>[\s\S]*)\n";
 
-            Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
-            MatchCollection entries = r.Matches(buffer);
+            var r = new Regex(pattern, RegexOptions.IgnoreCase);
+            var entries = r.Matches(buffer);
 
             if (entries.Count > 0)
             {
@@ -42,6 +42,7 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
                 foreach (Match entry in entries)
                 {
                     WemosMessage msg = null;
+
                     try
                     {
                         msg = new WemosMessage
@@ -50,7 +51,8 @@ namespace SmartHub.UWP.Plugins.Wemos.Core.Messages
                                 int.Parse(entry.Groups["v1"].Value),
                                 (WemosMessageType) int.Parse(entry.Groups["v2"].Value),
                                 int.Parse(entry.Groups["v3"].Value)
-                            ).Set(entry.Groups["v4"].Value.Trim());
+                            )
+                            .Set(entry.Groups["v4"].Value.Trim());
                     }
                     catch (Exception) { }
 

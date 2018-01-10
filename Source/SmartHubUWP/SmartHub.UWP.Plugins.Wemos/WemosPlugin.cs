@@ -43,9 +43,9 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         private List<WemosController> oldControllers = new List<WemosController>();
         private List<WemosLineController> controllers = new List<WemosLineController>();
-        private Task taskControllers;
-        private CancellationTokenSource ctsControllers;
-        private bool isTaskControllersActive = false;
+        //private Task taskControllers;
+        //private CancellationTokenSource ctsControllers;
+        //private bool isTaskControllersActive = false;
         #endregion
 
         #region Imports
@@ -122,8 +122,8 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override void InitPlugin()
         {
-            if (GetSetting("UnitSystem") == null)
-                Context.StorageSave(new WemosSetting() { Name = "UnitSystem", Value = "M" });
+            //if (GetSetting("UnitSystem") == null)
+            //    Context.StorageSave(new WemosSetting() { Name = "UnitSystem", Value = "M" });
 
             udpClient.MessageReceived += async (sender, e) =>
             {
@@ -170,12 +170,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Public methods
 
         #region Send/Receive
-        public async Task SendAsync(WemosMessage data)
+        public async Task SendAsync(WemosMessage msg)
         {
             try
             {
-                if (data != null)
-                    await udpClient.Send(remoteMulticastAddress, remoteService, data.ToDto());
+                if (msg != null)
+                    await udpClient.Send(remoteMulticastAddress, remoteService, msg.ToDto());
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace SmartHub.UWP.Plugins.Wemos
 
         public async Task RequestPresentationAsync(int nodeID = -1, int lineID = -1)
         {
-            await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation, 0));
+            await SendAsync(new WemosMessage(nodeID, lineID, WemosMessageType.Presentation));
         }
 
         public async Task RequestLinesValueAsync()
@@ -273,18 +273,19 @@ namespace SmartHub.UWP.Plugins.Wemos
             }
         }
 
-        public static bool IsWemosLine(WemosLine line)
-        {
-            return line.ID.StartsWith("WEMOS");
-        }
-        public static string GetLineID(int nodeID, int lineNumber)
-        {
-            return $"WEMOS-{nodeID}-{lineNumber}";
-        }
-        //public static int GetLineNodeID(this WemosLine line)
+        //public static bool IsWemosLine(Line line)
         //{
-        //    var parts = line.ID.Split('-');
+        //    return line.ID.StartsWith("WEMOS");
         //}
+
+        public static string BuildDeviceID(int nodeID)
+        {
+            return $"WEMOS-{nodeID}";
+        }
+        public static string BuildLineID(int nodeID, int lineNumber)
+        {
+            return $"{BuildDeviceID(nodeID)}-{lineNumber}";
+        }
         #endregion
 
         #region Line Monitors
@@ -328,12 +329,12 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         #endregion
 
-        #region Settings
-        public WemosSetting GetSetting(string name)
-        {
-            return Context.StorageGet().Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
-        }
-        #endregion
+        //#region Settings
+        //public WemosSetting GetSetting(string name)
+        //{
+        //    return Context.StorageGet().Table<WemosSetting>().Where(setting => setting.Name == name).FirstOrDefault();
+        //}
+        //#endregion
 
         #endregion
 
@@ -381,9 +382,6 @@ namespace SmartHub.UWP.Plugins.Wemos
             if (message == null)
                 return;
 
-            var node = GetNode(message.NodeID);
-            var line = GetLine(message.NodeID, message.LineID);
-
             switch (message.Type)
             {
                 #region Presentation
@@ -392,193 +390,48 @@ namespace SmartHub.UWP.Plugins.Wemos
                     {
                         var device = new Device()
                         {
-                            ID = message.NodeID.ToString(),
+                            ID = BuildDeviceID(message.NodeID),
                             Name = $"Wemos Node {message.NodeID}",
                             Type = DeviceType.Wemos,
                             IPAddress = remoteAddress.CanonicalName
                         };
 
                         Context.GetPlugin<ThingsPlugin>().RegisterDevice(device);
-
-
-                        //if (node == null)
-                        //{
-                        //    node = new WemosNode
-                        //    {
-                        //        NodeID = message.NodeID,
-                        //        Name = $"Node {message.NodeID}",
-                        //        Type = (LineType)message.SubType,
-                        //        ProtocolVersion = message.GetFloat(),
-                        //        IPAddress = remoteAddress.CanonicalName
-                        //    };
-
-                        //    Context.StorageSave(node);
-                        //}
-                        //else
-                        //{
-                        //    node.Type = (LineType)message.SubType;
-                        //    node.ProtocolVersion = message.GetFloat();
-                        //    node.IPAddress = remoteAddress.CanonicalName;
-
-                        //    Context.StorageSaveOrUpdate(node);
-                        //}
-
-                        //NotifyMessageReceivedForPlugins(message);
-                        //NotifyMessageReceivedForScripts(message);
-                        //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
                     }
                     else // line
                     {
-                        if (node != null)
+                        var line = new Line()
                         {
-                            if (line == null)
-                            {
-                                line = new WemosLine()
-                                {
-                                    ID = GetLineID(message.NodeID, message.LineID),
-                                    Name = $"Wemos Line {message.NodeID}-{message.LineID}",
-                                    Type = (LineType)message.SubType,
-                                    //ProtocolVersion = message.GetFloat(),
-                                    Factor = 1,
-                                    Offset = 0
-                                };
+                            ID = BuildLineID(message.NodeID, message.LineID),
+                            Name = $"Wemos Line {message.NodeID}-{message.LineID}",
+                            Type = (LineType) message.SubType,
+                            Factor = 1,
+                            Offset = 0
+                        };
 
-                                Context.StorageSave(line);
-                            }
-                            else
-                            {
-                                line.Type = (LineType) message.SubType;
-                                //line.ProtocolVersion = message.GetFloat();
-
-                                Context.StorageSaveOrUpdate(line);
-                            }
-
-                            //NotifyMessageReceivedForPlugins(message);
-                            //NotifyMessageReceivedForScripts(message);
-                            //NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorRichWebModel(line) });
-                        }
+                        Context.GetPlugin<ThingsPlugin>().RegisterLine(line);
                     }
                     break;
                 #endregion
 
                 #region Report
-                case WemosMessageType.Report:
-                    if (line != null)
-                    {
-                        // save value:
-                        var lv = new LineValue()
-                        {
-                            LineID = line.ID,
-                            TimeStamp = DateTime.UtcNow,
-                            Value = line.Factor * message.GetFloat() + line.Offset // tune value
-                        };
-                        Context.StorageSave(lv);
-
-                        // update line:
-                        line.LastTimeStamp = lv.TimeStamp;
-                        line.LastValue = lv.Value;
-                        Context.StorageSaveOrUpdate(line);
-
-                        // process:
-                        //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
-                        Run(WemosMessageHandlers, method => method(message));
-                        //NotifyMessageReceivedForScripts(message);
-                        //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
-
-                        foreach (var controller in oldControllers)
-                            controller.ProcessMessage(lv);
-                    }
-                    break;
-                #endregion
-
-                #region Set
-                case WemosMessageType.Set: // sent to a sensor when a sensor value should be updated
-                    break;
-                #endregion
-
-                #region Request
-                case WemosMessageType.Get: // requests a variable value (usually from an actuator destined for controller)
-                    break;
+                case WemosMessageType.Report: Context.GetPlugin<ThingsPlugin>().UpdateLineValue(BuildLineID(message.NodeID, message.LineID), message.GetFloat()); break;
                 #endregion
 
                 #region Internal
                 case WemosMessageType.Internal:
-                    var imt = (WemosInternalMessageType) message.SubType;
-                    switch (imt)
+                    switch ((WemosInternalMessageType)message.SubType)
                     {
-                        //case WemosInternalMessageType.BatteryLevel: // int, in %
-                        //    if (node != null)
-                        //    {
-                        //        WemosNodeBatteryValue bl = new WemosNodeBatteryValue()
-                        //        {
-                        //            NodeID = message.NodeID,
-                        //            TimeStamp = DateTime.Now,
-                        //            Value = (int) message.GetInteger()
-                        //        };
-                        //        Context.StorageSave(bl);
-
-                        //        node.LastTimeStamp = bl.TimeStamp;
-                        //        node.LastBatteryValue = bl.Value;
-                        //        node.IPAddress = remoteAddress.CanonicalName;
-                        //        Context.StorageSaveOrUpdate(node);
-
-                        //        //NotifyMessageReceivedForPlugins(message);
-                        //        //NotifyMessageReceivedForScripts(message);
-                        //        //NotifyForSignalR(new { MsgId = "BatteryValue", Data = bl });
-                        //    }
-                        //    break;
-                        case WemosInternalMessageType.Time:
-                            await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(CoreUtils.GetUnixSeconds()));
-                            break;
-                        //case WemosInternalMessageType.Version:
-                        //    if (node != null)
-                        //    {
-                        //        node.ProtocolVersion = message.GetFloat();
-                        //        Context.StorageSaveOrUpdate(node);
-                        //    }
-                        //    break;
-                        case WemosInternalMessageType.Config:
-                            await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
-                            break;
-                        //case WemosInternalMessageType.FirmwareName:
-                        //case WemosInternalMessageType.FirmwareVersion:
-                        //    if (node != null)
-                        //    {
-                        //        if (imt == WemosInternalMessageType.FirmwareName)
-                        //            node.FirmwareName = message.GetString();
-                        //        else
-                        //            node.FirmwareVersion = message.GetFloat();
-
-                        //        Context.StorageSaveOrUpdate(node);
-
-                        //        //NotifyMessageReceivedForPlugins(message);
-                        //        //NotifyMessageReceivedForScripts(message);
-                        //        //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
-                        //    }
-                        //    break;
+                        case WemosInternalMessageType.Time: await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(CoreUtils.GetUnixSeconds())); break;
+                        case WemosInternalMessageType.Config: await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set("M")); break;
                     }
                     break;
-                    #endregion
+                #endregion
 
                 #region Stream
                 //case WemosMessageType.Stream: //used for OTA firmware updates
                 //    switch ((StreamValueType) message.SubType)
                 //    {
-                //        case StreamValueType.FirmwareConfigRequest:
-                //            var fwtype = pullWord(payload, 0);
-                //            var fwversion = pullWord(payload, 2);
-                //            sendFirmwareConfigResponse(sender, fwtype, fwversion, db, gw);
-                //            break;
-                //        case StreamValueType.FirmwareConfigResponse:
-                //            break;
-                //        case StreamValueType.FirmwareRequest:
-                //            break;
-                //        case StreamValueType.FirmwareResponse:
-                //            var fwtype = pullWord(payload, 0);
-                //            var fwversion = pullWord(payload, 2);
-                //            var fwblock = pullWord(payload, 4);
-                //            sendFirmwareResponse(sender, fwtype, fwversion, fwblock, db, gw);
-                //            break;
                 //        case StreamValueType.Sound:
                 //            break;
                 //        case StreamValueType.Image:
@@ -588,6 +441,208 @@ namespace SmartHub.UWP.Plugins.Wemos
                 #endregion
             }
         }
+        //private async Task ProcessMessageOld(WemosMessage message, HostName remoteAddress)
+        //{
+        //    if (message == null)
+        //        return;
+
+        //    var node = GetNode(message.NodeID);
+        //    var line = GetLine(message.NodeID, message.LineID);
+
+        //    switch (message.Type)
+        //    {
+        //        #region Presentation
+        //        case WemosMessageType.Presentation: // sent by nodes when they present attached lines.
+        //            if (message.LineID == -1) // node
+        //            {
+        //                if (node == null)
+        //                {
+        //                    node = new WemosNode
+        //                    {
+        //                        NodeID = message.NodeID,
+        //                        Name = $"Node {message.NodeID}",
+        //                        Type = (LineType)message.SubType,
+        //                        ProtocolVersion = message.GetFloat(),
+        //                        IPAddress = remoteAddress.CanonicalName
+        //                    };
+
+        //                    Context.StorageSave(node);
+        //                }
+        //                else
+        //                {
+        //                    node.Type = (LineType)message.SubType;
+        //                    node.ProtocolVersion = message.GetFloat();
+        //                    node.IPAddress = remoteAddress.CanonicalName;
+
+        //                    Context.StorageSaveOrUpdate(node);
+        //                }
+
+        //                //NotifyMessageReceivedForPlugins(message);
+        //                //NotifyMessageReceivedForScripts(message);
+        //                //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
+        //            }
+        //            else // line
+        //            {
+        //                if (node != null)
+        //                {
+        //                    if (line == null)
+        //                    {
+        //                        line = new WemosLine()
+        //                        {
+        //                            ID = GetLineID(message.NodeID, message.LineID),
+        //                            Name = $"Wemos Line {message.NodeID}-{message.LineID}",
+        //                            Type = (LineType)message.SubType,
+        //                            ProtocolVersion = message.GetFloat(),
+        //                            Factor = 1,
+        //                            Offset = 0
+        //                        };
+
+        //                        Context.StorageSave(line);
+        //                    }
+        //                    else
+        //                    {
+        //                        line.Type = (LineType)message.SubType;
+        //                        line.ProtocolVersion = message.GetFloat();
+
+        //                        Context.StorageSaveOrUpdate(line);
+        //                    }
+
+        //                    //NotifyMessageReceivedForPlugins(message);
+        //                    //NotifyMessageReceivedForScripts(message);
+        //                    //NotifyForSignalR(new { MsgId = "SensorPresentation", Data = BuildSensorRichWebModel(line) });
+        //                }
+        //            }
+        //            break;
+        //        #endregion
+
+        //        #region Report
+        //        case WemosMessageType.Report:
+        //            if (line != null)
+        //            {
+        //                // save value:
+        //                var lv = new LineValue()
+        //                {
+        //                    LineID = line.ID,
+        //                    TimeStamp = DateTime.UtcNow,
+        //                    Value = line.Factor * message.GetFloat() + line.Offset // tune value
+        //                };
+        //                Context.StorageSave(lv);
+
+        //                // update line:
+        //                line.LastTimeStamp = lv.TimeStamp;
+        //                line.LastValue = lv.Value;
+        //                Context.StorageSaveOrUpdate(line);
+
+        //                // process:
+        //                //NotifyForSignalR(new { MsgId = "MySensorsTileContent", Data = BuildTileContent() }); // update MySensors tile
+        //                Run(WemosMessageHandlers, method => method(message));
+        //                //NotifyMessageReceivedForScripts(message);
+        //                //NotifyForSignalR(new { MsgId = "SensorValue", Data = sv }); // notify Web UI
+
+        //                //foreach (var controller in oldControllers)
+        //                //    controller.ProcessMessage(lv);
+        //            }
+        //            break;
+        //        #endregion
+
+        //        #region Set
+        //        case WemosMessageType.Set: // sent to a line when a line value should be updated
+        //            break;
+        //        #endregion
+
+        //        #region Request
+        //        case WemosMessageType.Get: // requests a variable value (usually from an actuator destined for controller)
+        //            break;
+        //        #endregion
+
+        //        #region Internal
+        //        case WemosMessageType.Internal:
+        //            var imt = (WemosInternalMessageType)message.SubType;
+        //            switch (imt)
+        //            {
+        //                case WemosInternalMessageType.BatteryLevel: // int, in %
+        //                    if (node != null)
+        //                    {
+        //                        WemosNodeBatteryValue bl = new WemosNodeBatteryValue()
+        //                        {
+        //                            NodeID = message.NodeID,
+        //                            TimeStamp = DateTime.Now,
+        //                            Value = (int)message.GetInteger()
+        //                        };
+        //                        Context.StorageSave(bl);
+
+        //                        node.LastTimeStamp = bl.TimeStamp;
+        //                        node.LastBatteryValue = bl.Value;
+        //                        node.IPAddress = remoteAddress.CanonicalName;
+        //                        Context.StorageSaveOrUpdate(node);
+
+        //                        //NotifyMessageReceivedForPlugins(message);
+        //                        //NotifyMessageReceivedForScripts(message);
+        //                        //NotifyForSignalR(new { MsgId = "BatteryValue", Data = bl });
+        //                    }
+        //                    break;
+        //                case WemosInternalMessageType.Time:
+        //                    await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int)WemosInternalMessageType.Time).Set(CoreUtils.GetUnixSeconds()));
+        //                    break;
+        //                case WemosInternalMessageType.Version:
+        //                    if (node != null)
+        //                    {
+        //                        node.ProtocolVersion = message.GetFloat();
+        //                        Context.StorageSaveOrUpdate(node);
+        //                    }
+        //                    break;
+        //                case WemosInternalMessageType.Config:
+        //                    //await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
+        //                    await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int)WemosInternalMessageType.Config).Set("M"));
+        //                    break;
+        //                case WemosInternalMessageType.FirmwareName:
+        //                case WemosInternalMessageType.FirmwareVersion:
+        //                    if (node != null)
+        //                    {
+        //                        if (imt == WemosInternalMessageType.FirmwareName)
+        //                            node.FirmwareName = message.GetString();
+        //                        else
+        //                            node.FirmwareVersion = message.GetFloat();
+
+        //                        Context.StorageSaveOrUpdate(node);
+
+        //                        //NotifyMessageReceivedForPlugins(message);
+        //                        //NotifyMessageReceivedForScripts(message);
+        //                        //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
+        //                    }
+        //                    break;
+        //            }
+        //            break;
+        //            #endregion
+
+        //        #region Stream
+        //        //case WemosMessageType.Stream: //used for OTA firmware updates
+        //        //    switch ((StreamValueType) message.SubType)
+        //        //    {
+        //        //        case StreamValueType.FirmwareConfigRequest:
+        //        //            var fwtype = pullWord(payload, 0);
+        //        //            var fwversion = pullWord(payload, 2);
+        //        //            sendFirmwareConfigResponse(sender, fwtype, fwversion, db, gw);
+        //        //            break;
+        //        //        case StreamValueType.FirmwareConfigResponse:
+        //        //            break;
+        //        //        case StreamValueType.FirmwareRequest:
+        //        //            break;
+        //        //        case StreamValueType.FirmwareResponse:
+        //        //            var fwtype = pullWord(payload, 0);
+        //        //            var fwversion = pullWord(payload, 2);
+        //        //            var fwblock = pullWord(payload, 4);
+        //        //            sendFirmwareResponse(sender, fwtype, fwversion, fwblock, db, gw);
+        //        //            break;
+        //        //        case StreamValueType.Sound:
+        //        //            break;
+        //        //        case StreamValueType.Image:
+        //        //            break;
+        //        //    }
+        //        //    break;
+        //        #endregion
+        //    }
+        //}
         #endregion
 
         #region Remote API
