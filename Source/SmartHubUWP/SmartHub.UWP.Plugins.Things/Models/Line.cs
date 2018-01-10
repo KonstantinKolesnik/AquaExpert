@@ -45,15 +45,15 @@ namespace SmartHub.UWP.Plugins.Things.Models
             get; set;
         }
 
+        public float RequirableValue
+        {
+            get; set;
+        }
         public DateTime TimeStamp
         {
             get; set;
         }
         public float Value
-        {
-            get; set;
-        }
-        public float RequirableValue
         {
             get; set;
         }
@@ -67,7 +67,7 @@ namespace SmartHub.UWP.Plugins.Things.Models
 
 
 
-
+        #region Public methods
         public string GetUnits()
         {
             switch (Type)
@@ -75,7 +75,7 @@ namespace SmartHub.UWP.Plugins.Things.Models
                 case LineType.Switch: return "";
                 case LineType.Temperature: return "°C";
                 case LineType.Humidity: return "%";
-                case LineType.Barometer: return "Pa"; // mm Hg
+                case LineType.Barometer: return "Pa"; // mmHg
                 case LineType.Weight: return "kg";
                 case LineType.Voltage: return "V";
                 case LineType.Current: return "A";
@@ -97,5 +97,6 @@ namespace SmartHub.UWP.Plugins.Things.Models
         {
             return Value == RequirableValue;
         }
+        #endregion
     }
 }

@@ -3,6 +3,7 @@
     public enum DeviceType
     {
         Unknown = -1,
-        Wemos
+        Wemos,
+        Sonoff
     }
 }

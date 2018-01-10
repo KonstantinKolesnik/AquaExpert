@@ -51,20 +51,18 @@
         //Custom = 23,            // Use this for custom sensors where no other fits.
         //Dust = 24,              // Dust level sensor
         //SceneController = 25,   // Scene controller device
-        //RGBLight,               // RGB light. Send color component data using V_RGB. Also supports V_WATT 
+        //RGBLight,               // RGB light. Send color component data using V_RGB. Also supports V_WATT
         //RGBWLight,              // RGB light with an additional White component. Send data using V_RGBW. Also supports V_WATT
         //ColorSensor,            // Color sensor, send color information using V_RGB
         //HVAC,                   // Thermostat/HVAC device. V_HVAC_SETPOINT_HEAT, V_HVAC_SETPOINT_COLD, V_HVAC_FLOW_STATE, V_HVAC_FLOW_MODE, V_TEMP
-        //Multimeter,             // Multimeter device, V_VOLTAGE, V_CURRENT, V_IMPEDANCE 
+        //Multimeter,             // Multimeter device, V_VOLTAGE, V_CURRENT, V_IMPEDANCE
         //Sprinkler,              // Sprinkler, V_STATUS (turn on/off), V_TRIPPED (if fire detecting device)
         //WaterLeak,              // Water leak sensor, V_TRIPPED, V_ARMED
         //Sound,                  // Sound sensor, V_TRIPPED, V_ARMED, V_LEVEL (sound level in dB)
         //Vibration,              // Vibration sensor, V_TRIPPED, V_ARMED, V_LEVEL (vibration in Hz)
-        //Moisture,               // Moisture sensor, V_TRIPPED, V_ARMED, V_LEVEL (water content or moisture in percentage?) 
+        //Moisture,               // Moisture sensor, V_TRIPPED, V_ARMED, V_LEVEL (water content or moisture in percentage?)
 
 
-        //Ph = 200,               // Ph sensor
-        //ORP,                    // ORP sensor
         //Informer,               // Display device
     }
 }

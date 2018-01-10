@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Networking;
 using Windows.UI.Core;
+using SmartHub.UWP.Core;
 
 namespace SmartHub.UWP.Plugins.Wemos
 {
@@ -107,15 +108,14 @@ namespace SmartHub.UWP.Plugins.Wemos
         #region Plugin overrides
         public override void InitDbModel()
         {
-            var db = Context.StorageGet();
+            //var db = Context.StorageGet();
 
-            db.CreateTable<WemosSetting>();
-            db.CreateTable<WemosNode>();
-            db.CreateTable<WemosLine>();
-            db.CreateTable<WemosNodeBatteryValue>();
-            //db.CreateTable<LineValue>();
+            //db.CreateTable<WemosSetting>();
+            //db.CreateTable<WemosNode>();
+            //db.CreateTable<WemosLine>();
+            //db.CreateTable<WemosNodeBatteryValue>();
 
-            db.CreateTable<WemosLineMonitor>();
+            //db.CreateTable<WemosLineMonitor>();
             //db.CreateTable<WemosLineController>();
             //db.CreateTable<WemosController>();
             //db.CreateTable<WemosZone>();
@@ -151,6 +151,7 @@ namespace SmartHub.UWP.Plugins.Wemos
             await udpClient.Start(localService, remoteMulticastAddress);
 
             await RequestPresentationAsync();
+            await Task.Delay(1000);
             await RequestLinesValueAsync();
 
             //foreach (var controller in oldControllers)
@@ -337,43 +338,43 @@ namespace SmartHub.UWP.Plugins.Wemos
         #endregion
 
         #region Private methods
-        private void StartControllersTask()
-        {
-            if (!isTaskControllersActive)
-            {
-                ctsControllers = new CancellationTokenSource();
+        //private void StartControllersTask()
+        //{
+        //    if (!isTaskControllersActive)
+        //    {
+        //        ctsControllers = new CancellationTokenSource();
 
-                taskControllers = Task.Factory.StartNew(async () =>
-                {
-                    while (!ctsControllers.IsCancellationRequested)
-                        if (isTaskControllersActive)
-                        {
-                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                            {
-                                for (int i = 0; i < Context.GetPlugin<WemosPlugin>().oldControllers.Count; i++)
-                                    Context.GetPlugin<WemosPlugin>().oldControllers[i].ProcessTimer(DateTime.Now);
+        //        taskControllers = Task.Factory.StartNew(async () =>
+        //        {
+        //            while (!ctsControllers.IsCancellationRequested)
+        //                if (isTaskControllersActive)
+        //                {
+        //                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+        //                    {
+        //                        for (int i = 0; i < Context.GetPlugin<WemosPlugin>().oldControllers.Count; i++)
+        //                            Context.GetPlugin<WemosPlugin>().oldControllers[i].ProcessTimer(DateTime.Now);
 
-                                //var controllers = Context.GetPlugin<WemosPlugin>().controllers;
-                                //for (int i = 0; i < controllers.Count; i++)
-                                //    await controllers[i].ProcessAsync();
-                            });
+        //                        //var controllers = Context.GetPlugin<WemosPlugin>().controllers;
+        //                        //for (int i = 0; i < controllers.Count; i++)
+        //                        //    await controllers[i].ProcessAsync();
+        //                    });
 
-                            await Task.Delay(50);
-                        }
+        //                    await Task.Delay(50);
+        //                }
 
-                }, ctsControllers.Token);
+        //        }, ctsControllers.Token);
 
-                isTaskControllersActive = true;
-            }
-        }
-        private void StopControllersTask()
-        {
-            if (isTaskControllersActive)
-            {
-                ctsControllers?.Cancel();
-                isTaskControllersActive = false;
-            }
-        }
+        //        isTaskControllersActive = true;
+        //    }
+        //}
+        //private void StopControllersTask()
+        //{
+        //    if (isTaskControllersActive)
+        //    {
+        //        ctsControllers?.Cancel();
+        //        isTaskControllersActive = false;
+        //    }
+        //}
 
         private async Task ProcessMessage(WemosMessage message, HostName remoteAddress)
         {
@@ -386,30 +387,41 @@ namespace SmartHub.UWP.Plugins.Wemos
             switch (message.Type)
             {
                 #region Presentation
-                case WemosMessageType.Presentation: // sent by a nodes when they present attached sensors.
+                case WemosMessageType.Presentation: // sent by nodes when they present attached lines.
                     if (message.LineID == -1) // node
                     {
-                        if (node == null)
+                        var device = new Device()
                         {
-                            node = new WemosNode
-                            {
-                                NodeID = message.NodeID,
-                                Name = $"Node {message.NodeID}",
-                                Type = (LineType) message.SubType,
-                                //ProtocolVersion = message.GetFloat(),
-                                IPAddress = remoteAddress.CanonicalName
-                            };
+                            ID = message.NodeID.ToString(),
+                            Name = $"Wemos Node {message.NodeID}",
+                            Type = DeviceType.Wemos,
+                            IPAddress = remoteAddress.CanonicalName
+                        };
 
-                            Context.StorageSave(node);
-                        }
-                        else
-                        {
-                            node.Type = (LineType) message.SubType;
-                            //node.ProtocolVersion = message.GetFloat();
-                            node.IPAddress = remoteAddress.CanonicalName;
+                        Context.GetPlugin<ThingsPlugin>().RegisterDevice(device);
 
-                            Context.StorageSaveOrUpdate(node);
-                        }
+
+                        //if (node == null)
+                        //{
+                        //    node = new WemosNode
+                        //    {
+                        //        NodeID = message.NodeID,
+                        //        Name = $"Node {message.NodeID}",
+                        //        Type = (LineType)message.SubType,
+                        //        ProtocolVersion = message.GetFloat(),
+                        //        IPAddress = remoteAddress.CanonicalName
+                        //    };
+
+                        //    Context.StorageSave(node);
+                        //}
+                        //else
+                        //{
+                        //    node.Type = (LineType)message.SubType;
+                        //    node.ProtocolVersion = message.GetFloat();
+                        //    node.IPAddress = remoteAddress.CanonicalName;
+
+                        //    Context.StorageSaveOrUpdate(node);
+                        //}
 
                         //NotifyMessageReceivedForPlugins(message);
                         //NotifyMessageReceivedForScripts(message);
@@ -494,58 +506,56 @@ namespace SmartHub.UWP.Plugins.Wemos
                     var imt = (WemosInternalMessageType) message.SubType;
                     switch (imt)
                     {
-                        case WemosInternalMessageType.BatteryLevel: // int, in %
-                            if (node != null)
-                            {
-                                WemosNodeBatteryValue bl = new WemosNodeBatteryValue()
-                                {
-                                    NodeID = message.NodeID,
-                                    TimeStamp = DateTime.Now,
-                                    Value = (int) message.GetInteger()
-                                };
-                                Context.StorageSave(bl);
+                        //case WemosInternalMessageType.BatteryLevel: // int, in %
+                        //    if (node != null)
+                        //    {
+                        //        WemosNodeBatteryValue bl = new WemosNodeBatteryValue()
+                        //        {
+                        //            NodeID = message.NodeID,
+                        //            TimeStamp = DateTime.Now,
+                        //            Value = (int) message.GetInteger()
+                        //        };
+                        //        Context.StorageSave(bl);
 
-                                node.LastTimeStamp = bl.TimeStamp;
-                                node.LastBatteryValue = bl.Value;
-                                node.IPAddress = remoteAddress.CanonicalName;
-                                Context.StorageSaveOrUpdate(node);
+                        //        node.LastTimeStamp = bl.TimeStamp;
+                        //        node.LastBatteryValue = bl.Value;
+                        //        node.IPAddress = remoteAddress.CanonicalName;
+                        //        Context.StorageSaveOrUpdate(node);
 
-                                //NotifyMessageReceivedForPlugins(message);
-                                //NotifyMessageReceivedForScripts(message);
-                                //NotifyForSignalR(new { MsgId = "BatteryValue", Data = bl });
-                            }
-                            break;
+                        //        //NotifyMessageReceivedForPlugins(message);
+                        //        //NotifyMessageReceivedForScripts(message);
+                        //        //NotifyForSignalR(new { MsgId = "BatteryValue", Data = bl });
+                        //    }
+                        //    break;
                         case WemosInternalMessageType.Time:
-                            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                            var sec = Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds); // seconds since 1970
-                            await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(sec));
+                            await SendAsync(new WemosMessage(message.NodeID, message.LineID, WemosMessageType.Internal, (int) WemosInternalMessageType.Time).Set(CoreUtils.GetUnixSeconds()));
                             break;
-                        case WemosInternalMessageType.Version:
-                            if (node != null)
-                            {
-                                node.ProtocolVersion = message.GetFloat();
-                                Context.StorageSaveOrUpdate(node);
-                            }
-                            break;
+                        //case WemosInternalMessageType.Version:
+                        //    if (node != null)
+                        //    {
+                        //        node.ProtocolVersion = message.GetFloat();
+                        //        Context.StorageSaveOrUpdate(node);
+                        //    }
+                        //    break;
                         case WemosInternalMessageType.Config:
                             await SendAsync(new WemosMessage(message.NodeID, -1, WemosMessageType.Internal, (int) WemosInternalMessageType.Config).Set(GetSetting("UnitSystem").Value));
                             break;
-                        case WemosInternalMessageType.FirmwareName:
-                        case WemosInternalMessageType.FirmwareVersion:
-                            if (node != null)
-                            {
-                                if (imt == WemosInternalMessageType.FirmwareName)
-                                    node.FirmwareName = message.GetString();
-                                else
-                                    node.FirmwareVersion = message.GetFloat();
+                        //case WemosInternalMessageType.FirmwareName:
+                        //case WemosInternalMessageType.FirmwareVersion:
+                        //    if (node != null)
+                        //    {
+                        //        if (imt == WemosInternalMessageType.FirmwareName)
+                        //            node.FirmwareName = message.GetString();
+                        //        else
+                        //            node.FirmwareVersion = message.GetFloat();
 
-                                Context.StorageSaveOrUpdate(node);
+                        //        Context.StorageSaveOrUpdate(node);
 
-                                //NotifyMessageReceivedForPlugins(message);
-                                //NotifyMessageReceivedForScripts(message);
-                                //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
-                            }
-                            break;
+                        //        //NotifyMessageReceivedForPlugins(message);
+                        //        //NotifyMessageReceivedForScripts(message);
+                        //        //NotifyForSignalR(new { MsgId = "NodePresentation", Data = BuildNodeRichWebModel(node) });
+                        //    }
+                        //    break;
                     }
                     break;
                     #endregion

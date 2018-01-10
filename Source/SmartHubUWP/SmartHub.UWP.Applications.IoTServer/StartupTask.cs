@@ -74,11 +74,8 @@ namespace SmartHub.UWP.Applications.IoTServer
         }
         private void StopHub()
         {
-            if (hub != null)
-            {
-                hub.StopServices();
-                hub = null;
-            }
+            hub?.StopServices();
+            hub = null;
         }
     }
 }

@@ -187,6 +187,12 @@ namespace SmartHub.UWP.Core
             return await file.GetBasicPropertiesAsync();
         }
 
+        public static long GetUnixSeconds()
+        {
+            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return Convert.ToInt64(DateTime.Now.Subtract(unixEpoch).TotalSeconds); // seconds since 1970
+        }
+
         #region Toast notification
         public static void ShowToast(ToastTemplateType templateType, string text)
         {

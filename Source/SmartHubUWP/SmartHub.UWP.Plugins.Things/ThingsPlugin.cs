@@ -15,7 +15,7 @@ using Windows.UI.Core;
 
 namespace SmartHub.UWP.Plugins.Things
 {
-    [AppSectionItem("Things", AppSectionType.System, null, "Things represent devices and their lines", "/api/things/ui/settings")]
+    [AppSectionItem("Things", AppSectionType.System, null, "Represents devices and their lines", "/api/things/ui/settings")]
     public class ThingsPlugin : PluginBase
     {
         #region Fields
@@ -48,19 +48,23 @@ namespace SmartHub.UWP.Plugins.Things
         }
         #endregion
 
+        #region Public methods
         public void RegisterDevice(Device device)
         {
-            var item = GetDevice(device.ID);
-
-            if (item != null)
+            if (device != null)
             {
-                item.Type = device.Type;
-                item.IPAddress = device.IPAddress;
+                var item = GetDevice(device.ID);
 
-                Context.StorageSaveOrUpdate(item);
+                if (item != null)
+                {
+                    item.Type = device.Type;
+                    item.IPAddress = device.IPAddress;
+
+                    Context.StorageSaveOrUpdate(item);
+                }
+                else
+                    Context.StorageSave(device);
             }
-            else
-                Context.StorageSave(device);
         }
         public List<Device> GetDevices()
         {
@@ -71,6 +75,23 @@ namespace SmartHub.UWP.Plugins.Things
             return Context.StorageGet().Table<Device>().SingleOrDefault(d => d.ID == id);
         }
 
+        public void RegisterLine(Line line)
+        {
+            if (line != null)
+            {
+                var item = GetLine(line.ID);
+
+                if (item != null)
+                {
+                    item.Type = line.Type;
+                    //item.IPAddress = device.IPAddress;
+
+                    Context.StorageSaveOrUpdate(item);
+                }
+                else
+                    Context.StorageSave(line);
+            }
+        }
         public List<Line> GetLines()
         {
             return Context.StorageGet().Table<Line>()
@@ -101,7 +122,7 @@ namespace SmartHub.UWP.Plugins.Things
             return Context.StorageGet().Table<LineValue>()
                 .Where(v => v.LineID == lineID)
                 .OrderByDescending(v => v.TimeStamp)
-                .Take(1)
+                //.Take(1)
                 .Select(v => { v.TimeStamp = v.TimeStamp.ToLocalTime(); return v; }) // time in DB is in UTC; convert to local time
                 .FirstOrDefault();
         }
@@ -110,7 +131,7 @@ namespace SmartHub.UWP.Plugins.Things
         {
             return val != null && lineID == val.LineID;
         }
-
+        #endregion
 
         #region Private methods
         private void StartValuesTask()
