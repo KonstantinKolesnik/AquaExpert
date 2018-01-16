@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Win10 IoT", "Win10 IoT", "{0C039330-2D58-44CA-9188-B73F43ED3809}"
 EndProject
@@ -61,6 +61,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Software", "Software", "{921F8DE6-E5C0-46E5-B5F6-74AD679A6441}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.Plugins.Things", "SmartHub.UWP.Plugins.Things\SmartHub.UWP.Plugins.Things.csproj", "{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub.UWP.ESPScanner", "SmartHub.UWP.ESPScanner\SmartHub.UWP.ESPScanner.csproj", "{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -501,6 +503,32 @@ Global
 		{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}.Release|x64.Build.0 = Release|x64
 		{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}.Release|x86.ActiveCfg = Release|x86
 		{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472}.Release|x86.Build.0 = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|ARM.Build.0 = Debug|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|Win32.ActiveCfg = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|Win32.Build.0 = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|Win32.Deploy.0 = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x64.ActiveCfg = Debug|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x64.Build.0 = Debug|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x64.Deploy.0 = Debug|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x86.ActiveCfg = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x86.Build.0 = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Debug|x86.Deploy.0 = Debug|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|Any CPU.ActiveCfg = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|ARM.ActiveCfg = Release|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|ARM.Build.0 = Release|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|ARM.Deploy.0 = Release|ARM
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|Win32.ActiveCfg = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|Win32.Build.0 = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|Win32.Deploy.0 = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x64.ActiveCfg = Release|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x64.Build.0 = Release|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x64.Deploy.0 = Release|x64
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x86.ActiveCfg = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x86.Build.0 = Release|x86
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -532,9 +560,10 @@ Global
 		{21B27D1D-05BD-43A2-86C2-3DDC1F97F890} = {B8FEA1A5-A0C9-43E6-9ED5-0E3ABD082E00}
 		{B9285CF7-35E5-48C2-8570-F51F717969AF} = {0F702261-9DBE-4F34-8BA9-02C05F59EEDB}
 		{CF2C6DF1-6B9D-453A-BBB0-5BBD460DA472} = {B8FEA1A5-A0C9-43E6-9ED5-0E3ABD082E00}
+		{D4B8FA80-631C-4AA2-AEB5-92C61F512BCC} = {0F702261-9DBE-4F34-8BA9-02C05F59EEDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 		SolutionGuid = {D2E7755D-DCB1-45FF-ADE1-EF87790B4082}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
 	EndGlobalSection
 EndGlobal
