@@ -2,8 +2,8 @@
 {
     public enum DeviceType
     {
-        Unknown = -1,
-        Wemos,
-        Sonoff
+        Generic = -1,
+        ESP,
+        Xiaomi
     }
 }

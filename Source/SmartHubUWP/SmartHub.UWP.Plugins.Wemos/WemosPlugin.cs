@@ -393,7 +393,7 @@ namespace SmartHub.UWP.Plugins.Wemos
                         {
                             ID = BuildDeviceID(message.NodeID),
                             Name = $"Wemos Node {message.NodeID}",
-                            Type = DeviceType.Wemos,
+                            Type = DeviceType.ESP,
                             IPAddress = remoteAddress.CanonicalName
                         };
 
