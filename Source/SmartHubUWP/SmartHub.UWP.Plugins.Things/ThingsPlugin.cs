@@ -90,9 +90,11 @@ namespace SmartHub.UWP.Plugins.Things
         {
             var db = Context.StorageGet();
 
-            db.CreateTable<Device>();
-            db.CreateTable<Line>();
-            db.CreateTable<LineValue>();
+            //db.CreateTable<Device>();
+            //db.CreateTable<Line>();
+            //db.CreateTable<LineValue>();
+
+
 
             //db.CreateTable<WemosLineMonitor>();
             ////db.CreateTable<WemosLineController>();
@@ -101,11 +103,11 @@ namespace SmartHub.UWP.Plugins.Things
         }
         public override void StartPlugin()
         {
-            StartValuesTask();
+            //StartValuesTask();
         }
         public override void StopPlugin()
         {
-            StopValuesTask();
+            //StopValuesTask();
         }
         #endregion
 

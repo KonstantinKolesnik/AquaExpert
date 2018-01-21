@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp iot">
-  <Identity Name="16799GothicMaestro.SmartHubIotServer" Publisher="CN=511B756D-8D0E-4C33-9E48-13F53061EBB7" Version="1.0.0.0" />
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp iot uap3">
+  <Identity Name="16799GothicMaestro.SmartHubIoTServer" Publisher="CN=511B756D-8D0E-4C33-9E48-13F53061EBB7" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="419bb842-32be-418a-a719-b115a46c426c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Smart Hub Iot Server</DisplayName>
@@ -34,5 +34,7 @@
     <Capability Name="internetClientServer" />
     <Capability Name="privateNetworkClientServer" />
     <DeviceCapability Name="microphone" />
+    <DeviceCapability Name="bluetooth" />
+    <DeviceCapability Name="location" />
   </Capabilities>
 </Package>

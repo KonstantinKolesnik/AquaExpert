@@ -10,28 +10,31 @@ namespace SmartHub.UWP.Plugins.Speech
     {
         public static async Task PlayStreamAsync(this MediaElement mediaElement, IRandomAccessStream stream, bool disposeStream = true)
         {
-            // bool is irrelevant here, just using this to flag task completion.
-            TaskCompletionSource<bool> taskCompleted = new TaskCompletionSource<bool>();
-
-            // Note that the MediaElement needs to be in the UI tree for events like MediaEnded to fire.
-            RoutedEventHandler endOfPlayHandler = (s, e) =>
+            if (stream != null)
             {
-                if (disposeStream)
-                    stream.Dispose();
+                // bool is irrelevant here, just using this to flag task completion.
+                var taskCompleted = new TaskCompletionSource<bool>();
 
-                taskCompleted.SetResult(true);
-            };
+                // Note that the MediaElement needs to be in the UI tree for events like MediaEnded to fire.
+                RoutedEventHandler endOfPlayHandler = (s, e) =>
+                {
+                    if (disposeStream)
+                        stream.Dispose();
 
-            mediaElement.MediaEnded += endOfPlayHandler;
+                    taskCompleted.SetResult(true);
+                };
 
-            mediaElement.SetSource(stream, (stream as SpeechSynthesisStream).ContentType);
-            mediaElement.Volume = 1;
-            mediaElement.IsMuted = false;
-            mediaElement.Play();
+                mediaElement.MediaEnded += endOfPlayHandler;
 
-            await taskCompleted.Task;
+                mediaElement.SetSource(stream, (stream as SpeechSynthesisStream).ContentType);
+                mediaElement.Volume = 1;
+                mediaElement.IsMuted = false;
+                mediaElement.Play();
 
-            mediaElement.MediaEnded -= endOfPlayHandler;
+                await taskCompleted.Task;
+
+                mediaElement.MediaEnded -= endOfPlayHandler;
+            }
         }
     }
 }

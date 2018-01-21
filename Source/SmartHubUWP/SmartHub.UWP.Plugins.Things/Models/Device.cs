@@ -13,7 +13,7 @@ namespace SmartHub.UWP.Plugins.Things.Models
         [NotNull]
         public abstract DeviceType Type
         {
-            get;
+            get; set;
         }
         public string Name
         {

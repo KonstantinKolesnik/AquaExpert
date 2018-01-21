@@ -19,10 +19,9 @@ namespace SmartHub.UWP.Plugins.Speech
     //[JavaScriptResource("/webapp/speech/settings-model.js", "SmartHub.Plugins.Speech.Resources.js.settings-model.js")]
     //[HttpResource("/webapp/speech/settings.html", "SmartHub.Plugins.Speech.Resources.js.settings.html")]
     [Plugin]
-    public class SpeechPlugin : PluginBase//, IDisposable
+    public class SpeechPlugin : PluginBase
     {
         #region Fields
-        //private bool disposed = false;
         private SpeechSynthesizer speechSynthesizer;
         private SpeechRecognizer speechRecognizer;
         private string languageTag = Language.CurrentInputMethodLanguageTag;
@@ -59,7 +58,13 @@ namespace SmartHub.UWP.Plugins.Speech
             if (!string.IsNullOrEmpty(text) && speechSynthesizer != null)
             {
                 var stream = await speechSynthesizer.SynthesizeTextToStreamAsync(text);
-                await new MediaElement().PlayStreamAsync(stream, true);
+                try
+                {
+                    await new MediaElement().PlayStreamAsync(stream);
+                }
+                catch
+                {
+                }
             }
         }
         #endregion
@@ -117,13 +122,12 @@ namespace SmartHub.UWP.Plugins.Speech
             speechSynthesizer = new SpeechSynthesizer();
 
             var prefferedVoice = SpeechSynthesizer.AllVoices.Where(v => v.Gender == VoiceGender.Female && v.Language == languageTag).FirstOrDefault();
+            prefferedVoice = prefferedVoice ?? SpeechSynthesizer.AllVoices.Where(v => v.Gender == VoiceGender.Female).FirstOrDefault();
             speechSynthesizer.Voice = prefferedVoice ?? SpeechSynthesizer.DefaultVoice;
         }
         private void CloseSpeechSynthesizer()
         {
-            if (speechSynthesizer != null)
-                speechSynthesizer.Dispose();
-
+            speechSynthesizer?.Dispose();
             speechSynthesizer = null;
         }
 
@@ -195,25 +199,9 @@ namespace SmartHub.UWP.Plugins.Speech
         }
         private void CloseRecognitionEngine()
         {
-            if (speechRecognizer != null)
-                speechRecognizer.Dispose();
-
+            speechRecognizer?.Dispose();
             speechRecognizer = null;
         }
-
-        //private void Dispose(bool disposing)
-        //{
-        //    if (!disposed)
-        //    {
-        //        if (disposing)
-        //        {
-        //            CloseSpeechSynthesizer();
-        //            CloseRecognitionEngine();
-        //        }
-
-        //        disposed = true;
-        //    }
-        //}
         #endregion
 
         #region Event handlers
@@ -274,6 +262,7 @@ namespace SmartHub.UWP.Plugins.Speech
         {
             var text = args[0].ToString();
 
+            //CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 await Context.GetPlugin<SpeechPlugin>().Say(text);
@@ -283,12 +272,6 @@ namespace SmartHub.UWP.Plugins.Speech
             return null;
         });
         #endregion
-
-        //public void Dispose()
-        //{
-        //    Dispose(true);
-        //    GC.SuppressFinalize(this);
-        //}
 
         #region Remote API
         //[HttpCommand("/api/speech/voicecommand/list")]

@@ -150,11 +150,13 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override async void StartPlugin()
         {
-            await udpClient.Start(localService, remoteMulticastAddress);
+            //await udpClient.Start(localService, remoteMulticastAddress);
 
-            await RequestPresentationAsync();
-            await Task.Delay(1000);
-            await RequestLinesValueAsync();
+            //await RequestPresentationAsync();
+            //await Task.Delay(1000);
+            //await RequestLinesValueAsync();
+
+
 
             //foreach (var controller in oldControllers)
             //    controller.Start();
@@ -163,7 +165,9 @@ namespace SmartHub.UWP.Plugins.Wemos
         }
         public override async void StopPlugin()
         {
-            await udpClient.Stop();
+            //await udpClient.Stop();
+
+
 
             //StopControllersTask();
         }
@@ -389,15 +393,15 @@ namespace SmartHub.UWP.Plugins.Wemos
                 case WemosMessageType.Presentation: // sent by nodes when they present attached lines.
                     if (message.LineID == -1) // node
                     {
-                        var device = new Device()
-                        {
-                            ID = BuildDeviceID(message.NodeID),
-                            Name = $"Wemos Node {message.NodeID}",
-                            Type = DeviceType.ESP,
-                            IPAddress = remoteAddress.CanonicalName
-                        };
+                        //var device = new Device()
+                        //{
+                        //    ID = BuildDeviceID(message.NodeID),
+                        //    Name = $"Wemos Node {message.NodeID}",
+                        //    Type = DeviceType.ESP,
+                        //    IPAddress = remoteAddress.CanonicalName
+                        //};
 
-                        Context.GetPlugin<ThingsPlugin>().RegisterDevice(device);
+                        //Context.GetPlugin<ThingsPlugin>().RegisterDevice(device);
                     }
                     else // line
                     {
