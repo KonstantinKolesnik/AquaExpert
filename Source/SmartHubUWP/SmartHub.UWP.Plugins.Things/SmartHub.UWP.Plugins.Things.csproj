@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DeviceType.cs" />
+    <Compile Include="Models\Subdevice.cs" />
     <Compile Include="ThingsPlugin.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\LineType.cs" />

@@ -3,6 +3,8 @@ using System;
 
 namespace SmartHub.UWP.Plugins.Things.Models
 {
+    //https://www.gitbook.com/@louiszl
+
     public abstract class Device
     {
         [PrimaryKey, NotNull]
