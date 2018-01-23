@@ -23,7 +23,7 @@ namespace SmartHub.UWP.Core.Communication.Udp
             {
                 socket = new DatagramSocket();
                 socket.Control.DontFragment = true;
-                socket.Control.MulticastOnly = true;
+                socket.Control.MulticastOnly = true; // true - use shared port
                 socket.MessageReceived += DataReceived;
 
                 //try

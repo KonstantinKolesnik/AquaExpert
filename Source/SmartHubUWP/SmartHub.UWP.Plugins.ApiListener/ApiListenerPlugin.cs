@@ -15,7 +15,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
     public class ApiListenerPlugin : PluginBase
     {
         public const string TcpServiceName = "11111";
-        public const string WebServiceName = "7777";
+        public const string HttpServiceName = "7777";
         public const string UdpServiceName = "55555";
         public const string UdpMulticastAddress = "224.3.0.5";
 
@@ -67,7 +67,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
         public async override void StartPlugin()
         {
             await tcpServer.StartAsync(TcpServiceName);
-            await httpServer.StartAsync(WebServiceName);
+            await httpServer.StartAsync(HttpServiceName);
             await udpClient.Start(UdpServiceName, UdpMulticastAddress);
         }
         public async override void StopPlugin()
