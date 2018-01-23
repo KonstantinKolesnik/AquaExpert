@@ -15,10 +15,10 @@ namespace SmartHub.UWP.Core.Communication.AppService
 
             return null;
         }
-        //public void SearchByRemoteSystemWatcher()
+
+        //public async void SearchByRemoteSystemWatcher()
         //{
-        //    var accessStatus = await RemoteSystem.RequestAccessAsync();
-        //    if (accessStatus == RemoteSystemAccessStatus.Allowed)
+        //    if (await RemoteSystem.RequestAccessAsync() == RemoteSystemAccessStatus.Allowed)
         //    {
         //        RemoteSystemWatcher m_remoteSystemWatcher;
 

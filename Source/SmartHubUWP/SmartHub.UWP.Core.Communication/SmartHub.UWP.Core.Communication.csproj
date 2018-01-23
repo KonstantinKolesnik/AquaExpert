@@ -104,8 +104,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppService\AppServiceClientLocal.cs" />
-    <Compile Include="AppService\AppServiceClientRemote.cs" />
+    <Compile Include="AppService\AppServiceClient.cs" />
     <Compile Include="CommunucationUtils.cs" />
     <Compile Include="Http\Controller.cs" />
     <Compile Include="Http\ControllerAttributes.cs.cs" />
