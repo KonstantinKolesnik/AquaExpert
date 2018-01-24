@@ -16,7 +16,7 @@ namespace SmartHub.UWP.Plugins.ApiListener
     {
         public const string TcpServiceName = "11111";
         public const string HttpServiceName = "7777";
-        public const string UdpServiceName = "55555";
+        public const string UdpServiceName = "33333";
         public const string UdpMulticastAddress = "224.3.0.5";
 
         #region Fields
