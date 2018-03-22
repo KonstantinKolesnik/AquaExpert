@@ -38,7 +38,6 @@ namespace SmartHub.Dashboard.Common
             return result;
         }
 
-
         public static async Task<string> GETRequest(string uri)
         {
             //var geturi = new Uri("http://api.openweathermap.org/data/2.5/weather?q=London");
